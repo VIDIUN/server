@@ -1,5 +1,5 @@
 <?php
-class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEventConsumer, kObjectCreatedEventConsumer, kObjectDeletedEventConsumer
+class vAuditTrailManager implements vObjectChangedEventConsumer, vObjectCopiedEventConsumer, vObjectCreatedEventConsumer, vObjectDeletedEventConsumer
 {
 	protected static $cachedPartnerEnabled = array();
 	protected static $cachedPartnerConfig = array();
@@ -12,7 +12,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	{
 		if(is_null($partnerId))
 		{
-			KalturaLog::info("Partner id is null");
+			VidiunLog::info("Partner id is null");
 			return false;
 		}
 		
@@ -21,13 +21,13 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 			$partner = PartnerPeer::retrieveByPK($partnerId);
 			if(!$partner)
 			{
-				KalturaLog::info("Partner not found");
+				VidiunLog::info("Partner not found");
 				return false;
 			}
 				
 			if(!$partner->getPluginEnabled(AuditPlugin::PLUGIN_NAME))
 			{
-				KalturaLog::info("Partner audit trail is disabled");
+				VidiunLog::info("Partner audit trail is disabled");
 				self::$cachedPartnerEnabled[$partnerId] = false;
 			}
 			else
@@ -43,7 +43,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 		$auditTrailConfig = self::getAuditTrailConfig($partnerId, $auditTrail->getObjectType());
 		if(is_null($auditTrailConfig))
 		{
-			KalturaLog::info("Audit trail config not found");
+			VidiunLog::info("Audit trail config not found");
 			return false;
 		}
 			
@@ -64,7 +64,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 		}
 		else
 		{
-			$cacheFolder = kConf::get("cache_root_path") . "/audit";
+			$cacheFolder = vConf::get("cache_root_path") . "/audit";
 			if(!is_dir($cacheFolder))
 				mkdir($cacheFolder, 0777);
 				
@@ -91,7 +91,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 
 		if(!isset($config[$objectType]))
 		{
-			KalturaLog::info("Object type [$objectType] not audited");
+			VidiunLog::info("Object type [$objectType] not audited");
 			return null;
 		}
 			
@@ -188,7 +188,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 		if(class_exists('Metadata') && $object instanceof Metadata && $object->getObjectType() == MetadataObjectType::ENTRY)
 			return $object->getObjectId();
 			
-		KalturaLog::info("Can't get entry id for object type [" . get_class($object) . "]");
+		VidiunLog::info("Can't get entry id for object type [" . get_class($object) . "]");
 		return null;
 	}
 
@@ -204,12 +204,12 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 		if(method_exists($object, 'getPartnerId'))
 			return $object->getPartnerId();
 			
-		KalturaLog::info("Can't get partner id for object type [" . get_class($object) . "]");
+		VidiunLog::info("Can't get partner id for object type [" . get_class($object) . "]");
 		
-		if(kCurrentContext::$partner_id)
-			return kCurrentContext::$partner_id;
-		if(kCurrentContext::$ks_partner_id)
-			return kCurrentContext::$ks_partner_id;
+		if(vCurrentContext::$partner_id)
+			return vCurrentContext::$partner_id;
+		if(vCurrentContext::$vs_partner_id)
+			return vCurrentContext::$vs_partner_id;
 			
 		return null;
 	}
@@ -220,7 +220,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	 */
 	public function createAuditTrail(BaseObject $object, $action) 
 	{
-		$partnerId = kCurrentContext::$master_partner_id;
+		$partnerId = vCurrentContext::$master_partner_id;
 				
 		if(!$this->traceEnabled($partnerId))
 			return null;
@@ -235,7 +235,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err("Error creating audit trail for object id[" . $object->getId() . "] type[$objectType] " . $e->getMessage());
+			VidiunLog::err("Error creating audit trail for object id[" . $object->getId() . "] type[$objectType] " . $e->getMessage());
 			$auditTrail = null;
 			return null;
 		}
@@ -255,9 +255,9 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 			
 			self::setRelatedObject($auditTrail, $object);
 		}
-		catch(kAuditTrailException $e)
+		catch(vAuditTrailException $e)
 		{
-			KalturaLog::err("Error creating audit trail for object id[" . $object->getId() . "] type[$objectType] " . $e->getMessage());
+			VidiunLog::err("Error creating audit trail for object id[" . $object->getId() . "] type[$objectType] " . $e->getMessage());
 			$auditTrail = null;
 		}
 		
@@ -269,21 +269,21 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	 */
 	public function fileSyncCreated(FileSync $fileSync) 
 	{
-		$object = kFileSyncUtils::retrieveObjectForFileSync($fileSync);
+		$object = vFileSyncUtils::retrieveObjectForFileSync($fileSync);
 		if(!$object || !($object instanceof ISyncableFile))
 		{
-			KalturaLog::info("Not instance of ISyncableFile");
+			VidiunLog::info("Not instance of ISyncableFile");
 			return;
 		}
 			
 		$auditTrail = self::createAuditTrail($object, AuditTrail::AUDIT_TRAIL_ACTION_FILE_SYNC_CREATED);
 		if(!$auditTrail)
 		{
-			KalturaLog::info("No audit created");
+			VidiunLog::info("No audit created");
 			return;
 		}
 			
-		$data = new kAuditTrailFileSyncCreateInfo();
+		$data = new vAuditTrailFileSyncCreateInfo();
 		$data->setVersion($fileSync->getVersion());
 		$data->setObjectSubType($fileSync->getObjectSubType());
 		$data->setDc($fileSync->getDc());
@@ -295,11 +295,11 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object)
 	{
-		$partnerId = kCurrentContext::$master_partner_id;
+		$partnerId = vCurrentContext::$master_partner_id;
 		if(($partnerId == Partner::ADMIN_CONSOLE_PARTNER_ID || $partnerId > 0) && $this->traceEnabled($partnerId))
 			return true;
 		
@@ -307,7 +307,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object) 
 	{
@@ -323,11 +323,11 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
+	 * @see vObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
 	 */
 	public function shouldConsumeCopiedEvent(BaseObject $fromObject, BaseObject $toObject)
 	{
-		$partnerId = kCurrentContext::$master_partner_id;
+		$partnerId = vCurrentContext::$master_partner_id;
 		if(($partnerId == Partner::ADMIN_CONSOLE_PARTNER_ID || $partnerId > 0) && $this->traceEnabled($partnerId))
 			return true;
 			
@@ -335,7 +335,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::objectCopied()
+	 * @see vObjectCopiedEventConsumer::objectCopied()
 	 */
 	public function objectCopied(BaseObject $fromObject, BaseObject $toObject) 
 	{
@@ -348,12 +348,12 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
 		
-		$partnerId = kCurrentContext::$master_partner_id;
+		$partnerId = vCurrentContext::$master_partner_id;
 		if(($partnerId == Partner::ADMIN_CONSOLE_PARTNER_ID || $partnerId > 0) && $this->traceEnabled($partnerId))
 			return true;
 			
@@ -361,7 +361,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null) 
 	{
@@ -374,11 +374,11 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
-		$partnerId = kCurrentContext::$master_partner_id;
+		$partnerId = vCurrentContext::$master_partner_id;
 		if(($partnerId == Partner::ADMIN_CONSOLE_PARTNER_ID || $partnerId > 0) && $this->traceEnabled($partnerId))
 			return true;
 			
@@ -386,7 +386,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns) 
 	{
@@ -408,25 +408,25 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 			return true;
 			
 		$supportedDescriptors = explode(',', $auditTrailConfig->getDescriptors());
-		KalturaLog::info("Audit trail supported descriptors: " . print_r($supportedDescriptors, true));
+		VidiunLog::info("Audit trail supported descriptors: " . print_r($supportedDescriptors, true));
 		
 		$changedItems = array();
 		foreach($columnsOldValues as $column => $oldValue)
 		{
 			if(!in_array($column, $supportedDescriptors))
 			{
-				KalturaLog::info("Audit trail for object type[" . $auditTrail->getObjectType() . "] column[$column] not supported");
+				VidiunLog::info("Audit trail for object type[" . $auditTrail->getObjectType() . "] column[$column] not supported");
 				continue;
 			}
 
 			$newValue = $object->getByName($column, BasePeer::TYPE_COLNAME);
 			if($newValue == $oldValue)
 			{
-				KalturaLog::info("Old and new values are identical [$column]");
+				VidiunLog::info("Old and new values are identical [$column]");
 				continue;
 			}
 			
-			$changedItem = new kAuditTrailChangeItem();
+			$changedItem = new vAuditTrailChangeItem();
 			$changedItem->setDescriptor($column);
 			$changedItem->setOldValue($oldValue);
 			$changedItem->setNewValue($newValue);
@@ -447,18 +447,18 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 				$descriptor = $prefix . $name;
 				if(!in_array($descriptor, $supportedDescriptors))
 				{
-					KalturaLog::info("Audit trail for object type[" . $auditTrail->getObjectType() . "] descriptor[$descriptor] not supported");
+					VidiunLog::info("Audit trail for object type[" . $auditTrail->getObjectType() . "] descriptor[$descriptor] not supported");
 					continue;
 				}
 			
 				$newValue = $object->getFromCustomData($name, $namespace);
 				if($newValue == $oldValue)
 				{
-					KalturaLog::info("Old and new values are identical [$descriptor]");
+					VidiunLog::info("Old and new values are identical [$descriptor]");
 					continue;
 				}
 				
-				$changedItem = new kAuditTrailChangeItem();
+				$changedItem = new vAuditTrailChangeItem();
 				$changedItem->setDescriptor($descriptor);
 				$changedItem->setOldValue($oldValue);
 				$changedItem->setNewValue($newValue);
@@ -468,7 +468,7 @@ class kAuditTrailManager implements kObjectChangedEventConsumer, kObjectCopiedEv
 		if(!count($changedItems))
 			return true;
 			
-		$data = new kAuditTrailChangeInfo();
+		$data = new vAuditTrailChangeInfo();
 		$data->setChangedItems($changedItems);
 		
 		$auditTrail->setData($data);

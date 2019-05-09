@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConcatJobData extends KalturaJobData
+class VidiunConcatJobData extends VidiunJobData
 {
 	/**
 	 * Source files to be concatenated
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 */
 	public $srcFiles;
 	
@@ -59,7 +59,7 @@ class KalturaConcatJobData extends KalturaJobData
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -67,12 +67,12 @@ class KalturaConcatJobData extends KalturaJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kConcatJobData();
+			$dbData = new vConcatJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

@@ -8,14 +8,14 @@ require_once 'oauth2Action.class.php';
  */
 class facebookoauth2Action extends oauth2Action
 {
-	const FACEBOOK_DISTRIBUTION_ACCESS_URL = "/api_v3/index.php?service=contentdistribution_distributionprofile&distributionProfile%3AobjectType=KalturaFacebookDistributionProfile";
+	const FACEBOOK_DISTRIBUTION_ACCESS_URL = "/api_v3/index.php?service=contentdistribution_distributionprofile&distributionProfile%3AobjectType=VidiunFacebookDistributionProfile";
 
 	private $authDataCache;
 
 	private function getAuthDataCache()
 	{
 		if(!$this->authDataCache)
-			$this->authDataCache = new kAuthDataCache();
+			$this->authDataCache = new vAuthDataCache();
 
 		return $this->authDataCache;
 	}
@@ -23,9 +23,9 @@ class facebookoauth2Action extends oauth2Action
 
 	public function execute()
 	{
-		set_include_path(get_include_path().PATH_SEPARATOR.KALTURA_ROOT_PATH.'/infra/general/');
+		set_include_path(get_include_path().PATH_SEPARATOR.VIDIUN_ROOT_PATH.'/infra/general/');
 		require_once 'FacebookGraphSdkUtils.php';
-		require_once 'kDistributionPersistentDataHandler.php';
+		require_once 'vDistributionPersistentDataHandler.php';
 
 		$nextAction = base64_decode($this->getRequestParameter(FacebookConstants::FACEBOOK_NEXT_ACTION_REQUEST_PARAM));
 
@@ -59,7 +59,7 @@ class facebookoauth2Action extends oauth2Action
 		$this->serviceUrl = requestUtils::getHost();
 		$params = $this->getForwardParameters();
 		$params[FacebookConstants::FACEBOOK_NEXT_ACTION_REQUEST_PARAM] = base64_encode(FacebookConstants::SUB_ACTION_REDIRECT_SCREEN);
-		$this->nextUrl = $this->getController()->genUrl('extservices/facebookoauth2?'.http_build_query($params, null, '&')).'?ks=';
+		$this->nextUrl = $this->getController()->genUrl('extservices/facebookoauth2?'.http_build_query($params, null, '&')).'?vs=';
 	}
 
 	/**
@@ -73,30 +73,30 @@ class facebookoauth2Action extends oauth2Action
 		$providerId = base64_decode($this->getRequestParameter(FacebookConstants::FACEBOOK_PROVIDER_ID_REQUEST_PARAM));
 		$requestPartnerId = base64_decode($this->getRequestParameter(FacebookConstants::FACEBOOK_PARTNER_ID_REQUEST_PARAM));
 
-		$ksStr = $this->getRequestParameter(FacebookConstants::FACEBOOK_KS_REQUEST_PARAM);
-		$this->ksError = null;
+		$vsStr = $this->getRequestParameter(FacebookConstants::FACEBOOK_VS_REQUEST_PARAM);
+		$this->vsError = null;
 		$this->partnerError = null;
-		$ksValid = $this->processKs($ksStr);
-		if (!$ksValid)
+		$vsValid = $this->processVs($vsStr);
+		if (!$vsValid)
 		{
-			$this->ksError = true;
+			$this->vsError = true;
 			return;
 		}
 
-		$ks = kCurrentContext::$ks_object;
-		$contextPartnerId = $ks->partner_id;
+		$vs = vCurrentContext::$vs_object;
+		$contextPartnerId = $vs->partner_id;
 		if ( empty($requestPartnerId) || $contextPartnerId != $requestPartnerId)
 		{
 			$this->partnerError = true;
 			return;
 		}
 
-		$ks = $this->generateTimeLimitedKs($contextPartnerId);
+		$vs = $this->generateTimeLimitedVs($contextPartnerId);
 		$params = $this->getForwardParameters();
-		$params[FacebookConstants::FACEBOOK_KS_REQUEST_PARAM] = $ks;
-		$accessURL = $this->getFacebookDistributionAccessURL($providerId, $ks);
-		$dataHandler = new kDistributionPersistentDataHandler($accessURL);
-		$redirectUrl = FacebookGraphSdkUtils::getKalturaRedirectUrl();
+		$params[FacebookConstants::FACEBOOK_VS_REQUEST_PARAM] = $vs;
+		$accessURL = $this->getFacebookDistributionAccessURL($providerId, $vs);
+		$dataHandler = new vDistributionPersistentDataHandler($accessURL);
+		$redirectUrl = FacebookGraphSdkUtils::getVidiunRedirectUrl();
 		$reRequestPermissions = base64_decode($this->getRequestParameter(FacebookConstants::FACEBOOK_RE_REQUEST_PERMISSIONS_REQUEST_PARAM));
 		$fb = FacebookGraphSdkUtils::createFacebookInstance($appId, $appSecret, $dataHandler);
 		$loginHelper = $fb->getRedirectLoginHelper();
@@ -126,13 +126,13 @@ class facebookoauth2Action extends oauth2Action
 
 		$pageId = base64_decode($data[FacebookConstants::FACEBOOK_PAGE_ID_REQUEST_PARAM]);
 		$providerId = base64_decode($data[FacebookConstants::FACEBOOK_PROVIDER_ID_REQUEST_PARAM]);
-		$ks = $data[FacebookConstants::FACEBOOK_KS_REQUEST_PARAM];
+		$vs = $data[FacebookConstants::FACEBOOK_VS_REQUEST_PARAM];
 		$permissions = explode(',',base64_decode($data[FacebookConstants::FACEBOOK_PERMISSIONS_REQUEST_PARAM]));
 
 		try
 		{
-			$accessURL = $this->getFacebookDistributionAccessURL($providerId, $ks);
-			$dataHandler = new kDistributionPersistentDataHandler($accessURL);
+			$accessURL = $this->getFacebookDistributionAccessURL($providerId, $vs);
+			$dataHandler = new vDistributionPersistentDataHandler($accessURL);
 
 			$userAccessToken = FacebookGraphSdkUtils::getLongLivedUserAccessToken($appId, $appSecret, $dataHandler, $permissions);
 
@@ -155,7 +155,7 @@ class facebookoauth2Action extends oauth2Action
 
 	protected function getFromConfig($paramName, $default = null)
 	{
-		return kConf::get($paramName, 'facebook', $default);
+		return vConf::get($paramName, 'facebook', $default);
 	}
 
 
@@ -172,16 +172,16 @@ class facebookoauth2Action extends oauth2Action
 				$this->getRequestParameter(FacebookConstants::FACEBOOK_PROVIDER_ID_REQUEST_PARAM),
 			FacebookConstants::FACEBOOK_PARTNER_ID_REQUEST_PARAM =>
 				$this->getRequestParameter(FacebookConstants::FACEBOOK_PARTNER_ID_REQUEST_PARAM),
-			FacebookConstants::FACEBOOK_KS_REQUEST_PARAM =>
-				$this->getRequestParameter(FacebookConstants::FACEBOOK_KS_REQUEST_PARAM)
+			FacebookConstants::FACEBOOK_VS_REQUEST_PARAM =>
+				$this->getRequestParameter(FacebookConstants::FACEBOOK_VS_REQUEST_PARAM)
 		);
 
 		return $params;
 	}
 
-	private function getFacebookDistributionAccessURL($providerId, $ks)
+	private function getFacebookDistributionAccessURL($providerId, $vs)
 	{
 		$host = requestUtils::getHost();
-		return $host.self::FACEBOOK_DISTRIBUTION_ACCESS_URL."&id=".$providerId."&ks=".$ks;
+		return $host.self::FACEBOOK_DISTRIBUTION_ACCESS_URL."&id=".$providerId."&vs=".$vs;
 	}
 }

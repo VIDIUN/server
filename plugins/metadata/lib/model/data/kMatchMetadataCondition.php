@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage model.data
  */
-class kMatchMetadataCondition extends kMatchCondition
+class vMatchMetadataCondition extends vMatchCondition
 {
 	/**
 	 * May contain the full xpath to the field in two formats
@@ -26,7 +26,7 @@ class kMatchMetadataCondition extends kMatchCondition
 	private $profileSystemName;
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -35,9 +35,9 @@ class kMatchMetadataCondition extends kMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::applyDynamicValues()
+	 * @see vCondition::applyDynamicValues()
 	 */
-	protected function applyDynamicValues(kScope $scope)
+	protected function applyDynamicValues(vScope $scope)
 	{
 		parent::applyDynamicValues($scope);
 		
@@ -52,23 +52,23 @@ class kMatchMetadataCondition extends kMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::getFieldValue()
+	 * @see vMatchCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
 		$profileId = $this->profileId;
 		if(!$profileId)
 		{
 			if(!$this->profileSystemName)
 			{
-				KalturaLog::err("No metadata profile id and system-name supplied");
+				VidiunLog::err("No metadata profile id and system-name supplied");
 				return null;
 			}
 				
-			$profile = MetadataProfilePeer::retrieveBySystemName($this->profileSystemName, array(kCurrentContext::getCurrentPartnerId(), PartnerPeer::GLOBAL_PARTNER));
+			$profile = MetadataProfilePeer::retrieveBySystemName($this->profileSystemName, array(vCurrentContext::getCurrentPartnerId(), PartnerPeer::GLOBAL_PARTNER));
 			if(!$profile)
 			{
-				KalturaLog::notice("Metadata profile with system-name [$this->profileSystemName] not found");
+				VidiunLog::notice("Metadata profile with system-name [$this->profileSystemName] not found");
 				return null;
 			}
 				
@@ -76,16 +76,16 @@ class kMatchMetadataCondition extends kMatchCondition
 		}
 		
 		$metadata = null;
-		if($scope instanceof accessControlScope || $scope instanceof kStorageProfileScope)
+		if($scope instanceof accessControlScope || $scope instanceof vStorageProfileScope)
 		{
 			$metadata = MetadataPeer::retrieveByObject($profileId, MetadataObjectType::ENTRY, $scope->getEntryId());
 		}
-		elseif($scope instanceof kEventScope)
+		elseif($scope instanceof vEventScope)
 		{
 			$object = $scope->getEvent()->getObject();
-			if(kMetadataManager::isMetadataObject($object))
+			if(vMetadataManager::isMetadataObject($object))
 			{
-				$objectType = kMetadataManager::getTypeNameFromObject($object);
+				$objectType = vMetadataManager::getTypeNameFromObject($object);
 				$metadata = MetadataPeer::retrieveByObject($profileId, $objectType, $object->getId());
 			}
 			else if ($object instanceof Metadata && $profileId == $object->getMetadataProfileId())
@@ -94,9 +94,9 @@ class kMatchMetadataCondition extends kMatchCondition
 			}
 			elseif ($scope->getEvent()->getObject() instanceof categoryEntry)
 			{
-				$profileObject = kMetadataManager::getObjectTypeName($profile->getObjectType());
+				$profileObject = vMetadataManager::getObjectTypeName($profile->getObjectType());
 				$getter = "get{$profileObject}Id";
-				KalturaLog::info ("Using $getter in order to retrieve the metadata object ID");
+				VidiunLog::info ("Using $getter in order to retrieve the metadata object ID");
 				$categoryEntry = $scope->getEvent()->getObject();
 				$objectId = $categoryEntry->$getter();
 				$metadata = MetadataPeer::retrieveByObject($profileId, $profile->getObjectType(), $objectId);
@@ -108,9 +108,9 @@ class kMatchMetadataCondition extends kMatchCondition
 		}
 			
 		if($metadata)
-			return kMetadataManager::parseMetadataValues($metadata, $this->xPath);
+			return vMetadataManager::parseMetadataValues($metadata, $this->xPath);
 			
-		KalturaLog::notice("Metadata object not found for scope [" . get_class($scope) . "]");
+		VidiunLog::notice("Metadata object not found for scope [" . get_class($scope) . "]");
 		return null;
 	}
 	
@@ -163,7 +163,7 @@ class kMatchMetadataCondition extends kMatchCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::shouldFieldDisableCache()
+	 * @see vMatchCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

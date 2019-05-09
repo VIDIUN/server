@@ -56,10 +56,10 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 	protected $partner_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the name field.
@@ -281,13 +281,13 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -550,27 +550,27 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 	} // setPartnerId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     ShortLink The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[ShortLinkPeer::KUSER_ID]))
-			$this->oldColumnsValues[ShortLinkPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[ShortLinkPeer::VUSER_ID]))
+			$this->oldColumnsValues[ShortLinkPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = ShortLinkPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = ShortLinkPeer::VUSER_ID;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [name] column.
@@ -702,7 +702,7 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 			$this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->expires_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->partner_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-			$this->kuser_id = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->vuser_id = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
 			$this->name = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
 			$this->system_name = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
 			$this->full_url = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
@@ -967,7 +967,7 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -991,12 +991,12 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1014,8 +1014,8 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1192,7 +1192,7 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 				return $this->getPartnerId();
 				break;
 			case 6:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 7:
 				return $this->getName();
@@ -1233,7 +1233,7 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 			$keys[3] => $this->getUpdatedAt(),
 			$keys[4] => $this->getExpiresAt(),
 			$keys[5] => $this->getPartnerId(),
-			$keys[6] => $this->getKuserId(),
+			$keys[6] => $this->getVuserId(),
 			$keys[7] => $this->getName(),
 			$keys[8] => $this->getSystemName(),
 			$keys[9] => $this->getFullUrl(),
@@ -1288,7 +1288,7 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 				$this->setPartnerId($value);
 				break;
 			case 6:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 7:
 				$this->setName($value);
@@ -1332,7 +1332,7 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setExpiresAt($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setPartnerId($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setKuserId($arr[$keys[6]]);
+		if (array_key_exists($keys[6], $arr)) $this->setVuserId($arr[$keys[6]]);
 		if (array_key_exists($keys[7], $arr)) $this->setName($arr[$keys[7]]);
 		if (array_key_exists($keys[8], $arr)) $this->setSystemName($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setFullUrl($arr[$keys[9]]);
@@ -1354,7 +1354,7 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ShortLinkPeer::UPDATED_AT)) $criteria->add(ShortLinkPeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(ShortLinkPeer::EXPIRES_AT)) $criteria->add(ShortLinkPeer::EXPIRES_AT, $this->expires_at);
 		if ($this->isColumnModified(ShortLinkPeer::PARTNER_ID)) $criteria->add(ShortLinkPeer::PARTNER_ID, $this->partner_id);
-		if ($this->isColumnModified(ShortLinkPeer::KUSER_ID)) $criteria->add(ShortLinkPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(ShortLinkPeer::VUSER_ID)) $criteria->add(ShortLinkPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(ShortLinkPeer::NAME)) $criteria->add(ShortLinkPeer::NAME, $this->name);
 		if ($this->isColumnModified(ShortLinkPeer::SYSTEM_NAME)) $criteria->add(ShortLinkPeer::SYSTEM_NAME, $this->system_name);
 		if ($this->isColumnModified(ShortLinkPeer::FULL_URL)) $criteria->add(ShortLinkPeer::FULL_URL, $this->full_url);
@@ -1435,7 +1435,7 @@ abstract class BaseShortLink extends BaseObject  implements Persistent {
 
 		$copyObj->setPartnerId($this->partner_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setName($this->name);
 

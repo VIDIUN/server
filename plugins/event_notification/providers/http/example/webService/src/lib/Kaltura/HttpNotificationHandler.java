@@ -1,17 +1,17 @@
-package lib.Kaltura;
+package lib.Vidiun;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.Kaltura.notification.Processor;
-import lib.Kaltura.notification.handlers.SyncSampleHandler;
-import lib.Kaltura.output.Console;
-import lib.Kaltura.output.OutputInterface;
-import lib.Kaltura.output.StandaradOutput;
+import lib.Vidiun.notification.Processor;
+import lib.Vidiun.notification.handlers.SyncSampleHandler;
+import lib.Vidiun.output.Console;
+import lib.Vidiun.output.OutputInterface;
+import lib.Vidiun.output.StandaradOutput;
 
-import com.kaltura.client.types.KalturaHttpNotification;
+import com.vidiun.client.types.VidiunHttpNotification;
 
 /**
  *  This class is a sample class for notification handling
@@ -40,7 +40,7 @@ public class HttpNotificationHandler {
 	 * Single event handling
 	 * @param httpNotification
 	 */
-	public void handle(KalturaHttpNotification httpNotification) {
+	public void handle(VidiunHttpNotification httpNotification) {
 		startHandling();
 		try {
 			

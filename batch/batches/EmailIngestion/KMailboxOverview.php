@@ -12,7 +12,7 @@
  * @subpackage Email-Ingestion
  */
 
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'KMailChecker.class.php');
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'VMailChecker.class.php');
 
 $arguments = $_SERVER['argv'];
 
@@ -26,7 +26,7 @@ $user = $arguments[3];
 $pass = $arguments[4];
 
 
-$mailChecker = new KMailChecker($host, $port, $user, $pass, '/novalidate-cert');
+$mailChecker = new VMailChecker($host, $port, $user, $pass, '/novalidate-cert');
 
 if (!@$mailChecker->connect()) {
 	die("Can't connect to [$host:$port] as $user - ".imap_last_error().PHP_EOL);

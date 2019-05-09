@@ -16,7 +16,7 @@ class PodcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		return true;
 	}
@@ -25,7 +25,7 @@ class PodcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		return true;
 	}
@@ -34,7 +34,7 @@ class PodcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		return true;
 	}
@@ -42,7 +42,7 @@ class PodcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseDelete::closeDelete()
 	 */
-	public function closeDelete(KalturaDistributionDeleteJobData $data)
+	public function closeDelete(VidiunDistributionDeleteJobData $data)
 	{
 		return true;
 	}
@@ -50,7 +50,7 @@ class PodcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		return true;
 	}
@@ -58,7 +58,7 @@ class PodcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineReport::fetchReport()
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data)
+	public function fetchReport(VidiunDistributionFetchReportJobData $data)
 	{
 		return true;
 	}
@@ -66,7 +66,7 @@ class PodcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
 		return true;
 	}

@@ -3,7 +3,7 @@
  * @package plugins.integrationEventNotifications
  * @subpackage lib
  */
-class IntegrationEventNotificationEventType implements IKalturaPluginEnum, EventNotificationEventType
+class IntegrationEventNotificationEventType implements IVidiunPluginEnum, EventNotificationEventType
 {
 	const INTEGRATION_JOB_CLOSED = 'INTEGRATION_JOB_CLOSED';
 	

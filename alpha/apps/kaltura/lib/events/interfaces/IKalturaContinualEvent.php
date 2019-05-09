@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage events
  */
-interface IKalturaContinualEvent extends IKalturaCancelableEvent
+interface IVidiunContinualEvent extends IVidiunCancelableEvent
 {
 	
 }

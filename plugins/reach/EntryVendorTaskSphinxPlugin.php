@@ -3,12 +3,12 @@
  * Enable indexing and searching schedule event objects in sphinx
  * @package plugins.reach
  */
-class EntryVendorTaskSphinxPlugin extends KalturaPlugin implements IKalturaCriteriaFactory, IKalturaSphinxConfiguration, IKalturaPending
+class EntryVendorTaskSphinxPlugin extends VidiunPlugin implements IVidiunCriteriaFactory, IVidiunSphinxConfiguration, IVidiunPending
 {
 	const PLUGIN_NAME = 'entryVendorTaskSphinx';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -16,9 +16,9 @@ class EntryVendorTaskSphinxPlugin extends KalturaPlugin implements IKalturaCrite
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCriteriaFactory::getKalturaCriteria()
+	 * @see IVidiunCriteriaFactory::getVidiunCriteria()
 	 */
-	public static function getKalturaCriteria($objectType)
+	public static function getVidiunCriteria($objectType)
 	{
 		if ($objectType == "EntryVendorTask")
 			return new SphinxEntryVendorTaskCriteria();
@@ -27,13 +27,13 @@ class EntryVendorTaskSphinxPlugin extends KalturaPlugin implements IKalturaCrite
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSphinxConfiguration::getSphinxSchema()
+	 * @see IVidiunSphinxConfiguration::getSphinxSchema()
 	 */
 	public static function getSphinxSchema()
 	{
 		return array(
-			kSphinxSearchManager::getSphinxIndexName('entry_vendor_task') => array (	
-				'path'		=> '/sphinx/kaltura_entry_vendor_task_rt',
+			vSphinxSearchManager::getSphinxIndexName('entry_vendor_task') => array (	
+				'path'		=> '/sphinx/vidiun_entry_vendor_task_rt',
 				'fields'	=> array (
 					'id' 				=> SphinxFieldType::RT_ATTR_BIGINT,
 					'created_at'		=> SphinxFieldType::RT_ATTR_TIMESTAMP,
@@ -47,7 +47,7 @@ class EntryVendorTaskSphinxPlugin extends KalturaPlugin implements IKalturaCrite
 					'price' 			=> SphinxFieldType::RT_ATTR_UINT,
 					'catalog_item_id' 	=> SphinxFieldType::RT_FIELD,
 					'reach_profile_id'  => SphinxFieldType::RT_FIELD,
-					'kuser_id'			=> SphinxFieldType::RT_FIELD,
+					'vuser_id'			=> SphinxFieldType::RT_FIELD,
 					'user_id'			=> SphinxFieldType::RT_FIELD,
 					'context' 			=> SphinxFieldType::RT_FIELD,
 					'notes' 			=> SphinxFieldType::RT_FIELD,
@@ -58,11 +58,11 @@ class EntryVendorTaskSphinxPlugin extends KalturaPlugin implements IKalturaCrite
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$rechPluginDependency = new KalturaDependency(ReachPlugin::getPluginName());
+		$rechPluginDependency = new VidiunDependency(ReachPlugin::getPluginName());
 		return array($rechPluginDependency);
 	}
 }

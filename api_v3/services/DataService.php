@@ -7,15 +7,15 @@
  * @package api
  * @subpackage services
  */
-class DataService extends KalturaEntryService
+class DataService extends VidiunEntryService
 {
 	
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if ($actionName === 'get') {
 			return true;
 		}
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 	
 	
@@ -23,10 +23,10 @@ class DataService extends KalturaEntryService
 	 * Adds a new data entry
 	 * 
 	 * @action add
-	 * @param KalturaDataEntry $dataEntry Data entry
-	 * @return KalturaDataEntry The new data entry
+	 * @param VidiunDataEntry $dataEntry Data entry
+	 * @return VidiunDataEntry The new data entry
 	 */
-	function addAction(KalturaDataEntry $dataEntry)
+	function addAction(VidiunDataEntry $dataEntry)
 	{
 		$dbEntry = $dataEntry->toObject(new entry());
 		
@@ -37,7 +37,7 @@ class DataService extends KalturaEntryService
 		
 		$dbEntry->setPartnerId($this->getPartnerId());
 		$dbEntry->setSubpId($this->getPartnerId() * 100);
-		$dbEntry->setStatus(KalturaEntryStatus::READY);
+		$dbEntry->setStatus(VidiunEntryStatus::READY);
 		$dbEntry->setMediaType(entry::ENTRY_MEDIA_TYPE_AUTOMATIC); 
 		$dbEntry->save();
 		
@@ -49,7 +49,7 @@ class DataService extends KalturaEntryService
 		
 		$dataEntry->fromObject($dbEntry, $this->getResponseProfile());
 		
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
 		
 		return $dataEntry;
 	}
@@ -60,21 +60,21 @@ class DataService extends KalturaEntryService
 	 * @action get
 	 * @param string $entryId Data entry id
 	 * @param int $version Desired version of the data
-	 * @return KalturaDataEntry The requested data entry
+	 * @return VidiunDataEntry The requested data entry
 	 * 
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	function getAction($entryId, $version = -1)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::DATA)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::DATA)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		if ($version !== -1)
 			$dbEntry->setDesiredVersion($version);
 			
-		$dataEntry = new KalturaDataEntry();
+		$dataEntry = new VidiunDataEntry();
 		$dataEntry->fromObject($dbEntry, $this->getResponseProfile());
 
 		return $dataEntry;
@@ -85,15 +85,15 @@ class DataService extends KalturaEntryService
 	 * 
 	 * @action update
 	 * @param string $entryId Data entry id to update
-	 * @param KalturaDataEntry $documentEntry Data entry metadata to update
-	 * @return KalturaDataEntry The updated data entry
+	 * @param VidiunDataEntry $documentEntry Data entry metadata to update
+	 * @return VidiunDataEntry The updated data entry
 	 * 
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 * validateUser entry $entryId edit
 	 */
-	function updateAction($entryId, KalturaDataEntry $documentEntry)
+	function updateAction($entryId, VidiunDataEntry $documentEntry)
 	{
-		return $this->updateEntry($entryId, $documentEntry, KalturaEntryType::DATA);
+		return $this->updateEntry($entryId, $documentEntry, VidiunEntryType::DATA);
 	}
 	
 	/**
@@ -102,32 +102,32 @@ class DataService extends KalturaEntryService
 	 * @action delete
 	 * @param string $entryId Data entry id to delete
 	 * 
- 	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+ 	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
  	 * @validateUser entry entryId edit
 	 */
 	function deleteAction($entryId)
 	{
-		$this->deleteEntry($entryId, KalturaEntryType::DATA);
+		$this->deleteEntry($entryId, VidiunEntryType::DATA);
 	}
 	
 	/**
 	 * List data entries by filter with paging support.
 	 * 
 	 * @action list
-     * @param KalturaDataEntryFilter $filter Document entry filter
-	 * @param KalturaFilterPager $pager Pager
-	 * @return KalturaDataListResponse Wrapper for array of document entries and total count
+     * @param VidiunDataEntryFilter $filter Document entry filter
+	 * @param VidiunFilterPager $pager Pager
+	 * @return VidiunDataListResponse Wrapper for array of document entries and total count
 	 */
-	function listAction(KalturaDataEntryFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunDataEntryFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 	    if (!$filter)
-			$filter = new KalturaDataEntryFilter();
+			$filter = new VidiunDataEntryFilter();
 			
-	    $filter->typeEqual = KalturaEntryType::DATA;
+	    $filter->typeEqual = VidiunEntryType::DATA;
 	    list($list, $totalCount) = parent::listEntriesByFilter($filter, $pager);
 	    
-	    $newList = KalturaDataEntryArray::fromDbArray($list, $this->getResponseProfile());
-		$response = new KalturaDataListResponse();
+	    $newList = VidiunDataEntryArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunDataListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -142,18 +142,18 @@ class DataService extends KalturaEntryService
 	 * @param bool $forceProxy force to get the content without redirect
 	 * @return file
 	 * 
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	function serveAction($entryId, $version = -1, $forceProxy = false)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::DATA)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::DATA)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
-		$ksObj = $this->getKs();
-		$ks = ($ksObj) ? $ksObj->getOriginalString() : null;
-		$securyEntryHelper = new KSecureEntryHelper($dbEntry, $ks, null, ContextType::DOWNLOAD);
+		$vsObj = $this->getVs();
+		$vs = ($vsObj) ? $vsObj->getOriginalString() : null;
+		$securyEntryHelper = new VSecureEntryHelper($dbEntry, $vs, null, ContextType::DOWNLOAD);
 		$securyEntryHelper->validateForDownload();	
 		
 		if ( ! $version || $version == -1 ) $version = null;
@@ -161,25 +161,25 @@ class DataService extends KalturaEntryService
 		$fileName = $dbEntry->getName();
 		
 		$syncKey = $dbEntry->getSyncKey( entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version);
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 		
 		header("Content-Disposition: attachment; filename=\"$fileName\"");
 
 		if($local)
 		{
 			$filePath = $fileSync->getFullPath();
-			$mimeType = kFile::mimeType($filePath);
+			$mimeType = vFile::mimeType($filePath);
 			$key = $fileSync->isEncrypted() ? $fileSync->getEncryptionKey() : null;
 			$iv = $key ? $fileSync->getIv() : null;
 			return $this->dumpFile($filePath, $mimeType, $key, $iv);
 		}
 		else
 		{
-			$remoteUrl = kDataCenterMgr::getRedirectExternalUrl($fileSync);
-			KalturaLog::info("Redirecting to [$remoteUrl]");
+			$remoteUrl = vDataCenterMgr::getRedirectExternalUrl($fileSync);
+			VidiunLog::info("Redirecting to [$remoteUrl]");
 			if($forceProxy)
 			{
-				kFileUtils::dumpUrl($remoteUrl);
+				vFileUtils::dumpUrl($remoteUrl);
 			}
 			else
 			{
@@ -196,53 +196,53 @@ class DataService extends KalturaEntryService
 	*
 	* @action addContent
 	* @param string $entryId
-	* @param KalturaGenericDataCenterContentResource $resource
+	* @param VidiunGenericDataCenterContentResource $resource
 	* @return string
-	* @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	* @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	* @validateUser entry entryId edit
 	*/
-	function addContentAction($entryId, KalturaGenericDataCenterContentResource $resource)
+	function addContentAction($entryId, VidiunGenericDataCenterContentResource $resource)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
-		if ($dbEntry->getType() != KalturaEntryType::DATA)
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_TYPE,$entryId, $dbEntry->getType(), entryType::DATA);
+		if ($dbEntry->getType() != VidiunEntryType::DATA)
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_TYPE,$entryId, $dbEntry->getType(), entryType::DATA);
 
 		$resource->validateEntry($dbEntry);
-		$kResource = $resource->toObject();
-		$this->attachResource($kResource, $dbEntry);
+		$vResource = $resource->toObject();
+		$this->attachResource($vResource, $dbEntry);
 		$resource->entryHandled($dbEntry);
 
 		return $this->getEntry($entryId);
 	}
 
 	/**
-	* @param kResource $resource
+	* @param vResource $resource
 	* @param entry $dbEntry
 	* @param asset $dbAsset
 	* @return asset
 	*/
-	protected function attachResource(kResource $resource, entry $dbEntry, asset $dbAsset = null)
+	protected function attachResource(vResource $resource, entry $dbEntry, asset $dbAsset = null)
 	{
-		if(($resource->getType() == 'kLocalFileResource') && (!isset($resource->getSourceType) ||  $resource->getSourceType != KalturaSourceType::WEBCAM))
+		if(($resource->getType() == 'vLocalFileResource') && (!isset($resource->getSourceType) ||  $resource->getSourceType != VidiunSourceType::WEBCAM))
 		{
 			$file_path = $resource->getLocalFilePath();
-			$fileType = kFile::mimeType($file_path);
+			$fileType = vFile::mimeType($file_path);
 			if((substr($fileType, 0, 5) == 'text/') || ($fileType == 'application/xml')) {
-				$dbEntry->setDataContent(kFile::getFileContent($file_path));
+				$dbEntry->setDataContent(vFile::getFileContent($file_path));
 			}
 			else{
-				KalturaLog::err("Resource of type [" . get_class($resource) . "] with file type ". $fileType. " is not supported");
-				throw new KalturaAPIException(KalturaErrors::FILE_TYPE_NOT_SUPPORTED, $fileType);
+				VidiunLog::err("Resource of type [" . get_class($resource) . "] with file type ". $fileType. " is not supported");
+				throw new VidiunAPIException(VidiunErrors::FILE_TYPE_NOT_SUPPORTED, $fileType);
 			}
 		}
 		else
 		{
-			KalturaLog::err("Resource of type [" . get_class($resource) . "] is not supported");
-			throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
+			VidiunLog::err("Resource of type [" . get_class($resource) . "] is not supported");
+			throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
 		}
 	}
 }

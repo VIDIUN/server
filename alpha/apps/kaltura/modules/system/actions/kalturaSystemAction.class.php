@@ -4,9 +4,9 @@
  * @subpackage system
  * @deprecated
  */
-abstract class kalturaSystemAction extends kalturaAction
+abstract class vidiunSystemAction extends vidiunAction
 {
-	const COOKIE_NAME = "kalsysauth";
+	const COOKIE_NAME = "vidsysauth";
 	
 	const SYSTEM_CRED_EXPIRY_SEC = 86400; // one day 
 
@@ -14,8 +14,8 @@ abstract class kalturaSystemAction extends kalturaAction
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 		
-		$kal_sys_auth = @$_COOKIE[self::COOKIE_NAME];
-		if ( $kal_sys_auth == $this->authKey() ) //$this->getUser()->isAuthenticated() && $this->isValidExpiryCredential( "system_auth"))
+		$vid_sys_auth = @$_COOKIE[self::COOKIE_NAME];
+		if ( $vid_sys_auth == $this->authKey() ) //$this->getUser()->isAuthenticated() && $this->isValidExpiryCredential( "system_auth"))
 		{
 			return true;
 		}
@@ -43,7 +43,7 @@ abstract class kalturaSystemAction extends kalturaAction
 	protected function authKey ()
 	{
 		$ip = requestUtils::getRemoteAddress();
-		$hash = kConf::hasParam ( "system_pages_login_password" ) ? kConf::get ( "system_pages_login_password" ) : uniqid();
+		$hash = vConf::hasParam ( "system_pages_login_password" ) ? vConf::get ( "system_pages_login_password" ) : uniqid();
 		return sha1($hash.$ip);
 	}
 }

@@ -33,7 +33,7 @@ class listmyentriesAction extends listentriesAction
 					"page_size" => array ("type" => "integer", "desc" => ""),
 					"page" => array ("type" => "integer", "desc" => ""),
 					"entrys" => array ("type" => "*entry", "desc" => ""),
-					"user" => array ("type" => "kuser", "desc" => ""),
+					"user" => array ("type" => "vuser", "desc" => ""),
 					),
 				"errors" => array (
 				)
@@ -45,18 +45,18 @@ class listmyentriesAction extends listentriesAction
 		return self::REQUIED_TICKET_REGULAR;
 	}
 		
-	// for this specific kshow list - the ticket is regular and the filter is for all
-	// kshows for the current user only 
+	// for this specific vshow list - the ticket is regular and the filter is for all
+	// vshows for the current user only 
 	protected function setExtraFilters ( entryFilter &$fields_set )
 	{
 		$fields_set->set( "_eq_user_id" , $this->puser_id );
 		$fields_set->set( "_in_type" , entryType::MEDIA_CLIP . "," . entryType::MIX );
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$this->puser_id = $puser_id;
-		if( ! $puser_kuser )
+		if( ! $puser_vuser )
 		{
 			$this->addMsg ( "count" , 0 );
 			$this->addMsg ( "page_size" , 0 );
@@ -65,7 +65,7 @@ class listmyentriesAction extends listentriesAction
 			$this->addError( APIErrors::INVALID_USER_ID ,  $puser_id );
 			return;
 		}
-		parent::executeImpl( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser );
+		parent::executeImpl( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser );
 	}
 }
 ?>

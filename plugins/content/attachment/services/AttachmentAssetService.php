@@ -7,7 +7,7 @@
  * @package plugins.attachment
  * @subpackage api.services
  */
-class AttachmentAssetService extends KalturaAssetService
+class AttachmentAssetService extends VidiunAssetService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -21,7 +21,7 @@ class AttachmentAssetService extends KalturaAssetService
 	
 	protected function getEnabledMediaTypes()
 	{
-		$liveStreamTypes = KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, KalturaEntryType::LIVE_STREAM);
+		$liveStreamTypes = VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, VidiunEntryType::LIVE_STREAM);
 		
 		$mediaTypes = array_merge($liveStreamTypes, parent::getEnabledMediaTypes());
 		$mediaTypes[] = entryType::AUTOMATIC;
@@ -30,7 +30,7 @@ class AttachmentAssetService extends KalturaAssetService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerRequired()
+	 * @see VidiunBaseService::partnerRequired()
 	 */
 	protected function partnerRequired($actionName)
 	{
@@ -41,9 +41,9 @@ class AttachmentAssetService extends KalturaAssetService
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::kalturaNetworkAllowed()
+	 * @see VidiunBaseService::vidiunNetworkAllowed()
 	 */
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if(
 			$actionName == 'get' ||
@@ -55,7 +55,7 @@ class AttachmentAssetService extends KalturaAssetService
 			return true;
 		}
 			
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 	
     /**
@@ -63,22 +63,22 @@ class AttachmentAssetService extends KalturaAssetService
      *
      * @action add
      * @param string $entryId
-     * @param KalturaAttachmentAsset $attachmentAsset
-     * @return KalturaAttachmentAsset
-     * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED
+     * @param VidiunAttachmentAsset $attachmentAsset
+     * @return VidiunAttachmentAsset
+     * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED
 	 * @validateUser entry entryId edit
      */
-    function addAction($entryId, KalturaAttachmentAsset $attachmentAsset)
+    function addAction($entryId, VidiunAttachmentAsset $attachmentAsset)
     {
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if(!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		$dbAsset = $attachmentAsset->toInsertableObject();
 		$dbAsset->setEntryId($entryId);
@@ -86,7 +86,7 @@ class AttachmentAssetService extends KalturaAssetService
 		$dbAsset->setStatus(AttachmentAsset::ASSET_STATUS_QUEUED);
 		$dbAsset->save();
 
-		$asset = KalturaAsset::getInstance($dbAsset);
+		$asset = VidiunAsset::getInstance($dbAsset);
 		$asset->fromObject($dbAsset, $this->getResponseProfile());
 		return $asset;
     }
@@ -96,35 +96,35 @@ class AttachmentAssetService extends KalturaAssetService
      *
      * @action setContent
      * @param string $id
-     * @param KalturaContentResource $contentResource
-     * @return KalturaAttachmentAsset
-     * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED 
+     * @param VidiunContentResource $contentResource
+     * @return VidiunAttachmentAsset
+     * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED 
 	 * @validateUser asset::entry id edit
      */
-    function setContentAction($id, KalturaContentResource $contentResource)
+    function setContentAction($id, VidiunContentResource $contentResource)
     {
    		$dbAttachmentAsset = assetPeer::retrieveById($id);
    		if (!$dbAttachmentAsset || !($dbAttachmentAsset instanceof AttachmentAsset))
-   			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $id);
+   			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $id);
     	
 		$dbEntry = $dbAttachmentAsset->getentry();
     	if(!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()))
-    		throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $dbAttachmentAsset->getEntryId());
+    		throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $dbAttachmentAsset->getEntryId());
 		
 		
    		$previousStatus = $dbAttachmentAsset->getStatus();
 		$contentResource->validateEntry($dbAttachmentAsset->getentry());
 		$contentResource->validateAsset($dbAttachmentAsset);
-		$kContentResource = $contentResource->toObject();
-    	$this->attachContentResource($dbAttachmentAsset, $kContentResource);
+		$vContentResource = $contentResource->toObject();
+    	$this->attachContentResource($dbAttachmentAsset, $vContentResource);
 		$contentResource->entryHandled($dbAttachmentAsset->getentry());
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbAttachmentAsset));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbAttachmentAsset));
 		
     	$newStatuses = array(
     		AttachmentAsset::ASSET_STATUS_READY,
@@ -133,9 +133,9 @@ class AttachmentAssetService extends KalturaAssetService
     	);
     	
     	if($previousStatus == AttachmentAsset::ASSET_STATUS_QUEUED && in_array($dbAttachmentAsset->getStatus(), $newStatuses))
-   			kEventsManager::raiseEvent(new kObjectAddedEvent($dbAttachmentAsset));
+   			vEventsManager::raiseEvent(new vObjectAddedEvent($dbAttachmentAsset));
    		
-		$attachmentAsset = KalturaAsset::getInstance($dbAttachmentAsset);
+		$attachmentAsset = VidiunAsset::getInstance($dbAttachmentAsset);
 		$attachmentAsset->fromObject($dbAttachmentAsset, $this->getResponseProfile());
 		return $attachmentAsset;
     }
@@ -145,26 +145,26 @@ class AttachmentAssetService extends KalturaAssetService
      *
      * @action update
      * @param string $id
-     * @param KalturaAttachmentAsset $attachmentAsset
-     * @return KalturaAttachmentAsset
-     * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+     * @param VidiunAttachmentAsset $attachmentAsset
+     * @return VidiunAttachmentAsset
+     * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
      * @validateUser asset::entry id edit
      */
-    function updateAction($id, KalturaAttachmentAsset $attachmentAsset)
+    function updateAction($id, VidiunAttachmentAsset $attachmentAsset)
     {
 		$dbAttachmentAsset = assetPeer::retrieveById($id);
 		if (!$dbAttachmentAsset || !($dbAttachmentAsset instanceof AttachmentAsset))
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $id);
     	
 		$dbEntry = $dbAttachmentAsset->getentry();
     	if(!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()))
-    		throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $dbAttachmentAsset->getEntryId());
+    		throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $dbAttachmentAsset->getEntryId());
 		
 		
     	$dbAttachmentAsset = $attachmentAsset->toUpdatableObject($dbAttachmentAsset);
     	$dbAttachmentAsset->save();
 		
-		$attachmentAsset = KalturaAsset::getInstance($dbAttachmentAsset);
+		$attachmentAsset = VidiunAsset::getInstance($dbAttachmentAsset);
 		$attachmentAsset->fromObject($dbAttachmentAsset, $this->getResponseProfile());
 		return $attachmentAsset;
     }
@@ -184,13 +184,13 @@ class AttachmentAssetService extends KalturaAssetService
         {
             $attachmentAsset->setFileExt($ext);
         }
-		$attachmentAsset->setSize(kFile::fileSize($fullPath));
+		$attachmentAsset->setSize(vFile::fileSize($fullPath));
 		$attachmentAsset->save();
 		
 		$syncKey = $attachmentAsset->getSyncKey(AttachmentAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 		
 		try {
-			kFileSyncUtils::moveFromFile($fullPath, $syncKey, true, $copyOnly);
+			vFileSyncUtils::moveFromFile($fullPath, $syncKey, true, $copyOnly);
 		}
 		catch (Exception $e) {
 			
@@ -203,8 +203,8 @@ class AttachmentAssetService extends KalturaAssetService
 			throw $e;
 		}
 		
-		$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
-		list($width, $height, $type, $attr) = kImageUtils::getImageSize($fileSync);
+		$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
+		list($width, $height, $type, $attr) = vImageUtils::getImageSize($fileSync);
 		
 		$attachmentAsset->setWidth($width);
 		$attachmentAsset->setHeight($height);
@@ -221,7 +221,7 @@ class AttachmentAssetService extends KalturaAssetService
 	protected function attachUrl(AttachmentAsset $attachmentAsset, $url)
 	{
     	$fullPath = myContentStorage::getFSUploadsPath() . '/' . basename($url);
-		if (KCurlWrapper::getDataFromFile($url, $fullPath))
+		if (VCurlWrapper::getDataFromFile($url, $fullPath))
 			return $this->attachFile($attachmentAsset, $fullPath);
 			
 		if($attachmentAsset->getStatus() == AttachmentAsset::ASSET_STATUS_QUEUED || $attachmentAsset->getStatus() == AttachmentAsset::ASSET_STATUS_NOT_APPLICABLE)
@@ -231,23 +231,23 @@ class AttachmentAssetService extends KalturaAssetService
 			$attachmentAsset->save();
 		}
 		
-		throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_DOWNLOAD_FAILED, $url);
+		throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_DOWNLOAD_FAILED, $url);
     }
     
 	/**
 	 * @param AttachmentAsset $attachmentAsset
-	 * @param kUrlResource $contentResource
+	 * @param vUrlResource $contentResource
 	 */
-	protected function attachUrlResource(AttachmentAsset $attachmentAsset, kUrlResource $contentResource)
+	protected function attachUrlResource(AttachmentAsset $attachmentAsset, vUrlResource $contentResource)
 	{
     	$this->attachUrl($attachmentAsset, $contentResource->getUrl());
     }
     
 	/**
 	 * @param AttachmentAsset $attachmentAsset
-	 * @param kLocalFileResource $contentResource
+	 * @param vLocalFileResource $contentResource
 	 */
-	protected function attachLocalFileResource(AttachmentAsset $attachmentAsset, kLocalFileResource $contentResource)
+	protected function attachLocalFileResource(AttachmentAsset $attachmentAsset, vLocalFileResource $contentResource)
 	{
 		if($contentResource->getIsReady())
 			return $this->attachFile($attachmentAsset, $contentResource->getLocalFilePath(), $contentResource->getKeepOriginalFile());
@@ -268,10 +268,10 @@ class AttachmentAssetService extends KalturaAssetService
 		$attachmentAsset->save();
 		
         $newSyncKey = $attachmentAsset->getSyncKey(AttachmentAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-        kFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
+        vFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
 		
-		$fileSync = kFileSyncUtils::getLocalFileSyncForKey($newSyncKey, false);
-		list($width, $height, $type, $attr) = kImageUtils::getImageSize($fileSync);
+		$fileSync = vFileSyncUtils::getLocalFileSyncForKey($newSyncKey, false);
+		list($width, $height, $type, $attr) = vImageUtils::getImageSize($fileSync);
 		
 		$attachmentAsset->setWidth($width);
 		$attachmentAsset->setHeight($height);
@@ -283,11 +283,11 @@ class AttachmentAssetService extends KalturaAssetService
     
 	/**
 	 * @param AttachmentAsset $attachmentAsset
-	 * @param kFileSyncResource $contentResource
+	 * @param vFileSyncResource $contentResource
 	 */
-	protected function attachFileSyncResource(AttachmentAsset $attachmentAsset, kFileSyncResource $contentResource)
+	protected function attachFileSyncResource(AttachmentAsset $attachmentAsset, vFileSyncResource $contentResource)
 	{
-    	$syncable = kFileSyncObjectManager::retrieveObject($contentResource->getFileSyncObjectType(), $contentResource->getObjectId());
+    	$syncable = vFileSyncObjectManager::retrieveObject($contentResource->getFileSyncObjectType(), $contentResource->getObjectId());
     	$srcSyncKey = $syncable->getSyncKey($contentResource->getObjectSubType(), $contentResource->getVersion());
     	
         return $this->attachFileSync($attachmentAsset, $srcSyncKey);
@@ -296,7 +296,7 @@ class AttachmentAssetService extends KalturaAssetService
 	/**
 	 * @param AttachmentAsset $attachmentAsset
 	 * @param IRemoteStorageResource $contentResource
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
 	 */
 	protected function attachRemoteStorageResource(AttachmentAsset $attachmentAsset, IRemoteStorageResource $contentResource)
 	{
@@ -311,41 +311,41 @@ class AttachmentAssetService extends KalturaAssetService
 		foreach($resources as $currentResource)
 		{
 			$storageProfile = StorageProfilePeer::retrieveByPK($currentResource->getStorageProfileId());
-			$fileSync = kFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
+			$fileSync = vFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
 		}
     }
     
     
 	/**
 	 * @param AttachmentAsset $attachmentAsset
-	 * @param kContentResource $contentResource
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED
+	 * @param vContentResource $contentResource
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED
 	 */
-	protected function attachContentResource(AttachmentAsset $attachmentAsset, kContentResource $contentResource)
+	protected function attachContentResource(AttachmentAsset $attachmentAsset, vContentResource $contentResource)
 	{
     	switch($contentResource->getType())
     	{
-			case 'kUrlResource':
+			case 'vUrlResource':
 				return $this->attachUrlResource($attachmentAsset, $contentResource);
 				
-			case 'kLocalFileResource':
+			case 'vLocalFileResource':
 				return $this->attachLocalFileResource($attachmentAsset, $contentResource);
 				
-			case 'kFileSyncResource':
+			case 'vFileSyncResource':
 				return $this->attachFileSyncResource($attachmentAsset, $contentResource);
 				
-			case 'kRemoteStorageResource':
-			case 'kRemoteStorageResources':
+			case 'vRemoteStorageResource':
+			case 'vRemoteStorageResources':
 				return $this->attachRemoteStorageResource($attachmentAsset, $contentResource);
 				
 			default:
 				$msg = "Resource of type [" . get_class($contentResource) . "] is not supported";
-				KalturaLog::err($msg);
+				VidiunLog::err($msg);
 				
 				if($attachmentAsset->getStatus() == AttachmentAsset::ASSET_STATUS_QUEUED || $attachmentAsset->getStatus() == AttachmentAsset::ASSET_STATUS_NOT_APPLICABLE)
 				{
@@ -354,7 +354,7 @@ class AttachmentAssetService extends KalturaAssetService
 					$attachmentAsset->save();
 				}
 				
-				throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($contentResource));
+				throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($contentResource));
     	}
     }
 	
@@ -365,23 +365,23 @@ class AttachmentAssetService extends KalturaAssetService
 	 * @param string $id
 	 * @param int $storageId
 	 * @return string
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_IS_NOT_READY
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_IS_NOT_READY
 	 */
 	public function getUrlAction($id, $storageId = null)
 	{
 		$assetDb = assetPeer::retrieveById($id);
 		if (!$assetDb || !($assetDb instanceof AttachmentAsset))
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $id);
 
 		$this->validateEntryEntitlement($assetDb->getEntryId(), $id);
 		
 		if ($assetDb->getStatus() != asset::ASSET_STATUS_READY)
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_IS_NOT_READY);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_IS_NOT_READY);
 		
 		$entryDb = $assetDb->getentry();
 		if(is_null($entryDb))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $assetDb->getEntryId());
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $assetDb->getEntryId());
 		
 		if($storageId)
 			return $assetDb->getExternalUrl($storageId);
@@ -394,18 +394,18 @@ class AttachmentAssetService extends KalturaAssetService
 	 * 
 	 * @action getRemotePaths
 	 * @param string $id
-	 * @return KalturaRemotePathListResponse
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_IS_NOT_READY
+	 * @return VidiunRemotePathListResponse
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_IS_NOT_READY
 	 */
 	public function getRemotePathsAction($id)
 	{
 		$assetDb = assetPeer::retrieveById($id);
 		if (!$assetDb || !($assetDb instanceof AttachmentAsset))
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $id);
 
 		if ($assetDb->getStatus() != asset::ASSET_STATUS_READY)
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_IS_NOT_READY);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_IS_NOT_READY);
 
 		$c = new Criteria();
 		$c->add(FileSyncPeer::OBJECT_TYPE, FileSyncObjectType::ASSET);
@@ -417,8 +417,8 @@ class AttachmentAssetService extends KalturaAssetService
 		$c->add(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_URL);
 		$fileSyncs = FileSyncPeer::doSelect($c);
 			
-		$listResponse = new KalturaRemotePathListResponse();
-		$listResponse->objects = KalturaRemotePathArray::fromDbArray($fileSyncs, $this->getResponseProfile());
+		$listResponse = new VidiunRemotePathListResponse();
+		$listResponse->objects = VidiunRemotePathArray::fromDbArray($fileSyncs, $this->getResponseProfile());
 		$listResponse->totalCount = count($listResponse->objects);
 		return $listResponse;
 	}
@@ -428,25 +428,25 @@ class AttachmentAssetService extends KalturaAssetService
 	 *  
 	 * @action serve
 	 * @param string $attachmentAssetId
-	 * @param KalturaAttachmentServeOptions $serveOptions
+	 * @param VidiunAttachmentServeOptions $serveOptions
 	 * @return file
-	 * @ksOptional
+	 * @vsOptional
 	 *  
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
 	 */
-	public function serveAction($attachmentAssetId, KalturaAttachmentServeOptions $serveOptions = null)
+	public function serveAction($attachmentAssetId, VidiunAttachmentServeOptions $serveOptions = null)
 	{
 		$attachmentAsset = null;
-		if (!kCurrentContext::$ks)
+		if (!vCurrentContext::$vs)
 		{	
-			$attachmentAsset = kCurrentContext::initPartnerByAssetId($attachmentAssetId);
+			$attachmentAsset = vCurrentContext::initPartnerByAssetId($attachmentAssetId);
 			
 			if (!$attachmentAsset || $attachmentAsset->getStatus() == asset::ASSET_STATUS_DELETED)
-				throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
+				throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
 				
 			// enforce entitlement
-			$this->setPartnerFilters(kCurrentContext::getCurrentPartnerId());
-			kEntitlementUtils::initEntitlementEnforcement();
+			$this->setPartnerFilters(vCurrentContext::getCurrentPartnerId());
+			vEntitlementUtils::initEntitlementEnforcement();
 		}
 		else 
 		{	
@@ -454,16 +454,16 @@ class AttachmentAssetService extends KalturaAssetService
 		}
 		
 		if (!$attachmentAsset || !($attachmentAsset instanceof AttachmentAsset))
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
 		
 		$entry = entryPeer::retrieveByPK($attachmentAsset->getEntryId());
 		if(!$entry)
 		{
 			//we will throw attachment asset not found, as the user is not entitled, and should not know that the entry exists.
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
 		}
 		
-		$securyEntryHelper = new KSecureEntryHelper($entry, kCurrentContext::$ks, null, ContextType::DOWNLOAD);
+		$securyEntryHelper = new VSecureEntryHelper($entry, vCurrentContext::$vs, null, ContextType::DOWNLOAD);
 		$securyEntryHelper->validateForDownload();
 		
 		$ext = $attachmentAsset->getFileExt();
@@ -483,17 +483,17 @@ class AttachmentAssetService extends KalturaAssetService
 	/**
 	 * @action get
 	 * @param string $attachmentAssetId
-	 * @return KalturaAttachmentAsset
+	 * @return VidiunAttachmentAsset
 	 * 
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
 	 */
 	public function getAction($attachmentAssetId)
 	{
 		$attachmentAssetsDb = assetPeer::retrieveById($attachmentAssetId);
 		if (!$attachmentAssetsDb || !($attachmentAssetsDb instanceof AttachmentAsset))
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
 		
-		$attachmentAsset = KalturaAsset::getInstance($attachmentAssetsDb);
+		$attachmentAsset = VidiunAsset::getInstance($attachmentAssetsDb);
 		$attachmentAsset->fromObject($attachmentAssetsDb, $this->getResponseProfile());
 		return $attachmentAsset;
 	}
@@ -502,27 +502,27 @@ class AttachmentAssetService extends KalturaAssetService
 	 * List attachment Assets by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaAssetFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaAttachmentAssetListResponse
+	 * @param VidiunAssetFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunAttachmentAssetListResponse
 	 */
-	function listAction(KalturaAssetFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunAssetFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if(!$filter)
 		{
-			$filter = new KalturaAttachmentAssetFilter();
+			$filter = new VidiunAttachmentAssetFilter();
 		}
-		elseif(! $filter instanceof KalturaAttachmentAssetFilter)
+		elseif(! $filter instanceof VidiunAttachmentAssetFilter)
 		{
-			$filter = $filter->cast('KalturaAttachmentAssetFilter');
+			$filter = $filter->cast('VidiunAttachmentAssetFilter');
 		}
 			
 		if(!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 
-		$types = KalturaPluginManager::getExtendedTypes(assetPeer::OM_CLASS, AttachmentPlugin::getAssetTypeCoreValue(AttachmentAssetType::ATTACHMENT));
+		$types = VidiunPluginManager::getExtendedTypes(assetPeer::OM_CLASS, AttachmentPlugin::getAssetTypeCoreValue(AttachmentAssetType::ATTACHMENT));
 		return $filter->getTypeListResponse($pager, $this->getResponseProfile(), $types);
 	}
 	
@@ -530,18 +530,18 @@ class AttachmentAssetService extends KalturaAssetService
 	 * @action delete
 	 * @param string $attachmentAssetId
 	 * 
-	 * @throws KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
+	 * @throws VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND
 	 * @validateUser asset::entry attachmentAssetId edit
 	 */
 	public function deleteAction($attachmentAssetId)
 	{
 		$attachmentAssetDb = assetPeer::retrieveById($attachmentAssetId);
 		if (!$attachmentAssetDb || !($attachmentAssetDb instanceof AttachmentAsset))
-			throw new KalturaAPIException(KalturaAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
+			throw new VidiunAPIException(VidiunAttachmentErrors::ATTACHMENT_ASSET_ID_NOT_FOUND, $attachmentAssetId);
 	
 		$dbEntry = $attachmentAssetDb->getentry();
     	if(!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()))
-    		throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $attachmentAssetDb->getEntryId());
+    		throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $attachmentAssetDb->getEntryId());
 		
 		
 		$attachmentAssetDb->setStatus(AttachmentAsset::ASSET_STATUS_DELETED);

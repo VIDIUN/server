@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFieldMatchCondition extends KalturaMatchCondition
+class VidiunFieldMatchCondition extends VidiunMatchCondition
 {
 	/**
 	 * Field to evaluate
-	 * @var KalturaStringField
+	 * @var VidiunStringField
 	 */
 	public $field;
 	
@@ -20,73 +20,73 @@ class KalturaFieldMatchCondition extends KalturaMatchCondition
 	}
 	 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kFieldMatchCondition();
+			$dbObject = new vFieldMatchCondition();
 	
-		/* @var $dbObject kFieldMatchCondition */
+		/* @var $dbObject vFieldMatchCondition */
 		$dbObject->setField($this->field->toObject());
 			
 		return parent::toObject($dbObject, $skip);
 	}
 	 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kFieldMatchCondition */
+		/* @var $dbObject vFieldMatchCondition */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		$fieldType = get_class($dbObject->getField());
-		KalturaLog::debug("Loading KalturaStringField from type [$fieldType]");
+		VidiunLog::debug("Loading VidiunStringField from type [$fieldType]");
 		switch ($fieldType)
 		{
-			case 'kCountryContextField':
-				$this->field = new KalturaCountryContextField();
+			case 'vCountryContextField':
+				$this->field = new VidiunCountryContextField();
 				break;
 				
-			case 'kIpAddressContextField':
-				$this->field = new KalturaIpAddressContextField();
+			case 'vIpAddressContextField':
+				$this->field = new VidiunIpAddressContextField();
 				break;
 				
-			case 'kUserAgentContextField':
-				$this->field = new KalturaUserAgentContextField();
+			case 'vUserAgentContextField':
+				$this->field = new VidiunUserAgentContextField();
 				break;
 				
-			case 'kUserEmailContextField':
-				$this->field = new KalturaUserEmailContextField();
+			case 'vUserEmailContextField':
+				$this->field = new VidiunUserEmailContextField();
 				break;
 				
-			case 'kCoordinatesContextField':
-				$this->field = new KalturaCoordinatesContextField();
+			case 'vCoordinatesContextField':
+				$this->field = new VidiunCoordinatesContextField();
 				break;
 
-			case 'kAnonymousIPContextField':
-				$this->field = new KalturaAnonymousIPContextField();
+			case 'vAnonymousIPContextField':
+				$this->field = new VidiunAnonymousIPContextField();
 				break;
 
-			case 'kEvalStringField':
-			    $this->field = new KalturaEvalStringField();
+			case 'vEvalStringField':
+			    $this->field = new VidiunEvalStringField();
 			    break;
 			
-			case 'kObjectIdField':
-			    $this->field = new KalturaObjectIdField();
+			case 'vObjectIdField':
+			    $this->field = new VidiunObjectIdField();
 			    break;				
 				
-			case 'kEvalStringField':
-				$this->field = new KalturaEvalStringField();
+			case 'vEvalStringField':
+				$this->field = new VidiunEvalStringField();
 				break;
 				
-			case 'kObjectIdField':
-				$this->field = new KalturaObjectIdField();
+			case 'vObjectIdField':
+				$this->field = new VidiunObjectIdField();
 				break;
 				
 			default:
-				$this->field = KalturaPluginManager::loadObject('KalturaStringField', $fieldType);
+				$this->field = VidiunPluginManager::loadObject('VidiunStringField', $fieldType);
 				break;
 		}
 		

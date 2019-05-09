@@ -1,6 +1,6 @@
 <?php
 
-class kReportResponseOptions
+class vReportResponseOptions
 {
 
 	protected $delimiter;

@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KOperationEngineExpressionEncoder3 extends KOperationEngine
+class VOperationEngineExpressionEncoder3 extends VOperationEngine
 {
 	/**
 	 * @var string
@@ -29,7 +29,7 @@ class KOperationEngineExpressionEncoder3 extends KOperationEngine
 	protected function getCmdLine()
 	{
 		$xml = file_get_contents($this->configFilePath);
-		$xml = str_replace(KDLCmdlinePlaceholders::OutDir, $this->outDir, $xml);
+		$xml = str_replace(VDLCmdlinePlaceholders::OutDir, $this->outDir, $xml);
 		file_put_contents($this->configFilePath, $xml);
 
 		$this->addToLogFile("Config File Path: $this->configFilePath");
@@ -37,7 +37,7 @@ class KOperationEngineExpressionEncoder3 extends KOperationEngine
 		
 		$exec_cmd = $this->cmd . " " . 
 			str_replace ( 
-				array(KDLCmdlinePlaceholders::InFileName, KDLCmdlinePlaceholders::OutDir, KDLCmdlinePlaceholders::ConfigFileName), 
+				array(VDLCmdlinePlaceholders::InFileName, VDLCmdlinePlaceholders::OutDir, VDLCmdlinePlaceholders::ConfigFileName), 
 				array($this->inFilePath, $this->outDir, $this->configFilePath),
 				$this->operator->command);
 				
@@ -47,7 +47,7 @@ class KOperationEngineExpressionEncoder3 extends KOperationEngine
 	}
 	
 	/* (non-PHPdoc)
-	 * @see batches/Convert/OperationEngines/KOperationEngine#doOperation()
+	 * @see batches/Convert/OperationEngines/VOperationEngine#doOperation()
 	 */
 	protected function doOperation()
 	{
@@ -64,16 +64,16 @@ class KOperationEngineExpressionEncoder3 extends KOperationEngine
 	protected function parseCreatedFiles()
 	{
 		$xmlPath = $this->outDir . DIRECTORY_SEPARATOR . $this->destFileName . '.ism';
-		KalturaLog::info("Parse created files from ism[$xmlPath]");
+		VidiunLog::info("Parse created files from ism[$xmlPath]");
 		
 		// in case of wma
 		if(!file_exists($xmlPath))
 		{
-			KalturaLog::info("ism file[$xmlPath] doesn't exist");
+			VidiunLog::info("ism file[$xmlPath] doesn't exist");
 			$wmaPath = $this->outDir . DIRECTORY_SEPARATOR . $this->destFileName . '.wma';
 			if(file_exists($wmaPath))
 			{
-				KalturaLog::info("wma file[$wmaPath] found");
+				VidiunLog::info("wma file[$wmaPath] found");
 				$this->outFilesPath[0] = $wmaPath;
 			}
 			
@@ -83,7 +83,7 @@ class KOperationEngineExpressionEncoder3 extends KOperationEngine
 		$xml = file_get_contents($xmlPath);
 		$xml = mb_convert_encoding($xml, 'ASCII', 'UTF-16');
 		
-		KalturaLog::debug("ism content:\n$xml");
+		VidiunLog::debug("ism content:\n$xml");
 		
 		$arr = null;
 		if(preg_match('/(<smil[\s\w\W]+<\/smil>)/', $xml, $arr))
@@ -99,7 +99,7 @@ class KOperationEngineExpressionEncoder3 extends KOperationEngine
 			$src = $this->outDir . DIRECTORY_SEPARATOR . $videoEntity->getAttribute("src");
 			$bitrate = $videoEntity->getAttribute("systemBitrate") / 1000;
 			
-			KalturaLog::info("Media found in ism bitrate[$bitrate] source[$src]");
+			VidiunLog::info("Media found in ism bitrate[$bitrate] source[$src]");
 			$this->outFilesPath[$bitrate] = $src;
 		}
 	}

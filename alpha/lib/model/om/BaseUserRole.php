@@ -93,14 +93,14 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 	protected $system_name;
 
 	/**
-	 * @var        array KuserToUserRole[] Collection to store aggregation of KuserToUserRole objects.
+	 * @var        array VuserToUserRole[] Collection to store aggregation of VuserToUserRole objects.
 	 */
-	protected $collKuserToUserRoles;
+	protected $collVuserToUserRoles;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collKuserToUserRoles.
+	 * @var        Criteria The criteria used to select the current contents of collVuserToUserRoles.
 	 */
-	private $lastKuserToUserRoleCriteria = null;
+	private $lastVuserToUserRoleCriteria = null;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -794,8 +794,8 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->collKuserToUserRoles = null;
-			$this->lastKuserToUserRoleCriteria = null;
+			$this->collVuserToUserRoles = null;
+			$this->lastVuserToUserRoleCriteria = null;
 
 		} // if (deep)
 	}
@@ -938,8 +938,8 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
-			if ($this->collKuserToUserRoles !== null) {
-				foreach ($this->collKuserToUserRoles as $referrerFK) {
+			if ($this->collVuserToUserRoles !== null) {
+				foreach ($this->collVuserToUserRoles as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -984,7 +984,7 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1010,12 +1010,12 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1033,8 +1033,8 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1159,8 +1159,8 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 			}
 
 
-				if ($this->collKuserToUserRoles !== null) {
-					foreach ($this->collKuserToUserRoles as $referrerFK) {
+				if ($this->collVuserToUserRoles !== null) {
+					foreach ($this->collVuserToUserRoles as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1489,9 +1489,9 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
 
-			foreach ($this->getKuserToUserRoles() as $relObj) {
+			foreach ($this->getVuserToUserRoles() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addKuserToUserRole($relObj->copy($deepCopy));
+					$copyObj->addVuserToUserRole($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1561,47 +1561,47 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Clears out the collKuserToUserRoles collection (array).
+	 * Clears out the collVuserToUserRoles collection (array).
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addKuserToUserRoles()
+	 * @see        addVuserToUserRoles()
 	 */
-	public function clearKuserToUserRoles()
+	public function clearVuserToUserRoles()
 	{
-		$this->collKuserToUserRoles = null; // important to set this to NULL since that means it is uninitialized
+		$this->collVuserToUserRoles = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collKuserToUserRoles collection (array).
+	 * Initializes the collVuserToUserRoles collection (array).
 	 *
-	 * By default this just sets the collKuserToUserRoles collection to an empty array (like clearcollKuserToUserRoles());
+	 * By default this just sets the collVuserToUserRoles collection to an empty array (like clearcollVuserToUserRoles());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
 	 * @return     void
 	 */
-	public function initKuserToUserRoles()
+	public function initVuserToUserRoles()
 	{
-		$this->collKuserToUserRoles = array();
+		$this->collVuserToUserRoles = array();
 	}
 
 	/**
-	 * Gets an array of KuserToUserRole objects which contain a foreign key that references this object.
+	 * Gets an array of VuserToUserRole objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
 	 * Otherwise if this UserRole has previously been saved, it will retrieve
-	 * related KuserToUserRoles from storage. If this UserRole is new, it will return
+	 * related VuserToUserRoles from storage. If this UserRole is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
 	 * @param      Criteria $criteria
-	 * @return     array KuserToUserRole[]
+	 * @return     array VuserToUserRole[]
 	 * @throws     PropelException
 	 */
-	public function getKuserToUserRoles($criteria = null, PropelPDO $con = null)
+	public function getVuserToUserRoles($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(UserRolePeer::DATABASE_NAME);
@@ -1611,15 +1611,15 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collKuserToUserRoles === null) {
+		if ($this->collVuserToUserRoles === null) {
 			if ($this->isNew()) {
-			   $this->collKuserToUserRoles = array();
+			   $this->collVuserToUserRoles = array();
 			} else {
 
-				$criteria->add(KuserToUserRolePeer::USER_ROLE_ID, $this->id);
+				$criteria->add(VuserToUserRolePeer::USER_ROLE_ID, $this->id);
 
-				KuserToUserRolePeer::addSelectColumns($criteria);
-				$this->collKuserToUserRoles = KuserToUserRolePeer::doSelect($criteria, $con);
+				VuserToUserRolePeer::addSelectColumns($criteria);
+				$this->collVuserToUserRoles = VuserToUserRolePeer::doSelect($criteria, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -1629,28 +1629,28 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(KuserToUserRolePeer::USER_ROLE_ID, $this->id);
+				$criteria->add(VuserToUserRolePeer::USER_ROLE_ID, $this->id);
 
-				KuserToUserRolePeer::addSelectColumns($criteria);
-				if (!isset($this->lastKuserToUserRoleCriteria) || !$this->lastKuserToUserRoleCriteria->equals($criteria)) {
-					$this->collKuserToUserRoles = KuserToUserRolePeer::doSelect($criteria, $con);
+				VuserToUserRolePeer::addSelectColumns($criteria);
+				if (!isset($this->lastVuserToUserRoleCriteria) || !$this->lastVuserToUserRoleCriteria->equals($criteria)) {
+					$this->collVuserToUserRoles = VuserToUserRolePeer::doSelect($criteria, $con);
 				}
 			}
 		}
-		$this->lastKuserToUserRoleCriteria = $criteria;
-		return $this->collKuserToUserRoles;
+		$this->lastVuserToUserRoleCriteria = $criteria;
+		return $this->collVuserToUserRoles;
 	}
 
 	/**
-	 * Returns the number of related KuserToUserRole objects.
+	 * Returns the number of related VuserToUserRole objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related KuserToUserRole objects.
+	 * @return     int Count of related VuserToUserRole objects.
 	 * @throws     PropelException
 	 */
-	public function countKuserToUserRoles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countVuserToUserRoles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(UserRolePeer::DATABASE_NAME);
@@ -1664,14 +1664,14 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 
 		$count = null;
 
-		if ($this->collKuserToUserRoles === null) {
+		if ($this->collVuserToUserRoles === null) {
 			if ($this->isNew()) {
 				$count = 0;
 			} else {
 
-				$criteria->add(KuserToUserRolePeer::USER_ROLE_ID, $this->id);
+				$criteria->add(VuserToUserRolePeer::USER_ROLE_ID, $this->id);
 
-				$count = KuserToUserRolePeer::doCount($criteria, false, $con);
+				$count = VuserToUserRolePeer::doCount($criteria, false, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -1681,35 +1681,35 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(KuserToUserRolePeer::USER_ROLE_ID, $this->id);
+				$criteria->add(VuserToUserRolePeer::USER_ROLE_ID, $this->id);
 
-				if (!isset($this->lastKuserToUserRoleCriteria) || !$this->lastKuserToUserRoleCriteria->equals($criteria)) {
-					$count = KuserToUserRolePeer::doCount($criteria, false, $con);
+				if (!isset($this->lastVuserToUserRoleCriteria) || !$this->lastVuserToUserRoleCriteria->equals($criteria)) {
+					$count = VuserToUserRolePeer::doCount($criteria, false, $con);
 				} else {
-					$count = count($this->collKuserToUserRoles);
+					$count = count($this->collVuserToUserRoles);
 				}
 			} else {
-				$count = count($this->collKuserToUserRoles);
+				$count = count($this->collVuserToUserRoles);
 			}
 		}
 		return $count;
 	}
 
 	/**
-	 * Method called to associate a KuserToUserRole object to this object
-	 * through the KuserToUserRole foreign key attribute.
+	 * Method called to associate a VuserToUserRole object to this object
+	 * through the VuserToUserRole foreign key attribute.
 	 *
-	 * @param      KuserToUserRole $l KuserToUserRole
+	 * @param      VuserToUserRole $l VuserToUserRole
 	 * @return     void
 	 * @throws     PropelException
 	 */
-	public function addKuserToUserRole(KuserToUserRole $l)
+	public function addVuserToUserRole(VuserToUserRole $l)
 	{
-		if ($this->collKuserToUserRoles === null) {
-			$this->initKuserToUserRoles();
+		if ($this->collVuserToUserRoles === null) {
+			$this->initVuserToUserRoles();
 		}
-		if (!in_array($l, $this->collKuserToUserRoles, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collKuserToUserRoles, $l);
+		if (!in_array($l, $this->collVuserToUserRoles, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collVuserToUserRoles, $l);
 			$l->setUserRole($this);
 		}
 	}
@@ -1720,13 +1720,13 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this UserRole is new, it will return
 	 * an empty collection; or if this UserRole has previously
-	 * been saved, it will retrieve related KuserToUserRoles from storage.
+	 * been saved, it will retrieve related VuserToUserRoles from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in UserRole.
 	 */
-	public function getKuserToUserRolesJoinkuser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getVuserToUserRolesJoinvuser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(UserRolePeer::DATABASE_NAME);
@@ -1736,29 +1736,29 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collKuserToUserRoles === null) {
+		if ($this->collVuserToUserRoles === null) {
 			if ($this->isNew()) {
-				$this->collKuserToUserRoles = array();
+				$this->collVuserToUserRoles = array();
 			} else {
 
-				$criteria->add(KuserToUserRolePeer::USER_ROLE_ID, $this->id);
+				$criteria->add(VuserToUserRolePeer::USER_ROLE_ID, $this->id);
 
-				$this->collKuserToUserRoles = KuserToUserRolePeer::doSelectJoinkuser($criteria, $con, $join_behavior);
+				$this->collVuserToUserRoles = VuserToUserRolePeer::doSelectJoinvuser($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(KuserToUserRolePeer::USER_ROLE_ID, $this->id);
+			$criteria->add(VuserToUserRolePeer::USER_ROLE_ID, $this->id);
 
-			if (!isset($this->lastKuserToUserRoleCriteria) || !$this->lastKuserToUserRoleCriteria->equals($criteria)) {
-				$this->collKuserToUserRoles = KuserToUserRolePeer::doSelectJoinkuser($criteria, $con, $join_behavior);
+			if (!isset($this->lastVuserToUserRoleCriteria) || !$this->lastVuserToUserRoleCriteria->equals($criteria)) {
+				$this->collVuserToUserRoles = VuserToUserRolePeer::doSelectJoinvuser($criteria, $con, $join_behavior);
 			}
 		}
-		$this->lastKuserToUserRoleCriteria = $criteria;
+		$this->lastVuserToUserRoleCriteria = $criteria;
 
-		return $this->collKuserToUserRoles;
+		return $this->collVuserToUserRoles;
 	}
 
 	/**
@@ -1773,14 +1773,14 @@ abstract class BaseUserRole extends BaseObject  implements Persistent {
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
-			if ($this->collKuserToUserRoles) {
-				foreach ((array) $this->collKuserToUserRoles as $o) {
+			if ($this->collVuserToUserRoles) {
+				foreach ((array) $this->collVuserToUserRoles as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
-		$this->collKuserToUserRoles = null;
+		$this->collVuserToUserRoles = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */

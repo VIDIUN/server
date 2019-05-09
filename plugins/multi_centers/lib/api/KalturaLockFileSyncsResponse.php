@@ -3,10 +3,10 @@
  * @package plugins.multiCenters
  * @subpackage api.objects
  */
-class KalturaLockFileSyncsResponse extends KalturaObject
+class VidiunLockFileSyncsResponse extends VidiunObject
 {
 	/**
-	 * @var KalturaFileSyncArray
+	 * @var VidiunFileSyncArray
 	 */
 	public $fileSyncs;
 		

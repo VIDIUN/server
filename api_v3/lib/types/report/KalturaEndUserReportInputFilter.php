@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEndUserReportInputFilter extends KalturaReportInputFilter 
+class VidiunEndUserReportInputFilter extends VidiunReportInputFilter 
 {
 	/**
 	 * 

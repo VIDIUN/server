@@ -5,7 +5,7 @@
  * @package plugins.multiCenters
  * @subpackage Scheduler.FileSyncImport
  */
-class KAsyncFileSyncImport extends KPeriodicWorker
+class VAsyncFileSyncImport extends VPeriodicWorker
 {
 	const MAX_EXECUTION_TIME = 3600;		// can be exceeded by one file sync
 	const IDLE_SLEEP_INTERVAL = 10;
@@ -26,18 +26,18 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 			$sourceDc = -1;
 		}
 				
-		$multiCentersPlugin = KalturaMultiCentersClientPlugin::get(self::$kClient);
+		$multiCentersPlugin = VidiunMultiCentersClientPlugin::get(self::$vClient);
 		
 		// create a response profile with the minimum fields needed (saves some queries on the API server)
-		$responseProfile = new KalturaDetachedResponseProfile();
-		$responseProfile->type = KalturaResponseProfileType::INCLUDE_FIELDS;
+		$responseProfile = new VidiunDetachedResponseProfile();
+		$responseProfile->type = VidiunResponseProfileType::INCLUDE_FIELDS;
 		$responseProfile->fields = 'id,originalId,fileSize,fileRoot,filePath,isDir';
 		
 		$timeLimit = time() + self::MAX_EXECUTION_TIME; 
 		
 		while (time() < $timeLimit)
 		{
-			self::$kClient->setResponseProfile($responseProfile);
+			self::$vClient->setResponseProfile($responseProfile);
 			
 			// lock file syncs to import
 			$lockResult = $multiCentersPlugin->filesyncImportBatch->lockPendingFileSyncs(
@@ -60,7 +60,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 			{				
 				if ($fileSync->isDir)
 				{
-					$this->curlWrapper = new KCurlWrapper(self::$taskConfig->params);
+					$this->curlWrapper = new VCurlWrapper(self::$taskConfig->params);
 					
 					$sourceUrl = self::getSourceUrl($fileSync->originalId, $lockResult->baseUrl, $lockResult->dcSecret);
 					if ($this->fetchDir($fileSync->id, $sourceUrl, self::getFullPath($fileSync)))
@@ -85,7 +85,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 
 			if (count($fileSyncs) > 0)
 			{
-				$this->curlWrapper = new KCurlWrapper(self::$taskConfig->params);
+				$this->curlWrapper = new VCurlWrapper(self::$taskConfig->params);
 	
 				// handle regular files
 				if (count($fileSyncs) == 1)
@@ -116,20 +116,20 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::FILESYNC_IMPORT;
+		return VidiunBatchJobType::FILESYNC_IMPORT;
 	}
 
 	protected function getFilter()
 	{
-		$filter = new KalturaFileSyncFilter();
-		if(KBatchBase::$taskConfig->filter)
+		$filter = new VidiunFileSyncFilter();
+		if(VBatchBase::$taskConfig->filter)
 		{
-			// copy the attributes since KBatchBase::$taskConfig->filter is of type KalturaBatchJobFilter
-			foreach(KBatchBase::$taskConfig->filter as $attr => $value)
+			// copy the attributes since VBatchBase::$taskConfig->filter is of type VidiunBatchJobFilter
+			foreach(VBatchBase::$taskConfig->filter as $attr => $value)
 			{
 				$filter->$attr = $value;
 			}
@@ -149,35 +149,35 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		return $baseUrl . "/index.php/extwidget/serveMultiFile/ids/$fileSyncIds/hash/$fileHash";
 	}
 	
-	static protected function getFullPath(KalturaFileSync $fileSync)
+	static protected function getFullPath(VidiunFileSync $fileSync)
 	{
 		return $fileSync->fileRoot . $fileSync->filePath;
 	}
 	
-	protected function markFileSyncAsReady(KalturaFileSync $fileSync)
+	protected function markFileSyncAsReady(VidiunFileSync $fileSync)
 	{
-		$updateFileSync = new KalturaFileSync;
-		$updateFileSync->status = KalturaFileSyncStatus::READY;
+		$updateFileSync = new VidiunFileSync;
+		$updateFileSync->status = VidiunFileSyncStatus::READY;
 		$updateFileSync->fileRoot = $fileSync->fileRoot;
 		$updateFileSync->filePath = $fileSync->filePath;
 	
 		try
 		{
-			$responseProfile = new KalturaDetachedResponseProfile();
-			$responseProfile->type = KalturaResponseProfileType::INCLUDE_FIELDS;
+			$responseProfile = new VidiunDetachedResponseProfile();
+			$responseProfile->type = VidiunResponseProfileType::INCLUDE_FIELDS;
 			$responseProfile->fields = '';		// don't need the response
-			self::$kClient->setResponseProfile($responseProfile);
+			self::$vClient->setResponseProfile($responseProfile);
 				
-			$fileSyncPlugin = KalturaFileSyncClientPlugin::get(self::$kClient);
+			$fileSyncPlugin = VidiunFileSyncClientPlugin::get(self::$vClient);
 			$fileSyncPlugin->fileSync->update($fileSync->id, $updateFileSync);
 		}
-		catch(KalturaException $e)
+		catch(VidiunException $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
-		catch(KalturaClientException $e)
+		catch(VidiunClientException $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 	}
 
@@ -185,16 +185,16 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 	{
 		try
 		{
-			$multiCentersPlugin = KalturaMultiCentersClientPlugin::get(self::$kClient);
+			$multiCentersPlugin = VidiunMultiCentersClientPlugin::get(self::$vClient);
 			$multiCentersPlugin->filesyncImportBatch->extendFileSyncLock($fileSyncId);
 		}
-		catch(KalturaException $e)
+		catch(VidiunException $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
-		catch(KalturaClientException $e)
+		catch(VidiunClientException $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 	}
 	
@@ -203,14 +203,14 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		$res = self::createAndSetDir(dirname($destination));
 		if ( !$res )
 		{
-			KalturaLog::err('Cannot create destination directory ['.dirname($destination).']');
+			VidiunLog::err('Cannot create destination directory ['.dirname($destination).']');
 			return false;
 		}
 		
 		$res = touch($destination);
 		if ( !$res )
 		{
-			KalturaLog::err("Cannot create file [$destination]");
+			VidiunLog::err("Cannot create file [$destination]");
 			return false;
 		}
 		return true;
@@ -227,7 +227,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		$res = $this->createAndSetDir($dirDestination);
 		if (!$res) 
 		{
-			KalturaLog::err("Cannot create destination directory [$dirDestination]");
+			VidiunLog::err("Cannot create destination directory [$dirDestination]");
 			return false;
 		}
 		
@@ -238,7 +238,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		
 		if ($contents === false || $curlError) 
 		{
-			KalturaLog::err("$curlError");
+			VidiunLog::err("$curlError");
 			return false;
 		}
 		$contents = unserialize($contents); // if an exception is thrown, it will be catched in fetchUrl
@@ -277,7 +277,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 				$res = $this->createAndSetDir($dirDestination.'/'.$name);
 				if (!$res)
 				{
-					KalturaLog::err('Cannot create destination directory ['.$dirDestination.'/'.$name.']');
+					VidiunLog::err('Cannot create destination directory ['.$dirDestination.'/'.$name.']');
 					return false;
 				}
 			}
@@ -299,7 +299,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 	 * Download a file from $sourceUrl to $fileDestination
 	 * @param string $sourceUrl
 	 * @param string $fileDestination
-	 * @param KCurlHeaderResponse $curlHeaderResponse header fetched for the $sourceUrl
+	 * @param VCurlHeaderResponse $curlHeaderResponse header fetched for the $sourceUrl
 	 */
 	private function fetchFile($fileSyncId, $sourceUrl, $fileDestination, $fileSize = null)
 	{
@@ -321,17 +321,17 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		if($fileSize && file_exists($fileDestination))
 		{
 			clearstatcache();
-			$actualFileSize = kFile::fileSize($fileDestination);
+			$actualFileSize = vFile::fileSize($fileDestination);
 			if($actualFileSize >= $fileSize)
 			{
 				// file download finished ?
-				KalturaLog::info('File exists with size ['.$actualFileSize.'] - checking if finished...');
+				VidiunLog::info('File exists with size ['.$actualFileSize.'] - checking if finished...');
 				return $this->checkFile($fileDestination, $fileSize);
 			}
 			else
 			{
 				// will resume from the current offset
-				KalturaLog::info('File partialy exists - resume offset set to ['.$actualFileSize.']');
+				VidiunLog::info('File partialy exists - resume offset set to ['.$actualFileSize.']');
 				$resumeOffset = $actualFileSize;
 			}
 		}
@@ -349,7 +349,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 				$res = self::createAndSetDir(dirname($fileDestination));
 				if ( !$res )
 				{
-					KalturaLog::err('Cannot create destination directory ['.dirname($fileDestination).']');
+					VidiunLog::err('Cannot create destination directory ['.dirname($fileDestination).']');
 					return false;
 				}
 			}
@@ -362,7 +362,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 			// reset the resume offset, since the curl handle is reused
 			$this->curlWrapper->setResumeOffset(0);
 
-			KalturaLog::info("Curl results: $res");
+			VidiunLog::info("Curl results: $res");
 	
 			// handle errors
 			if (!$res || $curlError)
@@ -370,29 +370,29 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 				if($curlErrorNumber != CURLE_OPERATION_TIMEOUTED)
 				{
 					// an error other than timeout occured  - cannot continue
-					KalturaLog::err("$curlError");
+					VidiunLog::err("$curlError");
 					return false;
 				}
 				else
 				{
 					// timeout error occured, ignore and try to resume
-					KalturaLog::log('Curl timeout');
+					VidiunLog::log('Curl timeout');
 				}
 			}
 			
 			if(!file_exists($fileDestination))
 			{
 				// destination file does not exist for an unknown reason
-				KalturaLog::err("output file doesn't exist");
+				VidiunLog::err("output file doesn't exist");
 				return false;
 			}
 	
 			clearstatcache();
-			$actualFileSize = kFile::fileSize($fileDestination);
+			$actualFileSize = vFile::fileSize($fileDestination);
 			if($actualFileSize == $resumeOffset)
 			{
 				// no downloading was done at all - error
-				KalturaLog::err("$curlError");
+				VidiunLog::err("$curlError");
 				return false;
 			}
 			
@@ -414,9 +414,9 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 
 	static protected function parseMultiPart($contentType, $contents)
 	{
-		if (!kString::beginsWith($contentType, 'multipart/form-data; boundary='))
+		if (!vString::beginsWith($contentType, 'multipart/form-data; boundary='))
 		{
-			KalturaLog::err("failed to parse multipart content type [$contentType]");
+			VidiunLog::err("failed to parse multipart content type [$contentType]");
 			return false;
 		}
 	
@@ -429,7 +429,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		{
 			if (substr($contents, $curPos, 2 + strlen($boundary)) != '--' . $boundary)
 			{
-				KalturaLog::err("expected [--$boundary] at pos [$curPos]");
+				VidiunLog::err("expected [--$boundary] at pos [$curPos]");
 				return false;
 			}
 				
@@ -443,7 +443,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 			$dataEndPos = strpos($contents, "\n--" . $boundary, $headerEndPos);
 			if ($dataEndPos === false)
 			{
-				KalturaLog::err("failed to find end boundary");
+				VidiunLog::err("failed to find end boundary");
 				return false;
 			}
 				
@@ -452,7 +452,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 			$name = null;
 			foreach ($headers as $header)
 			{
-				if (!kString::beginsWith($header, 'Content-Disposition: form-data; name="'))
+				if (!vString::beginsWith($header, 'Content-Disposition: form-data; name="'))
 				{
 					continue;
 				}
@@ -463,7 +463,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 				
 			if (is_null($name))
 			{
-				KalturaLog::err("failed to extract part name from " . print_r($headers, true));
+				VidiunLog::err("failed to extract part name from " . print_r($headers, true));
 				return false;
 			}
 				
@@ -474,7 +474,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 	
 		if (substr($contents, $curPos + 2 + strlen($boundary), 2) != '--')
 		{
-			KalturaLog::err("last boundary must end with --");
+			VidiunLog::err("last boundary must end with --");
 			return false;
 		}
 	
@@ -498,7 +498,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		
 		if ($contents === false || $curlError)
 		{
-			KalturaLog::err("failed to fetch $sourceUrl - $curlError");
+			VidiunLog::err("failed to fetch $sourceUrl - $curlError");
 			return false;
 		}
 		
@@ -507,7 +507,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		$parsedContent = self::parseMultiPart($contentType, $contents);
 		if ($parsedContent === false)
 		{
-			KalturaLog::err("failed to parse multipart response $sourceUrl");
+			VidiunLog::err("failed to parse multipart response $sourceUrl");
 			return false;
 		}
 		
@@ -515,7 +515,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		{
 			if (!isset($parsedContent[$fileSync->originalId]))
 			{
-				KalturaLog::err("missing content for file " . $fileSync->originalId);
+				VidiunLog::err("missing content for file " . $fileSync->originalId);
 				continue;
 			}
 				
@@ -525,13 +525,13 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 			$res = self::createAndSetDir(dirname($filePath));
 			if (!$res)
 			{
-				KalturaLog::err("failed to create dir for $filePath");
+				VidiunLog::err("failed to create dir for $filePath");
 				continue;
 			}
 				
-			if (!kFileBase::safeFilePutContents($filePath, $data))
+			if (!vFileBase::safeFilePutContents($filePath, $data))
 			{
-				KalturaLog::err("failed to write file $filePath");
+				VidiunLog::err("failed to write file $filePath");
 				continue;
 			}
 			
@@ -558,11 +558,11 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		if(!file_exists($destFile))
 		{
 			// destination file does not exist
-			KalturaLog::err("file [$destFile] doesn't exist");
+			VidiunLog::err("file [$destFile] doesn't exist");
 			return false;
 		}
 
-		$actualSize = kFile::fileSize($destFile);
+		$actualSize = vFile::fileSize($destFile);
 		if(!$fileSize)
 		{
 			$fileSize = $actualSize;
@@ -570,7 +570,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		else if($actualSize != $fileSize)
 		{
 			// destination file size is wrong
-			KalturaLog::err("file [$destFile] has a wrong size. file size: [$actualSize] should be [$fileSize]");
+			VidiunLog::err("file [$destFile] has a wrong size. file size: [$actualSize] should be [$fileSize]");
 			return false;
 		}
 			
@@ -578,7 +578,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		$chown_name = self::$taskConfig->params->fileOwner;
 		if ($chown_name) 
 		{
-			KalturaLog::info("Changing owner of file [$destFile] to [$chown_name]");
+			VidiunLog::info("Changing owner of file [$destFile] to [$chown_name]");
 			@chown($destFile, $chown_name);
 		}
 		
@@ -588,7 +588,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		{
 			$chmod_perm = 0644;
 		}
-		KalturaLog::info("Changing mode of file [$destFile] to [$chmod_perm]");
+		VidiunLog::info("Changing mode of file [$destFile] to [$chmod_perm]");
 		@chmod($destFile, $chmod_perm);
 
 		// IMPORTANT - check's if file is seen by apache
@@ -603,7 +603,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 	/**
 	 * Fetches the header for the given $url
 	 * @param string $url
-	 * @return false|KCurlHeaderResponse
+	 * @return false|VCurlHeaderResponse
 	 */
 	private function fetchHeader($url)
 	{
@@ -615,20 +615,20 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		if(!$curlHeaderResponse || !count($curlHeaderResponse->headers))
 		{
 			// error fetching headers
-			KalturaLog::err("$curlError");
+			VidiunLog::err("$curlError");
 			return false;
 		}
 	
     	if($curlError)
     	{
-    		KalturaLog::err("Headers error: $curlError");
-    		KalturaLog::err("Headers error number: $curlErrorNumber");
+    		VidiunLog::err("Headers error: $curlError");
+    		VidiunLog::err("Headers error number: $curlErrorNumber");
     	}
     			
 		if(!$curlHeaderResponse->isGoodCode())
 		{
 			// some error exists in the response
-			KalturaLog::err('HTTP Error: ' . $curlHeaderResponse->code . ' ' . $curlHeaderResponse->codeName);
+			VidiunLog::err('HTTP Error: ' . $curlHeaderResponse->code . ' ' . $curlHeaderResponse->codeName);
 			return false;
 		}
 		
@@ -638,7 +638,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 	
 	/**
 	 * Try to get the filesize from the given header
-	 * @param KCurlHeaderResponse $curlHeaderResponse
+	 * @param VCurlHeaderResponse $curlHeaderResponse
 	 * @return false|int file size or false on error
 	 */
 	private function getFilesizeFromHeader($curlHeaderResponse)
@@ -653,7 +653,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 	
 	/**
 	 * Check if the given curl header response contains a File-Sync-Type header == 'dir'
-	 * @param KCurlHeaderResponse $curlHeaderResponse
+	 * @param VCurlHeaderResponse $curlHeaderResponse
 	 * @return bool true/false
 	 */
 	private function isDirectoryHeader($curlHeaderResponse)
@@ -684,7 +684,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		$chown_name = self::$taskConfig->params->fileOwner;
 		if ($chown_name) 
 		{
-			KalturaLog::info("Changing owner of directory [$dirPath] to [$chown_name]");
+			VidiunLog::info("Changing owner of directory [$dirPath] to [$chown_name]");
 			@chown($dirPath, $chown_name);
 		}
 		
@@ -694,7 +694,7 @@ class KAsyncFileSyncImport extends KPeriodicWorker
 		{
 			$chmod_perm = 0644;
 		}
-		KalturaLog::info("Changing mode of directory [$dirPath] to [$chmod_perm]");
+		VidiunLog::info("Changing mode of directory [$dirPath] to [$chmod_perm]");
 		@chmod($dirPath, $chmod_perm);
 		
 		return true;

@@ -42,9 +42,9 @@ while(count($allCats))
 	}
 	
 	$criteria->setOffset($criteria->getOffset() + count($allCats));
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	usleep(200);
 	$allCats = categoryPeer::doSelect($criteria);
 }
 
-KalturaLog::log('Done.');
+VidiunLog::log('Done.');

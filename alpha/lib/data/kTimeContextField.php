@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kTimeContextField extends kIntegerField
+class vTimeContextField extends vIntegerField
 {
 	/**
 	 * Time offset in seconds since current time
@@ -14,12 +14,12 @@ class kTimeContextField extends kIntegerField
 	protected $offset;
 	
 	/* (non-PHPdoc)
-	 * @see kIntegerField::getFieldValue()
+	 * @see vIntegerField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null)
+	protected function getFieldValue(vScope $scope = null)
 	{
 		if(!$scope)
-			$scope = new kScope();
+			$scope = new vScope();
 			
 		return $scope->getTime() + $this->offset;
 	}
@@ -42,7 +42,7 @@ class kTimeContextField extends kIntegerField
 
 	
 	/* (non-PHPdoc)
-	 * @see kIntegerValue::shouldDisableCache()
+	 * @see vIntegerValue::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{

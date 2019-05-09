@@ -3,7 +3,7 @@
  * @package plugins.shortLink
  * @subpackage api.objects
  */
-class KalturaShortLink extends KalturaObject implements IFilterable
+class VidiunShortLink extends VidiunObject implements IFilterable
 {
 	/**
 	 * @var string
@@ -62,7 +62,7 @@ class KalturaShortLink extends KalturaObject implements IFilterable
 	public $fullUrl;
 
 	/**
-	 * @var KalturaShortLinkStatus
+	 * @var VidiunShortLinkStatus
 	 * @filter eq,in
 	 */
 	public $status;

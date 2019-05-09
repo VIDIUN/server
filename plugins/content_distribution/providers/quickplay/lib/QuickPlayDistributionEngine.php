@@ -10,7 +10,7 @@ class QuickPlayDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		$this->validateJobDataObjectTypes($data);
 		
@@ -23,7 +23,7 @@ class QuickPlayDistributionEngine extends DistributionEngine implements
 	 * (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
 		$this->validateJobDataObjectTypes($data);
 		
@@ -33,41 +33,41 @@ class QuickPlayDistributionEngine extends DistributionEngine implements
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
+	 * @param VidiunDistributionJobData $data
 	 * @throws Exception
 	 */
-	protected function validateJobDataObjectTypes(KalturaDistributionJobData $data)
+	protected function validateJobDataObjectTypes(VidiunDistributionJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaQuickPlayDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaQuickPlayDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunQuickPlayDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunQuickPlayDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaQuickPlayDistributionJobProviderData))
-			throw new Exception("Provider data must be of type KalturaQuickPlayDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunQuickPlayDistributionJobProviderData))
+			throw new Exception("Provider data must be of type VidiunQuickPlayDistributionJobProviderData");
 	}
 	
 	/**
 	 * @param string $path
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaVerizonDistributionProfile $distributionProfile
-	 * @param KalturaVerizonDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunVerizonDistributionProfile $distributionProfile
+	 * @param VidiunVerizonDistributionJobProviderData $providerData
 	 */
-	public function handleSubmit(KalturaDistributionJobData $data, KalturaQuickPlayDistributionProfile $distributionProfile, KalturaQuickPlayDistributionJobProviderData $providerData)
+	public function handleSubmit(VidiunDistributionJobData $data, VidiunQuickPlayDistributionProfile $distributionProfile, VidiunQuickPlayDistributionJobProviderData $providerData)
 	{
 		$fileName = $data->entryDistribution->entryId . '_' . date('Y-m-d_H-i-s') . '.xml';
-		KalturaLog::info('Sending file '. $fileName);
+		VidiunLog::info('Sending file '. $fileName);
 		
 		$sftpManager = $this->getSFTPManager($distributionProfile);
 		
 		// upload the thumbnails
 		foreach($providerData->thumbnailFilePaths as $thumbnailFilePath)
 		{
-			/* @var $thumbnailFilePath KalturaString */
+			/* @var $thumbnailFilePath VidiunString */
 			if (!file_exists($thumbnailFilePath->value))
-				throw new KalturaDistributionException('Thumbnail file path ['.$thumbnailFilePath.'] not found, assuming it wasn\'t synced and the job will retry');
+				throw new VidiunDistributionException('Thumbnail file path ['.$thumbnailFilePath.'] not found, assuming it wasn\'t synced and the job will retry');
 
 			$thumbnailUploadPath = '/'.$distributionProfile->sftpBasePath.'/'.pathinfo($thumbnailFilePath->value, PATHINFO_BASENAME);
 			if ($sftpManager->fileExists($thumbnailUploadPath))
-				KalturaLog::info('File "'.$thumbnailUploadPath.'" already exists, skip it');
+				VidiunLog::info('File "'.$thumbnailUploadPath.'" already exists, skip it');
 			else
 				$sftpManager->putFile($thumbnailUploadPath, $thumbnailFilePath->value);
 		}
@@ -75,13 +75,13 @@ class QuickPlayDistributionEngine extends DistributionEngine implements
 		// upload the video files
 		foreach($providerData->videoFilePaths as $videoFilePath)
 		{
-			/* @var $videoFilePath KalturaString */
+			/* @var $videoFilePath VidiunString */
 			if (!file_exists($videoFilePath->value))
-				throw new KalturaDistributionException('Video file path ['.$videoFilePath.'] not found, assuming it wasn\'t synced and the job will retry');
+				throw new VidiunDistributionException('Video file path ['.$videoFilePath.'] not found, assuming it wasn\'t synced and the job will retry');
 
 			$videoUploadPath = '/'.$distributionProfile->sftpBasePath.'/'.pathinfo($videoFilePath->value, PATHINFO_BASENAME);
 			if ($sftpManager->fileExists($videoUploadPath))
-				KalturaLog::info('File "'.$videoUploadPath.'" already exists, skip it');
+				VidiunLog::info('File "'.$videoUploadPath.'" already exists, skip it');
 			else
 				$sftpManager->putFile($videoUploadPath, $videoFilePath->value);
 		}
@@ -101,16 +101,16 @@ class QuickPlayDistributionEngine extends DistributionEngine implements
 	
 	/**
 	 * 
-	 * @param KalturaQuickPlayDistributionProfile $distributionProfile
+	 * @param VidiunQuickPlayDistributionProfile $distributionProfile
 	 * @return sftpMgr
 	 */
-	protected function getSFTPManager(KalturaQuickPlayDistributionProfile $distributionProfile)
+	protected function getSFTPManager(VidiunQuickPlayDistributionProfile $distributionProfile)
 	{
 		$host = $distributionProfile->sftpHost;
 		$login = $distributionProfile->sftpLogin;
 		$pass = $distributionProfile->sftpPass;
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$sftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$sftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP, $engineOptions);
 		$sftpManager->login($host, $login, $pass);
 		return $sftpManager;
 	}

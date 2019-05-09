@@ -3,6 +3,6 @@
  * @package plugins.timeWarnerDistribution
  * @subpackage api.filters.enum
  */
-class KalturaTimeWarnerDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunTimeWarnerDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

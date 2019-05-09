@@ -3,13 +3,13 @@
  * @package plugins.contentDistribution 
  * @subpackage admin
  */
-class Kaltura_View_Helper_EntryInvestigateDistribution extends Kaltura_View_Helper_PartialViewPlugin
+class Vidiun_View_Helper_EntryInvestigateDistribution extends Vidiun_View_Helper_PartialViewPlugin
 {
 	private $entryId;
 	private $partnerId;
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::plug()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::plug()
 	 */
 	public function plug(Zend_View_Interface $view)
 	{
@@ -20,13 +20,13 @@ class Kaltura_View_Helper_EntryInvestigateDistribution extends Kaltura_View_Help
 	}
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getDataArray()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getDataArray()
 	 */
 	protected function getDataArray()
 	{
 		$client = Infra_ClientHelper::getClient();
-		$contentDistributionPlugin = Kaltura_Client_ContentDistribution_Plugin::get($client);
-		$fileSyncPlugin = Kaltura_Client_FileSync_Plugin::get($client);
+		$contentDistributionPlugin = Vidiun_Client_ContentDistribution_Plugin::get($client);
+		$fileSyncPlugin = Vidiun_Client_FileSync_Plugin::get($client);
 		
 		if(!$client)
 		{
@@ -34,7 +34,7 @@ class Kaltura_View_Helper_EntryInvestigateDistribution extends Kaltura_View_Help
 			return;
 		}
 		
-		$filter = new Kaltura_Client_ContentDistribution_Type_EntryDistributionFilter();
+		$filter = new Vidiun_Client_ContentDistribution_Type_EntryDistributionFilter();
 		$filter->entryIdEqual = $this->entryId;
 		
 		$distributions = array();
@@ -66,11 +66,11 @@ class Kaltura_View_Helper_EntryInvestigateDistribution extends Kaltura_View_Help
 		{
 			try
 			{
-				$filter = new Kaltura_Client_FileSync_Type_FileSyncFilter();
-				$filter->fileObjectTypeEqual = Kaltura_Client_Enum_FileSyncObjectType::ENTRY_DISTRIBUTION;
+				$filter = new Vidiun_Client_FileSync_Type_FileSyncFilter();
+				$filter->fileObjectTypeEqual = Vidiun_Client_Enum_FileSyncObjectType::ENTRY_DISTRIBUTION;
 				$filter->objectIdIn = implode(',', $distributionIds);
 				
-				$pager = new Kaltura_Client_Type_FilterPager();
+				$pager = new Vidiun_Client_Type_FilterPager();
 				$pager->pageSize = 100;
 				
 				$fileSyncList = $fileSyncPlugin->fileSync->listAction($filter, $pager);
@@ -92,7 +92,7 @@ class Kaltura_View_Helper_EntryInvestigateDistribution extends Kaltura_View_Help
 	}
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getTemplatePath()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getTemplatePath()
 	 */
 	protected function getTemplatePath()
 	{
@@ -100,7 +100,7 @@ class Kaltura_View_Helper_EntryInvestigateDistribution extends Kaltura_View_Help
 	}
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getPHTML()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getPHTML()
 	 */
 	protected function getPHTML()
 	{

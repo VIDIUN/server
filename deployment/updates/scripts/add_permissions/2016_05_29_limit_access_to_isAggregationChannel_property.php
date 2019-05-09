@@ -4,5 +4,5 @@
  * @subpackage kajam.roles_and_permissions
  */
 $script = realpath(dirname(__FILE__) . '/../../../../') . '/alpha/scripts/utils/permissions/addPermissionsAndItems.php';
-$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.KalturaCategory.ini';
+$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.VidiunCategory.ini';
 passthru("php $script $config");

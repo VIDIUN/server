@@ -26,9 +26,9 @@ FROM
 		IF(SUM(aggr_pa.count_video)+SUM(aggr_pa.count_audio)+SUM(aggr_pa.count_image)+SUM(aggr_pa.count_widgets)>0,1,0) sum_active_partner
 		
 	FROM 
-		kalturadw.dwh_aggr_partner aggr_pa
-			RIGHT OUTER JOIN kalturadw.dwh_dim_partners dim_partner ON aggr_pa.partner_id=dim_partner.partner_id
-			LEFT OUTER JOIN kalturadw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
+		vidiundw.dwh_aggr_partner aggr_pa
+			RIGHT OUTER JOIN vidiundw.dwh_dim_partners dim_partner ON aggr_pa.partner_id=dim_partner.partner_id
+			LEFT OUTER JOIN vidiundw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
 	WHERE 
 		aggr_pa.date_id BETWEEN 20090101 AND 20090931
 	GROUP BY 	

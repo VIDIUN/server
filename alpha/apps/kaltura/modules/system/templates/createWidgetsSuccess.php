@@ -8,12 +8,12 @@
 		<form method='post'>
 			<input type="hidden" name="submitted" value="1">
 			<tr><td><input type="checkbox" name="create" <?php echo  $create ? "checked='checked'" : "" ?>>Create new
-				,Number of kshows to search: <input name="limit" id="limit" value="<?php echo  $limit ?>" size="5"></td></tr>
+				,Number of vshows to search: <input name="limit" id="limit" value="<?php echo  $limit ?>" size="5"></td></tr>
 			<tr><td><input type="radio" name="method" value="partner" <?php echo  $method == "partner" ? "checked='checked'" : "" ?> >partner_id <input name="partner_id" id="partner_id" value="<?php echo  $partner_id ?>">
 				</td>
 			<tr>
-			<tr><td><input type="radio" name="method" value="list" <?php echo  $method == "list" ? "checked='checked'" : "" ?> > kshow_ids 
-				<input name="kshow_ids" id="kshow_ids" value="<?php echo  $kshow_ids ?>" size="50"></td></tr>
+			<tr><td><input type="radio" name="method" value="list" <?php echo  $method == "list" ? "checked='checked'" : "" ?> > vshow_ids 
+				<input name="vshow_ids" id="vshow_ids" value="<?php echo  $vshow_ids ?>" size="50"></td></tr>
 			
 			<tr>
 				<td>source_widget_id <input name="source_widget_id" id="source_widget_id" value="<?php echo  $source_widget_id ?>"><td>

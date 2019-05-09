@@ -5,10 +5,10 @@
  * @package plugins.emailNotification
  * @subpackage Scheduler
  */
-class KEMailNotificationGroupRecipientEngine extends  KEmailNotificationRecipientEngine
+class VEMailNotificationGroupRecipientEngine extends  VEmailNotificationRecipientEngine
 {
 	/* (non-PHPdoc)
-	 * @see KEmailNotificationRecipientEngine::getRecipients()
+	 * @see VEmailNotificationRecipientEngine::getRecipients()
 	 */
 	function getRecipients(array $contentParameters) 
 	{
@@ -37,13 +37,13 @@ class KEMailNotificationGroupRecipientEngine extends  KEmailNotificationRecipien
 	
 	private function getUsersByUserIds($userIds)
 	{
-		$userFilter = new KalturaUserFilter();
+		$userFilter = new VidiunUserFilter();
 		$userFilter->idIn = $userIds;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		
-		$users = KBatchBase::$kClient->user->listAction($userFilter, $pager);
+		$users = VBatchBase::$vClient->user->listAction($userFilter, $pager);
 		
 		if(!($users->totalCount > 0))
 			return null;
@@ -54,12 +54,12 @@ class KEMailNotificationGroupRecipientEngine extends  KEmailNotificationRecipien
 	private function getGroupUserIds($groupId)
 	{
 		//list users in group
-		$groupFilter = new KalturaGroupUserFilter();
+		$groupFilter = new VidiunGroupUserFilter();
 		$groupFilter->groupIdEqual = $groupId;
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		
-		$groupUserList = KBatchBase::$kClient->groupUser->listAction($groupFilter, $pager);
+		$groupUserList = VBatchBase::$vClient->groupUser->listAction($groupFilter, $pager);
 		
 		if(!($groupUserList->totalCount > 0))
 			return null;

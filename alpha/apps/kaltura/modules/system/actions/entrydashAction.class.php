@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class entrydashAction extends kalturaSystemAction
+class entrydashAction extends vidiunSystemAction
 {
 	/**
 	 * Will list out all kind of perspectives of entries

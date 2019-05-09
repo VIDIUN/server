@@ -3,7 +3,7 @@
  * @package plugins.httpNotification
  * @subpackage Scheduler
  */
-class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
+class VDispatchHttpNotificationEngine extends VDispatchEventNotificationEngine
 {
 	/**
 	 * Folder to save uploaded files.
@@ -13,30 +13,30 @@ class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
 	protected $tempFolderPath;
 	
 	/* (non-PHPdoc)
-	 * @see KDispatchEventNotificationEngine::__construct()
+	 * @see VDispatchEventNotificationEngine::__construct()
 	 */
 	public function __construct()
 	{
 		$this->tempFolderPath = sys_get_temp_dir();
 		
-		if(isset(KBatchBase::$taskConfig->params->tempFolderPath) && KBatchBase::$taskConfig->params->tempFolderPath)
-			$this->tempFolderPath = KBatchBase::$taskConfig->params->tempFolderPath;
+		if(isset(VBatchBase::$taskConfig->params->tempFolderPath) && VBatchBase::$taskConfig->params->tempFolderPath)
+			$this->tempFolderPath = VBatchBase::$taskConfig->params->tempFolderPath;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KDispatchEventNotificationEngine::dispatch()
+	 * @see VDispatchEventNotificationEngine::dispatch()
 	 */
-	public function dispatch(KalturaEventNotificationTemplate $eventNotificationTemplate, KalturaEventNotificationDispatchJobData &$data)
+	public function dispatch(VidiunEventNotificationTemplate $eventNotificationTemplate, VidiunEventNotificationDispatchJobData &$data)
 	{
 		$this->sendHttpRequest($eventNotificationTemplate, $data);
 	}
 
 	/**
-	 * @param KalturaHttpNotificationTemplate $httpNotificationTemplate
-	 * @param KalturaHttpNotificationDispatchJobData $data
+	 * @param VidiunHttpNotificationTemplate $httpNotificationTemplate
+	 * @param VidiunHttpNotificationDispatchJobData $data
 	 * @return boolean
 	 */
-	public function sendHttpRequest(KalturaHttpNotificationTemplate $httpNotificationTemplate, KalturaHttpNotificationDispatchJobData &$data)
+	public function sendHttpRequest(VidiunHttpNotificationTemplate $httpNotificationTemplate, VidiunHttpNotificationDispatchJobData &$data)
 	{
 		/**
 		 * TODO
@@ -52,7 +52,7 @@ class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
 		{
 			foreach($data->contentParameters as $contentParameter)
 			{
-				/* @var $contentParameter KalturaKeyValue */
+				/* @var $contentParameter VidiunKeyValue */
 				$postParameters[$contentParameter->key] = $contentParameter->value;
 				$contentParameters['{' . $contentParameter->key . '}'] = $contentParameter->value;
 			}		
@@ -63,14 +63,14 @@ class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
 		$secret = $data->signSecret;
 		if(!is_null($secret)) { 
 			$dataSig = sha1($secret . $curlData);
-			$headers[] = "X-KALTURA-SIGNATURE: $dataSig";
+			$headers[] = "X-VIDIUN-SIGNATURE: $dataSig";
 		}
 		
 		if(is_array($data->customHeaders) && count($data->customHeaders))
 		{
 			foreach($data->customHeaders as $customHeader)
 			{
-				/* @var $customHeader KalturaKeyValue */
+				/* @var $customHeader VidiunKeyValue */
 				$key = $customHeader->key;
 				$value = $customHeader->value;
 				if(is_array($contentParameters) && count($contentParameters))
@@ -82,7 +82,7 @@ class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
 			}
 		}
 		
-		$curlWrapper = new KCurlWrapper();
+		$curlWrapper = new VCurlWrapper();
 
 		if(count($headers))
 			$curlWrapper->setOpt(CURLOPT_HTTPHEADER, $headers);
@@ -90,13 +90,13 @@ class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
 		$url = $data->url;
 		switch($data->method)
 		{
-			case KalturaHttpNotificationMethod::POST:
+			case VidiunHttpNotificationMethod::POST:
 				$curlWrapper->setOpt(CURLOPT_POST, true);
 				if ($curlData)
 					$curlWrapper->setOpt(CURLOPT_POSTFIELDS, $curlData);
 				break;
 
-			case KalturaHttpNotificationMethod::PUT:
+			case VidiunHttpNotificationMethod::PUT:
 				$curlWrapper->setOpt(CURLOPT_PUT, true);
 
 				if ($curlData)
@@ -107,19 +107,19 @@ class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
 				}
 				break;
 
-			case KalturaHttpNotificationMethod::DELETE:
+			case VidiunHttpNotificationMethod::DELETE:
 				$curlWrapper->setOpt(CURLOPT_CUSTOMREQUEST, 'DELETE');
 				if ($curlData)
 					$curlWrapper->setOpt( CURLOPT_POSTFIELDS, $curlData);
 				break;
 				
-			case KalturaHttpNotificationMethod::GET:
+			case VidiunHttpNotificationMethod::GET:
 			default:
 				if($curlData)
 					$url .= '?' . $curlData;
 		}
 
-		$curlTimeOut = KBatchBase::$taskConfig->getCurlTimeout();
+		$curlTimeOut = VBatchBase::$taskConfig->getCurlTimeout();
 		if($curlTimeOut)
 		{
 			$curlWrapper->setOpt(CURLOPT_TIMEOUT, $curlTimeOut);
@@ -151,7 +151,7 @@ class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
 
 		if($data->sslCertificate)
 		{
-			if($data->sslCertificateType == KalturaHttpNotificationCertificateType::PEM)
+			if($data->sslCertificateType == VidiunHttpNotificationCertificateType::PEM)
 				$curlWrapper->setOpt( CURLOPT_SSLCERT, $data->sslCertificate);
 			else
 			{
@@ -179,10 +179,10 @@ class KDispatchHttpNotificationEngine extends KDispatchEventNotificationEngine
 
 		$curlWrapper->close();
 
-		KalturaLog::info("HTTP Request httpCode [" . $httpCode . "] Results [$results]");
+		VidiunLog::info("HTTP Request httpCode [" . $httpCode . "] Results [$results]");
 		if(!$results || $httpCode != 200)
 		{
-			throw new kTemporaryException("Sending HTTP request failed [$errCode] httpCode [$httpCode]
+			throw new vTemporaryException("Sending HTTP request failed [$errCode] httpCode [$httpCode]
 			    url [$url]: $errMessage", $httpCode);
 		}
 		

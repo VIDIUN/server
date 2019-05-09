@@ -16,7 +16,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 	const IP_TREE_ACCEPT_INTERNAL_IPS = 'acceptInternalIps';
 	
 	// header to mark the rules fulfilled in the current request
-	const ACP_DEBUG_HEADER = 'X-Kaltura-ACP';
+	const ACP_DEBUG_HEADER = 'X-Vidiun-ACP';
 
 	/**
 	 * True when set as partner default (saved on partner object)
@@ -51,11 +51,11 @@ class accessControl extends BaseaccessControl implements IBaseObject
 		if ($this->isColumnModified(accessControlPeer::DELETED_AT))
 		{
 			if ($this->isDefault === true)
-				throw new kCoreException("Default access control profile [" . $this->getId(). "] can't be deleted", kCoreException::ACCESS_CONTROL_CANNOT_DELETE_PARTNER_DEFAULT);
+				throw new vCoreException("Default access control profile [" . $this->getId(). "] can't be deleted", vCoreException::ACCESS_CONTROL_CANNOT_DELETE_PARTNER_DEFAULT);
 				
 			$defaultAccessControl = $this->getPartner()->getDefaultAccessControlId();
 			if (!$defaultAccessControl)
-				throw new kCoreException("no default access control on partner",kCoreException::NO_DEFAULT_ACCESS_CONTROL);
+				throw new vCoreException("no default access control on partner",vCoreException::NO_DEFAULT_ACCESS_CONTROL);
 			
 			entryPeer::updateAccessControl($this->getPartnerId(), $this->id, $defaultAccessControl);
 		}
@@ -75,7 +75,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 		$partner = PartnerPeer::retrieveByPK($this->getPartnerId());
 		$maxAccessControls = $partner->getAccessControls();
 		if ($count >= $maxAccessControls)
-			throw new kCoreException("Max number of access control profiles [$maxAccessControls] was reached", kCoreException::MAX_NUMBER_OF_ACCESS_CONTROLS_REACHED, $maxAccessControls);
+			throw new vCoreException("Max number of access control profiles [$maxAccessControls] was reached", vCoreException::MAX_NUMBER_OF_ACCESS_CONTROLS_REACHED, $maxAccessControls);
 		
 		return parent::preInsert($con);
 	}
@@ -116,7 +116,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
@@ -167,7 +167,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 
 		foreach($rules as $rule)
 		{
-			/* @var $rule kRule */
+			/* @var $rule vRule */
 			$contexts = $rule->getContexts();
 			if(!is_array($contexts) || !count($contexts))
 			{
@@ -197,7 +197,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 				$ip = infraRequestUtils::getIpFromHttpHeader($header, $acceptInternalIps, true);
 				if ($ip)
 				{
-					$this->getScope()->setOutputVar(kIpAddressCondition::PARTNER_INTERNAL_IP, $ip);
+					$this->getScope()->setOutputVar(vIpAddressCondition::PARTNER_INTERNAL_IP, $ip);
 				}
 			}
 			else
@@ -206,7 +206,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 			}
 
 			// find relevant rules and add the rules the tree didn't optimize
-			$values = kIpAddressUtils::traverseIpTree($ip, $ipTree[self::IP_TREE_TREE]);
+			$values = vIpAddressUtils::traverseIpTree($ip, $ipTree[self::IP_TREE_TREE]);
 				
 			$filteredRules = array();
 			foreach($values as $value)
@@ -245,28 +245,28 @@ class accessControl extends BaseaccessControl implements IBaseObject
 			if ($header || $acceptInternalIps)
 			{
 				// since there are many ip related caching rules, cache the response only for this specific ip
-				kApiCache::addExtraField(array('type' => kApiCache::ECF_IP,
-					kApiCache::ECFD_IP_HTTP_HEADER => $header,
-					kApiCache::ECFD_IP_ACCEPT_INTERNAL_IPS => $acceptInternalIps));
+				vApiCache::addExtraField(array('type' => vApiCache::ECF_IP,
+					vApiCache::ECFD_IP_HTTP_HEADER => $header,
+					vApiCache::ECFD_IP_ACCEPT_INTERNAL_IPS => $acceptInternalIps));
 			}
 			else {
-				kApiCache::addExtraField(kApiCache::ECF_IP);
+				vApiCache::addExtraField(vApiCache::ECF_IP);
 			}
 		}
 	}
 	
 	/**
-	 * @param kEntryContextDataResult $context
+	 * @param vEntryContextDataResult $context
 	 * @param accessControlScope $scope
 	 * @return boolean disable cache or not
 	 */
-	public function applyContext(kEntryContextDataResult &$context, accessControlScope $scope = null, $checkForceAdminValidation = true)
+	public function applyContext(vEntryContextDataResult &$context, accessControlScope $scope = null, $checkForceAdminValidation = true)
 	{
 		if($scope)
 			$this->setScope($scope);
 
 		$disableCache = false;
-		$isKsAdmin = $this->scope && $this->scope->getKs() && $this->scope->getKs()->isAdmin();
+		$isVsAdmin = $this->scope && $this->scope->getVs() && $this->scope->getVs()->isAdmin();
 		
 		$rules = $this->getRulesArray();
 		$specialProperties = $this->getSpecialProperties();
@@ -279,7 +279,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 		$fulfilledRules = array();
 		foreach($rules as $ruleNum => $rule)
 		{
-			if($checkForceAdminValidation && $isKsAdmin && !$rule->getForceAdminValidation())
+			if($checkForceAdminValidation && $isVsAdmin && !$rule->getForceAdminValidation())
 				continue;
 
 			$fulfilled = $rule->applyContext($context);
@@ -302,7 +302,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 	}
 	
 	/**
-	 * @param array<kRule> $rules
+	 * @param array<vRule> $rules
 	 */
 	public function setRulesArray(array $rules)
 	{
@@ -313,7 +313,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 			$this->setRulesArrayCompressed(true);
 			$serializedRulesArray = gzcompress($serializedRulesArray);
 			if(strlen(utf8_encode($serializedRulesArray)) > myCustomData::MAX_MEDIUM_TEXT_FIELD_SIZE)
-				throw new kCoreException('Exceeded max size allowed for access control', kCoreException::EXCEEDED_MAX_CUSTOM_DATA_SIZE);
+				throw new vCoreException('Exceeded max size allowed for access control', vCoreException::EXCEEDED_MAX_CUSTOM_DATA_SIZE);
 				
 		}
 		else 
@@ -344,7 +344,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 	}
 	
 	/**
-	 * @return array<kRule>
+	 * @return array<vRule>
 	 */
 	public function getRulesArray($migrate = false)
 	{
@@ -361,7 +361,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err("Unable to unserialize [$rulesString], " . $e->getMessage());
+				VidiunLog::err("Unable to unserialize [$rulesString], " . $e->getMessage());
 				$rules = array();
 			}
 		} 
@@ -370,24 +370,24 @@ class accessControl extends BaseaccessControl implements IBaseObject
 		if(is_null($rulesString) || $migrate)
 		{
 			if (!is_null($this->getSiteRestrictType()))
-				$rules[] = new kAccessControlSiteRestriction($this);
+				$rules[] = new vAccessControlSiteRestriction($this);
 				
 			if (!is_null($this->getCountryRestrictType()))
-				$rules[] = new kAccessControlCountryRestriction($this);
+				$rules[] = new vAccessControlCountryRestriction($this);
 				
-			if (!is_null($this->getKsRestrictPrivilege()))
+			if (!is_null($this->getVsRestrictPrivilege()))
 			{
 				if($this->getPrvRestrictPrivilege())
-					$rules[] = new kAccessControlPreviewRestriction($this);
+					$rules[] = new vAccessControlPreviewRestriction($this);
 				else
-					$rules[] = new kAccessControlSessionRestriction($this);
+					$rules[] = new vAccessControlSessionRestriction($this);
 			}
 				
 			if (!is_null($this->getFromCustomData(self::IP_ADDRESS_RESTRICTION_COLUMN_NAME)))
-				$rules[] = new kAccessControlIpAddressRestriction($this);
+				$rules[] = new vAccessControlIpAddressRestriction($this);
 				
 			if (!is_null($this->getFromCustomData(self::USER_AGENT_RESTRICTION_COLUMN_NAME)))
-				$rules[] = new kAccessControlUserAgentRestriction($this);
+				$rules[] = new vAccessControlUserAgentRestriction($this);
 		}
 		
 		foreach ($rules as &$rule)
@@ -433,12 +433,12 @@ class accessControl extends BaseaccessControl implements IBaseObject
 
 	/**
 	 * Build a binary tree of IPs based on a given access control rules array
-	 * Filtered rules are rules which contain a kIpAddressCondition without NOT set
+	 * Filtered rules are rules which contain a vIpAddressCondition without NOT set
 	 * and with the most common ip type (internal / specific header + accept internal ips).
 	 * In case of an eCDN with many rules The optimization gain is substantial.
 	 * The non filtered rules will be matched as in the regular flow
 	 * 
-	 * @param array<kRule> $rules
+	 * @param array<vRule> $rules
 	 * 
 	 * @return array
 	 */
@@ -460,7 +460,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 			for($condNum = 0; $condNum < count($conditions); $condNum++)
 			{
 				$condition = $conditions[$condNum];
-				if ($condition->getNot() || !($condition instanceof kIpAddressCondition))
+				if ($condition->getNot() || !($condition instanceof vIpAddressCondition))
 					continue;
 				
 				$key = $condition->getHttpHeader() . ',' . $condition->getAcceptInternalIps();
@@ -492,7 +492,7 @@ class accessControl extends BaseaccessControl implements IBaseObject
 			$condition = $conditions[$condNum];
 			$ruleCondNum = "$ruleNum:$condNum";
 			
-			kIpAddressUtils::insertRangesIntoIpTree($ipTree, $condition->getStringValues(null), $ruleCondNum);
+			vIpAddressUtils::insertRangesIntoIpTree($ipTree, $condition->getStringValues(null), $ruleCondNum);
 			
 			unset($unfilteredRules[$ruleNum]);
 		}
@@ -517,17 +517,17 @@ class accessControl extends BaseaccessControl implements IBaseObject
 
 	protected function calcSpecialProperties()
 	{
-		$isServeFromKES = false;
+		$isServeFromVES = false;
 		foreach ($this->getRulesArray() as $rule)
 		{
-			/* @var $rule kRule */
+			/* @var $rule vRule */
 			if ($rule->hasActionType(array(RuleActionType::SERVE_FROM_REMOTE_SERVER)))
 			{
-				$isServeFromKES = true;
+				$isServeFromVES = true;
 				break;
 			}
 		}
-		$this->setSpecialProperty(self::SERVE_FROM_SERVER_NODE_RULE, $isServeFromKES);
+		$this->setSpecialProperty(self::SERVE_FROM_SERVER_NODE_RULE, $isServeFromVES);
 	}
 
 }

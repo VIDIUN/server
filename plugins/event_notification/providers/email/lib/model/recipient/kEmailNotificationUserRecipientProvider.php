@@ -5,32 +5,32 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class kEmailNotificationUserRecipientProvider extends kEmailNotificationRecipientProvider
+class vEmailNotificationUserRecipientProvider extends vEmailNotificationRecipientProvider
 {
 	/**
-	 * @var kuserFilter
+	 * @var vuserFilter
 	 */
 	protected $filter;
 	
 	/**
-	 * @return kuserFilter $filter
+	 * @return vuserFilter $filter
 	 */
 	public function getFilter() {
 		return $this->filter;
 	}
 
 	/**
-	 * @param kuserFilter $filter
+	 * @param vuserFilter $filter
 	 */
-	public function setFilter(kuserFilter $filter) {
+	public function setFilter(vuserFilter $filter) {
 		$this->filter = $filter;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kEmailNotificationRecipientProvider::getScopedProviderJobData()
+	 * @see vEmailNotificationRecipientProvider::getScopedProviderJobData()
 	 */
-	public function getScopedProviderJobData(kScope $scope = null) {
-		$ret = new kEmailNotificationUserRecipientJobData();
+	public function getScopedProviderJobData(vScope $scope = null) {
+		$ret = new vEmailNotificationUserRecipientJobData();
 
 		$ret->setFilter($this->filter);
 		return $ret;

@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUsersCsvJobData extends KalturaExportCsvJobData
+class VidiunUsersCsvJobData extends VidiunExportCsvJobData
 {
 	/**
 	 * The filter should return the list of users that need to be specified in the csv.
 	 *
-	 * @var KalturaUserFilter
+	 * @var VidiunUserFilter
 	 */
 	public $filter;
 	
@@ -23,7 +23,7 @@ class KalturaUsersCsvJobData extends KalturaExportCsvJobData
 	/**
 	 * The xpath to look in the metadataProfileId  and the wanted csv field name
 	 *
-	 * @var KalturaCsvAdditionalFieldInfoArray
+	 * @var VidiunCsvAdditionalFieldInfoArray
 	 */
 	public $additionalFields;
 	
@@ -36,7 +36,7 @@ class KalturaUsersCsvJobData extends KalturaExportCsvJobData
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -44,12 +44,12 @@ class KalturaUsersCsvJobData extends KalturaExportCsvJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array())
 	{
 		if (is_null($dbData))
-			$dbData = new kUsersCsvJobData();
+			$dbData = new vUsersCsvJobData();
 		
 		return parent::toObject($dbData, $props_to_skip);
 	}

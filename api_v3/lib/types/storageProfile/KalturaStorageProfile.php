@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStorageProfile extends KalturaObject implements IFilterable
+class VidiunStorageProfile extends VidiunObject implements IFilterable
 {
 	/**
 	 * @var int
@@ -50,13 +50,13 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	public $desciption;
 	
 	/**
-	 * @var KalturaStorageProfileStatus
+	 * @var VidiunStorageProfileStatus
 	 * @filter eq,in
 	 */
 	public $status;
 	
 	/**
-	 * @var KalturaStorageProfileProtocol
+	 * @var VidiunStorageProfileProtocol
 	 * @filter eq,in
 	 */
 	public $protocol;
@@ -112,7 +112,7 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	public $pathManagerClass;
 	
 	/**
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $pathManagerParams;
 	
@@ -132,13 +132,13 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	
 	/**
 	 * 
-	 * @var KalturaStorageProfileDeliveryStatus
+	 * @var VidiunStorageProfileDeliveryStatus
 	 */
 	public $deliveryStatus;
 	
 	/**
 	 * 
-	 * @var KalturaStorageProfileReadyBehavior
+	 * @var VidiunStorageProfileReadyBehavior
 	 */
 	public $readyBehavior;
 	
@@ -157,13 +157,13 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	/**
 	 * Holds storage profile export rules
 	 * 
-	 * @var KalturaRuleArray
+	 * @var VidiunRuleArray
 	 */
 	public $rules;
 	
 	/**
 	 * Delivery profile ids
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $deliveryProfileIds;
 	
@@ -224,7 +224,7 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -232,7 +232,7 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	}	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
@@ -243,7 +243,7 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -251,18 +251,18 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(StorageProfilePeer::OM_CLASS);
+			$c = VidiunCriteria::create(StorageProfilePeer::OM_CLASS);
 			$c->add(StorageProfilePeer::ID, $sourceObject->getId(), Criteria::NOT_EQUAL);
 			$c->add(StorageProfilePeer::SYSTEM_NAME, $this->systemName);
 			if(StorageProfilePeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		return parent::validateForUpdate($sourceObject, $propertiesToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -270,10 +270,10 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 		
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(StorageProfilePeer::OM_CLASS);
+			$c = VidiunCriteria::create(StorageProfilePeer::OM_CLASS);
 			$c->add(StorageProfilePeer::SYSTEM_NAME, $this->systemName);
 			if(StorageProfilePeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		return parent::validateForInsert($propertiesToSkip);
@@ -292,7 +292,7 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
@@ -328,16 +328,16 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 	    parent::doFromObject($source_object, $responseProfile);
 	    
 		if($this->shouldGet('pathManagerParams', $responseProfile))
-			$this->pathManagerParams = KalturaKeyValueArray::fromKeyValueArray($source_object->getPathManagerParams());
+			$this->pathManagerParams = VidiunKeyValueArray::fromKeyValueArray($source_object->getPathManagerParams());
 		if($this->shouldGet('deliveryProfileIds', $responseProfile))
-			$this->deliveryProfileIds = KalturaKeyValueArray::fromKeyValueArray($source_object->getDeliveryProfileIds());
+			$this->deliveryProfileIds = VidiunKeyValueArray::fromKeyValueArray($source_object->getDeliveryProfileIds());
 	}
 	
 	/* (non-PHPdoc)
@@ -357,10 +357,10 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
 	}
     
     /**
-     * Function returns KalturaStorageProfile sub-type according to protocol
+     * Function returns VidiunStorageProfile sub-type according to protocol
      * @var string $protocol
      * 
-     * @return KalturaStorageProfile
+     * @return VidiunStorageProfile
      */
     public static function getInstanceByType ($protocol)
     {
@@ -369,20 +369,20 @@ class KalturaStorageProfile extends KalturaObject implements IFilterable
             case StorageProfileProtocol::FTP:
             case StorageProfileProtocol::SFTP:
             case StorageProfileProtocol::SCP:
-            case StorageProfileProtocol::KALTURA_DC:
+            case StorageProfileProtocol::VIDIUN_DC:
             case StorageProfileProtocol::LOCAL:
-                $obj = new KalturaStorageProfile();                
+                $obj = new VidiunStorageProfile();                
                 break;
             case StorageProfileProtocol::S3:
-                $obj = new KalturaAmazonS3StorageProfile();
+                $obj = new VidiunAmazonS3StorageProfile();
                 break;
             default:
-                $obj = KalturaPluginManager::loadObject('KalturaStorageProfile', $protocol);
+                $obj = VidiunPluginManager::loadObject('VidiunStorageProfile', $protocol);
                 break;
         }
         
         if (!$obj)
-            $obj = new KalturaStorageProfile();
+            $obj = new VidiunStorageProfile();
         
         return $obj;
     }

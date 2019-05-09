@@ -3,7 +3,7 @@
  * @package plugins.audit
  * @subpackage api.enums
  */
-class KalturaAuditTrailContext extends KalturaEnum
+class VidiunAuditTrailContext extends VidiunEnum
 {
 	const CLIENT = -1;
 	const SCRIPT = 0;

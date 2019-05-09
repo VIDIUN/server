@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaUploadTokenFilter extends KalturaUploadTokenBaseFilter
+class VidiunUploadTokenFilter extends VidiunUploadTokenBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

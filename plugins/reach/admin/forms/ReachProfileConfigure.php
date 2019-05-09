@@ -48,80 +48,80 @@ class Form_ReachProfileConfigure extends ConfigureForm
 			'readonly' => 'true',
 		));
 
-		$profileType = new Kaltura_Form_Element_EnumSelect('profileType', array('enum' => 'Kaltura_Client_Reach_Enum_ReachProfileType'));
+		$profileType = new Vidiun_Form_Element_EnumSelect('profileType', array('enum' => 'Vidiun_Client_Reach_Enum_ReachProfileType'));
 		$profileType->setLabel('Profile Type:');
-		$profileType->setValue(Kaltura_Client_Reach_Enum_ReachProfileType::FREE_TRIAL);
+		$profileType->setValue(Vidiun_Client_Reach_Enum_ReachProfileType::FREE_TRIAL);
 		$this->addElement($profileType);
 
-		$defaultOutputFormatView = new Kaltura_Form_Element_EnumSelect('defaultOutputFormat', array('enum' => 'Kaltura_Client_Reach_Enum_VendorCatalogItemOutputFormat'));
+		$defaultOutputFormatView = new Vidiun_Form_Element_EnumSelect('defaultOutputFormat', array('enum' => 'Vidiun_Client_Reach_Enum_VendorCatalogItemOutputFormat'));
 		$defaultOutputFormatView->setLabel('Default Output Format:');
-		$defaultOutputFormatView->setValue(Kaltura_Client_Reach_Enum_VendorCatalogItemOutputFormat::SRT);
+		$defaultOutputFormatView->setValue(Vidiun_Client_Reach_Enum_VendorCatalogItemOutputFormat::SRT);
 		$this->addElement($defaultOutputFormatView);
 
-		$enableMachineModeration = new Kaltura_Form_Element_EnumSelect('enableMachineModeration', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-			Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+		$enableMachineModeration = new Vidiun_Form_Element_EnumSelect('enableMachineModeration', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+			Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 		$enableMachineModeration->setLabel('Enable Machine Moderation:');
 		$enableMachineModeration->setRequired(true);
-		$enableMachineModeration->setValue(Kaltura_Client_Enum_NullableBoolean::FALSE_VALUE);
+		$enableMachineModeration->setValue(Vidiun_Client_Enum_NullableBoolean::FALSE_VALUE);
 		$this->addElement($enableMachineModeration);
 
-		$enableHumanModeration = new Kaltura_Form_Element_EnumSelect('enableHumanModeration', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-			Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+		$enableHumanModeration = new Vidiun_Form_Element_EnumSelect('enableHumanModeration', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+			Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 		$enableHumanModeration->setLabel('Enable Human Moderation:');
 		$enableHumanModeration->setRequired(true);
-		$enableHumanModeration->setValue(Kaltura_Client_Enum_NullableBoolean::FALSE_VALUE);
+		$enableHumanModeration->setValue(Vidiun_Client_Enum_NullableBoolean::FALSE_VALUE);
 		$this->addElement($enableHumanModeration);
 
-		$autoDisplayMachineCaptionsOnPlayer = new Kaltura_Form_Element_EnumSelect('autoDisplayMachineCaptionsOnPlayer', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-			Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+		$autoDisplayMachineCaptionsOnPlayer = new Vidiun_Form_Element_EnumSelect('autoDisplayMachineCaptionsOnPlayer', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+			Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 		$autoDisplayMachineCaptionsOnPlayer->setLabel('Auto Display Machine Captions On Player:');
 		$autoDisplayMachineCaptionsOnPlayer->setRequired(true);
-		$autoDisplayMachineCaptionsOnPlayer->setValue(Kaltura_Client_Enum_NullableBoolean::TRUE_VALUE);
+		$autoDisplayMachineCaptionsOnPlayer->setValue(Vidiun_Client_Enum_NullableBoolean::TRUE_VALUE);
 		$this->addElement($autoDisplayMachineCaptionsOnPlayer);
 
-		$autoDisplayHumanCaptionsOnPlayer = new Kaltura_Form_Element_EnumSelect('autoDisplayHumanCaptionsOnPlayer', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-			Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+		$autoDisplayHumanCaptionsOnPlayer = new Vidiun_Form_Element_EnumSelect('autoDisplayHumanCaptionsOnPlayer', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+			Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 		$autoDisplayHumanCaptionsOnPlayer->setLabel('Auto Display Human Captions On Player:');
 		$autoDisplayHumanCaptionsOnPlayer->setRequired(true);
-		$autoDisplayHumanCaptionsOnPlayer->setValue(Kaltura_Client_Enum_NullableBoolean::TRUE_VALUE);
+		$autoDisplayHumanCaptionsOnPlayer->setValue(Vidiun_Client_Enum_NullableBoolean::TRUE_VALUE);
 		$this->addElement($autoDisplayHumanCaptionsOnPlayer);
 
-		$enableMetadataExtraction = new Kaltura_Form_Element_EnumSelect('enableMetadataExtraction', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-			Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+		$enableMetadataExtraction = new Vidiun_Form_Element_EnumSelect('enableMetadataExtraction', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+			Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 		$enableMetadataExtraction->setLabel('Enable Metadata Extraction:');
 		$enableMetadataExtraction->setRequired(true);
-		$enableMetadataExtraction->setValue(Kaltura_Client_Enum_NullableBoolean::TRUE_VALUE);
+		$enableMetadataExtraction->setValue(Vidiun_Client_Enum_NullableBoolean::TRUE_VALUE);
 		$this->addElement($enableMetadataExtraction);
 
-		$enableSpeakerChangeIndication = new Kaltura_Form_Element_EnumSelect('enableSpeakerChangeIndication', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-			Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+		$enableSpeakerChangeIndication = new Vidiun_Form_Element_EnumSelect('enableSpeakerChangeIndication', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+			Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 		$enableSpeakerChangeIndication->setLabel('Enable Speaker Change Indication:');
 		$enableSpeakerChangeIndication->setRequired(true);
-		$enableSpeakerChangeIndication->setValue(Kaltura_Client_Enum_NullableBoolean::FALSE_VALUE);
+		$enableSpeakerChangeIndication->setValue(Vidiun_Client_Enum_NullableBoolean::FALSE_VALUE);
 		$this->addElement($enableSpeakerChangeIndication);
 
-		$enableAudioTags = new Kaltura_Form_Element_EnumSelect('enableAudioTags', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-			Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+		$enableAudioTags = new Vidiun_Form_Element_EnumSelect('enableAudioTags', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+			Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 		$enableAudioTags->setLabel('Enable Audio Tags:');
 		$enableAudioTags->setRequired(true);
-		$enableAudioTags->setValue(Kaltura_Client_Enum_NullableBoolean::FALSE_VALUE);
+		$enableAudioTags->setValue(Vidiun_Client_Enum_NullableBoolean::FALSE_VALUE);
 		$this->addElement($enableAudioTags);
 
-		$enableProfanityRemoval = new Kaltura_Form_Element_EnumSelect('enableProfanityRemoval', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-			Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+		$enableProfanityRemoval = new Vidiun_Form_Element_EnumSelect('enableProfanityRemoval', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+			Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 		$enableProfanityRemoval->setLabel('Enable Profanity Removal:');
 		$enableProfanityRemoval->setRequired(true);
-		$enableProfanityRemoval->setValue(Kaltura_Client_Enum_NullableBoolean::TRUE_VALUE);
+		$enableProfanityRemoval->setValue(Vidiun_Client_Enum_NullableBoolean::TRUE_VALUE);
 		$this->addElement($enableProfanityRemoval);
 
-		$contentDeletionPolicy = new Kaltura_Form_Element_EnumSelect('contentDeletionPolicy', array('enum' => 'Kaltura_Client_Reach_Enum_ReachProfileContentDeletionPolicy'));
+		$contentDeletionPolicy = new Vidiun_Form_Element_EnumSelect('contentDeletionPolicy', array('enum' => 'Vidiun_Client_Reach_Enum_ReachProfileContentDeletionPolicy'));
 		$contentDeletionPolicy->setLabel('Content Deletion Policy:');
-		$contentDeletionPolicy->setValue(Kaltura_Client_Reach_Enum_ReachProfileContentDeletionPolicy::DELETE_ONCE_PROCESSED);
+		$contentDeletionPolicy->setValue(Vidiun_Client_Reach_Enum_ReachProfileContentDeletionPolicy::DELETE_ONCE_PROCESSED);
 		$this->addElement($contentDeletionPolicy);
 		
-		$vendorTaskProcessingRegion = new Kaltura_Form_Element_EnumSelect('vendorTaskProcessingRegion', array('enum' => 'Kaltura_Client_Reach_Enum_VendorTaskProcessingRegion'));
+		$vendorTaskProcessingRegion = new Vidiun_Form_Element_EnumSelect('vendorTaskProcessingRegion', array('enum' => 'Vidiun_Client_Reach_Enum_VendorTaskProcessingRegion'));
 		$vendorTaskProcessingRegion->setLabel('Task Processing Region:');
-		$vendorTaskProcessingRegion->setValue(Kaltura_Client_Reach_Enum_VendorTaskProcessingRegion::US);
+		$vendorTaskProcessingRegion->setValue(Vidiun_Client_Reach_Enum_VendorTaskProcessingRegion::US);
 		$this->addElement($vendorTaskProcessingRegion);
 
 		$this->addElement('text', 'maxCharactersPerCaptionLine', array(
@@ -155,12 +155,12 @@ class Form_ReachProfileConfigure extends ConfigureForm
 			'viewScript' => 'dictionaries-sub-form.phtml',
 		));
 		$this->addSubForm($dictionariesSubForm, 'ReachProfileDictionaries_');
-		$innerDictionariesSubForm = new Form_DictionariesSubForm ('Kaltura_Client_Reach_Type_Dictionary');
+		$innerDictionariesSubForm = new Form_DictionariesSubForm ('Vidiun_Client_Reach_Type_Dictionary');
 		$this->addSubForm($innerDictionariesSubForm, "DictionaryTemplate");
 
 	}
 
-	public static $rulesMap = array("Kaltura_Client_Reach_Type_AddEntryVendorTaskAction" => "Automatic_Rule");
+	public static $rulesMap = array("Vidiun_Client_Reach_Type_AddEntryVendorTaskAction" => "Automatic_Rule");
 
 	private function addRulesSection()
 	{
@@ -181,7 +181,7 @@ class Form_ReachProfileConfigure extends ConfigureForm
 
 	private function addRulesTemplate()
 	{
-		$ruleSubForm = new Form_RulesSubForm("Kaltura_Client_Reach_Type_AddEntryVendorTaskAction","Kaltura_Client_Type_BooleanEventNotificationCondition");
+		$ruleSubForm = new Form_RulesSubForm("Vidiun_Client_Reach_Type_AddEntryVendorTaskAction","Vidiun_Client_Type_BooleanEventNotificationCondition");
 		$this->addSubForm($ruleSubForm, "reachProfileRuleTemplate_" . "Automatic_Rule");
 	}
 
@@ -196,7 +196,7 @@ class Form_ReachProfileConfigure extends ConfigureForm
 		$allElements = $this->getElements();
 		foreach ($allElements as $element)
 		{
-			if ($element instanceof Kaltura_Form_Element_EnumSelect)
+			if ($element instanceof Vidiun_Form_Element_EnumSelect)
 			{
 				$elementName = $element->getName();
 				if (isset($props[$elementName]))
@@ -233,7 +233,7 @@ class Form_ReachProfileConfigure extends ConfigureForm
 		{
 			if (substr($rule->description, 0, strlen(self::ADMIN_CONSOLE_RULE_PREFIX)) === self::ADMIN_CONSOLE_RULE_PREFIX)
 			{
-				$newRule = $this->createAutomaticRule($rule, self::$rulesMap['Kaltura_Client_Reach_Type_AddEntryVendorTaskAction']);
+				$newRule = $this->createAutomaticRule($rule, self::$rulesMap['Vidiun_Client_Reach_Type_AddEntryVendorTaskAction']);
 				$newRule['description'] = $rule->description;
 				$rules[] = $newRule;
 			}
@@ -250,14 +250,14 @@ class Form_ReachProfileConfigure extends ConfigureForm
 		$booleanEventNotificationIds = array();
 		foreach ($rule->actions as $action)
 		{
-			/* @var Kaltura_Client_Reach_Type_AddEntryVendorTaskAction $action */
+			/* @var Vidiun_Client_Reach_Type_AddEntryVendorTaskAction $action */
 			$catalogItemIds[] = $action->catalogItemIds;
 		}
 		if (isset($rule->conditions))
 		{
 			foreach ($rule->conditions as $condition)
 			{
-				/* @var  Kaltura_Client_Type_BooleanEventNotificationCondition $condition */
+				/* @var  Vidiun_Client_Type_BooleanEventNotificationCondition $condition */
 				$booleanEventNotificationIds[] = $condition->booleanEventNotificationIds;
 			}
 			$newRule['booleanEventNotificationIds'] = implode(', ', $booleanEventNotificationIds);
@@ -276,12 +276,12 @@ class Form_ReachProfileConfigure extends ConfigureForm
 		{
 			switch (array_search($rule->ruleType, self::$rulesMap))
 			{
-				case 'Kaltura_Client_Reach_Type_AddEntryVendorTaskAction':
+				case 'Vidiun_Client_Reach_Type_AddEntryVendorTaskAction':
 				{
-					$action = new Kaltura_Client_Reach_Type_AddEntryVendorTaskAction();
+					$action = new Vidiun_Client_Reach_Type_AddEntryVendorTaskAction();
 					$action->catalogItemIds = $rule->catalogItemIds;
 					$description = (empty($rule->description) || $rule->description == self::ADMIN_CONSOLE_RULE_PREFIX) ? (self::ADMIN_CONSOLE_RULE_PREFIX . mt_rand(100000, 999999)) : $rule->description;
-					$condition = new Kaltura_Client_Type_BooleanEventNotificationCondition();
+					$condition = new Vidiun_Client_Type_BooleanEventNotificationCondition();
 					if (isset($rule->booleanEventNotificationIds))
 					{
 						$condition->booleanEventNotificationIds = $rule->booleanEventNotificationIds;
@@ -297,7 +297,7 @@ class Form_ReachProfileConfigure extends ConfigureForm
 		$dictionariesArray = array();
 		foreach ((array)json_decode($dictionaries) as $dictionary)
 		{
-			$dictionaryItem = new Kaltura_Client_Reach_Type_Dictionary();
+			$dictionaryItem = new Vidiun_Client_Reach_Type_Dictionary();
 			$dictionaryItem->language = $dictionary->language;
 			$dictionaryItem->data = $dictionary->data;
 			$dictionariesArray [] = $dictionaryItem;
@@ -310,7 +310,7 @@ class Form_ReachProfileConfigure extends ConfigureForm
 
 	public function getReachProfileRule($actions, $conditions, $description = null)
 	{
-		$rule = new Kaltura_Client_Type_Rule();
+		$rule = new Vidiun_Client_Type_Rule();
 		$rule->actions = $actions;
 		if ($description)
 			$rule->description = $description;
@@ -320,9 +320,9 @@ class Form_ReachProfileConfigure extends ConfigureForm
 
 	/**
 	 * Set to null all the attributes that shouldn't be updated
-	 * @param Kaltura_Client_Reach_Type_ReachProfile $reachProfile
+	 * @param Vidiun_Client_Reach_Type_ReachProfile $reachProfile
 	 */
-	public function resetUnUpdatebleAttributes(Kaltura_Client_Reach_Type_ReachProfile $reachProfile)
+	public function resetUnUpdatebleAttributes(Vidiun_Client_Reach_Type_ReachProfile $reachProfile)
 	{
 		// reset readonly attributes
 		$reachProfile->id = null;

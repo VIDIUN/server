@@ -2,12 +2,12 @@
 require_once(__DIR__ . "/../../../../batch/bootstrap.php");
 
 /**
- * Executes the KAsyncDistributeFetchReport
+ * Executes the VAsyncDistributeFetchReport
  * 
  * @package plugins.contentDistribution 
  * @subpackage Scheduler.Distribute
  */
 
-$instance = new KAsyncDistributeFetchReport();
+$instance = new VAsyncDistributeFetchReport();
 $instance->run(); 
 $instance->done();

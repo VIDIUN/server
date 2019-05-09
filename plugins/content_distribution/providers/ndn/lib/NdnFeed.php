@@ -43,7 +43,7 @@ class NdnFeed
 	public function __construct($templateName)
 	{
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . $templateName;
-		$this->doc = new KDOMDocument();
+		$this->doc = new VDOMDocument();
 		$this->doc->formatOutput = true;
 		$this->doc->preserveWhiteSpace = false;
 		$this->doc->load($xmlTemplate);
@@ -109,21 +109,21 @@ class NdnFeed
 	
 	public function setChannelFields ()
 	{
-		kXml::setNodeValue($this->xpath,'/rss/channel/title', $this->distributionProfile->getChannelTitle());
-		kXml::setNodeValue($this->xpath,'/rss/channel/link', $this->distributionProfile->getChannelLink());
-		kXml::setNodeValue($this->xpath,'/rss/channel/description', $this->distributionProfile->getChannelDescription());
-		kXml::setNodeValue($this->xpath,'/rss/channel/language', $this->distributionProfile->getChannelLanguage());
-		kXml::setNodeValue($this->xpath,'/rss/channel/copyright', $this->distributionProfile->getChannelCopyright());
-		kXml::setNodeValue($this->xpath,'/rss/channel/image/title', $this->distributionProfile->getChannelImageTitle());
-		kXml::setNodeValue($this->xpath,'/rss/channel/image/url', $this->distributionProfile->getChannelImageUrl());
-		kXml::setNodeValue($this->xpath,'/rss/channel/image/link', $this->distributionProfile->getChannelImageLink());				
-		kXml::setNodeValue($this->xpath,'/rss/channel/pubDate', date('r',$this->distributionProfile->getCreatedAt(null)));
+		vXml::setNodeValue($this->xpath,'/rss/channel/title', $this->distributionProfile->getChannelTitle());
+		vXml::setNodeValue($this->xpath,'/rss/channel/link', $this->distributionProfile->getChannelLink());
+		vXml::setNodeValue($this->xpath,'/rss/channel/description', $this->distributionProfile->getChannelDescription());
+		vXml::setNodeValue($this->xpath,'/rss/channel/language', $this->distributionProfile->getChannelLanguage());
+		vXml::setNodeValue($this->xpath,'/rss/channel/copyright', $this->distributionProfile->getChannelCopyright());
+		vXml::setNodeValue($this->xpath,'/rss/channel/image/title', $this->distributionProfile->getChannelImageTitle());
+		vXml::setNodeValue($this->xpath,'/rss/channel/image/url', $this->distributionProfile->getChannelImageUrl());
+		vXml::setNodeValue($this->xpath,'/rss/channel/image/link', $this->distributionProfile->getChannelImageLink());				
+		vXml::setNodeValue($this->xpath,'/rss/channel/pubDate', date('r',$this->distributionProfile->getCreatedAt(null)));
 		
 	}
 	
 	public function setChannelLastBuildDate($lastBuildDate)
 	{
-		kXml::setNodeValue($this->xpath,'/rss/channel/lastBuildDate', date('r', $lastBuildDate));
+		vXml::setNodeValue($this->xpath,'/rss/channel/lastBuildDate', date('r', $lastBuildDate));
 	}
 	
 	public function addItemXml($xml)
@@ -156,20 +156,20 @@ class NdnFeed
 		{
 			$thumbnailUrl = $entry->getThumbnailUrl();
 		}
-		kXml::setNodeValue($this->xpath,'guid', $values[NdnDistributionField::ITEM_GUID], $item);
-		kXml::setNodeValue($this->xpath,'title', $values[NdnDistributionField::ITEM_TITLE], $item);
-		kXml::setNodeValue($this->xpath,'link', $values[NdnDistributionField::ITEM_LINK], $item);
-		kXml::setNodeValue($this->xpath,'description', $values[NdnDistributionField::ITEM_DESCRIPTION], $item);
+		vXml::setNodeValue($this->xpath,'guid', $values[NdnDistributionField::ITEM_GUID], $item);
+		vXml::setNodeValue($this->xpath,'title', $values[NdnDistributionField::ITEM_TITLE], $item);
+		vXml::setNodeValue($this->xpath,'link', $values[NdnDistributionField::ITEM_LINK], $item);
+		vXml::setNodeValue($this->xpath,'description', $values[NdnDistributionField::ITEM_DESCRIPTION], $item);
 		$pubDate = date('r', $values[NdnDistributionField::ITEM_PUB_DATE]);
-		kXml::setNodeValue($this->xpath,'pubDate', $pubDate, $item);
+		vXml::setNodeValue($this->xpath,'pubDate', $pubDate, $item);
 		$endTime = date('r', $values[NdnDistributionField::ITEM_EXPIRATION_DATE]);
-		kXml::setNodeValue($this->xpath,'expirationDate', $endTime, $item);
+		vXml::setNodeValue($this->xpath,'expirationDate', $endTime, $item);
 		$origReleaseDate = date('r', $values[NdnDistributionField::ITEM_LIVE_ORIGINAL_RELEASE_DATE]);
-		kXml::setNodeValue($this->xpath,'live:origReleaseDate',$origReleaseDate, $item);
-		kXml::setNodeValue($this->xpath,'media:title', $values[NdnDistributionField::ITEM_MEDIA_TITLE], $item);
-		kXml::setNodeValue($this->xpath,'media:description', $values[NdnDistributionField::ITEM_MEDIA_DESCRIPTION], $item);
-		kXml::setNodeValue($this->xpath,'media:keywords', $values[NdnDistributionField::ITEM_MEDIA_KEYWORDS], $item);
-		kXml::setNodeValue($this->xpath,'media:rating', $values[NdnDistributionField::ITEM_MEDIA_RATING], $item);		
+		vXml::setNodeValue($this->xpath,'live:origReleaseDate',$origReleaseDate, $item);
+		vXml::setNodeValue($this->xpath,'media:title', $values[NdnDistributionField::ITEM_MEDIA_TITLE], $item);
+		vXml::setNodeValue($this->xpath,'media:description', $values[NdnDistributionField::ITEM_MEDIA_DESCRIPTION], $item);
+		vXml::setNodeValue($this->xpath,'media:keywords', $values[NdnDistributionField::ITEM_MEDIA_KEYWORDS], $item);
+		vXml::setNodeValue($this->xpath,'media:rating', $values[NdnDistributionField::ITEM_MEDIA_RATING], $item);		
 		if (!is_null($flavorAssets) && is_array($flavorAssets) && count($flavorAssets)>0)
 		{
 			$this->setFlavorAsset($item, $flavorAssets, $values[NdnDistributionField::ITEM_CONTENT_LANG]);
@@ -183,8 +183,8 @@ class NdnFeed
 			$this->setThumbAssetUrl($item, $thumbnailUrl, $values[NdnDistributionField::ITEM_THUMBNAIL_CREDIT]);
 		}		
 		$this->addCategory($item,$values[NdnDistributionField::ITEM_MEDIA_CATEGORY]);
-		kXml::setNodeValue($this->xpath,'media:copyright', $values[NdnDistributionField::ITEM_MEDIA_COPYRIGHT], $item);	
-		kXml::setNodeValue($this->xpath,'media:copyright/@url', $values[NdnDistributionField::ITEM_MEDIA_COPYRIGHT_URL], $item);			
+		vXml::setNodeValue($this->xpath,'media:copyright', $values[NdnDistributionField::ITEM_MEDIA_COPYRIGHT], $item);	
+		vXml::setNodeValue($this->xpath,'media:copyright/@url', $values[NdnDistributionField::ITEM_MEDIA_COPYRIGHT_URL], $item);			
 		
 		return $item;
 	}
@@ -242,21 +242,21 @@ class NdnFeed
 		$flavorAsset = $flavorAssets[0];		
 		/* @var $flavorAsset flavorAsset */
 		$url = $this->getAssetUrl($flavorAsset);
-		kXml::setNodeValue($this->xpath,'media:content/@url', $url, $item);
-		kXml::setNodeValue($this->xpath,'media:content/@width', $flavorAsset->getWidth(), $item);
-		kXml::setNodeValue($this->xpath,'media:content/@height', $flavorAsset->getHeight(), $item);
+		vXml::setNodeValue($this->xpath,'media:content/@url', $url, $item);
+		vXml::setNodeValue($this->xpath,'media:content/@width', $flavorAsset->getWidth(), $item);
+		vXml::setNodeValue($this->xpath,'media:content/@height', $flavorAsset->getHeight(), $item);
 		//setting mime type
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		if(kFileSyncUtils::fileSync_exists($syncKey))
+		if(vFileSyncUtils::fileSync_exists($syncKey))
 		{
-			$filePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
-			$mimeType = kFile::mimeType($filePath);
+			$filePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			$mimeType = vFile::mimeType($filePath);
 		}				
-		kXml::setNodeValue($this->xpath,'media:content/@type', $mimeType, $item);
+		vXml::setNodeValue($this->xpath,'media:content/@type', $mimeType, $item);
 							
 		if (!empty($flavorLang))
 		{
-			kXml::setNodeValue($this->xpath,'media:content/@lang', $flavorLang, $item);
+			vXml::setNodeValue($this->xpath,'media:content/@lang', $flavorLang, $item);
 		}
 	}
 	
@@ -269,12 +269,12 @@ class NdnFeed
 			if ($thumbAsset){
 				$url = $this->getAssetUrl($thumbAsset);
 				$thumbnailNode = $templateNode->cloneNode(true);	
-				kXml::setNodeValue($this->xpath,'./@url', $url, $thumbnailNode);
-				kXml::setNodeValue($this->xpath,'./@width', $thumbAsset->getWidth(), $thumbnailNode);
-				kXml::setNodeValue($this->xpath,'./@height', $thumbAsset->getHeight(), $thumbnailNode);
+				vXml::setNodeValue($this->xpath,'./@url', $url, $thumbnailNode);
+				vXml::setNodeValue($this->xpath,'./@width', $thumbAsset->getWidth(), $thumbnailNode);
+				vXml::setNodeValue($this->xpath,'./@height', $thumbAsset->getHeight(), $thumbnailNode);
 				if (!empty($thumbnailCredit))
 				{
-					kXml::setNodeValue($this->xpath,'./@credit', $thumbnailCredit, $item);
+					vXml::setNodeValue($this->xpath,'./@credit', $thumbnailCredit, $item);
 				}													
 				$parentNode->insertBefore($thumbnailNode,$templateNode);
 			}
@@ -284,12 +284,12 @@ class NdnFeed
 	
 	public function setThumbAssetUrl($item, $thumbnailUrl, $thumbnailCredit)
 	{
-		kXml::setNodeValue($this->xpath,'media:thumbnail/@url', $thumbnailUrl, $item);
-		kXml::setNodeValue($this->xpath,'media:thumbnail/@width', '320', $item);
-		kXml::setNodeValue($this->xpath,'media:thumbnail/@height', '240', $item);
+		vXml::setNodeValue($this->xpath,'media:thumbnail/@url', $thumbnailUrl, $item);
+		vXml::setNodeValue($this->xpath,'media:thumbnail/@width', '320', $item);
+		vXml::setNodeValue($this->xpath,'media:thumbnail/@height', '240', $item);
 		if (!empty($thumbnailCredit))
 		{
-			kXml::setNodeValue($this->xpath,'media:thumbnail/@credit', $thumbnailCredit, $item);
+			vXml::setNodeValue($this->xpath,'media:thumbnail/@credit', $thumbnailCredit, $item);
 		}
 	}
 		

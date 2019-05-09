@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaPhpSerializer extends KalturaSerializer
+class VidiunPhpSerializer extends VidiunSerializer
 {
 	function serialize($object)
 	{

@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFullStatusResponse extends KalturaObject 
+class VidiunFullStatusResponse extends VidiunObject 
 {
 	/**
 	 * The status of all queues on the server
 	 * 
-	 * @var KalturaBatchQueuesStatusArray
+	 * @var VidiunBatchQueuesStatusArray
 	 */
 	public $queuesStatus;
 	
@@ -16,7 +16,7 @@ class KalturaFullStatusResponse extends KalturaObject
 	/**
 	 * Array of all schedulers
 	 * 
-	 * @var KalturaSchedulerArray
+	 * @var VidiunSchedulerArray
 	 */
 	public $schedulers;
 }

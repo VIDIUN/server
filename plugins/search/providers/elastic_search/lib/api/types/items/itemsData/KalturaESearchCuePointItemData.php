@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchCuePointItemData extends KalturaESearchItemData
+class VidiunESearchCuePointItemData extends VidiunESearchItemData
 {
 
 	/**
@@ -27,7 +27,7 @@ class KalturaESearchCuePointItemData extends KalturaESearchItemData
 	public $text;
 
 	/**
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 **/
 	public $tags;
 
@@ -52,7 +52,7 @@ class KalturaESearchCuePointItemData extends KalturaESearchItemData
 	public $question;
 
 	/**
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 **/
 	public $answers;
 

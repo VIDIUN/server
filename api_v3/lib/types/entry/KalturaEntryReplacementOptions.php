@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryReplacementOptions extends KalturaObject
+class VidiunEntryReplacementOptions extends VidiunObject
 {
 	/**
 	 * If true manually created thumbnails will not be deleted on entry replacement
@@ -14,7 +14,7 @@ class KalturaEntryReplacementOptions extends KalturaObject
 
 	/**
 	 * Array of plugin replacement options
-	 * @var KalturaPluginReplacementOptionsArray
+	 * @var VidiunPluginReplacementOptionsArray
 	 */
 	public $pluginOptionItems;
 
@@ -25,7 +25,7 @@ class KalturaEntryReplacementOptions extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -33,12 +33,12 @@ class KalturaEntryReplacementOptions extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kEntryReplacementOptions();
+			$object_to_fill = new vEntryReplacementOptions();
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

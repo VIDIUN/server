@@ -1,11 +1,11 @@
-<kcw>
+<vcw>
   <UIConfigList>
     <UIConfig>
       <target>ContributionWizard.swf</target>
       <cssUrl>
-      /content/uiconf/kaltura/generic/kcw_2.1.5/style/style.swf</cssUrl>
+      /content/uiconf/vidiun/generic/vcw_2.1.5/style/style.swf</cssUrl>
       <localeUrl>
-      /content/uiconf/kaltura/kmc/kcw/v2.1.5/en_US_ContributionWizard_kaltura.swf</localeUrl>
+      /content/uiconf/vidiun/vmc/vcw/v2.1.5/en_US_ContributionWizard_vidiun.swf</localeUrl>
     </UIConfig>
   </UIConfigList>
   <ImportTypesConfig>
@@ -55,10 +55,10 @@
         </authMethodList>
         <moduleUrl>WebcamView.swf</moduleUrl>
         <customData>
-          <serverUrl>rtmpt://rtmpt.kaltura.com/oflaDemo</serverUrl>
+          <serverUrl>rtmpt://rtmpt.vidiun.com/oflaDemo</serverUrl>
         </customData>
       </provider>
-      <!-- provider id="kaltura" name="kaltura" code="20">         <moduleUrl>SearchView.swf</moduleUrl>         <authMethodList>           <authMethod type="1"/>           <authMethod type="3" searchable="false"/>         </authMethodList>       </provider-->
+      <!-- provider id="vidiun" name="vidiun" code="20">         <moduleUrl>SearchView.swf</moduleUrl>         <authMethodList>           <authMethod type="1"/>           <authMethod type="3" searchable="false"/>         </authMethodList>       </provider-->
       <provider id="metacafe" name="metacafe" code="24">
         <moduleUrl>SearchView.swf</moduleUrl>
         <authMethodList>
@@ -109,4 +109,4 @@
       <mediaProviderName>upload</mediaProviderName>
     </gotoScreen>
   </StartupDefaults>
-</kcw>
+</vcw>

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAccessControlLimitThumbnailCaptureAction extends kRuleAction 
+class vAccessControlLimitThumbnailCaptureAction extends vRuleAction 
 {
 	public function __construct() 
 	{

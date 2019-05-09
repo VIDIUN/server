@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage Admin
  */
-class DrmAdminApiAction extends KalturaApplicationPlugin
+class DrmAdminApiAction extends VidiunApplicationPlugin
 {
 
 	/**
@@ -30,7 +30,7 @@ class DrmAdminApiAction extends KalturaApplicationPlugin
 		}
 		
 		$adminApiForm = new Form_AdminApiConfigure($partnerId, $drmType, $actionApi);
-		KalturaLog::info("Got params for the ADMIN-API action as: partnerId: [$partnerId], drmType: [$drmType] ,actionApi: [$actionApi] ");
+		VidiunLog::info("Got params for the ADMIN-API action as: partnerId: [$partnerId], drmType: [$drmType] ,actionApi: [$actionApi] ");
 
 		try
 		{
@@ -53,7 +53,7 @@ class DrmAdminApiAction extends KalturaApplicationPlugin
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . PHP_EOL . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 		}	
 		$action->view->form = $adminApiForm;
@@ -93,7 +93,7 @@ class DrmAdminApiAction extends KalturaApplicationPlugin
 	{
 		$host = Zend_Registry::get('config')->admin_api_server_url;
 		$secret = Zend_Registry::get('config')->admin_request_secret;
-		KalturaLog::info("Got configuration params as: host [$host] secret [$secret] ");
+		VidiunLog::info("Got configuration params as: host [$host] secret [$secret] ");
 		if (!$secret || !$host)
 			throw new Exception("Missing configuration Params. check for UDRM server host or Admin secret");
 		return array($host, $secret);
@@ -106,7 +106,7 @@ class DrmAdminApiAction extends KalturaApplicationPlugin
 		$signature = DrmLicenseUtils::signDataWithKey($body,$secret);
 		$url = $host . '/admin/' . $action . 'Partner' . '?signature=' . $signature;
 
-		KalturaLog::debug("Send to UDRM server [$url] and body: [$body]");
+		VidiunLog::debug("Send to UDRM server [$url] and body: [$body]");
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,            $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -115,7 +115,7 @@ class DrmAdminApiAction extends KalturaApplicationPlugin
 		curl_setopt($ch, CURLOPT_POSTFIELDS,     $body);
 		$result=curl_exec ($ch);
 		curl_close($ch);
-		KalturaLog::debug("Got response from UDRM server as [$result]");
+		VidiunLog::debug("Got response from UDRM server as [$result]");
 
 		return $result;
 

@@ -48,8 +48,8 @@ class PartnerStatsTableMap extends TableMap {
 		$this->addColumn('USERS_2', 'Users2', 'INTEGER', false, null, null);
 		$this->addColumn('RC_1', 'Rc1', 'INTEGER', false, null, null);
 		$this->addColumn('RC_2', 'Rc2', 'INTEGER', false, null, null);
-		$this->addColumn('KSHOWS_1', 'Kshows1', 'INTEGER', false, null, null);
-		$this->addColumn('KSHOWS_2', 'Kshows2', 'INTEGER', false, null, null);
+		$this->addColumn('VSHOWS_1', 'Vshows1', 'INTEGER', false, null, null);
+		$this->addColumn('VSHOWS_2', 'Vshows2', 'INTEGER', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('CUSTOM_DATA', 'CustomData', 'LONGVARCHAR', false, null, null);

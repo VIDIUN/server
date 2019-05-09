@@ -3,6 +3,6 @@
  * @package plugins.doubleClickDistribution
  * @subpackage api.filters.enum
  */
-class KalturaDoubleClickDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunDoubleClickDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

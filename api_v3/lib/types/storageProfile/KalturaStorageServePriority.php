@@ -3,10 +3,10 @@
  * @package api
  * @subpackage enum
  */
-class KalturaStorageServePriority extends KalturaEnum
+class VidiunStorageServePriority extends VidiunEnum
 {	  				
-	const KALTURA_ONLY = 1;
-	const KALTURA_FIRST = 2;
+	const VIDIUN_ONLY = 1;
+	const VIDIUN_FIRST = 2;
 	const EXTERNAL_FIRST = 3;
 	const EXTERNAL_ONLY = 4;
 }

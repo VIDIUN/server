@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kConvertCollectionJobData extends kConvartableJobData
+class vConvertCollectionJobData extends vConvartableJobData
 {
 	/**
 	 * @var string
@@ -39,7 +39,7 @@ class kConvertCollectionJobData extends kConvartableJobData
 	
 	
 	/**
-	 * @var array<kConvertCollectionFlavorData>
+	 * @var array<vConvertCollectionFlavorData>
 	 */
 	private $flavors;
 	
@@ -141,7 +141,7 @@ class kConvertCollectionJobData extends kConvartableJobData
 	}
 	
 	/**
-	 * @return array<kConvertCollectionFlavorData>
+	 * @return array<vConvertCollectionFlavorData>
 	 */
 	public function getFlavors()
 	{
@@ -157,9 +157,9 @@ class kConvertCollectionJobData extends kConvartableJobData
 	}
 
 	/**
-	 * @param kConvertCollectionFlavorData $flavor the $flavor to add
+	 * @param vConvertCollectionFlavorData $flavor the $flavor to add
 	 */
-	public function addFlavor(kConvertCollectionFlavorData $flavor)
+	public function addFlavor(vConvertCollectionFlavorData $flavor)
 	{
 		if(!is_array($this->flavors))
 			$this->flavors = array();

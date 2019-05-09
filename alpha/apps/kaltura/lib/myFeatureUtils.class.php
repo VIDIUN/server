@@ -20,12 +20,12 @@ class myFeatureUtils
 	
 	/**
 	 * Will store the featured teams in some cache and refresh on a daily basis.
-	 * The ids of the featured kshows will be read from a config file at first, and at a later phase for DB.  
+	 * The ids of the featured vshows will be read from a config file at first, and at a later phase for DB.  
 	 *
 	 */
 	public static function getFeaturedTeams ()
 	{
-		return self::getCachedKshowList ( "featured_team_list" );
+		return self::getCachedVshowList ( "featured_team_list" );
 	}
 
 	public static function getFeaturedTeamsIdList ()
@@ -37,12 +37,12 @@ class myFeatureUtils
 	
 	/**
 	 * Will store the featured shows in some cache and refresh on a daily basis.
-	 * The ids of the featured kshows will be read from a config file at first, and at a later phase for DB.  
+	 * The ids of the featured vshows will be read from a config file at first, and at a later phase for DB.  
 	 *
 	 */
 	public static function getFeaturedShows ()
 	{
-		return self::getCachedKshowList ( "featured_show_list" );
+		return self::getCachedVshowList ( "featured_show_list" );
 	}
 
 	public static function getFeaturedShowsIdList ()
@@ -54,17 +54,17 @@ class myFeatureUtils
 
 	/**
 	 * Will store the featured intors in some cache and refresh on a daily basis.
-	 * The ids of the featured kshows will be read from a config file at first, and at a later phase for DB.  
+	 * The ids of the featured vshows will be read from a config file at first, and at a later phase for DB.  
 	 *
 	 */
 	public static function getFeaturedIntros ()
 	{
-		return self::getCachedKshowList ( "featured_intro_list" );
+		return self::getCachedVshowList ( "featured_intro_list" );
 	}
 	
 	
 	
-	private  static function getCachedKshowList ( $config_param_name , $fallback = NULL) 
+	private  static function getCachedVshowList ( $config_param_name , $fallback = NULL) 
 	{
 		return array();
 		self::init();
@@ -87,18 +87,18 @@ class myFeatureUtils
 			}
 			
 			$c = new Criteria();
-			$c->add ( kshowPeer::ID , $id_list , Criteria::IN );
-			// fetch the real kshows from the DB
-			$kshow_list = kshowPeer::doSelectJoinkuser( $c );
+			$c->add ( vshowPeer::ID , $id_list , Criteria::IN );
+			// fetch the real vshows from the DB
+			$vshow_list = vshowPeer::doSelectJoinvuser( $c );
 
-			// create stub objects with only the minimum data from the real kshow
+			// create stub objects with only the minimum data from the real vshow
 			$cached_show_list = array();
 			$temp_array = array();
 			
 			// the order is not the one we had in the $id_list - it's sorted by the DB
-			foreach ( $kshow_list as $kshow )
+			foreach ( $vshow_list as $vshow )
 			{
-				$temp_array[$kshow->getId()] = new kshowStub ( $kshow ); 
+				$temp_array[$vshow->getId()] = new vshowStub ( $vshow ); 
 			}
 			
 			$i = 0;

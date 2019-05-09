@@ -4,10 +4,10 @@
  * @subpackage model.data
  * @abstract
  */
-abstract class kMatchCondition extends kCondition
+abstract class vMatchCondition extends vCondition
 {
 	/**
-	 * @var array<kStringValue>
+	 * @var array<vStringValue>
 	 */
 	protected $values;
 	
@@ -26,12 +26,12 @@ abstract class kMatchCondition extends kCondition
 	 */
 	function setValues(array $values)
 	{
-		$kStringValues = $values;
+		$vStringValues = $values;
 		foreach($values as $index => $value)
 			if(is_string($value))
-				$kStringValues[$index] = new kStringValue($value);
+				$vStringValues[$index] = new vStringValue($value);
 				
-		$this->values = $kStringValues;
+		$this->values = $vStringValues;
 	}
 	
 	/**
@@ -61,16 +61,16 @@ abstract class kMatchCondition extends kCondition
 	
 
 	/* (non-PHPdoc)
-	 * @see kCondition::applyDynamicValues()
+	 * @see vCondition::applyDynamicValues()
 	 */
-	protected function applyDynamicValues(kScope $scope)
+	protected function applyDynamicValues(vScope $scope)
 	{
 		parent::applyDynamicValues($scope);
 		$this->dynamicValues = $scope->getDynamicValues('{', '}');
 	}
 	
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return array<string>
 	 */
 	function getStringValues($scope = null)
@@ -85,11 +85,11 @@ abstract class kMatchCondition extends kCondition
 		
 		foreach($this->values as $value)
 		{
-			/* @var $value kStringValue */
+			/* @var $value vStringValue */
 			$calculatedValue = null;
 			if(is_object($value))
 			{
-				if($scope && $value instanceof kStringField)
+				if($scope && $value instanceof vStringField)
 					$value->setScope($scope);
 				
 				$calculatedValue = $value->getValue();
@@ -109,10 +109,10 @@ abstract class kMatchCondition extends kCondition
 	}
 	
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return string the field content
 	 */
-	abstract public function getFieldValue(kScope $scope);
+	abstract public function getFieldValue(vScope $scope);
 	
 	/**
 	 * @param string $field
@@ -132,7 +132,7 @@ abstract class kMatchCondition extends kCondition
 	{
 		if(in_array($field, $values))
 		{
-			KalturaLog::debug("[$this->description] Field found in the values list, condition is true");
+			VidiunLog::debug("[$this->description] Field found in the values list, condition is true");
 			return true;
 		}
 		
@@ -140,33 +140,33 @@ abstract class kMatchCondition extends kCondition
 		{
 			if($this->matches($field, $value))
 			{
-				KalturaLog::debug("[$this->description] Field [$field] matches value [$value], condition is true");
+				VidiunLog::debug("[$this->description] Field [$field] matches value [$value], condition is true");
 				return true;
 			}
 		}
 			
-		KalturaLog::debug("[$this->description] No match found, condition is false");
+		VidiunLog::debug("[$this->description] No match found, condition is false");
 		return false;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		$field = $this->getFieldValue($scope);
 		$values = $this->getStringValues($scope);
 		
-		KalturaLog::debug("[$this->description] Matches field [" . print_r($field, true) . "] to values [" . print_r($values, true) . "]");
+		VidiunLog::debug("[$this->description] Matches field [" . print_r($field, true) . "] to values [" . print_r($values, true) . "]");
 		if (!count($values))
 		{
-			KalturaLog::debug("[$this->description] No values found, condition is true");
+			VidiunLog::debug("[$this->description] No values found, condition is true");
 			return true;
 		}
 		
 		if (is_null($field))
 		{
-			KalturaLog::debug("[$this->description] Field is empty, condition is false");
+			VidiunLog::debug("[$this->description] Field is empty, condition is false");
 			return false;
 		}
 
@@ -178,11 +178,11 @@ abstract class kMatchCondition extends kCondition
 				{
 					if(!$this->fieldFulfilled($fieldItem, $values))
 					{
-						KalturaLog::debug("[$this->description] Field item [$fieldItem] does not fulfill, condition is false");
+						VidiunLog::debug("[$this->description] Field item [$fieldItem] does not fulfill, condition is false");
 						return false;
 					}
 				}
-				KalturaLog::debug("[$this->description] All field items fulfilled, condition is true");
+				VidiunLog::debug("[$this->description] All field items fulfilled, condition is true");
 				return true;
 			}
 			
@@ -190,11 +190,11 @@ abstract class kMatchCondition extends kCondition
 			{
 				if($this->fieldFulfilled($fieldItem, $values))
 				{
-					KalturaLog::debug("[$this->description] Field item [$fieldItem] fulfill, condition is true");
+					VidiunLog::debug("[$this->description] Field item [$fieldItem] fulfill, condition is true");
 					return true;
 				}
 			}
-			KalturaLog::debug("[$this->description] None of the field items fulfilled, condition is false");
+			VidiunLog::debug("[$this->description] None of the field items fulfilled, condition is false");
 			return false;
 		}
 		
@@ -202,7 +202,7 @@ abstract class kMatchCondition extends kCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::shouldDisableCache()
+	 * @see vCondition::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{
@@ -221,7 +221,7 @@ abstract class kMatchCondition extends kCondition
 	}
 
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return bool
 	 */
 	public function shouldFieldDisableCache($scope)

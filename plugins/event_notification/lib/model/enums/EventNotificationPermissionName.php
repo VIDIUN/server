@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage model.enum
  */ 
-class EventNotificationPermissionName implements IKalturaPluginEnum, PermissionName
+class EventNotificationPermissionName implements IVidiunPluginEnum, PermissionName
 {
 	const SYSTEM_ADMIN_EVENT_NOTIFICATION_BASE = 'SYSTEM_ADMIN_EVENT_NOTIFICATION_BASE';
 	const SYSTEM_ADMIN_EVENT_NOTIFICATION_MODIFY = 'SYSTEM_ADMIN_EVENT_NOTIFICATION_MODIFY';

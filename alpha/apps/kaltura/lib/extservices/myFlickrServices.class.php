@@ -9,7 +9,7 @@ class myFlickrServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "Flickr";
 	protected $auth_method = array ( self::AUTH_METHOD_PUBLIC , self::AUTH_METHOD_EXTERNAL );
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_flickr.png";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_flickr.png";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_FLICKR;
 	
 	private static $NEED_MEDIA_INFO = "1";
@@ -30,25 +30,25 @@ class myFlickrServices extends myBaseMediaSource implements IMediaSource
 		return null;		
 	}
 
-	public function getAuthData($kuserId, $userName, $password, $token)
+	public function getAuthData($vuserId, $userName, $password, $token)
 	{
 		if (!$token)
 			$token = "";
 			
-		if (!$kuserId)
-			$kuserId = 0;
+		if (!$vuserId)
+			$vuserId = 0;
 		
-		//$kalt_token = $kuserId . ":" . $token;
-		$kalt_token = base64_decode(@$_COOKIE['flickr_kalttoken']);
-		if (!$kalt_token)
-			$kalt_token = $kuserId . ":" . md5(microtime());
+		//$vidi_token = $vuserId . ":" . $token;
+		$vidi_token = base64_decode(@$_COOKIE['flickr_viditoken']);
+		if (!$vidi_token)
+			$vidi_token = $vuserId . ":" . md5(microtime());
 		
-	 	$flickrToken = flickrTokenPeer::retrieveByPK($kalt_token);
+	 	$flickrToken = flickrTokenPeer::retrieveByPK($vidi_token);
 		
 		$status = 'ok';
 		$message = '';
-		$authData = ($flickrToken && $flickrToken->getIsValid()) ? $kalt_token : "";
-		setcookie( 'flickr_kalttoken', base64_encode($kalt_token), time() + 86400 , '/' );
+		$authData = ($flickrToken && $flickrToken->getIsValid()) ? $vidi_token : "";
+		setcookie( 'flickr_viditoken', base64_encode($vidi_token), time() + 86400 , '/' );
 		
 		$loginUrl = $authData ? "" : self::createLoginUrl();
 		
@@ -80,9 +80,9 @@ class myFlickrServices extends myBaseMediaSource implements IMediaSource
 			$params['format'] = 'php_serial';
 
 		ksort($params);
-		foreach ($params as $k => $v){
-			$encoded_params[] = urlencode($k).'='.urlencode($v);
-			$api_sig .= $k.$v;
+		foreach ($params as $v => $v){
+			$encoded_params[] = urlencode($v).'='.urlencode($v);
+			$api_sig .= $v.$v;
 		}
 		
 		//print_r($encoded_params);
@@ -102,7 +102,7 @@ class myFlickrServices extends myBaseMediaSource implements IMediaSource
 	{
 		$fullUrl = self::buildUrl($params, $url);
 		
-		$rsp = kFile::downloadUrlToString($fullUrl);
+		$rsp = vFile::downloadUrlToString($fullUrl);
 			
 		$rsp_obj = unserialize($rsp);
 			
@@ -118,18 +118,18 @@ class myFlickrServices extends myBaseMediaSource implements IMediaSource
 		return myResponseUtils::createRedirectUrl(self::buildUrl($params, "auth"));
 	}
 	
-	public static function setKuserToken($kalt_token, $frob)
+	public static function setVuserToken($vidi_token, $frob)
 	{
 		$params = array(
 			'method'	=> 'flickr.auth.getToken',
 			'frob'	=>	$frob
 		);
 		
-		$flickrToken = flickrTokenPeer::retrieveByPK($kalt_token);
+		$flickrToken = flickrTokenPeer::retrieveByPK($vidi_token);
 		if (!$flickrToken)
 		{
 			$flickrToken = new flickrToken();
-			$flickrToken->setKaltToken($kalt_token);
+			$flickrToken->setVidiToken($vidi_token);
 		}
 		
 		$flickrToken->setFrob($frob);

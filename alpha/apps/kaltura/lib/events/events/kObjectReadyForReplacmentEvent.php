@@ -4,9 +4,9 @@
  * @package Core
  * @subpackage events
  */
-class kObjectReadyForReplacmentEvent extends kApplicativeEvent
+class vObjectReadyForReplacmentEvent extends vApplicativeEvent
 {
-	const EVENT_CONSUMER = 'kObjectReadyForReplacmentEventConsumer';
+	const EVENT_CONSUMER = 'vObjectReadyForReplacmentEventConsumer';
 	
 	public function getConsumerInterface()
 	{
@@ -14,10 +14,10 @@ class kObjectReadyForReplacmentEvent extends kApplicativeEvent
 	}
 	
 	/**
-	 * @param kObjectReadyForReplacmentEventConsumer $consumer
+	 * @param vObjectReadyForReplacmentEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeReadyForReplacmentEvent($this->object))
 			return true;
@@ -26,9 +26,9 @@ class kObjectReadyForReplacmentEvent extends kApplicativeEvent
 		if(method_exists($this->object, 'getId'))
 			$additionalLog .= 'id [' . $this->object->getId() . ']';
 			
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		$result = $consumer->objectReadyForReplacment($this->object, $this->raisedJob);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		return $result;
 	}
 

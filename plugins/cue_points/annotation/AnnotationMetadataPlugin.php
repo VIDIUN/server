@@ -3,27 +3,27 @@
  * Enable custom metadata on annotation objects
  * @package plugins.annotation
  */
-class AnnotationMetadataPlugin extends KalturaPlugin implements IKalturaPending, IKalturaObjectLoader, IKalturaCuePointXmlParser, IKalturaEnumerator
+class AnnotationMetadataPlugin extends VidiunPlugin implements IVidiunPending, IVidiunObjectLoader, IVidiunCuePointXmlParser, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'annotationMetadata';
 	const METADATA_BULK_UPLOAD_XML_PLUGIN_NAME = 'metadataBulkUploadXml';
 	
 	/* (non-PHPdoc)
-	 * @see KalturaPlugin::getInstance()
+	 * @see VidiunPlugin::getInstance()
 	 */
 	public function getInstance($interface)
 	{
 		if($this instanceof $interface)
 			return $this;
 			
-		if($interface == 'IKalturaBulkUploadXmlHandler')
-			return new MetadataBulkUploadXmlEngineHandler(KalturaMetadataObjectType::ANNOTATION, 'KalturaAnnotation', 'scene-customData');
+		if($interface == 'IVidiunBulkUploadXmlHandler')
+			return new MetadataBulkUploadXmlEngineHandler(VidiunMetadataObjectType::ANNOTATION, 'VidiunAnnotation', 'scene-customData');
 			
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -31,18 +31,18 @@ class AnnotationMetadataPlugin extends KalturaPlugin implements IKalturaPending,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$cuePointMetadataDependency = new KalturaDependency(CuePointMetadataPlugin::getPluginName());
-		$metadataBulkUploadXmlDependency = new KalturaDependency(self::METADATA_BULK_UPLOAD_XML_PLUGIN_NAME);
+		$cuePointMetadataDependency = new VidiunDependency(CuePointMetadataPlugin::getPluginName());
+		$metadataBulkUploadXmlDependency = new VidiunDependency(self::METADATA_BULK_UPLOAD_XML_PLUGIN_NAME);
 		
 		return array($cuePointMetadataDependency, $metadataBulkUploadXmlDependency);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -56,7 +56,7 @@ class AnnotationMetadataPlugin extends KalturaPlugin implements IKalturaPending,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -68,7 +68,7 @@ class AnnotationMetadataPlugin extends KalturaPlugin implements IKalturaPending,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -84,7 +84,7 @@ class AnnotationMetadataPlugin extends KalturaPlugin implements IKalturaPending,
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/**
@@ -92,12 +92,12 @@ class AnnotationMetadataPlugin extends KalturaPlugin implements IKalturaPending,
 	 */
 	public static function getMetadataObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('MetadataObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('MetadataObjectType', $value);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::parseXml()
+	 * @see IVidiunCuePointXmlParser::parseXml()
 	 */
 	public static function parseXml(SimpleXMLElement $scene, $partnerId, CuePoint $cuePoint = null)
 	{
@@ -109,7 +109,7 @@ class AnnotationMetadataPlugin extends KalturaPlugin implements IKalturaPending,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::generateXml()
+	 * @see IVidiunCuePointXmlParser::generateXml()
 	 */
 	public static function generateXml(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{
@@ -121,7 +121,7 @@ class AnnotationMetadataPlugin extends KalturaPlugin implements IKalturaPending,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::syndicate()
+	 * @see IVidiunCuePointXmlParser::syndicate()
 	 */
 	public static function syndicate(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{

@@ -3,7 +3,7 @@
  * @package plugins.adminConsoleGallery
  * @subpackage admin
  */
-class AdminConsoleGalleryAction extends KalturaApplicationPlugin
+class AdminConsoleGalleryAction extends VidiunApplicationPlugin
 {
 	public function __construct()
 	{
@@ -22,7 +22,7 @@ class AdminConsoleGalleryAction extends KalturaApplicationPlugin
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_ENTRY_INVESTIGATION);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_ENTRY_INVESTIGATION);
 	}
 	
 	public function doAction(Zend_Controller_Action $action)
@@ -58,7 +58,7 @@ class AdminConsoleGalleryAction extends KalturaApplicationPlugin
 			$action->view->uiConf = null;
 			$action->view->swfUrl = null;
 			
-			$adminConsolePlugin = Kaltura_Client_AdminConsole_Plugin::get($client);
+			$adminConsolePlugin = Vidiun_Client_AdminConsole_Plugin::get($client);
 			
 			$uiConfId = Zend_Registry::get('config')->settings->defaultUiConfId;
 			if($uiConfId)
@@ -67,20 +67,20 @@ class AdminConsoleGalleryAction extends KalturaApplicationPlugin
 			}
 			else
 			{
-				$uiConfFilter = new Kaltura_Client_Type_UiConfFilter();
+				$uiConfFilter = new Vidiun_Client_Type_UiConfFilter();
 				$uiConfFilter->partnerIdIn = 0;
-				$uiConfFilter->objTypeEqual = Kaltura_Client_Enum_UiConfObjType::PLAYER_V3;
-				$uiConfFilter->orderBy = Kaltura_Client_Enum_UiConfOrderBy::CREATED_AT_DESC;
-				$uiConfPager = new Kaltura_Client_Type_FilterPager();
+				$uiConfFilter->objTypeEqual = Vidiun_Client_Enum_UiConfObjType::PLAYER_V3;
+				$uiConfFilter->orderBy = Vidiun_Client_Enum_UiConfOrderBy::CREATED_AT_DESC;
+				$uiConfPager = new Vidiun_Client_Type_FilterPager();
 				$uiConfPager->pageSize = 1;
 				$uiConfList = $adminConsolePlugin->uiConfAdmin->listAction($uiConfFilter, $uiConfPager);
-				/* @var $uiConfList Kaltura_Client_AdminConsole_Type_UiConfAdminListResponse */
+				/* @var $uiConfList Vidiun_Client_AdminConsole_Type_UiConfAdminListResponse */
 				if(count($uiConfList->objects))
 					$action->view->uiConf = reset($uiConfList->objects);
 			}
 			
 			if($action->view->uiConf)
-				$action->view->swfUrl = "/index.php/kwidget/wid/_{$partnerId}/cache_st/" . time() . "/uiconf_id/" . $action->view->uiConf->id;
+				$action->view->swfUrl = "/index.php/vwidget/wid/_{$partnerId}/cache_st/" . time() . "/uiconf_id/" . $action->view->uiConf->id;
 		}
 	}
 }

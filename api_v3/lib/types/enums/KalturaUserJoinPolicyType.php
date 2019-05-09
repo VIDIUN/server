@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaUserJoinPolicyType extends KalturaEnum implements UserJoinPolicyType
+class VidiunUserJoinPolicyType extends VidiunEnum implements UserJoinPolicyType
 {
 
 }

@@ -3,7 +3,7 @@
  * @package plugins.shortLink
  * @subpackage api.filters.enum
  */
-class KalturaShortLinkOrderBy extends KalturaStringEnum
+class VidiunShortLinkOrderBy extends VidiunStringEnum
 {
 	const CREATED_AT_ASC = "+createdAt";
 	const CREATED_AT_DESC = "-createdAt";

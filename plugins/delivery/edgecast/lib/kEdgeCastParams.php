@@ -1,6 +1,6 @@
 <?php
 
-class kEdgeCastParams
+class vEdgeCastParams
 {
 	private $accountNumber;
 	private $apiToken;

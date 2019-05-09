@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaApiParameterPermissionItemOrderBy extends KalturaPermissionItemOrderBy
+class VidiunApiParameterPermissionItemOrderBy extends VidiunPermissionItemOrderBy
 {
 }

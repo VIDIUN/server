@@ -42,11 +42,11 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 	public function preInsert(PropelPDO $con = null)
 	{
 		$this->setStatus(ScheduleEventStatus::ACTIVE);
-		$this->setPartnerId(kCurrentContext::getCurrentPartnerId());
+		$this->setPartnerId(vCurrentContext::getCurrentPartnerId());
 		
 		if(!$this->getParentId())
 		{
-			$this->setOwnerId(kCurrentContext::$ks_uid);
+			$this->setOwnerId(vCurrentContext::$vs_uid);
 			$this->incrementSequence();
 		}
 		
@@ -71,7 +71,7 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 		parent::postInsert($con);
 	
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 	}
 	
 	/**
@@ -93,12 +93,12 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 		
 		if ($objectDeleted)
 		{
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 		}
 
 		if($objectUpdated)
 		{
-		    kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+		    vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 		}
 			
 		return $ret;
@@ -120,7 +120,7 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 	
 	public function incrementSequence()
 	{
-		$this->setSequence(kDataCenterMgr::incrementVersion($this->getSequence()));
+		$this->setSequence(vDataCenterMgr::incrementVersion($this->getSequence()));
 	}
 	
 	/**
@@ -128,8 +128,8 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 	 */
 	public function setOwnerId($puserId)
 	{
-		$kuser = kuserPeer::createKuserForPartner(kCurrentContext::getCurrentPartnerId(), $puserId, kCurrentContext::$is_admin_session);
-		$this->setOwnerKuserId($kuser->getId());
+		$vuser = vuserPeer::createVuserForPartner(vCurrentContext::getCurrentPartnerId(), $puserId, vCurrentContext::$is_admin_session);
+		$this->setOwnerVuserId($vuser->getId());
 		$this->putInCustomData(self::CUSTOM_DATA_FIELD_OWNER_ID, $puserId);
 	}
 	
@@ -142,9 +142,9 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 	}
 	
 	/**
-	 * @param kScheduleEventRecurrence $v
+	 * @param vScheduleEventRecurrence $v
 	 */
-	public function setRecurrence(kScheduleEventRecurrence $v)
+	public function setRecurrence(vScheduleEventRecurrence $v)
 	{
 		$this->putInCustomData(self::CUSTOM_DATA_FIELD_RECURRENCE, $v);
 	}
@@ -155,7 +155,7 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 	}
 
 	/**
-	 * @return kScheduleEventRecurrence
+	 * @return vScheduleEventRecurrence
 	 */
 	public function getRecurrence()
 	{
@@ -195,7 +195,7 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 	
 	public function getEntryIds()

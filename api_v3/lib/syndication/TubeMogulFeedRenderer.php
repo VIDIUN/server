@@ -26,7 +26,7 @@ class TubeMogulFeedRenderer extends SyndicationFeedRenderer{
 		$categories = explode(',', $this->syndicationFeed->categories);
 		foreach($categories as $category)
 		{
-			$categoryId = KalturaTubeMogulSyndicationFeed::getCategoryId($category);
+			$categoryId = VidiunTubeMogulSyndicationFeed::getCategoryId($category);
 			$res .= $this->writeFullXmlNode('media:category', $categoryId, 3, array( 'scheme'=>"http://www.tubemogul.com"));
 			break;
 		}

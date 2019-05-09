@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KOperationEngineException extends Exception
+class VOperationEngineException extends Exception
 {
 
 }

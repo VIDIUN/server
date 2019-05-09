@@ -34,9 +34,9 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 			self::$s_criteria_filter = new criteriaFilter ();
 		}
 
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS); 
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS); 
 		
-		$partnerId = kCurrentContext::$ks_partner_id ? kCurrentContext::$ks_partner_id : kCurrentContext::$partner_id; 			
+		$partnerId = vCurrentContext::$vs_partner_id ? vCurrentContext::$vs_partner_id : vCurrentContext::$partner_id; 			
 		
 		if($partnerId != Partner::BATCH_PARTNER_ID || self::$ignoreDeleted)
 		{
@@ -47,28 +47,28 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 			$c->add ( self::STATUS, CategoryStatus::PURGED, Criteria::NOT_EQUAL );
 		}
 		
-		if (kEntitlementUtils::getEntitlementEnforcement())
+		if (vEntitlementUtils::getEntitlementEnforcement())
 		{
 			//add context as filter
-			$privacyContextCrit = $c->getNewCriterion(self::PRIVACY_CONTEXTS, kEntitlementUtils::getKsPrivacyContext(), KalturaCriteria::IN_LIKE);
-			$privacyContextCrit->addTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+			$privacyContextCrit = $c->getNewCriterion(self::PRIVACY_CONTEXTS, vEntitlementUtils::getVsPrivacyContext(), VidiunCriteria::IN_LIKE);
+			$privacyContextCrit->addTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 			$c->addAnd($privacyContextCrit);
 			
 			$crit = $c->getNewCriterion ( self::DISPLAY_IN_SEARCH, DisplayInSearchType::PARTNER_ONLY, Criteria::EQUAL);
-			$crit->addTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+			$crit->addTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 
-			$kuser = null;
-			$ksString = kCurrentContext::$ks ? kCurrentContext::$ks : '';
-			if($ksString <> '')
-				$kuser = kCurrentContext::getCurrentKsKuser();
+			$vuser = null;
+			$vsString = vCurrentContext::$vs ? vCurrentContext::$vs : '';
+			if($vsString <> '')
+				$vuser = vCurrentContext::getCurrentVsVuser();
 
-			if($kuser)
+			if($vuser)
 			{
 				// get the groups that the user belongs to in case she is not associated to the category directly
-				$kgroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserId($kuser->getId());
-				$kgroupIds[] = $kuser->getId();
-				$membersCrit = $c->getNewCriterion ( self::MEMBERS , $kgroupIds, KalturaCriteria::IN_LIKE);
-				$membersCrit->addTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+				$vgroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserId($vuser->getId());
+				$vgroupIds[] = $vuser->getId();
+				$membersCrit = $c->getNewCriterion ( self::MEMBERS , $vgroupIds, VidiunCriteria::IN_LIKE);
+				$membersCrit->addTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
      			$crit->addOr($membersCrit);
 			}
 				
@@ -83,7 +83,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 	 * 
 	 * Override parent implementation in order to add tag to pertner id criterion in order to be able to disable it later 
 	 */
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -91,21 +91,21 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura network stuff
-				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+				// allow only the vidiun network stuff
+				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 				
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -127,7 +127,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -144,17 +144,17 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 				else 
 				{
 					$criterion = $criteria->getNewCriterion(self::PARTNER_ID, $partners, Criteria::IN);
-					if($kalturaNetwork)
+					if($vidiunNetwork)
 					{
-						$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+						$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 						$criterion->addOr($criterionNetwork);
 					}
 					$criteria->addAnd($criterion);
 				}
 			}
 			
-			if($criterion && $criterion instanceof KalturaCriterion)
-				$criterion->addTag(KalturaCriterion::TAG_PARTNER_SESSION);
+			if($criterion && $criterion instanceof VidiunCriterion)
+				$criterion->addTag(VidiunCriterion::TAG_PARTNER_SESSION);
 		}
 			
 		$criteriaFilter->enable();
@@ -209,7 +209,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 		if (trim($fullName) == '')
 			return null;
 		
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS); 
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS); 
 		$c->add(categoryPeer::FULL_NAME, $fullName);
 		
 		if($ignoreCategoryId)
@@ -219,14 +219,14 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 		if(!is_null($partnerId))
 		{
 			$tagDisabled = true;
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_PARTNER_SESSION);
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_PARTNER_SESSION);
 			$c->add(categoryPeer::PARTNER_ID, $partnerId);
 		}
 		
 		$ret = categoryPeer::doSelectOne($c);
 		
 		if ($tagDisabled)
-		    KalturaCriterion::restoreTag(KalturaCriterion::TAG_PARTNER_SESSION);
+		    VidiunCriterion::restoreTag(VidiunCriterion::TAG_PARTNER_SESSION);
 		    
 		return $ret;
 	}
@@ -249,8 +249,8 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 			$fullNameParsed[] = $fullName;
 		}
 		
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS); 
-		$c->add(categoryPeer::FULL_NAME, $fullNameParsed, KalturaCriteria::IN);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS); 
+		$c->add(categoryPeer::FULL_NAME, $fullNameParsed, VidiunCriteria::IN);
 
 		return categoryPeer::doSelect($c);
 	}
@@ -269,7 +269,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 			return null;
 			
 //		$fullName = str_replace(array('\\', '%', '_'), array('\\\\', '\%', '\_'), $fullName);
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS); 
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS); 
 		$c->add(categoryPeer::FULL_NAME, "$fullName\\*", Criteria::LIKE);
 		
 		return categoryPeer::doSelect($c, $con);
@@ -292,7 +292,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 			return null;
 		
 		$fullIds = $category->getFullIds();
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS); 
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS); 
 		$c->add(categoryPeer::FULL_IDS, "$fullIds\\*", Criteria::LIKE);
 
 		return categoryPeer::doSelect($c, $con);
@@ -311,7 +311,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 		if (trim($fullIds) == '')
 			return null;
 		
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS); 
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS); 
 		$c->add(categoryPeer::FULL_IDS, "$fullIds\\*", Criteria::LIKE);
 
 		return categoryPeer::doSelect($c, $con);
@@ -330,7 +330,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 	{
 		$c = clone $criteria;
 			
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());
@@ -340,23 +340,23 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 	}
 	
 	/**
-	 * Return all categories kuser is entitled to view the content.
+	 * Return all categories vuser is entitled to view the content.
 	 * (User may call category->get to view a category - but not to view its content)
 	 * 
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @param int $limit
 	 * @return array<category>
 	 */
-	public static function retrieveEntitledAndNonIndexedByKuser($kuserId, $limit)
+	public static function retrieveEntitledAndNonIndexedByVuser($vuserId, $limit)
 	{
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		
-		$categoryGroupSize = kConf::get('max_number_of_memebrs_to_be_indexed_on_entry');
+		$categoryGroupSize = vConf::get('max_number_of_memebrs_to_be_indexed_on_entry');
 		if($partner && $partner->getCategoryGroupSize())
 			$categoryGroupSize = $partner->getCategoryGroupSize();
 
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		
 		$filteredCategoriesIds = entryPeer::getFilterdCategoriesIds();
 		
@@ -365,7 +365,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 			
 		$membersCountCrit = $c->getNewCriterion (categoryPeer::MEMBERS_COUNT, $categoryGroupSize, Criteria::GREATER_THAN);
 		$membersCountCrit->addOr($c->getNewCriterion (categoryPeer::ENTRIES_COUNT, 
-										kConf::get('category_entries_count_limit_to_be_indexed'), Criteria::GREATER_THAN));		
+										vConf::get('category_entries_count_limit_to_be_indexed'), Criteria::GREATER_THAN));		
 		$c->addAnd($membersCountCrit);
 
 		$c->setLimit($limit);
@@ -379,26 +379,26 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 		$c->add(self::PARTNER_ID, $partnerId, Criteria::EQUAL);
 
 		//add privacy context
-		$privacyContextCrit = $c->getNewCriterion(self::PRIVACY_CONTEXTS, kEntitlementUtils::getKsPrivacyContext(), KalturaCriteria::IN_LIKE);
-		$privacyContextCrit->addTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		$privacyContextCrit = $c->getNewCriterion(self::PRIVACY_CONTEXTS, vEntitlementUtils::getVsPrivacyContext(), VidiunCriteria::IN_LIKE);
+		$privacyContextCrit->addTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$c->addAnd($privacyContextCrit);
 
-		//set privacy by ks and type
+		//set privacy by vs and type
 
 		//user is entitled to view all cantent that belong to categoires he is a membr of
-		$kuser = null;
-		$ksString = kCurrentContext::$ks ? kCurrentContext::$ks : '';
-		if($ksString <> '')
-			$kuser = kCurrentContext::getCurrentKsKuser();
+		$vuser = null;
+		$vsString = vCurrentContext::$vs ? vCurrentContext::$vs : '';
+		if($vsString <> '')
+			$vuser = vCurrentContext::getCurrentVsVuser();
 
 
-		if($kuser)
+		if($vuser)
 		{
 			// get the groups that the user belongs to in case she is not associated to the category directly
-			$kgroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserId($kuser->getId());
-			$kgroupIds[] = $kuser->getId();
-			$membersCrit = $c->getNewCriterion ( self::MEMBERS , $kgroupIds, KalturaCriteria::IN_LIKE);
-			$membersCrit->addTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+			$vgroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserId($vuser->getId());
+			$vgroupIds[] = $vuser->getId();
+			$membersCrit = $c->getNewCriterion ( self::MEMBERS , $vgroupIds, VidiunCriteria::IN_LIKE);
+			$membersCrit->addTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 			$c->addAnd($membersCrit);
 		}
 		else
@@ -427,7 +427,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 			return $obj;
 		}
 
-		$criteria = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$criteria->add(categoryPeer::ID, $pk);
 
 		$v = categoryPeer::doSelect($criteria, $con);
@@ -449,7 +449,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = KalturaCriteria::create(categoryPeer::OM_CLASS);
+			$criteria = VidiunCriteria::create(categoryPeer::OM_CLASS);
 			$criteria->add(categoryPeer::ID, $pks, Criteria::IN);
 			$objs = categoryPeer::doSelect($criteria, $con);
 		}
@@ -463,7 +463,7 @@ class categoryPeer extends BasecategoryPeer implements IRelatedObjectPeer
 	 */
 	public static function getByReferenceId ($v)
 	{
-		$c = KalturaCriteria::create(self::OM_CLASS);
+		$c = VidiunCriteria::create(self::OM_CLASS);
 		$c->addAnd(categoryPeer::REFERENCE_ID, $v);
 		$objects = self::doSelect($c);
 		

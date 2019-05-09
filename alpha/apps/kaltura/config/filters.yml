@@ -16,7 +16,7 @@ my_security:
 #  class: rememberFilter
 #  file: lib/filter/rememberFilter.class.php
 #  param:
-#    cookie_name: kalt
+#    cookie_name: vidi
 #    condition:   %APP_ENABLE_REMEMBER_ME%
 
 

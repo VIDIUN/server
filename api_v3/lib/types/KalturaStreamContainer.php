@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStreamContainer extends KalturaObject
+class VidiunStreamContainer extends VidiunObject
 {
 	/**
 	 * @var string
@@ -45,7 +45,7 @@ class KalturaStreamContainer extends KalturaObject
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -53,13 +53,13 @@ class KalturaStreamContainer extends KalturaObject
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kStreamContainer();
+			$dbObject = new vStreamContainer();
 		}
 
 		return parent::toObject($dbObject, $propsToSkip);

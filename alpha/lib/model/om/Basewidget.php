@@ -56,10 +56,10 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	protected $subp_id;
 
 	/**
-	 * The value for the kshow_id field.
+	 * The value for the vshow_id field.
 	 * @var        string
 	 */
-	protected $kshow_id;
+	protected $vshow_id;
 
 	/**
 	 * The value for the entry_id field.
@@ -110,9 +110,9 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	protected $partner_data;
 
 	/**
-	 * @var        kshow
+	 * @var        vshow
 	 */
-	protected $akshow;
+	protected $avshow;
 
 	/**
 	 * @var        entry
@@ -230,13 +230,13 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kshow_id] column value.
+	 * Get the [vshow_id] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKshowId()
+	public function getVshowId()
 	{
-		return $this->kshow_id;
+		return $this->vshow_id;
 	}
 
 	/**
@@ -518,31 +518,31 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	} // setSubpId()
 
 	/**
-	 * Set the value of [kshow_id] column.
+	 * Set the value of [vshow_id] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     widget The current object (for fluent API support)
 	 */
-	public function setKshowId($v)
+	public function setVshowId($v)
 	{
-		if(!isset($this->oldColumnsValues[widgetPeer::KSHOW_ID]))
-			$this->oldColumnsValues[widgetPeer::KSHOW_ID] = $this->kshow_id;
+		if(!isset($this->oldColumnsValues[widgetPeer::VSHOW_ID]))
+			$this->oldColumnsValues[widgetPeer::VSHOW_ID] = $this->vshow_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->kshow_id !== $v) {
-			$this->kshow_id = $v;
-			$this->modifiedColumns[] = widgetPeer::KSHOW_ID;
+		if ($this->vshow_id !== $v) {
+			$this->vshow_id = $v;
+			$this->modifiedColumns[] = widgetPeer::VSHOW_ID;
 		}
 
-		if ($this->akshow !== null && $this->akshow->getId() !== $v) {
-			$this->akshow = null;
+		if ($this->avshow !== null && $this->avshow->getId() !== $v) {
+			$this->avshow = null;
 		}
 
 		return $this;
-	} // setKshowId()
+	} // setVshowId()
 
 	/**
 	 * Set the value of [entry_id] column.
@@ -823,7 +823,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 			$this->root_widget_id = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->partner_id = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
 			$this->subp_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-			$this->kshow_id = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+			$this->vshow_id = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
 			$this->entry_id = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
 			$this->ui_conf_id = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
 			$this->custom_data = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
@@ -864,8 +864,8 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akshow !== null && $this->kshow_id !== $this->akshow->getId()) {
-			$this->akshow = null;
+		if ($this->avshow !== null && $this->vshow_id !== $this->avshow->getId()) {
+			$this->avshow = null;
 		}
 		if ($this->aentry !== null && $this->entry_id !== $this->aentry->getId()) {
 			$this->aentry = null;
@@ -914,7 +914,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akshow = null;
+			$this->avshow = null;
 			$this->aentry = null;
 			$this->auiConf = null;
 		} // if (deep)
@@ -1043,11 +1043,11 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akshow !== null) {
-				if ($this->akshow->isModified() || $this->akshow->isNew()) {
-					$affectedRows += $this->akshow->save($con);
+			if ($this->avshow !== null) {
+				if ($this->avshow->isModified() || $this->avshow->isNew()) {
+					$affectedRows += $this->avshow->save($con);
 				}
-				$this->setkshow($this->akshow);
+				$this->setvshow($this->avshow);
 			}
 
 			if ($this->aentry !== null) {
@@ -1132,7 +1132,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1158,12 +1158,12 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1181,8 +1181,8 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1307,9 +1307,9 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akshow !== null) {
-				if (!$this->akshow->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akshow->getValidationFailures());
+			if ($this->avshow !== null) {
+				if (!$this->avshow->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avshow->getValidationFailures());
 				}
 			}
 
@@ -1383,7 +1383,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 				return $this->getSubpId();
 				break;
 			case 6:
-				return $this->getKshowId();
+				return $this->getVshowId();
 				break;
 			case 7:
 				return $this->getEntryId();
@@ -1436,7 +1436,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 			$keys[3] => $this->getRootWidgetId(),
 			$keys[4] => $this->getPartnerId(),
 			$keys[5] => $this->getSubpId(),
-			$keys[6] => $this->getKshowId(),
+			$keys[6] => $this->getVshowId(),
 			$keys[7] => $this->getEntryId(),
 			$keys[8] => $this->getUiConfId(),
 			$keys[9] => $this->getCustomData(),
@@ -1495,7 +1495,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 				$this->setSubpId($value);
 				break;
 			case 6:
-				$this->setKshowId($value);
+				$this->setVshowId($value);
 				break;
 			case 7:
 				$this->setEntryId($value);
@@ -1551,7 +1551,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[3], $arr)) $this->setRootWidgetId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setPartnerId($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setSubpId($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setKshowId($arr[$keys[6]]);
+		if (array_key_exists($keys[6], $arr)) $this->setVshowId($arr[$keys[6]]);
 		if (array_key_exists($keys[7], $arr)) $this->setEntryId($arr[$keys[7]]);
 		if (array_key_exists($keys[8], $arr)) $this->setUiConfId($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setCustomData($arr[$keys[9]]);
@@ -1577,7 +1577,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(widgetPeer::ROOT_WIDGET_ID)) $criteria->add(widgetPeer::ROOT_WIDGET_ID, $this->root_widget_id);
 		if ($this->isColumnModified(widgetPeer::PARTNER_ID)) $criteria->add(widgetPeer::PARTNER_ID, $this->partner_id);
 		if ($this->isColumnModified(widgetPeer::SUBP_ID)) $criteria->add(widgetPeer::SUBP_ID, $this->subp_id);
-		if ($this->isColumnModified(widgetPeer::KSHOW_ID)) $criteria->add(widgetPeer::KSHOW_ID, $this->kshow_id);
+		if ($this->isColumnModified(widgetPeer::VSHOW_ID)) $criteria->add(widgetPeer::VSHOW_ID, $this->vshow_id);
 		if ($this->isColumnModified(widgetPeer::ENTRY_ID)) $criteria->add(widgetPeer::ENTRY_ID, $this->entry_id);
 		if ($this->isColumnModified(widgetPeer::UI_CONF_ID)) $criteria->add(widgetPeer::UI_CONF_ID, $this->ui_conf_id);
 		if ($this->isColumnModified(widgetPeer::CUSTOM_DATA)) $criteria->add(widgetPeer::CUSTOM_DATA, $this->custom_data);
@@ -1662,7 +1662,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 
 		$copyObj->setSubpId($this->subp_id);
 
-		$copyObj->setKshowId($this->kshow_id);
+		$copyObj->setVshowId($this->vshow_id);
 
 		$copyObj->setEntryId($this->entry_id);
 
@@ -1744,24 +1744,24 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kshow object.
+	 * Declares an association between this object and a vshow object.
 	 *
-	 * @param      kshow $v
+	 * @param      vshow $v
 	 * @return     widget The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkshow(kshow $v = null)
+	public function setvshow(vshow $v = null)
 	{
 		if ($v === null) {
-			$this->setKshowId(NULL);
+			$this->setVshowId(NULL);
 		} else {
-			$this->setKshowId($v->getId());
+			$this->setVshowId($v->getId());
 		}
 
-		$this->akshow = $v;
+		$this->avshow = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kshow object, it will not be re-added.
+		// If this object has already been added to the vshow object, it will not be re-added.
 		if ($v !== null) {
 			$v->addwidget($this);
 		}
@@ -1771,25 +1771,25 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kshow object
+	 * Get the associated vshow object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kshow The associated kshow object.
+	 * @return     vshow The associated vshow object.
 	 * @throws     PropelException
 	 */
-	public function getkshow(PropelPDO $con = null)
+	public function getvshow(PropelPDO $con = null)
 	{
-		if ($this->akshow === null && (($this->kshow_id !== "" && $this->kshow_id !== null))) {
-			$this->akshow = kshowPeer::retrieveByPk($this->kshow_id);
+		if ($this->avshow === null && (($this->vshow_id !== "" && $this->vshow_id !== null))) {
+			$this->avshow = vshowPeer::retrieveByPk($this->vshow_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akshow->addwidgets($this);
+			   $this->avshow->addwidgets($this);
 			 */
 		}
-		return $this->akshow;
+		return $this->avshow;
 	}
 
 	/**
@@ -1904,7 +1904,7 @@ abstract class Basewidget extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akshow = null;
+			$this->avshow = null;
 			$this->aentry = null;
 			$this->auiConf = null;
 	}

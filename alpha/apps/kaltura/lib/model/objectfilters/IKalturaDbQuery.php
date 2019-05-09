@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.filters
  */
-interface IKalturaDbQuery
+interface IVidiunDbQuery
 {
 	/**
 	 * Add a new where clause condition to the query on specific column

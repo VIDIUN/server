@@ -32,7 +32,7 @@ class executeplaylistAction extends defPartnerservices2Action
 					"page_size" => array ("type" => "integer", "desc" => ""),
 					"page" => array ("type" => "integer", "desc" => ""),
 					"entries" => array ("type" => "*entry", "desc" => ""),
-					"user" => array ("type" => "PuserKuser", "desc" => ""),
+					"user" => array ("type" => "PuserVuser", "desc" => ""),
 					),
 				"errors" => array (
 				)
@@ -57,11 +57,11 @@ class executeplaylistAction extends defPartnerservices2Action
 
 	protected function getObjectPrefix () { return "entries"; } 
 
-	protected function partnerGroup2() {return  kCurrentContext::$ks_partner_id . ',0';}
+	protected function partnerGroup2() {return  vCurrentContext::$vs_partner_id . ',0';}
 	
-	protected function kalturaNetwork2() {return null;}
+	protected function vidiunNetwork2() {return null;}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser , $create_cachekey=false)
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser , $create_cachekey=false)
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 		// TODO -  verify permissions for viewing lists
@@ -77,22 +77,22 @@ class executeplaylistAction extends defPartnerservices2Action
 			if ( $this->isAdmin() )
 				return null;		
 
-			$ks_partner_id = null; 
+			$vs_partner_id = null; 
 			$privileges = null;
 				
-			$ks = ks::fromSecureString(kCurrentContext::$ks);
-			if($ks)
+			$vs = vs::fromSecureString(vCurrentContext::$vs);
+			if($vs)
 			{
-				$ks_partner_id = $ks->getPartnerId();
-				$privileges = $ks->getPrivileges();
+				$vs_partner_id = $vs->getPartnerId();
+				$privileges = $vs->getPrivileges();
 			}
 				
 			$cache_key_arr = array ( 
 				"playlist_id" => $playlist_id , 
 				"partner_id" => $partner_id ,
-				"ks_partner_id" => $ks_partner_id ,  
+				"vs_partner_id" => $vs_partner_id ,  
 				"detailed" => $detailed,
-				"user" => kCurrentContext::$ks_uid,
+				"user" => vCurrentContext::$vs_uid,
 				"privileges" => $privileges,
 				"is_admin" => $this->isAdmin(),
 				"protocol" => infraRequestUtils::getProtocol(),
@@ -116,7 +116,7 @@ class executeplaylistAction extends defPartnerservices2Action
 		}
 		
 		if ($this->isAdmin())
-			myPlaylistUtils::setIsAdminKs(true);
+			myPlaylistUtils::setIsAdminVs(true);
 
 		$entry_list = myPlaylistUtils::executePlaylistById( $partner_id , $playlist_id , null , $detailed );
 

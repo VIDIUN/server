@@ -5,5 +5,5 @@
  */ 
 interface IScopeField
 {
-	public function setScope(kScope $scope);
+	public function setScope(vScope $scope);
 }

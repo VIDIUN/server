@@ -1,35 +1,35 @@
 <?php
 
 /**
- * Base class that represents a row from the 'kshow_kuser' table.
+ * Base class that represents a row from the 'vshow_vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BaseKshowKuser extends BaseObject  implements Persistent {
+abstract class BaseVshowVuser extends BaseObject  implements Persistent {
 
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        KshowKuserPeer
+	 * @var        VshowVuserPeer
 	 */
 	protected static $peer;
 
 	/**
-	 * The value for the kshow_id field.
+	 * The value for the vshow_id field.
 	 * @var        string
 	 */
-	protected $kshow_id;
+	protected $vshow_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the subscription_type field.
@@ -50,14 +50,14 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
-	 * @var        kshow
+	 * @var        vshow
 	 */
-	protected $akshow;
+	protected $avshow;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -105,23 +105,23 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kshow_id] column value.
+	 * Get the [vshow_id] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKshowId()
+	public function getVshowId()
 	{
-		return $this->kshow_id;
+		return $this->vshow_id;
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -155,69 +155,69 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Set the value of [kshow_id] column.
+	 * Set the value of [vshow_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KshowKuser The current object (for fluent API support)
+	 * @return     VshowVuser The current object (for fluent API support)
 	 */
-	public function setKshowId($v)
+	public function setVshowId($v)
 	{
-		if(!isset($this->oldColumnsValues[KshowKuserPeer::KSHOW_ID]))
-			$this->oldColumnsValues[KshowKuserPeer::KSHOW_ID] = $this->kshow_id;
+		if(!isset($this->oldColumnsValues[VshowVuserPeer::VSHOW_ID]))
+			$this->oldColumnsValues[VshowVuserPeer::VSHOW_ID] = $this->vshow_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->kshow_id !== $v) {
-			$this->kshow_id = $v;
-			$this->modifiedColumns[] = KshowKuserPeer::KSHOW_ID;
+		if ($this->vshow_id !== $v) {
+			$this->vshow_id = $v;
+			$this->modifiedColumns[] = VshowVuserPeer::VSHOW_ID;
 		}
 
-		if ($this->akshow !== null && $this->akshow->getId() !== $v) {
-			$this->akshow = null;
+		if ($this->avshow !== null && $this->avshow->getId() !== $v) {
+			$this->avshow = null;
 		}
 
 		return $this;
-	} // setKshowId()
+	} // setVshowId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KshowKuser The current object (for fluent API support)
+	 * @return     VshowVuser The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[KshowKuserPeer::KUSER_ID]))
-			$this->oldColumnsValues[KshowKuserPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[VshowVuserPeer::VUSER_ID]))
+			$this->oldColumnsValues[VshowVuserPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = KshowKuserPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = VshowVuserPeer::VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [subscription_type] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KshowKuser The current object (for fluent API support)
+	 * @return     VshowVuser The current object (for fluent API support)
 	 */
 	public function setSubscriptionType($v)
 	{
-		if(!isset($this->oldColumnsValues[KshowKuserPeer::SUBSCRIPTION_TYPE]))
-			$this->oldColumnsValues[KshowKuserPeer::SUBSCRIPTION_TYPE] = $this->subscription_type;
+		if(!isset($this->oldColumnsValues[VshowVuserPeer::SUBSCRIPTION_TYPE]))
+			$this->oldColumnsValues[VshowVuserPeer::SUBSCRIPTION_TYPE] = $this->subscription_type;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -225,7 +225,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 
 		if ($this->subscription_type !== $v) {
 			$this->subscription_type = $v;
-			$this->modifiedColumns[] = KshowKuserPeer::SUBSCRIPTION_TYPE;
+			$this->modifiedColumns[] = VshowVuserPeer::SUBSCRIPTION_TYPE;
 		}
 
 		return $this;
@@ -235,12 +235,12 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 * Set the value of [alert_type] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KshowKuser The current object (for fluent API support)
+	 * @return     VshowVuser The current object (for fluent API support)
 	 */
 	public function setAlertType($v)
 	{
-		if(!isset($this->oldColumnsValues[KshowKuserPeer::ALERT_TYPE]))
-			$this->oldColumnsValues[KshowKuserPeer::ALERT_TYPE] = $this->alert_type;
+		if(!isset($this->oldColumnsValues[VshowVuserPeer::ALERT_TYPE]))
+			$this->oldColumnsValues[VshowVuserPeer::ALERT_TYPE] = $this->alert_type;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -248,7 +248,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 
 		if ($this->alert_type !== $v) {
 			$this->alert_type = $v;
-			$this->modifiedColumns[] = KshowKuserPeer::ALERT_TYPE;
+			$this->modifiedColumns[] = VshowVuserPeer::ALERT_TYPE;
 		}
 
 		return $this;
@@ -258,12 +258,12 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KshowKuser The current object (for fluent API support)
+	 * @return     VshowVuser The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
-		if(!isset($this->oldColumnsValues[KshowKuserPeer::ID]))
-			$this->oldColumnsValues[KshowKuserPeer::ID] = $this->id;
+		if(!isset($this->oldColumnsValues[VshowVuserPeer::ID]))
+			$this->oldColumnsValues[VshowVuserPeer::ID] = $this->id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -271,7 +271,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = KshowKuserPeer::ID;
+			$this->modifiedColumns[] = VshowVuserPeer::ID;
 		}
 
 		return $this;
@@ -309,8 +309,8 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	{
 		try {
 
-			$this->kshow_id = ($row[$startcol + 0] !== null) ? (string) $row[$startcol + 0] : null;
-			$this->kuser_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->vshow_id = ($row[$startcol + 0] !== null) ? (string) $row[$startcol + 0] : null;
+			$this->vuser_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->subscription_type = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->alert_type = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->id = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
@@ -323,10 +323,10 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 5; // 5 = KshowKuserPeer::NUM_COLUMNS - KshowKuserPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 5; // 5 = VshowVuserPeer::NUM_COLUMNS - VshowVuserPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating KshowKuser object", $e);
+			throw new PropelException("Error populating VshowVuser object", $e);
 		}
 	}
 
@@ -346,11 +346,11 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akshow !== null && $this->kshow_id !== $this->akshow->getId()) {
-			$this->akshow = null;
+		if ($this->avshow !== null && $this->vshow_id !== $this->avshow->getId()) {
+			$this->avshow = null;
 		}
-		if ($this->akuser !== null && $this->kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -375,17 +375,17 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KshowKuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(VshowVuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		KshowKuserPeer::setUseCriteriaFilter(false);
+		VshowVuserPeer::setUseCriteriaFilter(false);
 		$criteria = $this->buildPkeyCriteria();
-		KshowKuserPeer::addSelectColumns($criteria);
+		VshowVuserPeer::addSelectColumns($criteria);
 		$stmt = BasePeer::doSelect($criteria, $con);
-		KshowKuserPeer::setUseCriteriaFilter(true);
+		VshowVuserPeer::setUseCriteriaFilter(true);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -395,8 +395,8 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akshow = null;
-			$this->akuser = null;
+			$this->avshow = null;
+			$this->avuser = null;
 		} // if (deep)
 	}
 
@@ -416,14 +416,14 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KshowKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VshowVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				KshowKuserPeer::doDelete($this, $con);
+				VshowVuserPeer::doDelete($this, $con);
 				$this->postDelete($con);
 				$this->setDeleted(true);
 				$con->commit();
@@ -456,7 +456,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KshowKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VshowVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
@@ -476,7 +476,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 					$this->postUpdate($con);
 				}
 				$this->postSave($con);
-				KshowKuserPeer::addInstanceToPool($this);
+				VshowVuserPeer::addInstanceToPool($this);
 			} else {
 				$affectedRows = 0;
 			}
@@ -515,29 +515,29 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akshow !== null) {
-				if ($this->akshow->isModified() || $this->akshow->isNew()) {
-					$affectedRows += $this->akshow->save($con);
+			if ($this->avshow !== null) {
+				if ($this->avshow->isModified() || $this->avshow->isNew()) {
+					$affectedRows += $this->avshow->save($con);
 				}
-				$this->setkshow($this->akshow);
+				$this->setvshow($this->avshow);
 			}
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = KshowKuserPeer::ID;
+				$this->modifiedColumns[] = VshowVuserPeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			$this->objectSaved = false;
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = KshowKuserPeer::doInsert($this, $con);
+					$pk = VshowVuserPeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -547,7 +547,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 					$this->setNew(false);
 					$this->objectSaved = true;
 				} else {
-					$affectedObjects = KshowKuserPeer::doUpdate($this, $con);
+					$affectedObjects = VshowVuserPeer::doUpdate($this, $con);
 					if($affectedObjects)
 						$this->objectSaved = true;
 						
@@ -593,7 +593,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -614,12 +614,12 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -637,9 +637,9 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -761,20 +761,20 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akshow !== null) {
-				if (!$this->akshow->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akshow->getValidationFailures());
+			if ($this->avshow !== null) {
+				if (!$this->avshow->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avshow->getValidationFailures());
 				}
 			}
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
 
-			if (($retval = KshowKuserPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = VshowVuserPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -797,7 +797,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = KshowKuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = VshowVuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -813,10 +813,10 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	{
 		switch($pos) {
 			case 0:
-				return $this->getKshowId();
+				return $this->getVshowId();
 				break;
 			case 1:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 2:
 				return $this->getSubscriptionType();
@@ -846,10 +846,10 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = KshowKuserPeer::getFieldNames($keyType);
+		$keys = VshowVuserPeer::getFieldNames($keyType);
 		$result = array(
-			$keys[0] => $this->getKshowId(),
-			$keys[1] => $this->getKuserId(),
+			$keys[0] => $this->getVshowId(),
+			$keys[1] => $this->getVuserId(),
 			$keys[2] => $this->getSubscriptionType(),
 			$keys[3] => $this->getAlertType(),
 			$keys[4] => $this->getId(),
@@ -869,7 +869,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = KshowKuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = VshowVuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -885,10 +885,10 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	{
 		switch($pos) {
 			case 0:
-				$this->setKshowId($value);
+				$this->setVshowId($value);
 				break;
 			case 1:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 2:
 				$this->setSubscriptionType($value);
@@ -921,10 +921,10 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = KshowKuserPeer::getFieldNames($keyType);
+		$keys = VshowVuserPeer::getFieldNames($keyType);
 
-		if (array_key_exists($keys[0], $arr)) $this->setKshowId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setKuserId($arr[$keys[1]]);
+		if (array_key_exists($keys[0], $arr)) $this->setVshowId($arr[$keys[0]]);
+		if (array_key_exists($keys[1], $arr)) $this->setVuserId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setSubscriptionType($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setAlertType($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setId($arr[$keys[4]]);
@@ -937,13 +937,13 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(KshowKuserPeer::DATABASE_NAME);
+		$criteria = new Criteria(VshowVuserPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(KshowKuserPeer::KSHOW_ID)) $criteria->add(KshowKuserPeer::KSHOW_ID, $this->kshow_id);
-		if ($this->isColumnModified(KshowKuserPeer::KUSER_ID)) $criteria->add(KshowKuserPeer::KUSER_ID, $this->kuser_id);
-		if ($this->isColumnModified(KshowKuserPeer::SUBSCRIPTION_TYPE)) $criteria->add(KshowKuserPeer::SUBSCRIPTION_TYPE, $this->subscription_type);
-		if ($this->isColumnModified(KshowKuserPeer::ALERT_TYPE)) $criteria->add(KshowKuserPeer::ALERT_TYPE, $this->alert_type);
-		if ($this->isColumnModified(KshowKuserPeer::ID)) $criteria->add(KshowKuserPeer::ID, $this->id);
+		if ($this->isColumnModified(VshowVuserPeer::VSHOW_ID)) $criteria->add(VshowVuserPeer::VSHOW_ID, $this->vshow_id);
+		if ($this->isColumnModified(VshowVuserPeer::VUSER_ID)) $criteria->add(VshowVuserPeer::VUSER_ID, $this->vuser_id);
+		if ($this->isColumnModified(VshowVuserPeer::SUBSCRIPTION_TYPE)) $criteria->add(VshowVuserPeer::SUBSCRIPTION_TYPE, $this->subscription_type);
+		if ($this->isColumnModified(VshowVuserPeer::ALERT_TYPE)) $criteria->add(VshowVuserPeer::ALERT_TYPE, $this->alert_type);
+		if ($this->isColumnModified(VshowVuserPeer::ID)) $criteria->add(VshowVuserPeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -958,9 +958,9 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(KshowKuserPeer::DATABASE_NAME);
+		$criteria = new Criteria(VshowVuserPeer::DATABASE_NAME);
 
-		$criteria->add(KshowKuserPeer::ID, $this->id);
+		$criteria->add(VshowVuserPeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -991,16 +991,16 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of KshowKuser (or compatible) type.
+	 * @param      object $copyObj An object of VshowVuser (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setKshowId($this->kshow_id);
+		$copyObj->setVshowId($this->vshow_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setSubscriptionType($this->subscription_type);
 
@@ -1022,7 +1022,7 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     KshowKuser Clone of current object.
+	 * @return     VshowVuser Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -1038,16 +1038,16 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @var     KshowKuser Clone of current object.
+	 * @var     VshowVuser Clone of current object.
 	 */
 	protected $copiedFrom = null;
 	
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @param      KshowKuser $copiedFrom Clone of current object.
+	 * @param      VshowVuser $copiedFrom Clone of current object.
 	 */
-	public function setCopiedFrom(KshowKuser $copiedFrom)
+	public function setCopiedFrom(VshowVuser $copiedFrom)
 	{
 		$this->copiedFrom = $copiedFrom;
 	}
@@ -1059,37 +1059,37 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     KshowKuserPeer
+	 * @return     VshowVuserPeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new KshowKuserPeer();
+			self::$peer = new VshowVuserPeer();
 		}
 		return self::$peer;
 	}
 
 	/**
-	 * Declares an association between this object and a kshow object.
+	 * Declares an association between this object and a vshow object.
 	 *
-	 * @param      kshow $v
-	 * @return     KshowKuser The current object (for fluent API support)
+	 * @param      vshow $v
+	 * @return     VshowVuser The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkshow(kshow $v = null)
+	public function setvshow(vshow $v = null)
 	{
 		if ($v === null) {
-			$this->setKshowId(NULL);
+			$this->setVshowId(NULL);
 		} else {
-			$this->setKshowId($v->getId());
+			$this->setVshowId($v->getId());
 		}
 
-		$this->akshow = $v;
+		$this->avshow = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kshow object, it will not be re-added.
+		// If this object has already been added to the vshow object, it will not be re-added.
 		if ($v !== null) {
-			$v->addKshowKuser($this);
+			$v->addVshowVuser($this);
 		}
 
 		return $this;
@@ -1097,48 +1097,48 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kshow object
+	 * Get the associated vshow object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kshow The associated kshow object.
+	 * @return     vshow The associated vshow object.
 	 * @throws     PropelException
 	 */
-	public function getkshow(PropelPDO $con = null)
+	public function getvshow(PropelPDO $con = null)
 	{
-		if ($this->akshow === null && (($this->kshow_id !== "" && $this->kshow_id !== null))) {
-			$this->akshow = kshowPeer::retrieveByPk($this->kshow_id);
+		if ($this->avshow === null && (($this->vshow_id !== "" && $this->vshow_id !== null))) {
+			$this->avshow = vshowPeer::retrieveByPk($this->vshow_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akshow->addKshowKusers($this);
+			   $this->avshow->addVshowVusers($this);
 			 */
 		}
-		return $this->akshow;
+		return $this->avshow;
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
-	 * @return     KshowKuser The current object (for fluent API support)
+	 * @param      vuser $v
+	 * @return     VshowVuser The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addKshowKuser($this);
+			$v->addVshowVuser($this);
 		}
 
 		return $this;
@@ -1146,25 +1146,25 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuser === null && ($this->vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addKshowKusers($this);
+			   $this->avuser->addVshowVusers($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
@@ -1181,8 +1181,8 @@ abstract class BaseKshowKuser extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akshow = null;
-			$this->akuser = null;
+			$this->avshow = null;
+			$this->avuser = null;
 	}
 
-} // BaseKshowKuser
+} // BaseVshowVuser

@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kUserAgentCondition extends kRegexCondition
+class vUserAgentCondition extends vRegexCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -15,16 +15,16 @@ class kUserAgentCondition extends kRegexCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::getFieldValue()
+	 * @see vCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
-		kApiCache::addExtraField(kApiCache::ECF_USER_AGENT, kApiCache::COND_REGEX, $this->getStringValues($scope));
+		vApiCache::addExtraField(vApiCache::ECF_USER_AGENT, vApiCache::COND_REGEX, $this->getStringValues($scope));
 		return $scope->getUserAgent();
 	}
 
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::shouldFieldDisableCache()
+	 * @see vMatchCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

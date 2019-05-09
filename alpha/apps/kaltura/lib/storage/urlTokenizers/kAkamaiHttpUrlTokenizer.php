@@ -1,5 +1,5 @@
 <?php
-class kAkamaiHttpUrlTokenizer extends kUrlTokenizer
+class vAkamaiHttpUrlTokenizer extends vUrlTokenizer
 {
 	/**
 	 * @var string

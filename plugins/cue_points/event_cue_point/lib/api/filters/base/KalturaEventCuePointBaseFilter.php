@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaEventCuePointBaseFilter extends KalturaCuePointFilter
+abstract class VidiunEventCuePointBaseFilter extends VidiunCuePointFilter
 {
 	static private $map_between_objects = array
 	(
@@ -28,12 +28,12 @@ abstract class KalturaEventCuePointBaseFilter extends KalturaCuePointFilter
 	}
 
 	/**
-	 * @var KalturaEventType
+	 * @var VidiunEventType
 	 */
 	public $eventTypeEqual;
 
 	/**
-	 * @dynamicType KalturaEventType
+	 * @dynamicType VidiunEventType
 	 * @var string
 	 */
 	public $eventTypeIn;

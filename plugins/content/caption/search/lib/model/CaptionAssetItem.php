@@ -157,7 +157,7 @@ class CaptionAssetItem extends BaseCaptionAssetItem implements IBaseObject
 		parent::postInsert($con);
 	
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 	}
 
 	/* (non-PHPdoc)
@@ -173,7 +173,7 @@ class CaptionAssetItem extends BaseCaptionAssetItem implements IBaseObject
 		$ret = parent::postUpdate($con);
 					
 		if($objectUpdated)
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 			
 		return $ret;
 	}
@@ -183,7 +183,7 @@ class CaptionAssetItem extends BaseCaptionAssetItem implements IBaseObject
 	 */
 	public function postDelete(PropelPDO $con = null)
 	{
-		kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+		vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 	}
 
 } // CaptionAssetItem

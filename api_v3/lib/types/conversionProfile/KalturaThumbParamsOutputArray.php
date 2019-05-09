@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaThumbParamsOutputArray extends KalturaTypedArray
+class VidiunThumbParamsOutputArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaThumbParamsOutputArray();
+		$newArr = new VidiunThumbParamsOutputArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaThumbParamsOutput();
+    		$nObj = new VidiunThumbParamsOutput();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaThumbParamsOutputArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaThumbParamsOutput");	
+		parent::__construct("VidiunThumbParamsOutput");	
 	}
 }

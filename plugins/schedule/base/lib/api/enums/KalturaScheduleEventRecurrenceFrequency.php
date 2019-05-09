@@ -3,6 +3,6 @@
  * @package plugins.schedule
  * @subpackage api.enum
  */
-class KalturaScheduleEventRecurrenceFrequency extends KalturaStringEnum implements ScheduleEventRecurrenceFrequency
+class VidiunScheduleEventRecurrenceFrequency extends VidiunStringEnum implements ScheduleEventRecurrenceFrequency
 {
 }

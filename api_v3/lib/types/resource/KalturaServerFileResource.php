@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaServerFileResource extends KalturaGenericDataCenterContentResource
+class VidiunServerFileResource extends VidiunGenericDataCenterContentResource
 {
 	/**
 	 * Full path to the local file 
@@ -23,7 +23,7 @@ class KalturaServerFileResource extends KalturaGenericDataCenterContentResource
 	private static $map_between_objects = array('localFilePath','keepOriginalFile');
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -31,7 +31,7 @@ class KalturaServerFileResource extends KalturaGenericDataCenterContentResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaDataCenterContentResource::validateForUsage()
+	 * @see VidiunDataCenterContentResource::validateForUsage()
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -41,12 +41,12 @@ class KalturaServerFileResource extends KalturaGenericDataCenterContentResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kLocalFileResource();
+			$object_to_fill = new vLocalFileResource();
 		
 		$keepOriginalFile = true;
 		if(isset($this->keepOriginalFile) && $this->keepOriginalFile === false)
@@ -54,10 +54,10 @@ class KalturaServerFileResource extends KalturaGenericDataCenterContentResource
 		
 		$object_to_fill->setKeepOriginalFile($keepOriginalFile);
 		$ret = parent::toObject($object_to_fill, $props_to_skip);
-		/* @var $ret kLocalFileResource */
+		/* @var $ret vLocalFileResource */
 		
 		if(!file_exists($ret->getLocalFilePath()))
-			throw new KalturaAPIException(KalturaErrors::LOCAL_FILE_NOT_FOUND, $ret->getLocalFilePath());
+			throw new VidiunAPIException(VidiunErrors::LOCAL_FILE_NOT_FOUND, $ret->getLocalFilePath());
 		
 		return $ret;
 	}

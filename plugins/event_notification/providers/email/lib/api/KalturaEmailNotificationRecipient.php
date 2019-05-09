@@ -3,17 +3,17 @@
  * @package plugins.emailNotification
  * @subpackage api.objects
  */
-class KalturaEmailNotificationRecipient extends KalturaObject
+class VidiunEmailNotificationRecipient extends VidiunObject
 {
 	/**
 	 * Recipient e-mail address
-	 * @var KalturaStringValue
+	 * @var VidiunStringValue
 	 */
 	public $email;
 	
 	/**
 	 * Recipient name
-	 * @var KalturaStringValue
+	 * @var VidiunStringValue
 	 */
 	public $name;
 	
@@ -29,42 +29,42 @@ class KalturaEmailNotificationRecipient extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kEmailNotificationRecipient();
+			$dbObject = new vEmailNotificationRecipient();
 			
 		return parent::toObject($dbObject, $skip);
 	}
 	 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kEmailNotificationRecipient */
+		/* @var $dbObject vEmailNotificationRecipient */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		
 		$emailType = get_class($dbObject->getEmail());
 		switch ($emailType)
 		{
-			case 'kStringValue':
-				$this->email = new KalturaStringValue();
+			case 'vStringValue':
+				$this->email = new VidiunStringValue();
 				break;
 				
-			case 'kEvalStringField':
-				$this->email = new KalturaEvalStringField();
+			case 'vEvalStringField':
+				$this->email = new VidiunEvalStringField();
 				break;
 				
-			case 'kUserEmailContextField':
-				$this->email = new KalturaUserEmailContextField();
+			case 'vUserEmailContextField':
+				$this->email = new VidiunUserEmailContextField();
 				break;
 				
 			default:
-				$this->email = KalturaPluginManager::loadObject('KalturaStringValue', $emailType);
+				$this->email = VidiunPluginManager::loadObject('VidiunStringValue', $emailType);
 				break;
 		}
 		if($this->email)
@@ -74,16 +74,16 @@ class KalturaEmailNotificationRecipient extends KalturaObject
 		$nameType = get_class($dbObject->getName());
 		switch ($nameType)
 		{
-			case 'kStringValue':
-				$this->name = new KalturaStringValue();
+			case 'vStringValue':
+				$this->name = new VidiunStringValue();
 				break;
 				
-			case 'kEvalStringField':
-				$this->name = new KalturaEvalStringField();
+			case 'vEvalStringField':
+				$this->name = new VidiunEvalStringField();
 				break;
 				
 			default:
-				$this->name = KalturaPluginManager::loadObject('KalturaStringValue', $nameType);
+				$this->name = VidiunPluginManager::loadObject('VidiunStringValue', $nameType);
 				break;
 		}
 		if($this->name)

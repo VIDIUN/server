@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-abstract class KalturaServerNode extends KalturaObject implements IFilterable, IApiObjectFactory
+abstract class VidiunServerNode extends VidiunObject implements IFilterable, IApiObjectFactory
 {
 	/**
 	 * @var int
@@ -70,14 +70,14 @@ abstract class KalturaServerNode extends KalturaObject implements IFilterable, I
 	public $hostName;
 	
 	/**
-	 * @var KalturaServerNodeStatus
+	 * @var VidiunServerNodeStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
 	public $status;
 	
 	/**
-	 * @var KalturaServerNodeType
+	 * @var VidiunServerNodeType
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -138,7 +138,7 @@ abstract class KalturaServerNode extends KalturaObject implements IFilterable, I
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -182,7 +182,7 @@ abstract class KalturaServerNode extends KalturaObject implements IFilterable, I
 	
 	public function validateHostNameDuplication($serverNodeId = null, $type)
 	{
-		$c = KalturaCriteria::create(ServerNodePeer::OM_CLASS);
+		$c = VidiunCriteria::create(ServerNodePeer::OM_CLASS);
 		
 		if($serverNodeId)
 			$c->add(ServerNodePeer::ID, $serverNodeId, Criteria::NOT_EQUAL);
@@ -191,12 +191,12 @@ abstract class KalturaServerNode extends KalturaObject implements IFilterable, I
 		$c->add(ServerNodePeer::TYPE, $type);
 		
 		if(ServerNodePeer::doCount($c))
-			throw new KalturaAPIException(KalturaErrors::HOST_NAME_ALREADY_EXISTS, $this->hostName);
+			throw new VidiunAPIException(VidiunErrors::HOST_NAME_ALREADY_EXISTS, $this->hostName);
 	}
 	
 	public function validateSystemNameDuplication($serverNodeId = null, $type)
 	{
-		$c = KalturaCriteria::create(ServerNodePeer::OM_CLASS);
+		$c = VidiunCriteria::create(ServerNodePeer::OM_CLASS);
 	
 		if($serverNodeId)
 			$c->add(ServerNodePeer::ID, $serverNodeId, Criteria::NOT_EQUAL);
@@ -205,13 +205,13 @@ abstract class KalturaServerNode extends KalturaObject implements IFilterable, I
 		$c->add(ServerNodePeer::TYPE, $type);
 	
 		if(ServerNodePeer::doCount($c))
-			throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+			throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		
@@ -236,20 +236,20 @@ abstract class KalturaServerNode extends KalturaObject implements IFilterable, I
 		return array();
 	}
 	
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$type = $sourceObject->getType();
 		
 		switch ($type)
 		{
-			case KalturaServerNodeType::EDGE:
-				$object = new KalturaEdgeServerNode();
+			case VidiunServerNodeType::EDGE:
+				$object = new VidiunEdgeServerNode();
 				break;
 		
 			default:
-				$object = KalturaPluginManager::loadObject('KalturaServerNode', $type);
+				$object = VidiunPluginManager::loadObject('VidiunServerNode', $type);
 				if(!$object)
-					$object = new KalturaServerNode();
+					$object = new VidiunServerNode();
 				break;
 		}
 		
@@ -272,14 +272,14 @@ abstract class KalturaServerNode extends KalturaObject implements IFilterable, I
 		if(count($inputParentIds) !== count($dbParentIds))
 		{
 			$parentIdsDiff = array_diff($inputParentIds, $dbParentIds);
-			throw new KalturaAPIException(KalturaErrors::SERVER_NODE_PROVIDED_AS_PARENT_NOT_FOUND, implode(",", $parentIdsDiff));
+			throw new VidiunAPIException(VidiunErrors::SERVER_NODE_PROVIDED_AS_PARENT_NOT_FOUND, implode(",", $parentIdsDiff));
 		}
 	}
 	
 	public function validateParentLoop($currentServerNodeId, $directParentIds = array(), $parentIdsTree = array())
 	{
 		if(in_array($currentServerNodeId, $directParentIds) || in_array($currentServerNodeId, $parentIdsTree))
-			throw new KalturaAPIException(KalturaErrors::SERVER_NODE_PARENT_LOOP_DETECTED, $currentServerNodeId);
+			throw new VidiunAPIException(VidiunErrors::SERVER_NODE_PARENT_LOOP_DETECTED, $currentServerNodeId);
 		
 		if(!count($directParentIds))
 			return;

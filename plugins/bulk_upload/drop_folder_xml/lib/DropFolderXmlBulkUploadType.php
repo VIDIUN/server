@@ -3,7 +3,7 @@
  * @package plugins.dropFolderXmlBulkUpload
  * @subpackage lib
  */
-class DropFolderXmlBulkUploadType implements IKalturaPluginEnum, BulkUploadType
+class DropFolderXmlBulkUploadType implements IVidiunPluginEnum, BulkUploadType
 {
 	const DROP_FOLDER_XML = 'DROP_FOLDER_XML';
 	

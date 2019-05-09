@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage model.data
  */
-class kCompareMetadataCondition extends kCompareCondition
+class vCompareMetadataCondition extends vCompareCondition
 {
 	/**
 	 * May contain the full xpath to the field in two formats
@@ -26,7 +26,7 @@ class kCompareMetadataCondition extends kCompareCondition
 	private $profileSystemName;
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -35,9 +35,9 @@ class kCompareMetadataCondition extends kCompareCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::applyDynamicValues()
+	 * @see vCondition::applyDynamicValues()
 	 */
-	protected function applyDynamicValues(kScope $scope)
+	protected function applyDynamicValues(vScope $scope)
 	{
 		parent::applyDynamicValues($scope);
 	
@@ -52,9 +52,9 @@ class kCompareMetadataCondition extends kCompareCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::getFieldValue()
+	 * @see vCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
 		$profileId = $this->profileId;
 		if(!$profileId)
@@ -62,7 +62,7 @@ class kCompareMetadataCondition extends kCompareCondition
 			if(!$this->profileSystemName)
 				return null;
 				
-			$profile = MetadataProfilePeer::retrieveBySystemName($this->profileSystemName, kCurrentContext::getCurrentPartnerId());
+			$profile = MetadataProfilePeer::retrieveBySystemName($this->profileSystemName, vCurrentContext::getCurrentPartnerId());
 			if(!$profile)
 				return null;
 				
@@ -70,16 +70,16 @@ class kCompareMetadataCondition extends kCompareCondition
 		}
 		
 		$metadata = null;
-		if($scope instanceof accessControlScope || $scope instanceof kStorageProfileScope)
+		if($scope instanceof accessControlScope || $scope instanceof vStorageProfileScope)
 		{
 			$metadata = MetadataPeer::retrieveByObject($profileId, MetadataObjectType::ENTRY, $scope->getEntryId());
 		}
-		elseif($scope instanceof kEventScope && $scope->getEvent() instanceof kApplicativeEvent)
+		elseif($scope instanceof vEventScope && $scope->getEvent() instanceof vApplicativeEvent)
 		{
 			$object = $scope->getEvent()->getObject();
-			if(kMetadataManager::isMetadataObject($object))
+			if(vMetadataManager::isMetadataObject($object))
 			{
-				$objectType = kMetadataManager::getTypeNameFromObject($object);
+				$objectType = vMetadataManager::getTypeNameFromObject($object);
 				$metadata = MetadataPeer::retrieveByObject($profileId, $objectType, $object->getId());
 			}
 			else if ($object instanceof Metadata)
@@ -91,7 +91,7 @@ class kCompareMetadataCondition extends kCompareCondition
 		if(!$metadata)
 			return null;
 			
-		$values = kMetadataManager::parseMetadataValues($metadata, $this->xPath);
+		$values = vMetadataManager::parseMetadataValues($metadata, $this->xPath);
 		if(is_null($values))
 			return null;
 			
@@ -147,7 +147,7 @@ class kCompareMetadataCondition extends kCompareCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCompareCondition::shouldFieldDisableCache()
+	 * @see vCompareCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

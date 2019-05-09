@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaFtpDistributionProfileBaseFilter extends KalturaConfigurableDistributionProfileFilter
+abstract class VidiunFtpDistributionProfileBaseFilter extends VidiunConfigurableDistributionProfileFilter
 {
 	static private $map_between_objects = array
 	(

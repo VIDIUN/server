@@ -40,7 +40,7 @@ class UverseClickToOrderFeed
 	public function __construct($templateName)
 	{
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml_templates/' . $templateName;
-		$this->doc = new KDOMDocument('1.0', 'UTF-8');
+		$this->doc = new VDOMDocument('1.0', 'UTF-8');
 		$this->doc->formatOutput = true;
 		$this->doc->preserveWhiteSpace = false;
 		$this->doc->load($xmlTemplate);
@@ -64,7 +64,7 @@ class UverseClickToOrderFeed
 	 */
 	public function setNodeValue($xpath, $value, DOMNode $contextnode = null)
 	{
-		kXml::setNodeValue($this->xpath, $xpath, $value, $contextnode);
+		vXml::setNodeValue($this->xpath, $xpath, $value, $contextnode);
 	}
 	
 	/**
@@ -93,8 +93,8 @@ class UverseClickToOrderFeed
 		$parentNode = $this->xpath->query('/root')->item(0);
 		$categoryNode = $this->category->cloneNode(true);
 		$parentNode->appendChild($categoryNode);
-		kXml::setNodeValue($this->xpath,'@name', $categoryName, $categoryNode);	
-		kXml::setNodeValue($this->xpath,'@file', $categoryFile, $categoryNode);
+		vXml::setNodeValue($this->xpath,'@name', $categoryName, $categoryNode);	
+		vXml::setNodeValue($this->xpath,'@file', $categoryFile, $categoryNode);
 		
 		return $categoryNode;
 	}
@@ -104,30 +104,30 @@ class UverseClickToOrderFeed
 		$item = $this->item->cloneNode(true);
 		$categoryNode->appendChild($item);
 		
-		kXml::setNodeValue($this->xpath,'@title', $values[UverseClickToOrderDistributionField::ITEM_TITLE], $item);
-		kXml::setNodeValue($this->xpath,'@content_type', $values[UverseClickToOrderDistributionField::ITEM_CONTENT_TYPE], $item);
-		kXml::setNodeValue($this->xpath,'@file', $thumbnailFile, $item);
-		kXml::setNodeValue($this->xpath,'@destination', $values[UverseClickToOrderDistributionField::ITEM_DESTINATION], $item);
+		vXml::setNodeValue($this->xpath,'@title', $values[UverseClickToOrderDistributionField::ITEM_TITLE], $item);
+		vXml::setNodeValue($this->xpath,'@content_type', $values[UverseClickToOrderDistributionField::ITEM_CONTENT_TYPE], $item);
+		vXml::setNodeValue($this->xpath,'@file', $thumbnailFile, $item);
+		vXml::setNodeValue($this->xpath,'@destination', $values[UverseClickToOrderDistributionField::ITEM_DESTINATION], $item);
 		if (strtolower($values[UverseClickToOrderDistributionField::ITEM_CONTENT_TYPE]) == self::VIDFILE_CONTENT_TYPE) {
-		    kXml::setNodeValue($this->xpath,'@vidfile', $flavorFile, $item);
+		    vXml::setNodeValue($this->xpath,'@vidfile', $flavorFile, $item);
 		}
 		else {
 		    $item->removeAttribute('vidfile');
 		}		
-		kXml::setNodeValue($this->xpath,'@ccvidfile', $values[UverseClickToOrderDistributionField::ITEM_CCVIDFILE], $item);
-		kXml::setNodeValue($this->xpath,'content', $values[UverseClickToOrderDistributionField::ITEM_CONTENT], $item);
-		kXml::setNodeValue($this->xpath,'directions', $values[UverseClickToOrderDistributionField::ITEM_DIRECTIONS], $item);
+		vXml::setNodeValue($this->xpath,'@ccvidfile', $values[UverseClickToOrderDistributionField::ITEM_CCVIDFILE], $item);
+		vXml::setNodeValue($this->xpath,'content', $values[UverseClickToOrderDistributionField::ITEM_CONTENT], $item);
+		vXml::setNodeValue($this->xpath,'directions', $values[UverseClickToOrderDistributionField::ITEM_DIRECTIONS], $item);
 	}
 	
 	public function setBackgroudImage($widedBackgroundImageUrl = null, $standardBackgroundImageUrl = null)
 	{				
 		if ($widedBackgroundImageUrl)
 		{
-			kXml::setNodeValue($this->xpath,'background_image/@wide', $widedBackgroundImageUrl);
+			vXml::setNodeValue($this->xpath,'background_image/@wide', $widedBackgroundImageUrl);
 		}
 		if ($standardBackgroundImageUrl)
 		{	
-			kXml::setNodeValue($this->xpath,'background_image/@standard', $standardBackgroundImageUrl);
+			vXml::setNodeValue($this->xpath,'background_image/@standard', $standardBackgroundImageUrl);
 		}
 	}
 	

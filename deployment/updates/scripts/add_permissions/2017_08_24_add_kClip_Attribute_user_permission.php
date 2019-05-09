@@ -6,5 +6,5 @@
 
 $addPermissionsAndItemsScript = realpath(dirname(__FILE__) . '/../../../../') . '/alpha/scripts/utils/permissions/addPermissionsAndItems.php';
 
-$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.KalturaClipAttributes.ini';
+$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.VidiunClipAttributes.ini';
 passthru("php $addPermissionsAndItemsScript $config");

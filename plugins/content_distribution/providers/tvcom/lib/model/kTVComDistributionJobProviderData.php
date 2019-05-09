@@ -3,7 +3,7 @@
  * @package plugins.tvComDistribution
  * @subpackage model.data
  */
-class kTVComDistributionJobProviderData extends kDistributionJobProviderData
+class vTVComDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -20,7 +20,7 @@ class kTVComDistributionJobProviderData extends kDistributionJobProviderData
 	 */
 	private $distributionProfileId;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

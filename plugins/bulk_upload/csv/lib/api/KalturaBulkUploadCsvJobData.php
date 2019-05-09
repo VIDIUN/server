@@ -5,18 +5,18 @@
  * @package plugins.bulkUploadCsv
  * @subpackage api.objects
  */
-class KalturaBulkUploadCsvJobData extends KalturaBulkUploadJobData
+class VidiunBulkUploadCsvJobData extends VidiunBulkUploadJobData
 {	
 	/**
 	 * The version of the csv file
-	 * @var KalturaBulkUploadCsvVersion
+	 * @var VidiunBulkUploadCsvVersion
 	 * @readonly
 	 */
 	public $csvVersion = null;
 	
 	/**
 	 * Array containing CSV headers
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 */
 	public $columns;
 	
@@ -40,7 +40,7 @@ class KalturaBulkUploadCsvJobData extends KalturaBulkUploadJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kBulkUploadCsvJobData();
+			$dbData = new vBulkUploadCsvJobData();
 			
 		return parent::toObject($dbData);
 	}
@@ -56,6 +56,6 @@ class KalturaBulkUploadCsvJobData extends KalturaBulkUploadJobData
 	
 	public function setType ()
 	{
-	    $this->type = kPluginableEnumsManager::coreToApi("KalturaBulkUploadType", BulkUploadCsvPlugin::getApiValue(BulkUploadCsvType::CSV));
+	    $this->type = vPluginableEnumsManager::coreToApi("VidiunBulkUploadType", BulkUploadCsvPlugin::getApiValue(BulkUploadCsvType::CSV));
 	}
 }

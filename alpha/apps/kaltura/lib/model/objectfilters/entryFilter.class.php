@@ -10,14 +10,14 @@ class entryFilter extends baseObjectFilter
 	// allow only 256 charaters when creation a MATCH-AGAINST caluse
 	const MAX_SAERCH_TEXT_SIZE = 256;
 	
-	// this flag will indicate if the uiser_id set in the _eq_user_id field shouyld be translated to kuser_id or not.
-	// if $user_id_is_kuser_id is true, the switch was already done   
-	public $user_id_is_kuser_id = false;
+	// this flag will indicate if the uiser_id set in the _eq_user_id field shouyld be translated to vuser_id or not.
+	// if $user_id_is_vuser_id is true, the switch was already done   
+	public $user_id_is_vuser_id = false;
 	
-	public function setSwitchUserIdToKuserId( $kuser_id )
+	public function setSwitchUserIdToVuserId( $vuser_id )
 	{
-		$this->user_id_is_kuser_id = true;
-		$this->fields["_eq_user_id"] = $kuser_id;
+		$this->user_id_is_vuser_id = true;
+		$this->fields["_eq_user_id"] = $vuser_id;
 	}
 	 
 	private static $relative_time_fields = array("gte_created_at","lte_created_at","gte_updated_at","lte_updated_at","gte_last_played_at","lte_last_played_at","gte_media_date","lte_media_date","lteornull_start_date","gteornull_start_date","lte_start_date","gte_start_date","lteornull_end_date","gteornull_end_date","lte_end_date","gte_end_date");
@@ -26,14 +26,14 @@ class entryFilter extends baseObjectFilter
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_in_id" , 
 			"_notin_id" , 
 			"_eq_id" ,
 			"_in_user_id",
 			"_notin_user_id",
-			"_eq_user_id" ,  // is in fact the kuser_id - see aliases
-			"_eq_kshow_id" ,
+			"_eq_user_id" ,  // is in fact the vuser_id - see aliases
+			"_eq_vshow_id" ,
 			"_eq_status" ,
 			"_in_status" ,
 			"_notin_status" ,
@@ -130,12 +130,12 @@ class entryFilter extends baseObjectFilter
 			"_eq_root_entry_id",
 			"_in_root_entry_id",
 			"_eq_parent_entry_id",
-			"_matchand_entitled_kusers_edit",
-			"_matchand_entitled_kusers_publish",
-			"_matchand_entitled_kusers_view",
-			"_matchor_entitled_kusers_edit",
-			"_matchor_entitled_kusers_publish",
-			"_matchor_entitled_kusers_view",
+			"_matchand_entitled_vusers_edit",
+			"_matchand_entitled_vusers_publish",
+			"_matchand_entitled_vusers_view",
+			"_matchor_entitled_vusers_edit",
+			"_matchor_entitled_vusers_publish",
+			"_matchor_entitled_vusers_view",
 			"_is_root",
 			"_matchand_roots",
 			"_notin_roots",
@@ -163,7 +163,7 @@ class entryFilter extends baseObjectFilter
 
 		$this->aliases = array ( 
 			"creator_id" => "creator_puser_id",
-			"user_id" => "kuser_id",
+			"user_id" => "vuser_id",
 			"document_type" => "media_type", // for document listing in api_v3
 			"duration" => "length_in_msecs",
 			"categories" => "search_text_discrete",
@@ -185,7 +185,7 @@ class entryFilter extends baseObjectFilter
 				"desc" => "",
 				"fields" => array(
 					"user_id" => array("type" => "integer", "desc" => ""),
-					"kshow_id" => array("type" => "integer", "desc" => ""),
+					"vshow_id" => array("type" => "integer", "desc" => ""),
 					"type" => array("type" => "enum,entry,ENTRY_TYPE", "desc" => ""),
 					"media_type" => array("type" => "enum,entry,ENTRY_MEDIA_TYPE", "desc" => ""),
 					"view" => array("type" => "integer", "desc" => ""),
@@ -240,7 +240,7 @@ class entryFilter extends baseObjectFilter
 			$cats = array();
 		else
 			$cats = explode(",", $cats);
-		kArray::trim($cats);
+		vArray::trim($cats);
 			
 		$catsIds = array();
 		foreach($cats as $cat)
@@ -274,7 +274,7 @@ class entryFilter extends baseObjectFilter
 			$cats = array();
 		else
 			$cats = explode(",", $cats);
-		kArray::trim($cats);
+		vArray::trim($cats);
 			
 		$catsIds = array();
 		foreach($cats as $cat)
@@ -298,7 +298,7 @@ class entryFilter extends baseObjectFilter
 			$cats = array();
 		else
 			$cats = explode(",", $cats);
-		kArray::trim($cats);
+		vArray::trim($cats);
 			
 		$catsIds = array();
 		foreach($cats as $cat)
@@ -329,7 +329,7 @@ class entryFilter extends baseObjectFilter
 			$cats = array();
 		else
 			$cats = explode(",", $cats);
-		kArray::trim($cats);
+		vArray::trim($cats);
 			
 		if($statuses == null || trim($statuses) == '')
 			$statuses = CategoryEntryStatus::ACTIVE;
@@ -366,7 +366,7 @@ class entryFilter extends baseObjectFilter
 			$cats = array();
 		else
 			$cats = explode(",", $cats);
-		kArray::trim($cats);
+		vArray::trim($cats);
 			
 		if($statuses == null || trim($statuses) == '')
 			$statuses = CategoryEntryStatus::ACTIVE;
@@ -418,7 +418,7 @@ class entryFilter extends baseObjectFilter
 			$cats = array();
 		else
 			$cats = explode(",", $cats);
-		kArray::trim($cats);
+		vArray::trim($cats);
 		
 		$commaSeparatedStatuses = trim( $commaSeparatedStatuses );
 		if ( empty( $commaSeparatedStatuses ) )
@@ -490,7 +490,7 @@ class entryFilter extends baseObjectFilter
 			$catIds = explode(",", $commaSeparatedCatIds);
 		}
 
-		kArray::trim($catIds);
+		vArray::trim($catIds);
 
 		$commaSeparatedStatuses = trim( $commaSeparatedStatuses );
 		if ( empty( $commaSeparatedStatuses ) )
@@ -532,7 +532,7 @@ class entryFilter extends baseObjectFilter
 			$flavorParamsIds = array();
 		else
 			$flavorParamsIds = explode(",", $flavorParamsIds);
-		kArray::trim($flavorParamsIds);
+		vArray::trim($flavorParamsIds);
 			
 		$flavorParamsStrings = array();
 		foreach($flavorParamsIds as $flavorParamsId)
@@ -554,7 +554,7 @@ class entryFilter extends baseObjectFilter
 			$durationTypeIds = array();
 		else
 			$durationTypeIds = explode(",", $durationTypeIds);
-		kArray::trim($durationTypeIds);
+		vArray::trim($durationTypeIds);
 			
 		$durationTypesStrings = array();
 		foreach($durationTypeIds as $durationTypeId)
@@ -565,7 +565,7 @@ class entryFilter extends baseObjectFilter
 	}
 	
 	/**
-	 * Will be used for the KCW's search - this is slightly different  
+	 * Will be used for the VCW's search - this is slightly different  
 	 *
 	 * @param Criteria $criteria
 	 * @param array $keys_to_search
@@ -600,7 +600,7 @@ class entryFilter extends baseObjectFilter
 			if($this->is_set($relativeFieldName))
 			{
 				$value = $this->getByName($relativeFieldName);
-				$value = kTime::getRelativeTime($value);
+				$value = vTime::getRelativeTime($value);
 				$this->setByName($relativeFieldName, $value);
 			}
 		}

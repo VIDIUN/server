@@ -3,17 +3,17 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-class KalturaPlayReadyDigitalAudioOPIdHolderArray extends KalturaTypedArray
+class VidiunPlayReadyDigitalAudioOPIdHolderArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaPlayReadyDigitalAudioOPIdHolderArray();
+		$newArr = new VidiunPlayReadyDigitalAudioOPIdHolderArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $type)
 		{
-    		$nObj = new KalturaPlayReadyDigitalAudioOPIdHolder();
+    		$nObj = new VidiunPlayReadyDigitalAudioOPIdHolder();
 			$nObj->type = $type;
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaPlayReadyDigitalAudioOPIdHolderArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		parent::__construct("KalturaPlayReadyDigitalAudioOPIdHolder");	
+		parent::__construct("VidiunPlayReadyDigitalAudioOPIdHolder");	
 	}
 }

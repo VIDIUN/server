@@ -3,38 +3,38 @@
  * @package plugins.captionSearch
  * @subpackage Scheduler
  */
-class KAsyncParseCaptionAsset extends KJobHandlerWorker
+class VAsyncParseCaptionAsset extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::PARSE_CAPTION_ASSET;
+		return VidiunBatchJobType::PARSE_CAPTION_ASSET;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->parse($job, $job->data);
 	}
 	
-	protected function parse(KalturaBatchJob $job, KalturaParseCaptionAssetJobData $data)
+	protected function parse(VidiunBatchJob $job, VidiunParseCaptionAssetJobData $data)
 	{
 		try
 		{
-			$this->updateJob($job, "Start parsing caption asset [$data->captionAssetId]", KalturaBatchJobStatus::QUEUED);
+			$this->updateJob($job, "Start parsing caption asset [$data->captionAssetId]", VidiunBatchJobStatus::QUEUED);
 			
-			$captionSearchPlugin = KalturaCaptionSearchClientPlugin::get(self::$kClient);
+			$captionSearchPlugin = VidiunCaptionSearchClientPlugin::get(self::$vClient);
 			$captionSearchPlugin->captionAssetItem->parse($data->captionAssetId);
 			
-			$this->closeJob($job, null, null, "Finished parsing", KalturaBatchJobStatus::FINISHED);
+			$this->closeJob($job, null, null, "Finished parsing", VidiunBatchJobStatus::FINISHED);
 		}
 		catch(Exception $ex)
 		{
-			$this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED, $data);
+			$this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED, $data);
 		}
 		return $job;
 	}

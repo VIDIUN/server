@@ -1,8 +1,8 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage api.filters
  */
-class KalturaCrossKalturaDistributionProfileFilter extends KalturaCrossKalturaDistributionProfileBaseFilter
+class VidiunCrossVidiunDistributionProfileFilter extends VidiunCrossVidiunDistributionProfileBaseFilter
 {
 }

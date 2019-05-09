@@ -159,10 +159,10 @@ class batchStatus
 
 	public static function getPhpPath()
 	{
-		$kaltura_env_path = myContentStorage::getFSContentRootPath() .  '/kaltura/alpha/batch/kaltura_env.sh';
-		$kaltura_env = file_get_contents($kaltura_env_path);
-		$kaltura_env_lines = explode("\n", $kaltura_env);
-		foreach($kaltura_env_lines as $line)
+		$vidiun_env_path = myContentStorage::getFSContentRootPath() .  '/vidiun/alpha/batch/vidiun_env.sh';
+		$vidiun_env = file_get_contents($vidiun_env_path);
+		$vidiun_env_lines = explode("\n", $vidiun_env);
+		foreach($vidiun_env_lines as $line)
 		{
 			// find PHP_PATH and return the path
 			if(substr_count($line, 'PHP_PATH'))
@@ -178,12 +178,12 @@ class batchStatus
 		$output = array();
 		$error = "";
 		$batch_runner_log = myContentStorage::getFSContentRootPath().'/logs/'.php_uname('n').'-batchRunner.log';
-		//$command = myContentStorage::getFSContentRootPath() .  '/kaltura/alpha/batch/runBatch.sh ' . $action . " " . $batch_name;
-		$runbatch_path = myContentStorage::getFSContentRootPath() .'/kaltura/alpha/batch/runBatch.php';
+		//$command = myContentStorage::getFSContentRootPath() .  '/vidiun/alpha/batch/runBatch.sh ' . $action . " " . $batch_name;
+		$runbatch_path = myContentStorage::getFSContentRootPath() .'/vidiun/alpha/batch/runBatch.php';
 		if (self::getPlatform() == 'win')
 		{
 			$args = '"'.$runbatch_path.'" "'. $action .'" "'. $batch_name .'"';
-			pclose(popen("start \"kaltura_batchrunner\" \"" . self::getPhpPath() . "\" " . $args, "r"));
+			pclose(popen("start \"vidiun_batchrunner\" \"" . self::getPhpPath() . "\" " . $args, "r"));
 		}
 		else
 		{

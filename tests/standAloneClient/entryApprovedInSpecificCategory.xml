@@ -14,7 +14,7 @@
 	<multirequest>
 		<!-- Entry Approved In Category -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Entry Approved In Specific Category</name>
 				<systemName>Entry_Approved_In_Specific_Category</systemName>
 				<description>Email notification template to be sent when a new entry is approved in a specific category.</description>
@@ -22,19 +22,19 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<description>Status changed to active, See:KalturaCategoryEntryStatus:/api_v3/testmeDoc/?object=KalturaCategoryEntryStatus</description>
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<description>Status changed to active, See:VidiunCategoryEntryStatus:/api_v3/testmeDoc/?object=VidiunCategoryEntryStatus</description>
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof categoryEntry &amp;&amp; in_array(categoryEntryPeer::STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == CategoryEntryStatus::ACTIVE</code>
 						</field>
 					</item>
-					<item objectType="KalturaFieldMatchCondition">
+					<item objectType="VidiunFieldMatchCondition">
 						<description>Match category ID</description>
-						<field objectType="KalturaEvalStringField">
+						<field objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getCategoryId()</code>
 						</field>
 						<values objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>{category_id}</value>
 							</item>
 						</values>
@@ -43,16 +43,16 @@
 				
 				
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_id</key>
 						<description>Category ID</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>
 				</userParameters>
 				
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification">

@@ -11,10 +11,10 @@ class searchHistoryUtils
 	public static function getSearchContext()
 	{
 		$searchContext = null;
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
-		if ($ks)
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
+		if ($vs)
 		{
-			$searchContext = $ks->getSearchContext();
+			$searchContext = $vs->getSearchContext();
 		}
 		return $searchContext ? $searchContext : self::DEFAULT_SEARCH_CONTEXT;
 	}

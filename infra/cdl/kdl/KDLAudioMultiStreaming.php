@@ -1,9 +1,9 @@
 <?php
 
 /**************************************
- * class KDLStreamDescriptor
+ * class VDLStreamDescriptor
  */
-class KDLStreamDescriptor {
+class VDLStreamDescriptor {
 	protected $mapping = null;
 	public	$olayout = null;
 	public	$lang = null;
@@ -29,7 +29,7 @@ class KDLStreamDescriptor {
 	public function getLayoutChannels()
 	{
 		if (isset($this->olayout) ) {
-			return KDLAudioLayouts::getLayoutChannels($this->olayout);
+			return VDLAudioLayouts::getLayoutChannels($this->olayout);
 		}
 		return 0;
 	}
@@ -104,7 +104,7 @@ class KDLStreamDescriptor {
 	 *
 	 * @param unknown_type $sourceStreams
 	 * @param unknown_type $sourceAnalize
-	 * @return NULL|KDLStreamDescriptor
+	 * @return NULL|VDLStreamDescriptor
 	 */
 	public function generateTarget($sourceAudioStreams, $sourceAnalize)
 	{
@@ -144,7 +144,7 @@ class KDLStreamDescriptor {
 		foreach($this->mapping as $m){
 			foreach($sourceAudioStreams as $sourceStream){
 				if($sourceStream->id==$m
-						&& isset($sourceStream->audioChannelLayout)	&& $sourceStream->audioChannelLayout==KDLAudioLayouts::DOWNMIX){
+						&& isset($sourceStream->audioChannelLayout)	&& $sourceStream->audioChannelLayout==VDLAudioLayouts::DOWNMIX){
 					$this->downmix = 1;
 					return true;
 				}
@@ -155,7 +155,7 @@ class KDLStreamDescriptor {
 
 	/**
 	 *
-	 * @param KDLStreamDescriptor $stream
+	 * @param VDLStreamDescriptor $stream
 	 * @param array $sourceStreams
 	 * @param unknown_type $verifyFields
 	 * @param array $filteredStreams
@@ -168,7 +168,7 @@ class KDLStreamDescriptor {
 			if(isset($this->mapping) && array_search($sourceStream->id, $this->mapping)===false && $this->mapping[0]!="all"){
 				continue;
 			}
-			if(count($filteredStreams)==0 || $verifyFields==false || KDLAudioMultiStreamingHelper::isSimilarSourceStreams($filteredStreams[0], $sourceStream)){
+			if(count($filteredStreams)==0 || $verifyFields==false || VDLAudioMultiStreamingHelper::isSimilarSourceStreams($filteredStreams[0], $sourceStream)){
 				$filteredStreams[] = $sourceStream;
 				$streamsIds[] = $sourceStream->id;
 			}
@@ -191,7 +191,7 @@ class KDLStreamDescriptor {
 	 * 
 	 * @param unknown_type $sourceStreams
 	 * @param unknown_type $sourceAnalize
-	 * @return NULL|KDLStreamDescriptor
+	 * @return NULL|VDLStreamDescriptor
 	 */
 	private function generateTargetMappedStreams($sourceStreams, $sourceAnalize)
 	{
@@ -229,9 +229,9 @@ class KDLStreamDescriptor {
 		 * Check whether the 'olayout' value is in the list of the 'supported layouts'
 		 * If it is - get the layout and filter the mapped streams that are in the layout
 		 */
-		if(key_exists((string)$this->olayout, KDLAudioLayouts::$layouts)) {
-			$layout = KDLAudioLayouts::$layouts[$this->olayout];
-			$layoutStreams = KDLAudioLayouts::matchLayouts($sourceStreams, $layout);
+		if(key_exists((string)$this->olayout, VDLAudioLayouts::$layouts)) {
+			$layout = VDLAudioLayouts::$layouts[$this->olayout];
+			$layoutStreams = VDLAudioLayouts::matchLayouts($sourceStreams, $layout);
 			/*
 			 * There are channel notations in the source file -
 			 * and the layout matching succeeded - use only the matched streams as source streams
@@ -318,7 +318,7 @@ class KDLStreamDescriptor {
 	 * 
 	 * @param unknown_type $sourceStreams
 	 * @param unknown_type $sourceAnalize
-	 * @return NULL|KDLStreamDescriptor
+	 * @return NULL|VDLStreamDescriptor
 	 */
 	private function generateTargetMappedChannels($sourceStreams, $sourceAnalize)
 	{
@@ -430,7 +430,7 @@ class KDLStreamDescriptor {
 						}
 					}
 					if(count($matchedChannelsArr)>0){
-						$target = new KDLStreamDescriptor();
+						$target = new VDLStreamDescriptor();
 						$target->channels[$streamIdx] = $matchedChannelsArr;
 						$target->mapping[] = $streamIdx;
 						if($target->getChannelsNum()>=$thisLayoutChannels)
@@ -499,7 +499,7 @@ class KDLStreamDescriptor {
 			return null;
 		}
 		
-		$target = new KDLStreamDescriptor();
+		$target = new VDLStreamDescriptor();
 		
 		if(isset($overrideItem->audioChannelIndex)){
 			$target->channels[$overrideItem->id] = $matchedChannelsArr;
@@ -545,10 +545,10 @@ class KDLStreamDescriptor {
 		 */
 		if(isset($streams[0]->audioChannels)){
 			$olayout = (isset($this->olayout) && $this->olayout>0)? $this->olayout: $streams[0]->audioChannels;
-			$target = new KDLStreamDescriptor(array($streams[0]->id),$olayout,$this->lang);
+			$target = new VDLStreamDescriptor(array($streams[0]->id),$olayout,$this->lang);
 		}
 		else {
-			$target =  new KDLStreamDescriptor(array($streams[0]->id),0,$this->lang);
+			$target =  new VDLStreamDescriptor(array($streams[0]->id),0,$this->lang);
 		}
 		if(isset($streams[0]->audioLabel)) {
 			$target->label = $streams[0]->audioLabel;
@@ -558,9 +558,9 @@ class KDLStreamDescriptor {
 }
 
 /***************************************
- * class KDLAudioMultiStreaming
+ * class VDLAudioMultiStreaming
  */
-class KDLAudioMultiStreaming {
+class VDLAudioMultiStreaming {
 	public $streams = array();
 	public $action;
 	
@@ -700,7 +700,7 @@ class KDLAudioMultiStreaming {
 	 * @param unknown_type $lang
 	 */
 	public function addStream($obj, $lang=null){
-		$stream = new KDLStreamDescriptor();
+		$stream = new VDLStreamDescriptor();
 		if(isset($obj)){
 			$stream->set($obj);
 		}
@@ -731,14 +731,14 @@ class KDLAudioMultiStreaming {
 }
 
 /***************************************************
- * class KDLAudioMultiStreamingHelper
+ * class VDLAudioMultiStreamingHelper
  */
-class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
+class VDLAudioMultiStreamingHelper extends VDLAudioMultiStreaming {
 
 	/**
 	 *
 	 * @param unknown_type $sourceStreams
-	 * @return Ambigous <-, NULL, KDLAudioMultiStreaming>|Ambigous <NULL, KDLAudioMultiStreaming>|NULL|KDLAudioMultiStreamingHelper
+	 * @return Ambigous <-, NULL, VDLAudioMultiStreaming>|Ambigous <NULL, VDLAudioMultiStreaming>|NULL|VDLAudioMultiStreamingHelper
 	 */
 	public function GetSettings($sourceStreams, $overrideStreams=null)
 	{
@@ -792,7 +792,7 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 		/*
 		 *
 		 */
-		$targetMultiAudio = new KDLAudioMultiStreamingHelper();
+		$targetMultiAudio = new VDLAudioMultiStreamingHelper();
 		foreach ($streams as $idx=>$stream){
 			$target = $stream->generateTarget($sourceAudioStreams, $sourceAnalize);
 			if(isset($target)){
@@ -823,7 +823,7 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 		if(isset($firstStreamMapping) && count($firstStreamMapping)>0 && (string)$firstStreamMapping[0]=='all'){
 			if($this->action=='separate'){
 				foreach($sourceAudioStreams as $sourceStream){
-					$stream = new KDLStreamDescriptor(array($sourceStream->id), $firstStream->olayout, $firstStream->lang);
+					$stream = new VDLStreamDescriptor(array($sourceStream->id), $firstStream->olayout, $firstStream->lang);
 					$streams[] = $stream;
 				}
 			}
@@ -832,7 +832,7 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 				foreach($sourceAudioStreams as $sourceStream){
 					$streamIds[] = $sourceStream->id;
 				}
-				$stream = new KDLStreamDescriptor($streamIds, $firstStream->olayout, $firstStream->lang);
+				$stream = new VDLStreamDescriptor($streamIds, $firstStream->olayout, $firstStream->lang);
 				$streams = array($stream);
 			}
 		}
@@ -905,7 +905,7 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 		if(array_key_exists('audio', $identicalDur) && count($identicalDur['audio'])>1
 		&& (count($contentStreams->audio)-count($identicalDur['audio']))<=2){
 			// Get all streams that have 'surround' like audio layout - FR, FL, ...
-			$channelStreams = KDLAudioLayouts::matchLayouts($identicalDur['audio']);
+			$channelStreams = VDLAudioLayouts::matchLayouts($identicalDur['audio']);
 
 			// Sort the audio streams for channel number. We are looking for mono streams
 			$chnNumStreams = array();
@@ -1093,11 +1093,11 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 			 * - DL,DR
 			 * If found the source can be porcessed into stereo
 			 */
-		$mappedStreams = KDLAudioLayouts::matchLayouts($sourceAudioStreams, KDLAudioLayouts::DOWNMIX);
+		$mappedStreams = VDLAudioLayouts::matchLayouts($sourceAudioStreams, VDLAudioLayouts::DOWNMIX);
 		if(count($mappedStreams)==0) {
-			$mappedStreams = KDLAudioLayouts::matchLayouts($analyzedStreams, array(KDLAudioLayouts::FL, KDLAudioLayouts::FR, KDLAudioLayouts::MONO,));
+			$mappedStreams = VDLAudioLayouts::matchLayouts($analyzedStreams, array(VDLAudioLayouts::FL, VDLAudioLayouts::FR, VDLAudioLayouts::MONO,));
 			if(count($mappedStreams)==0) {
-				$mappedStreams = KDLAudioLayouts::matchLayouts($analyzedStreams, array(KDLAudioLayouts::DL, KDLAudioLayouts::DR));
+				$mappedStreams = VDLAudioLayouts::matchLayouts($analyzedStreams, array(VDLAudioLayouts::DL, VDLAudioLayouts::DR));
 			}
 		}
 		
@@ -1105,20 +1105,20 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 		foreach ($mappedStreams as $mappedStream){
 			$mapping[] = $mappedStream->id;
 		}
-		$stream = new KDLStreamDescriptor();
+		$stream = new VDLStreamDescriptor();
 		$stream->setMapping(count($mapping)>0? $mapping: null);
 		if(count($mappedStreams)==1){
 			if(isset($mappedStream->audioChannels)){
 				$stream->olayout = $mappedStream->audioChannels;
 			}
-			if(isset($mappedStream->audioChannelLayout)	&& $mappedStream->audioChannelLayout==KDLAudioLayouts::DOWNMIX){
+			if(isset($mappedStream->audioChannelLayout)	&& $mappedStream->audioChannelLayout==VDLAudioLayouts::DOWNMIX){
 				$stream->downmix = 1;
 			}
 		}
 		if(count($mappedStreams)>1){
 			$stream->olayout = 2;
 		}
-		$target = new KDLAudioMultiStreaming();
+		$target = new VDLAudioMultiStreaming();
 		$target->streams[] = $stream;
 		return $target;
 	}
@@ -1138,11 +1138,11 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 		$mapping = array();
 		$mapping[] = $analyzedStreams[0]->id;
 		$mapping[] = $analyzedStreams[1]->id;
-		$stream = new KDLStreamDescriptor();
+		$stream = new VDLStreamDescriptor();
 		$stream->olayout = 2;
 		$stream->setMapping($mapping);
 		
-		$target = new KDLAudioMultiStreaming();
+		$target = new VDLAudioMultiStreaming();
 		$target->streams[] = $stream;
 		return $target;
 	}
@@ -1154,8 +1154,8 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 	 */
 	public static function overrideChannelsToTarget($sourceAudioStreams, $sourceAnalize)
 	{
-		$layoutMajor = array(KDLAudioLayouts::FL, KDLAudioLayouts::FR, KDLAudioLayouts::MONO);
-		$layoutMinor = array(KDLAudioLayouts::DL, KDLAudioLayouts::DR);
+		$layoutMajor = array(VDLAudioLayouts::FL, VDLAudioLayouts::FR, VDLAudioLayouts::MONO);
+		$layoutMinor = array(VDLAudioLayouts::DL, VDLAudioLayouts::DR);
 
 		/*
 		 * Look for labled channels, try to adjust one of the 'downmix'able layout (majir/minor)
@@ -1214,7 +1214,7 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 		/*
 		 * 
 		 */
-		$stream = new KDLStreamDescriptor();
+		$stream = new VDLStreamDescriptor();
 		$mapping = array();
 		foreach ($mappedChannels as $mappedChannel){
 			$mapping[] = $mappedChannels[0]->id.".".$mappedChannel->audioChannelIndex;
@@ -1224,7 +1224,7 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 		}
 		$stream->setMapping($mapping);
 		
-		$target = new KDLAudioMultiStreaming();
+		$target = new VDLAudioMultiStreaming();
 		$target->streams[] = $stream;
 		return $target;
 	}
@@ -1241,7 +1241,7 @@ class KDLAudioMultiStreamingHelper extends KDLAudioMultiStreaming {
 		if(isset($override)) {
 			foreach ($override as $trkIdx=>$perTrack){
 				foreach($perTrack as $langIdx=>$perLang){
-					$mappedStreams = KDLAudioLayouts::matchLayouts($perLang, $layouts);
+					$mappedStreams = VDLAudioLayouts::matchLayouts($perLang, $layouts);
 					if(count($mappedStreams)==count($layouts)) {
 						return $mappedStreams;
 					}

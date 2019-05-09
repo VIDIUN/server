@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaRemotePathListResponse extends KalturaListResponse
+class VidiunRemotePathListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaRemotePathArray
+	 * @var VidiunRemotePathArray
 	 * @readonly
 	 */
 	public $objects;

@@ -1,9 +1,9 @@
-package lib.Kaltura.output;
+package lib.Vidiun.output;
 
 /**
  * OutpuInterface interface
  *
- * @package Kaltura
+ * @package Vidiun
  * @subpackage Output
  */
 public interface OutputInterface

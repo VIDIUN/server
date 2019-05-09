@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage lib.events
  */
-interface kESearchSearchHistoryInfoEventConsumer extends KalturaEventConsumer
+interface vESearchSearchHistoryInfoEventConsumer extends VidiunEventConsumer
 {
 
     /**

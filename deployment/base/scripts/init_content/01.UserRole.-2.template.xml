@@ -18,7 +18,7 @@
 	</session>
 	<multirequest>
 		<request service="userRole" action="add">
-			<userRole objectType="KalturaUserRole">
+			<userRole objectType="VidiunUserRole">
 				<name>System Administrator</name>
 				<systemName>System Administrator</systemName>
 				<description>System Administrator</description>
@@ -28,7 +28,7 @@
 			</userRole>
 		</request>
 		<request service="user" action="add">
-			<user objectType="KalturaUser">
+			<user objectType="VidiunUser">
 				<id>@ADMIN_CONSOLE_ADMIN_MAIL@</id>
 				<screenName>@ADMIN_CONSOLE_ADMIN_MAIL@</screenName>
 				<email>@ADMIN_CONSOLE_ADMIN_MAIL@</email>
@@ -37,22 +37,22 @@
 				<isAdmin>1</isAdmin>
 				<allowedPartnerIds>*</allowedPartnerIds>
 				<roleIds>{1:result:id}</roleIds>
-				<fullName>Kaltura Administrator</fullName>
+				<fullName>Vidiun Administrator</fullName>
 			</user>
 		</request>
 	</multirequest>
 	<request service="userRole" action="add">
-		<userRole objectType="KalturaUserRole">
+		<userRole objectType="VidiunUserRole">
 			<name>Support Manager</name>
 			<systemName>Support Manager</systemName>
 			<description>Support manager</description>
-			<permissionNames>SYSTEM_ADMIN_BASE,SYSTEM_ADMIN_PUBLISHER_BASE,SYSTEM_ADMIN_PUBLISHER_KMC_ACCESS,SYSTEM_ADMIN_PUBLISHER_CONFIG,SYSTEM_ADMIN_PUBLISHER_BLOCK,SYSTEM_ADMIN_PUBLISHER_ADD,SYSTEM_ADMIN_PUBLISHER_USAGE,SYSTEM_ADMIN_DEVELOPERS_TAB,SYSTEM_ADMIN_BATCH_CONTROL,SYSTEM_ADMIN_CONTENT_DISTRIBUTION_BASE,SYSTEM_ADMIN_CONTENT_DISTRIBUTION_MODIFY,SYSTEM_ADMIN_PUBLISHER_RESET_USER_PASSWORD,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_ACCOUNT_INFO,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_GROUP_OPTIONS,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_TECH_DATA,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_GENERAL_INFORMATION,SYSTEM_ADMIN_PARTNER_CONFIGURATION_VIEW,SYSTEM_ADMIN_WIDGET,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_ADMIN_KMC_USERS,AUDIT_TRAIL_BASE</permissionNames>
+			<permissionNames>SYSTEM_ADMIN_BASE,SYSTEM_ADMIN_PUBLISHER_BASE,SYSTEM_ADMIN_PUBLISHER_VMC_ACCESS,SYSTEM_ADMIN_PUBLISHER_CONFIG,SYSTEM_ADMIN_PUBLISHER_BLOCK,SYSTEM_ADMIN_PUBLISHER_ADD,SYSTEM_ADMIN_PUBLISHER_USAGE,SYSTEM_ADMIN_DEVELOPERS_TAB,SYSTEM_ADMIN_BATCH_CONTROL,SYSTEM_ADMIN_CONTENT_DISTRIBUTION_BASE,SYSTEM_ADMIN_CONTENT_DISTRIBUTION_MODIFY,SYSTEM_ADMIN_PUBLISHER_RESET_USER_PASSWORD,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_ACCOUNT_INFO,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_GROUP_OPTIONS,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_TECH_DATA,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_GENERAL_INFORMATION,SYSTEM_ADMIN_PARTNER_CONFIGURATION_VIEW,SYSTEM_ADMIN_WIDGET,systemPartner.SYSTEM_ADMIN_PUBLISHER_CONFIG_ADMIN_VMC_USERS,AUDIT_TRAIL_BASE</permissionNames>
 			<status>1</status>
 			<tags>admin_console</tags>
 		</userRole>
 	</request>
 	<request service="userRole" action="add">
-		<userRole objectType="KalturaUserRole">
+		<userRole objectType="VidiunUserRole">
 			<name>Guest</name>
 			<systemName>Guest</systemName>
 			<description>Guest</description>

@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.enum
  */
-class KalturaESearchCuePointFieldName extends KalturaStringEnum
+class VidiunESearchCuePointFieldName extends VidiunStringEnum
 {
 	const ID = 'id';
 	const NAME = 'name';

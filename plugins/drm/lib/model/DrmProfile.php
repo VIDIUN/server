@@ -33,11 +33,11 @@ class DrmProfile extends BaseDrmProfile implements IBaseObject {
         $key = $this->getFromCustomData(self::CUSTOM_DATA_SIGNING_KEY);
         if(!$key)
         {
-        	$signingKeys  = kConf::get('partner_signing_key', 'drm', array());
+        	$signingKeys  = vConf::get('partner_signing_key', 'drm', array());
         	if(isset($signingKeys[$this->getPartnerId()]))
         		$key = $signingKeys[$this->getPartnerId()];
         	else
-        		$key = kConf::get('signing_key', 'drm', null);
+        		$key = vConf::get('signing_key', 'drm', null);
         }
         return $key;
     }

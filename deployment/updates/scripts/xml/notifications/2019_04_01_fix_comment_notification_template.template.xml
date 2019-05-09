@@ -16,17 +16,17 @@
     <multirequest>
         <!-- Get notification template using system name -->
         <request service="eventNotificationTemplate" action="listTemplates" plugin="eventNotification" partnerId="0">
-            <filter objectType="KalturaEventNotificationTemplateFilter">
-                <systemNameEqual>Unique_Kms_Comment_Was_Added_To_Entry</systemNameEqual>
+            <filter objectType="VidiunEventNotificationTemplateFilter">
+                <systemNameEqual>Unique_Vms_Comment_Was_Added_To_Entry</systemNameEqual>
             </filter>
-            <pager objectType="KalturaFilterPager">
+            <pager objectType="VidiunFilterPager">
                 <pageSize>1</pageSize>
             </pager>
         </request>
         <!-- Update notification template -->
         <request service="eventNotificationTemplate" action="update" plugin="eventNotification" partnerId="0">
             <id>{1:result:objects:0:id}</id>
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <body><![CDATA[ A new comment was added to your media {entry_name}. Comment: {comment_text}. You can see the media here: <a href="[AppEntryUrl]t/{entry_id}/{category_id}">[AppEntryUrl]t/{entry_id}/{category_id}</a> ]]></body>
             </template>
         </request>

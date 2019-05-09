@@ -3,13 +3,13 @@
  * @package plugins.confMaps
  * @subpackage api.objects
  */
-class KalturaConfMapsArray extends KalturaTypedArray
+class VidiunConfMapsArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		parent::__construct("KalturaConfMaps");
+		parent::__construct("VidiunConfMaps");
 	}
-	public function insert(KalturaConfMaps $map)
+	public function insert(VidiunConfMaps $map)
 	{
 		$this->array[] = $map;
 	}

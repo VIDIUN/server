@@ -3,12 +3,12 @@
  * @package plugins.logView
  * @subpackage admin
  */
-class KalturaLogViewAction extends KalturaApplicationPlugin
+class VidiunLogViewAction extends VidiunApplicationPlugin
 {
 	
 	public function __construct()
 	{
-		$this->action = 'KalturaLogViewAction';
+		$this->action = 'VidiunLogViewAction';
 		$this->label = null;
 		$this->rootLabel = null;
 	}

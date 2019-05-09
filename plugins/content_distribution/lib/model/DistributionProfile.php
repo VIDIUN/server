@@ -132,7 +132,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 	}
 	
 	/**
-	 * @return array<kDistributionThumbDimensions>
+	 * @return array<vDistributionThumbDimensions>
 	 */
 	public function getRequiredThumbDimensionsObjects()
 	{
@@ -145,7 +145,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 				$requiredThumbDimensions = unserialize($requiredThumbDimensionsStr);
 			}
 			catch(Exception $e){
-				KalturaLog::err("Unable to unserialize [$requiredThumbDimensionsStr]");
+				VidiunLog::err("Unable to unserialize [$requiredThumbDimensionsStr]");
 			}
 		}
 			
@@ -156,7 +156,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 	}
 	
 	/**
-	 * @param array<kDistributionThumbDimensions> $v
+	 * @param array<vDistributionThumbDimensions> $v
 	 * @return DistributionProfile The current object (for fluent API support)
 	 */
 	public function setRequiredThumbDimensionsObjects(array $v)
@@ -176,7 +176,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 	}
 	
 	/**
-	 * @return array<kDistributionThumbDimensions>
+	 * @return array<vDistributionThumbDimensions>
 	 */
 	public function getOptionalThumbDimensionsObjects()
 	{
@@ -189,7 +189,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 				$optionalThumbDimensions = unserialize($optionalThumbDimensionsStr);
 			}
 			catch(Exception $e){
-				KalturaLog::err("Unable to unserialize [$optionalThumbDimensionsStr]");
+				VidiunLog::err("Unable to unserialize [$optionalThumbDimensionsStr]");
 			}
 		}
 			
@@ -200,7 +200,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 	}
 	
 	/**
-	 * @param array<kDistributionThumbDimensions> $v
+	 * @param array<vDistributionThumbDimensions> $v
 	 * @return DistributionProfile The current object (for fluent API support)
 	 */
 	public function setOptionalThumbDimensionsObjects(array $v)
@@ -220,7 +220,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 	}
 	
 	/**
-	 * @return array<kDistributionThumbDimensions>
+	 * @return array<vDistributionThumbDimensions>
 	 */
 	public function getThumbDimensionsObjects()
 	{
@@ -284,7 +284,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 	/**
 	 * @param EntryDistribution $entryDistribution
 	 * @param int $action enum from DistributionAction
-	 * @return array<kDistributionValidationError>
+	 * @return array<vDistributionValidationError>
 	 */
 	public function validateForSubmission(EntryDistribution $entryDistribution, $action)
 	{
@@ -293,7 +293,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 		$distributionProvider = $this->getProvider();
 		if(!$distributionProvider)
 		{
-			KalturaLog::err("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $this->getProviderType() . "] not found");
+			VidiunLog::err("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $this->getProviderType() . "] not found");
 			return $validationErrors;
 		}
 		
@@ -301,13 +301,13 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 		{
 			if(!$distributionProvider->isUpdateEnabled() || !$distributionProvider->isMediaUpdateEnabled())
 			{
-				KalturaLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProvider->getName() . "] does not support update");
+				VidiunLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProvider->getName() . "] does not support update");
 				return $validationErrors;
 			}
 		}
 		
 		$requiredFlavorParamsIds = $this->getRequiredFlavorParamsIdsArray();
-		KalturaLog::log("Required Flavor Params Ids [" . print_r($requiredFlavorParamsIds, true) . "]");
+		VidiunLog::log("Required Flavor Params Ids [" . print_r($requiredFlavorParamsIds, true) . "]");
 		$entryFlavorAssets = assetPeer::retrieveReadyFlavorsByEntryId($entryDistribution->getEntryId());
 		
 		$requiredFlavorParamsIdsKeys = array_flip($requiredFlavorParamsIds);
@@ -322,7 +322,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 			$validationErrors[] = $this->createValidationError($action, DistributionErrorType::MISSING_FLAVOR, $requiredFlavorParamsId);
 		
 		$requiredThumbDimensions = $this->getRequiredThumbDimensionsObjects();
-		KalturaLog::log("Required Thumb Dimensions [" . print_r($requiredThumbDimensions, true) . "]");
+		VidiunLog::log("Required Thumb Dimensions [" . print_r($requiredThumbDimensions, true) . "]");
 		$entryThumbAssets = assetPeer::retrieveReadyThumbnailsByEntryId($entryDistribution->getEntryId());
 		
 		$requiredThumbDimensionsWithKeys = array();
@@ -349,7 +349,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 		{
 			$foundMatchingAsset = false;
 			
-			/* @var $entryAssetDistributionRule kAssetDistributionRule */
+			/* @var $entryAssetDistributionRule vAssetDistributionRule */
 			foreach($entryAssets as $entryAsset)
 			{
 				/* @var $entryAsset asset */
@@ -381,7 +381,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 		foreach($metadataObjects as $metadata)
 		{
 			$key = $metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-			$xmlContent = kFileSyncUtils::file_get_contents($key, true, false);
+			$xmlContent = vFileSyncUtils::file_get_contents($key, true, false);
 			
 			$xml = new DOMDocument();
 			$xml->loadXML($xmlContent);
@@ -405,7 +405,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 
 	public function createValidationError($action, $type, $data = null, $description = null)
 	{
-		$validationError = new kDistributionValidationError();
+		$validationError = new vDistributionValidationError();
 		$validationError->setAction($action);
 		$validationError->setErrorType($type);
 		$validationError->setData($data);
@@ -429,7 +429,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
@@ -441,7 +441,7 @@ abstract class DistributionProfile extends BaseDistributionProfile implements IS
 	
 	public function incrementConfigVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_CONFIG_VERSION, $version);
 	}
 

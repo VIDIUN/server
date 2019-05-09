@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDeleteFileJobData extends KalturaJobData
+class VidiunDeleteFileJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -11,9 +11,9 @@ class KalturaDeleteFileJobData extends KalturaJobData
 	public $localFileSyncPath;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($source_object)
+	 * @see VidiunObject::fromObject($source_object)
 	 */
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$this->localFileSyncPath = $sourceObject->getLocalFileSyncPath();
 		parent::doFromObject($sourceObject, $responseProfile);

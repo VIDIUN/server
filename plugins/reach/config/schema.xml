@@ -76,7 +76,7 @@
 		<column primaryKey="false" required="true" 	autoIncrement="false" lazyLoad="false" name="price" 				type="float" />
 		<column primaryKey="false" required="true" 	autoIncrement="false" lazyLoad="false" name="catalog_item_id"		type="integer" />
 		<column primaryKey="false" required="true" 	autoIncrement="false" lazyLoad="false" name="reach_profile_id"		type="integer" />
-		<column primaryKey="false" required="true" 	autoIncrement="false" lazyLoad="false" name="kuser_id"				type="integer" />
+		<column primaryKey="false" required="true" 	autoIncrement="false" lazyLoad="false" name="vuser_id"				type="integer" />
 		<column primaryKey="false" required="false" autoIncrement="false" lazyLoad="false" name="version"				type="integer" />
 		<column primaryKey="false" required="false" autoIncrement="false" lazyLoad="false" name="context"				type="varchar" size="256" /> />
 		<column primaryKey="false" required="false" autoIncrement="false" lazyLoad="false" name="custom_data" 			type="longvarchar" />

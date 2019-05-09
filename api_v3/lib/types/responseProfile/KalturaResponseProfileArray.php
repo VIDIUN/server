@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaResponseProfileArray extends KalturaTypedArray
+class VidiunResponseProfileArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaResponseProfileArray();
+		$newArr = new VidiunResponseProfileArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaResponseProfile();
+			$nObj = new VidiunResponseProfile();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaResponseProfileArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaResponseProfile");	
+		parent::__construct("VidiunResponseProfile");	
 	}
 }

@@ -25,21 +25,21 @@
 		var ENTRY_MEDIA_SOURCE_JAMENDO = <?php echo entry::ENTRY_MEDIA_SOURCE_JAMENDO; ?>;
 		var ENTRY_MEDIA_SOURCE_CCMIXTER = <?php echo entry::ENTRY_MEDIA_SOURCE_CCMIXTER; ?>;
 		
-		var COMMENT_TYPE_KSHOW = <?php echo comment::COMMENT_TYPE_KSHOW; ?>;
+		var COMMENT_TYPE_VSHOW = <?php echo comment::COMMENT_TYPE_VSHOW; ?>;
 		var COMMENT_TYPE_DISCUSSION = <?php echo comment::COMMENT_TYPE_DISCUSSION; ?>;
 		var COMMENT_TYPE_USER = <?php echo comment::COMMENT_TYPE_USER; ?>;
 		var COMMENT_TYPE_SHOUTOUT = <?php echo comment::COMMENT_TYPE_SHOUTOUT; ?>;
 		
-		var KSHOW_PERMISSION_INVITE_ONLY = <?php echo kshow::KSHOW_PERMISSION_INVITE_ONLY; ?>;
+		var VSHOW_PERMISSION_INVITE_ONLY = <?php echo vshow::VSHOW_PERMISSION_INVITE_ONLY; ?>;
 		
-		var KSHOWKUSER_VIEWER_USER = <?php echo KshowKuser::KSHOWKUSER_VIEWER_USER; ?>;
-		var KSHOWKUSER_VIEWER_SUBSCRIBER = <?php echo KshowKuser::KSHOWKUSER_VIEWER_SUBSCRIBER; ?>;
-		var KSHOWKUSER_VIEWER_PRODUCER = <?php echo KshowKuser::KSHOWKUSER_VIEWER_PRODUCER; ?>;
+		var VSHOWVUSER_VIEWER_USER = <?php echo VshowVuser::VSHOWVUSER_VIEWER_USER; ?>;
+		var VSHOWVUSER_VIEWER_SUBSCRIBER = <?php echo VshowVuser::VSHOWVUSER_VIEWER_SUBSCRIBER; ?>;
+		var VSHOWVUSER_VIEWER_PRODUCER = <?php echo VshowVuser::VSHOWVUSER_VIEWER_PRODUCER; ?>;
 		
 		<?php
 		
-		$modules = array('browse', 'contribute', 'edit', 'emailImport', 'kshowcss',
-			'login', 'mail', 'mykaltura', 'produce', 'home', 'tour', 
+		$modules = array('browse', 'contribute', 'edit', 'emailImport', 'vshowcss',
+			'login', 'mail', 'myvidiun', 'produce', 'home', 'tour', 
 			'search', 'sns', 'static', 'system', 'upload', 'forum' );
 			
 		foreach($modules as $module)
@@ -70,10 +70,10 @@
 				</ul>
 				<ul class="menu1">
 					<li onclick='onClickNavBarBrowse()' <?php if( $sf_context->getModuleName() == 'browse' || $sf_context->getModuleName() == 'home' ) echo 'class="active"' ?> >Browse</li>
-					<li onclick='onClickNavBarMyKaltura()' <?php if ( $sf_context->getModuleName() == 'mykaltura'  && $sf_user->isAuthenticated() && ( ( isset( $user ) && $sf_user->getAttribute('id') == $user->getId() ) || ( $sf_request->getParameter('user_id') == $sf_user->getAttribute('id')) )  ) echo 'class="active"' ?> >My Kaltura</li>
+					<li onclick='onClickNavBarMyVidiun()' <?php if ( $sf_context->getModuleName() == 'myvidiun'  && $sf_user->isAuthenticated() && ( ( isset( $user ) && $sf_user->getAttribute('id') == $user->getId() ) || ( $sf_request->getParameter('user_id') == $sf_user->getAttribute('id')) )  ) echo 'class="active"' ?> >My Vidiun</li>
 			
 				</ul>
-				<button class="btn4 btn4_white startKaltura" onclick="onClickNavBarCreate()">Start a Kaltura</button>
+				<button class="btn4 btn4_white startVidiun" onclick="onClickNavBarCreate()">Start a Vidiun</button>
 				<div class="search">
 						<div class="left" ></div>
 						<input type="text" id="navBarSearchInput" onkeydown="onKeyPressSearchInput(event)" onfocus="onFocusSearchInput()" />
@@ -95,7 +95,7 @@
 				<li class="last"><a href="/index.php/static/contactus">Contact Us</a></li>
 			</ul>
 			<p>
-				Copyright © 2007 Kaltura Inc. All Rights Reserved. Designated trademarks and brands are the property of their respective owners.
+				Copyright © 2007 Vidiun Inc. All Rights Reserved. Designated trademarks and brands are the property of their respective owners.
 				<br/>
 				Use of this web site constitutes acceptance of the
 				<a href="/index.php/static/tandc">Terms of Use</a> and <a href="/index.php/static/privacy">Privacy Policy</a>

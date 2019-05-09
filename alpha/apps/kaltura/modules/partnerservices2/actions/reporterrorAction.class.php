@@ -23,20 +23,20 @@ class reporterrorAction extends defPartnerservices2Action
 				"out" => array (
 					),
 				"errors" => array (
-					APIErrors::DUPLICATE_KSHOW_BY_NAME
+					APIErrors::DUPLICATE_VSHOW_BY_NAME
 				)
 			);
 	}
 
 	protected function ticketType ()	{		return self::REQUIED_TICKET_NONE;	}
 
-	// check to see if already exists in the system = ask to fetch the puser & the kuser
-	// don't ask for  KUSER_DATA_KUSER_DATA - because then we won't tell the difference between a missing kuser and a missing puser_kuser
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	// check to see if already exists in the system = ask to fetch the puser & the vuser
+	// don't ask for  VUSER_DATA_VUSER_DATA - because then we won't tell the difference between a missing vuser and a missing puser_vuser
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 
 	protected function addUserOnDemand ( )	{		return self::CREATE_USER_FALSE;	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// TODO - store to some error filefile
 		$reporting_obj = $this->getP ( "reporting_obj" );

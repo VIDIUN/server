@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-abstract class kESearchBaseQuery
+abstract class vESearchBaseQuery
 {
 
 	abstract public function getFinalQuery();

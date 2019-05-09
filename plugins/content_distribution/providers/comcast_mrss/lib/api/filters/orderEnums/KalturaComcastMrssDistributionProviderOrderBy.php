@@ -3,6 +3,6 @@
  * @package plugins.comcastMrssDistribution
  * @subpackage api.filters.enum
  */
-class KalturaComcastMrssDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunComcastMrssDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

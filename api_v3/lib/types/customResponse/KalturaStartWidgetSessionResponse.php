@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStartWidgetSessionResponse extends KalturaObject
+class VidiunStartWidgetSessionResponse extends VidiunObject
 {
 	/**
 	 * @var int
@@ -15,7 +15,7 @@ class KalturaStartWidgetSessionResponse extends KalturaObject
 	 * @var string
 	 * @readonly
 	 */
-	public $ks;
+	public $vs;
 	
 	/**
 	 * @var string

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaBulkUploadAction extends KalturaDynamicEnum implements BulkUploadAction
+class VidiunBulkUploadAction extends VidiunDynamicEnum implements BulkUploadAction
 {
 	/**
 	 * @return string

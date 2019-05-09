@@ -15,7 +15,7 @@ class PartnerUsageController extends Zend_Controller_Action
 		$to = new Zend_Date($this->_getParam('to_date', $this->getDefaultToDate()));
 		
 		$client = Infra_ClientHelper::getClient();
-		$systemPartnerPlugin = Kaltura_Client_SystemPartner_Plugin::get($client);
+		$systemPartnerPlugin = Vidiun_Client_SystemPartner_Plugin::get($client);
 		
 		$form = new Form_PartnerUsageFilter();
 		$partnerPackages = $systemPartnerPlugin->systemPartner->getPackages();
@@ -37,7 +37,7 @@ class PartnerUsageController extends Zend_Controller_Action
 		
 		// init filters
 		$partnerFilter = $this->getPartnerFilterFromForm($form);
-		$usageFilter = new Kaltura_Client_SystemPartner_Type_SystemPartnerUsageFilter();
+		$usageFilter = new Vidiun_Client_SystemPartner_Type_SystemPartnerUsageFilter();
 		$usageFilter->fromDate = $from->toString(Zend_Date::TIMESTAMP);
 		$usageFilter->toDate = $to->toString(Zend_Date::TIMESTAMP);
 		$usageFilter->timezoneOffset = Infra_AuthHelper::getAuthInstance()->getIdentity()->getTimezoneOffset();
@@ -63,25 +63,25 @@ class PartnerUsageController extends Zend_Controller_Action
 		$from = new Zend_Date($this->_getParam('from_date', $this->getDefaultFromDate()));
 		$to = new Zend_Date($this->_getParam('to_date', $this->getDefaultToDate()));
 		$client = Infra_ClientHelper::getClient();
-		if ($client->getKs() == null) {
-			$client->setKs(self::generateKs());
+		if ($client->getVs() == null) {
+			$client->setVs(self::generateVs());
 		}
 		$form = new Form_PartnerUsageFilter();
 		$form->populate($request->getParams());
 		
 		// init filters
 		$partnerFilter = $this->getPartnerFilterFromForm($form);
-		$usageFilter = new Kaltura_Client_SystemPartner_Type_SystemPartnerUsageFilter();
+		$usageFilter = new Vidiun_Client_SystemPartner_Type_SystemPartnerUsageFilter();
 		$usageFilter->fromDate = $from->toString(Zend_Date::TIMESTAMP);
 		$usageFilter->toDate = $to->toString(Zend_Date::TIMESTAMP);
 		
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$pager->pageIndex = 1;
 		$pager->pageSize = 500;
 		$items = array();
 		while(true)
 		{
-			$systemPartnerPlugin = Kaltura_Client_SystemPartner_Plugin::get($client);
+			$systemPartnerPlugin = Vidiun_Client_SystemPartner_Plugin::get($client);
 			$response = $systemPartnerPlugin->systemPartner->getUsage($partnerFilter, $usageFilter, $pager);
 			if (count($response->objects) <= 0)
 				break;
@@ -124,7 +124,7 @@ class PartnerUsageController extends Zend_Controller_Action
 		foreach($items as $item)
 		{
 			$d = (new Zend_Date($item->partnerCreatedAt));
-			echo 	$this->view->enumTranslate('KalturaPartnerStatus', $item->partnerStatus), ',',
+			echo 	$this->view->enumTranslate('VidiunPartnerStatus', $item->partnerStatus), ',',
 					$item->partnerName, ',', 
 					$item->partnerId, ',', 
 					'"',$d->toString(Zend_Date::DATE_LONG), '",', 
@@ -151,7 +151,7 @@ class PartnerUsageController extends Zend_Controller_Action
 	
 	private function getPartnerFilterFromForm(Zend_Form $form)
 	{
-		$filter = new Kaltura_Client_Type_PartnerFilter();
+		$filter = new Vidiun_Client_Type_PartnerFilter();
 		$filterType = $form->getValue('filter_type');
 		$filterInput = $form->getValue('filter_input');
 		$includeActive = $form->getValue('include_active');
@@ -172,17 +172,17 @@ class PartnerUsageController extends Zend_Controller_Action
 		}
 		$statuses = array();
 		if ($includeActive)
-			$statuses[] = Kaltura_Client_Enum_PartnerStatus::ACTIVE;
+			$statuses[] = Vidiun_Client_Enum_PartnerStatus::ACTIVE;
 		if ($includeBlocked)
-			$statuses[] = Kaltura_Client_Enum_PartnerStatus::BLOCKED;
+			$statuses[] = Vidiun_Client_Enum_PartnerStatus::BLOCKED;
 		if ($includeRemoved)
-			$statuses[] = Kaltura_Client_Enum_PartnerStatus::FULL_BLOCK;
+			$statuses[] = Vidiun_Client_Enum_PartnerStatus::FULL_BLOCK;
 			
 		if ($filterPackage != '')
 			$filter->partnerPackageEqual = $filterPackage;
 						
 		$filter->statusIn = implode(',', $statuses);
-		$filter->orderBy = Kaltura_Client_Enum_PartnerOrderBy::ID_DESC;
+		$filter->orderBy = Vidiun_Client_Enum_PartnerOrderBy::ID_DESC;
 		return $filter;
 	}
 	
@@ -196,15 +196,15 @@ class PartnerUsageController extends Zend_Controller_Action
 		return time();
 	}
 	
-	private static function generateKs() {
+	private static function generateVs() {
 		$settings = Zend_Registry::get('config')->settings;
 		$partnerId = $settings->partnerId;
 		$secret = $settings->secret;
 		$sessionExpiry = $settings->sessionExpiry;
-		return self::createKS($partnerId, $secret, Kaltura_Client_Enum_SessionType::ADMIN, $sessionExpiry);
+		return self::createVS($partnerId, $secret, Vidiun_Client_Enum_SessionType::ADMIN, $sessionExpiry);
 	}
 	
-	private static function createKS($partnerId, $adminSecret, $sessionType = Kaltura_Client_Enum_SessionType::ADMIN, $expiry = 7200)
+	private static function createVS($partnerId, $adminSecret, $sessionType = Vidiun_Client_Enum_SessionType::ADMIN, $expiry = 7200)
 	{
 		$puserId = '';
 		$privileges = '';

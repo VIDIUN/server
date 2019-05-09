@@ -13,7 +13,7 @@ class IndexGeneratorBase
 		$objects = array();
 		if (!file_exists ($inputFile))
 		{
-			KalturaLog::err ("input file ". $inputFile ." not found");
+			VidiunLog::err ("input file ". $inputFile ." not found");
 			exit(1);
 		}
 		

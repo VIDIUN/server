@@ -3,11 +3,11 @@
  * @package infra
  * @subpackage Media
  */
-class kPatchSwf
+class vPatchSwf
 {
 	const SWF_TAG_DefineBinaryData = 87;
 	
-	const KALTURA_EMBED_SIGNATURE = "KALTURA_EMBEDDED_DATA";
+	const VIDIUN_EMBED_SIGNATURE = "VIDIUN_EMBEDDED_DATA";
 	
 	static $TAG_NAMES = array(
 		0 => "End",
@@ -78,7 +78,7 @@ class kPatchSwf
 	private $swfdata;
 	private $pos;
 	
-	public function __construct($swf, $signature = self::KALTURA_EMBED_SIGNATURE)
+	public function __construct($swf, $signature = self::VIDIUN_EMBED_SIGNATURE)
 	{
 		$this->header = substr($swf, 0, 8);
 		$zdata = substr($swf, 8, strlen($swf) - 8);

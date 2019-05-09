@@ -4,11 +4,11 @@
  * @package api
  * @subpackage objects
  */
-abstract class KalturaConstantXsltSyndicationFeed extends KalturaGenericXsltSyndicationFeed
+abstract class VidiunConstantXsltSyndicationFeed extends VidiunGenericXsltSyndicationFeed
 {
 	protected $xsltPath;
 
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 
@@ -19,13 +19,13 @@ abstract class KalturaConstantXsltSyndicationFeed extends KalturaGenericXsltSynd
 			{
 				$startTime = microtime(true);
 				$contents = file_get_contents( $real_path);
-				KalturaLog::info("Roku xslt file was found [$real_path] fgc took [".(microtime(true) - $startTime)."]");
+				VidiunLog::info("Roku xslt file was found [$real_path] fgc took [".(microtime(true) - $startTime)."]");
 				$this->xslt = $contents;
 			}
 			else
 			{
-				KalturaLog::info("Roku xslt file was not found [$this->xsltPath]");
-				throw new KalturaAPIException(KalturaErrors::FILE_NOT_FOUND);
+				VidiunLog::info("Roku xslt file was not found [$this->xsltPath]");
+				throw new VidiunAPIException(VidiunErrors::FILE_NOT_FOUND);
 			}
 		}
 	}

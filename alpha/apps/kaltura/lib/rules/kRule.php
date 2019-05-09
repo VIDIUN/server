@@ -4,7 +4,7 @@
  * @subpackage model.data
  * @abstract
  */
-class kRule 
+class vRule 
 {
 	/**
 	 * Short Rule Description
@@ -24,7 +24,7 @@ class kRule
 	 * Conditions to validate the rule
 	 * No conditions means always apply
 	 * 
-	 * @var array<kCondition>
+	 * @var array<vCondition>
 	 */
 	protected $conditions;
 	
@@ -47,7 +47,7 @@ class kRule
 	/**
 	 * Actions to be performed by the player in case the rule fulfilled
 	 * 
-	 * @var array<kRuleAction>
+	 * @var array<vRuleAction>
 	 */
 	protected $actions;
 	
@@ -67,7 +67,7 @@ class kRule
 	protected $stopProcessing;
 	
 	/**
-	 * Indicates if we should force ks validation for admin ks users as well
+	 * Indicates if we should force vs validation for admin vs users as well
 	 *
 	 * @var bool
 	 */
@@ -76,15 +76,15 @@ class kRule
 	/**
 	 * Indicates the scope on which the rule is applied
 	 * 
-	 * @var kScope
+	 * @var vScope
 	 */
 	
 	protected $scope;
 
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 */
-	public function __construct(kScope $scope = null)
+	public function __construct(vScope $scope = null)
 	{
 		$this->scope = $scope;
 	}
@@ -98,7 +98,7 @@ class kRule
 	}
 
 	/**
-	 * @param array<kCondition> $conditions
+	 * @param array<vCondition> $conditions
 	 */
 	public function setConditions($conditions) 
 	{
@@ -127,13 +127,13 @@ class kRule
 	{
 		if(!$this->isInContext())
 		{
-			KalturaLog::debug("Rule is not in context");
+			VidiunLog::debug("Rule is not in context");
 			return false;
 		}
 			
 		if(!is_array($this->conditions) || !count($this->conditions))
 		{
-			KalturaLog::debug("No conditions found");
+			VidiunLog::debug("No conditions found");
 			return true;
 		}
 			
@@ -143,12 +143,12 @@ class kRule
 			$this->copyExtraVals($condition);
 			if(!$condRes)
 			{
-				KalturaLog::debug("Condition [" . get_class($condition) . "] not  fulfilled");
+				VidiunLog::debug("Condition [" . get_class($condition) . "] not  fulfilled");
 				return false;
 			}
 		}
 				
-		KalturaLog::debug("All conditions fulfilled");
+		VidiunLog::debug("All conditions fulfilled");
 		return true;
 	}	
 	
@@ -174,18 +174,18 @@ class kRule
 	}
 	
 	/**
-	 * @param kContextDataResult $context
+	 * @param vContextDataResult $context
 	 * @return boolean
 	 */
-	public function applyContext(kContextDataResult $context)
+	public function applyContext(vContextDataResult $context)
 	{
 		if(!$this->fulfilled())
 		{
-			KalturaLog::debug("Rule conditions NOT fulfilled");
+			VidiunLog::debug("Rule conditions NOT fulfilled");
 			return false;
 		}
 			
-		KalturaLog::debug("Rule conditions fulfilled");
+		VidiunLog::debug("Rule conditions fulfilled");
 		if ($this->message)
 		{
 			$context->addMessage($this->message);
@@ -238,7 +238,7 @@ class kRule
 	}
 
 	/**
-	 * @return array<kRuleAction>
+	 * @return array<vRuleAction>
 	 */
 	public function getActions() 
 	{
@@ -297,7 +297,7 @@ class kRule
 	}
 
 	/**
-	 * @param array<kRuleAction> $actions
+	 * @param array<vRuleAction> $actions
 	 */
 	public function setActions(array $actions) 
 	{
@@ -329,7 +329,7 @@ class kRule
 	}
 	
 	/**
-	 * @return bool for validation while using Admin KS
+	 * @return bool for validation while using Admin VS
 	 */
 	public function getForceAdminValidation()
 	{
@@ -340,7 +340,7 @@ class kRule
 	}
 	
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 */
 	public function setScope($scope) 
 	{
@@ -349,7 +349,7 @@ class kRule
 	
 	public function __sleep()
 	{
-		$vars = get_class_vars('kRule');
+		$vars = get_class_vars('vRule');
 		unset($vars['scope']);
 		return array_keys($vars);
 	}
@@ -365,7 +365,7 @@ class kRule
 			}
 			foreach ($ruleActions as $currAction)
 			{
-				/* @var kRuleAction $currAction */
+				/* @var vRuleAction $currAction */
 				if (in_array($currAction->getType(), $actionTypes))
 				{
 					return true;

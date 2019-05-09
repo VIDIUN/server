@@ -1,55 +1,55 @@
 
 define hostgroup{
-        hostgroup_name  kaltura-api
-        alias           Kaltura API Servers
+        hostgroup_name  vidiun-api
+        alias           Vidiun API Servers
         members         @API_MACHINES_NAMES@
         }
 
 define hostgroup{
-        hostgroup_name  kaltura-batch
-        alias           Kaltura Batch Servers
+        hostgroup_name  vidiun-batch
+        alias           Vidiun Batch Servers
         members         @BATCH_MACHINES_NAMES@
         }
 
 define hostgroup{
-        hostgroup_name  kaltura-admin
-        alias           Kaltura Admin Consoles
+        hostgroup_name  vidiun-admin
+        alias           Vidiun Admin Consoles
         members         @ADMIN_MACHINES_NAMES@
         }
 
 define hostgroup{
-        hostgroup_name  kaltura-var
-        alias           Kaltura Multi-Account Consoles
+        hostgroup_name  vidiun-var
+        alias           Vidiun Multi-Account Consoles
         members         @VAR_MACHINES_NAMES@
         }
 
 define hostgroup{
-        hostgroup_name  kaltura-db
-        alias           Kaltura Database Servers
+        hostgroup_name  vidiun-db
+        alias           Vidiun Database Servers
         members         @DB_MACHINES_NAMES@
         }
 
 define hostgroup{
-        hostgroup_name  kaltura-sphinx
-        alias           Kaltura Search Servers
+        hostgroup_name  vidiun-sphinx
+        alias           Vidiun Search Servers
         members         @SPHINX_MACHINES_NAMES@
         }
 
 define hostgroup{
-        hostgroup_name  kaltura-populate
-        alias           Kaltura Search Sync Servers
+        hostgroup_name  vidiun-populate
+        alias           Vidiun Search Sync Servers
         members         @POPULATE_MACHINES_NAMES@
         }
 
 define hostgroup{
-        hostgroup_name  kaltura-dwh
-        alias           Kaltura Data Warehouse Servers
+        hostgroup_name  vidiun-dwh
+        alias           Vidiun Data Warehouse Servers
         members         @DWH_MACHINES_NAMES@
         }
 
 define hostgroup{
-        hostgroup_name  kaltura-red5
-        alias           Kaltura Media Servers
+        hostgroup_name  vidiun-red5
+        alias           Vidiun Media Servers
         members         @RED5_MACHINES_NAMES@
         }
 

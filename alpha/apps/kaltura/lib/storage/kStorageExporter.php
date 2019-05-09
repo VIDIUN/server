@@ -3,16 +3,16 @@
  * @package Core
  * @subpackage storage
  */
-class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEventConsumer, kObjectDeletedEventConsumer, kObjectAddedEventConsumer
+class vStorageExporter implements vObjectChangedEventConsumer, vBatchJobStatusEventConsumer, vObjectDeletedEventConsumer, vObjectAddedEventConsumer
 {
 	/**
-	 * per session cache of kRule->fulfilled result per storage profile and entry id
-	 * @var array of kContextDataResult per storage profile and entry id
+	 * per session cache of vRule->fulfilled result per storage profile and entry id
+	 * @var array of vContextDataResult per storage profile and entry id
 	 */
 	public static $entryContextDataResult = array();
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{		
@@ -28,7 +28,7 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -116,16 +116,16 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 	static protected function export(entry $entry, StorageProfile $externalStorage, FileSyncKey $key, $force = false)
 	{			
 		/* @var $fileSync FileSync */
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($key,true,false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($key,true,false);
 		if (!$fileSync || $fileSync->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_URL) {
-			KalturaLog::info("no ready fileSync was found for key [$key]");
+			VidiunLog::info("no ready fileSync was found for key [$key]");
 			return;
 		}
 		
-		$externalFileSync = kFileSyncUtils::createPendingExternalSyncFileForKey($key, $externalStorage, $fileSync->getIsDir());
+		$externalFileSync = vFileSyncUtils::createPendingExternalSyncFileForKey($key, $externalStorage, $fileSync->getIsDir());
 		
-		$srcFileSync = kFileSyncUtils::resolve($fileSync);
-		kJobsManager::addStorageExportJob(null, $entry->getId(), $entry->getPartnerId(), $externalStorage, $externalFileSync, $srcFileSync, $force, $fileSync->getDc());
+		$srcFileSync = vFileSyncUtils::resolve($fileSync);
+		vJobsManager::addStorageExportJob(null, $entry->getId(), $entry->getPartnerId(), $externalStorage, $externalFileSync, $srcFileSync, $force, $fileSync->getDc());
 		return true;
 	}
 	
@@ -140,11 +140,11 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 			self::exportEntry($entry,$externalStorage);
 			return true;
 		}
-		catch (kCoreException $e)
+		catch (vCoreException $e)
 		{
-			if ($e->getCode()==kCoreException::PROFILE_STATUS_DISABLED)
+			if ($e->getCode()==vCoreException::PROFILE_STATUS_DISABLED)
 			{
-				KalturaLog::info("Profile status disabled exportEntry will not be called [{$entry->getId()}]");
+				VidiunLog::info("Profile status disabled exportEntry will not be called [{$entry->getId()}]");
 			}
 			return false;
 		}
@@ -158,7 +158,7 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 	{
 		if($externalStorage->getStatus()==StorageProfile::STORAGE_STATUS_DISABLED)
 		{
-			throw new kCoreException("Export entry operation failed since profile status is disabled",kCoreException::PROFILE_STATUS_DISABLED);
+			throw new vCoreException("Export entry operation failed since profile status is disabled",vCoreException::PROFILE_STATUS_DISABLED);
 		}
 		
         $flavorAssets = assetPeer::retrieveFlavorsByEntryIdAndStatus($entry->getId(), null, array(asset::ASSET_STATUS_READY, asset::ASSET_STATUS_EXPORTING));
@@ -193,7 +193,7 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 		foreach ($storageProfiles as $profile) 
 		{			
 			/* @var $profile StorageProfile */
-			KalturaLog::debug('Checking entry ['.$entry->getId().']re-export to storage ['.$profile->getId().']');
+			VidiunLog::debug('Checking entry ['.$entry->getId().']re-export to storage ['.$profile->getId().']');
 			$scope = $profile->getScope();
 			$scope->setEntryId($entry->getId());
 			if($profile->triggerFitsReadyAsset($entry->getId()) && $profile->fulfillsRules($scope))
@@ -204,7 +204,7 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -233,11 +233,11 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 				if($externalStorage->triggerFitsReadyAsset($entry->getId()))
 				{
 					$ismKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISM);
-					if(kFileSyncUtils::fileSync_exists($ismKey))
+					if(vFileSyncUtils::fileSync_exists($ismKey))
 						self::export($entry, $externalStorage, $ismKey);
 					
 					$ismcKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISMC);
-					if(kFileSyncUtils::fileSync_exists($ismcKey))
+					if(vFileSyncUtils::fileSync_exists($ismcKey))
 						self::export($entry, $externalStorage, $ismcKey);
 				}
 			}
@@ -246,7 +246,7 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -262,7 +262,7 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{
 		/* @var $object FileSync */
-		$syncKey = kFileSyncUtils::getKeyForFileSync($object);
+		$syncKey = vFileSyncUtils::getKeyForFileSync($object);
 		$entryId = null;
 		switch ($object->getObjectType())
 		{
@@ -291,12 +291,12 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
                     $entry = entryPeer::retrieveByPKNoFilter($entryId);
                     if (!$entry) 
                     {
-                    	KalturaLog::alert("No entry found by the ID of [$entryId]");
+                    	VidiunLog::alert("No entry found by the ID of [$entryId]");
                     }
                     
                     else if ($entry->getReplacedEntryId())
                     {
-                        KalturaLog::info("Will not handle event - deleted asset belongs to replacement entry");
+                        VidiunLog::info("Will not handle event - deleted asset belongs to replacement entry");
                         return;
                     }
 					
@@ -307,7 +307,7 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 		
 		$storage = StorageProfilePeer::retrieveByPK($object->getDc());
 		
-		kJobsManager::addStorageDeleteJob($raisedJob, $entryId ,$storage, $object);		
+		vJobsManager::addStorageDeleteJob($raisedJob, $entryId ,$storage, $object);		
 	}
 	
 	/**
@@ -381,7 +381,7 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 	 */
 	protected static function delete(entry $entry, StorageProfile $profile, FileSyncKey $key)
 	{
-		$externalFileSync = kFileSyncUtils::getReadyPendingExternalFileSyncForKey($key, $profile->getId());
+		$externalFileSync = vFileSyncUtils::getReadyPendingExternalFileSyncForKey($key, $profile->getId());
 		if(!$externalFileSync)
 			return;
 			
@@ -396,13 +396,13 @@ class kStorageExporter implements kObjectChangedEventConsumer, kBatchJobStatusEv
 
 		if(!$exportJobs)
 		{
-			kJobsManager::addStorageDeleteJob(null, $entry->getId(), $profile, $externalFileSync);
+			vJobsManager::addStorageDeleteJob(null, $entry->getId(), $profile, $externalFileSync);
 		}
 		else
 		{
 			foreach ($exportJobs as $exportJob) 
 			{
-				kJobsManager::abortDbBatchJob($exportJob);
+				vJobsManager::abortDbBatchJob($exportJob);
 			}
 		}
 	}

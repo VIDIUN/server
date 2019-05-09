@@ -4,15 +4,15 @@
  * @subpackage api.objects
  * @abstract
  */
-abstract class KalturaDistributionValidationError extends KalturaObject
+abstract class VidiunDistributionValidationError extends VidiunObject
 {
 	/**
-	 * @var KalturaDistributionAction
+	 * @var VidiunDistributionAction
 	 */
 	public $action;
 	
 	/**
-	 * @var KalturaDistributionErrorType
+	 * @var VidiunDistributionErrorType
 	 */
 	public $errorType;
 	
@@ -39,7 +39,7 @@ abstract class KalturaDistributionValidationError extends KalturaObject
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			return new kDistributionValidationError();
+			return new vDistributionValidationError();
 			
 		return parent::toObject($dbObject, $skip);
 	}

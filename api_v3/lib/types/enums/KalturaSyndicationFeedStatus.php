@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaSyndicationFeedStatus extends KalturaEnum
+class VidiunSyndicationFeedStatus extends VidiunEnum
 {
 	const DELETED = -1;
 	const ACTIVE = 1;

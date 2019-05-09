@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-abstract class kRegexCondition extends kMatchCondition
+abstract class vRegexCondition extends vMatchCondition
 {
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::matches()
+	 * @see vMatchCondition::matches()
 	 */
 	protected function matches($field, $value)
 	{

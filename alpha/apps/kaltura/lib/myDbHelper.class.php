@@ -22,7 +22,7 @@ class myDbHelper
 	{
 		if(!Propel::isInit())
 		{
-			DbManager::setConfig(kConf::getDB());
+			DbManager::setConfig(vConf::getDB());
 			DbManager::initialize();
 		}
 		

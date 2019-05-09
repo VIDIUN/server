@@ -1,9 +1,9 @@
 <?php
 /**
- * @package plugins.KalturaInternalTools
+ * @package plugins.VidiunInternalTools
  * @subpackage api.objects
  */
-class KalturaInternalToolsSession extends KalturaObject 
+class VidiunInternalToolsSession extends VidiunObject 
 {
 	
 	/**
@@ -24,7 +24,7 @@ class KalturaInternalToolsSession extends KalturaObject
 	public $partner_pattern = null;
 	/**
 	 * 
-	 * @var KalturaSessionType
+	 * @var VidiunSessionType
 	 */
 	public $type;
 	/**
@@ -48,7 +48,7 @@ class KalturaInternalToolsSession extends KalturaObject
 	 */
 	public $privileges;
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$this->partner_id = $source_object->partner_id;
 		$this->valid_until = $source_object->valid_until;

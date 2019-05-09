@@ -3,10 +3,10 @@
  * @package plugins.contentDistribution
  * @subpackage lib
  */
-class kContentDistributionMrssManager implements IKalturaMrssContributor
+class vContentDistributionMrssManager implements IVidiunMrssContributor
 {
 	/**
-	 * @var kContentDistributionMrssManager
+	 * @var vContentDistributionMrssManager
 	 */
 	protected static $instance;
 	
@@ -15,20 +15,20 @@ class kContentDistributionMrssManager implements IKalturaMrssContributor
 	}
 	
 	/**
-	 * @return kContentDistributionMrssManager
+	 * @return vContentDistributionMrssManager
 	 */
 	public static function get()
 	{
 		if(!self::$instance)
-			self::$instance = new kContentDistributionMrssManager();
+			self::$instance = new vContentDistributionMrssManager();
 			
 		return self::$instance;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaMrssContributor::contribute()
+	 * @see IVidiunMrssContributor::contribute()
 	 */
-	public function contribute(BaseObject $object, SimpleXMLElement $mrss, kMrssParameters $mrssParams = null)
+	public function contribute(BaseObject $object, SimpleXMLElement $mrss, vMrssParameters $mrssParams = null)
 	{
 		if(!($object instanceof entry))
 			return;
@@ -70,7 +70,7 @@ class kContentDistributionMrssManager implements IKalturaMrssContributor
 			}
 			else
 			{
-				$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaContentDistributionProvider');
+				$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunContentDistributionProvider');
 				foreach($pluginInstances as $pluginInstance)
 					if($pluginInstance->getProvider() === $distributionsProvider)
 						$pluginInstance->contributeMRSS($entryDistribution, $distribution);
@@ -102,14 +102,14 @@ class kContentDistributionMrssManager implements IKalturaMrssContributor
 			$assetIdsNode->addChild('assetId', $assetId);
 			
 		if($entryDistribution->getErrorDescription())
-			$distribution->addChild('errorDescription', kMrssManager::stringToSafeXml($entryDistribution->getErrorDescription()));
+			$distribution->addChild('errorDescription', vMrssManager::stringToSafeXml($entryDistribution->getErrorDescription()));
 			
-		$distribution->addChild('createdAt', $entryDistribution->getCreatedAt(kMrssManager::FORMAT_DATETIME));	
-		$distribution->addChild('updatedAt', $entryDistribution->getUpdatedAt(kMrssManager::FORMAT_DATETIME));	
+		$distribution->addChild('createdAt', $entryDistribution->getCreatedAt(vMrssManager::FORMAT_DATETIME));	
+		$distribution->addChild('updatedAt', $entryDistribution->getUpdatedAt(vMrssManager::FORMAT_DATETIME));	
 		if($entryDistribution->getSubmittedAt(null))
-			$distribution->addChild('submittedAt', $entryDistribution->getSubmittedAt(kMrssManager::FORMAT_DATETIME));
+			$distribution->addChild('submittedAt', $entryDistribution->getSubmittedAt(vMrssManager::FORMAT_DATETIME));
 		if($entryDistribution->getLastReport(null))
-			$distribution->addChild('lastReport', $entryDistribution->getLastReport(kMrssManager::FORMAT_DATETIME));
+			$distribution->addChild('lastReport', $entryDistribution->getLastReport(vMrssManager::FORMAT_DATETIME));
 		if($entryDistribution->getDirtyStatus())
 			$distribution->addChild('dirtyStatus', $entryDistribution->getDirtyStatus());
 		$distribution->addChild('status', $entryDistribution->getStatus());
@@ -125,14 +125,14 @@ class kContentDistributionMrssManager implements IKalturaMrssContributor
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaBase::getInstance()
+	 * @see IVidiunBase::getInstance()
 	 */
 	public function getInstance($interface)
 	{
 		if($this instanceof $interface)
 			return $this;
 			
-		$plugin = KalturaPluginManager::getPluginInstance(ContentDistributionPlugin::getPluginName());
+		$plugin = VidiunPluginManager::getPluginInstance(ContentDistributionPlugin::getPluginName());
 		if($plugin)
 			return $plugin->getInstance($interface);
 		
@@ -140,7 +140,7 @@ class kContentDistributionMrssManager implements IKalturaMrssContributor
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaMrssContributor::getObjectFeatureType()
+	 * @see IVidiunMrssContributor::getObjectFeatureType()
 	 */
 	public function getObjectFeatureType()
 	{

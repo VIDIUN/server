@@ -3,7 +3,7 @@
 /**
 *@package plugins.inletArmada
 */
-class InletArmadaPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator
+class InletArmadaPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'inletArmada';
 	
@@ -20,17 +20,17 @@ class InletArmadaPlugin extends KalturaPlugin implements IKalturaObjectLoader, I
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::INLET_ARMADA)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::INLET_ARMADA)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
-			return new KOperationEngineInletArmada("", $constructorArgs['outFilePath']);
+			return new VOperationEngineInletArmada("", $constructorArgs['outFilePath']);
 		}
 
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(InletArmadaConversionEngineType::INLET_ARMADA))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(InletArmadaConversionEngineType::INLET_ARMADA))
 		{
-			return new KDLOperatorInletArmada($enumValue);
+			return new VDLOperatorInletArmada($enumValue);
 		}
 		
 		return null;
@@ -43,11 +43,11 @@ class InletArmadaPlugin extends KalturaPlugin implements IKalturaObjectLoader, I
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(InletArmadaConversionEngineType::INLET_ARMADA))
-			return 'KOperationEngineInletArmada';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(InletArmadaConversionEngineType::INLET_ARMADA))
+			return 'VOperationEngineInletArmada';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(InletArmadaConversionEngineType::INLET_ARMADA))
-			return 'KDLOperatorInletArmada';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(InletArmadaConversionEngineType::INLET_ARMADA))
+			return 'VDLOperatorInletArmada';
 		
 		return null;
 	}
@@ -71,8 +71,8 @@ class InletArmadaPlugin extends KalturaPlugin implements IKalturaObjectLoader, I
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -80,6 +80,6 @@ class InletArmadaPlugin extends KalturaPlugin implements IKalturaObjectLoader, I
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

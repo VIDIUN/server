@@ -6,7 +6,7 @@
 interface ESearchHistoryFieldName extends BaseEnum
 {
 	const PARTNER_ID = 'partner_id';
-	const KUSER_ID = 'kuser_id';
+	const VUSER_ID = 'vuser_id';
 	const TIMESTAMP = 'timestamp';
 	const SEARCH_TERM = 'search_term';
 	const SEARCHED_OBJECT = 'searched_object';

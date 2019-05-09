@@ -4,14 +4,14 @@
  * @subpackage model.entitlement
  */
 
-class kScheduledResourceSearchEntitlement extends kBaseElasticEntitlement
+class vScheduledResourceSearchEntitlement extends vBaseElasticEntitlement
 {
 	protected static $entitlementContributors = array(
-		'kScheduledResourcePartnerEntitlementDecorator'
+		'vScheduledResourcePartnerEntitlementDecorator'
 	);
 
 	protected static function initialize()
 	{
-		self::$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		self::$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 	}
 }

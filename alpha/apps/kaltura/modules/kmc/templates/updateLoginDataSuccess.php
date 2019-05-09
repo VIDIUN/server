@@ -16,8 +16,8 @@
 	.error { color: #ff0000; font-weight: bold; font-size: 12px; margin-bottom: -10px; }
 	input { font-size: 13px; width: 170px; }
 	.truncated { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-	button { margin: 0 auto 5px; padding: 0 28px 0 0; height: 25px; border: 0; font: normal 11px arial,sans-serif; color:#2B2B2B; line-height: normal; overflow: visible; background: url(/lib/images/kmc/kmc_sprite.png) no-repeat -72px -152px; cursor: pointer; }
-	button span { height:20px; padding: 4px 0 0 28px; margin: 1px 1px 0 0; float:left; white-space:nowrap; background:transparent url(/lib/images/kmc/kmc_sprite.png) no-repeat scroll 0 -153px;}
+	button { margin: 0 auto 5px; padding: 0 28px 0 0; height: 25px; border: 0; font: normal 11px arial,sans-serif; color:#2B2B2B; line-height: normal; overflow: visible; background: url(/lib/images/vmc/vmc_sprite.png) no-repeat -72px -152px; cursor: pointer; }
+	button span { height:20px; padding: 4px 0 0 28px; margin: 1px 1px 0 0; float:left; white-space:nowrap; background:transparent url(/lib/images/vmc/vmc_sprite.png) no-repeat scroll 0 -153px;}
 	button:hover span { background-position: 0 -178px;}
 	@-moz-document url-prefix() {
    		button span { margin: -2px 2px 0 -3px; }
@@ -30,10 +30,10 @@
 	    l.href = href;
 	    return l;
 	};
-	var forceKMCHttps = <?php echo ($forceKMCHttps) ? 'true' : 'false'; ?>;
+	var forceVMCHttps = <?php echo ($forceVMCHttps) ? 'true' : 'false'; ?>;
 	// Check if our parent has the same protocol and host name and then check
 	// for top / window objects
-	if( forceKMCHttps && top != window && top.location.hostname != window.location.hostname ) { 
+	if( forceVMCHttps && top != window && top.location.hostname != window.location.hostname ) { 
 		top.location = window.location;
 	}
 

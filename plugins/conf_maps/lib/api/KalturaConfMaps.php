@@ -5,7 +5,7 @@
  * @relatedService ConfMapsService
  */
 
-class KalturaConfMaps extends KalturaObject implements IRelatedFilterable
+class VidiunConfMaps extends VidiunObject implements IRelatedFilterable
 {
 	/**
 	 * Name of the map
@@ -55,7 +55,7 @@ class KalturaConfMaps extends KalturaObject implements IRelatedFilterable
 	public $version;
 
 	/**
-	 * @var KalturaConfMapsSourceLocation
+	 * @var VidiunConfMapsSourceLocation
 	 * @insertonly
 	 */
 	public $sourceLocation;
@@ -69,7 +69,7 @@ class KalturaConfMaps extends KalturaObject implements IRelatedFilterable
 	/**
 	 * map status
 	 *
-	 * @var KalturaConfMapsStatus
+	 * @var VidiunConfMapsStatus
 	 * @filter eq
 	 */
 	public $status;
@@ -96,11 +96,11 @@ class KalturaConfMaps extends KalturaObject implements IRelatedFilterable
 	{
 		if(strstr($this->relatedHost,'*'))
 		{
-			throw new KalturaAPIException(KalturaErrors::HOST_NAME_CONTAINS_ASTRIX ,$this->relatedHost );
+			throw new VidiunAPIException(VidiunErrors::HOST_NAME_CONTAINS_ASTRIX ,$this->relatedHost );
 		}
-		if($this->sourceLocation == KalturaConfMapsSourceLocation::FS)
+		if($this->sourceLocation == VidiunConfMapsSourceLocation::FS)
 		{
-			throw new KalturaAPIException(KalturaErrors::MAP_CANNOT_BE_CREATED_ON_FILE_SYSTEM);
+			throw new VidiunAPIException(VidiunErrors::MAP_CANNOT_BE_CREATED_ON_FILE_SYSTEM);
 		}
 		parent::validateForInsert($propertiesToSkip);
 	}
@@ -110,12 +110,12 @@ class KalturaConfMaps extends KalturaObject implements IRelatedFilterable
 		$contentArray = json_decode($this->content, true);
 		if(!$contentArray)
 		{
-			throw new KalturaAPIException(KalturaErrors::CANNOT_PARSE_CONTENT , "Cannot JSON decode content"  ,$this->content );
+			throw new VidiunAPIException(VidiunErrors::CANNOT_PARSE_CONTENT , "Cannot JSON decode content"  ,$this->content );
 		}
 		$initStr = iniUtils::arrayToIniString($contentArray);
 		if(!parse_ini_string($initStr,true))
 		{
-			throw new KalturaAPIException(KalturaErrors::CANNOT_PARSE_CONTENT, "Cannot parse INI", $initStr);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_PARSE_CONTENT, "Cannot parse INI", $initStr);
 		}
 	}
 

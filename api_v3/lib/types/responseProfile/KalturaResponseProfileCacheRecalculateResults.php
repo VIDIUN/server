@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaResponseProfileCacheRecalculateResults extends KalturaObject
+class VidiunResponseProfileCacheRecalculateResults extends VidiunObject
 {
 	/**
 	 * Last recalculated id

@@ -1,5 +1,5 @@
 <?php
-class kReportManager
+class vReportManager
 {
 	/**
 	 * @var Report
@@ -20,9 +20,9 @@ class kReportManager
 	{
 		$this->initPdo();
 		$query = $this->_report->getQuery();
-		KalturaLog::debug('Prepering statement: ' . $query);
+		VidiunLog::debug('Prepering statement: ' . $query);
 		$pdoStatement = $this->_pdo->prepare($query);
-		KalturaLog::debug('With params: ' . print_r($params, true));
+		VidiunLog::debug('With params: ' . print_r($params, true));
 		$pdoStatement->execute($params);
 		$rows = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
 		$columns = array();
@@ -39,13 +39,13 @@ class kReportManager
 	{
 		if (is_null($this->_pdo))
 		{
-			$dbConfig = kConf::get("reports_db_config");
+			$dbConfig = vConf::get("reports_db_config");
 			$host = $dbConfig["host"];
 			$port = $dbConfig["port"];
 			$user = $dbConfig["user"];
 			$password = $dbConfig["password"];
 			$dbName = $dbConfig["db_name"];
-			$db = kConf::getDB();
+			$db = vConf::getDB();
 			$charset = isset($dbConfig["charset"]) ? $dbConfig["charset"] : null;
 			
 			$pdoString = "mysql:host={$host};port={$port};dbname={$dbName};";

@@ -22,26 +22,26 @@ $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 //$sphinxCon = DbManager::getSphinxConnection();
 
 $captions = CaptionAssetItemPeer::doSelect($c, $con);
-$sphinx = new kSphinxSearchManager();
+$sphinx = new vSphinxSearchManager();
 while(count($captions))
 {
 	foreach($captions as $caption)
 	{
-		KalturaLog::log('caption_asset_id ' . $caption->getId() . ' int id[' . $caption->getIntId() . '] crc id[' . $sphinx->getSphinxId($caption) . '] last updated at ['. $caption->getUpdatedAt(null) .']');
+		VidiunLog::log('caption_asset_id ' . $caption->getId() . ' int id[' . $caption->getIntId() . '] crc id[' . $sphinx->getSphinxId($caption) . '] last updated at ['. $caption->getUpdatedAt(null) .']');
 		
 		try {
 			$ret = $sphinx->saveToSphinx($caption, true);
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			exit -1;
 		}
 	}
 	
 	$c->setOffset($c->getOffset() + count($captions));
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	$captions = CaptionAssetItemPeer::doSelect($c, $con);
 }
 
-KalturaLog::log('Done. Cureent time: ' . time());
+VidiunLog::log('Done. Cureent time: ' . time());
 exit(0);

@@ -42,7 +42,7 @@ class moderationTableMap extends TableMap {
 		$this->addColumn('SUBP_ID', 'SubpId', 'INTEGER', false, null, null);
 		$this->addColumn('OBJECT_ID', 'ObjectId', 'VARCHAR', false, 20, null);
 		$this->addColumn('OBJECT_TYPE', 'ObjectType', 'SMALLINT', false, null, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
 		$this->addColumn('PUSER_ID', 'PuserId', 'VARCHAR', false, 64, null);
 		$this->addColumn('STATUS', 'Status', 'INTEGER', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -58,7 +58,7 @@ class moderationTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
 } // moderationTableMap

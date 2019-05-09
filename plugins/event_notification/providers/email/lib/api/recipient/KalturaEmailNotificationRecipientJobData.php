@@ -4,11 +4,11 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-abstract class KalturaEmailNotificationRecipientJobData extends KalturaObject
+abstract class VidiunEmailNotificationRecipientJobData extends VidiunObject
 {
 	 /**
 	  * Provider type of the job data.
-	  * @var KalturaEmailNotificationRecipientProviderType
+	  * @var VidiunEmailNotificationRecipientProviderType
 	  * 
 	  * @readonly
 	  */
@@ -21,8 +21,8 @@ abstract class KalturaEmailNotificationRecipientJobData extends KalturaObject
 	
 	/**
 	 * Function returns correct API recipient data type based on the DB class received.
-	 * @param kEmailNotificationRecipientJobData $dbData
-	 * @return Kaltura
+	 * @param vEmailNotificationRecipientJobData $dbData
+	 * @return Vidiun
 	 */
 	public static function getDataInstance ($dbData)
 	{
@@ -31,20 +31,20 @@ abstract class KalturaEmailNotificationRecipientJobData extends KalturaObject
 		{
 			switch (get_class($dbData))
 			{
-				case 'kEmailNotificationCategoryRecipientJobData':
-					$instance = new KalturaEmailNotificationCategoryRecipientJobData();
+				case 'vEmailNotificationCategoryRecipientJobData':
+					$instance = new VidiunEmailNotificationCategoryRecipientJobData();
 					break;
-				case 'kEmailNotificationStaticRecipientJobData':
-					$instance = new KalturaEmailNotificationStaticRecipientJobData();
+				case 'vEmailNotificationStaticRecipientJobData':
+					$instance = new VidiunEmailNotificationStaticRecipientJobData();
 					break;
-				case 'kEmailNotificationUserRecipientJobData':
-					$instance = new KalturaEmailNotificationUserRecipientJobData();
+				case 'vEmailNotificationUserRecipientJobData':
+					$instance = new VidiunEmailNotificationUserRecipientJobData();
 					break;
-				case 'kEmailNotificationGroupRecipientJobData':
-					$instance = new KalturaEmailNotificationGroupRecipientJobData();
+				case 'vEmailNotificationGroupRecipientJobData':
+					$instance = new VidiunEmailNotificationGroupRecipientJobData();
 					break;
 				default:
-					$instance = KalturaPluginManager::loadObject('KalturaEmailNotificationRecipientJobData', $dbData->getProviderType());
+					$instance = VidiunPluginManager::loadObject('VidiunEmailNotificationRecipientJobData', $dbData->getProviderType());
 					break;
 			}
 			

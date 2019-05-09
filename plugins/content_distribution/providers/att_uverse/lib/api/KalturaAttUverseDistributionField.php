@@ -3,7 +3,7 @@
  * @package plugins.attUverseDistribution
  * @subpackage api.enum
  */
-class KalturaAttUverseDistributionField extends KalturaStringEnum implements AttUverseDistributionField
+class VidiunAttUverseDistributionField extends VidiunStringEnum implements AttUverseDistributionField
 {
 	// see AttUverseDistributionField interface
 }

@@ -7,7 +7,7 @@
  * @subpackage model
  *
  */
-class kVendorCatalogItemPricing
+class vVendorCatalogItemPricing
 {
 	/**
 	 * @var float

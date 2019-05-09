@@ -15,19 +15,19 @@
 	<session />
 	<!-- 24 Months Archive -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>24 Months Archive</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtLessThanOrEqual>{php:return -24*30*24*60*60;}</createdAtLessThanOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='ArchiveStatus']</field>
 									<value>Not Archived</value>
 								</item>
@@ -37,7 +37,7 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaExecuteMetadataXsltObjectTask">
+				<item objectType="VidiunExecuteMetadataXsltObjectTask">
 					<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 					<metadataObjectType>1</metadataObjectType><!-- ENTRY -->
 					<xslt>
@@ -60,13 +60,13 @@
 						]]>
 					</xslt>
 				</item>
-				<item objectType="KalturaModifyCategoriesObjectTask">
+				<item objectType="VidiunModifyCategoriesObjectTask">
 					<addRemoveType>2</addRemoveType><!-- REMOVE -->
 				</item>
-				<item objectType="KalturaModifyCategoriesObjectTask">
+				<item objectType="VidiunModifyCategoriesObjectTask">
 					<addRemoveType>1</addRemoveType><!-- ADD -->
 					<categoryIds objectType="array">
-						<item objectType="KalturaIntegerValue">
+						<item objectType="VidiunIntegerValue">
 							<value>{variable:archiveCategoryId}</value>
 						</item>
 					</categoryIds>

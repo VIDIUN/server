@@ -14,7 +14,7 @@ jQuery(function() {
 });
 </script>
 
-<div class="mykaltura_viewAll mykaltura_media" style="width: 80%;">
+<div class="myvidiun_viewAll myvidiun_media" style="width: 80%;">
 	<div>
 		
 	</div>

@@ -3,16 +3,16 @@
  * @package api
  * @subpackage filters
  */
-class KalturaUserEntryFilter extends KalturaUserEntryBaseFilter
+class VidiunUserEntryFilter extends VidiunUserEntryBaseFilter
 {
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $userIdEqualCurrent;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isAnonymous;
 	
@@ -54,20 +54,20 @@ class KalturaUserEntryFilter extends KalturaUserEntryBaseFilter
 	protected function validateFilter()
 	{
 		if(!$this->userIdEqual && !$this->userIdIn && !$this->entryIdEqual && !$this->entryIdIn)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL,
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL,
 				$this->getFormattedPropertyNameWithClassName('userIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('userIdIn') . '/' .
 				$this->getFormattedPropertyNameWithClassName('entryIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('entryIdIn'));
 	}
 	
 	/**
-	 * @param KalturaFilterPager $pager
-	 * @param KalturaDetachedResponseProfile $responseProfile
-	 * @return KalturaListResponse
+	 * @param VidiunFilterPager $pager
+	 * @param VidiunDetachedResponseProfile $responseProfile
+	 * @return VidiunListResponse
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$response = new KalturaUserEntryListResponse();
-		if ( in_array(kCurrentContext::getCurrentSessionType(), array(kSessionBase::SESSION_TYPE_NONE,kSessionBase::SESSION_TYPE_WIDGET)) )
+		$response = new VidiunUserEntryListResponse();
+		if ( in_array(vCurrentContext::getCurrentSessionType(), array(vSessionBase::SESSION_TYPE_NONE,vSessionBase::SESSION_TYPE_WIDGET)) )
 		{
 			$response->totalCount = 0;
 			return $response;
@@ -88,30 +88,30 @@ class KalturaUserEntryFilter extends KalturaUserEntryBaseFilter
 		}
 		else
 		{
-			KalturaFilterPager::detachFromCriteria($c);
+			VidiunFilterPager::detachFromCriteria($c);
 			$totalCount = UserEntryPeer::doCount($c);
 		}
 
 		$response->totalCount = $totalCount;
-		$response->objects = KalturaUserEntryArray::fromDbArray($list, $responseProfile);
+		$response->objects = VidiunUserEntryArray::fromDbArray($list, $responseProfile);
 		return $response;
 	}
 	
 
 	public function toObject ($object_to_fill = null, $props_to_skip = array())
 	{
-		if (kCurrentContext::$ks_partner_id != Partner::BATCH_PARTNER_ID)
+		if (vCurrentContext::$vs_partner_id != Partner::BATCH_PARTNER_ID)
 		{
 			if (!is_null($this->privacyContextEqual) || !is_null($this->privacyContextIn))
 			{
-				throw new KalturaAPIException(KalturaErrors::USER_ENTRY_FILTER_FORBIDDEN_FIELDS_USED);
+				throw new VidiunAPIException(VidiunErrors::USER_ENTRY_FILTER_FORBIDDEN_FIELDS_USED);
 			}
-			$this->partnerId = kCurrentContext::getCurrentPartnerId();
+			$this->partnerId = vCurrentContext::getCurrentPartnerId();
 		}
 		
 		if (!is_null($this->userIdEqualCurrent) && $this->userIdEqualCurrent)
 		{
-			$this->userIdEqual = kCurrentContext::getCurrentKsKuserId();
+			$this->userIdEqual = vCurrentContext::getCurrentVsVuserId();
 		}
 		else
 		{
@@ -122,84 +122,84 @@ class KalturaUserEntryFilter extends KalturaUserEntryBaseFilter
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}
 	
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/* @var $srcObj UserEntryFilter */
 		parent::doFromObject($srcObj, $responseProfile);
-		if (kCurrentContext::$ks_partner_id == Partner::BATCH_PARTNER_ID) //batch should be able to get userEntry objects of deleted users.
-				kuserPeer::setUseCriteriaFilter(false);
+		if (vCurrentContext::$vs_partner_id == Partner::BATCH_PARTNER_ID) //batch should be able to get userEntry objects of deleted users.
+				vuserPeer::setUseCriteriaFilter(false);
 		
 		if ($srcObj->get('_eq_user_id'))
 		{
-			$this->userIdEqual = $this->prepareKusersToPusersFilter($srcObj->get('_eq_user_id'));
+			$this->userIdEqual = $this->prepareVusersToPusersFilter($srcObj->get('_eq_user_id'));
 		}
 		if ($srcObj->get('_in_user_id'))
 		{
-			$this->userIdIn = $this->prepareKusersToPusersFilter($srcObj->get('_in_user_id'));
+			$this->userIdIn = $this->prepareVusersToPusersFilter($srcObj->get('_in_user_id'));
 		}
 		if ($srcObj->get('_notin_user_id'))
 		{
-			$this->userIdNotIn = $this->prepareKusersToPusersFilter($srcObj->get('_notin_user_id'));
+			$this->userIdNotIn = $this->prepareVusersToPusersFilter($srcObj->get('_notin_user_id'));
 		}
 		
 	}
 
 
 	/**
-	 * The user_id is infact a puser_id and the kuser_id should be retrieved
+	 * The user_id is infact a puser_id and the vuser_id should be retrieved
 	 */
 	protected function fixFilterUserId()
 	{
-		if (kCurrentContext::$ks_partner_id == Partner::BATCH_PARTNER_ID)
+		if (vCurrentContext::$vs_partner_id == Partner::BATCH_PARTNER_ID)
 		{
-			kCurrentContext::$partner_id = $this->partnerId;
+			vCurrentContext::$partner_id = $this->partnerId;
 		}
 
 		if ($this->userIdEqual !== null)
 		{
-			if (kCurrentContext::$ks_partner_id == Partner::BATCH_PARTNER_ID) //batch should be able to get userEntry objects of deleted users.
-				kuserPeer::setUseCriteriaFilter(false);
+			if (vCurrentContext::$vs_partner_id == Partner::BATCH_PARTNER_ID) //batch should be able to get userEntry objects of deleted users.
+				vuserPeer::setUseCriteriaFilter(false);
 
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::getCurrentPartnerId(), $this->userIdEqual);
-			kuserPeer::setUseCriteriaFilter(true);
-			if ($kuser)
-				$this->userIdEqual = $kuser->getId();
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::getCurrentPartnerId(), $this->userIdEqual);
+			vuserPeer::setUseCriteriaFilter(true);
+			if ($vuser)
+				$this->userIdEqual = $vuser->getId();
 			else
 				$this->userIdEqual = -1; // no result will be returned when the user is missing
 		}
 
 		if(!empty($this->userIdIn))
 		{
-			$this->userIdIn = $this->preparePusersToKusersFilter( $this->userIdIn );
+			$this->userIdIn = $this->preparePusersToVusersFilter( $this->userIdIn );
 		}
 		if(!empty($this->userIdNotIn))
 		{
-			$this->userIdNotIn = $this->preparePusersToKusersFilter( $this->userIdNotIn );
+			$this->userIdNotIn = $this->preparePusersToVusersFilter( $this->userIdNotIn );
 		}
 
 		if(!is_null($this->isAnonymous))
 		{
-			if(KalturaNullableBoolean::toBoolean($this->isAnonymous)===false)
+			if(VidiunNullableBoolean::toBoolean($this->isAnonymous)===false)
 				$this->userIdNotIn .= self::getListOfAnonymousUsers();
 
-			elseif(KalturaNullableBoolean::toBoolean($this->isAnonymous)===true)
+			elseif(VidiunNullableBoolean::toBoolean($this->isAnonymous)===true)
 				$this->userIdIn .= self::getListOfAnonymousUsers();
 		}
 	}
 
 	public static function getListOfAnonymousUsers()
 	{
-		$anonKuserIds = "";
-		$anonKusers = kuserPeer::getKuserByPartnerAndUids(kCurrentContext::getCurrentPartnerId(), array(0,''));
-		foreach ($anonKusers as $anonKuser) {
-			$anonKuserIds .= ",".$anonKuser->getKuserId();
+		$anonVuserIds = "";
+		$anonVusers = vuserPeer::getVuserByPartnerAndUids(vCurrentContext::getCurrentPartnerId(), array(0,''));
+		foreach ($anonVusers as $anonVuser) {
+			$anonVuserIds .= ",".$anonVuser->getVuserId();
 		}
-		return $anonKuserIds;
+		return $anonVuserIds;
 	}
 	
 	public function getEmptyListResponse()
 	{
-		$res = new KalturaUserEntryListResponse();
+		$res = new VidiunUserEntryListResponse();
 		$res->objects = array();
 		$res->totalCount = 0;
 		return $res;

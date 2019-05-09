@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAccessControlLimitFlavorsAction extends kRuleAction 
+class vAccessControlLimitFlavorsAction extends vRuleAction 
 {
 	/**
 	 * @var array

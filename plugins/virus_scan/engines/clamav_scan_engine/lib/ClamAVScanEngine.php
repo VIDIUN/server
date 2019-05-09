@@ -18,7 +18,7 @@ class ClamAVScanEngine extends VirusScanEngine
 	{
 		if (!isset($paramsObject->clamAvScanEngineBin))
 		{
-		    KalturaLog::err('Binary file configuration not found');
+		    VidiunLog::err('Binary file configuration not found');
 			return false;
 		}
 		$this->binFile = $paramsObject->clamAvScanEngineBin;
@@ -37,12 +37,12 @@ class ClamAVScanEngine extends VirusScanEngine
 		if (!$this->binFile)
 		{
 			$errorDescription = 'Engine binary file not set';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		if (!file_exists($filePath)) {
 			$errorDescription = 'Source file does not exists ['.$filePath.']';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		clearstatcache();
@@ -53,7 +53,7 @@ class ClamAVScanEngine extends VirusScanEngine
 		$errorDescription = null;
 		$output = null;
 		
-		KalturaLog::info("Executing - [$cmd]");
+		VidiunLog::info("Executing - [$cmd]");
 		exec($cmd, $output, $return_value);
 				
 		$statusLine = false;
@@ -69,7 +69,7 @@ class ClamAVScanEngine extends VirusScanEngine
 		if (!$statusLine)
 		{
 			$errorDescription = 'Unknown error - return value ['.$return_value.']';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 
 		$statusLineArr = explode(' ', $statusLine);
@@ -77,17 +77,17 @@ class ClamAVScanEngine extends VirusScanEngine
 		
 		if ($scanStatus == 'OK' || strpos($statusLine , 'Empty file') != 0)
 		{
-			return KalturaVirusScanJobResult::FILE_IS_CLEAN;
+			return VidiunVirusScanJobResult::FILE_IS_CLEAN;
 		}
 		else if ($scanStatus == 'FOUND')
 		{
 			$errorDescription = "The file was found infected, but was not repaired";
-			return KalturaVirusScanJobResult::FILE_INFECTED;
+			return VidiunVirusScanJobResult::FILE_INFECTED;
 		}
 		else
 		{
 		    $errorDescription = $statusLine;
-		    return KalturaVirusScanJobResult::SCAN_ERROR;
+		    return VidiunVirusScanJobResult::SCAN_ERROR;
 		}		
 	}
 

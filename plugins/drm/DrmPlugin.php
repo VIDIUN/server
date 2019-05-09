@@ -2,12 +2,12 @@
 /**
  * @package plugins.drm
  */
-class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdminConsolePages, IKalturaPermissions, IKalturaEnumerator, IKalturaObjectLoader, IKalturaEntryContextDataContributor,IKalturaPermissionsEnabler, IKalturaPlaybackContextDataContributor, IKalturaConfigurator
+class DrmPlugin extends BaseDrmPlugin implements IVidiunServices, IVidiunAdminConsolePages, IVidiunPermissions, IVidiunEnumerator, IVidiunObjectLoader, IVidiunEntryContextDataContributor,IVidiunPermissionsEnabler, IVidiunPlaybackContextDataContributor, IVidiunConfigurator
 {
 	const PLUGIN_NAME = 'drm';
 
 	/* (non-PHPdoc)
-     * @see IKalturaPlugin::getPluginName()
+     * @see IVidiunPlugin::getPluginName()
      */
 	public static function getPluginName()
 	{
@@ -15,7 +15,7 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap() {
 		$map = array(
@@ -27,7 +27,7 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaAdminConsolePages::getApplicationPages()
+	 * @see IVidiunAdminConsolePages::getApplicationPages()
 	 */
 	public static function getApplicationPages()
 	{
@@ -41,7 +41,7 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId) {	
 		
@@ -55,7 +55,7 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -74,16 +74,16 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 
 	public static function getConfigParam($configName, $key)
 	{
-		$config = kConf::getMap($configName);
+		$config = vConf::getMap($configName);
 		if (!is_array($config))
 		{
-			KalturaLog::err($configName.' config section is not defined');
+			VidiunLog::err($configName.' config section is not defined');
 			return null;
 		}
 
 		if (!isset($config[$key]))
 		{
-			KalturaLog::err('The key '.$key.' was not found in the '.$configName.' config section');
+			VidiunLog::err('The key '.$key.' was not found in the '.$configName.' config section');
 			return null;
 		}
 
@@ -91,48 +91,48 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	}
 
     /* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
     public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
     {
-        if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::CENC)
-            return new KCEncOperationEngine($constructorArgs['params'], $constructorArgs['outFilePath']);
-        if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(DrmConversionEngineType::CENC))
-            return new KDLOperatorDrm($enumValue);
-        if ($baseClass == 'Kaltura_Client_Drm_Type_DrmProfile' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::CENC)
-            return new Kaltura_Client_Drm_Type_DrmProfile();
-        if($baseClass == 'kRuleAction' && $enumValue == DrmAccessControlActionType::DRM_POLICY)
-            return new kAccessControlDrmPolicyAction();
-        if($baseClass == 'KalturaRuleAction' && $enumValue == DrmAccessControlActionType::DRM_POLICY)
-            return new KalturaAccessControlDrmPolicyAction();
-	    if ($baseClass == 'KalturaPluginData' && $enumValue == self::getPluginName())
-		    return new KalturaDrmEntryContextPluginData();
-	    if ($baseClass == 'KalturaDrmPlaybackPluginData' && $enumValue == 'kDrmPlaybackPluginData')
-		    return new KalturaDrmPlaybackPluginData();
+        if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::CENC)
+            return new VCEncOperationEngine($constructorArgs['params'], $constructorArgs['outFilePath']);
+        if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(DrmConversionEngineType::CENC))
+            return new VDLOperatorDrm($enumValue);
+        if ($baseClass == 'Vidiun_Client_Drm_Type_DrmProfile' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::CENC)
+            return new Vidiun_Client_Drm_Type_DrmProfile();
+        if($baseClass == 'vRuleAction' && $enumValue == DrmAccessControlActionType::DRM_POLICY)
+            return new vAccessControlDrmPolicyAction();
+        if($baseClass == 'VidiunRuleAction' && $enumValue == DrmAccessControlActionType::DRM_POLICY)
+            return new VidiunAccessControlDrmPolicyAction();
+	    if ($baseClass == 'VidiunPluginData' && $enumValue == self::getPluginName())
+		    return new VidiunDrmEntryContextPluginData();
+	    if ($baseClass == 'VidiunDrmPlaybackPluginData' && $enumValue == 'vDrmPlaybackPluginData')
+		    return new VidiunDrmPlaybackPluginData();
         return null;
     }
 
     /* (non-PHPdoc)
-    * @see IKalturaObjectLoader::getObjectClass()
+    * @see IVidiunObjectLoader::getObjectClass()
      */
     public static function getObjectClass($baseClass, $enumValue)
     {
-        if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::CENC)
-            return "KDRMOperationEngine";
-        if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(DrmConversionEngineType::CENC))
-            return "KDLOperatorrm";
-        if($baseClass == 'KalturaDrmProfile' && $enumValue == KalturaDrmProviderType::CENC)
-            return "KalturaDrmProfile";
+        if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::CENC)
+            return "VDRMOperationEngine";
+        if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(DrmConversionEngineType::CENC))
+            return "VDLOperatorrm";
+        if($baseClass == 'VidiunDrmProfile' && $enumValue == VidiunDrmProviderType::CENC)
+            return "VidiunDrmProfile";
         if($baseClass == 'DrmProfile' && $enumValue == DrmProviderType::CENC)
             return "DrmProfile";
-        if ($baseClass == 'Kaltura_Client_Drm_Type_DrmProfile' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::CENC)
-            return 'Kaltura_Client_Drm_Type_DrmProfile';
-        if($baseClass == 'kRuleAction' && $enumValue == DrmAccessControlActionType::DRM_POLICY)
-            return 'kAccessControlDrmPolicyAction';
-        if($baseClass == 'KalturaRuleAction' && $enumValue == DrmAccessControlActionType::DRM_POLICY)
-            return 'KalturaAccessControlDrmPolicyAction';
-	    if ($baseClass == 'KalturaPluginData' && $enumValue == self::getPluginName())
-		    return 'KalturaDrmEntryContextPluginData';
+        if ($baseClass == 'Vidiun_Client_Drm_Type_DrmProfile' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::CENC)
+            return 'Vidiun_Client_Drm_Type_DrmProfile';
+        if($baseClass == 'vRuleAction' && $enumValue == DrmAccessControlActionType::DRM_POLICY)
+            return 'vAccessControlDrmPolicyAction';
+        if($baseClass == 'VidiunRuleAction' && $enumValue == DrmAccessControlActionType::DRM_POLICY)
+            return 'VidiunAccessControlDrmPolicyAction';
+	    if ($baseClass == 'VidiunPluginData' && $enumValue == self::getPluginName())
+		    return 'VidiunDrmEntryContextPluginData';
         return null;
     }
 
@@ -141,19 +141,19 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
      */
     protected static function getApiValue($value)
     {
-        return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $value;
+        return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $value;
     }
 
-    public function contributeToEntryContextDataResult(entry $entry, accessControlScope $contextDataParams, kContextDataHelper $contextDataHelper)
+    public function contributeToEntryContextDataResult(entry $entry, accessControlScope $contextDataParams, vContextDataHelper $contextDataHelper)
     {
 	    if ($this->shouldContribute($entry ))
 	    {
 		    $signingKey = $this->getSigningKey();
 		    if (!is_null($signingKey))
 		    {
-			    KalturaLog::info("Signing key is '$signingKey'");
+			    VidiunLog::info("Signing key is '$signingKey'");
 			    $customDataJson = DrmLicenseUtils::createCustomData($entry->getId(), $contextDataHelper->getAllowedFlavorAssets(), $signingKey);
-			    $drmContextData = new kDrmEntryContextPluginData();
+			    $drmContextData = new vDrmEntryContextPluginData();
 			    $drmContextData->setFlavorData($customDataJson);
 			    return $drmContextData;
 		    }
@@ -161,11 +161,11 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	    return null;
     }
 
-	public function contributeToPlaybackContextDataResult(entry $entry, kPlaybackContextDataParams $entryPlayingDataParams, kPlaybackContextDataResult $result, kContextDataHelper $contextDataHelper)
+	public function contributeToPlaybackContextDataResult(entry $entry, vPlaybackContextDataParams $entryPlayingDataParams, vPlaybackContextDataResult $result, vContextDataHelper $contextDataHelper)
 	{
 		if ( $entryPlayingDataParams->getType() == self::BASE_PLUGIN_NAME && self::shouldContributeToPlaybackContext($contextDataHelper->getContextDataResult()->getActions()) && $this->isSupportStreamerTypes($entryPlayingDataParams->getDeliveryProfile()->getStreamerType()))
 		{
-			$dbProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(KalturaDrmProviderType::CENC, kCurrentContext::getCurrentPartnerId());
+			$dbProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(VidiunDrmProviderType::CENC, vCurrentContext::getCurrentPartnerId());
 			if ($dbProfile)
 			{
 				$signingKey = $dbProfile->getSigningKey();
@@ -176,7 +176,7 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 
 					foreach (CencSchemeName::getAdditionalValues() as $scheme)
 					{
-						$data = new kDrmPlaybackPluginData();
+						$data = new vDrmPlaybackPluginData();
 						$data->setLicenseURL($this->constructUrl($dbProfile, $this->getUrlName($scheme), $customDataObject));
 						$data->setScheme($this->getDrmSchemeCoreValue($scheme));
 						$result->addToPluginData($scheme, $data);
@@ -187,7 +187,7 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public function getUrlName($scheme)
 	{
@@ -207,8 +207,8 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	 */
 	public static function getDrmSchemeCoreValue($scheme)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $scheme;
-		return kPluginableEnumsManager::apiToCore('DrmSchemeName', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $scheme;
+		return vPluginableEnumsManager::apiToCore('DrmSchemeName', $value);
 	}
 
 	public function isSupportStreamerTypes($streamerType)
@@ -223,7 +223,7 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 
     private function getSigningKey()
     {
-	    $dbProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(KalturaDrmProviderType::CENC, kCurrentContext::getCurrentPartnerId());
+	    $dbProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(VidiunDrmProviderType::CENC, vCurrentContext::getCurrentPartnerId());
 	    if (!is_null($dbProfile))
 	    {
 		    $signingKey = $dbProfile->getSigningKey();
@@ -243,12 +243,12 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 			foreach ($entry->getAccessControl()->getRulesArray() as $rule)
 			{
 				/**
-				 * @var kRule $rule
+				 * @var vRule $rule
 				 */
 				foreach ($rule->getActions() as $action)
 				{
 					/**
-					 * @var kRuleAction $action
+					 * @var vRuleAction $action
 					 */
 					if ($action->getType() == DrmAccessControlActionType::DRM_POLICY)
 					{
@@ -261,13 +261,13 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissionsEnabler::permissionEnabled()
+	 * @see IVidiunPermissionsEnabler::permissionEnabled()
 	 */
 	public static function permissionEnabled($partnerId, $permissionName)
 	{
 		if ($permissionName == 'DRM_PLUGIN_PERMISSION')
 		{
-			kDrmPartnerSetup::setupPartner($partnerId);
+			vDrmPartnerSetup::setupPartner($partnerId);
 		}
 	}
 
@@ -282,7 +282,7 @@ class DrmPlugin extends BaseDrmPlugin implements IKalturaServices, IKalturaAdmin
 	public static function isAllowAdminApi($actionApi = null)
 	{
 		$currentPermissions = Infra_AclHelper::getCurrentPermissions();
-		return ($currentPermissions && in_array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_DRM_PROFILE_MODIFY, $currentPermissions));
+		return ($currentPermissions && in_array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_DRM_PROFILE_MODIFY, $currentPermissions));
 	}
 
 }

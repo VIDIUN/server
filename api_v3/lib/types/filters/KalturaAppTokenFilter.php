@@ -3,11 +3,11 @@
  * @package api
  * @subpackage filters
  */
-class KalturaAppTokenFilter extends KalturaAppTokenBaseFilter
+class VidiunAppTokenFilter extends VidiunAppTokenBaseFilter
 {
 	static private $map_between_objects = array
 	(
-		"sessionUserIdEqual" => "_eq_kuser_id",
+		"sessionUserIdEqual" => "_eq_vuser_id",
 	);
 	
 	public function getMapBetweenObjects()
@@ -16,7 +16,7 @@ class KalturaAppTokenFilter extends KalturaAppTokenBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

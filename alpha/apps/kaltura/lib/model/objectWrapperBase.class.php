@@ -157,12 +157,12 @@ abstract class objectWrapperBase implements Iterator
 
 	public function getRegularFields()
 	{
-	//	return kArray::append ( $this->basic_fields , $this->regular_fields_ext );
+	//	return vArray::append ( $this->basic_fields , $this->regular_fields_ext );
 		return array_merge ( $this->basic_fields , $this->regular_fields_ext );
 /*
 		if ( self::$accumulated_regular_fields == null )
 		{
-			self::$accumulated_regular_fields = kArray::append ( $this->basic_fields , $this->regular_fields_ext );
+			self::$accumulated_regular_fields = vArray::append ( $this->basic_fields , $this->regular_fields_ext );
 		}
 
 		return self::$accumulated_regular_fields;
@@ -171,10 +171,10 @@ abstract class objectWrapperBase implements Iterator
 
 	public function getDetailedFields()
 	{
-		return kArray::append ( $this->basic_fields , $this->regular_fields_ext , $this->detailed_fields_ext , $this->detailed_objs_ext );
+		return vArray::append ( $this->basic_fields , $this->regular_fields_ext , $this->detailed_fields_ext , $this->detailed_objs_ext );
 /*		if ( self::$accumulated_detailed_fields == null )
 		{
-			self::$accumulated_detailed_fields = kArray::append ( $this->basic_fields , $this->regular_fields_ext , $this->detailed_fields_ext , $this->detailed_objs_ext );
+			self::$accumulated_detailed_fields = vArray::append ( $this->basic_fields , $this->regular_fields_ext , $this->detailed_fields_ext , $this->detailed_objs_ext );
 		}
 		return self::$accumulated_detailed_fields;
 */
@@ -188,10 +188,10 @@ abstract class objectWrapperBase implements Iterator
 	
 	public function getUpdateableFields()
 	{
-		return kArray::append ( $this->basic_fields , $this->regular_fields_ext , $this->detailed_fields_ext  ); // leave out the objects !
+		return vArray::append ( $this->basic_fields , $this->regular_fields_ext , $this->detailed_fields_ext  ); // leave out the objects !
 /*		if ( self::$accumulated_updateable_fields == null )
 		{
-			self::$accumulated_updateable_fields = kArray::append ( $this->basic_fields , $this->regular_fields_ext , $this->detailed_fields_ext  ); // leave out the objects !
+			self::$accumulated_updateable_fields = vArray::append ( $this->basic_fields , $this->regular_fields_ext , $this->detailed_fields_ext  ); // leave out the objects !
 			// TODO - remove all the read only fields
 		}
 		return self::$accumulated_updateable_fields;
@@ -366,7 +366,7 @@ abstract class objectWrapperBase implements Iterator
 				$id = $this->get ( $obj_id_field );
 
 				// this indicates the field is an array of objects
-				if ( kString::beginsWith( $obj_clazz , "*" ) )
+				if ( vString::beginsWith( $obj_clazz , "*" ) )
 				{
 					//				echo "\nfetchFromCache [$field_name] $obj_clazz\n";
 					$obj_clazz = substr ( $obj_clazz , 1 );

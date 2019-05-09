@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConditionArray extends KalturaTypedArray
+class VidiunConditionArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaConditionArray();
+		$newArr = new VidiunConditionArray();
 		if ($arr == null)
 			return $newArr;
 
@@ -16,7 +16,7 @@ class KalturaConditionArray extends KalturaTypedArray
 			$nObj = self::getInstanceByDbObject($obj);
 			if(!$nObj)
 			{
-				KalturaLog::alert("Object [" . get_class($obj) . "] type [" . $obj->getType() . "] could not be translated to API object");
+				VidiunLog::alert("Object [" . get_class($obj) . "] type [" . $obj->getType() . "] could not be translated to API object");
 				continue;
 			}
 			$nObj->fromObject($obj, $responseProfile);
@@ -26,51 +26,51 @@ class KalturaConditionArray extends KalturaTypedArray
 		return $newArr;
 	}
 
-	static function getInstanceByDbObject(kCondition $dbObject)
+	static function getInstanceByDbObject(vCondition $dbObject)
 	{
 		switch($dbObject->getType())
 		{
 			case ConditionType::AUTHENTICATED:
-				return new KalturaAuthenticatedCondition();
+				return new VidiunAuthenticatedCondition();
 			case ConditionType::COUNTRY:
-				return new KalturaCountryCondition();
+				return new VidiunCountryCondition();
 			case ConditionType::IP_ADDRESS:
-				return new KalturaIpAddressCondition();
+				return new VidiunIpAddressCondition();
 			case ConditionType::SITE:
-				return new KalturaSiteCondition();
+				return new VidiunSiteCondition();
 			case ConditionType::USER_AGENT:
-				return new KalturaUserAgentCondition();
+				return new VidiunUserAgentCondition();
 			case ConditionType::FIELD_COMPARE:
-				return new KalturaFieldCompareCondition();
+				return new VidiunFieldCompareCondition();
 			case ConditionType::FIELD_MATCH:
-				return new KalturaFieldMatchCondition();
+				return new VidiunFieldMatchCondition();
 			case ConditionType::ASSET_PROPERTIES_COMPARE:
-				return new KalturaAssetPropertiesCompareCondition();
+				return new VidiunAssetPropertiesCompareCondition();
 			case ConditionType::USER_ROLE:
-				return new KalturaUserRoleCondition();
+				return new VidiunUserRoleCondition();
 			case ConditionType::GEO_DISTANCE:
-				return new KalturaGeoDistanceCondition();
+				return new VidiunGeoDistanceCondition();
 			case ConditionType::OR_OPERATOR:
-			    return new KalturaOrCondition();
+			    return new VidiunOrCondition();
 			case ConditionType::HASH:
-			    return new KalturaHashCondition();
+			    return new VidiunHashCondition();
 			case ConditionType::DELIVERY_PROFILE:
-				return new KalturaDeliveryProfileCondition();
+				return new VidiunDeliveryProfileCondition();
 			case ConditionType::ACTIVE_EDGE_VALIDATE:
-				return new KalturaValidateActiveEdgeCondition();
+				return new VidiunValidateActiveEdgeCondition();
 			case ConditionType::ANONYMOUS_IP:
-				return new KalturaAnonymousIPCondition();
+				return new VidiunAnonymousIPCondition();
 			case ConditionType::ASSET_TYPE:
-				return new KalturaAssetTypeCondition();
+				return new VidiunAssetTypeCondition();
 			case ConditionType::BOOLEAN:
-				return new KalturaBooleanEventNotificationCondition();
+				return new VidiunBooleanEventNotificationCondition();
 			default:
-			     return KalturaPluginManager::loadObject('KalturaCondition', $dbObject->getType());
+			     return VidiunPluginManager::loadObject('VidiunCondition', $dbObject->getType());
 		}
 	}
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaCondition");	
+		parent::__construct("VidiunCondition");	
 	}
 }

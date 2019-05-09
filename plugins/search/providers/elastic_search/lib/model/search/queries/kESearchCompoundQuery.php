@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-abstract class kESearchCompoundQuery extends kESearchBaseQuery
+abstract class vESearchCompoundQuery extends vESearchBaseQuery
 {
 
 }

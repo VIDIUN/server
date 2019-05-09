@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaContextTypeHolder extends KalturaObject
+class VidiunContextTypeHolder extends VidiunObject
 {
 	/**
 	 * The type of the condition context
 	 * 
-	 * @var KalturaContextType
+	 * @var VidiunContextType
 	 */
 	public $type;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{

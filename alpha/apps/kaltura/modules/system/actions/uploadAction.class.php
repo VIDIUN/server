@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class uploadAction extends kalturaSystemAction
+class uploadAction extends vidiunSystemAction
 {
 
 	public function execute()
@@ -34,12 +34,12 @@ class uploadAction extends kalturaSystemAction
 		else if($this->getRequest()->getMethod() == sfRequest::DELETE)
 		{
 			$filename = basename($_REQUEST['fileName']);
-			kFile::deleteFile($dynamicRoot.$filename);
+			vFile::deleteFile($dynamicRoot.$filename);
 			
 			return $this->renderText("ok");
 		}
 		
-		$this->files = kFile::dirListExtended($dynamicRoot, false);
+		$this->files = vFile::dirListExtended($dynamicRoot, false);
 	
 		$this->extraHead = <<<EOT
 		<style type="text/css">

@@ -34,14 +34,14 @@ class registerpartnerAction extends defPartnerservices2Action
 
 	protected function ticketType()			{		return self::REQUIED_TICKET_NONE;	}
 
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER; 	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER; 	}
 
 	protected function addUserOnDemand ( )	{		return self::CREATE_USER_FALSE;	}
 
 	protected function allowEmptyPuser()	{		return true;	}
 	
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		defPartnerservices2baseAction::disableCache();
 		

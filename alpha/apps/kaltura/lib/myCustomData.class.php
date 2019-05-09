@@ -48,7 +48,7 @@ class myCustomData
 		catch ( Exception $ex )
 		{
 			// cannot initialize from $str 
-			KalturaLog::log ( __METHOD__ . ", cannot init from string [$str]");
+			VidiunLog::log ( __METHOD__ . ", cannot init from string [$str]");
 			$this->data = array();
 		}
 	}
@@ -64,7 +64,7 @@ class myCustomData
 		
 		$s = serialize( $this->data );
 		if (strlen($s) > self::MAX_TEXT_FIELD_SIZE)
-			throw new kCoreException('Exceeded custom data max size', kCoreException::EXCEEDED_MAX_CUSTOM_DATA_SIZE);
+			throw new vCoreException('Exceeded custom data max size', vCoreException::EXCEEDED_MAX_CUSTOM_DATA_SIZE);
 			
 		return $s; 
 	}

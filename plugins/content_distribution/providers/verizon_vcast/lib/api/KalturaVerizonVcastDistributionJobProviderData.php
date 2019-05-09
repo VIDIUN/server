@@ -3,7 +3,7 @@
  * @package plugins.verizonVcastDistribution
  * @subpackage api.objects
  */
-class KalturaVerizonVcastDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunVerizonVcastDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -13,15 +13,15 @@ class KalturaVerizonVcastDistributionJobProviderData extends KalturaConfigurable
 	/**
 	 * Called on the server side and enables you to populate the object with any data from the DB
 	 * 
-	 * @param KalturaDistributionJobData $distributionJobData
+	 * @param VidiunDistributionJobData $distributionJobData
 	 */
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaVerizonVcastDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunVerizonVcastDistributionProfile))
 			return;
 
 		// loads all the flavor assets that should be submitted to the remote destination site
@@ -31,10 +31,10 @@ class KalturaVerizonVcastDistributionJobProviderData extends KalturaConfigurable
 		$this->xml = $verizonFeed->getXml();
 		
 		// save the flavors & their versions that we are sending
-		$distributionJobData->mediaFiles = new KalturaDistributionRemoteMediaFileArray();
+		$distributionJobData->mediaFiles = new VidiunDistributionRemoteMediaFileArray();
 		foreach($flavorAssets as $flavorAsset)
 		{
-			$mediaFile = new KalturaDistributionRemoteMediaFile();
+			$mediaFile = new VidiunDistributionRemoteMediaFile();
 			$mediaFile->assetId = $flavorAsset->getId();
 			$mediaFile->version = $flavorAsset->getVersion();
 			$distributionJobData->mediaFiles[] = $mediaFile;
@@ -52,7 +52,7 @@ class KalturaVerizonVcastDistributionJobProviderData extends KalturaConfigurable
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{

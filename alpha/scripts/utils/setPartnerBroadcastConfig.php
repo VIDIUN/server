@@ -12,7 +12,7 @@ Example ini file:
 require_once (dirname(__FILE__) . '/../bootstrap.php');
 
 $realRun = (isset($argv[3]) && $argv[3] === 'realRun');
-KalturaStatement::setDryRun(!$realRun);
+VidiunStatement::setDryRun(!$realRun);
 
 $partner = PartnerPeer::retrieveByPK($argv[1]);
 if(!$partner)

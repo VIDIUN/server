@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage api.enum
  */
-class KalturaDocumentType extends KalturaEnum 
+class VidiunDocumentType extends VidiunEnum 
 {
 	const DOCUMENT = 11;
 	const SWF = 12;

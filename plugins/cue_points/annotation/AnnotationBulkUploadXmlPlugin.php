@@ -3,7 +3,7 @@
  * Enable annotation ingestion from XML bulk upload
  * @package plugins.annotation
  */
-class AnnotationBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPending, IKalturaSchemaContributor
+class AnnotationBulkUploadXmlPlugin extends VidiunPlugin implements IVidiunPending, IVidiunSchemaContributor
 {
 	const PLUGIN_NAME = 'annotationBulkUploadXml';
 	const BULK_UPLOAD_XML_PLUGIN_NAME = 'bulkUploadXml';
@@ -13,21 +13,21 @@ class AnnotationBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPen
 	const BULK_UPLOAD_XML_VERSION_BUILD = 0;
 
 	/* (non-PHPdoc)
-	 * @see KalturaPlugin::getInstance()
+	 * @see VidiunPlugin::getInstance()
 	 */
 	public function getInstance($interface)
 	{
 		if($this instanceof $interface)
 			return $this;
 			
-		if($interface == 'IKalturaBulkUploadXmlHandler')
+		if($interface == 'IVidiunBulkUploadXmlHandler')
 			return AnnotationBulkUploadXmlHandler::get();
 			
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -35,27 +35,27 @@ class AnnotationBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPen
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadXmlVersion = new KalturaVersion(
+		$bulkUploadXmlVersion = new VidiunVersion(
 			self::BULK_UPLOAD_XML_VERSION_MAJOR,
 			self::BULK_UPLOAD_XML_VERSION_MINOR,
 			self::BULK_UPLOAD_XML_VERSION_BUILD);
 			
-		$bulkUploadXmlDependency = new KalturaDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME, $bulkUploadXmlVersion);
-		$annotationDependency = new KalturaDependency(AnnotationPlugin::getPluginName());
+		$bulkUploadXmlDependency = new VidiunDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME, $bulkUploadXmlVersion);
+		$annotationDependency = new VidiunDependency(AnnotationPlugin::getPluginName());
 		
 		return array($bulkUploadXmlDependency, $annotationDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != BulkUploadXmlPlugin::getSchemaTypeCoreValue(XmlSchemaType::BULK_UPLOAD_XML)
 			&&

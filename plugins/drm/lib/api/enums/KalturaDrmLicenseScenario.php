@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage api.enum
  */
-class KalturaDrmLicenseScenario extends KalturaDynamicEnum implements DrmLicenseScenario
+class VidiunDrmLicenseScenario extends VidiunDynamicEnum implements DrmLicenseScenario
 {
 	public static function getEnumClass()
 	{

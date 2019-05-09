@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaRemoteStorageResource extends KalturaUrlResource
+class VidiunRemoteStorageResource extends VidiunUrlResource
 {
 	/**
 	 * ID of storage profile to be associated with the created file sync, used for file serving URL composing. 
@@ -16,7 +16,7 @@ class KalturaRemoteStorageResource extends KalturaUrlResource
 	private static $map_between_objects = array('storageProfileId');
 	
 	/* (non-PHPdoc)
-	 * @see KalturaUrlResource::getMapBetweenObjects()
+	 * @see VidiunUrlResource::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -24,7 +24,7 @@ class KalturaRemoteStorageResource extends KalturaUrlResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -34,16 +34,16 @@ class KalturaRemoteStorageResource extends KalturaUrlResource
 		
 		$storageProfile = StorageProfilePeer::retrieveByPK($this->storageProfileId);
 		if(!$storageProfile)
-			throw new KalturaAPIException(KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND, $this->storageProfileId);
+			throw new VidiunAPIException(VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND, $this->storageProfileId);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaUrlResource::toObject()
+	 * @see VidiunUrlResource::toObject()
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kRemoteStorageResource();
+			$object_to_fill = new vRemoteStorageResource();
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

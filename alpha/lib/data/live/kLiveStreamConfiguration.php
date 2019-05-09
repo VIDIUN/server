@@ -6,7 +6,7 @@
  * @subpackage model
  *
  */
-class kLiveStreamConfiguration
+class vLiveStreamConfiguration
 {
 	/**
 	 * @var string

@@ -3,40 +3,40 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaMetadataResponseProfileMapping extends KalturaResponseProfileMapping
+class VidiunMetadataResponseProfileMapping extends VidiunResponseProfileMapping
 {
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object = null, $propertiesToSkip = array())
 	{
 		if(is_null($object))
 		{
-			$object = new kMetadataResponseProfileMapping();
+			$object = new vMetadataResponseProfileMapping();
 		}
 
 		return parent::toObject($object, $propertiesToSkip);
 	}
 
-	public function apply(KalturaRelatedFilter $filter, KalturaObject $parentObject)
+	public function apply(VidiunRelatedFilter $filter, VidiunObject $parentObject)
 	{
 		$filterProperty = $this->filterProperty;
 		$parentProperty = $this->parentProperty;
 
-		KalturaLog::info("Mapping XPath $parentProperty to " . get_class($filter) . "::$filterProperty");
+		VidiunLog::info("Mapping XPath $parentProperty to " . get_class($filter) . "::$filterProperty");
 	
-		if(!$parentObject instanceof KalturaMetadata)
+		if(!$parentObject instanceof VidiunMetadata)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_TYPE, get_class($parentObject));
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_TYPE, get_class($parentObject));
 		}
 
 		if(!property_exists($filter, $filterProperty))
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_IS_NOT_DEFINED, $filterProperty, get_class($filter));
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_IS_NOT_DEFINED, $filterProperty, get_class($filter));
 		}
 
 		$xml = $parentObject->xml;
-		$doc = new KDOMDocument();
+		$doc = new VDOMDocument();
 		$doc->loadXML($xml);
 		$xpath = new DOMXPath($doc);
 		$metadataElements = $xpath->query($parentProperty);

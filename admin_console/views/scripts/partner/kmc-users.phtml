@@ -1,6 +1,6 @@
 <p><b><?php echo 'Publisher ID: '.$this->partnerId; ?></b></p>
-<p><?php echo $this->translate('partner-kmc-users intro text'); ?></p>
-<div id="list_kmc_users_panel" class="panel">
+<p><?php echo $this->translate('partner-vmc-users intro text'); ?></p>
+<div id="list_vmc_users_panel" class="panel">
 	<table>
 		<thead>
 			<tr>
@@ -36,8 +36,8 @@
 				<td>
 					<select class="options" onchange="doAction(this.value, '<?php echo $user->partnerId; ?>','<?php echo $user->id; ?>')">
 						<option value=""><?php echo $this->translate('Select Action'); ?></option>
-						<option value="kmcLogin"><?php echo $this->translate('Login'); ?></option>
-						<option value="kmcNewLogin"><?php echo $this->translate('Login-new'); ?></option>
+						<option value="vmcLogin"><?php echo $this->translate('Login'); ?></option>
+						<option value="vmcNewLogin"><?php echo $this->translate('Login-new'); ?></option>
 						<?php //if (Infra_AclHelper::isAllowed('partner','reset-user-password')): ?>
 							<option value="resetUserPassword" ><?php echo $this->translate('Reset Password'); ?></option>
 						<?php //endif; ?>
@@ -49,25 +49,25 @@
 </div>
 <script type="text/javascript">
 
-function kmcLogin(partnerId, userId) {
-	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'kmc-redirect', 'partner_id' => '')); ?>' + partnerId + '/user_id/' + userId;
+function vmcLogin(partnerId, userId) {
+	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'vmc-redirect', 'partner_id' => '')); ?>' + partnerId + '/user_id/' + userId;
 	window.open(url);
 }
 
-function kmcNewLogin(partnerId, userId) {
-	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'kmc-new-redirect', 'partner_id' => '')); ?>' + partnerId + '/user_id/' + userId;
+function vmcNewLogin(partnerId, userId) {
+	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'vmc-new-redirect', 'partner_id' => '')); ?>' + partnerId + '/user_id/' + userId;
 	window.open(url);
 }
 
 $( function() {
-	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'kmc-users', 'partner_id' => $this->partnerId)); ?>';
-	form = jQuery('#list_kmc_users_panel').find('form');
+	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'vmc-users', 'partner_id' => $this->partnerId)); ?>';
+	form = jQuery('#list_vmc_users_panel').find('form');
 	form.attr('action', url);
 	var theForm = form.get(0);
 	theForm.submit = function() {
-		jQuery('#partner-kmc-users-dialog').html('Loading...');
+		jQuery('#partner-vmc-users-dialog').html('Loading...');
 		jQuery.post(url, form.serialize(), function(data) {
-			jQuery('#partner-kmc-users-dialog').html(data);
+			jQuery('#partner-vmc-users-dialog').html(data);
 		});
 		return false;
 	};
@@ -107,7 +107,7 @@ function resetUserPassword(partnerId, userId, pageHtml /* default = null */)
 				jQuery(this).dialog('close');
 			},
 			'<?php echo $this->translate('Reset'); ?>': function() {
-				jQuery(this).find('#frmKmcUsersResetPassword').submit();
+				jQuery(this).find('#frmVmcUsersResetPassword').submit();
 			}
 		}
 	});
@@ -122,12 +122,12 @@ function resetUserPassword(partnerId, userId, pageHtml /* default = null */)
 				jQuery('#resetUserPasswordPage').replaceWith( pageHtml );
 			}
 
-			if (jQuery('#frmKmcUsersResetPassword').hasClass('valid')) {
+			if (jQuery('#frmVmcUsersResetPassword').hasClass('valid')) {
 				jQuery('#reset-user-password-dialog').dialog('close');
 				return;
 			}
 
-			jQuery(this).find('#frmKmcUsersResetPassword').ajaxForm({
+			jQuery(this).find('#frmVmcUsersResetPassword').ajaxForm({
 				success: function( html ) {
 					// Re-invoke this method with the server's result html
 					resetUserPassword(partnerId, userId, html);

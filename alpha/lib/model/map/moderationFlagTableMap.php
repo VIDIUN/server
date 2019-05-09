@@ -39,10 +39,10 @@ class moderationFlagTableMap extends TableMap {
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addColumn('PARTNER_ID', 'PartnerId', 'INTEGER', false, null, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
 		$this->addColumn('OBJECT_TYPE', 'ObjectType', 'SMALLINT', false, null, null);
 		$this->addForeignKey('FLAGGED_ENTRY_ID', 'FlaggedEntryId', 'VARCHAR', 'entry', 'ID', false, 20, null);
-		$this->addForeignKey('FLAGGED_KUSER_ID', 'FlaggedKuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
+		$this->addForeignKey('FLAGGED_VUSER_ID', 'FlaggedVuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
 		$this->addColumn('STATUS', 'Status', 'INTEGER', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -56,9 +56,9 @@ class moderationFlagTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuserRelatedByKuserId', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuserRelatedByVuserId', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
     $this->addRelation('entry', 'entry', RelationMap::MANY_TO_ONE, array('flagged_entry_id' => 'id', ), null, null);
-    $this->addRelation('kuserRelatedByFlaggedKuserId', 'kuser', RelationMap::MANY_TO_ONE, array('flagged_kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuserRelatedByFlaggedVuserId', 'vuser', RelationMap::MANY_TO_ONE, array('flagged_vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
 } // moderationFlagTableMap

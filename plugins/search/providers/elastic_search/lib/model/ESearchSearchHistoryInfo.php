@@ -24,7 +24,7 @@ class ESearchSearchHistoryInfo
 	/**
 	 * @var string
 	 */
-	protected $kuserId;
+	protected $vuserId;
 
 	/**
 	 * @var int
@@ -87,17 +87,17 @@ class ESearchSearchHistoryInfo
 	/**
 	 * @return string
 	 */
-	public function getKUserId()
+	public function getVUserId()
 	{
-		return $this->kuserId;
+		return $this->vuserId;
 	}
 
 	/**
 	 * @param string $userId
 	 */
-	public function setKUserId($userId)
+	public function setVUserId($userId)
 	{
-		$this->kuserId = $userId;
+		$this->vuserId = $userId;
 	}
 
 	/**
@@ -135,12 +135,12 @@ class ESearchSearchHistoryInfo
 	public function getPidUidContext()
 	{
 		$pidUidContextObject = array(
-			searchHistoryUtils::formatPartnerIdUserIdContext($this->getPartnerId(), $this->getKUserId(), searchHistoryUtils::DEFAULT_SEARCH_CONTEXT),
+			searchHistoryUtils::formatPartnerIdUserIdContext($this->getPartnerId(), $this->getVUserId(), searchHistoryUtils::DEFAULT_SEARCH_CONTEXT),
 		);
 
 		if ($this->getSearchContext() != searchHistoryUtils::DEFAULT_SEARCH_CONTEXT)
 		{
-			$pidUidContextObject[] = searchHistoryUtils::formatPartnerIdUserIdContext($this->getPartnerId(), $this->getKUserId(), $this->getSearchContext());
+			$pidUidContextObject[] = searchHistoryUtils::formatPartnerIdUserIdContext($this->getPartnerId(), $this->getVUserId(), $this->getSearchContext());
 		}
 
 		return $pidUidContextObject;

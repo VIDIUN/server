@@ -24,13 +24,13 @@
 	protected function querySyndicationReport($timeFrame, $pageIdx, $args) {
 			$this->checkParams($args, array(LiveReportConstants::TIME_REFERENCE_PARAM, LiveReportConstants::ENTRY_IDS));
 		
-		$reportType = KalturaLiveReportType::ENTRY_SYNDICATION_TOTAL;
-		$filter = new KalturaLiveReportInputFilter();
+		$reportType = VidiunLiveReportType::ENTRY_SYNDICATION_TOTAL;
+		$filter = new VidiunLiveReportInputFilter();
 		$filter->toTime = $args[LiveReportConstants::TIME_REFERENCE_PARAM];
 		$filter->fromTime = $args[LiveReportConstants::TIME_REFERENCE_PARAM] - $timeFrame;
 		$filter->entryIds =  $args[LiveReportConstants::ENTRY_IDS];
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageIndex = $pageIdx;
 		$pager->pageSize = self::CHUNK_SIZE;
 		

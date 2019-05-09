@@ -1,7 +1,7 @@
-<layout id="full" skinPath="/content/uiconf/kaltura/kdp3/kdp3.3.9.19.508/skin.swf">
+<layout id="full" skinPath="/content/uiconf/vidiun/vdp3/vdp3.3.9.19.508/skin.swf">
   <HBox id="topLevel" width="100%" height="100%">
     <VBox id="player" width="100%" height="100%" styleName="black">
-      <Plugin id="kalturaMix" width="0%" height="0%" includeInLayout="false" loadingPolicy="onDemand"/>
+      <Plugin id="vidiunMix" width="0%" height="0%" includeInLayout="false" loadingPolicy="onDemand"/>
       <Plugin id="captureThumbnail" width="0%" height="0%" includeInLayout="false"/>
       <Plugin id="advanceSeek" width="0%" height="0%" />
 	  <Plugin id="metaData" width="0%" height="0%" preSequence="1" loadingPolicy="preInitialize" includeInLayout="false"/>
@@ -70,7 +70,7 @@
           <Button id="backButton"
             maxWidth="36"
             minHeight="30"
-            kClick="sendNotification ('seekBackwards' , '5')"
+            vClick="sendNotification ('seekBackwards' , '5')"
             icon="Button_upIcon_previousBtn" 
             upIcon="Button_upIcon_previousBtn" 
             overIcon="Button_overIcon_previousBtn" 
@@ -121,7 +121,7 @@
           <Button id="fwdButton"
             maxWidth="36"
             minHeight="30"
-            kClick="sendNotification ('seekForward' , '5')"
+            vClick="sendNotification ('seekForward' , '5')"
             icon="Button_upIcon_nextBtn" 
             upIcon="Button_upIcon_nextBtn" 
             overIcon="Button_overIcon_nextBtn" 
@@ -150,7 +150,7 @@
             maxWidth="36"
             minHeight="30"
             toggle="true" 
-            kClick="sendNotification ('volume508mute')"
+            vClick="sendNotification ('volume508mute')"
             icon="Button_upIcon_volBtn" 
             upIcon="Button_upIcon_volBtn" 
             overIcon="Button_overIcon_volBtn" 
@@ -176,7 +176,7 @@
           <Button id="volDownButton"
             maxWidth="36"
             minHeight="30"
-            kClick="sendNotification ('volume508down')"
+            vClick="sendNotification ('volume508down')"
             icon="Button_upIcon_volDownBtn" 
             upIcon="Button_upIcon_volDownBtn" 
             overIcon="Button_overIcon_volDownBtn" 
@@ -204,7 +204,7 @@
           <Button id="volUpButton"
             maxWidth="36"
             minHeight="30"
-            kClick="sendNotification ('volume508up')"
+            vClick="sendNotification ('volume508up')"
             icon="Button_upIcon_volUpBtn" 
             upIcon="Button_upIcon_volUpBtn" 
             overIcon="Button_overIcon_volUpBtn" 
@@ -269,7 +269,7 @@
 	            minWidth="66"
 	            minHeight="62"
 	            toggle="true"
-	            kClick="sendNotification('showHideClosedCaptions')"
+	            vClick="sendNotification('showHideClosedCaptions')"
 	            upIcon="Button_upIcon_ccBtn" 
 	            overIcon="Button_overIcon_ccBtn" 
 	            downIcon="Button_downIcon_ccBtn" 
@@ -298,7 +298,7 @@
 	            maxWidth="66"
 	            minHeight="62"
 	            toggle="true"
-	            kClick="sendNotification ('audioDescriptionClicked')"
+	            vClick="sendNotification ('audioDescriptionClicked')"
 	            upIcon="Button_upIcon_adBtn" 
 	            overIcon="Button_overIcon_adBtn" 
 	            downIcon="Button_downIcon_adBtn" 
@@ -330,6 +330,6 @@
   <extraData>
   </extraData>
   <uiVars>
-	<var key="adFile" value="http://212.143.222.226:8080/kaltura/snd.mp3" overrideFlashvar="true"/>
+	<var key="adFile" value="http://212.143.222.226:8080/vidiun/snd.mp3" overrideFlashvar="true"/>
   </uiVars>
 </layout>

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage errors
  */
-class KalturaErrors extends APIErrors
+class VidiunErrors extends APIErrors
 {
 	/**
 	 * General Errors
@@ -18,10 +18,10 @@ class KalturaErrors extends APIErrors
 	const INTERNAL_SERVERL_ERROR_DEBUG = "INTERNAL_SERVERL_ERROR;ERROR;Internal server error occurred \"@ERROR@\"";
 
 	//
-	const MISSING_KS = "MISSING_KS;;Missing KS, session not established";
+	const MISSING_VS = "MISSING_VS;;Missing VS, session not established";
 
-	// KS - the ks string, ERR_CODE - error code, ERR_DESC - error description
-	const INVALID_KS = "INVALID_KS;KSID,ERR_CODE,ERR_DESC;Invalid KS \"@KSID@\", Error \"@ERR_CODE@,@ERR_DESC@\"";
+	// VS - the vs string, ERR_CODE - error code, ERR_DESC - error description
+	const INVALID_VS = "INVALID_VS;VSID,ERR_CODE,ERR_DESC;Invalid VS \"@VSID@\", Error \"@ERR_CODE@,@ERR_DESC@\"";
 
 	//
 	const SERVICE_NOT_SPECIFIED = "SERVICE_NOT_SPECIFIED;;Service name was not specified, please specify one";
@@ -471,7 +471,7 @@ class KalturaErrors extends APIErrors
 
 	const SYNDICATION_FEED_INVALID_STORAGE_ID = "SYNDICATION_FEED_INVALID_STORAGE_ID;;Invalid storage id";
 
-	const SYNDICATION_FEED_KALTURA_DC_ONLY = "SYNDICATION_FEED_KALTURA_DC_ONLY;;Partner configured to use Kaltura data centers only";
+	const SYNDICATION_FEED_VIDIUN_DC_ONLY = "SYNDICATION_FEED_VIDIUN_DC_ONLY;;Partner configured to use Vidiun data centers only";
 
 	const ENFORCE_ITUNES_FEED_AUTHOR = "ENFORCE_ITUNES_FEED_AUTHOR;;Missing feedAuthor param [Mandatory when enforcing feedAuthor]";
 
@@ -577,7 +577,7 @@ class KalturaErrors extends APIErrors
 
 	const CANNOT_LIST_RELATED_ENTITLED_WHEN_ENTITLEMENT_IS_ENABLE = "CANNOT_LIST_RELATED_ENTITLED_WHEN_ENTITLEMENT_IS_ENABLE;FILTER;Objects that require entitlement should not be listed [@FILTER@] as related-objects when enetitlment is enabled";
 
-	const USER_KS_CANNOT_LIST_RELATED_ENTRIES = "USER_KS_CANNOT_LIST_RELATED_ENTRIES;FILTER;Entries should not be listed [@FILTER@] as related-objects with unprivileged user ks";
+	const USER_VS_CANNOT_LIST_RELATED_ENTRIES = "USER_VS_CANNOT_LIST_RELATED_ENTRIES;FILTER;Entries should not be listed [@FILTER@] as related-objects with unprivileged user vs";
 
 	// live stream
 	const LIVE_STREAM_STATUS_CANNOT_BE_DETERMINED = "LIVE_STREAM_STATUS_CANNOT_BE_DETERMINED;PROT;Status cannot be determined for live stream protocol [@PROT@]";
@@ -608,9 +608,9 @@ class KalturaErrors extends APIErrors
 
 	const CANNOT_REGENERATE_STREAM_TOKEN_FOR_EXTERNAL_LIVE_STREAMS = "CANNOT_REGENERATE_STREAM_TOKEN_FOR_EXTERNAL_LIVE_STREAMS;TYPE;Cannot regenerate stream token for external type [@TYPE@] live stream";
 
-	const KALTURA_RECORDING_ENABLED = "KALTURA_RECORDING_ENABLED;PARTNER_ID;Kaltura recording is enabled for partner [@PARTNER_ID@] use liveStream->setRecordedContent to set the live recorded content";
+	const VIDIUN_RECORDING_ENABLED = "VIDIUN_RECORDING_ENABLED;PARTNER_ID;Vidiun recording is enabled for partner [@PARTNER_ID@] use liveStream->setRecordedContent to set the live recorded content";
 
-	const KALTURA_RECORDING_DISABLED = "KALTURA_RECORDING_DISABLED;PARTNER_ID;Kaltura recording is disabled for partner [@PARTNER_ID@] use liveStream->appendRecording to set the live recorded content";
+	const VIDIUN_RECORDING_DISABLED = "VIDIUN_RECORDING_DISABLED;PARTNER_ID;Vidiun recording is disabled for partner [@PARTNER_ID@] use liveStream->appendRecording to set the live recorded content";
 
 	const RECORDING_DISABLED = "RECORDING_DISABLED;;Record status attribute cannot be set, account has recording feature disabled";
 
@@ -691,7 +691,7 @@ class KalturaErrors extends APIErrors
 	const MUST_FILTER_ON_ENTRY_OR_USER = 'MUST_FILTER_ON_ENTRY_OR_USER;;Must filter on entry ID or user ID';
 	const USER_ENTRY_FILTER_FORBIDDEN_FIELDS_USED = 'USER_ENTRY_FILTER_FORBIDDEN_FIELDS_USED;;UserEntry filter object forbidden fields used';
 	const USER_ENTRY_ALREADY_EXISTS = 'USER_ENTRY_ALREADY_EXISTS;;UserEntry for this type already exists';
-	const USER_ID_NOT_PROVIDED_OR_EMPTY = 'USER_ID_NOT_PROVIDED_OR_EMPTY;;User ID not found neither on the object or KS';
+	const USER_ID_NOT_PROVIDED_OR_EMPTY = 'USER_ID_NOT_PROVIDED_OR_EMPTY;;User ID not found neither on the object or VS';
 
 	/*
 	 * serverNode service

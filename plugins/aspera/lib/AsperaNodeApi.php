@@ -67,10 +67,10 @@ class AsperaNodeApi
 		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
 		curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 		$responseStr = curl_exec($curl);
-		KalturaLog::info('Raw response from aspera node api: '. $responseStr);
+		VidiunLog::info('Raw response from aspera node api: '. $responseStr);
 		$error = curl_error($curl);
 		if ($error)
-			throw new kCoreException('Failed to call node api server: ' . $error);
+			throw new vCoreException('Failed to call node api server: ' . $error);
 
 		$response = json_decode($responseStr);
 		if (is_null($response))
@@ -87,7 +87,7 @@ class AsperaNodeApi
 
 		if (is_null($response))
 		{
-			throw new kCoreException('Aspera node api response could not be decoded');
+			throw new vCoreException('Aspera node api response could not be decoded');
 		}
 
 		return $response;

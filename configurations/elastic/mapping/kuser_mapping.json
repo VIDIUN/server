@@ -36,12 +36,12 @@
 	"number_of_replicas" : 0,
 	"analysis": {
 	  "char_filter": {
-		"kaltura_whitespace_filter": {
+		"vidiun_whitespace_filter": {
 		  "type": "pattern_replace",
 		  "pattern": "(\\s+)",
 		  "replacement": " "
 		},
-		"kaltura_apostrophe_filter": {
+		"vidiun_apostrophe_filter": {
 		  "type": "mapping",
 		  "mappings": [
 			"'=>",
@@ -49,7 +49,7 @@
 			"‘=>"
 		  ]
 		},
-		"kaltura_special_chars_filter": {
+		"vidiun_special_chars_filter": {
 		  "type": "mapping",
 		  "mappings": [
 			"!=>__exclamationmark__",
@@ -81,7 +81,7 @@
 		}
 	  },
 	  "tokenizer": {
-		"kaltura_ngram_tokenizer": {
+		"vidiun_ngram_tokenizer": {
 		  "type": "ngram",
 		  "min_gram": 3,
 		  "max_gram": 3,
@@ -92,10 +92,10 @@
 		}
 	  },
 	  "normalizer": {
-		"kaltura_keyword_normalizer": {
+		"vidiun_keyword_normalizer": {
 		  "type": "custom",
 		  "char_filter": [
-			"kaltura_whitespace_filter"
+			"vidiun_whitespace_filter"
 		  ],
 		  "filter": [
 			"lowercase",
@@ -104,23 +104,23 @@
 		}
 	  },
 	  "analyzer": {
-		"kaltura_ngrams": {
+		"vidiun_ngrams": {
 		  "type": "custom",
-		  "tokenizer": "kaltura_ngram_tokenizer",
+		  "tokenizer": "vidiun_ngram_tokenizer",
 		  "char_filter": [
-			"kaltura_apostrophe_filter"
+			"vidiun_apostrophe_filter"
 		  ],
 		  "filter": [
 			"lowercase",
 			"icu_folding"
 		  ]
 		},
-		"kaltura_text" : {
+		"vidiun_text" : {
 		  "type": "custom",
 		  "tokenizer" : "standard",
 		  "char_filter": [
-			"kaltura_apostrophe_filter",
-			"kaltura_special_chars_filter"
+			"vidiun_apostrophe_filter",
+			"vidiun_special_chars_filter"
 		  ],
 		  "filter" : [
 			"standard",
@@ -128,11 +128,11 @@
 			"icu_folding"
 		  ]
 		},
-		"kaltura_text_partial_search" : {
+		"vidiun_text_partial_search" : {
 		  "type": "custom",
 		  "tokenizer": "standard",
 		  "char_filter": [
-			"kaltura_apostrophe_filter"
+			"vidiun_apostrophe_filter"
 		  ],
 		  "filter": [
 			"standard",
@@ -144,7 +144,7 @@
 	}
   },
   "mappings" : {
-	"kuser" : {
+	"vuser" : {
 	  "_source" : {
 		"enabled" : true
 	  },
@@ -154,69 +154,69 @@
 	  "properties" : {
 		"group_ids" : {
 		  "type" : "keyword",
-		  "normalizer" : "kaltura_keyword_normalizer"
+		  "normalizer" : "vidiun_keyword_normalizer"
 		},
 		"group_user_data" : {
 		  "type" : "keyword",
-		  "normalizer" : "kaltura_keyword_normalizer"
+		  "normalizer" : "vidiun_keyword_normalizer"
 		},
 		"puser_id" : {
 		  "type" : "text",
-		  "analyzer" : "kaltura_text",
+		  "analyzer" : "vidiun_text",
 		  "fields": {
 			"ngrams" : {
 			  "type" : "text",
-			  "analyzer" : "kaltura_ngrams"
+			  "analyzer" : "vidiun_ngrams"
 			},
 			"raw" : {
 			  "type" : "keyword",
-			  "normalizer" : "kaltura_keyword_normalizer"
+			  "normalizer" : "vidiun_keyword_normalizer"
 			}
 		  }
 		},
 		"screen_name" : {
 		  "type" : "text",
-		  "analyzer" : "kaltura_text",
+		  "analyzer" : "vidiun_text",
 		  "fields": {
 			"ngrams" : {
 			  "type" : "text",
-			  "analyzer" : "kaltura_ngrams"
+			  "analyzer" : "vidiun_ngrams"
 			},
 			"raw" : {
 			  "type" : "keyword",
-			  "normalizer" : "kaltura_keyword_normalizer"
+			  "normalizer" : "vidiun_keyword_normalizer"
 			}
 		  }
 		},
-		"kuser_type" : {
+		"vuser_type" : {
 		  "type" : "keyword",
-		  "normalizer" : "kaltura_keyword_normalizer"
+		  "normalizer" : "vidiun_keyword_normalizer"
 		},
 		"email" : {
 		  "type" : "keyword",
-		  "normalizer" : "kaltura_keyword_normalizer"
+		  "normalizer" : "vidiun_keyword_normalizer"
 		},
 		"tags" : {
 		  "type" : "text",
-		  "analyzer" : "kaltura_text",
+		  "analyzer" : "vidiun_text",
 		  "fields": {
 			"ngrams" : {
 			  "type" : "text",
-			  "analyzer" : "kaltura_ngrams"
+			  "analyzer" : "vidiun_ngrams"
 			},
 			"raw" : {
 			  "type" : "keyword",
-			  "normalizer" : "kaltura_keyword_normalizer"
+			  "normalizer" : "vidiun_keyword_normalizer"
 			}
 		  }
 		},
 		"status" : {
 		  "type" : "keyword",
-		  "normalizer" : "kaltura_keyword_normalizer"
+		  "normalizer" : "vidiun_keyword_normalizer"
 		},
 		"partner_id" : {
 		  "type" : "keyword",
-		  "normalizer" : "kaltura_keyword_normalizer"
+		  "normalizer" : "vidiun_keyword_normalizer"
 		},
 		"partner_status":{
 		  "type" : "keyword"
@@ -231,77 +231,77 @@
 		},
 		"first_name_ft" : {
 			"type" : "text",
-			"analyzer" : "kaltura_text",
+			"analyzer" : "vidiun_text",
 			"fields": {
 				"ngrams" : {
 					"type" : "text",
-					"analyzer" : "kaltura_ngrams"
+					"analyzer" : "vidiun_ngrams"
 				},
 				"raw" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				}
 			}
 		},
 		"last_name_ft" : {
 			"type" : "text",
-			"analyzer" : "kaltura_text",
+			"analyzer" : "vidiun_text",
 			"fields": {
 				"ngrams" : {
 					"type" : "text",
-					"analyzer" : "kaltura_ngrams"
+					"analyzer" : "vidiun_ngrams"
 				},
 				"raw" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				}
 			}
 		},
 		"role_ids" : {
 		  "type" : "keyword",
-		  "normalizer" : "kaltura_keyword_normalizer"
+		  "normalizer" : "vidiun_keyword_normalizer"
 		},
 		"permission_names" : {
 		  "type" : "keyword",
-		  "normalizer" : "kaltura_keyword_normalizer"
+		  "normalizer" : "vidiun_keyword_normalizer"
 		},
 		"metadata" :{
 		  "type"  : "nested",
 		  "properties"  : {
 			"metadata_id" : {
 			  "type" : "keyword",
-			  "normalizer" : "kaltura_keyword_normalizer"
+			  "normalizer" : "vidiun_keyword_normalizer"
 			},
 			"system_name" : {
 			  "type" : "keyword",
-			  "normalizer" : "kaltura_keyword_normalizer"
+			  "normalizer" : "vidiun_keyword_normalizer"
 			},
 			"xpath" : {
 			  "type" : "keyword",
-			  "normalizer" : "kaltura_keyword_normalizer"
+			  "normalizer" : "vidiun_keyword_normalizer"
 			},
 			"metadata_profile_id" : {
 			  "type" : "keyword",
-			  "normalizer" : "kaltura_keyword_normalizer"
+			  "normalizer" : "vidiun_keyword_normalizer"
 			},
 			"metadata_field_id" : {
 			  "type" : "keyword",
-			  "normalizer" : "kaltura_keyword_normalizer"
+			  "normalizer" : "vidiun_keyword_normalizer"
 			},
 			"value_int": {
 			  "type": "long"
 			},
 			"value_text": {
 			  "type" : "text",
-			  "analyzer" : "kaltura_text",
+			  "analyzer" : "vidiun_text",
 			  "fields": {
 				"ngrams" : {
 				  "type" : "text",
-				  "analyzer" : "kaltura_ngrams"
+				  "analyzer" : "vidiun_ngrams"
 				},
 				"raw" : {
 				  "type" : "keyword",
-				  "normalizer" : "kaltura_keyword_normalizer"
+				  "normalizer" : "vidiun_keyword_normalizer"
 				}
 			  }
 			}

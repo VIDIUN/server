@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage lib
  */
-class kWebVTTGenerator
+class vWebVTTGenerator
 {
 	/**
 	 * @param int $timeStamp

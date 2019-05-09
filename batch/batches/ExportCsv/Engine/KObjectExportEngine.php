@@ -4,22 +4,22 @@
  * @package Scheduler
  * @subpackage ExportCsv
  */
-abstract class KObjectExportEngine
+abstract class VObjectExportEngine
 {
 	/**
-	 * @param int $objectType of enum KalturaCopyObjectType
-	 * @return KCopyingEngine
+	 * @param int $objectType of enum VidiunCopyObjectType
+	 * @return VCopyingEngine
 	 */
 	public static function getInstance($objectType)
 	{
 		switch($objectType)
 		{
-			case KalturaExportObjectType::USER:
+			case VidiunExportObjectType::USER:
 				return new KUserExportEngine();
 			
 			
 			default:
-				return KalturaPluginManager::loadObject('KObjectExportEngine', $objectType);
+				return VidiunPluginManager::loadObject('VObjectExportEngine', $objectType);
 		}
 	}
 	

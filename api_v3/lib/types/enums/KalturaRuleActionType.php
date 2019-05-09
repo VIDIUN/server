@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaRuleActionType extends KalturaDynamicEnum implements RuleActionType
+class VidiunRuleActionType extends VidiunDynamicEnum implements RuleActionType
 {
 	public static function getEnumClass()
 	{

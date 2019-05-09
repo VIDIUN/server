@@ -20,17 +20,17 @@ class syndicationFeed extends BasesyndicationFeed implements IBaseObject
 	const CUSTOM_DATA_FEED_CONTENT_TYPE_HEADER = 'feed_content_type_header';
 	const CUSTOM_DATA_ENFORCE_AUTHOR = 'enforce_feed_author';
 
-	// copied from KalturaSyndicationFeedStatus
+	// copied from VidiunSyndicationFeedStatus
 	const SYNDICATION_DELETED = -1;
 	const SYNDICATION_ACTIVE = 1;
 	
 	// don't stop until a unique hash is created for this object
 	private static function calculateId ( )
 	{
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		for ( $i = 0 ; $i < 10 ; ++$i)
 		{
-			$id = $dc["id"].'_'.kString::generateStringId();
+			$id = $dc["id"].'_'.vString::generateStringId();
 			$existing_object = syndicationFeedPeer::retrieveByPKNoFilter( $id );
 			
 			if ( ! $existing_object ) return $id;
@@ -88,13 +88,13 @@ class syndicationFeed extends BasesyndicationFeed implements IBaseObject
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
 	
 	/*
-	 * @return kMrssParameters
+	 * @return vMrssParameters
 	 */
 	public function getMrssParameters()
 	{
@@ -102,9 +102,9 @@ class syndicationFeed extends BasesyndicationFeed implements IBaseObject
 	}
 	
 	/**
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 */
-	public function setMrssParameters(kMrssParameters $mrssParams)
+	public function setMrssParameters(vMrssParameters $mrssParams)
 	{	
 		if (is_array($mrssParams->getItemXpathsToExtend())) {			
 			$this->putInCustomData(self::CUSTOM_DATA_MRSS_PARAMETERS, $mrssParams);
@@ -205,7 +205,7 @@ class syndicationFeed extends BasesyndicationFeed implements IBaseObject
 	 */
 	public function getPlayerType()
 	{
-		return $this->getFromCustomData(self::CUSTOM_DATA_PLAYER_TYPE, null, PlayerType::KDP);
+		return $this->getFromCustomData(self::CUSTOM_DATA_PLAYER_TYPE, null, PlayerType::VDP);
 	}
 
 	/**

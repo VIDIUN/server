@@ -3,7 +3,7 @@
  * Enable ad cue point objects management on entry objects
  * @package plugins.adCuePoint
  */
-class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKalturaCuePointXmlParser
+class AdCuePointPlugin extends BaseCuePointPlugin implements IVidiunCuePoint, IVidiunCuePointXmlParser
 {
 	const PLUGIN_NAME = 'adCuePoint';
 	const CUE_POINT_VERSION_MAJOR = 1;
@@ -12,7 +12,7 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	const CUE_POINT_NAME = 'cuePoint';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -20,7 +20,7 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -29,7 +29,7 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -46,30 +46,30 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$cuePointVersion = new KalturaVersion(
+		$cuePointVersion = new VidiunVersion(
 			self::CUE_POINT_VERSION_MAJOR,
 			self::CUE_POINT_VERSION_MINOR,
 			self::CUE_POINT_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(self::CUE_POINT_NAME, $cuePointVersion);
+		$dependency = new VidiunDependency(self::CUE_POINT_NAME, $cuePointVersion);
 		return array($dependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaCuePoint' && $enumValue == self::getCuePointTypeCoreValue(AdCuePointType::AD))
-			return new KalturaAdCuePoint();
+		if($baseClass == 'VidiunCuePoint' && $enumValue == self::getCuePointTypeCoreValue(AdCuePointType::AD))
+			return new VidiunAdCuePoint();
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -78,11 +78,11 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != SchemaType::SYNDICATION
 			&&
@@ -120,12 +120,12 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 							<xs:documentation>The URL of the ad XML</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-					<xs:element name="adType" minOccurs="1" maxOccurs="1" type="KalturaAdType">
+					<xs:element name="adType" minOccurs="1" maxOccurs="1" type="VidiunAdType">
 						<xs:annotation>
 							<xs:documentation>Indicates the ad type</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-					<xs:element name="protocolType" minOccurs="1" maxOccurs="1" type="KalturaAdProtocolType">
+					<xs:element name="protocolType" minOccurs="1" maxOccurs="1" type="VidiunAdProtocolType">
 						<xs:annotation>
 							<xs:documentation>Indicates the ad protocol type</xs:documentation>
 						</xs:annotation>
@@ -163,12 +163,12 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getCuePointTypeCoreValue()
+	 * @see IVidiunCuePoint::getCuePointTypeCoreValue()
 	 */
 	public static function getCuePointTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('CuePointType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('CuePointType', $value);
 	}
 
 	/**
@@ -176,20 +176,20 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	 */
 	public static function getBaseEntryCloneOptionsCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BaseEntryCloneOptions', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BaseEntryCloneOptions', $value);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getApiValue()
+	 * @see IVidiunCuePoint::getApiValue()
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::parseXml()
+	 * @see IVidiunCuePointXmlParser::parseXml()
 	 */
 	public static function parseXml(SimpleXMLElement $scene, $partnerId, CuePoint $cuePoint = null)
 	{
@@ -197,13 +197,13 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 			return $cuePoint;
 			
 		if(!$cuePoint)
-			$cuePoint = kCuePointManager::parseXml($scene, $partnerId, new AdCuePoint());
+			$cuePoint = vCuePointManager::parseXml($scene, $partnerId, new AdCuePoint());
 			
 		if(!($cuePoint instanceof AdCuePoint))
 			return null;
 		
 		if(isset($scene->sceneEndTime))
-			$cuePoint->setEndTime(kXml::timeToInteger($scene->sceneEndTime));
+			$cuePoint->setEndTime(vXml::timeToInteger($scene->sceneEndTime));
 		if(isset($scene->sceneTitle))
 			$cuePoint->setName($scene->sceneTitle);
 		if(isset($scene->sourceUrl))
@@ -216,7 +216,7 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::generateXml()
+	 * @see IVidiunCuePointXmlParser::generateXml()
 	 */
 	public static function generateXml(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{
@@ -224,12 +224,12 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 			return $scene;
 			
 		if(!$scene)
-			$scene = kCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-ad-cue-point'));
+			$scene = vCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-ad-cue-point'));
 		
 		if($cuePoint->getEndTime())
-			$scene->addChild('sceneEndTime', kXml::integerToTime($cuePoint->getEndTime()));
+			$scene->addChild('sceneEndTime', vXml::integerToTime($cuePoint->getEndTime()));
 		if($cuePoint->getName())
-			$scene->addChild('sceneTitle', kMrssManager::stringToSafeXml($cuePoint->getName()));
+			$scene->addChild('sceneTitle', vMrssManager::stringToSafeXml($cuePoint->getName()));
 		if($cuePoint->getSourceUrl())
 			$scene->addChild('sourceUrl', htmlspecialchars($cuePoint->getSourceUrl()));
 
@@ -240,7 +240,7 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::syndicate()
+	 * @see IVidiunCuePointXmlParser::syndicate()
 	 */
 	public static function syndicate(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{
@@ -248,12 +248,12 @@ class AdCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, I
 			return $scene;
 			
 		if(!$scene)
-			$scene = kCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-ad-cue-point'));
+			$scene = vCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-ad-cue-point'));
 		
 		if($cuePoint->getEndTime())
-			$scene->addChild('sceneEndTime', kXml::integerToTime($cuePoint->getEndTime()));
+			$scene->addChild('sceneEndTime', vXml::integerToTime($cuePoint->getEndTime()));
 		if($cuePoint->getName())
-			$scene->addChild('sceneTitle', kMrssManager::stringToSafeXml($cuePoint->getName()));
+			$scene->addChild('sceneTitle', vMrssManager::stringToSafeXml($cuePoint->getName()));
 		if($cuePoint->getSourceUrl())
 			$scene->addChild('sourceUrl', htmlspecialchars($cuePoint->getSourceUrl()));
 

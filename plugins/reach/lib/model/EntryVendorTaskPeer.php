@@ -100,7 +100,7 @@ class EntryVendorTaskPeer extends BaseEntryVendorTaskPeer
 	{
 		$c = clone $criteria;
 		
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());

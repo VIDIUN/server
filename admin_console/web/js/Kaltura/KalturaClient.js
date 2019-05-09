@@ -1,934 +1,934 @@
-function KalturaAccessControlOrderBy()
+function VidiunAccessControlOrderBy()
 {
 }
-KalturaAccessControlOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaAccessControlOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunAccessControlOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunAccessControlOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaAudioCodec()
+function VidiunAudioCodec()
 {
 }
-KalturaAudioCodec.prototype.NONE = "";
-KalturaAudioCodec.prototype.MP3 = "mp3";
-KalturaAudioCodec.prototype.AAC = "aac";
+VidiunAudioCodec.prototype.NONE = "";
+VidiunAudioCodec.prototype.MP3 = "mp3";
+VidiunAudioCodec.prototype.AAC = "aac";
 
-function KalturaBaseEntryOrderBy()
+function VidiunBaseEntryOrderBy()
 {
 }
-KalturaBaseEntryOrderBy.prototype.NAME_ASC = "+name";
-KalturaBaseEntryOrderBy.prototype.NAME_DESC = "-name";
-KalturaBaseEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
-KalturaBaseEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
-KalturaBaseEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaBaseEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaBaseEntryOrderBy.prototype.RANK_ASC = "+rank";
-KalturaBaseEntryOrderBy.prototype.RANK_DESC = "-rank";
+VidiunBaseEntryOrderBy.prototype.NAME_ASC = "+name";
+VidiunBaseEntryOrderBy.prototype.NAME_DESC = "-name";
+VidiunBaseEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
+VidiunBaseEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
+VidiunBaseEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunBaseEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunBaseEntryOrderBy.prototype.RANK_ASC = "+rank";
+VidiunBaseEntryOrderBy.prototype.RANK_DESC = "-rank";
 
-function KalturaBaseJobOrderBy()
+function VidiunBaseJobOrderBy()
 {
 }
-KalturaBaseJobOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaBaseJobOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaBaseJobOrderBy.prototype.EXECUTION_ATTEMPTS_ASC = "+executionAttempts";
-KalturaBaseJobOrderBy.prototype.EXECUTION_ATTEMPTS_DESC = "-executionAttempts";
+VidiunBaseJobOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunBaseJobOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunBaseJobOrderBy.prototype.EXECUTION_ATTEMPTS_ASC = "+executionAttempts";
+VidiunBaseJobOrderBy.prototype.EXECUTION_ATTEMPTS_DESC = "-executionAttempts";
 
-function KalturaBaseSyndicationFeedOrderBy()
+function VidiunBaseSyndicationFeedOrderBy()
 {
 }
-KalturaBaseSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
-KalturaBaseSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
-KalturaBaseSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
-KalturaBaseSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
-KalturaBaseSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
-KalturaBaseSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
-KalturaBaseSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaBaseSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunBaseSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
+VidiunBaseSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
+VidiunBaseSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
+VidiunBaseSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
+VidiunBaseSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
+VidiunBaseSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
+VidiunBaseSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunBaseSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaBatchJobErrorTypes()
+function VidiunBatchJobErrorTypes()
 {
 }
-KalturaBatchJobErrorTypes.prototype.APP = 0;
-KalturaBatchJobErrorTypes.prototype.RUNTIME = 1;
-KalturaBatchJobErrorTypes.prototype.HTTP = 2;
-KalturaBatchJobErrorTypes.prototype.CURL = 3;
+VidiunBatchJobErrorTypes.prototype.APP = 0;
+VidiunBatchJobErrorTypes.prototype.RUNTIME = 1;
+VidiunBatchJobErrorTypes.prototype.HTTP = 2;
+VidiunBatchJobErrorTypes.prototype.CURL = 3;
 
-function KalturaBatchJobOrderBy()
+function VidiunBatchJobOrderBy()
 {
 }
-KalturaBatchJobOrderBy.prototype.STATUS_ASC = "+status";
-KalturaBatchJobOrderBy.prototype.STATUS_DESC = "-status";
-KalturaBatchJobOrderBy.prototype.QUEUE_TIME_ASC = "+queueTime";
-KalturaBatchJobOrderBy.prototype.QUEUE_TIME_DESC = "-queueTime";
-KalturaBatchJobOrderBy.prototype.FINISH_TIME_ASC = "+finishTime";
-KalturaBatchJobOrderBy.prototype.FINISH_TIME_DESC = "-finishTime";
-KalturaBatchJobOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaBatchJobOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaBatchJobOrderBy.prototype.EXECUTION_ATTEMPTS_ASC = "+executionAttempts";
-KalturaBatchJobOrderBy.prototype.EXECUTION_ATTEMPTS_DESC = "-executionAttempts";
+VidiunBatchJobOrderBy.prototype.STATUS_ASC = "+status";
+VidiunBatchJobOrderBy.prototype.STATUS_DESC = "-status";
+VidiunBatchJobOrderBy.prototype.QUEUE_TIME_ASC = "+queueTime";
+VidiunBatchJobOrderBy.prototype.QUEUE_TIME_DESC = "-queueTime";
+VidiunBatchJobOrderBy.prototype.FINISH_TIME_ASC = "+finishTime";
+VidiunBatchJobOrderBy.prototype.FINISH_TIME_DESC = "-finishTime";
+VidiunBatchJobOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunBatchJobOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunBatchJobOrderBy.prototype.EXECUTION_ATTEMPTS_ASC = "+executionAttempts";
+VidiunBatchJobOrderBy.prototype.EXECUTION_ATTEMPTS_DESC = "-executionAttempts";
 
-function KalturaBatchJobStatus()
+function VidiunBatchJobStatus()
 {
 }
-KalturaBatchJobStatus.prototype.PENDING = 0;
-KalturaBatchJobStatus.prototype.QUEUED = 1;
-KalturaBatchJobStatus.prototype.PROCESSING = 2;
-KalturaBatchJobStatus.prototype.PROCESSED = 3;
-KalturaBatchJobStatus.prototype.MOVEFILE = 4;
-KalturaBatchJobStatus.prototype.FINISHED = 5;
-KalturaBatchJobStatus.prototype.FAILED = 6;
-KalturaBatchJobStatus.prototype.ABORTED = 7;
-KalturaBatchJobStatus.prototype.ALMOST_DONE = 8;
-KalturaBatchJobStatus.prototype.RETRY = 9;
-KalturaBatchJobStatus.prototype.FATAL = 10;
+VidiunBatchJobStatus.prototype.PENDING = 0;
+VidiunBatchJobStatus.prototype.QUEUED = 1;
+VidiunBatchJobStatus.prototype.PROCESSING = 2;
+VidiunBatchJobStatus.prototype.PROCESSED = 3;
+VidiunBatchJobStatus.prototype.MOVEFILE = 4;
+VidiunBatchJobStatus.prototype.FINISHED = 5;
+VidiunBatchJobStatus.prototype.FAILED = 6;
+VidiunBatchJobStatus.prototype.ABORTED = 7;
+VidiunBatchJobStatus.prototype.ALMOST_DONE = 8;
+VidiunBatchJobStatus.prototype.RETRY = 9;
+VidiunBatchJobStatus.prototype.FATAL = 10;
 
-function KalturaBatchJobType()
+function VidiunBatchJobType()
 {
 }
-KalturaBatchJobType.prototype.CONVERT = 0;
-KalturaBatchJobType.prototype.IMPORT = 1;
-KalturaBatchJobType.prototype.DELETE = 2;
-KalturaBatchJobType.prototype.FLATTEN = 3;
-KalturaBatchJobType.prototype.BULKUPLOAD = 4;
-KalturaBatchJobType.prototype.DVDCREATOR = 5;
-KalturaBatchJobType.prototype.DOWNLOAD = 6;
-KalturaBatchJobType.prototype.OOCONVERT = 7;
-KalturaBatchJobType.prototype.CONVERT_PROFILE = 10;
-KalturaBatchJobType.prototype.POSTCONVERT = 11;
-KalturaBatchJobType.prototype.PULL = 12;
-KalturaBatchJobType.prototype.REMOTE_CONVERT = 13;
-KalturaBatchJobType.prototype.EXTRACT_MEDIA = 14;
-KalturaBatchJobType.prototype.MAIL = 15;
-KalturaBatchJobType.prototype.NOTIFICATION = 16;
-KalturaBatchJobType.prototype.CLEANUP = 17;
-KalturaBatchJobType.prototype.SCHEDULER_HELPER = 18;
-KalturaBatchJobType.prototype.BULKDOWNLOAD = 19;
-KalturaBatchJobType.prototype.PROJECT = 1000;
+VidiunBatchJobType.prototype.CONVERT = 0;
+VidiunBatchJobType.prototype.IMPORT = 1;
+VidiunBatchJobType.prototype.DELETE = 2;
+VidiunBatchJobType.prototype.FLATTEN = 3;
+VidiunBatchJobType.prototype.BULKUPLOAD = 4;
+VidiunBatchJobType.prototype.DVDCREATOR = 5;
+VidiunBatchJobType.prototype.DOWNLOAD = 6;
+VidiunBatchJobType.prototype.OOCONVERT = 7;
+VidiunBatchJobType.prototype.CONVERT_PROFILE = 10;
+VidiunBatchJobType.prototype.POSTCONVERT = 11;
+VidiunBatchJobType.prototype.PULL = 12;
+VidiunBatchJobType.prototype.REMOTE_CONVERT = 13;
+VidiunBatchJobType.prototype.EXTRACT_MEDIA = 14;
+VidiunBatchJobType.prototype.MAIL = 15;
+VidiunBatchJobType.prototype.NOTIFICATION = 16;
+VidiunBatchJobType.prototype.CLEANUP = 17;
+VidiunBatchJobType.prototype.SCHEDULER_HELPER = 18;
+VidiunBatchJobType.prototype.BULKDOWNLOAD = 19;
+VidiunBatchJobType.prototype.PROJECT = 1000;
 
-function KalturaBulkUploadCsvVersion()
+function VidiunBulkUploadCsvVersion()
 {
 }
-KalturaBulkUploadCsvVersion.prototype.V1 = "1";
-KalturaBulkUploadCsvVersion.prototype.V2 = "2";
+VidiunBulkUploadCsvVersion.prototype.V1 = "1";
+VidiunBulkUploadCsvVersion.prototype.V2 = "2";
 
-function KalturaCategoryOrderBy()
+function VidiunCategoryOrderBy()
 {
 }
-KalturaCategoryOrderBy.prototype.DEPTH_ASC = "+depth";
-KalturaCategoryOrderBy.prototype.DEPTH_DESC = "-depth";
-KalturaCategoryOrderBy.prototype.FULL_NAME_ASC = "+fullName";
-KalturaCategoryOrderBy.prototype.FULL_NAME_DESC = "-fullName";
-KalturaCategoryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaCategoryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunCategoryOrderBy.prototype.DEPTH_ASC = "+depth";
+VidiunCategoryOrderBy.prototype.DEPTH_DESC = "-depth";
+VidiunCategoryOrderBy.prototype.FULL_NAME_ASC = "+fullName";
+VidiunCategoryOrderBy.prototype.FULL_NAME_DESC = "-fullName";
+VidiunCategoryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunCategoryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaCommercialUseType()
+function VidiunCommercialUseType()
 {
 }
-KalturaCommercialUseType.prototype.COMMERCIAL_USE = "commercial_use";
-KalturaCommercialUseType.prototype.NON_COMMERCIAL_USE = "non-commercial_use";
+VidiunCommercialUseType.prototype.COMMERCIAL_USE = "commercial_use";
+VidiunCommercialUseType.prototype.NON_COMMERCIAL_USE = "non-commercial_use";
 
-function KalturaContainerFormat()
+function VidiunContainerFormat()
 {
 }
-KalturaContainerFormat.prototype.FLV = "flv";
-KalturaContainerFormat.prototype.MP4 = "mp4";
-KalturaContainerFormat.prototype.AVI = "avi";
-KalturaContainerFormat.prototype.MOV = "mov";
-KalturaContainerFormat.prototype._3GP = "3gp";
+VidiunContainerFormat.prototype.FLV = "flv";
+VidiunContainerFormat.prototype.MP4 = "mp4";
+VidiunContainerFormat.prototype.AVI = "avi";
+VidiunContainerFormat.prototype.MOV = "mov";
+VidiunContainerFormat.prototype._3GP = "3gp";
 
-function KalturaConversionProfileOrderBy()
+function VidiunConversionProfileOrderBy()
 {
 }
-KalturaConversionProfileOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaConversionProfileOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunConversionProfileOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunConversionProfileOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaCountryRestrictionType()
+function VidiunCountryRestrictionType()
 {
 }
-KalturaCountryRestrictionType.prototype.RESTRICT_COUNTRY_LIST = 0;
-KalturaCountryRestrictionType.prototype.ALLOW_COUNTRY_LIST = 1;
+VidiunCountryRestrictionType.prototype.RESTRICT_COUNTRY_LIST = 0;
+VidiunCountryRestrictionType.prototype.ALLOW_COUNTRY_LIST = 1;
 
-function KalturaDataEntryOrderBy()
+function VidiunDataEntryOrderBy()
 {
 }
-KalturaDataEntryOrderBy.prototype.NAME_ASC = "+name";
-KalturaDataEntryOrderBy.prototype.NAME_DESC = "-name";
-KalturaDataEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
-KalturaDataEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
-KalturaDataEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaDataEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaDataEntryOrderBy.prototype.RANK_ASC = "+rank";
-KalturaDataEntryOrderBy.prototype.RANK_DESC = "-rank";
+VidiunDataEntryOrderBy.prototype.NAME_ASC = "+name";
+VidiunDataEntryOrderBy.prototype.NAME_DESC = "-name";
+VidiunDataEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
+VidiunDataEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
+VidiunDataEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunDataEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunDataEntryOrderBy.prototype.RANK_ASC = "+rank";
+VidiunDataEntryOrderBy.prototype.RANK_DESC = "-rank";
 
-function KalturaDirectoryRestrictionType()
+function VidiunDirectoryRestrictionType()
 {
 }
-KalturaDirectoryRestrictionType.prototype.DONT_DISPLAY = 0;
-KalturaDirectoryRestrictionType.prototype.DISPLAY_WITH_LINK = 1;
+VidiunDirectoryRestrictionType.prototype.DONT_DISPLAY = 0;
+VidiunDirectoryRestrictionType.prototype.DISPLAY_WITH_LINK = 1;
 
-function KalturaDocumentEntryOrderBy()
+function VidiunDocumentEntryOrderBy()
 {
 }
-KalturaDocumentEntryOrderBy.prototype.NAME_ASC = "+name";
-KalturaDocumentEntryOrderBy.prototype.NAME_DESC = "-name";
-KalturaDocumentEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
-KalturaDocumentEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
-KalturaDocumentEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaDocumentEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaDocumentEntryOrderBy.prototype.RANK_ASC = "+rank";
-KalturaDocumentEntryOrderBy.prototype.RANK_DESC = "-rank";
+VidiunDocumentEntryOrderBy.prototype.NAME_ASC = "+name";
+VidiunDocumentEntryOrderBy.prototype.NAME_DESC = "-name";
+VidiunDocumentEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
+VidiunDocumentEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
+VidiunDocumentEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunDocumentEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunDocumentEntryOrderBy.prototype.RANK_ASC = "+rank";
+VidiunDocumentEntryOrderBy.prototype.RANK_DESC = "-rank";
 
-function KalturaDocumentType()
+function VidiunDocumentType()
 {
 }
-KalturaDocumentType.prototype.DOCUMENT = 11;
-KalturaDocumentType.prototype.SWF = 12;
+VidiunDocumentType.prototype.DOCUMENT = 11;
+VidiunDocumentType.prototype.SWF = 12;
 
-function KalturaDurationType()
+function VidiunDurationType()
 {
 }
-KalturaDurationType.prototype.NOT_AVAILABLE = "notavailable";
-KalturaDurationType.prototype.SHORT = "short";
-KalturaDurationType.prototype.MEDIUM = "medium";
-KalturaDurationType.prototype.LONG = "long";
+VidiunDurationType.prototype.NOT_AVAILABLE = "notavailable";
+VidiunDurationType.prototype.SHORT = "short";
+VidiunDurationType.prototype.MEDIUM = "medium";
+VidiunDurationType.prototype.LONG = "long";
 
-function KalturaEditorType()
+function VidiunEditorType()
 {
 }
-KalturaEditorType.prototype.SIMPLE = 1;
-KalturaEditorType.prototype.ADVANCED = 2;
+VidiunEditorType.prototype.SIMPLE = 1;
+VidiunEditorType.prototype.ADVANCED = 2;
 
-function KalturaEntryModerationStatus()
+function VidiunEntryModerationStatus()
 {
 }
-KalturaEntryModerationStatus.prototype.PENDING_MODERATION = 1;
-KalturaEntryModerationStatus.prototype.APPROVED = 2;
-KalturaEntryModerationStatus.prototype.REJECTED = 3;
-KalturaEntryModerationStatus.prototype.FLAGGED_FOR_REVIEW = 5;
-KalturaEntryModerationStatus.prototype.AUTO_APPROVED = 6;
+VidiunEntryModerationStatus.prototype.PENDING_MODERATION = 1;
+VidiunEntryModerationStatus.prototype.APPROVED = 2;
+VidiunEntryModerationStatus.prototype.REJECTED = 3;
+VidiunEntryModerationStatus.prototype.FLAGGED_FOR_REVIEW = 5;
+VidiunEntryModerationStatus.prototype.AUTO_APPROVED = 6;
 
-function KalturaEntryStatus()
+function VidiunEntryStatus()
 {
 }
-KalturaEntryStatus.prototype.ERROR_IMPORTING = -2;
-KalturaEntryStatus.prototype.ERROR_CONVERTING = -1;
-KalturaEntryStatus.prototype.IMPORT = 0;
-KalturaEntryStatus.prototype.PRECONVERT = 1;
-KalturaEntryStatus.prototype.READY = 2;
-KalturaEntryStatus.prototype.DELETED = 3;
-KalturaEntryStatus.prototype.PENDING = 4;
-KalturaEntryStatus.prototype.MODERATE = 5;
-KalturaEntryStatus.prototype.BLOCKED = 6;
+VidiunEntryStatus.prototype.ERROR_IMPORTING = -2;
+VidiunEntryStatus.prototype.ERROR_CONVERTING = -1;
+VidiunEntryStatus.prototype.IMPORT = 0;
+VidiunEntryStatus.prototype.PRECONVERT = 1;
+VidiunEntryStatus.prototype.READY = 2;
+VidiunEntryStatus.prototype.DELETED = 3;
+VidiunEntryStatus.prototype.PENDING = 4;
+VidiunEntryStatus.prototype.MODERATE = 5;
+VidiunEntryStatus.prototype.BLOCKED = 6;
 
-function KalturaEntryType()
+function VidiunEntryType()
 {
 }
-KalturaEntryType.prototype.AUTOMATIC = -1;
-KalturaEntryType.prototype.MEDIA_CLIP = 1;
-KalturaEntryType.prototype.MIX = 2;
-KalturaEntryType.prototype.PLAYLIST = 5;
-KalturaEntryType.prototype.DATA = 6;
-KalturaEntryType.prototype.DOCUMENT = 10;
+VidiunEntryType.prototype.AUTOMATIC = -1;
+VidiunEntryType.prototype.MEDIA_CLIP = 1;
+VidiunEntryType.prototype.MIX = 2;
+VidiunEntryType.prototype.PLAYLIST = 5;
+VidiunEntryType.prototype.DATA = 6;
+VidiunEntryType.prototype.DOCUMENT = 10;
 
-function KalturaFlavorAssetStatus()
+function VidiunFlavorAssetStatus()
 {
 }
-KalturaFlavorAssetStatus.prototype.ERROR = -1;
-KalturaFlavorAssetStatus.prototype.QUEUED = 0;
-KalturaFlavorAssetStatus.prototype.CONVERTING = 1;
-KalturaFlavorAssetStatus.prototype.READY = 2;
-KalturaFlavorAssetStatus.prototype.DELETED = 3;
-KalturaFlavorAssetStatus.prototype.NOT_APPLICABLE = 4;
+VidiunFlavorAssetStatus.prototype.ERROR = -1;
+VidiunFlavorAssetStatus.prototype.QUEUED = 0;
+VidiunFlavorAssetStatus.prototype.CONVERTING = 1;
+VidiunFlavorAssetStatus.prototype.READY = 2;
+VidiunFlavorAssetStatus.prototype.DELETED = 3;
+VidiunFlavorAssetStatus.prototype.NOT_APPLICABLE = 4;
 
-function KalturaFlavorParamsOrderBy()
+function VidiunFlavorParamsOrderBy()
 {
 }
 
-function KalturaFlavorParamsOutputOrderBy()
+function VidiunFlavorParamsOutputOrderBy()
 {
 }
 
-function KalturaGender()
+function VidiunGender()
 {
 }
-KalturaGender.prototype.UNKNOWN = 0;
-KalturaGender.prototype.MALE = 1;
-KalturaGender.prototype.FEMALE = 2;
+VidiunGender.prototype.UNKNOWN = 0;
+VidiunGender.prototype.MALE = 1;
+VidiunGender.prototype.FEMALE = 2;
 
-function KalturaGoogleSyndicationFeedAdultValues()
+function VidiunGoogleSyndicationFeedAdultValues()
 {
 }
-KalturaGoogleSyndicationFeedAdultValues.prototype.YES = "Yes";
-KalturaGoogleSyndicationFeedAdultValues.prototype.NO = "No";
+VidiunGoogleSyndicationFeedAdultValues.prototype.YES = "Yes";
+VidiunGoogleSyndicationFeedAdultValues.prototype.NO = "No";
 
-function KalturaGoogleVideoSyndicationFeedOrderBy()
+function VidiunGoogleVideoSyndicationFeedOrderBy()
 {
 }
-KalturaGoogleVideoSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
-KalturaGoogleVideoSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
-KalturaGoogleVideoSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
-KalturaGoogleVideoSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
-KalturaGoogleVideoSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
-KalturaGoogleVideoSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
-KalturaGoogleVideoSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaGoogleVideoSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunGoogleVideoSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
+VidiunGoogleVideoSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
+VidiunGoogleVideoSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
+VidiunGoogleVideoSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
+VidiunGoogleVideoSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
+VidiunGoogleVideoSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
+VidiunGoogleVideoSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunGoogleVideoSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaITunesSyndicationFeedAdultValues()
+function VidiunITunesSyndicationFeedAdultValues()
 {
 }
-KalturaITunesSyndicationFeedAdultValues.prototype.YES = "yes";
-KalturaITunesSyndicationFeedAdultValues.prototype.NO = "no";
-KalturaITunesSyndicationFeedAdultValues.prototype.CLEAN = "clean";
+VidiunITunesSyndicationFeedAdultValues.prototype.YES = "yes";
+VidiunITunesSyndicationFeedAdultValues.prototype.NO = "no";
+VidiunITunesSyndicationFeedAdultValues.prototype.CLEAN = "clean";
 
-function KalturaITunesSyndicationFeedCategories()
+function VidiunITunesSyndicationFeedCategories()
 {
 }
-KalturaITunesSyndicationFeedCategories.prototype.ARTS = "Arts";
-KalturaITunesSyndicationFeedCategories.prototype.ARTS_DESIGN = "Arts/Design";
-KalturaITunesSyndicationFeedCategories.prototype.ARTS_FASHION_BEAUTY = "Arts/Fashion &amp; Beauty";
-KalturaITunesSyndicationFeedCategories.prototype.ARTS_FOOD = "Arts/Food";
-KalturaITunesSyndicationFeedCategories.prototype.ARTS_LITERATURE = "Arts/Literature";
-KalturaITunesSyndicationFeedCategories.prototype.ARTS_PERFORMING_ARTS = "Arts/Performing Arts";
-KalturaITunesSyndicationFeedCategories.prototype.ARTS_VISUAL_ARTS = "Arts/Visual Arts";
-KalturaITunesSyndicationFeedCategories.prototype.BUSINESS = "Business";
-KalturaITunesSyndicationFeedCategories.prototype.BUSINESS_BUSINESS_NEWS = "Business/Business News";
-KalturaITunesSyndicationFeedCategories.prototype.BUSINESS_CAREERS = "Business/Careers";
-KalturaITunesSyndicationFeedCategories.prototype.BUSINESS_INVESTING = "Business/Investing";
-KalturaITunesSyndicationFeedCategories.prototype.BUSINESS_MANAGEMENT_MARKETING = "Business/Management &amp; Marketing";
-KalturaITunesSyndicationFeedCategories.prototype.BUSINESS_SHOPPING = "Business/Shopping";
-KalturaITunesSyndicationFeedCategories.prototype.COMEDY = "Comedy";
-KalturaITunesSyndicationFeedCategories.prototype.EDUCATION = "Education";
-KalturaITunesSyndicationFeedCategories.prototype.EDUCATION_TECHNOLOGY = "Education/Education Technology";
-KalturaITunesSyndicationFeedCategories.prototype.EDUCATION_HIGHER_EDUCATION = "Education/Higher Education";
-KalturaITunesSyndicationFeedCategories.prototype.EDUCATION_K_12 = "Education/K-12";
-KalturaITunesSyndicationFeedCategories.prototype.EDUCATION_LANGUAGE_COURSES = "Education/Language Courses";
-KalturaITunesSyndicationFeedCategories.prototype.EDUCATION_TRAINING = "Education/Training";
-KalturaITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES = "Games &amp; Hobbies";
-KalturaITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_AUTOMOTIVE = "Games &amp; Hobbies/Automotive";
-KalturaITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_AVIATION = "Games &amp; Hobbies/Aviation";
-KalturaITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_HOBBIES = "Games &amp; Hobbies/Hobbies";
-KalturaITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_OTHER_GAMES = "Games &amp; Hobbies/Other Games";
-KalturaITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_VIDEO_GAMES = "Games &amp; Hobbies/Video Games";
-KalturaITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS = "Government &amp; Organizations";
-KalturaITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS_LOCAL = "Government &amp; Organizations/Local";
-KalturaITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS_NATIONAL = "Government &amp; Organizations/National";
-KalturaITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS_NON_PROFIT = "Government &amp; Organizations/Non-Profit";
-KalturaITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS_REGIONAL = "Government &amp; Organizations/Regional";
-KalturaITunesSyndicationFeedCategories.prototype.HEALTH = "Health";
-KalturaITunesSyndicationFeedCategories.prototype.HEALTH_ALTERNATIVE_HEALTH = "Health/Alternative Health";
-KalturaITunesSyndicationFeedCategories.prototype.HEALTH_FITNESS_NUTRITION = "Health/Fitness &amp; Nutrition";
-KalturaITunesSyndicationFeedCategories.prototype.HEALTH_SELF_HELP = "Health/Self-Help";
-KalturaITunesSyndicationFeedCategories.prototype.HEALTH_SEXUALITY = "Health/Sexuality";
-KalturaITunesSyndicationFeedCategories.prototype.KIDS_FAMILY = "Kids &amp; Family";
-KalturaITunesSyndicationFeedCategories.prototype.MUSIC = "Music";
-KalturaITunesSyndicationFeedCategories.prototype.NEWS_POLITICS = "News &amp; Politics";
-KalturaITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY = "Religion &amp; Spirituality";
-KalturaITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_BUDDHISM = "Religion &amp; Spirituality/Buddhism";
-KalturaITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_CHRISTIANITY = "Religion &amp; Spirituality/Christianity";
-KalturaITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_HINDUISM = "Religion &amp; Spirituality/Hinduism";
-KalturaITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_ISLAM = "Religion &amp; Spirituality/Islam";
-KalturaITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_JUDAISM = "Religion &amp; Spirituality/Judaism";
-KalturaITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_OTHER = "Religion &amp; Spirituality/Other";
-KalturaITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_SPIRITUALITY = "Religion &amp; Spirituality/Spirituality";
-KalturaITunesSyndicationFeedCategories.prototype.SCIENCE_MEDICINE = "Science &amp; Medicine";
-KalturaITunesSyndicationFeedCategories.prototype.SCIENCE_MEDICINE_MEDICINE = "Science &amp; Medicine/Medicine";
-KalturaITunesSyndicationFeedCategories.prototype.SCIENCE_MEDICINE_NATURAL_SCIENCES = "Science &amp; Medicine/Natural Sciences";
-KalturaITunesSyndicationFeedCategories.prototype.SCIENCE_MEDICINE_SOCIAL_SCIENCES = "Science &amp; Medicine/Social Sciences";
-KalturaITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE = "Society &amp; Culture";
-KalturaITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE_HISTORY = "Society &amp; Culture/History";
-KalturaITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE_PERSONAL_JOURNALS = "Society &amp; Culture/Personal Journals";
-KalturaITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE_PHILOSOPHY = "Society &amp; Culture/Philosophy";
-KalturaITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE_PLACES_TRAVEL = "Society &amp; Culture/Places &amp; Travel";
-KalturaITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION = "Sports &amp; Recreation";
-KalturaITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION_AMATEUR = "Sports &amp; Recreation/Amateur";
-KalturaITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION_COLLEGE_HIGH_SCHOOL = "Sports &amp; Recreation/College &amp; High School";
-KalturaITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION_OUTDOOR = "Sports &amp; Recreation/Outdoor";
-KalturaITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION_PROFESSIONAL = "Sports &amp; Recreation/Professional";
-KalturaITunesSyndicationFeedCategories.prototype.TECHNOLOGY = "Technology";
-KalturaITunesSyndicationFeedCategories.prototype.TECHNOLOGY_GADGETS = "Technology/Gadgets";
-KalturaITunesSyndicationFeedCategories.prototype.TECHNOLOGY_TECH_NEWS = "Technology/Tech News";
-KalturaITunesSyndicationFeedCategories.prototype.TECHNOLOGY_PODCASTING = "Technology/Podcasting";
-KalturaITunesSyndicationFeedCategories.prototype.TECHNOLOGY_SOFTWARE_HOW_TO = "Technology/Software How-To";
-KalturaITunesSyndicationFeedCategories.prototype.TV_FILM = "TV &amp; Film";
-
-function KalturaITunesSyndicationFeedOrderBy()
-{
-}
-KalturaITunesSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
-KalturaITunesSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
-KalturaITunesSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
-KalturaITunesSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
-KalturaITunesSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
-KalturaITunesSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
-KalturaITunesSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaITunesSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-
-function KalturaLicenseType()
-{
-}
-KalturaLicenseType.prototype.UNKNOWN = -1;
-KalturaLicenseType.prototype.NONE = 0;
-KalturaLicenseType.prototype.COPYRIGHTED = 1;
-KalturaLicenseType.prototype.PUBLIC_DOMAIN = 2;
-KalturaLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION = 3;
-KalturaLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_SHARE_ALIKE = 4;
-KalturaLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_NO_DERIVATIVES = 5;
-KalturaLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_NON_COMMERCIAL = 6;
-KalturaLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE = 7;
-KalturaLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVATIVES = 8;
-KalturaLicenseType.prototype.GFDL = 9;
-KalturaLicenseType.prototype.GPL = 10;
-KalturaLicenseType.prototype.AFFERO_GPL = 11;
-KalturaLicenseType.prototype.LGPL = 12;
-KalturaLicenseType.prototype.BSD = 13;
-KalturaLicenseType.prototype.APACHE = 14;
-KalturaLicenseType.prototype.MOZILLA = 15;
-
-function KalturaMailJobOrderBy()
-{
-}
-KalturaMailJobOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaMailJobOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaMailJobOrderBy.prototype.EXECUTION_ATTEMPTS_ASC = "+executionAttempts";
-KalturaMailJobOrderBy.prototype.EXECUTION_ATTEMPTS_DESC = "-executionAttempts";
-
-function KalturaMailJobStatus()
-{
-}
-KalturaMailJobStatus.prototype.PENDING = 1;
-KalturaMailJobStatus.prototype.SENT = 2;
-KalturaMailJobStatus.prototype.ERROR = 3;
-KalturaMailJobStatus.prototype.QUEUED = 4;
-
-function KalturaMailType()
-{
-}
-KalturaMailType.prototype.MAIL_TYPE_KALTURA_NEWSLETTER = 10;
-KalturaMailType.prototype.MAIL_TYPE_ADDED_TO_FAVORITES = 11;
-KalturaMailType.prototype.MAIL_TYPE_ADDED_TO_CLIP_FAVORITES = 12;
-KalturaMailType.prototype.MAIL_TYPE_NEW_COMMENT_IN_PROFILE = 13;
-KalturaMailType.prototype.MAIL_TYPE_CLIP_ADDED_YOUR_KALTURA = 20;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_ADDED = 21;
-KalturaMailType.prototype.MAIL_TYPE_ROUGHCUT_CREATED = 22;
-KalturaMailType.prototype.MAIL_TYPE_ADDED_KALTURA_TO_YOUR_FAVORITES = 23;
-KalturaMailType.prototype.MAIL_TYPE_NEW_COMMENT_IN_KALTURA = 24;
-KalturaMailType.prototype.MAIL_TYPE_CLIP_ADDED = 30;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_CREATED = 31;
-KalturaMailType.prototype.MAIL_TYPE_ADDED_KALTURA_TO_HIS_FAVORITES = 32;
-KalturaMailType.prototype.MAIL_TYPE_NEW_COMMENT_IN_KALTURA_YOU_CONTRIBUTED = 33;
-KalturaMailType.prototype.MAIL_TYPE_CLIP_CONTRIBUTED = 40;
-KalturaMailType.prototype.MAIL_TYPE_ROUGHCUT_CREATED_SUBSCRIBED = 41;
-KalturaMailType.prototype.MAIL_TYPE_ADDED_KALTURA_TO_HIS_FAVORITES_SUBSCRIBED = 42;
-KalturaMailType.prototype.MAIL_TYPE_NEW_COMMENT_IN_KALTURA_YOU_SUBSCRIBED = 43;
-KalturaMailType.prototype.MAIL_TYPE_REGISTER_CONFIRM = 50;
-KalturaMailType.prototype.MAIL_TYPE_PASSWORD_RESET = 51;
-KalturaMailType.prototype.MAIL_TYPE_LOGIN_MAIL_RESET = 52;
-KalturaMailType.prototype.MAIL_TYPE_REGISTER_CONFIRM_VIDEO_SERVICE = 54;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_READY = 60;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_IS_READY = 62;
-KalturaMailType.prototype.MAIL_TYPE_BULK_DOWNLOAD_READY = 63;
-KalturaMailType.prototype.MAIL_TYPE_NOTIFY_ERR = 70;
-KalturaMailType.prototype.MAIL_TYPE_ACCOUNT_UPGRADE_CONFIRM = 80;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE = 81;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE_LIMIT_REACHED = 82;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE_ACCOUNT_LOCKED = 83;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE_ACCOUNT_DELETED = 84;
-KalturaMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE_UPGRADE_OFFER = 85;
-KalturaMailType.prototype.MAIL_TYPE_ACCOUNT_REACTIVE_CONFIRM = 86;
-KalturaMailType.prototype.MAIL_TYPE_SYSTEM_USER_RESET_PASSWORD = 110;
-KalturaMailType.prototype.MAIL_TYPE_SYSTEM_USER_RESET_PASSWORD_SUCCESS = 111;
+VidiunITunesSyndicationFeedCategories.prototype.ARTS = "Arts";
+VidiunITunesSyndicationFeedCategories.prototype.ARTS_DESIGN = "Arts/Design";
+VidiunITunesSyndicationFeedCategories.prototype.ARTS_FASHION_BEAUTY = "Arts/Fashion &amp; Beauty";
+VidiunITunesSyndicationFeedCategories.prototype.ARTS_FOOD = "Arts/Food";
+VidiunITunesSyndicationFeedCategories.prototype.ARTS_LITERATURE = "Arts/Literature";
+VidiunITunesSyndicationFeedCategories.prototype.ARTS_PERFORMING_ARTS = "Arts/Performing Arts";
+VidiunITunesSyndicationFeedCategories.prototype.ARTS_VISUAL_ARTS = "Arts/Visual Arts";
+VidiunITunesSyndicationFeedCategories.prototype.BUSINESS = "Business";
+VidiunITunesSyndicationFeedCategories.prototype.BUSINESS_BUSINESS_NEWS = "Business/Business News";
+VidiunITunesSyndicationFeedCategories.prototype.BUSINESS_CAREERS = "Business/Careers";
+VidiunITunesSyndicationFeedCategories.prototype.BUSINESS_INVESTING = "Business/Investing";
+VidiunITunesSyndicationFeedCategories.prototype.BUSINESS_MANAGEMENT_MARKETING = "Business/Management &amp; Marketing";
+VidiunITunesSyndicationFeedCategories.prototype.BUSINESS_SHOPPING = "Business/Shopping";
+VidiunITunesSyndicationFeedCategories.prototype.COMEDY = "Comedy";
+VidiunITunesSyndicationFeedCategories.prototype.EDUCATION = "Education";
+VidiunITunesSyndicationFeedCategories.prototype.EDUCATION_TECHNOLOGY = "Education/Education Technology";
+VidiunITunesSyndicationFeedCategories.prototype.EDUCATION_HIGHER_EDUCATION = "Education/Higher Education";
+VidiunITunesSyndicationFeedCategories.prototype.EDUCATION_K_12 = "Education/K-12";
+VidiunITunesSyndicationFeedCategories.prototype.EDUCATION_LANGUAGE_COURSES = "Education/Language Courses";
+VidiunITunesSyndicationFeedCategories.prototype.EDUCATION_TRAINING = "Education/Training";
+VidiunITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES = "Games &amp; Hobbies";
+VidiunITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_AUTOMOTIVE = "Games &amp; Hobbies/Automotive";
+VidiunITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_AVIATION = "Games &amp; Hobbies/Aviation";
+VidiunITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_HOBBIES = "Games &amp; Hobbies/Hobbies";
+VidiunITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_OTHER_GAMES = "Games &amp; Hobbies/Other Games";
+VidiunITunesSyndicationFeedCategories.prototype.GAMES_HOBBIES_VIDEO_GAMES = "Games &amp; Hobbies/Video Games";
+VidiunITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS = "Government &amp; Organizations";
+VidiunITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS_LOCAL = "Government &amp; Organizations/Local";
+VidiunITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS_NATIONAL = "Government &amp; Organizations/National";
+VidiunITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS_NON_PROFIT = "Government &amp; Organizations/Non-Profit";
+VidiunITunesSyndicationFeedCategories.prototype.GOVERNMENT_ORGANIZATIONS_REGIONAL = "Government &amp; Organizations/Regional";
+VidiunITunesSyndicationFeedCategories.prototype.HEALTH = "Health";
+VidiunITunesSyndicationFeedCategories.prototype.HEALTH_ALTERNATIVE_HEALTH = "Health/Alternative Health";
+VidiunITunesSyndicationFeedCategories.prototype.HEALTH_FITNESS_NUTRITION = "Health/Fitness &amp; Nutrition";
+VidiunITunesSyndicationFeedCategories.prototype.HEALTH_SELF_HELP = "Health/Self-Help";
+VidiunITunesSyndicationFeedCategories.prototype.HEALTH_SEXUALITY = "Health/Sexuality";
+VidiunITunesSyndicationFeedCategories.prototype.KIDS_FAMILY = "Kids &amp; Family";
+VidiunITunesSyndicationFeedCategories.prototype.MUSIC = "Music";
+VidiunITunesSyndicationFeedCategories.prototype.NEWS_POLITICS = "News &amp; Politics";
+VidiunITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY = "Religion &amp; Spirituality";
+VidiunITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_BUDDHISM = "Religion &amp; Spirituality/Buddhism";
+VidiunITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_CHRISTIANITY = "Religion &amp; Spirituality/Christianity";
+VidiunITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_HINDUISM = "Religion &amp; Spirituality/Hinduism";
+VidiunITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_ISLAM = "Religion &amp; Spirituality/Islam";
+VidiunITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_JUDAISM = "Religion &amp; Spirituality/Judaism";
+VidiunITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_OTHER = "Religion &amp; Spirituality/Other";
+VidiunITunesSyndicationFeedCategories.prototype.RELIGION_SPIRITUALITY_SPIRITUALITY = "Religion &amp; Spirituality/Spirituality";
+VidiunITunesSyndicationFeedCategories.prototype.SCIENCE_MEDICINE = "Science &amp; Medicine";
+VidiunITunesSyndicationFeedCategories.prototype.SCIENCE_MEDICINE_MEDICINE = "Science &amp; Medicine/Medicine";
+VidiunITunesSyndicationFeedCategories.prototype.SCIENCE_MEDICINE_NATURAL_SCIENCES = "Science &amp; Medicine/Natural Sciences";
+VidiunITunesSyndicationFeedCategories.prototype.SCIENCE_MEDICINE_SOCIAL_SCIENCES = "Science &amp; Medicine/Social Sciences";
+VidiunITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE = "Society &amp; Culture";
+VidiunITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE_HISTORY = "Society &amp; Culture/History";
+VidiunITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE_PERSONAL_JOURNALS = "Society &amp; Culture/Personal Journals";
+VidiunITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE_PHILOSOPHY = "Society &amp; Culture/Philosophy";
+VidiunITunesSyndicationFeedCategories.prototype.SOCIETY_CULTURE_PLACES_TRAVEL = "Society &amp; Culture/Places &amp; Travel";
+VidiunITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION = "Sports &amp; Recreation";
+VidiunITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION_AMATEUR = "Sports &amp; Recreation/Amateur";
+VidiunITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION_COLLEGE_HIGH_SCHOOL = "Sports &amp; Recreation/College &amp; High School";
+VidiunITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION_OUTDOOR = "Sports &amp; Recreation/Outdoor";
+VidiunITunesSyndicationFeedCategories.prototype.SPORTS_RECREATION_PROFESSIONAL = "Sports &amp; Recreation/Professional";
+VidiunITunesSyndicationFeedCategories.prototype.TECHNOLOGY = "Technology";
+VidiunITunesSyndicationFeedCategories.prototype.TECHNOLOGY_GADGETS = "Technology/Gadgets";
+VidiunITunesSyndicationFeedCategories.prototype.TECHNOLOGY_TECH_NEWS = "Technology/Tech News";
+VidiunITunesSyndicationFeedCategories.prototype.TECHNOLOGY_PODCASTING = "Technology/Podcasting";
+VidiunITunesSyndicationFeedCategories.prototype.TECHNOLOGY_SOFTWARE_HOW_TO = "Technology/Software How-To";
+VidiunITunesSyndicationFeedCategories.prototype.TV_FILM = "TV &amp; Film";
+
+function VidiunITunesSyndicationFeedOrderBy()
+{
+}
+VidiunITunesSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
+VidiunITunesSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
+VidiunITunesSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
+VidiunITunesSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
+VidiunITunesSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
+VidiunITunesSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
+VidiunITunesSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunITunesSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+
+function VidiunLicenseType()
+{
+}
+VidiunLicenseType.prototype.UNKNOWN = -1;
+VidiunLicenseType.prototype.NONE = 0;
+VidiunLicenseType.prototype.COPYRIGHTED = 1;
+VidiunLicenseType.prototype.PUBLIC_DOMAIN = 2;
+VidiunLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION = 3;
+VidiunLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_SHARE_ALIKE = 4;
+VidiunLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_NO_DERIVATIVES = 5;
+VidiunLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_NON_COMMERCIAL = 6;
+VidiunLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE = 7;
+VidiunLicenseType.prototype.CREATIVECOMMONS_ATTRIBUTION_NON_COMMERCIAL_NO_DERIVATIVES = 8;
+VidiunLicenseType.prototype.GFDL = 9;
+VidiunLicenseType.prototype.GPL = 10;
+VidiunLicenseType.prototype.AFFERO_GPL = 11;
+VidiunLicenseType.prototype.LGPL = 12;
+VidiunLicenseType.prototype.BSD = 13;
+VidiunLicenseType.prototype.APACHE = 14;
+VidiunLicenseType.prototype.MOZILLA = 15;
+
+function VidiunMailJobOrderBy()
+{
+}
+VidiunMailJobOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunMailJobOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunMailJobOrderBy.prototype.EXECUTION_ATTEMPTS_ASC = "+executionAttempts";
+VidiunMailJobOrderBy.prototype.EXECUTION_ATTEMPTS_DESC = "-executionAttempts";
+
+function VidiunMailJobStatus()
+{
+}
+VidiunMailJobStatus.prototype.PENDING = 1;
+VidiunMailJobStatus.prototype.SENT = 2;
+VidiunMailJobStatus.prototype.ERROR = 3;
+VidiunMailJobStatus.prototype.QUEUED = 4;
+
+function VidiunMailType()
+{
+}
+VidiunMailType.prototype.MAIL_TYPE_VIDIUN_NEWSLETTER = 10;
+VidiunMailType.prototype.MAIL_TYPE_ADDED_TO_FAVORITES = 11;
+VidiunMailType.prototype.MAIL_TYPE_ADDED_TO_CLIP_FAVORITES = 12;
+VidiunMailType.prototype.MAIL_TYPE_NEW_COMMENT_IN_PROFILE = 13;
+VidiunMailType.prototype.MAIL_TYPE_CLIP_ADDED_YOUR_VIDIUN = 20;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_ADDED = 21;
+VidiunMailType.prototype.MAIL_TYPE_ROUGHCUT_CREATED = 22;
+VidiunMailType.prototype.MAIL_TYPE_ADDED_VIDIUN_TO_YOUR_FAVORITES = 23;
+VidiunMailType.prototype.MAIL_TYPE_NEW_COMMENT_IN_VIDIUN = 24;
+VidiunMailType.prototype.MAIL_TYPE_CLIP_ADDED = 30;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_CREATED = 31;
+VidiunMailType.prototype.MAIL_TYPE_ADDED_VIDIUN_TO_HIS_FAVORITES = 32;
+VidiunMailType.prototype.MAIL_TYPE_NEW_COMMENT_IN_VIDIUN_YOU_CONTRIBUTED = 33;
+VidiunMailType.prototype.MAIL_TYPE_CLIP_CONTRIBUTED = 40;
+VidiunMailType.prototype.MAIL_TYPE_ROUGHCUT_CREATED_SUBSCRIBED = 41;
+VidiunMailType.prototype.MAIL_TYPE_ADDED_VIDIUN_TO_HIS_FAVORITES_SUBSCRIBED = 42;
+VidiunMailType.prototype.MAIL_TYPE_NEW_COMMENT_IN_VIDIUN_YOU_SUBSCRIBED = 43;
+VidiunMailType.prototype.MAIL_TYPE_REGISTER_CONFIRM = 50;
+VidiunMailType.prototype.MAIL_TYPE_PASSWORD_RESET = 51;
+VidiunMailType.prototype.MAIL_TYPE_LOGIN_MAIL_RESET = 52;
+VidiunMailType.prototype.MAIL_TYPE_REGISTER_CONFIRM_VIDEO_SERVICE = 54;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_READY = 60;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_IS_READY = 62;
+VidiunMailType.prototype.MAIL_TYPE_BULK_DOWNLOAD_READY = 63;
+VidiunMailType.prototype.MAIL_TYPE_NOTIFY_ERR = 70;
+VidiunMailType.prototype.MAIL_TYPE_ACCOUNT_UPGRADE_CONFIRM = 80;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE = 81;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE_LIMIT_REACHED = 82;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE_ACCOUNT_LOCKED = 83;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE_ACCOUNT_DELETED = 84;
+VidiunMailType.prototype.MAIL_TYPE_VIDEO_SERVICE_NOTICE_UPGRADE_OFFER = 85;
+VidiunMailType.prototype.MAIL_TYPE_ACCOUNT_REACTIVE_CONFIRM = 86;
+VidiunMailType.prototype.MAIL_TYPE_SYSTEM_USER_RESET_PASSWORD = 110;
+VidiunMailType.prototype.MAIL_TYPE_SYSTEM_USER_RESET_PASSWORD_SUCCESS = 111;
 
-function KalturaPlayableEntryOrderBy()
+function VidiunPlayableEntryOrderBy()
 {
 }
-KalturaPlayableEntryOrderBy.prototype.PLAYS_ASC = "+plays";
-KalturaPlayableEntryOrderBy.prototype.PLAYS_DESC = "-plays";
-KalturaPlayableEntryOrderBy.prototype.VIEWS_ASC = "+views";
-KalturaPlayableEntryOrderBy.prototype.VIEWS_DESC = "-views";
-KalturaPlayableEntryOrderBy.prototype.DURATION_ASC = "+duration";
-KalturaPlayableEntryOrderBy.prototype.DURATION_DESC = "-duration";
-KalturaPlayableEntryOrderBy.prototype.NAME_ASC = "+name";
-KalturaPlayableEntryOrderBy.prototype.NAME_DESC = "-name";
-KalturaPlayableEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
-KalturaPlayableEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
-KalturaPlayableEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaPlayableEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaPlayableEntryOrderBy.prototype.RANK_ASC = "+rank";
-KalturaPlayableEntryOrderBy.prototype.RANK_DESC = "-rank";
+VidiunPlayableEntryOrderBy.prototype.PLAYS_ASC = "+plays";
+VidiunPlayableEntryOrderBy.prototype.PLAYS_DESC = "-plays";
+VidiunPlayableEntryOrderBy.prototype.VIEWS_ASC = "+views";
+VidiunPlayableEntryOrderBy.prototype.VIEWS_DESC = "-views";
+VidiunPlayableEntryOrderBy.prototype.DURATION_ASC = "+duration";
+VidiunPlayableEntryOrderBy.prototype.DURATION_DESC = "-duration";
+VidiunPlayableEntryOrderBy.prototype.NAME_ASC = "+name";
+VidiunPlayableEntryOrderBy.prototype.NAME_DESC = "-name";
+VidiunPlayableEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
+VidiunPlayableEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
+VidiunPlayableEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunPlayableEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunPlayableEntryOrderBy.prototype.RANK_ASC = "+rank";
+VidiunPlayableEntryOrderBy.prototype.RANK_DESC = "-rank";
 
-function KalturaMediaEntryOrderBy()
+function VidiunMediaEntryOrderBy()
 {
 }
-KalturaMediaEntryOrderBy.prototype.MEDIA_TYPE_ASC = "+mediaType";
-KalturaMediaEntryOrderBy.prototype.MEDIA_TYPE_DESC = "-mediaType";
-KalturaMediaEntryOrderBy.prototype.PLAYS_ASC = "+plays";
-KalturaMediaEntryOrderBy.prototype.PLAYS_DESC = "-plays";
-KalturaMediaEntryOrderBy.prototype.VIEWS_ASC = "+views";
-KalturaMediaEntryOrderBy.prototype.VIEWS_DESC = "-views";
-KalturaMediaEntryOrderBy.prototype.DURATION_ASC = "+duration";
-KalturaMediaEntryOrderBy.prototype.DURATION_DESC = "-duration";
-KalturaMediaEntryOrderBy.prototype.NAME_ASC = "+name";
-KalturaMediaEntryOrderBy.prototype.NAME_DESC = "-name";
-KalturaMediaEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
-KalturaMediaEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
-KalturaMediaEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaMediaEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaMediaEntryOrderBy.prototype.RANK_ASC = "+rank";
-KalturaMediaEntryOrderBy.prototype.RANK_DESC = "-rank";
+VidiunMediaEntryOrderBy.prototype.MEDIA_TYPE_ASC = "+mediaType";
+VidiunMediaEntryOrderBy.prototype.MEDIA_TYPE_DESC = "-mediaType";
+VidiunMediaEntryOrderBy.prototype.PLAYS_ASC = "+plays";
+VidiunMediaEntryOrderBy.prototype.PLAYS_DESC = "-plays";
+VidiunMediaEntryOrderBy.prototype.VIEWS_ASC = "+views";
+VidiunMediaEntryOrderBy.prototype.VIEWS_DESC = "-views";
+VidiunMediaEntryOrderBy.prototype.DURATION_ASC = "+duration";
+VidiunMediaEntryOrderBy.prototype.DURATION_DESC = "-duration";
+VidiunMediaEntryOrderBy.prototype.NAME_ASC = "+name";
+VidiunMediaEntryOrderBy.prototype.NAME_DESC = "-name";
+VidiunMediaEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
+VidiunMediaEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
+VidiunMediaEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunMediaEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunMediaEntryOrderBy.prototype.RANK_ASC = "+rank";
+VidiunMediaEntryOrderBy.prototype.RANK_DESC = "-rank";
 
-function KalturaMediaType()
+function VidiunMediaType()
 {
 }
-KalturaMediaType.prototype.VIDEO = 1;
-KalturaMediaType.prototype.IMAGE = 2;
-KalturaMediaType.prototype.AUDIO = 5;
+VidiunMediaType.prototype.VIDEO = 1;
+VidiunMediaType.prototype.IMAGE = 2;
+VidiunMediaType.prototype.AUDIO = 5;
 
-function KalturaMixEntryOrderBy()
+function VidiunMixEntryOrderBy()
 {
 }
-KalturaMixEntryOrderBy.prototype.PLAYS_ASC = "+plays";
-KalturaMixEntryOrderBy.prototype.PLAYS_DESC = "-plays";
-KalturaMixEntryOrderBy.prototype.VIEWS_ASC = "+views";
-KalturaMixEntryOrderBy.prototype.VIEWS_DESC = "-views";
-KalturaMixEntryOrderBy.prototype.DURATION_ASC = "+duration";
-KalturaMixEntryOrderBy.prototype.DURATION_DESC = "-duration";
-KalturaMixEntryOrderBy.prototype.NAME_ASC = "+name";
-KalturaMixEntryOrderBy.prototype.NAME_DESC = "-name";
-KalturaMixEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
-KalturaMixEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
-KalturaMixEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaMixEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaMixEntryOrderBy.prototype.RANK_ASC = "+rank";
-KalturaMixEntryOrderBy.prototype.RANK_DESC = "-rank";
+VidiunMixEntryOrderBy.prototype.PLAYS_ASC = "+plays";
+VidiunMixEntryOrderBy.prototype.PLAYS_DESC = "-plays";
+VidiunMixEntryOrderBy.prototype.VIEWS_ASC = "+views";
+VidiunMixEntryOrderBy.prototype.VIEWS_DESC = "-views";
+VidiunMixEntryOrderBy.prototype.DURATION_ASC = "+duration";
+VidiunMixEntryOrderBy.prototype.DURATION_DESC = "-duration";
+VidiunMixEntryOrderBy.prototype.NAME_ASC = "+name";
+VidiunMixEntryOrderBy.prototype.NAME_DESC = "-name";
+VidiunMixEntryOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
+VidiunMixEntryOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
+VidiunMixEntryOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunMixEntryOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunMixEntryOrderBy.prototype.RANK_ASC = "+rank";
+VidiunMixEntryOrderBy.prototype.RANK_DESC = "-rank";
 
-function KalturaModerationFlagStatus()
+function VidiunModerationFlagStatus()
 {
 }
-KalturaModerationFlagStatus.prototype.PENDING = 1;
-KalturaModerationFlagStatus.prototype.MODERATED = 2;
+VidiunModerationFlagStatus.prototype.PENDING = 1;
+VidiunModerationFlagStatus.prototype.MODERATED = 2;
 
-function KalturaModerationFlagType()
+function VidiunModerationFlagType()
 {
 }
-KalturaModerationFlagType.prototype.SEXUAL_CONTENT = 1;
-KalturaModerationFlagType.prototype.VIOLENT_REPULSIVE = 2;
-KalturaModerationFlagType.prototype.HARMFUL_DANGEROUS = 3;
-KalturaModerationFlagType.prototype.SPAM_COMMERCIALS = 4;
+VidiunModerationFlagType.prototype.SEXUAL_CONTENT = 1;
+VidiunModerationFlagType.prototype.VIOLENT_REPULSIVE = 2;
+VidiunModerationFlagType.prototype.HARMFUL_DANGEROUS = 3;
+VidiunModerationFlagType.prototype.SPAM_COMMERCIALS = 4;
 
-function KalturaModerationObjectType()
+function VidiunModerationObjectType()
 {
 }
-KalturaModerationObjectType.prototype.ENTRY = 2;
-KalturaModerationObjectType.prototype.USER = 3;
+VidiunModerationObjectType.prototype.ENTRY = 2;
+VidiunModerationObjectType.prototype.USER = 3;
 
-function KalturaNotificationObjectType()
+function VidiunNotificationObjectType()
 {
 }
-KalturaNotificationObjectType.prototype.ENTRY = 1;
-KalturaNotificationObjectType.prototype.KSHOW = 2;
-KalturaNotificationObjectType.prototype.USER = 3;
-KalturaNotificationObjectType.prototype.BATCH_JOB = 4;
+VidiunNotificationObjectType.prototype.ENTRY = 1;
+VidiunNotificationObjectType.prototype.VSHOW = 2;
+VidiunNotificationObjectType.prototype.USER = 3;
+VidiunNotificationObjectType.prototype.BATCH_JOB = 4;
 
-function KalturaNotificationOrderBy()
+function VidiunNotificationOrderBy()
 {
 }
-KalturaNotificationOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaNotificationOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaNotificationOrderBy.prototype.EXECUTION_ATTEMPTS_ASC = "+executionAttempts";
-KalturaNotificationOrderBy.prototype.EXECUTION_ATTEMPTS_DESC = "-executionAttempts";
+VidiunNotificationOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunNotificationOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunNotificationOrderBy.prototype.EXECUTION_ATTEMPTS_ASC = "+executionAttempts";
+VidiunNotificationOrderBy.prototype.EXECUTION_ATTEMPTS_DESC = "-executionAttempts";
 
-function KalturaNotificationStatus()
+function VidiunNotificationStatus()
 {
 }
-KalturaNotificationStatus.prototype.PENDING = 1;
-KalturaNotificationStatus.prototype.SENT = 2;
-KalturaNotificationStatus.prototype.ERROR = 3;
-KalturaNotificationStatus.prototype.SHOULD_RESEND = 4;
-KalturaNotificationStatus.prototype.ERROR_RESENDING = 5;
-KalturaNotificationStatus.prototype.SENT_SYNCH = 6;
-KalturaNotificationStatus.prototype.QUEUED = 7;
+VidiunNotificationStatus.prototype.PENDING = 1;
+VidiunNotificationStatus.prototype.SENT = 2;
+VidiunNotificationStatus.prototype.ERROR = 3;
+VidiunNotificationStatus.prototype.SHOULD_RESEND = 4;
+VidiunNotificationStatus.prototype.ERROR_RESENDING = 5;
+VidiunNotificationStatus.prototype.SENT_SYNCH = 6;
+VidiunNotificationStatus.prototype.QUEUED = 7;
 
-function KalturaNotificationType()
+function VidiunNotificationType()
 {
 }
-KalturaNotificationType.prototype.ENTRY_ADD = 1;
-KalturaNotificationType.prototype.ENTR_UPDATE_PERMISSIONS = 2;
-KalturaNotificationType.prototype.ENTRY_DELETE = 3;
-KalturaNotificationType.prototype.ENTRY_BLOCK = 4;
-KalturaNotificationType.prototype.ENTRY_UPDATE = 5;
-KalturaNotificationType.prototype.ENTRY_UPDATE_THUMBNAIL = 6;
-KalturaNotificationType.prototype.ENTRY_UPDATE_MODERATION = 7;
-KalturaNotificationType.prototype.USER_ADD = 21;
-KalturaNotificationType.prototype.USER_BANNED = 26;
+VidiunNotificationType.prototype.ENTRY_ADD = 1;
+VidiunNotificationType.prototype.ENTR_UPDATE_PERMISSIONS = 2;
+VidiunNotificationType.prototype.ENTRY_DELETE = 3;
+VidiunNotificationType.prototype.ENTRY_BLOCK = 4;
+VidiunNotificationType.prototype.ENTRY_UPDATE = 5;
+VidiunNotificationType.prototype.ENTRY_UPDATE_THUMBNAIL = 6;
+VidiunNotificationType.prototype.ENTRY_UPDATE_MODERATION = 7;
+VidiunNotificationType.prototype.USER_ADD = 21;
+VidiunNotificationType.prototype.USER_BANNED = 26;
 
-function KalturaNullableBoolean()
+function VidiunNullableBoolean()
 {
 }
-KalturaNullableBoolean.prototype.NULL_VALUE = -1;
-KalturaNullableBoolean.prototype.FALSE_VALUE = 0;
-KalturaNullableBoolean.prototype.TRUE_VALUE = 1;
+VidiunNullableBoolean.prototype.NULL_VALUE = -1;
+VidiunNullableBoolean.prototype.FALSE_VALUE = 0;
+VidiunNullableBoolean.prototype.TRUE_VALUE = 1;
 
-function KalturaPartnerOrderBy()
+function VidiunPartnerOrderBy()
 {
 }
-KalturaPartnerOrderBy.prototype.ID_ASC = "+id";
-KalturaPartnerOrderBy.prototype.ID_DESC = "-id";
-KalturaPartnerOrderBy.prototype.NAME_ASC = "+name";
-KalturaPartnerOrderBy.prototype.NAME_DESC = "-name";
-KalturaPartnerOrderBy.prototype.WEBSITE_ASC = "+website";
-KalturaPartnerOrderBy.prototype.WEBSITE_DESC = "-website";
-KalturaPartnerOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaPartnerOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaPartnerOrderBy.prototype.ADMIN_NAME_ASC = "+adminName";
-KalturaPartnerOrderBy.prototype.ADMIN_NAME_DESC = "-adminName";
-KalturaPartnerOrderBy.prototype.ADMIN_EMAIL_ASC = "+adminEmail";
-KalturaPartnerOrderBy.prototype.ADMIN_EMAIL_DESC = "-adminEmail";
-KalturaPartnerOrderBy.prototype.STATUS_ASC = "+status";
-KalturaPartnerOrderBy.prototype.STATUS_DESC = "-status";
+VidiunPartnerOrderBy.prototype.ID_ASC = "+id";
+VidiunPartnerOrderBy.prototype.ID_DESC = "-id";
+VidiunPartnerOrderBy.prototype.NAME_ASC = "+name";
+VidiunPartnerOrderBy.prototype.NAME_DESC = "-name";
+VidiunPartnerOrderBy.prototype.WEBSITE_ASC = "+website";
+VidiunPartnerOrderBy.prototype.WEBSITE_DESC = "-website";
+VidiunPartnerOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunPartnerOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunPartnerOrderBy.prototype.ADMIN_NAME_ASC = "+adminName";
+VidiunPartnerOrderBy.prototype.ADMIN_NAME_DESC = "-adminName";
+VidiunPartnerOrderBy.prototype.ADMIN_EMAIL_ASC = "+adminEmail";
+VidiunPartnerOrderBy.prototype.ADMIN_EMAIL_DESC = "-adminEmail";
+VidiunPartnerOrderBy.prototype.STATUS_ASC = "+status";
+VidiunPartnerOrderBy.prototype.STATUS_DESC = "-status";
 
-function KalturaPartnerType()
+function VidiunPartnerType()
 {
 }
-KalturaPartnerType.prototype.KMC = 1;
-KalturaPartnerType.prototype.WIKI = 100;
-KalturaPartnerType.prototype.WORDPRESS = 101;
-KalturaPartnerType.prototype.DRUPAL = 102;
-KalturaPartnerType.prototype.DEKIWIKI = 103;
-KalturaPartnerType.prototype.MOODLE = 104;
-KalturaPartnerType.prototype.COMMUNITY_EDITION = 105;
-KalturaPartnerType.prototype.JOOMLA = 106;
+VidiunPartnerType.prototype.VMC = 1;
+VidiunPartnerType.prototype.WIKI = 100;
+VidiunPartnerType.prototype.WORDPRESS = 101;
+VidiunPartnerType.prototype.DRUPAL = 102;
+VidiunPartnerType.prototype.DEKIWIKI = 103;
+VidiunPartnerType.prototype.MOODLE = 104;
+VidiunPartnerType.prototype.COMMUNITY_EDITION = 105;
+VidiunPartnerType.prototype.JOOMLA = 106;
 
-function KalturaPlaylistOrderBy()
+function VidiunPlaylistOrderBy()
 {
 }
-KalturaPlaylistOrderBy.prototype.NAME_ASC = "+name";
-KalturaPlaylistOrderBy.prototype.NAME_DESC = "-name";
-KalturaPlaylistOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
-KalturaPlaylistOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
-KalturaPlaylistOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaPlaylistOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
-KalturaPlaylistOrderBy.prototype.RANK_ASC = "+rank";
-KalturaPlaylistOrderBy.prototype.RANK_DESC = "-rank";
+VidiunPlaylistOrderBy.prototype.NAME_ASC = "+name";
+VidiunPlaylistOrderBy.prototype.NAME_DESC = "-name";
+VidiunPlaylistOrderBy.prototype.MODERATION_COUNT_ASC = "+moderationCount";
+VidiunPlaylistOrderBy.prototype.MODERATION_COUNT_DESC = "-moderationCount";
+VidiunPlaylistOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunPlaylistOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunPlaylistOrderBy.prototype.RANK_ASC = "+rank";
+VidiunPlaylistOrderBy.prototype.RANK_DESC = "-rank";
 
-function KalturaPlaylistType()
+function VidiunPlaylistType()
 {
 }
-KalturaPlaylistType.prototype.DYNAMIC = 10;
-KalturaPlaylistType.prototype.STATIC_LIST = 3;
-KalturaPlaylistType.prototype.EXTERNAL = 101;
-
-function KalturaReportType()
-{
-}
-KalturaReportType.prototype.TOP_CONTENT = 1;
-KalturaReportType.prototype.CONTENT_DROPOFF = 2;
-KalturaReportType.prototype.CONTENT_INTERACTIONS = 3;
-KalturaReportType.prototype.MAP_OVERLAY = 4;
-KalturaReportType.prototype.TOP_CONTRIBUTORS = 5;
-KalturaReportType.prototype.TOP_SYNDICATION = 6;
-KalturaReportType.prototype.CONTENT_CONTRIBUTIONS = 7;
-KalturaReportType.prototype.WIDGETS_STATS = 8;
-
-function KalturaSearchProviderType()
-{
-}
-KalturaSearchProviderType.prototype.FLICKR = 3;
-KalturaSearchProviderType.prototype.YOUTUBE = 4;
-KalturaSearchProviderType.prototype.MYSPACE = 7;
-KalturaSearchProviderType.prototype.PHOTOBUCKET = 8;
-KalturaSearchProviderType.prototype.JAMENDO = 9;
-KalturaSearchProviderType.prototype.CCMIXTER = 10;
-KalturaSearchProviderType.prototype.NYPL = 11;
-KalturaSearchProviderType.prototype.CURRENT = 12;
-KalturaSearchProviderType.prototype.MEDIA_COMMONS = 13;
-KalturaSearchProviderType.prototype.KALTURA = 20;
-KalturaSearchProviderType.prototype.KALTURA_USER_CLIPS = 21;
-KalturaSearchProviderType.prototype.ARCHIVE_ORG = 22;
-KalturaSearchProviderType.prototype.KALTURA_PARTNER = 23;
-KalturaSearchProviderType.prototype.METACAFE = 24;
-KalturaSearchProviderType.prototype.SEARCH_PROXY = 28;
-
-function KalturaSessionType()
-{
-}
-KalturaSessionType.prototype.USER = 0;
-KalturaSessionType.prototype.ADMIN = 2;
-
-function KalturaSiteRestrictionType()
-{
-}
-KalturaSiteRestrictionType.prototype.RESTRICT_SITE_LIST = 0;
-KalturaSiteRestrictionType.prototype.ALLOW_SITE_LIST = 1;
-
-function KalturaSourceType()
-{
-}
-KalturaSourceType.prototype.FILE = 1;
-KalturaSourceType.prototype.WEBCAM = 2;
-KalturaSourceType.prototype.URL = 5;
-KalturaSourceType.prototype.SEARCH_PROVIDER = 6;
-
-function KalturaStatsEventType()
-{
-}
-KalturaStatsEventType.prototype.WIDGET_LOADED = 1;
-KalturaStatsEventType.prototype.MEDIA_LOADED = 2;
-KalturaStatsEventType.prototype.PLAY = 3;
-KalturaStatsEventType.prototype.PLAY_REACHED_25 = 4;
-KalturaStatsEventType.prototype.PLAY_REACHED_50 = 5;
-KalturaStatsEventType.prototype.PLAY_REACHED_75 = 6;
-KalturaStatsEventType.prototype.PLAY_REACHED_100 = 7;
-KalturaStatsEventType.prototype.OPEN_EDIT = 8;
-KalturaStatsEventType.prototype.OPEN_VIRAL = 9;
-KalturaStatsEventType.prototype.OPEN_DOWNLOAD = 10;
-KalturaStatsEventType.prototype.OPEN_REPORT = 11;
-KalturaStatsEventType.prototype.BUFFER_START = 12;
-KalturaStatsEventType.prototype.BUFFER_END = 13;
-KalturaStatsEventType.prototype.OPEN_FULL_SCREEN = 14;
-KalturaStatsEventType.prototype.CLOSE_FULL_SCREEN = 15;
-KalturaStatsEventType.prototype.REPLAY = 16;
-KalturaStatsEventType.prototype.SEEK = 17;
-KalturaStatsEventType.prototype.OPEN_UPLOAD = 18;
-KalturaStatsEventType.prototype.SAVE_PUBLISH = 19;
-KalturaStatsEventType.prototype.CLOSE_EDITOR = 20;
-KalturaStatsEventType.prototype.PRE_BUMPER_PLAYED = 21;
-KalturaStatsEventType.prototype.POST_BUMPER_PLAYED = 22;
-KalturaStatsEventType.prototype.BUMPER_CLICKED = 23;
-KalturaStatsEventType.prototype.FUTURE_USE_1 = 24;
-KalturaStatsEventType.prototype.FUTURE_USE_2 = 25;
-KalturaStatsEventType.prototype.FUTURE_USE_3 = 26;
-
-function KalturaStatsKmcEventType()
-{
-}
-KalturaStatsKmcEventType.prototype.CONTENT_PAGE_VIEW = 1001;
-KalturaStatsKmcEventType.prototype.CONTENT_ADD_PLAYLIST = 1010;
-KalturaStatsKmcEventType.prototype.CONTENT_EDIT_PLAYLIST = 1011;
-KalturaStatsKmcEventType.prototype.CONTENT_DELETE_PLAYLIST = 1012;
-KalturaStatsKmcEventType.prototype.CONTENT_DELETE_ITEM = 1058;
-KalturaStatsKmcEventType.prototype.CONTENT_EDIT_ENTRY = 1013;
-KalturaStatsKmcEventType.prototype.CONTENT_CHANGE_THUMBNAIL = 1014;
-KalturaStatsKmcEventType.prototype.CONTENT_ADD_TAGS = 1015;
-KalturaStatsKmcEventType.prototype.CONTENT_REMOVE_TAGS = 1016;
-KalturaStatsKmcEventType.prototype.CONTENT_ADD_ADMIN_TAGS = 1017;
-KalturaStatsKmcEventType.prototype.CONTENT_REMOVE_ADMIN_TAGS = 1018;
-KalturaStatsKmcEventType.prototype.CONTENT_DOWNLOAD = 1019;
-KalturaStatsKmcEventType.prototype.CONTENT_APPROVE_MODERATION = 1020;
-KalturaStatsKmcEventType.prototype.CONTENT_REJECT_MODERATION = 1021;
-KalturaStatsKmcEventType.prototype.CONTENT_BULK_UPLOAD = 1022;
-KalturaStatsKmcEventType.prototype.CONTENT_ADMIN_KCW_UPLOAD = 1023;
-KalturaStatsKmcEventType.prototype.CONTENT_CONTENT_GO_TO_PAGE = 1057;
-KalturaStatsKmcEventType.prototype.ACCOUNT_CHANGE_PARTNER_INFO = 1030;
-KalturaStatsKmcEventType.prototype.ACCOUNT_CHANGE_LOGIN_INFO = 1031;
-KalturaStatsKmcEventType.prototype.ACCOUNT_CONTACT_US_USAGE = 1032;
-KalturaStatsKmcEventType.prototype.ACCOUNT_UPDATE_SERVER_SETTINGS = 1033;
-KalturaStatsKmcEventType.prototype.ACCOUNT_ACCOUNT_OVERVIEW = 1034;
-KalturaStatsKmcEventType.prototype.ACCOUNT_ACCESS_CONTROL = 1035;
-KalturaStatsKmcEventType.prototype.ACCOUNT_TRANSCODING_SETTINGS = 1036;
-KalturaStatsKmcEventType.prototype.ACCOUNT_ACCOUNT_UPGRADE = 1037;
-KalturaStatsKmcEventType.prototype.ACCOUNT_SAVE_SERVER_SETTINGS = 1038;
-KalturaStatsKmcEventType.prototype.ACCOUNT_ACCESS_CONTROL_DELETE = 1039;
-KalturaStatsKmcEventType.prototype.ACCOUNT_SAVE_TRANSCODING_SETTINGS = 1040;
-KalturaStatsKmcEventType.prototype.LOGIN = 1041;
-KalturaStatsKmcEventType.prototype.DASHBOARD_IMPORT_CONTENT = 1042;
-KalturaStatsKmcEventType.prototype.DASHBOARD_UPDATE_CONTENT = 1043;
-KalturaStatsKmcEventType.prototype.DASHBOARD_ACCOUNT_CONTACT_US = 1044;
-KalturaStatsKmcEventType.prototype.DASHBOARD_VIEW_REPORTS = 1045;
-KalturaStatsKmcEventType.prototype.DASHBOARD_EMBED_PLAYER = 1046;
-KalturaStatsKmcEventType.prototype.DASHBOARD_EMBED_PLAYLIST = 1047;
-KalturaStatsKmcEventType.prototype.DASHBOARD_CUSTOMIZE_PLAYERS = 1048;
-KalturaStatsKmcEventType.prototype.APP_STUDIO_NEW_PLAYER_SINGLE_VIDEO = 1050;
-KalturaStatsKmcEventType.prototype.APP_STUDIO_NEW_PLAYER_PLAYLIST = 1051;
-KalturaStatsKmcEventType.prototype.APP_STUDIO_NEW_PLAYER_MULTI_TAB_PLAYLIST = 1052;
-KalturaStatsKmcEventType.prototype.APP_STUDIO_EDIT_PLAYER_SINGLE_VIDEO = 1053;
-KalturaStatsKmcEventType.prototype.APP_STUDIO_EDIT_PLAYER_PLAYLIST = 1054;
-KalturaStatsKmcEventType.prototype.APP_STUDIO_EDIT_PLAYER_MULTI_TAB_PLAYLIST = 1055;
-KalturaStatsKmcEventType.prototype.APP_STUDIO_DUPLICATE_PLAYER = 1056;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_BANDWIDTH_USAGE_TAB = 1070;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_REPORTS_TAB = 1071;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_USERS_AND_COMMUNITY_REPORTS_TAB = 1072;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_TOP_CONTRIBUTORS = 1073;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_MAP_OVERLAYS = 1074;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_TOP_SYNDICATIONS = 1075;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_TOP_CONTENT = 1076;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_DROPOFF = 1077;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_INTERACTIONS = 1078;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_CONTRIBUTIONS = 1079;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_VIDEO_DRILL_DOWN = 1080;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_DRILL_DOWN_INTERACTION = 1081;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_CONTRIBUTIONS_DRILLDOWN = 1082;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_VIDEO_DRILL_DOWN_DROPOFF = 1083;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_MAP_OVERLAYS_DRILLDOWN = 1084;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_TOP_SYNDICATIONS_DRILL_DOWN = 1085;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_BANDWIDTH_USAGE_VIEW_MONTHLY = 1086;
-KalturaStatsKmcEventType.prototype.REPORTS_AND_ANALYTICS_BANDWIDTH_USAGE_VIEW_YEARLY = 1087;
-
-function KalturaSyndicationFeedStatus()
-{
-}
-KalturaSyndicationFeedStatus.prototype.DELETED = -1;
-KalturaSyndicationFeedStatus.prototype.ACTIVE = 1;
+VidiunPlaylistType.prototype.DYNAMIC = 10;
+VidiunPlaylistType.prototype.STATIC_LIST = 3;
+VidiunPlaylistType.prototype.EXTERNAL = 101;
+
+function VidiunReportType()
+{
+}
+VidiunReportType.prototype.TOP_CONTENT = 1;
+VidiunReportType.prototype.CONTENT_DROPOFF = 2;
+VidiunReportType.prototype.CONTENT_INTERACTIONS = 3;
+VidiunReportType.prototype.MAP_OVERLAY = 4;
+VidiunReportType.prototype.TOP_CONTRIBUTORS = 5;
+VidiunReportType.prototype.TOP_SYNDICATION = 6;
+VidiunReportType.prototype.CONTENT_CONTRIBUTIONS = 7;
+VidiunReportType.prototype.WIDGETS_STATS = 8;
+
+function VidiunSearchProviderType()
+{
+}
+VidiunSearchProviderType.prototype.FLICKR = 3;
+VidiunSearchProviderType.prototype.YOUTUBE = 4;
+VidiunSearchProviderType.prototype.MYSPACE = 7;
+VidiunSearchProviderType.prototype.PHOTOBUCKET = 8;
+VidiunSearchProviderType.prototype.JAMENDO = 9;
+VidiunSearchProviderType.prototype.CCMIXTER = 10;
+VidiunSearchProviderType.prototype.NYPL = 11;
+VidiunSearchProviderType.prototype.CURRENT = 12;
+VidiunSearchProviderType.prototype.MEDIA_COMMONS = 13;
+VidiunSearchProviderType.prototype.VIDIUN = 20;
+VidiunSearchProviderType.prototype.VIDIUN_USER_CLIPS = 21;
+VidiunSearchProviderType.prototype.ARCHIVE_ORG = 22;
+VidiunSearchProviderType.prototype.VIDIUN_PARTNER = 23;
+VidiunSearchProviderType.prototype.METACAFE = 24;
+VidiunSearchProviderType.prototype.SEARCH_PROXY = 28;
+
+function VidiunSessionType()
+{
+}
+VidiunSessionType.prototype.USER = 0;
+VidiunSessionType.prototype.ADMIN = 2;
+
+function VidiunSiteRestrictionType()
+{
+}
+VidiunSiteRestrictionType.prototype.RESTRICT_SITE_LIST = 0;
+VidiunSiteRestrictionType.prototype.ALLOW_SITE_LIST = 1;
+
+function VidiunSourceType()
+{
+}
+VidiunSourceType.prototype.FILE = 1;
+VidiunSourceType.prototype.WEBCAM = 2;
+VidiunSourceType.prototype.URL = 5;
+VidiunSourceType.prototype.SEARCH_PROVIDER = 6;
+
+function VidiunStatsEventType()
+{
+}
+VidiunStatsEventType.prototype.WIDGET_LOADED = 1;
+VidiunStatsEventType.prototype.MEDIA_LOADED = 2;
+VidiunStatsEventType.prototype.PLAY = 3;
+VidiunStatsEventType.prototype.PLAY_REACHED_25 = 4;
+VidiunStatsEventType.prototype.PLAY_REACHED_50 = 5;
+VidiunStatsEventType.prototype.PLAY_REACHED_75 = 6;
+VidiunStatsEventType.prototype.PLAY_REACHED_100 = 7;
+VidiunStatsEventType.prototype.OPEN_EDIT = 8;
+VidiunStatsEventType.prototype.OPEN_VIRAL = 9;
+VidiunStatsEventType.prototype.OPEN_DOWNLOAD = 10;
+VidiunStatsEventType.prototype.OPEN_REPORT = 11;
+VidiunStatsEventType.prototype.BUFFER_START = 12;
+VidiunStatsEventType.prototype.BUFFER_END = 13;
+VidiunStatsEventType.prototype.OPEN_FULL_SCREEN = 14;
+VidiunStatsEventType.prototype.CLOSE_FULL_SCREEN = 15;
+VidiunStatsEventType.prototype.REPLAY = 16;
+VidiunStatsEventType.prototype.SEEK = 17;
+VidiunStatsEventType.prototype.OPEN_UPLOAD = 18;
+VidiunStatsEventType.prototype.SAVE_PUBLISH = 19;
+VidiunStatsEventType.prototype.CLOSE_EDITOR = 20;
+VidiunStatsEventType.prototype.PRE_BUMPER_PLAYED = 21;
+VidiunStatsEventType.prototype.POST_BUMPER_PLAYED = 22;
+VidiunStatsEventType.prototype.BUMPER_CLICKED = 23;
+VidiunStatsEventType.prototype.FUTURE_USE_1 = 24;
+VidiunStatsEventType.prototype.FUTURE_USE_2 = 25;
+VidiunStatsEventType.prototype.FUTURE_USE_3 = 26;
+
+function VidiunStatsVmcEventType()
+{
+}
+VidiunStatsVmcEventType.prototype.CONTENT_PAGE_VIEW = 1001;
+VidiunStatsVmcEventType.prototype.CONTENT_ADD_PLAYLIST = 1010;
+VidiunStatsVmcEventType.prototype.CONTENT_EDIT_PLAYLIST = 1011;
+VidiunStatsVmcEventType.prototype.CONTENT_DELETE_PLAYLIST = 1012;
+VidiunStatsVmcEventType.prototype.CONTENT_DELETE_ITEM = 1058;
+VidiunStatsVmcEventType.prototype.CONTENT_EDIT_ENTRY = 1013;
+VidiunStatsVmcEventType.prototype.CONTENT_CHANGE_THUMBNAIL = 1014;
+VidiunStatsVmcEventType.prototype.CONTENT_ADD_TAGS = 1015;
+VidiunStatsVmcEventType.prototype.CONTENT_REMOVE_TAGS = 1016;
+VidiunStatsVmcEventType.prototype.CONTENT_ADD_ADMIN_TAGS = 1017;
+VidiunStatsVmcEventType.prototype.CONTENT_REMOVE_ADMIN_TAGS = 1018;
+VidiunStatsVmcEventType.prototype.CONTENT_DOWNLOAD = 1019;
+VidiunStatsVmcEventType.prototype.CONTENT_APPROVE_MODERATION = 1020;
+VidiunStatsVmcEventType.prototype.CONTENT_REJECT_MODERATION = 1021;
+VidiunStatsVmcEventType.prototype.CONTENT_BULK_UPLOAD = 1022;
+VidiunStatsVmcEventType.prototype.CONTENT_ADMIN_VCW_UPLOAD = 1023;
+VidiunStatsVmcEventType.prototype.CONTENT_CONTENT_GO_TO_PAGE = 1057;
+VidiunStatsVmcEventType.prototype.ACCOUNT_CHANGE_PARTNER_INFO = 1030;
+VidiunStatsVmcEventType.prototype.ACCOUNT_CHANGE_LOGIN_INFO = 1031;
+VidiunStatsVmcEventType.prototype.ACCOUNT_CONTACT_US_USAGE = 1032;
+VidiunStatsVmcEventType.prototype.ACCOUNT_UPDATE_SERVER_SETTINGS = 1033;
+VidiunStatsVmcEventType.prototype.ACCOUNT_ACCOUNT_OVERVIEW = 1034;
+VidiunStatsVmcEventType.prototype.ACCOUNT_ACCESS_CONTROL = 1035;
+VidiunStatsVmcEventType.prototype.ACCOUNT_TRANSCODING_SETTINGS = 1036;
+VidiunStatsVmcEventType.prototype.ACCOUNT_ACCOUNT_UPGRADE = 1037;
+VidiunStatsVmcEventType.prototype.ACCOUNT_SAVE_SERVER_SETTINGS = 1038;
+VidiunStatsVmcEventType.prototype.ACCOUNT_ACCESS_CONTROL_DELETE = 1039;
+VidiunStatsVmcEventType.prototype.ACCOUNT_SAVE_TRANSCODING_SETTINGS = 1040;
+VidiunStatsVmcEventType.prototype.LOGIN = 1041;
+VidiunStatsVmcEventType.prototype.DASHBOARD_IMPORT_CONTENT = 1042;
+VidiunStatsVmcEventType.prototype.DASHBOARD_UPDATE_CONTENT = 1043;
+VidiunStatsVmcEventType.prototype.DASHBOARD_ACCOUNT_CONTACT_US = 1044;
+VidiunStatsVmcEventType.prototype.DASHBOARD_VIEW_REPORTS = 1045;
+VidiunStatsVmcEventType.prototype.DASHBOARD_EMBED_PLAYER = 1046;
+VidiunStatsVmcEventType.prototype.DASHBOARD_EMBED_PLAYLIST = 1047;
+VidiunStatsVmcEventType.prototype.DASHBOARD_CUSTOMIZE_PLAYERS = 1048;
+VidiunStatsVmcEventType.prototype.APP_STUDIO_NEW_PLAYER_SINGLE_VIDEO = 1050;
+VidiunStatsVmcEventType.prototype.APP_STUDIO_NEW_PLAYER_PLAYLIST = 1051;
+VidiunStatsVmcEventType.prototype.APP_STUDIO_NEW_PLAYER_MULTI_TAB_PLAYLIST = 1052;
+VidiunStatsVmcEventType.prototype.APP_STUDIO_EDIT_PLAYER_SINGLE_VIDEO = 1053;
+VidiunStatsVmcEventType.prototype.APP_STUDIO_EDIT_PLAYER_PLAYLIST = 1054;
+VidiunStatsVmcEventType.prototype.APP_STUDIO_EDIT_PLAYER_MULTI_TAB_PLAYLIST = 1055;
+VidiunStatsVmcEventType.prototype.APP_STUDIO_DUPLICATE_PLAYER = 1056;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_BANDWIDTH_USAGE_TAB = 1070;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_REPORTS_TAB = 1071;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_USERS_AND_COMMUNITY_REPORTS_TAB = 1072;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_TOP_CONTRIBUTORS = 1073;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_MAP_OVERLAYS = 1074;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_TOP_SYNDICATIONS = 1075;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_TOP_CONTENT = 1076;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_DROPOFF = 1077;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_INTERACTIONS = 1078;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_CONTRIBUTIONS = 1079;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_VIDEO_DRILL_DOWN = 1080;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_DRILL_DOWN_INTERACTION = 1081;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_CONTENT_CONTRIBUTIONS_DRILLDOWN = 1082;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_VIDEO_DRILL_DOWN_DROPOFF = 1083;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_MAP_OVERLAYS_DRILLDOWN = 1084;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_TOP_SYNDICATIONS_DRILL_DOWN = 1085;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_BANDWIDTH_USAGE_VIEW_MONTHLY = 1086;
+VidiunStatsVmcEventType.prototype.REPORTS_AND_ANALYTICS_BANDWIDTH_USAGE_VIEW_YEARLY = 1087;
+
+function VidiunSyndicationFeedStatus()
+{
+}
+VidiunSyndicationFeedStatus.prototype.DELETED = -1;
+VidiunSyndicationFeedStatus.prototype.ACTIVE = 1;
 
-function KalturaSyndicationFeedType()
-{
-}
-KalturaSyndicationFeedType.prototype.GOOGLE_VIDEO = 1;
-KalturaSyndicationFeedType.prototype.YAHOO = 2;
-KalturaSyndicationFeedType.prototype.ITUNES = 3;
-KalturaSyndicationFeedType.prototype.TUBE_MOGUL = 4;
+function VidiunSyndicationFeedType()
+{
+}
+VidiunSyndicationFeedType.prototype.GOOGLE_VIDEO = 1;
+VidiunSyndicationFeedType.prototype.YAHOO = 2;
+VidiunSyndicationFeedType.prototype.ITUNES = 3;
+VidiunSyndicationFeedType.prototype.TUBE_MOGUL = 4;
 
-function KalturaSystemUserOrderBy()
+function VidiunSystemUserOrderBy()
 {
 }
-KalturaSystemUserOrderBy.prototype.ID_ASC = "+id";
-KalturaSystemUserOrderBy.prototype.ID_DESC = "-id";
-KalturaSystemUserOrderBy.prototype.STATUS_ASC = "+status";
-KalturaSystemUserOrderBy.prototype.STATUS_DESC = "-status";
+VidiunSystemUserOrderBy.prototype.ID_ASC = "+id";
+VidiunSystemUserOrderBy.prototype.ID_DESC = "-id";
+VidiunSystemUserOrderBy.prototype.STATUS_ASC = "+status";
+VidiunSystemUserOrderBy.prototype.STATUS_DESC = "-status";
 
-function KalturaSystemUserStatus()
+function VidiunSystemUserStatus()
 {
 }
-KalturaSystemUserStatus.prototype.BLOCKED = 0;
-KalturaSystemUserStatus.prototype.ACTIVE = 1;
+VidiunSystemUserStatus.prototype.BLOCKED = 0;
+VidiunSystemUserStatus.prototype.ACTIVE = 1;
 
-function KalturaTubeMogulSyndicationFeedCategories()
+function VidiunTubeMogulSyndicationFeedCategories()
 {
 }
-KalturaTubeMogulSyndicationFeedCategories.prototype.ARTS_AND_ANIMATION = "Arts &amp; Animation";
-KalturaTubeMogulSyndicationFeedCategories.prototype.COMEDY = "Comedy";
-KalturaTubeMogulSyndicationFeedCategories.prototype.ENTERTAINMENT = "Entertainment";
-KalturaTubeMogulSyndicationFeedCategories.prototype.MUSIC = "Music";
-KalturaTubeMogulSyndicationFeedCategories.prototype.NEWS_AND_BLOGS = "News &amp; Blogs";
-KalturaTubeMogulSyndicationFeedCategories.prototype.SCIENCE_AND_TECHNOLOGY = "Science &amp; Technology";
-KalturaTubeMogulSyndicationFeedCategories.prototype.SPORTS = "Sports";
-KalturaTubeMogulSyndicationFeedCategories.prototype.TRAVEL_AND_PLACES = "Travel &amp; Places";
-KalturaTubeMogulSyndicationFeedCategories.prototype.VIDEO_GAMES = "Video Games";
-KalturaTubeMogulSyndicationFeedCategories.prototype.ANIMALS_AND_PETS = "Animals &amp; Pets";
-KalturaTubeMogulSyndicationFeedCategories.prototype.AUTOS = "Autos";
-KalturaTubeMogulSyndicationFeedCategories.prototype.VLOGS_PEOPLE = "Vlogs &amp; People";
-KalturaTubeMogulSyndicationFeedCategories.prototype.HOW_TO_INSTRUCTIONAL_DIY = "How To/Instructional/DIY";
-KalturaTubeMogulSyndicationFeedCategories.prototype.COMMERCIALS_PROMOTIONAL = "Commercials/Promotional";
-KalturaTubeMogulSyndicationFeedCategories.prototype.FAMILY_AND_KIDS = "Family &amp; Kids";
+VidiunTubeMogulSyndicationFeedCategories.prototype.ARTS_AND_ANIMATION = "Arts &amp; Animation";
+VidiunTubeMogulSyndicationFeedCategories.prototype.COMEDY = "Comedy";
+VidiunTubeMogulSyndicationFeedCategories.prototype.ENTERTAINMENT = "Entertainment";
+VidiunTubeMogulSyndicationFeedCategories.prototype.MUSIC = "Music";
+VidiunTubeMogulSyndicationFeedCategories.prototype.NEWS_AND_BLOGS = "News &amp; Blogs";
+VidiunTubeMogulSyndicationFeedCategories.prototype.SCIENCE_AND_TECHNOLOGY = "Science &amp; Technology";
+VidiunTubeMogulSyndicationFeedCategories.prototype.SPORTS = "Sports";
+VidiunTubeMogulSyndicationFeedCategories.prototype.TRAVEL_AND_PLACES = "Travel &amp; Places";
+VidiunTubeMogulSyndicationFeedCategories.prototype.VIDEO_GAMES = "Video Games";
+VidiunTubeMogulSyndicationFeedCategories.prototype.ANIMALS_AND_PETS = "Animals &amp; Pets";
+VidiunTubeMogulSyndicationFeedCategories.prototype.AUTOS = "Autos";
+VidiunTubeMogulSyndicationFeedCategories.prototype.VLOGS_PEOPLE = "Vlogs &amp; People";
+VidiunTubeMogulSyndicationFeedCategories.prototype.HOW_TO_INSTRUCTIONAL_DIY = "How To/Instructional/DIY";
+VidiunTubeMogulSyndicationFeedCategories.prototype.COMMERCIALS_PROMOTIONAL = "Commercials/Promotional";
+VidiunTubeMogulSyndicationFeedCategories.prototype.FAMILY_AND_KIDS = "Family &amp; Kids";
 
-function KalturaTubeMogulSyndicationFeedOrderBy()
+function VidiunTubeMogulSyndicationFeedOrderBy()
 {
 }
-KalturaTubeMogulSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
-KalturaTubeMogulSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
-KalturaTubeMogulSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
-KalturaTubeMogulSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
-KalturaTubeMogulSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
-KalturaTubeMogulSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
-KalturaTubeMogulSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaTubeMogulSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunTubeMogulSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
+VidiunTubeMogulSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
+VidiunTubeMogulSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
+VidiunTubeMogulSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
+VidiunTubeMogulSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
+VidiunTubeMogulSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
+VidiunTubeMogulSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunTubeMogulSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaUiConfCreationMode()
+function VidiunUiConfCreationMode()
 {
 }
-KalturaUiConfCreationMode.prototype.WIZARD = 2;
-KalturaUiConfCreationMode.prototype.ADVANCED = 3;
+VidiunUiConfCreationMode.prototype.WIZARD = 2;
+VidiunUiConfCreationMode.prototype.ADVANCED = 3;
 
-function KalturaUiConfObjType()
+function VidiunUiConfObjType()
 {
 }
-KalturaUiConfObjType.prototype.PLAYER = 1;
-KalturaUiConfObjType.prototype.CONTRIBUTION_WIZARD = 2;
-KalturaUiConfObjType.prototype.SIMPLE_EDITOR = 3;
-KalturaUiConfObjType.prototype.ADVANCED_EDITOR = 4;
-KalturaUiConfObjType.prototype.PLAYLIST = 5;
-KalturaUiConfObjType.prototype.APP_STUDIO = 6;
+VidiunUiConfObjType.prototype.PLAYER = 1;
+VidiunUiConfObjType.prototype.CONTRIBUTION_WIZARD = 2;
+VidiunUiConfObjType.prototype.SIMPLE_EDITOR = 3;
+VidiunUiConfObjType.prototype.ADVANCED_EDITOR = 4;
+VidiunUiConfObjType.prototype.PLAYLIST = 5;
+VidiunUiConfObjType.prototype.APP_STUDIO = 6;
 
-function KalturaUiConfOrderBy()
+function VidiunUiConfOrderBy()
 {
 }
-KalturaUiConfOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaUiConfOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunUiConfOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunUiConfOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaUploadErrorCode()
+function VidiunUploadErrorCode()
 {
 }
-KalturaUploadErrorCode.prototype.NO_ERROR = 0;
-KalturaUploadErrorCode.prototype.GENERAL_ERROR = 1;
-KalturaUploadErrorCode.prototype.PARTIAL_UPLOAD = 2;
+VidiunUploadErrorCode.prototype.NO_ERROR = 0;
+VidiunUploadErrorCode.prototype.GENERAL_ERROR = 1;
+VidiunUploadErrorCode.prototype.PARTIAL_UPLOAD = 2;
 
-function KalturaUserOrderBy()
+function VidiunUserOrderBy()
 {
 }
-KalturaUserOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaUserOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunUserOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunUserOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaUserStatus()
+function VidiunUserStatus()
 {
 }
-KalturaUserStatus.prototype.BLOCKED = 0;
-KalturaUserStatus.prototype.ACTIVE = 1;
-KalturaUserStatus.prototype.DELETED = 2;
+VidiunUserStatus.prototype.BLOCKED = 0;
+VidiunUserStatus.prototype.ACTIVE = 1;
+VidiunUserStatus.prototype.DELETED = 2;
 
-function KalturaVideoCodec()
+function VidiunVideoCodec()
 {
 }
-KalturaVideoCodec.prototype.NONE = "";
-KalturaVideoCodec.prototype.VP6 = "vp6";
-KalturaVideoCodec.prototype.H263 = "h263";
-KalturaVideoCodec.prototype.H264 = "h264";
-KalturaVideoCodec.prototype.FLV = "flv";
+VidiunVideoCodec.prototype.NONE = "";
+VidiunVideoCodec.prototype.VP6 = "vp6";
+VidiunVideoCodec.prototype.H263 = "h263";
+VidiunVideoCodec.prototype.H264 = "h264";
+VidiunVideoCodec.prototype.FLV = "flv";
 
-function KalturaWidgetOrderBy()
+function VidiunWidgetOrderBy()
 {
 }
-KalturaWidgetOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaWidgetOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunWidgetOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunWidgetOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaWidgetSecurityType()
+function VidiunWidgetSecurityType()
 {
 }
-KalturaWidgetSecurityType.prototype.NONE = 1;
-KalturaWidgetSecurityType.prototype.TIMEHASH = 2;
+VidiunWidgetSecurityType.prototype.NONE = 1;
+VidiunWidgetSecurityType.prototype.TIMEHASH = 2;
 
-function KalturaYahooSyndicationFeedAdultValues()
+function VidiunYahooSyndicationFeedAdultValues()
 {
 }
-KalturaYahooSyndicationFeedAdultValues.prototype.ADULT = "adult";
-KalturaYahooSyndicationFeedAdultValues.prototype.NON_ADULT = "nonadult";
+VidiunYahooSyndicationFeedAdultValues.prototype.ADULT = "adult";
+VidiunYahooSyndicationFeedAdultValues.prototype.NON_ADULT = "nonadult";
 
-function KalturaYahooSyndicationFeedCategories()
+function VidiunYahooSyndicationFeedCategories()
 {
 }
-KalturaYahooSyndicationFeedCategories.prototype.ACTION = "Action";
-KalturaYahooSyndicationFeedCategories.prototype.ART_AND_ANIMATION = "Art &amp; Animation";
-KalturaYahooSyndicationFeedCategories.prototype.ENTERTAINMENT_AND_TV = "Entertainment &amp; TV";
-KalturaYahooSyndicationFeedCategories.prototype.FOOD = "Food";
-KalturaYahooSyndicationFeedCategories.prototype.GAMES = "Games";
-KalturaYahooSyndicationFeedCategories.prototype.HOW_TO = "How-To";
-KalturaYahooSyndicationFeedCategories.prototype.MUSIC = "Music";
-KalturaYahooSyndicationFeedCategories.prototype.PEOPLE_AND_VLOGS = "People &amp; Vlogs";
-KalturaYahooSyndicationFeedCategories.prototype.SCIENCE_AND_ENVIRONMENT = "Science &amp; Environment";
-KalturaYahooSyndicationFeedCategories.prototype.TRANSPORTATION = "Transportation";
-KalturaYahooSyndicationFeedCategories.prototype.ANIMALS = "Animals";
-KalturaYahooSyndicationFeedCategories.prototype.COMMERCIALS = "Commercials";
-KalturaYahooSyndicationFeedCategories.prototype.FAMILY = "Family";
-KalturaYahooSyndicationFeedCategories.prototype.FUNNY_VIDEOS = "Funny Videos";
-KalturaYahooSyndicationFeedCategories.prototype.HEALTH_AND_BEAUTY = "Health &amp; Beauty";
-KalturaYahooSyndicationFeedCategories.prototype.MOVIES_AND_SHORTS = "Movies &amp; Shorts";
-KalturaYahooSyndicationFeedCategories.prototype.NEWS_AND_POLITICS = "News &amp; Politics";
-KalturaYahooSyndicationFeedCategories.prototype.PRODUCTS_AND_TECH = "Products &amp; Tech.";
-KalturaYahooSyndicationFeedCategories.prototype.SPORTS = "Sports";
-KalturaYahooSyndicationFeedCategories.prototype.TRAVEL = "Travel";
+VidiunYahooSyndicationFeedCategories.prototype.ACTION = "Action";
+VidiunYahooSyndicationFeedCategories.prototype.ART_AND_ANIMATION = "Art &amp; Animation";
+VidiunYahooSyndicationFeedCategories.prototype.ENTERTAINMENT_AND_TV = "Entertainment &amp; TV";
+VidiunYahooSyndicationFeedCategories.prototype.FOOD = "Food";
+VidiunYahooSyndicationFeedCategories.prototype.GAMES = "Games";
+VidiunYahooSyndicationFeedCategories.prototype.HOW_TO = "How-To";
+VidiunYahooSyndicationFeedCategories.prototype.MUSIC = "Music";
+VidiunYahooSyndicationFeedCategories.prototype.PEOPLE_AND_VLOGS = "People &amp; Vlogs";
+VidiunYahooSyndicationFeedCategories.prototype.SCIENCE_AND_ENVIRONMENT = "Science &amp; Environment";
+VidiunYahooSyndicationFeedCategories.prototype.TRANSPORTATION = "Transportation";
+VidiunYahooSyndicationFeedCategories.prototype.ANIMALS = "Animals";
+VidiunYahooSyndicationFeedCategories.prototype.COMMERCIALS = "Commercials";
+VidiunYahooSyndicationFeedCategories.prototype.FAMILY = "Family";
+VidiunYahooSyndicationFeedCategories.prototype.FUNNY_VIDEOS = "Funny Videos";
+VidiunYahooSyndicationFeedCategories.prototype.HEALTH_AND_BEAUTY = "Health &amp; Beauty";
+VidiunYahooSyndicationFeedCategories.prototype.MOVIES_AND_SHORTS = "Movies &amp; Shorts";
+VidiunYahooSyndicationFeedCategories.prototype.NEWS_AND_POLITICS = "News &amp; Politics";
+VidiunYahooSyndicationFeedCategories.prototype.PRODUCTS_AND_TECH = "Products &amp; Tech.";
+VidiunYahooSyndicationFeedCategories.prototype.SPORTS = "Sports";
+VidiunYahooSyndicationFeedCategories.prototype.TRAVEL = "Travel";
 
-function KalturaYahooSyndicationFeedOrderBy()
+function VidiunYahooSyndicationFeedOrderBy()
 {
 }
-KalturaYahooSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
-KalturaYahooSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
-KalturaYahooSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
-KalturaYahooSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
-KalturaYahooSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
-KalturaYahooSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
-KalturaYahooSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
-KalturaYahooSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
+VidiunYahooSyndicationFeedOrderBy.prototype.PLAYLIST_ID_ASC = "+playlistId";
+VidiunYahooSyndicationFeedOrderBy.prototype.PLAYLIST_ID_DESC = "-playlistId";
+VidiunYahooSyndicationFeedOrderBy.prototype.NAME_ASC = "+name";
+VidiunYahooSyndicationFeedOrderBy.prototype.NAME_DESC = "-name";
+VidiunYahooSyndicationFeedOrderBy.prototype.TYPE_ASC = "+type";
+VidiunYahooSyndicationFeedOrderBy.prototype.TYPE_DESC = "-type";
+VidiunYahooSyndicationFeedOrderBy.prototype.CREATED_AT_ASC = "+createdAt";
+VidiunYahooSyndicationFeedOrderBy.prototype.CREATED_AT_DESC = "-createdAt";
 
-function KalturaAccessControl()
+function VidiunAccessControl()
 {
 }
-KalturaAccessControl.prototype = new KalturaObjectBase();
+VidiunAccessControl.prototype = new VidiunObjectBase();
 /**
  * The id of the Access Control Profile
 	 * 
@@ -936,7 +936,7 @@ KalturaAccessControl.prototype = new KalturaObjectBase();
  * @var int
  * @readonly
  */
-KalturaAccessControl.prototype.id = null;
+VidiunAccessControl.prototype.id = null;
 
 /**
  * 
@@ -944,7 +944,7 @@ KalturaAccessControl.prototype.id = null;
  * @var int
  * @readonly
  */
-KalturaAccessControl.prototype.partnerId = null;
+VidiunAccessControl.prototype.partnerId = null;
 
 /**
  * The name of the Access Control Profile
@@ -952,7 +952,7 @@ KalturaAccessControl.prototype.partnerId = null;
  *
  * @var string
  */
-KalturaAccessControl.prototype.name = null;
+VidiunAccessControl.prototype.name = null;
 
 /**
  * The description of the Access Control Profile
@@ -960,7 +960,7 @@ KalturaAccessControl.prototype.name = null;
  *
  * @var string
  */
-KalturaAccessControl.prototype.description = null;
+VidiunAccessControl.prototype.description = null;
 
 /**
  * Creation date as Unix timestamp (In seconds) 
@@ -969,81 +969,81 @@ KalturaAccessControl.prototype.description = null;
  * @var int
  * @readonly
  */
-KalturaAccessControl.prototype.createdAt = null;
+VidiunAccessControl.prototype.createdAt = null;
 
 /**
  * True if this Conversion Profile is the default
 	 * 
  *
- * @var KalturaNullableBoolean
+ * @var VidiunNullableBoolean
  */
-KalturaAccessControl.prototype.isDefault = null;
+VidiunAccessControl.prototype.isDefault = null;
 
 /**
  * Array of Access Control Restrictions
 	 * 
  *
- * @var KalturaRestrictionArray
+ * @var VidiunRestrictionArray
  */
-KalturaAccessControl.prototype.restrictions = null;
+VidiunAccessControl.prototype.restrictions = null;
 
 
-function KalturaFilter()
+function VidiunFilter()
 {
 }
-KalturaFilter.prototype = new KalturaObjectBase();
+VidiunFilter.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  */
-KalturaFilter.prototype.orderBy = null;
+VidiunFilter.prototype.orderBy = null;
 
 
-function KalturaAccessControlFilter()
+function VidiunAccessControlFilter()
 {
 }
-KalturaAccessControlFilter.prototype = new KalturaFilter();
+VidiunAccessControlFilter.prototype = new VidiunFilter();
 /**
  * 
  *
  * @var int
  */
-KalturaAccessControlFilter.prototype.idEqual = null;
+VidiunAccessControlFilter.prototype.idEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaAccessControlFilter.prototype.idIn = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaAccessControlFilter.prototype.createdAtGreaterThanOrEqual = null;
+VidiunAccessControlFilter.prototype.idIn = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaAccessControlFilter.prototype.createdAtLessThanOrEqual = null;
+VidiunAccessControlFilter.prototype.createdAtGreaterThanOrEqual = null;
 
-
-function KalturaAccessControlListResponse()
-{
-}
-KalturaAccessControlListResponse.prototype = new KalturaObjectBase();
 /**
  * 
  *
- * @var KalturaAccessControlArray
+ * @var int
+ */
+VidiunAccessControlFilter.prototype.createdAtLessThanOrEqual = null;
+
+
+function VidiunAccessControlListResponse()
+{
+}
+VidiunAccessControlListResponse.prototype = new VidiunObjectBase();
+/**
+ * 
+ *
+ * @var VidiunAccessControlArray
  * @readonly
  */
-KalturaAccessControlListResponse.prototype.objects = null;
+VidiunAccessControlListResponse.prototype.objects = null;
 
 /**
  * 
@@ -1051,20 +1051,20 @@ KalturaAccessControlListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaAccessControlListResponse.prototype.totalCount = null;
+VidiunAccessControlListResponse.prototype.totalCount = null;
 
 
-function KalturaAdminUser()
+function VidiunAdminUser()
 {
 }
-KalturaAdminUser.prototype = new KalturaObjectBase();
+VidiunAdminUser.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  * @readonly
  */
-KalturaAdminUser.prototype.password = null;
+VidiunAdminUser.prototype.password = null;
 
 /**
  * 
@@ -1072,20 +1072,20 @@ KalturaAdminUser.prototype.password = null;
  * @var string
  * @readonly
  */
-KalturaAdminUser.prototype.email = null;
+VidiunAdminUser.prototype.email = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaAdminUser.prototype.screenName = null;
+VidiunAdminUser.prototype.screenName = null;
 
 
-function KalturaBaseEntry()
+function VidiunBaseEntry()
 {
 }
-KalturaBaseEntry.prototype = new KalturaObjectBase();
+VidiunBaseEntry.prototype = new VidiunObjectBase();
 /**
  * Auto generated 10 characters alphanumeric string
 	 * 
@@ -1093,7 +1093,7 @@ KalturaBaseEntry.prototype = new KalturaObjectBase();
  * @var string
  * @readonly
  */
-KalturaBaseEntry.prototype.id = null;
+VidiunBaseEntry.prototype.id = null;
 
 /**
  * Entry name (Min 1 chars)
@@ -1101,7 +1101,7 @@ KalturaBaseEntry.prototype.id = null;
  *
  * @var string
  */
-KalturaBaseEntry.prototype.name = null;
+VidiunBaseEntry.prototype.name = null;
 
 /**
  * Entry description
@@ -1109,7 +1109,7 @@ KalturaBaseEntry.prototype.name = null;
  *
  * @var string
  */
-KalturaBaseEntry.prototype.description = null;
+VidiunBaseEntry.prototype.description = null;
 
 /**
  * 
@@ -1117,7 +1117,7 @@ KalturaBaseEntry.prototype.description = null;
  * @var int
  * @readonly
  */
-KalturaBaseEntry.prototype.partnerId = null;
+VidiunBaseEntry.prototype.partnerId = null;
 
 /**
  * The ID of the user who is the owner of this entry 
@@ -1125,7 +1125,7 @@ KalturaBaseEntry.prototype.partnerId = null;
  *
  * @var string
  */
-KalturaBaseEntry.prototype.userId = null;
+VidiunBaseEntry.prototype.userId = null;
 
 /**
  * Entry tags
@@ -1133,7 +1133,7 @@ KalturaBaseEntry.prototype.userId = null;
  *
  * @var string
  */
-KalturaBaseEntry.prototype.tags = null;
+VidiunBaseEntry.prototype.tags = null;
 
 /**
  * Entry admin tags can be updated only by administrators
@@ -1141,31 +1141,31 @@ KalturaBaseEntry.prototype.tags = null;
  *
  * @var string
  */
-KalturaBaseEntry.prototype.adminTags = null;
+VidiunBaseEntry.prototype.adminTags = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntry.prototype.categories = null;
+VidiunBaseEntry.prototype.categories = null;
 
 /**
  * 
  *
- * @var KalturaEntryStatus
+ * @var VidiunEntryStatus
  * @readonly
  */
-KalturaBaseEntry.prototype.status = null;
+VidiunBaseEntry.prototype.status = null;
 
 /**
  * Entry moderation status
 	 * 
  *
- * @var KalturaEntryModerationStatus
+ * @var VidiunEntryModerationStatus
  * @readonly
  */
-KalturaBaseEntry.prototype.moderationStatus = null;
+VidiunBaseEntry.prototype.moderationStatus = null;
 
 /**
  * Number of moderation requests waiting for this entry
@@ -1174,16 +1174,16 @@ KalturaBaseEntry.prototype.moderationStatus = null;
  * @var int
  * @readonly
  */
-KalturaBaseEntry.prototype.moderationCount = null;
+VidiunBaseEntry.prototype.moderationCount = null;
 
 /**
  * The type of the entry, this is auto filled by the derived entry object
 	 * 
  *
- * @var KalturaEntryType
+ * @var VidiunEntryType
  * @readonly
  */
-KalturaBaseEntry.prototype.type = null;
+VidiunBaseEntry.prototype.type = null;
 
 /**
  * Entry creation date as Unix timestamp (In seconds)
@@ -1192,7 +1192,7 @@ KalturaBaseEntry.prototype.type = null;
  * @var int
  * @readonly
  */
-KalturaBaseEntry.prototype.createdAt = null;
+VidiunBaseEntry.prototype.createdAt = null;
 
 /**
  * Calculated rank
@@ -1201,7 +1201,7 @@ KalturaBaseEntry.prototype.createdAt = null;
  * @var float
  * @readonly
  */
-KalturaBaseEntry.prototype.rank = null;
+VidiunBaseEntry.prototype.rank = null;
 
 /**
  * The total (sum) of all votes
@@ -1210,7 +1210,7 @@ KalturaBaseEntry.prototype.rank = null;
  * @var int
  * @readonly
  */
-KalturaBaseEntry.prototype.totalRank = null;
+VidiunBaseEntry.prototype.totalRank = null;
 
 /**
  * Number of votes
@@ -1219,14 +1219,14 @@ KalturaBaseEntry.prototype.totalRank = null;
  * @var int
  * @readonly
  */
-KalturaBaseEntry.prototype.votes = null;
+VidiunBaseEntry.prototype.votes = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntry.prototype.groupId = null;
+VidiunBaseEntry.prototype.groupId = null;
 
 /**
  * Can be used to store various partner related data as a string 
@@ -1234,7 +1234,7 @@ KalturaBaseEntry.prototype.groupId = null;
  *
  * @var string
  */
-KalturaBaseEntry.prototype.partnerData = null;
+VidiunBaseEntry.prototype.partnerData = null;
 
 /**
  * Download URL for the entry
@@ -1243,7 +1243,7 @@ KalturaBaseEntry.prototype.partnerData = null;
  * @var string
  * @readonly
  */
-KalturaBaseEntry.prototype.downloadUrl = null;
+VidiunBaseEntry.prototype.downloadUrl = null;
 
 /**
  * Indexed search text for full text search
@@ -1251,15 +1251,15 @@ KalturaBaseEntry.prototype.downloadUrl = null;
  * @var string
  * @readonly
  */
-KalturaBaseEntry.prototype.searchText = null;
+VidiunBaseEntry.prototype.searchText = null;
 
 /**
  * License type used for this entry
 	 * 
  *
- * @var KalturaLicenseType
+ * @var VidiunLicenseType
  */
-KalturaBaseEntry.prototype.licenseType = null;
+VidiunBaseEntry.prototype.licenseType = null;
 
 /**
  * Version of the entry data
@@ -1267,7 +1267,7 @@ KalturaBaseEntry.prototype.licenseType = null;
  * @var int
  * @readonly
  */
-KalturaBaseEntry.prototype.version = null;
+VidiunBaseEntry.prototype.version = null;
 
 /**
  * Thumbnail URL
@@ -1276,7 +1276,7 @@ KalturaBaseEntry.prototype.version = null;
  * @var string
  * @readonly
  */
-KalturaBaseEntry.prototype.thumbnailUrl = null;
+VidiunBaseEntry.prototype.thumbnailUrl = null;
 
 /**
  * The Access Control ID assigned to this entry (null when not set, send -1 to remove)  
@@ -1284,7 +1284,7 @@ KalturaBaseEntry.prototype.thumbnailUrl = null;
  *
  * @var int
  */
-KalturaBaseEntry.prototype.accessControlId = null;
+VidiunBaseEntry.prototype.accessControlId = null;
 
 /**
  * Entry scheduling start date (null when not set, send -1 to remove)
@@ -1292,7 +1292,7 @@ KalturaBaseEntry.prototype.accessControlId = null;
  *
  * @var int
  */
-KalturaBaseEntry.prototype.startDate = null;
+VidiunBaseEntry.prototype.startDate = null;
 
 /**
  * Entry scheduling end date (null when not set, send -1 to remove)
@@ -1300,20 +1300,20 @@ KalturaBaseEntry.prototype.startDate = null;
  *
  * @var int
  */
-KalturaBaseEntry.prototype.endDate = null;
+VidiunBaseEntry.prototype.endDate = null;
 
 
-function KalturaBaseEntryFilter()
+function VidiunBaseEntryFilter()
 {
 }
-KalturaBaseEntryFilter.prototype = new KalturaFilter();
+VidiunBaseEntryFilter.prototype = new VidiunFilter();
 /**
  * This filter should be in use for retrieving only a specific entry (identified by its entryId).
 	 * @var string
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.idEqual = null;
+VidiunBaseEntryFilter.prototype.idEqual = null;
 
 /**
  * This filter should be in use for retrieving few specific entries (string should include comma separated list of entryId strings).
@@ -1321,7 +1321,7 @@ KalturaBaseEntryFilter.prototype.idEqual = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.idIn = null;
+VidiunBaseEntryFilter.prototype.idIn = null;
 
 /**
  * This filter should be in use for retrieving specific entries while applying an SQL 'LIKE' pattern matching on entry names. It should include only one pattern for matching entry names against.
@@ -1329,7 +1329,7 @@ KalturaBaseEntryFilter.prototype.idIn = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.nameLike = null;
+VidiunBaseEntryFilter.prototype.nameLike = null;
 
 /**
  * This filter should be in use for retrieving specific entries, while applying an SQL 'LIKE' pattern matching on entry names. It could include few (comma separated) patterns for matching entry names against, while applying an OR logic to retrieve entries that match at least one input pattern.
@@ -1337,7 +1337,7 @@ KalturaBaseEntryFilter.prototype.nameLike = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.nameMultiLikeOr = null;
+VidiunBaseEntryFilter.prototype.nameMultiLikeOr = null;
 
 /**
  * This filter should be in use for retrieving specific entries, while applying an SQL 'LIKE' pattern matching on entry names. It could include few (comma separated) patterns for matching entry names against, while applying an AND logic to retrieve entries that match all input patterns.
@@ -1345,7 +1345,7 @@ KalturaBaseEntryFilter.prototype.nameMultiLikeOr = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.nameMultiLikeAnd = null;
+VidiunBaseEntryFilter.prototype.nameMultiLikeAnd = null;
 
 /**
  * This filter should be in use for retrieving entries with a specific name.
@@ -1353,23 +1353,23 @@ KalturaBaseEntryFilter.prototype.nameMultiLikeAnd = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.nameEqual = null;
+VidiunBaseEntryFilter.prototype.nameEqual = null;
 
 /**
- * This filter should be in use for retrieving only entries which were uploaded by/assigned to users of a specific Kaltura Partner (identified by Partner ID).
+ * This filter should be in use for retrieving only entries which were uploaded by/assigned to users of a specific Vidiun Partner (identified by Partner ID).
 	 * @var int
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.partnerIdEqual = null;
+VidiunBaseEntryFilter.prototype.partnerIdEqual = null;
 
 /**
- * This filter should be in use for retrieving only entries within Kaltura network which were uploaded by/assigned to users of few Kaltura Partners  (string should include comma separated list of PartnerIDs)
+ * This filter should be in use for retrieving only entries within Vidiun network which were uploaded by/assigned to users of few Vidiun Partners  (string should include comma separated list of PartnerIDs)
 	 * @var string
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.partnerIdIn = null;
+VidiunBaseEntryFilter.prototype.partnerIdIn = null;
 
 /**
  * This filter parameter should be in use for retrieving only entries, uploaded by/assigned to a specific user (identified by user Id).
@@ -1377,7 +1377,7 @@ KalturaBaseEntryFilter.prototype.partnerIdIn = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.userIdEqual = null;
+VidiunBaseEntryFilter.prototype.userIdEqual = null;
 
 /**
  * This filter should be in use for retrieving specific entries while applying an SQL 'LIKE' pattern matching on entry tags. It should include only one pattern for matching entry tags against.
@@ -1385,7 +1385,7 @@ KalturaBaseEntryFilter.prototype.userIdEqual = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsLike = null;
+VidiunBaseEntryFilter.prototype.tagsLike = null;
 
 /**
  * This filter should be in use for retrieving specific entries, while applying an SQL 'LIKE' pattern matching on tags.  It could include few (comma separated) patterns for matching entry tags against, while applying an OR logic to retrieve entries that match at least one input pattern.
@@ -1393,7 +1393,7 @@ KalturaBaseEntryFilter.prototype.tagsLike = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsMultiLikeOr = null;
+VidiunBaseEntryFilter.prototype.tagsMultiLikeOr = null;
 
 /**
  * This filter should be in use for retrieving specific entries, while applying an SQL 'LIKE' pattern matching on tags.  It could include few (comma separated) patterns for matching entry tags against, while applying an AND logic to retrieve entries that match all input patterns.
@@ -1401,7 +1401,7 @@ KalturaBaseEntryFilter.prototype.tagsMultiLikeOr = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsMultiLikeAnd = null;
+VidiunBaseEntryFilter.prototype.tagsMultiLikeAnd = null;
 
 /**
  * This filter should be in use for retrieving specific entries while applying an SQL 'LIKE' pattern matching on entry tags, set by an ADMIN user. It should include only one pattern for matching entry tags against.
@@ -1409,7 +1409,7 @@ KalturaBaseEntryFilter.prototype.tagsMultiLikeAnd = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.adminTagsLike = null;
+VidiunBaseEntryFilter.prototype.adminTagsLike = null;
 
 /**
  * This filter should be in use for retrieving specific entries, while applying an SQL 'LIKE' pattern matching on tags, set by an ADMIN user.  It could include few (comma separated) patterns for matching entry tags against, while applying an OR logic to retrieve entries that match at least one input pattern.
@@ -1417,7 +1417,7 @@ KalturaBaseEntryFilter.prototype.adminTagsLike = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.adminTagsMultiLikeOr = null;
+VidiunBaseEntryFilter.prototype.adminTagsMultiLikeOr = null;
 
 /**
  * This filter should be in use for retrieving specific entries, while applying an SQL 'LIKE' pattern matching on tags, set by an ADMIN user.  It could include few (comma separated) patterns for matching entry tags against, while applying an AND logic to retrieve entries that match all input patterns.
@@ -1425,119 +1425,119 @@ KalturaBaseEntryFilter.prototype.adminTagsMultiLikeOr = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.adminTagsMultiLikeAnd = null;
+VidiunBaseEntryFilter.prototype.adminTagsMultiLikeAnd = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.categoriesMatchAnd = null;
+VidiunBaseEntryFilter.prototype.categoriesMatchAnd = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.categoriesMatchOr = null;
+VidiunBaseEntryFilter.prototype.categoriesMatchOr = null;
 
 /**
- * This filter should be in use for retrieving only entries, at a specific {@link ?object=KalturaEntryStatus KalturaEntryStatus}.
-	 * @var KalturaEntryStatus
+ * This filter should be in use for retrieving only entries, at a specific {@link ?object=VidiunEntryStatus VidiunEntryStatus}.
+	 * @var VidiunEntryStatus
  *
- * @var KalturaEntryStatus
+ * @var VidiunEntryStatus
  */
-KalturaBaseEntryFilter.prototype.statusEqual = null;
+VidiunBaseEntryFilter.prototype.statusEqual = null;
 
 /**
- * This filter should be in use for retrieving only entries, not at a specific {@link ?object=KalturaEntryStatus KalturaEntryStatus}.
-	 * @var KalturaEntryStatus
+ * This filter should be in use for retrieving only entries, not at a specific {@link ?object=VidiunEntryStatus VidiunEntryStatus}.
+	 * @var VidiunEntryStatus
  *
- * @var KalturaEntryStatus
+ * @var VidiunEntryStatus
  */
-KalturaBaseEntryFilter.prototype.statusNotEqual = null;
+VidiunBaseEntryFilter.prototype.statusNotEqual = null;
 
 /**
- * This filter should be in use for retrieving only entries, at few specific {@link ?object=KalturaEntryStatus KalturaEntryStatus} (comma separated).
+ * This filter should be in use for retrieving only entries, at few specific {@link ?object=VidiunEntryStatus VidiunEntryStatus} (comma separated).
 	 * @var string
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.statusIn = null;
+VidiunBaseEntryFilter.prototype.statusIn = null;
 
 /**
- * This filter should be in use for retrieving only entries, not at few specific {@link ?object=KalturaEntryStatus KalturaEntryStatus} (comma separated).
-	 * @var KalturaEntryStatus
+ * This filter should be in use for retrieving only entries, not at few specific {@link ?object=VidiunEntryStatus VidiunEntryStatus} (comma separated).
+	 * @var VidiunEntryStatus
  *
- * @var KalturaEntryStatus
+ * @var VidiunEntryStatus
  */
-KalturaBaseEntryFilter.prototype.statusNotIn = null;
-
-/**
- * 
- *
- * @var KalturaEntryModerationStatus
- */
-KalturaBaseEntryFilter.prototype.moderationStatusEqual = null;
+VidiunBaseEntryFilter.prototype.statusNotIn = null;
 
 /**
  * 
  *
- * @var KalturaEntryModerationStatus
+ * @var VidiunEntryModerationStatus
  */
-KalturaBaseEntryFilter.prototype.moderationStatusNotEqual = null;
+VidiunBaseEntryFilter.prototype.moderationStatusEqual = null;
+
+/**
+ * 
+ *
+ * @var VidiunEntryModerationStatus
+ */
+VidiunBaseEntryFilter.prototype.moderationStatusNotEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.moderationStatusIn = null;
+VidiunBaseEntryFilter.prototype.moderationStatusIn = null;
 
 /**
  * 
  *
- * @var KalturaEntryModerationStatus
+ * @var VidiunEntryModerationStatus
  */
-KalturaBaseEntryFilter.prototype.moderationStatusNotIn = null;
+VidiunBaseEntryFilter.prototype.moderationStatusNotIn = null;
 
 /**
  * 
  *
- * @var KalturaEntryType
+ * @var VidiunEntryType
  */
-KalturaBaseEntryFilter.prototype.typeEqual = null;
+VidiunBaseEntryFilter.prototype.typeEqual = null;
 
 /**
- * This filter should be in use for retrieving entries of few {@link ?object=KalturaEntryType KalturaEntryType} (string should include a comma separated list of {@link ?object=KalturaEntryType KalturaEntryType} enumerated parameters).
+ * This filter should be in use for retrieving entries of few {@link ?object=VidiunEntryType VidiunEntryType} (string should include a comma separated list of {@link ?object=VidiunEntryType VidiunEntryType} enumerated parameters).
 	 * @var string
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.typeIn = null;
+VidiunBaseEntryFilter.prototype.typeIn = null;
 
 /**
- * This filter parameter should be in use for retrieving only entries which were created at Kaltura system after a specific time/date (standard timestamp format).
+ * This filter parameter should be in use for retrieving only entries which were created at Vidiun system after a specific time/date (standard timestamp format).
 	 * @var int
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.createdAtGreaterThanOrEqual = null;
+VidiunBaseEntryFilter.prototype.createdAtGreaterThanOrEqual = null;
 
 /**
- * This filter parameter should be in use for retrieving only entries which were created at Kaltura system before a specific time/date (standard timestamp format).
+ * This filter parameter should be in use for retrieving only entries which were created at Vidiun system before a specific time/date (standard timestamp format).
 	 * @var int
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.createdAtLessThanOrEqual = null;
+VidiunBaseEntryFilter.prototype.createdAtLessThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.groupIdEqual = null;
+VidiunBaseEntryFilter.prototype.groupIdEqual = null;
 
 /**
  * This filter should be in use for retrieving specific entries while search match the input string within all of the following metadata attributes: name, description, tags, adminTags.
@@ -1545,7 +1545,7 @@ KalturaBaseEntryFilter.prototype.groupIdEqual = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.searchTextMatchAnd = null;
+VidiunBaseEntryFilter.prototype.searchTextMatchAnd = null;
 
 /**
  * This filter should be in use for retrieving specific entries while search match the input string within at least one of the following metadata attributes: name, description, tags, adminTags.
@@ -1553,132 +1553,132 @@ KalturaBaseEntryFilter.prototype.searchTextMatchAnd = null;
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.searchTextMatchOr = null;
+VidiunBaseEntryFilter.prototype.searchTextMatchOr = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.accessControlIdEqual = null;
+VidiunBaseEntryFilter.prototype.accessControlIdEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.accessControlIdIn = null;
+VidiunBaseEntryFilter.prototype.accessControlIdIn = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.startDateGreaterThanOrEqual = null;
+VidiunBaseEntryFilter.prototype.startDateGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.startDateLessThanOrEqual = null;
+VidiunBaseEntryFilter.prototype.startDateLessThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.startDateGreaterThanOrEqualOrNull = null;
+VidiunBaseEntryFilter.prototype.startDateGreaterThanOrEqualOrNull = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.startDateLessThanOrEqualOrNull = null;
+VidiunBaseEntryFilter.prototype.startDateLessThanOrEqualOrNull = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.endDateGreaterThanOrEqual = null;
+VidiunBaseEntryFilter.prototype.endDateGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.endDateLessThanOrEqual = null;
+VidiunBaseEntryFilter.prototype.endDateLessThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.endDateGreaterThanOrEqualOrNull = null;
+VidiunBaseEntryFilter.prototype.endDateGreaterThanOrEqualOrNull = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseEntryFilter.prototype.endDateLessThanOrEqualOrNull = null;
+VidiunBaseEntryFilter.prototype.endDateLessThanOrEqualOrNull = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsNameMultiLikeOr = null;
+VidiunBaseEntryFilter.prototype.tagsNameMultiLikeOr = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsAdminTagsMultiLikeOr = null;
+VidiunBaseEntryFilter.prototype.tagsAdminTagsMultiLikeOr = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsAdminTagsNameMultiLikeOr = null;
+VidiunBaseEntryFilter.prototype.tagsAdminTagsNameMultiLikeOr = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsNameMultiLikeAnd = null;
+VidiunBaseEntryFilter.prototype.tagsNameMultiLikeAnd = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsAdminTagsMultiLikeAnd = null;
+VidiunBaseEntryFilter.prototype.tagsAdminTagsMultiLikeAnd = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseEntryFilter.prototype.tagsAdminTagsNameMultiLikeAnd = null;
+VidiunBaseEntryFilter.prototype.tagsAdminTagsNameMultiLikeAnd = null;
 
 
-function KalturaBaseEntryListResponse()
+function VidiunBaseEntryListResponse()
 {
 }
-KalturaBaseEntryListResponse.prototype = new KalturaObjectBase();
+VidiunBaseEntryListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaBaseEntryArray
+ * @var VidiunBaseEntryArray
  * @readonly
  */
-KalturaBaseEntryListResponse.prototype.objects = null;
+VidiunBaseEntryListResponse.prototype.objects = null;
 
 /**
  * 
@@ -1686,28 +1686,20 @@ KalturaBaseEntryListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaBaseEntryListResponse.prototype.totalCount = null;
+VidiunBaseEntryListResponse.prototype.totalCount = null;
 
 
-function KalturaBaseJob()
+function VidiunBaseJob()
 {
 }
-KalturaBaseJob.prototype = new KalturaObjectBase();
+VidiunBaseJob.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var int
  * @readonly
  */
-KalturaBaseJob.prototype.id = null;
-
-/**
- * 
- *
- * @var int
- * @readonly
- */
-KalturaBaseJob.prototype.partnerId = null;
+VidiunBaseJob.prototype.id = null;
 
 /**
  * 
@@ -1715,7 +1707,7 @@ KalturaBaseJob.prototype.partnerId = null;
  * @var int
  * @readonly
  */
-KalturaBaseJob.prototype.createdAt = null;
+VidiunBaseJob.prototype.partnerId = null;
 
 /**
  * 
@@ -1723,7 +1715,7 @@ KalturaBaseJob.prototype.createdAt = null;
  * @var int
  * @readonly
  */
-KalturaBaseJob.prototype.updatedAt = null;
+VidiunBaseJob.prototype.createdAt = null;
 
 /**
  * 
@@ -1731,7 +1723,7 @@ KalturaBaseJob.prototype.updatedAt = null;
  * @var int
  * @readonly
  */
-KalturaBaseJob.prototype.processorExpiration = null;
+VidiunBaseJob.prototype.updatedAt = null;
 
 /**
  * 
@@ -1739,72 +1731,80 @@ KalturaBaseJob.prototype.processorExpiration = null;
  * @var int
  * @readonly
  */
-KalturaBaseJob.prototype.executionAttempts = null;
+VidiunBaseJob.prototype.processorExpiration = null;
+
+/**
+ * 
+ *
+ * @var int
+ * @readonly
+ */
+VidiunBaseJob.prototype.executionAttempts = null;
 
 
-function KalturaBaseJobFilter()
+function VidiunBaseJobFilter()
 {
 }
-KalturaBaseJobFilter.prototype = new KalturaFilter();
+VidiunBaseJobFilter.prototype = new VidiunFilter();
 /**
  * 
  *
  * @var int
  */
-KalturaBaseJobFilter.prototype.idEqual = null;
+VidiunBaseJobFilter.prototype.idEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseJobFilter.prototype.idGreaterThanOrEqual = null;
+VidiunBaseJobFilter.prototype.idGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseJobFilter.prototype.partnerIdEqual = null;
+VidiunBaseJobFilter.prototype.partnerIdEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseJobFilter.prototype.partnerIdIn = null;
+VidiunBaseJobFilter.prototype.partnerIdIn = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseJobFilter.prototype.createdAtGreaterThanOrEqual = null;
+VidiunBaseJobFilter.prototype.createdAtGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseJobFilter.prototype.createdAtLessThanOrEqual = null;
+VidiunBaseJobFilter.prototype.createdAtLessThanOrEqual = null;
 
 
-function KalturaBaseRestriction()
+function VidiunBaseRestriction()
 {
 }
-KalturaBaseRestriction.prototype = new KalturaObjectBase();
+VidiunBaseRestriction.prototype = new VidiunObjectBase();
 
-function KalturaBaseSyndicationFeed()
+function VidiunBaseSyndicationFeed()
 {
 }
-KalturaBaseSyndicationFeed.prototype = new KalturaObjectBase();
+VidiunBaseSyndicationFeed.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  * @readonly
  */
-KalturaBaseSyndicationFeed.prototype.id = null;
+VidiunBaseSyndicationFeed.prototype.id = null;
 
 /**
  * 
@@ -1812,7 +1812,7 @@ KalturaBaseSyndicationFeed.prototype.id = null;
  * @var string
  * @readonly
  */
-KalturaBaseSyndicationFeed.prototype.feedUrl = null;
+VidiunBaseSyndicationFeed.prototype.feedUrl = null;
 
 /**
  * 
@@ -1820,7 +1820,7 @@ KalturaBaseSyndicationFeed.prototype.feedUrl = null;
  * @var int
  * @readonly
  */
-KalturaBaseSyndicationFeed.prototype.partnerId = null;
+VidiunBaseSyndicationFeed.prototype.partnerId = null;
 
 /**
  * link a playlist that will set what content the feed will include
@@ -1829,7 +1829,7 @@ KalturaBaseSyndicationFeed.prototype.partnerId = null;
  *
  * @var string
  */
-KalturaBaseSyndicationFeed.prototype.playlistId = null;
+VidiunBaseSyndicationFeed.prototype.playlistId = null;
 
 /**
  * feed name
@@ -1837,25 +1837,25 @@ KalturaBaseSyndicationFeed.prototype.playlistId = null;
  *
  * @var string
  */
-KalturaBaseSyndicationFeed.prototype.name = null;
+VidiunBaseSyndicationFeed.prototype.name = null;
 
 /**
  * feed status
 	 * 
  *
- * @var KalturaSyndicationFeedStatus
+ * @var VidiunSyndicationFeedStatus
  * @readonly
  */
-KalturaBaseSyndicationFeed.prototype.status = null;
+VidiunBaseSyndicationFeed.prototype.status = null;
 
 /**
  * feed type
 	 * 
  *
- * @var KalturaSyndicationFeedType
+ * @var VidiunSyndicationFeedType
  * @readonly
  */
-KalturaBaseSyndicationFeed.prototype.type = null;
+VidiunBaseSyndicationFeed.prototype.type = null;
 
 /**
  * Base URL for each video, on the partners site
@@ -1863,7 +1863,7 @@ KalturaBaseSyndicationFeed.prototype.type = null;
  *
  * @var string
  */
-KalturaBaseSyndicationFeed.prototype.landingPage = null;
+VidiunBaseSyndicationFeed.prototype.landingPage = null;
 
 /**
  * Creation date as Unix timestamp (In seconds)
@@ -1872,7 +1872,7 @@ KalturaBaseSyndicationFeed.prototype.landingPage = null;
  * @var int
  * @readonly
  */
-KalturaBaseSyndicationFeed.prototype.createdAt = null;
+VidiunBaseSyndicationFeed.prototype.createdAt = null;
 
 /**
  * allow_embed tells google OR yahoo weather to allow embedding the video on google OR yahoo video results
@@ -1882,60 +1882,60 @@ KalturaBaseSyndicationFeed.prototype.createdAt = null;
  *
  * @var bool
  */
-KalturaBaseSyndicationFeed.prototype.allowEmbed = null;
+VidiunBaseSyndicationFeed.prototype.allowEmbed = null;
 
 /**
- * Select a uiconf ID as player skin to include in the kwidget url
+ * Select a uiconf ID as player skin to include in the vwidget url
  *
  * @var int
  */
-KalturaBaseSyndicationFeed.prototype.playerUiconfId = null;
+VidiunBaseSyndicationFeed.prototype.playerUiconfId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBaseSyndicationFeed.prototype.flavorParamId = null;
+VidiunBaseSyndicationFeed.prototype.flavorParamId = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaBaseSyndicationFeed.prototype.transcodeExistingContent = null;
+VidiunBaseSyndicationFeed.prototype.transcodeExistingContent = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaBaseSyndicationFeed.prototype.addToDefaultConversionProfile = null;
+VidiunBaseSyndicationFeed.prototype.addToDefaultConversionProfile = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBaseSyndicationFeed.prototype.categories = null;
+VidiunBaseSyndicationFeed.prototype.categories = null;
 
 
-function KalturaBaseSyndicationFeedFilter()
+function VidiunBaseSyndicationFeedFilter()
 {
 }
-KalturaBaseSyndicationFeedFilter.prototype = new KalturaFilter();
+VidiunBaseSyndicationFeedFilter.prototype = new VidiunFilter();
 
-function KalturaBaseSyndicationFeedListResponse()
+function VidiunBaseSyndicationFeedListResponse()
 {
 }
-KalturaBaseSyndicationFeedListResponse.prototype = new KalturaObjectBase();
+VidiunBaseSyndicationFeedListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaBaseSyndicationFeedArray
+ * @var VidiunBaseSyndicationFeedArray
  * @readonly
  */
-KalturaBaseSyndicationFeedListResponse.prototype.objects = null;
+VidiunBaseSyndicationFeedListResponse.prototype.objects = null;
 
 /**
  * 
@@ -1943,290 +1943,290 @@ KalturaBaseSyndicationFeedListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaBaseSyndicationFeedListResponse.prototype.totalCount = null;
+VidiunBaseSyndicationFeedListResponse.prototype.totalCount = null;
 
 
-function KalturaBatchJob()
+function VidiunBatchJob()
 {
 }
-KalturaBatchJob.prototype = new KalturaBaseJob();
+VidiunBatchJob.prototype = new VidiunBaseJob();
 /**
  * 
  *
  * @var string
  */
-KalturaBatchJob.prototype.entryId = null;
+VidiunBatchJob.prototype.entryId = null;
 
 /**
  * 
  *
- * @var KalturaBatchJobType
+ * @var VidiunBatchJobType
  * @readonly
  */
-KalturaBatchJob.prototype.jobType = null;
+VidiunBatchJob.prototype.jobType = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJob.prototype.jobSubType = null;
+VidiunBatchJob.prototype.jobSubType = null;
 
 /**
  * 
  *
- * @var KalturaJobData
+ * @var VidiunJobData
  */
-KalturaBatchJob.prototype.data = null;
+VidiunBatchJob.prototype.data = null;
 
 /**
  * 
  *
- * @var KalturaBatchJobStatus
+ * @var VidiunBatchJobStatus
  */
-KalturaBatchJob.prototype.status = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaBatchJob.prototype.abort = null;
+VidiunBatchJob.prototype.status = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJob.prototype.checkAgainTimeout = null;
+VidiunBatchJob.prototype.abort = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJob.prototype.progress = null;
+VidiunBatchJob.prototype.checkAgainTimeout = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunBatchJob.prototype.progress = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBatchJob.prototype.message = null;
+VidiunBatchJob.prototype.message = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBatchJob.prototype.description = null;
+VidiunBatchJob.prototype.description = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJob.prototype.updatesCount = null;
+VidiunBatchJob.prototype.updatesCount = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJob.prototype.priority = null;
+VidiunBatchJob.prototype.priority = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJob.prototype.workGroupId = null;
+VidiunBatchJob.prototype.workGroupId = null;
 
 /**
  * The id of the bulk upload job that initiated this job
  *
  * @var int
  */
-KalturaBatchJob.prototype.bulkJobId = null;
+VidiunBatchJob.prototype.bulkJobId = null;
 
 /**
  * When one job creates another - the parent should set this parentJobId to be its own id.
  *
  * @var int
  */
-KalturaBatchJob.prototype.parentJobId = null;
+VidiunBatchJob.prototype.parentJobId = null;
 
 /**
  * The id of the root parent job
  *
  * @var int
  */
-KalturaBatchJob.prototype.rootJobId = null;
+VidiunBatchJob.prototype.rootJobId = null;
 
 /**
  * The time that the job was pulled from the queue
  *
  * @var int
  */
-KalturaBatchJob.prototype.queueTime = null;
+VidiunBatchJob.prototype.queueTime = null;
 
 /**
  * The time that the job was finished or closed as failed
  *
  * @var int
  */
-KalturaBatchJob.prototype.finishTime = null;
+VidiunBatchJob.prototype.finishTime = null;
 
 /**
  * 
  *
- * @var KalturaBatchJobErrorTypes
+ * @var VidiunBatchJobErrorTypes
  */
-KalturaBatchJob.prototype.errType = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaBatchJob.prototype.errNumber = null;
+VidiunBatchJob.prototype.errType = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJob.prototype.fileSize = null;
+VidiunBatchJob.prototype.errNumber = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunBatchJob.prototype.fileSize = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaBatchJob.prototype.lastWorkerRemote = null;
+VidiunBatchJob.prototype.lastWorkerRemote = null;
 
 
-function KalturaBatchJobFilter()
+function VidiunBatchJobFilter()
 {
 }
-KalturaBatchJobFilter.prototype = new KalturaBaseJobFilter();
+VidiunBatchJobFilter.prototype = new VidiunBaseJobFilter();
 /**
  * 
  *
  * @var string
  */
-KalturaBatchJobFilter.prototype.entryIdEqual = null;
+VidiunBatchJobFilter.prototype.entryIdEqual = null;
 
 /**
  * 
  *
- * @var KalturaBatchJobType
+ * @var VidiunBatchJobType
  */
-KalturaBatchJobFilter.prototype.jobTypeEqual = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaBatchJobFilter.prototype.jobTypeIn = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaBatchJobFilter.prototype.jobSubTypeEqual = null;
+VidiunBatchJobFilter.prototype.jobTypeEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBatchJobFilter.prototype.jobSubTypeIn = null;
+VidiunBatchJobFilter.prototype.jobTypeIn = null;
 
 /**
  * 
  *
- * @var KalturaBatchJobStatus
+ * @var int
  */
-KalturaBatchJobFilter.prototype.statusEqual = null;
+VidiunBatchJobFilter.prototype.jobSubTypeEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBatchJobFilter.prototype.statusIn = null;
+VidiunBatchJobFilter.prototype.jobSubTypeIn = null;
+
+/**
+ * 
+ *
+ * @var VidiunBatchJobStatus
+ */
+VidiunBatchJobFilter.prototype.statusEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBatchJobFilter.prototype.workGroupIdIn = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaBatchJobFilter.prototype.queueTimeGreaterThanOrEqual = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaBatchJobFilter.prototype.queueTimeLessThanOrEqual = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaBatchJobFilter.prototype.finishTimeGreaterThanOrEqual = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaBatchJobFilter.prototype.finishTimeLessThanOrEqual = null;
+VidiunBatchJobFilter.prototype.statusIn = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBatchJobFilter.prototype.errTypeIn = null;
+VidiunBatchJobFilter.prototype.workGroupIdIn = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJobFilter.prototype.fileSizeLessThan = null;
+VidiunBatchJobFilter.prototype.queueTimeGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBatchJobFilter.prototype.fileSizeGreaterThan = null;
+VidiunBatchJobFilter.prototype.queueTimeLessThanOrEqual = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunBatchJobFilter.prototype.finishTimeGreaterThanOrEqual = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunBatchJobFilter.prototype.finishTimeLessThanOrEqual = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunBatchJobFilter.prototype.errTypeIn = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunBatchJobFilter.prototype.fileSizeLessThan = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunBatchJobFilter.prototype.fileSizeGreaterThan = null;
 
 
-function KalturaBatchJobListResponse()
+function VidiunBatchJobListResponse()
 {
 }
-KalturaBatchJobListResponse.prototype = new KalturaObjectBase();
+VidiunBatchJobListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaBatchJobArray
+ * @var VidiunBatchJobArray
  * @readonly
  */
-KalturaBatchJobListResponse.prototype.objects = null;
+VidiunBatchJobListResponse.prototype.objects = null;
 
 /**
  * 
@@ -2234,46 +2234,46 @@ KalturaBatchJobListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaBatchJobListResponse.prototype.totalCount = null;
+VidiunBatchJobListResponse.prototype.totalCount = null;
 
 
-function KalturaBatchJobResponse()
+function VidiunBatchJobResponse()
 {
 }
-KalturaBatchJobResponse.prototype = new KalturaObjectBase();
+VidiunBatchJobResponse.prototype = new VidiunObjectBase();
 /**
  * The main batch job
 	 * 
  *
- * @var KalturaBatchJob
+ * @var VidiunBatchJob
  */
-KalturaBatchJobResponse.prototype.batchJob = null;
+VidiunBatchJobResponse.prototype.batchJob = null;
 
 /**
  * All batch jobs that reference the main job as root
 	 * 
  *
- * @var KalturaBatchJobArray
+ * @var VidiunBatchJobArray
  */
-KalturaBatchJobResponse.prototype.childBatchJobs = null;
+VidiunBatchJobResponse.prototype.childBatchJobs = null;
 
 
-function KalturaJobData()
+function VidiunJobData()
 {
 }
-KalturaJobData.prototype = new KalturaObjectBase();
+VidiunJobData.prototype = new VidiunObjectBase();
 
-function KalturaBulkDownloadJobData()
+function VidiunBulkDownloadJobData()
 {
 }
-KalturaBulkDownloadJobData.prototype = new KalturaJobData();
+VidiunBulkDownloadJobData.prototype = new VidiunJobData();
 /**
  * Comma separated list of entry ids
 	 * 
  *
  * @var string
  */
-KalturaBulkDownloadJobData.prototype.entryIds = null;
+VidiunBulkDownloadJobData.prototype.entryIds = null;
 
 /**
  * Flavor params id to use for conversion
@@ -2281,7 +2281,7 @@ KalturaBulkDownloadJobData.prototype.entryIds = null;
  *
  * @var int
  */
-KalturaBulkDownloadJobData.prototype.flavorParamsId = null;
+VidiunBulkDownloadJobData.prototype.flavorParamsId = null;
 
 /**
  * The id of the requesting user
@@ -2289,80 +2289,80 @@ KalturaBulkDownloadJobData.prototype.flavorParamsId = null;
  *
  * @var string
  */
-KalturaBulkDownloadJobData.prototype.puserId = null;
+VidiunBulkDownloadJobData.prototype.puserId = null;
 
 
-function KalturaBulkUpload()
+function VidiunBulkUpload()
 {
 }
-KalturaBulkUpload.prototype = new KalturaObjectBase();
+VidiunBulkUpload.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUpload.prototype.id = null;
+VidiunBulkUpload.prototype.id = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUpload.prototype.uploadedBy = null;
+VidiunBulkUpload.prototype.uploadedBy = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUpload.prototype.uploadedOn = null;
+VidiunBulkUpload.prototype.uploadedOn = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUpload.prototype.numOfEntries = null;
+VidiunBulkUpload.prototype.numOfEntries = null;
 
 /**
  * 
  *
- * @var KalturaBatchJobStatus
+ * @var VidiunBatchJobStatus
  */
-KalturaBulkUpload.prototype.status = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaBulkUpload.prototype.logFileUrl = null;
+VidiunBulkUpload.prototype.status = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUpload.prototype.csvFileUrl = null;
+VidiunBulkUpload.prototype.logFileUrl = null;
 
 /**
  * 
  *
- * @var KalturaBulkUploadResultArray
+ * @var string
  */
-KalturaBulkUpload.prototype.results = null;
+VidiunBulkUpload.prototype.csvFileUrl = null;
+
+/**
+ * 
+ *
+ * @var VidiunBulkUploadResultArray
+ */
+VidiunBulkUpload.prototype.results = null;
 
 
-function KalturaBulkUploadJobData()
+function VidiunBulkUploadJobData()
 {
 }
-KalturaBulkUploadJobData.prototype = new KalturaJobData();
+VidiunBulkUploadJobData.prototype = new VidiunJobData();
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUploadJobData.prototype.userId = null;
+VidiunBulkUploadJobData.prototype.userId = null;
 
 /**
  * The screen name of the user
@@ -2370,7 +2370,7 @@ KalturaBulkUploadJobData.prototype.userId = null;
  *
  * @var string
  */
-KalturaBulkUploadJobData.prototype.uploadedBy = null;
+VidiunBulkUploadJobData.prototype.uploadedBy = null;
 
 /**
  * Selected profile id for all bulk entries
@@ -2378,7 +2378,7 @@ KalturaBulkUploadJobData.prototype.uploadedBy = null;
  *
  * @var int
  */
-KalturaBulkUploadJobData.prototype.conversionProfileId = null;
+VidiunBulkUploadJobData.prototype.conversionProfileId = null;
 
 /**
  * Created by the API
@@ -2386,7 +2386,7 @@ KalturaBulkUploadJobData.prototype.conversionProfileId = null;
  *
  * @var string
  */
-KalturaBulkUploadJobData.prototype.csvFilePath = null;
+VidiunBulkUploadJobData.prototype.csvFilePath = null;
 
 /**
  * Created by the API
@@ -2394,7 +2394,7 @@ KalturaBulkUploadJobData.prototype.csvFilePath = null;
  *
  * @var string
  */
-KalturaBulkUploadJobData.prototype.resultsFileLocalPath = null;
+VidiunBulkUploadJobData.prototype.resultsFileLocalPath = null;
 
 /**
  * Created by the API
@@ -2402,7 +2402,7 @@ KalturaBulkUploadJobData.prototype.resultsFileLocalPath = null;
  *
  * @var string
  */
-KalturaBulkUploadJobData.prototype.resultsFileUrl = null;
+VidiunBulkUploadJobData.prototype.resultsFileUrl = null;
 
 /**
  * Number of created entries
@@ -2410,28 +2410,28 @@ KalturaBulkUploadJobData.prototype.resultsFileUrl = null;
  *
  * @var int
  */
-KalturaBulkUploadJobData.prototype.numOfEntries = null;
+VidiunBulkUploadJobData.prototype.numOfEntries = null;
 
 /**
  * The version of the csv file
 	 * 
  *
- * @var KalturaBulkUploadCsvVersion
+ * @var VidiunBulkUploadCsvVersion
  */
-KalturaBulkUploadJobData.prototype.csvVersion = null;
+VidiunBulkUploadJobData.prototype.csvVersion = null;
 
 
-function KalturaBulkUploadListResponse()
+function VidiunBulkUploadListResponse()
 {
 }
-KalturaBulkUploadListResponse.prototype = new KalturaObjectBase();
+VidiunBulkUploadListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaBulkUploads
+ * @var VidiunBulkUploads
  * @readonly
  */
-KalturaBulkUploadListResponse.prototype.objects = null;
+VidiunBulkUploadListResponse.prototype.objects = null;
 
 /**
  * 
@@ -2439,13 +2439,13 @@ KalturaBulkUploadListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaBulkUploadListResponse.prototype.totalCount = null;
+VidiunBulkUploadListResponse.prototype.totalCount = null;
 
 
-function KalturaBulkUploadResult()
+function VidiunBulkUploadResult()
 {
 }
-KalturaBulkUploadResult.prototype = new KalturaObjectBase();
+VidiunBulkUploadResult.prototype = new VidiunObjectBase();
 /**
  * The id of the result
 	 * 
@@ -2453,7 +2453,7 @@ KalturaBulkUploadResult.prototype = new KalturaObjectBase();
  * @var int
  * @readonly
  */
-KalturaBulkUploadResult.prototype.id = null;
+VidiunBulkUploadResult.prototype.id = null;
 
 /**
  * The id of the parent job
@@ -2461,7 +2461,7 @@ KalturaBulkUploadResult.prototype.id = null;
  *
  * @var int
  */
-KalturaBulkUploadResult.prototype.bulkUploadJobId = null;
+VidiunBulkUploadResult.prototype.bulkUploadJobId = null;
 
 /**
  * The index of the line in the CSV
@@ -2469,28 +2469,28 @@ KalturaBulkUploadResult.prototype.bulkUploadJobId = null;
  *
  * @var int
  */
-KalturaBulkUploadResult.prototype.lineIndex = null;
+VidiunBulkUploadResult.prototype.lineIndex = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUploadResult.prototype.partnerId = null;
+VidiunBulkUploadResult.prototype.partnerId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.entryId = null;
+VidiunBulkUploadResult.prototype.entryId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUploadResult.prototype.entryStatus = null;
+VidiunBulkUploadResult.prototype.entryStatus = null;
 
 /**
  * The data as recieved in the csv
@@ -2498,187 +2498,187 @@ KalturaBulkUploadResult.prototype.entryStatus = null;
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.rowData = null;
+VidiunBulkUploadResult.prototype.rowData = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.title = null;
+VidiunBulkUploadResult.prototype.title = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.description = null;
+VidiunBulkUploadResult.prototype.description = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.tags = null;
+VidiunBulkUploadResult.prototype.tags = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.url = null;
+VidiunBulkUploadResult.prototype.url = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.contentType = null;
+VidiunBulkUploadResult.prototype.contentType = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUploadResult.prototype.conversionProfileId = null;
+VidiunBulkUploadResult.prototype.conversionProfileId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUploadResult.prototype.accessControlProfileId = null;
+VidiunBulkUploadResult.prototype.accessControlProfileId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.category = null;
+VidiunBulkUploadResult.prototype.category = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUploadResult.prototype.scheduleStartDate = null;
+VidiunBulkUploadResult.prototype.scheduleStartDate = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaBulkUploadResult.prototype.scheduleEndDate = null;
+VidiunBulkUploadResult.prototype.scheduleEndDate = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.thumbnailUrl = null;
+VidiunBulkUploadResult.prototype.thumbnailUrl = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaBulkUploadResult.prototype.thumbnailSaved = null;
+VidiunBulkUploadResult.prototype.thumbnailSaved = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.partnerData = null;
+VidiunBulkUploadResult.prototype.partnerData = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaBulkUploadResult.prototype.errorDescription = null;
+VidiunBulkUploadResult.prototype.errorDescription = null;
 
 
-function KalturaCEError()
+function VidiunCEError()
 {
 }
-KalturaCEError.prototype = new KalturaObjectBase();
+VidiunCEError.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  * @readonly
  */
-KalturaCEError.prototype.id = null;
+VidiunCEError.prototype.id = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaCEError.prototype.partnerId = null;
+VidiunCEError.prototype.partnerId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCEError.prototype.browser = null;
+VidiunCEError.prototype.browser = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCEError.prototype.serverIp = null;
+VidiunCEError.prototype.serverIp = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCEError.prototype.serverOs = null;
+VidiunCEError.prototype.serverOs = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCEError.prototype.phpVersion = null;
+VidiunCEError.prototype.phpVersion = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCEError.prototype.ceAdminEmail = null;
+VidiunCEError.prototype.ceAdminEmail = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCEError.prototype.type = null;
+VidiunCEError.prototype.type = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCEError.prototype.description = null;
+VidiunCEError.prototype.description = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCEError.prototype.data = null;
+VidiunCEError.prototype.data = null;
 
 
-function KalturaCategory()
+function VidiunCategory()
 {
 }
-KalturaCategory.prototype = new KalturaObjectBase();
+VidiunCategory.prototype = new VidiunObjectBase();
 /**
  * The id of the Category
 	 * 
@@ -2686,22 +2686,14 @@ KalturaCategory.prototype = new KalturaObjectBase();
  * @var int
  * @readonly
  */
-KalturaCategory.prototype.id = null;
+VidiunCategory.prototype.id = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaCategory.prototype.parentId = null;
-
-/**
- * 
- *
- * @var int
- * @readonly
- */
-KalturaCategory.prototype.depth = null;
+VidiunCategory.prototype.parentId = null;
 
 /**
  * 
@@ -2709,7 +2701,15 @@ KalturaCategory.prototype.depth = null;
  * @var int
  * @readonly
  */
-KalturaCategory.prototype.partnerId = null;
+VidiunCategory.prototype.depth = null;
+
+/**
+ * 
+ *
+ * @var int
+ * @readonly
+ */
+VidiunCategory.prototype.partnerId = null;
 
 /**
  * The name of the Category. 
@@ -2718,7 +2718,7 @@ KalturaCategory.prototype.partnerId = null;
  *
  * @var string
  */
-KalturaCategory.prototype.name = null;
+VidiunCategory.prototype.name = null;
 
 /**
  * The full name of the Category
@@ -2727,7 +2727,7 @@ KalturaCategory.prototype.name = null;
  * @var string
  * @readonly
  */
-KalturaCategory.prototype.fullName = null;
+VidiunCategory.prototype.fullName = null;
 
 /**
  * Number of entries in this Category (including child categories)
@@ -2736,7 +2736,7 @@ KalturaCategory.prototype.fullName = null;
  * @var int
  * @readonly
  */
-KalturaCategory.prototype.entriesCount = null;
+VidiunCategory.prototype.entriesCount = null;
 
 /**
  * Creation date as Unix timestamp (In seconds)
@@ -2745,74 +2745,74 @@ KalturaCategory.prototype.entriesCount = null;
  * @var int
  * @readonly
  */
-KalturaCategory.prototype.createdAt = null;
+VidiunCategory.prototype.createdAt = null;
 
 
-function KalturaCategoryFilter()
+function VidiunCategoryFilter()
 {
 }
-KalturaCategoryFilter.prototype = new KalturaFilter();
+VidiunCategoryFilter.prototype = new VidiunFilter();
 /**
  * 
  *
  * @var int
  */
-KalturaCategoryFilter.prototype.idEqual = null;
+VidiunCategoryFilter.prototype.idEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCategoryFilter.prototype.idIn = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaCategoryFilter.prototype.parentIdEqual = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaCategoryFilter.prototype.parentIdIn = null;
+VidiunCategoryFilter.prototype.idIn = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaCategoryFilter.prototype.depthEqual = null;
+VidiunCategoryFilter.prototype.parentIdEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCategoryFilter.prototype.fullNameEqual = null;
+VidiunCategoryFilter.prototype.parentIdIn = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunCategoryFilter.prototype.depthEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaCategoryFilter.prototype.fullNameStartsWith = null;
+VidiunCategoryFilter.prototype.fullNameEqual = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunCategoryFilter.prototype.fullNameStartsWith = null;
 
 
-function KalturaCategoryListResponse()
+function VidiunCategoryListResponse()
 {
 }
-KalturaCategoryListResponse.prototype = new KalturaObjectBase();
+VidiunCategoryListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaCategoryArray
+ * @var VidiunCategoryArray
  * @readonly
  */
-KalturaCategoryListResponse.prototype.objects = null;
+VidiunCategoryListResponse.prototype.objects = null;
 
 /**
  * 
@@ -2820,72 +2820,72 @@ KalturaCategoryListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaCategoryListResponse.prototype.totalCount = null;
+VidiunCategoryListResponse.prototype.totalCount = null;
 
 
-function KalturaClientNotification()
+function VidiunClientNotification()
 {
 }
-KalturaClientNotification.prototype = new KalturaObjectBase();
+VidiunClientNotification.prototype = new VidiunObjectBase();
 /**
  * The URL where the notification should be sent to 
  *
  * @var string
  */
-KalturaClientNotification.prototype.url = null;
+VidiunClientNotification.prototype.url = null;
 
 /**
  * The serialized notification data to send
  *
  * @var string
  */
-KalturaClientNotification.prototype.data = null;
+VidiunClientNotification.prototype.data = null;
 
 
-function KalturaConvartableJobData()
+function VidiunConvartableJobData()
 {
 }
-KalturaConvartableJobData.prototype = new KalturaJobData();
+VidiunConvartableJobData.prototype = new VidiunJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaConvartableJobData.prototype.srcFileSyncLocalPath = null;
+VidiunConvartableJobData.prototype.srcFileSyncLocalPath = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaConvartableJobData.prototype.srcFileSyncRemoteUrl = null;
+VidiunConvartableJobData.prototype.srcFileSyncRemoteUrl = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaConvartableJobData.prototype.flavorParamsOutputId = null;
+VidiunConvartableJobData.prototype.flavorParamsOutputId = null;
 
 /**
  * 
  *
- * @var KalturaFlavorParamsOutput
+ * @var VidiunFlavorParamsOutput
  */
-KalturaConvartableJobData.prototype.flavorParamsOutput = null;
+VidiunConvartableJobData.prototype.flavorParamsOutput = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaConvartableJobData.prototype.mediaInfoId = null;
+VidiunConvartableJobData.prototype.mediaInfoId = null;
 
 
-function KalturaConversionProfile()
+function VidiunConversionProfile()
 {
 }
-KalturaConversionProfile.prototype = new KalturaObjectBase();
+VidiunConversionProfile.prototype = new VidiunObjectBase();
 /**
  * The id of the Conversion Profile
 	 * 
@@ -2893,7 +2893,7 @@ KalturaConversionProfile.prototype = new KalturaObjectBase();
  * @var int
  * @readonly
  */
-KalturaConversionProfile.prototype.id = null;
+VidiunConversionProfile.prototype.id = null;
 
 /**
  * 
@@ -2901,7 +2901,7 @@ KalturaConversionProfile.prototype.id = null;
  * @var int
  * @readonly
  */
-KalturaConversionProfile.prototype.partnerId = null;
+VidiunConversionProfile.prototype.partnerId = null;
 
 /**
  * The name of the Conversion Profile
@@ -2909,7 +2909,7 @@ KalturaConversionProfile.prototype.partnerId = null;
  *
  * @var string
  */
-KalturaConversionProfile.prototype.name = null;
+VidiunConversionProfile.prototype.name = null;
 
 /**
  * The description of the Conversion Profile
@@ -2917,7 +2917,7 @@ KalturaConversionProfile.prototype.name = null;
  *
  * @var string
  */
-KalturaConversionProfile.prototype.description = null;
+VidiunConversionProfile.prototype.description = null;
 
 /**
  * Creation date as Unix timestamp (In seconds) 
@@ -2926,7 +2926,7 @@ KalturaConversionProfile.prototype.description = null;
  * @var int
  * @readonly
  */
-KalturaConversionProfile.prototype.createdAt = null;
+VidiunConversionProfile.prototype.createdAt = null;
 
 /**
  * List of included flavor ids (comma separated)
@@ -2934,23 +2934,23 @@ KalturaConversionProfile.prototype.createdAt = null;
  *
  * @var string
  */
-KalturaConversionProfile.prototype.flavorParamsIds = null;
+VidiunConversionProfile.prototype.flavorParamsIds = null;
 
 /**
  * True if this Conversion Profile is the default
 	 * 
  *
- * @var KalturaNullableBoolean
+ * @var VidiunNullableBoolean
  */
-KalturaConversionProfile.prototype.isDefault = null;
+VidiunConversionProfile.prototype.isDefault = null;
 
 /**
  * Cropping dimensions
 	 * 
  *
- * @var KalturaCropDimensions
+ * @var VidiunCropDimensions
  */
-KalturaConversionProfile.prototype.cropDimensions = null;
+VidiunConversionProfile.prototype.cropDimensions = null;
 
 /**
  * Clipping start position (in miliseconds)
@@ -2958,7 +2958,7 @@ KalturaConversionProfile.prototype.cropDimensions = null;
  *
  * @var int
  */
-KalturaConversionProfile.prototype.clipStart = null;
+VidiunConversionProfile.prototype.clipStart = null;
 
 /**
  * Clipping duration (in miliseconds)
@@ -2966,39 +2966,39 @@ KalturaConversionProfile.prototype.clipStart = null;
  *
  * @var int
  */
-KalturaConversionProfile.prototype.clipDuration = null;
+VidiunConversionProfile.prototype.clipDuration = null;
 
 
-function KalturaConversionProfileFilter()
+function VidiunConversionProfileFilter()
 {
 }
-KalturaConversionProfileFilter.prototype = new KalturaFilter();
+VidiunConversionProfileFilter.prototype = new VidiunFilter();
 /**
  * 
  *
  * @var int
  */
-KalturaConversionProfileFilter.prototype.idEqual = null;
+VidiunConversionProfileFilter.prototype.idEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaConversionProfileFilter.prototype.idIn = null;
+VidiunConversionProfileFilter.prototype.idIn = null;
 
 
-function KalturaConversionProfileListResponse()
+function VidiunConversionProfileListResponse()
 {
 }
-KalturaConversionProfileListResponse.prototype = new KalturaObjectBase();
+VidiunConversionProfileListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaConversionProfileArray
+ * @var VidiunConversionProfileArray
  * @readonly
  */
-KalturaConversionProfileListResponse.prototype.objects = null;
+VidiunConversionProfileListResponse.prototype.objects = null;
 
 /**
  * 
@@ -3006,59 +3006,59 @@ KalturaConversionProfileListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaConversionProfileListResponse.prototype.totalCount = null;
+VidiunConversionProfileListResponse.prototype.totalCount = null;
 
 
-function KalturaConvertJobData()
+function VidiunConvertJobData()
 {
 }
-KalturaConvertJobData.prototype = new KalturaConvartableJobData();
+VidiunConvertJobData.prototype = new VidiunConvartableJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaConvertJobData.prototype.destFileSyncLocalPath = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaConvertJobData.prototype.destFileSyncRemoteUrl = null;
+VidiunConvertJobData.prototype.destFileSyncLocalPath = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaConvertJobData.prototype.logFileSyncLocalPath = null;
+VidiunConvertJobData.prototype.destFileSyncRemoteUrl = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaConvertJobData.prototype.flavorAssetId = null;
+VidiunConvertJobData.prototype.logFileSyncLocalPath = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaConvertJobData.prototype.remoteMediaId = null;
+VidiunConvertJobData.prototype.flavorAssetId = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunConvertJobData.prototype.remoteMediaId = null;
 
 
-function KalturaConvertProfileJobData()
+function VidiunConvertProfileJobData()
 {
 }
-KalturaConvertProfileJobData.prototype = new KalturaJobData();
+VidiunConvertProfileJobData.prototype = new VidiunJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaConvertProfileJobData.prototype.inputFileSyncLocalPath = null;
+VidiunConvertProfileJobData.prototype.inputFileSyncLocalPath = null;
 
 /**
  * The height of last created thumbnail, will be used to comapare if this thumbnail is the best we can have
@@ -3066,7 +3066,7 @@ KalturaConvertProfileJobData.prototype.inputFileSyncLocalPath = null;
  *
  * @var int
  */
-KalturaConvertProfileJobData.prototype.thumbHeight = null;
+VidiunConvertProfileJobData.prototype.thumbHeight = null;
 
 /**
  * The bit rate of last created thumbnail, will be used to comapare if this thumbnail is the best we can have
@@ -3074,20 +3074,20 @@ KalturaConvertProfileJobData.prototype.thumbHeight = null;
  *
  * @var int
  */
-KalturaConvertProfileJobData.prototype.thumbBitrate = null;
+VidiunConvertProfileJobData.prototype.thumbBitrate = null;
 
 
-function KalturaCountryRestriction()
+function VidiunCountryRestriction()
 {
 }
-KalturaCountryRestriction.prototype = new KalturaBaseRestriction();
+VidiunCountryRestriction.prototype = new VidiunBaseRestriction();
 /**
  * Country restriction type (Allow or deny)
 	 * 
  *
- * @var KalturaCountryRestrictionType
+ * @var VidiunCountryRestrictionType
  */
-KalturaCountryRestriction.prototype.countryRestrictionType = null;
+VidiunCountryRestriction.prototype.countryRestrictionType = null;
 
 /**
  * Comma separated list of country codes to allow to deny 
@@ -3095,20 +3095,20 @@ KalturaCountryRestriction.prototype.countryRestrictionType = null;
  *
  * @var string
  */
-KalturaCountryRestriction.prototype.countryList = null;
+VidiunCountryRestriction.prototype.countryList = null;
 
 
-function KalturaCropDimensions()
+function VidiunCropDimensions()
 {
 }
-KalturaCropDimensions.prototype = new KalturaObjectBase();
+VidiunCropDimensions.prototype = new VidiunObjectBase();
 /**
  * Crop left point
 	 * 
  *
  * @var int
  */
-KalturaCropDimensions.prototype.left = null;
+VidiunCropDimensions.prototype.left = null;
 
 /**
  * Crop top point
@@ -3116,7 +3116,7 @@ KalturaCropDimensions.prototype.left = null;
  *
  * @var int
  */
-KalturaCropDimensions.prototype.top = null;
+VidiunCropDimensions.prototype.top = null;
 
 /**
  * Crop width
@@ -3124,7 +3124,7 @@ KalturaCropDimensions.prototype.top = null;
  *
  * @var int
  */
-KalturaCropDimensions.prototype.width = null;
+VidiunCropDimensions.prototype.width = null;
 
 /**
  * Crop height
@@ -3132,37 +3132,37 @@ KalturaCropDimensions.prototype.width = null;
  *
  * @var int
  */
-KalturaCropDimensions.prototype.height = null;
+VidiunCropDimensions.prototype.height = null;
 
 
-function KalturaDataEntry()
+function VidiunDataEntry()
 {
 }
-KalturaDataEntry.prototype = new KalturaBaseEntry();
+VidiunDataEntry.prototype = new VidiunBaseEntry();
 /**
  * The data of the entry
  *
  * @var string
  */
-KalturaDataEntry.prototype.dataContent = null;
+VidiunDataEntry.prototype.dataContent = null;
 
 
-function KalturaDataEntryFilter()
+function VidiunDataEntryFilter()
 {
 }
-KalturaDataEntryFilter.prototype = new KalturaBaseEntryFilter();
+VidiunDataEntryFilter.prototype = new VidiunBaseEntryFilter();
 
-function KalturaDataListResponse()
+function VidiunDataListResponse()
 {
 }
-KalturaDataListResponse.prototype = new KalturaObjectBase();
+VidiunDataListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaDataEntryArray
+ * @var VidiunDataEntryArray
  * @readonly
  */
-KalturaDataListResponse.prototype.objects = null;
+VidiunDataListResponse.prototype.objects = null;
 
 /**
  * 
@@ -3170,136 +3170,136 @@ KalturaDataListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaDataListResponse.prototype.totalCount = null;
+VidiunDataListResponse.prototype.totalCount = null;
 
 
-function KalturaDirectoryRestriction()
+function VidiunDirectoryRestriction()
 {
 }
-KalturaDirectoryRestriction.prototype = new KalturaBaseRestriction();
+VidiunDirectoryRestriction.prototype = new VidiunBaseRestriction();
 /**
- * Kaltura directory restriction type
+ * Vidiun directory restriction type
 	 * 
  *
- * @var KalturaDirectoryRestrictionType
+ * @var VidiunDirectoryRestrictionType
  */
-KalturaDirectoryRestriction.prototype.directoryRestrictionType = null;
+VidiunDirectoryRestriction.prototype.directoryRestrictionType = null;
 
 
-function KalturaDocumentEntry()
+function VidiunDocumentEntry()
 {
 }
-KalturaDocumentEntry.prototype = new KalturaBaseEntry();
+VidiunDocumentEntry.prototype = new VidiunBaseEntry();
 /**
  * The type of the document
  *
- * @var KalturaDocumentType
+ * @var VidiunDocumentType
  * @insertonly
  */
-KalturaDocumentEntry.prototype.documentType = null;
+VidiunDocumentEntry.prototype.documentType = null;
 
 
-function KalturaDocumentEntryFilter()
+function VidiunDocumentEntryFilter()
 {
 }
-KalturaDocumentEntryFilter.prototype = new KalturaBaseEntryFilter();
+VidiunDocumentEntryFilter.prototype = new VidiunBaseEntryFilter();
 /**
  * 
  *
- * @var KalturaDocumentType
+ * @var VidiunDocumentType
  */
-KalturaDocumentEntryFilter.prototype.documentTypeEqual = null;
+VidiunDocumentEntryFilter.prototype.documentTypeEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaDocumentEntryFilter.prototype.documentTypeIn = null;
+VidiunDocumentEntryFilter.prototype.documentTypeIn = null;
 
 
-function KalturaEntryExtraDataParams()
+function VidiunEntryExtraDataParams()
 {
 }
-KalturaEntryExtraDataParams.prototype = new KalturaObjectBase();
+VidiunEntryExtraDataParams.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  */
-KalturaEntryExtraDataParams.prototype.referrer = null;
+VidiunEntryExtraDataParams.prototype.referrer = null;
 
 
-function KalturaEntryExtraDataResult()
+function VidiunEntryExtraDataResult()
 {
 }
-KalturaEntryExtraDataResult.prototype = new KalturaObjectBase();
+VidiunEntryExtraDataResult.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var bool
  */
-KalturaEntryExtraDataResult.prototype.isSiteRestricted = null;
+VidiunEntryExtraDataResult.prototype.isSiteRestricted = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaEntryExtraDataResult.prototype.isCountryRestricted = null;
+VidiunEntryExtraDataResult.prototype.isCountryRestricted = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaEntryExtraDataResult.prototype.isSessionRestricted = null;
+VidiunEntryExtraDataResult.prototype.isSessionRestricted = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaEntryExtraDataResult.prototype.previewLength = null;
+VidiunEntryExtraDataResult.prototype.previewLength = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaEntryExtraDataResult.prototype.isScheduledNow = null;
+VidiunEntryExtraDataResult.prototype.isScheduledNow = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaEntryExtraDataResult.prototype.isAdmin = null;
+VidiunEntryExtraDataResult.prototype.isAdmin = null;
 
 
-function KalturaExtractMediaJobData()
+function VidiunExtractMediaJobData()
 {
 }
-KalturaExtractMediaJobData.prototype = new KalturaConvartableJobData();
+VidiunExtractMediaJobData.prototype = new VidiunConvartableJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaExtractMediaJobData.prototype.flavorAssetId = null;
+VidiunExtractMediaJobData.prototype.flavorAssetId = null;
 
 
-function KalturaFilterPager()
+function VidiunFilterPager()
 {
 }
-KalturaFilterPager.prototype = new KalturaObjectBase();
+VidiunFilterPager.prototype = new VidiunObjectBase();
 /**
  * The number of objects to retrieve. (Default is 30, maximum page size is 500).
 	 * 
  *
  * @var int
  */
-KalturaFilterPager.prototype.pageSize = null;
+VidiunFilterPager.prototype.pageSize = null;
 
 /**
  * The page number for which {pageSize} of objects should be retrieved (Default is 1).
@@ -3307,18 +3307,18 @@ KalturaFilterPager.prototype.pageSize = null;
  *
  * @var int
  */
-KalturaFilterPager.prototype.pageIndex = null;
+VidiunFilterPager.prototype.pageIndex = null;
 
 
-function KalturaFlattenJobData()
+function VidiunFlattenJobData()
 {
 }
-KalturaFlattenJobData.prototype = new KalturaJobData();
+VidiunFlattenJobData.prototype = new VidiunJobData();
 
-function KalturaFlavorAsset()
+function VidiunFlavorAsset()
 {
 }
-KalturaFlavorAsset.prototype = new KalturaObjectBase();
+VidiunFlavorAsset.prototype = new VidiunObjectBase();
 /**
  * The ID of the Flavor Asset
 	 * 
@@ -3326,7 +3326,7 @@ KalturaFlavorAsset.prototype = new KalturaObjectBase();
  * @var string
  * @readonly
  */
-KalturaFlavorAsset.prototype.id = null;
+VidiunFlavorAsset.prototype.id = null;
 
 /**
  * The entry ID of the Flavor Asset
@@ -3335,7 +3335,7 @@ KalturaFlavorAsset.prototype.id = null;
  * @var string
  * @readonly
  */
-KalturaFlavorAsset.prototype.entryId = null;
+VidiunFlavorAsset.prototype.entryId = null;
 
 /**
  * 
@@ -3343,16 +3343,16 @@ KalturaFlavorAsset.prototype.entryId = null;
  * @var string
  * @readonly
  */
-KalturaFlavorAsset.prototype.partnerId = null;
+VidiunFlavorAsset.prototype.partnerId = null;
 
 /**
  * The status of the Flavor Asset
 	 * 
  *
- * @var KalturaFlavorAssetStatus
+ * @var VidiunFlavorAssetStatus
  * @readonly
  */
-KalturaFlavorAsset.prototype.status = null;
+VidiunFlavorAsset.prototype.status = null;
 
 /**
  * The Flavor Params used to create this Flavor Asset
@@ -3361,7 +3361,7 @@ KalturaFlavorAsset.prototype.status = null;
  * @var int
  * @readonly
  */
-KalturaFlavorAsset.prototype.flavorParamsId = null;
+VidiunFlavorAsset.prototype.flavorParamsId = null;
 
 /**
  * The version of the Flavor Asset
@@ -3370,7 +3370,7 @@ KalturaFlavorAsset.prototype.flavorParamsId = null;
  * @var int
  * @readonly
  */
-KalturaFlavorAsset.prototype.version = null;
+VidiunFlavorAsset.prototype.version = null;
 
 /**
  * The width of the Flavor Asset 
@@ -3379,7 +3379,7 @@ KalturaFlavorAsset.prototype.version = null;
  * @var int
  * @readonly
  */
-KalturaFlavorAsset.prototype.width = null;
+VidiunFlavorAsset.prototype.width = null;
 
 /**
  * The height of the Flavor Asset
@@ -3388,7 +3388,7 @@ KalturaFlavorAsset.prototype.width = null;
  * @var int
  * @readonly
  */
-KalturaFlavorAsset.prototype.height = null;
+VidiunFlavorAsset.prototype.height = null;
 
 /**
  * The overall bitrate (in KBits) of the Flavor Asset 
@@ -3397,7 +3397,7 @@ KalturaFlavorAsset.prototype.height = null;
  * @var int
  * @readonly
  */
-KalturaFlavorAsset.prototype.bitrate = null;
+VidiunFlavorAsset.prototype.bitrate = null;
 
 /**
  * The frame rate (in FPS) of the Flavor Asset
@@ -3406,7 +3406,7 @@ KalturaFlavorAsset.prototype.bitrate = null;
  * @var int
  * @readonly
  */
-KalturaFlavorAsset.prototype.frameRate = null;
+VidiunFlavorAsset.prototype.frameRate = null;
 
 /**
  * The size (in KBytes) of the Flavor Asset
@@ -3415,7 +3415,7 @@ KalturaFlavorAsset.prototype.frameRate = null;
  * @var int
  * @readonly
  */
-KalturaFlavorAsset.prototype.size = null;
+VidiunFlavorAsset.prototype.size = null;
 
 /**
  * True if this Flavor Asset is the original source
@@ -3423,7 +3423,7 @@ KalturaFlavorAsset.prototype.size = null;
  *
  * @var bool
  */
-KalturaFlavorAsset.prototype.isOriginal = null;
+VidiunFlavorAsset.prototype.isOriginal = null;
 
 /**
  * Tags used to identify the Flavor Asset in various scenarios
@@ -3431,15 +3431,15 @@ KalturaFlavorAsset.prototype.isOriginal = null;
  *
  * @var string
  */
-KalturaFlavorAsset.prototype.tags = null;
+VidiunFlavorAsset.prototype.tags = null;
 
 /**
- * True if this Flavor Asset is playable in KDP
+ * True if this Flavor Asset is playable in VDP
 	 * 
  *
  * @var bool
  */
-KalturaFlavorAsset.prototype.isWeb = null;
+VidiunFlavorAsset.prototype.isWeb = null;
 
 /**
  * The file extension
@@ -3447,7 +3447,7 @@ KalturaFlavorAsset.prototype.isWeb = null;
  *
  * @var string
  */
-KalturaFlavorAsset.prototype.fileExt = null;
+VidiunFlavorAsset.prototype.fileExt = null;
 
 /**
  * The container format
@@ -3455,7 +3455,7 @@ KalturaFlavorAsset.prototype.fileExt = null;
  *
  * @var string
  */
-KalturaFlavorAsset.prototype.containerFormat = null;
+VidiunFlavorAsset.prototype.containerFormat = null;
 
 /**
  * The video codec
@@ -3463,28 +3463,28 @@ KalturaFlavorAsset.prototype.containerFormat = null;
  *
  * @var string
  */
-KalturaFlavorAsset.prototype.videoCodecId = null;
+VidiunFlavorAsset.prototype.videoCodecId = null;
 
 
-function KalturaFlavorAssetWithParams()
+function VidiunFlavorAssetWithParams()
 {
 }
-KalturaFlavorAssetWithParams.prototype = new KalturaObjectBase();
+VidiunFlavorAssetWithParams.prototype = new VidiunObjectBase();
 /**
  * The Flavor Asset (Can be null when there are params without asset)
 	 * 
  *
- * @var KalturaFlavorAsset
+ * @var VidiunFlavorAsset
  */
-KalturaFlavorAssetWithParams.prototype.flavorAsset = null;
+VidiunFlavorAssetWithParams.prototype.flavorAsset = null;
 
 /**
  * The Flavor Params
 	 * 
  *
- * @var KalturaFlavorParams
+ * @var VidiunFlavorParams
  */
-KalturaFlavorAssetWithParams.prototype.flavorParams = null;
+VidiunFlavorAssetWithParams.prototype.flavorParams = null;
 
 /**
  * The entry id
@@ -3492,13 +3492,13 @@ KalturaFlavorAssetWithParams.prototype.flavorParams = null;
  *
  * @var string
  */
-KalturaFlavorAssetWithParams.prototype.entryId = null;
+VidiunFlavorAssetWithParams.prototype.entryId = null;
 
 
-function KalturaFlavorParams()
+function VidiunFlavorParams()
 {
 }
-KalturaFlavorParams.prototype = new KalturaObjectBase();
+VidiunFlavorParams.prototype = new VidiunObjectBase();
 /**
  * The id of the Flavor Params
 	 * 
@@ -3506,7 +3506,7 @@ KalturaFlavorParams.prototype = new KalturaObjectBase();
  * @var int
  * @readonly
  */
-KalturaFlavorParams.prototype.id = null;
+VidiunFlavorParams.prototype.id = null;
 
 /**
  * 
@@ -3514,7 +3514,7 @@ KalturaFlavorParams.prototype.id = null;
  * @var int
  * @readonly
  */
-KalturaFlavorParams.prototype.partnerId = null;
+VidiunFlavorParams.prototype.partnerId = null;
 
 /**
  * The name of the Flavor Params
@@ -3522,7 +3522,7 @@ KalturaFlavorParams.prototype.partnerId = null;
  *
  * @var string
  */
-KalturaFlavorParams.prototype.name = null;
+VidiunFlavorParams.prototype.name = null;
 
 /**
  * The description of the Flavor Params
@@ -3530,7 +3530,7 @@ KalturaFlavorParams.prototype.name = null;
  *
  * @var string
  */
-KalturaFlavorParams.prototype.description = null;
+VidiunFlavorParams.prototype.description = null;
 
 /**
  * Creation date as Unix timestamp (In seconds)
@@ -3539,16 +3539,16 @@ KalturaFlavorParams.prototype.description = null;
  * @var int
  * @readonly
  */
-KalturaFlavorParams.prototype.createdAt = null;
+VidiunFlavorParams.prototype.createdAt = null;
 
 /**
  * True if those Flavor Params are part of system defaults
 	 * 
  *
- * @var KalturaNullableBoolean
+ * @var VidiunNullableBoolean
  * @readonly
  */
-KalturaFlavorParams.prototype.isSystemDefault = null;
+VidiunFlavorParams.prototype.isSystemDefault = null;
 
 /**
  * The Flavor Params tags are used to identify the flavor for different usage (e.g. web, hd, mobile)
@@ -3556,23 +3556,23 @@ KalturaFlavorParams.prototype.isSystemDefault = null;
  *
  * @var string
  */
-KalturaFlavorParams.prototype.tags = null;
+VidiunFlavorParams.prototype.tags = null;
 
 /**
  * The container format of the Flavor Params
 	 * 
  *
- * @var KalturaContainerFormat
+ * @var VidiunContainerFormat
  */
-KalturaFlavorParams.prototype.format = null;
+VidiunFlavorParams.prototype.format = null;
 
 /**
  * The video codec of the Flavor Params
 	 * 
  *
- * @var KalturaVideoCodec
+ * @var VidiunVideoCodec
  */
-KalturaFlavorParams.prototype.videoCodec = null;
+VidiunFlavorParams.prototype.videoCodec = null;
 
 /**
  * The video bitrate (in KBits) of the Flavor Params
@@ -3580,15 +3580,15 @@ KalturaFlavorParams.prototype.videoCodec = null;
  *
  * @var int
  */
-KalturaFlavorParams.prototype.videoBitrate = null;
+VidiunFlavorParams.prototype.videoBitrate = null;
 
 /**
  * The audio codec of the Flavor Params
 	 * 
  *
- * @var KalturaAudioCodec
+ * @var VidiunAudioCodec
  */
-KalturaFlavorParams.prototype.audioCodec = null;
+VidiunFlavorParams.prototype.audioCodec = null;
 
 /**
  * The audio bitrate (in KBits) of the Flavor Params
@@ -3596,7 +3596,7 @@ KalturaFlavorParams.prototype.audioCodec = null;
  *
  * @var int
  */
-KalturaFlavorParams.prototype.audioBitrate = null;
+VidiunFlavorParams.prototype.audioBitrate = null;
 
 /**
  * The number of audio channels for "downmixing"
@@ -3604,7 +3604,7 @@ KalturaFlavorParams.prototype.audioBitrate = null;
  *
  * @var int
  */
-KalturaFlavorParams.prototype.audioChannels = null;
+VidiunFlavorParams.prototype.audioChannels = null;
 
 /**
  * The audio sample rate of the Flavor Params
@@ -3612,7 +3612,7 @@ KalturaFlavorParams.prototype.audioChannels = null;
  *
  * @var int
  */
-KalturaFlavorParams.prototype.audioSampleRate = null;
+VidiunFlavorParams.prototype.audioSampleRate = null;
 
 /**
  * The desired width of the Flavor Params
@@ -3620,7 +3620,7 @@ KalturaFlavorParams.prototype.audioSampleRate = null;
  *
  * @var int
  */
-KalturaFlavorParams.prototype.width = null;
+VidiunFlavorParams.prototype.width = null;
 
 /**
  * The desired height of the Flavor Params
@@ -3628,7 +3628,7 @@ KalturaFlavorParams.prototype.width = null;
  *
  * @var int
  */
-KalturaFlavorParams.prototype.height = null;
+VidiunFlavorParams.prototype.height = null;
 
 /**
  * The frame rate of the Flavor Params
@@ -3636,7 +3636,7 @@ KalturaFlavorParams.prototype.height = null;
  *
  * @var int
  */
-KalturaFlavorParams.prototype.frameRate = null;
+VidiunFlavorParams.prototype.frameRate = null;
 
 /**
  * The gop size of the Flavor Params
@@ -3644,7 +3644,7 @@ KalturaFlavorParams.prototype.frameRate = null;
  *
  * @var int
  */
-KalturaFlavorParams.prototype.gopSize = null;
+VidiunFlavorParams.prototype.gopSize = null;
 
 /**
  * The list of conversion engines (comma separated)
@@ -3652,7 +3652,7 @@ KalturaFlavorParams.prototype.gopSize = null;
  *
  * @var string
  */
-KalturaFlavorParams.prototype.conversionEngines = null;
+VidiunFlavorParams.prototype.conversionEngines = null;
 
 /**
  * The list of conversion engines extra params (separated with "|")
@@ -3660,39 +3660,39 @@ KalturaFlavorParams.prototype.conversionEngines = null;
  *
  * @var string
  */
-KalturaFlavorParams.prototype.conversionEnginesExtraParams = null;
+VidiunFlavorParams.prototype.conversionEnginesExtraParams = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaFlavorParams.prototype.twoPass = null;
+VidiunFlavorParams.prototype.twoPass = null;
 
 
-function KalturaFlavorParamsFilter()
+function VidiunFlavorParamsFilter()
 {
 }
-KalturaFlavorParamsFilter.prototype = new KalturaFilter();
+VidiunFlavorParamsFilter.prototype = new VidiunFilter();
 /**
  * 
  *
- * @var KalturaNullableBoolean
+ * @var VidiunNullableBoolean
  */
-KalturaFlavorParamsFilter.prototype.isSystemDefaultEqual = null;
+VidiunFlavorParamsFilter.prototype.isSystemDefaultEqual = null;
 
 
-function KalturaFlavorParamsListResponse()
+function VidiunFlavorParamsListResponse()
 {
 }
-KalturaFlavorParamsListResponse.prototype = new KalturaObjectBase();
+VidiunFlavorParamsListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaFlavorParamsArray
+ * @var VidiunFlavorParamsArray
  * @readonly
  */
-KalturaFlavorParamsListResponse.prototype.objects = null;
+VidiunFlavorParamsListResponse.prototype.objects = null;
 
 /**
  * 
@@ -3700,61 +3700,61 @@ KalturaFlavorParamsListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaFlavorParamsListResponse.prototype.totalCount = null;
+VidiunFlavorParamsListResponse.prototype.totalCount = null;
 
 
-function KalturaFlavorParamsOutput()
+function VidiunFlavorParamsOutput()
 {
 }
-KalturaFlavorParamsOutput.prototype = new KalturaFlavorParams();
+VidiunFlavorParamsOutput.prototype = new VidiunFlavorParams();
 /**
  * 
  *
  * @var int
  */
-KalturaFlavorParamsOutput.prototype.flavorParamsId = null;
+VidiunFlavorParamsOutput.prototype.flavorParamsId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaFlavorParamsOutput.prototype.commandLinesStr = null;
+VidiunFlavorParamsOutput.prototype.commandLinesStr = null;
 
 
-function KalturaFlavorParamsOutputFilter()
+function VidiunFlavorParamsOutputFilter()
 {
 }
-KalturaFlavorParamsOutputFilter.prototype = new KalturaFlavorParamsFilter();
+VidiunFlavorParamsOutputFilter.prototype = new VidiunFlavorParamsFilter();
 
-function KalturaGoogleVideoSyndicationFeed()
+function VidiunGoogleVideoSyndicationFeed()
 {
 }
-KalturaGoogleVideoSyndicationFeed.prototype = new KalturaBaseSyndicationFeed();
+VidiunGoogleVideoSyndicationFeed.prototype = new VidiunBaseSyndicationFeed();
 /**
  * 
  *
- * @var KalturaGoogleSyndicationFeedAdultValues
+ * @var VidiunGoogleSyndicationFeedAdultValues
  */
-KalturaGoogleVideoSyndicationFeed.prototype.adultContent = null;
+VidiunGoogleVideoSyndicationFeed.prototype.adultContent = null;
 
 
-function KalturaGoogleVideoSyndicationFeedFilter()
+function VidiunGoogleVideoSyndicationFeedFilter()
 {
 }
-KalturaGoogleVideoSyndicationFeedFilter.prototype = new KalturaBaseSyndicationFeedFilter();
+VidiunGoogleVideoSyndicationFeedFilter.prototype = new VidiunBaseSyndicationFeedFilter();
 
-function KalturaITunesSyndicationFeed()
+function VidiunITunesSyndicationFeed()
 {
 }
-KalturaITunesSyndicationFeed.prototype = new KalturaBaseSyndicationFeed();
+VidiunITunesSyndicationFeed.prototype = new VidiunBaseSyndicationFeed();
 /**
  * feed description
 	 * 
  *
  * @var string
  */
-KalturaITunesSyndicationFeed.prototype.feedDescription = null;
+VidiunITunesSyndicationFeed.prototype.feedDescription = null;
 
 /**
  * feed language
@@ -3762,7 +3762,7 @@ KalturaITunesSyndicationFeed.prototype.feedDescription = null;
  *
  * @var string
  */
-KalturaITunesSyndicationFeed.prototype.language = null;
+VidiunITunesSyndicationFeed.prototype.language = null;
 
 /**
  * feed landing page (i.e publisher website)
@@ -3770,7 +3770,7 @@ KalturaITunesSyndicationFeed.prototype.language = null;
  *
  * @var string
  */
-KalturaITunesSyndicationFeed.prototype.feedLandingPage = null;
+VidiunITunesSyndicationFeed.prototype.feedLandingPage = null;
 
 /**
  * author/publisher name
@@ -3778,7 +3778,7 @@ KalturaITunesSyndicationFeed.prototype.feedLandingPage = null;
  *
  * @var string
  */
-KalturaITunesSyndicationFeed.prototype.ownerName = null;
+VidiunITunesSyndicationFeed.prototype.ownerName = null;
 
 /**
  * publisher email
@@ -3786,7 +3786,7 @@ KalturaITunesSyndicationFeed.prototype.ownerName = null;
  *
  * @var string
  */
-KalturaITunesSyndicationFeed.prototype.ownerEmail = null;
+VidiunITunesSyndicationFeed.prototype.ownerEmail = null;
 
 /**
  * podcast thumbnail
@@ -3794,284 +3794,284 @@ KalturaITunesSyndicationFeed.prototype.ownerEmail = null;
  *
  * @var string
  */
-KalturaITunesSyndicationFeed.prototype.feedImageUrl = null;
+VidiunITunesSyndicationFeed.prototype.feedImageUrl = null;
 
 /**
  * 
  *
- * @var KalturaITunesSyndicationFeedCategories
+ * @var VidiunITunesSyndicationFeedCategories
  * @readonly
  */
-KalturaITunesSyndicationFeed.prototype.category = null;
+VidiunITunesSyndicationFeed.prototype.category = null;
 
 /**
  * 
  *
- * @var KalturaITunesSyndicationFeedAdultValues
+ * @var VidiunITunesSyndicationFeedAdultValues
  */
-KalturaITunesSyndicationFeed.prototype.adultContent = null;
+VidiunITunesSyndicationFeed.prototype.adultContent = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaITunesSyndicationFeed.prototype.feedAuthor = null;
+VidiunITunesSyndicationFeed.prototype.feedAuthor = null;
 
 
-function KalturaITunesSyndicationFeedFilter()
+function VidiunITunesSyndicationFeedFilter()
 {
 }
-KalturaITunesSyndicationFeedFilter.prototype = new KalturaBaseSyndicationFeedFilter();
+VidiunITunesSyndicationFeedFilter.prototype = new VidiunBaseSyndicationFeedFilter();
 
-function KalturaImportJobData()
+function VidiunImportJobData()
 {
 }
-KalturaImportJobData.prototype = new KalturaJobData();
+VidiunImportJobData.prototype = new VidiunJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaImportJobData.prototype.srcFileUrl = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaImportJobData.prototype.destFileLocalPath = null;
+VidiunImportJobData.prototype.srcFileUrl = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaImportJobData.prototype.flavorAssetId = null;
+VidiunImportJobData.prototype.destFileLocalPath = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunImportJobData.prototype.flavorAssetId = null;
 
 
-function KalturaMailJob()
+function VidiunMailJob()
 {
 }
-KalturaMailJob.prototype = new KalturaBaseJob();
+VidiunMailJob.prototype = new VidiunBaseJob();
 /**
  * 
  *
- * @var KalturaMailType
+ * @var VidiunMailType
  */
-KalturaMailJob.prototype.mailType = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaMailJob.prototype.mailPriority = null;
-
-/**
- * 
- *
- * @var KalturaMailJobStatus
- */
-KalturaMailJob.prototype.status = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaMailJob.prototype.recipientName = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaMailJob.prototype.recipientEmail = null;
-
-/**
- * kuserId  
- *
- * @var int
- */
-KalturaMailJob.prototype.recipientId = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaMailJob.prototype.fromName = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaMailJob.prototype.fromEmail = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaMailJob.prototype.bodyParams = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaMailJob.prototype.subjectParams = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaMailJob.prototype.templatePath = null;
+VidiunMailJob.prototype.mailType = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaMailJob.prototype.culture = null;
+VidiunMailJob.prototype.mailPriority = null;
+
+/**
+ * 
+ *
+ * @var VidiunMailJobStatus
+ */
+VidiunMailJob.prototype.status = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunMailJob.prototype.recipientName = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunMailJob.prototype.recipientEmail = null;
+
+/**
+ * vuserId  
+ *
+ * @var int
+ */
+VidiunMailJob.prototype.recipientId = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunMailJob.prototype.fromName = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunMailJob.prototype.fromEmail = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunMailJob.prototype.bodyParams = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunMailJob.prototype.subjectParams = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunMailJob.prototype.templatePath = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaMailJob.prototype.campaignId = null;
+VidiunMailJob.prototype.culture = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaMailJob.prototype.minSendDate = null;
+VidiunMailJob.prototype.campaignId = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunMailJob.prototype.minSendDate = null;
 
 
-function KalturaMailJobData()
+function VidiunMailJobData()
 {
 }
-KalturaMailJobData.prototype = new KalturaJobData();
+VidiunMailJobData.prototype = new VidiunJobData();
 /**
  * 
  *
- * @var KalturaMailType
+ * @var VidiunMailType
  */
-KalturaMailJobData.prototype.mailType = null;
+VidiunMailJobData.prototype.mailType = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaMailJobData.prototype.mailPriority = null;
+VidiunMailJobData.prototype.mailPriority = null;
 
 /**
  * 
  *
- * @var KalturaMailJobStatus
+ * @var VidiunMailJobStatus
  */
-KalturaMailJobData.prototype.status = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaMailJobData.prototype.recipientName = null;
+VidiunMailJobData.prototype.status = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMailJobData.prototype.recipientEmail = null;
+VidiunMailJobData.prototype.recipientName = null;
 
 /**
- * kuserId  
+ * 
+ *
+ * @var string
+ */
+VidiunMailJobData.prototype.recipientEmail = null;
+
+/**
+ * vuserId  
  *
  * @var int
  */
-KalturaMailJobData.prototype.recipientId = null;
+VidiunMailJobData.prototype.recipientId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMailJobData.prototype.fromName = null;
+VidiunMailJobData.prototype.fromName = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMailJobData.prototype.fromEmail = null;
+VidiunMailJobData.prototype.fromEmail = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMailJobData.prototype.bodyParams = null;
+VidiunMailJobData.prototype.bodyParams = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMailJobData.prototype.subjectParams = null;
+VidiunMailJobData.prototype.subjectParams = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMailJobData.prototype.templatePath = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaMailJobData.prototype.culture = null;
+VidiunMailJobData.prototype.templatePath = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaMailJobData.prototype.campaignId = null;
+VidiunMailJobData.prototype.culture = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaMailJobData.prototype.minSendDate = null;
+VidiunMailJobData.prototype.campaignId = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunMailJobData.prototype.minSendDate = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaMailJobData.prototype.isHtml = null;
+VidiunMailJobData.prototype.isHtml = null;
 
 
-function KalturaMailJobFilter()
+function VidiunMailJobFilter()
 {
 }
-KalturaMailJobFilter.prototype = new KalturaBaseJobFilter();
+VidiunMailJobFilter.prototype = new VidiunBaseJobFilter();
 
-function KalturaPlayableEntry()
+function VidiunPlayableEntry()
 {
 }
-KalturaPlayableEntry.prototype = new KalturaBaseEntry();
+VidiunPlayableEntry.prototype = new VidiunBaseEntry();
 /**
  * Number of plays
 	 * 
@@ -4079,7 +4079,7 @@ KalturaPlayableEntry.prototype = new KalturaBaseEntry();
  * @var int
  * @readonly
  */
-KalturaPlayableEntry.prototype.plays = null;
+VidiunPlayableEntry.prototype.plays = null;
 
 /**
  * Number of views
@@ -4088,7 +4088,7 @@ KalturaPlayableEntry.prototype.plays = null;
  * @var int
  * @readonly
  */
-KalturaPlayableEntry.prototype.views = null;
+VidiunPlayableEntry.prototype.views = null;
 
 /**
  * The width in pixels
@@ -4097,7 +4097,7 @@ KalturaPlayableEntry.prototype.views = null;
  * @var int
  * @readonly
  */
-KalturaPlayableEntry.prototype.width = null;
+VidiunPlayableEntry.prototype.width = null;
 
 /**
  * The height in pixels
@@ -4106,7 +4106,7 @@ KalturaPlayableEntry.prototype.width = null;
  * @var int
  * @readonly
  */
-KalturaPlayableEntry.prototype.height = null;
+VidiunPlayableEntry.prototype.height = null;
 
 /**
  * The duration in seconds
@@ -4115,30 +4115,30 @@ KalturaPlayableEntry.prototype.height = null;
  * @var int
  * @readonly
  */
-KalturaPlayableEntry.prototype.duration = null;
+VidiunPlayableEntry.prototype.duration = null;
 
 /**
  * The duration type (short for 0-4 mins, medium for 4-20 mins, long for 20+ mins)
 	 * 
  *
- * @var KalturaDurationType
+ * @var VidiunDurationType
  * @readonly
  */
-KalturaPlayableEntry.prototype.durationType = null;
+VidiunPlayableEntry.prototype.durationType = null;
 
 
-function KalturaMediaEntry()
+function VidiunMediaEntry()
 {
 }
-KalturaMediaEntry.prototype = new KalturaPlayableEntry();
+VidiunMediaEntry.prototype = new VidiunPlayableEntry();
 /**
  * The media type of the entry
 	 * 
  *
- * @var KalturaMediaType
+ * @var VidiunMediaType
  * @insertonly
  */
-KalturaMediaEntry.prototype.mediaType = null;
+VidiunMediaEntry.prototype.mediaType = null;
 
 /**
  * Override the default conversion quality  
@@ -4147,23 +4147,23 @@ KalturaMediaEntry.prototype.mediaType = null;
  * @var string
  * @insertonly
  */
-KalturaMediaEntry.prototype.conversionQuality = null;
+VidiunMediaEntry.prototype.conversionQuality = null;
 
 /**
  * The source type of the entry 
  *
- * @var KalturaSourceType
+ * @var VidiunSourceType
  * @readonly
  */
-KalturaMediaEntry.prototype.sourceType = null;
+VidiunMediaEntry.prototype.sourceType = null;
 
 /**
  * The search provider type used to import this entry
  *
- * @var KalturaSearchProviderType
+ * @var VidiunSearchProviderType
  * @readonly
  */
-KalturaMediaEntry.prototype.searchProviderType = null;
+VidiunMediaEntry.prototype.searchProviderType = null;
 
 /**
  * The ID of the media in the importing site
@@ -4171,21 +4171,21 @@ KalturaMediaEntry.prototype.searchProviderType = null;
  * @var string
  * @readonly
  */
-KalturaMediaEntry.prototype.searchProviderId = null;
+VidiunMediaEntry.prototype.searchProviderId = null;
 
 /**
  * The user name used for credits
  *
  * @var string
  */
-KalturaMediaEntry.prototype.creditUserName = null;
+VidiunMediaEntry.prototype.creditUserName = null;
 
 /**
  * The URL for credits
  *
  * @var string
  */
-KalturaMediaEntry.prototype.creditUrl = null;
+VidiunMediaEntry.prototype.creditUrl = null;
 
 /**
  * The media date extracted from EXIF data (For images) as Unix timestamp (In seconds)
@@ -4193,7 +4193,7 @@ KalturaMediaEntry.prototype.creditUrl = null;
  * @var int
  * @readonly
  */
-KalturaMediaEntry.prototype.mediaDate = null;
+VidiunMediaEntry.prototype.mediaDate = null;
 
 /**
  * The URL used for playback. This is not the download URL.
@@ -4201,7 +4201,7 @@ KalturaMediaEntry.prototype.mediaDate = null;
  * @var string
  * @readonly
  */
-KalturaMediaEntry.prototype.dataUrl = null;
+VidiunMediaEntry.prototype.dataUrl = null;
 
 /**
  * Comma separated flavor params ids that exists for this media entry
@@ -4210,119 +4210,119 @@ KalturaMediaEntry.prototype.dataUrl = null;
  * @var string
  * @readonly
  */
-KalturaMediaEntry.prototype.flavorParamsIds = null;
+VidiunMediaEntry.prototype.flavorParamsIds = null;
 
 
-function KalturaPlayableEntryFilter()
+function VidiunPlayableEntryFilter()
 {
 }
-KalturaPlayableEntryFilter.prototype = new KalturaBaseEntryFilter();
+VidiunPlayableEntryFilter.prototype = new VidiunBaseEntryFilter();
 /**
  * 
  *
  * @var int
  */
-KalturaPlayableEntryFilter.prototype.durationLessThan = null;
+VidiunPlayableEntryFilter.prototype.durationLessThan = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPlayableEntryFilter.prototype.durationGreaterThan = null;
+VidiunPlayableEntryFilter.prototype.durationGreaterThan = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPlayableEntryFilter.prototype.durationLessThanOrEqual = null;
+VidiunPlayableEntryFilter.prototype.durationLessThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPlayableEntryFilter.prototype.durationGreaterThanOrEqual = null;
+VidiunPlayableEntryFilter.prototype.durationGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPlayableEntryFilter.prototype.durationTypeMatchOr = null;
+VidiunPlayableEntryFilter.prototype.durationTypeMatchOr = null;
 
 
-function KalturaMediaEntryFilter()
+function VidiunMediaEntryFilter()
 {
 }
-KalturaMediaEntryFilter.prototype = new KalturaPlayableEntryFilter();
+VidiunMediaEntryFilter.prototype = new VidiunPlayableEntryFilter();
 /**
  * 
  *
- * @var KalturaMediaType
+ * @var VidiunMediaType
  */
-KalturaMediaEntryFilter.prototype.mediaTypeEqual = null;
+VidiunMediaEntryFilter.prototype.mediaTypeEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMediaEntryFilter.prototype.mediaTypeIn = null;
+VidiunMediaEntryFilter.prototype.mediaTypeIn = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaMediaEntryFilter.prototype.mediaDateGreaterThanOrEqual = null;
+VidiunMediaEntryFilter.prototype.mediaDateGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaMediaEntryFilter.prototype.mediaDateLessThanOrEqual = null;
+VidiunMediaEntryFilter.prototype.mediaDateLessThanOrEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMediaEntryFilter.prototype.flavorParamsIdsMatchOr = null;
+VidiunMediaEntryFilter.prototype.flavorParamsIdsMatchOr = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaMediaEntryFilter.prototype.flavorParamsIdsMatchAnd = null;
+VidiunMediaEntryFilter.prototype.flavorParamsIdsMatchAnd = null;
 
 
-function KalturaMediaEntryFilterForPlaylist()
+function VidiunMediaEntryFilterForPlaylist()
 {
 }
-KalturaMediaEntryFilterForPlaylist.prototype = new KalturaMediaEntryFilter();
+VidiunMediaEntryFilterForPlaylist.prototype = new VidiunMediaEntryFilter();
 /**
  * 
  *
  * @var int
  */
-KalturaMediaEntryFilterForPlaylist.prototype.limit = null;
+VidiunMediaEntryFilterForPlaylist.prototype.limit = null;
 
 
-function KalturaMediaListResponse()
+function VidiunMediaListResponse()
 {
 }
-KalturaMediaListResponse.prototype = new KalturaObjectBase();
+VidiunMediaListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaMediaEntryArray
+ * @var VidiunMediaEntryArray
  * @readonly
  */
-KalturaMediaListResponse.prototype.objects = null;
+VidiunMediaListResponse.prototype.objects = null;
 
 /**
  * 
@@ -4330,13 +4330,13 @@ KalturaMediaListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaMediaListResponse.prototype.totalCount = null;
+VidiunMediaListResponse.prototype.totalCount = null;
 
 
-function KalturaMixEntry()
+function VidiunMixEntry()
 {
 }
-KalturaMixEntry.prototype = new KalturaPlayableEntry();
+VidiunMixEntry.prototype = new VidiunPlayableEntry();
 /**
  * Indicates whether the user has submited a real thumbnail to the mix (Not the one that was generated automaticaly)
 	 * 
@@ -4344,40 +4344,40 @@ KalturaMixEntry.prototype = new KalturaPlayableEntry();
  * @var bool
  * @readonly
  */
-KalturaMixEntry.prototype.hasRealThumbnail = null;
+VidiunMixEntry.prototype.hasRealThumbnail = null;
 
 /**
  * The editor type used to edit the metadata
 	 * 
  *
- * @var KalturaEditorType
+ * @var VidiunEditorType
  */
-KalturaMixEntry.prototype.editorType = null;
+VidiunMixEntry.prototype.editorType = null;
 
 /**
  * The xml data of the mix
  *
  * @var string
  */
-KalturaMixEntry.prototype.dataContent = null;
+VidiunMixEntry.prototype.dataContent = null;
 
 
-function KalturaMixEntryFilter()
+function VidiunMixEntryFilter()
 {
 }
-KalturaMixEntryFilter.prototype = new KalturaPlayableEntryFilter();
+VidiunMixEntryFilter.prototype = new VidiunPlayableEntryFilter();
 
-function KalturaMixListResponse()
+function VidiunMixListResponse()
 {
 }
-KalturaMixListResponse.prototype = new KalturaObjectBase();
+VidiunMixListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaMixEntryArray
+ * @var VidiunMixEntryArray
  * @readonly
  */
-KalturaMixListResponse.prototype.objects = null;
+VidiunMixListResponse.prototype.objects = null;
 
 /**
  * 
@@ -4385,20 +4385,20 @@ KalturaMixListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaMixListResponse.prototype.totalCount = null;
+VidiunMixListResponse.prototype.totalCount = null;
 
 
-function KalturaModerationFlag()
+function VidiunModerationFlag()
 {
 }
-KalturaModerationFlag.prototype = new KalturaObjectBase();
+VidiunModerationFlag.prototype = new VidiunObjectBase();
 /**
  * Moderation flag id
  *
  * @var int
  * @readonly
  */
-KalturaModerationFlag.prototype.id = null;
+VidiunModerationFlag.prototype.id = null;
 
 /**
  * 
@@ -4406,7 +4406,7 @@ KalturaModerationFlag.prototype.id = null;
  * @var int
  * @readonly
  */
-KalturaModerationFlag.prototype.partnerId = null;
+VidiunModerationFlag.prototype.partnerId = null;
 
 /**
  * The user id that added the moderation flag
@@ -4414,59 +4414,51 @@ KalturaModerationFlag.prototype.partnerId = null;
  * @var string
  * @readonly
  */
-KalturaModerationFlag.prototype.userId = null;
+VidiunModerationFlag.prototype.userId = null;
 
 /**
  * The type of the moderation flag (entry or user)
  *
- * @var KalturaModerationObjectType
+ * @var VidiunModerationObjectType
  * @readonly
  */
-KalturaModerationFlag.prototype.moderationObjectType = null;
+VidiunModerationFlag.prototype.moderationObjectType = null;
 
 /**
  * If moderation flag is set for entry, this is the flagged entry id
  *
  * @var string
  */
-KalturaModerationFlag.prototype.flaggedEntryId = null;
+VidiunModerationFlag.prototype.flaggedEntryId = null;
 
 /**
  * If moderation flag is set for user, this is the flagged user id
  *
  * @var string
  */
-KalturaModerationFlag.prototype.flaggedUserId = null;
+VidiunModerationFlag.prototype.flaggedUserId = null;
 
 /**
  * The moderation flag status
  *
- * @var KalturaModerationFlagStatus
+ * @var VidiunModerationFlagStatus
  * @readonly
  */
-KalturaModerationFlag.prototype.status = null;
+VidiunModerationFlag.prototype.status = null;
 
 /**
  * The comment that was added to the flag
  *
  * @var string
  */
-KalturaModerationFlag.prototype.comments = null;
+VidiunModerationFlag.prototype.comments = null;
 
 /**
  * 
  *
- * @var KalturaModerationFlagType
+ * @var VidiunModerationFlagType
  */
-KalturaModerationFlag.prototype.flagType = null;
-
-/**
- * 
- *
- * @var int
- * @readonly
- */
-KalturaModerationFlag.prototype.createdAt = null;
+VidiunModerationFlag.prototype.flagType = null;
 
 /**
  * 
@@ -4474,20 +4466,28 @@ KalturaModerationFlag.prototype.createdAt = null;
  * @var int
  * @readonly
  */
-KalturaModerationFlag.prototype.updatedAt = null;
+VidiunModerationFlag.prototype.createdAt = null;
+
+/**
+ * 
+ *
+ * @var int
+ * @readonly
+ */
+VidiunModerationFlag.prototype.updatedAt = null;
 
 
-function KalturaModerationFlagListResponse()
+function VidiunModerationFlagListResponse()
 {
 }
-KalturaModerationFlagListResponse.prototype = new KalturaObjectBase();
+VidiunModerationFlagListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaModerationFlagArray
+ * @var VidiunModerationFlagArray
  * @readonly
  */
-KalturaModerationFlagListResponse.prototype.objects = null;
+VidiunModerationFlagListResponse.prototype.objects = null;
 
 /**
  * 
@@ -4495,176 +4495,176 @@ KalturaModerationFlagListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaModerationFlagListResponse.prototype.totalCount = null;
+VidiunModerationFlagListResponse.prototype.totalCount = null;
 
 
-function KalturaNotification()
+function VidiunNotification()
 {
 }
-KalturaNotification.prototype = new KalturaBaseJob();
+VidiunNotification.prototype = new VidiunBaseJob();
 /**
  * 
  *
  * @var string
  */
-KalturaNotification.prototype.puserId = null;
+VidiunNotification.prototype.puserId = null;
 
 /**
  * 
  *
- * @var KalturaNotificationType
+ * @var VidiunNotificationType
  */
-KalturaNotification.prototype.type = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaNotification.prototype.objectId = null;
-
-/**
- * 
- *
- * @var KalturaNotificationStatus
- */
-KalturaNotification.prototype.status = null;
+VidiunNotification.prototype.type = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaNotification.prototype.notificationData = null;
+VidiunNotification.prototype.objectId = null;
+
+/**
+ * 
+ *
+ * @var VidiunNotificationStatus
+ */
+VidiunNotification.prototype.status = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunNotification.prototype.notificationData = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaNotification.prototype.numberOfAttempts = null;
+VidiunNotification.prototype.numberOfAttempts = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaNotification.prototype.notificationResult = null;
+VidiunNotification.prototype.notificationResult = null;
 
 /**
  * 
  *
- * @var KalturaNotificationObjectType
+ * @var VidiunNotificationObjectType
  */
-KalturaNotification.prototype.objType = null;
+VidiunNotification.prototype.objType = null;
 
-function KalturaNotificationJobData()
+function VidiunNotificationJobData()
 {
 }
-KalturaNotificationJobData.prototype = new KalturaJobData();
+VidiunNotificationJobData.prototype = new VidiunJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaNotificationJobData.prototype.userId = null;
+VidiunNotificationJobData.prototype.userId = null;
 
 /**
  * 
  *
- * @var KalturaNotificationType
+ * @var VidiunNotificationType
  */
-KalturaNotificationJobData.prototype.type = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaNotificationJobData.prototype.typeAsString = null;
+VidiunNotificationJobData.prototype.type = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaNotificationJobData.prototype.objectId = null;
-
-/**
- * 
- *
- * @var KalturaNotificationStatus
- */
-KalturaNotificationJobData.prototype.status = null;
+VidiunNotificationJobData.prototype.typeAsString = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaNotificationJobData.prototype.data = null;
+VidiunNotificationJobData.prototype.objectId = null;
+
+/**
+ * 
+ *
+ * @var VidiunNotificationStatus
+ */
+VidiunNotificationJobData.prototype.status = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunNotificationJobData.prototype.data = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaNotificationJobData.prototype.numberOfAttempts = null;
+VidiunNotificationJobData.prototype.numberOfAttempts = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaNotificationJobData.prototype.notificationResult = null;
+VidiunNotificationJobData.prototype.notificationResult = null;
 
 /**
  * 
  *
- * @var KalturaNotificationObjectType
+ * @var VidiunNotificationObjectType
  */
-KalturaNotificationJobData.prototype.objType = null;
+VidiunNotificationJobData.prototype.objType = null;
 
 
-function KalturaPartner()
+function VidiunPartner()
 {
 }
-KalturaPartner.prototype = new KalturaObjectBase();
+VidiunPartner.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var int
  * @readonly
  */
-KalturaPartner.prototype.id = null;
+VidiunPartner.prototype.id = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.name = null;
+VidiunPartner.prototype.name = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.website = null;
+VidiunPartner.prototype.website = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.notificationUrl = null;
+VidiunPartner.prototype.notificationUrl = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPartner.prototype.appearInSearch = null;
+VidiunPartner.prototype.appearInSearch = null;
 
 /**
  * 
@@ -4672,98 +4672,98 @@ KalturaPartner.prototype.appearInSearch = null;
  * @var string
  * @readonly
  */
-KalturaPartner.prototype.createdAt = null;
+VidiunPartner.prototype.createdAt = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.adminName = null;
+VidiunPartner.prototype.adminName = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.adminEmail = null;
+VidiunPartner.prototype.adminEmail = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.description = null;
+VidiunPartner.prototype.description = null;
 
 /**
  * 
  *
- * @var KalturaCommercialUseType
+ * @var VidiunCommercialUseType
  */
-KalturaPartner.prototype.commercialUse = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaPartner.prototype.landingPage = null;
+VidiunPartner.prototype.commercialUse = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.userLandingPage = null;
+VidiunPartner.prototype.landingPage = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.contentCategories = null;
-
-/**
- * 
- *
- * @var KalturaPartnerType
- */
-KalturaPartner.prototype.type = null;
+VidiunPartner.prototype.userLandingPage = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.phone = null;
+VidiunPartner.prototype.contentCategories = null;
+
+/**
+ * 
+ *
+ * @var VidiunPartnerType
+ */
+VidiunPartner.prototype.type = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.describeYourself = null;
+VidiunPartner.prototype.phone = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunPartner.prototype.describeYourself = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaPartner.prototype.adultContent = null;
+VidiunPartner.prototype.adultContent = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.defConversionProfileType = null;
+VidiunPartner.prototype.defConversionProfileType = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPartner.prototype.notify = null;
+VidiunPartner.prototype.notify = null;
 
 /**
  * 
@@ -4771,56 +4771,56 @@ KalturaPartner.prototype.notify = null;
  * @var int
  * @readonly
  */
-KalturaPartner.prototype.status = null;
+VidiunPartner.prototype.status = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPartner.prototype.allowQuickEdit = null;
+VidiunPartner.prototype.allowQuickEdit = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPartner.prototype.mergeEntryLists = null;
+VidiunPartner.prototype.mergeEntryLists = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartner.prototype.notificationsConfig = null;
+VidiunPartner.prototype.notificationsConfig = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPartner.prototype.maxUploadSize = null;
+VidiunPartner.prototype.maxUploadSize = null;
 
 /**
  * readonly
  *
  * @var int
  */
-KalturaPartner.prototype.partnerPackage = null;
+VidiunPartner.prototype.partnerPackage = null;
 
 /**
  * readonly
  *
  * @var string
  */
-KalturaPartner.prototype.secret = null;
+VidiunPartner.prototype.secret = null;
 
 /**
  * readonly
  *
  * @var string
  */
-KalturaPartner.prototype.adminSecret = null;
+VidiunPartner.prototype.adminSecret = null;
 
 /**
  * 
@@ -4828,74 +4828,74 @@ KalturaPartner.prototype.adminSecret = null;
  * @var string
  * @readonly
  */
-KalturaPartner.prototype.cmsPassword = null;
+VidiunPartner.prototype.cmsPassword = null;
 
 /**
  * readonly
  *
  * @var int
  */
-KalturaPartner.prototype.allowMultiNotification = null;
+VidiunPartner.prototype.allowMultiNotification = null;
 
 
-function KalturaPartnerFilter()
+function VidiunPartnerFilter()
 {
 }
-KalturaPartnerFilter.prototype = new KalturaFilter();
+VidiunPartnerFilter.prototype = new VidiunFilter();
 /**
  * 
  *
  * @var string
  */
-KalturaPartnerFilter.prototype.nameLike = null;
+VidiunPartnerFilter.prototype.nameLike = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartnerFilter.prototype.nameMultiLikeOr = null;
+VidiunPartnerFilter.prototype.nameMultiLikeOr = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartnerFilter.prototype.nameMultiLikeAnd = null;
+VidiunPartnerFilter.prototype.nameMultiLikeAnd = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartnerFilter.prototype.nameEqual = null;
+VidiunPartnerFilter.prototype.nameEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPartnerFilter.prototype.statusEqual = null;
+VidiunPartnerFilter.prototype.statusEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPartnerFilter.prototype.statusIn = null;
+VidiunPartnerFilter.prototype.statusIn = null;
 
 
-function KalturaPartnerUsage()
+function VidiunPartnerUsage()
 {
 }
-KalturaPartnerUsage.prototype = new KalturaObjectBase();
+VidiunPartnerUsage.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var float
  * @readonly
  */
-KalturaPartnerUsage.prototype.hostingGB = null;
+VidiunPartnerUsage.prototype.hostingGB = null;
 
 /**
  * 
@@ -4903,7 +4903,7 @@ KalturaPartnerUsage.prototype.hostingGB = null;
  * @var float
  * @readonly
  */
-KalturaPartnerUsage.prototype.Percent = null;
+VidiunPartnerUsage.prototype.Percent = null;
 
 /**
  * 
@@ -4911,7 +4911,7 @@ KalturaPartnerUsage.prototype.Percent = null;
  * @var int
  * @readonly
  */
-KalturaPartnerUsage.prototype.packageBW = null;
+VidiunPartnerUsage.prototype.packageBW = null;
 
 /**
  * 
@@ -4919,7 +4919,7 @@ KalturaPartnerUsage.prototype.packageBW = null;
  * @var int
  * @readonly
  */
-KalturaPartnerUsage.prototype.usageGB = null;
+VidiunPartnerUsage.prototype.usageGB = null;
 
 /**
  * 
@@ -4927,7 +4927,7 @@ KalturaPartnerUsage.prototype.usageGB = null;
  * @var int
  * @readonly
  */
-KalturaPartnerUsage.prototype.reachedLimitDate = null;
+VidiunPartnerUsage.prototype.reachedLimitDate = null;
 
 /**
  * 
@@ -4935,13 +4935,13 @@ KalturaPartnerUsage.prototype.reachedLimitDate = null;
  * @var string
  * @readonly
  */
-KalturaPartnerUsage.prototype.usageGraph = null;
+VidiunPartnerUsage.prototype.usageGraph = null;
 
 
-function KalturaPlaylist()
+function VidiunPlaylist()
 {
 }
-KalturaPlaylist.prototype = new KalturaBaseEntry();
+VidiunPlaylist.prototype = new VidiunBaseEntry();
 /**
  * Content of the playlist - 
 	 * XML if the playlistType is dynamic 
@@ -4950,28 +4950,28 @@ KalturaPlaylist.prototype = new KalturaBaseEntry();
  *
  * @var string
  */
-KalturaPlaylist.prototype.playlistContent = null;
+VidiunPlaylist.prototype.playlistContent = null;
 
 /**
  * 
  *
- * @var KalturaMediaEntryFilterForPlaylistArray
+ * @var VidiunMediaEntryFilterForPlaylistArray
  */
-KalturaPlaylist.prototype.filters = null;
+VidiunPlaylist.prototype.filters = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPlaylist.prototype.totalResults = null;
+VidiunPlaylist.prototype.totalResults = null;
 
 /**
  * Type of playlist  
  *
- * @var KalturaPlaylistType
+ * @var VidiunPlaylistType
  */
-KalturaPlaylist.prototype.playlistType = null;
+VidiunPlaylist.prototype.playlistType = null;
 
 /**
  * Number of plays
@@ -4979,7 +4979,7 @@ KalturaPlaylist.prototype.playlistType = null;
  * @var int
  * @readonly
  */
-KalturaPlaylist.prototype.plays = null;
+VidiunPlaylist.prototype.plays = null;
 
 /**
  * Number of views
@@ -4987,7 +4987,7 @@ KalturaPlaylist.prototype.plays = null;
  * @var int
  * @readonly
  */
-KalturaPlaylist.prototype.views = null;
+VidiunPlaylist.prototype.views = null;
 
 /**
  * The duration in seconds
@@ -4995,25 +4995,25 @@ KalturaPlaylist.prototype.views = null;
  * @var int
  * @readonly
  */
-KalturaPlaylist.prototype.duration = null;
+VidiunPlaylist.prototype.duration = null;
 
 
-function KalturaPlaylistFilter()
+function VidiunPlaylistFilter()
 {
 }
-KalturaPlaylistFilter.prototype = new KalturaBaseEntryFilter();
+VidiunPlaylistFilter.prototype = new VidiunBaseEntryFilter();
 
-function KalturaPlaylistListResponse()
+function VidiunPlaylistListResponse()
 {
 }
-KalturaPlaylistListResponse.prototype = new KalturaObjectBase();
+VidiunPlaylistListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaPlaylistArray
+ * @var VidiunPlaylistArray
  * @readonly
  */
-KalturaPlaylistListResponse.prototype.objects = null;
+VidiunPlaylistListResponse.prototype.objects = null;
 
 /**
  * 
@@ -5021,26 +5021,26 @@ KalturaPlaylistListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaPlaylistListResponse.prototype.totalCount = null;
+VidiunPlaylistListResponse.prototype.totalCount = null;
 
 
-function KalturaPostConvertJobData()
+function VidiunPostConvertJobData()
 {
 }
-KalturaPostConvertJobData.prototype = new KalturaJobData();
+VidiunPostConvertJobData.prototype = new VidiunJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaPostConvertJobData.prototype.srcFileSyncLocalPath = null;
+VidiunPostConvertJobData.prototype.srcFileSyncLocalPath = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPostConvertJobData.prototype.flavorAssetId = null;
+VidiunPostConvertJobData.prototype.flavorAssetId = null;
 
 /**
  * Indicates if a thumbnail should be created
@@ -5048,7 +5048,7 @@ KalturaPostConvertJobData.prototype.flavorAssetId = null;
  *
  * @var bool
  */
-KalturaPostConvertJobData.prototype.createThumb = null;
+VidiunPostConvertJobData.prototype.createThumb = null;
 
 /**
  * The path of the created thumbnail
@@ -5056,7 +5056,7 @@ KalturaPostConvertJobData.prototype.createThumb = null;
  *
  * @var string
  */
-KalturaPostConvertJobData.prototype.thumbPath = null;
+VidiunPostConvertJobData.prototype.thumbPath = null;
 
 /**
  * The position of the thumbnail in the media file
@@ -5064,7 +5064,7 @@ KalturaPostConvertJobData.prototype.thumbPath = null;
  *
  * @var int
  */
-KalturaPostConvertJobData.prototype.thumbOffset = null;
+VidiunPostConvertJobData.prototype.thumbOffset = null;
 
 /**
  * The height of the movie, will be used to comapare if this thumbnail is the best we can have
@@ -5072,7 +5072,7 @@ KalturaPostConvertJobData.prototype.thumbOffset = null;
  *
  * @var int
  */
-KalturaPostConvertJobData.prototype.thumbHeight = null;
+VidiunPostConvertJobData.prototype.thumbHeight = null;
 
 /**
  * The bit rate of the movie, will be used to comapare if this thumbnail is the best we can have
@@ -5080,63 +5080,63 @@ KalturaPostConvertJobData.prototype.thumbHeight = null;
  *
  * @var int
  */
-KalturaPostConvertJobData.prototype.thumbBitrate = null;
+VidiunPostConvertJobData.prototype.thumbBitrate = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaPostConvertJobData.prototype.flavorParamsOutputId = null;
+VidiunPostConvertJobData.prototype.flavorParamsOutputId = null;
 
 
-function KalturaSessionRestriction()
+function VidiunSessionRestriction()
 {
 }
-KalturaSessionRestriction.prototype = new KalturaBaseRestriction();
+VidiunSessionRestriction.prototype = new VidiunBaseRestriction();
 
-function KalturaPreviewRestriction()
+function VidiunPreviewRestriction()
 {
 }
-KalturaPreviewRestriction.prototype = new KalturaSessionRestriction();
+VidiunPreviewRestriction.prototype = new VidiunSessionRestriction();
 /**
  * The preview restriction length 
 	 * 
  *
  * @var int
  */
-KalturaPreviewRestriction.prototype.previewLength = null;
+VidiunPreviewRestriction.prototype.previewLength = null;
 
 
-function KalturaPullJobData()
+function VidiunPullJobData()
 {
 }
-KalturaPullJobData.prototype = new KalturaJobData();
+VidiunPullJobData.prototype = new VidiunJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaPullJobData.prototype.srcFileUrl = null;
+VidiunPullJobData.prototype.srcFileUrl = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaPullJobData.prototype.destFileLocalPath = null;
+VidiunPullJobData.prototype.destFileLocalPath = null;
 
 
-function KalturaRemoteConvertJobData()
+function VidiunRemoteConvertJobData()
 {
 }
-KalturaRemoteConvertJobData.prototype = new KalturaConvartableJobData();
+VidiunRemoteConvertJobData.prototype = new VidiunConvartableJobData();
 /**
  * 
  *
  * @var string
  */
-KalturaRemoteConvertJobData.prototype.srcFileUrl = null;
+VidiunRemoteConvertJobData.prototype.srcFileUrl = null;
 
 /**
  * Should be set by the API
@@ -5144,86 +5144,86 @@ KalturaRemoteConvertJobData.prototype.srcFileUrl = null;
  *
  * @var string
  */
-KalturaRemoteConvertJobData.prototype.destFileUrl = null;
+VidiunRemoteConvertJobData.prototype.destFileUrl = null;
 
 
-function KalturaReportGraph()
+function VidiunReportGraph()
 {
 }
-KalturaReportGraph.prototype = new KalturaObjectBase();
+VidiunReportGraph.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  */
-KalturaReportGraph.prototype.id = null;
+VidiunReportGraph.prototype.id = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaReportGraph.prototype.data = null;
+VidiunReportGraph.prototype.data = null;
 
 
-function KalturaReportInputFilter()
+function VidiunReportInputFilter()
 {
 }
-KalturaReportInputFilter.prototype = new KalturaObjectBase();
+VidiunReportInputFilter.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var int
  */
-KalturaReportInputFilter.prototype.fromDate = null;
+VidiunReportInputFilter.prototype.fromDate = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaReportInputFilter.prototype.toDate = null;
+VidiunReportInputFilter.prototype.toDate = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaReportInputFilter.prototype.keywords = null;
+VidiunReportInputFilter.prototype.keywords = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaReportInputFilter.prototype.searchInTags = null;
+VidiunReportInputFilter.prototype.searchInTags = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaReportInputFilter.prototype.searchInAdminTags = null;
+VidiunReportInputFilter.prototype.searchInAdminTags = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaReportInputFilter.prototype.categories = null;
+VidiunReportInputFilter.prototype.categories = null;
 
 
-function KalturaReportTable()
+function VidiunReportTable()
 {
 }
-KalturaReportTable.prototype = new KalturaObjectBase();
+VidiunReportTable.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  * @readonly
  */
-KalturaReportTable.prototype.header = null;
+VidiunReportTable.prototype.header = null;
 
 /**
  * 
@@ -5231,7 +5231,7 @@ KalturaReportTable.prototype.header = null;
  * @var string
  * @readonly
  */
-KalturaReportTable.prototype.data = null;
+VidiunReportTable.prototype.data = null;
 
 /**
  * 
@@ -5239,52 +5239,52 @@ KalturaReportTable.prototype.data = null;
  * @var int
  * @readonly
  */
-KalturaReportTable.prototype.totalCount = null;
+VidiunReportTable.prototype.totalCount = null;
 
 
-function KalturaReportTotal()
+function VidiunReportTotal()
 {
 }
-KalturaReportTotal.prototype = new KalturaObjectBase();
+VidiunReportTotal.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  */
-KalturaReportTotal.prototype.header = null;
+VidiunReportTotal.prototype.header = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaReportTotal.prototype.data = null;
+VidiunReportTotal.prototype.data = null;
 
 
-function KalturaSearch()
+function VidiunSearch()
 {
 }
-KalturaSearch.prototype = new KalturaObjectBase();
+VidiunSearch.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  */
-KalturaSearch.prototype.keyWords = null;
+VidiunSearch.prototype.keyWords = null;
 
 /**
  * 
  *
- * @var KalturaSearchProviderType
+ * @var VidiunSearchProviderType
  */
-KalturaSearch.prototype.searchSource = null;
+VidiunSearch.prototype.searchSource = null;
 
 /**
  * 
  *
- * @var KalturaMediaType
+ * @var VidiunMediaType
  */
-KalturaSearch.prototype.mediaType = null;
+VidiunSearch.prototype.mediaType = null;
 
 /**
  * Use this field to pass dynamic data for searching
@@ -5294,129 +5294,129 @@ KalturaSearch.prototype.mediaType = null;
  *
  * @var string
  */
-KalturaSearch.prototype.extraData = null;
+VidiunSearch.prototype.extraData = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSearch.prototype.authData = null;
+VidiunSearch.prototype.authData = null;
 
 
-function KalturaSearchAuthData()
+function VidiunSearchAuthData()
 {
 }
-KalturaSearchAuthData.prototype = new KalturaObjectBase();
+VidiunSearchAuthData.prototype = new VidiunObjectBase();
 /**
  * The authentication data that further should be used for search
 	 * 
  *
  * @var string
  */
-KalturaSearchAuthData.prototype.authData = null;
+VidiunSearchAuthData.prototype.authData = null;
 
 /**
  * Login URL when user need to sign-in and authorize the search
  *
  * @var string
  */
-KalturaSearchAuthData.prototype.loginUrl = null;
+VidiunSearchAuthData.prototype.loginUrl = null;
 
 /**
  * Information when there was an error
  *
  * @var string
  */
-KalturaSearchAuthData.prototype.message = null;
+VidiunSearchAuthData.prototype.message = null;
 
 
-function KalturaSearchResult()
+function VidiunSearchResult()
 {
 }
-KalturaSearchResult.prototype = new KalturaSearch();
+VidiunSearchResult.prototype = new VidiunSearch();
 /**
  * 
  *
  * @var string
  */
-KalturaSearchResult.prototype.id = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaSearchResult.prototype.title = null;
+VidiunSearchResult.prototype.id = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSearchResult.prototype.thumbUrl = null;
+VidiunSearchResult.prototype.title = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSearchResult.prototype.description = null;
+VidiunSearchResult.prototype.thumbUrl = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSearchResult.prototype.tags = null;
+VidiunSearchResult.prototype.description = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSearchResult.prototype.url = null;
+VidiunSearchResult.prototype.tags = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSearchResult.prototype.sourceLink = null;
+VidiunSearchResult.prototype.url = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSearchResult.prototype.credit = null;
-
-/**
- * 
- *
- * @var KalturaLicenseType
- */
-KalturaSearchResult.prototype.licenseType = null;
+VidiunSearchResult.prototype.sourceLink = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSearchResult.prototype.flashPlaybackType = null;
+VidiunSearchResult.prototype.credit = null;
+
+/**
+ * 
+ *
+ * @var VidiunLicenseType
+ */
+VidiunSearchResult.prototype.licenseType = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunSearchResult.prototype.flashPlaybackType = null;
 
 
-function KalturaSearchResultResponse()
+function VidiunSearchResultResponse()
 {
 }
-KalturaSearchResultResponse.prototype = new KalturaObjectBase();
+VidiunSearchResultResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaSearchResultArray
+ * @var VidiunSearchResultArray
  * @readonly
  */
-KalturaSearchResultResponse.prototype.objects = null;
+VidiunSearchResultResponse.prototype.objects = null;
 
 /**
  * 
@@ -5424,20 +5424,20 @@ KalturaSearchResultResponse.prototype.objects = null;
  * @var bool
  * @readonly
  */
-KalturaSearchResultResponse.prototype.needMediaInfo = null;
+VidiunSearchResultResponse.prototype.needMediaInfo = null;
 
 
-function KalturaSiteRestriction()
+function VidiunSiteRestriction()
 {
 }
-KalturaSiteRestriction.prototype = new KalturaBaseRestriction();
+VidiunSiteRestriction.prototype = new VidiunBaseRestriction();
 /**
  * The site restriction type (allow or deny)
 	 * 
  *
- * @var KalturaSiteRestrictionType
+ * @var VidiunSiteRestrictionType
  */
-KalturaSiteRestriction.prototype.siteRestrictionType = null;
+VidiunSiteRestriction.prototype.siteRestrictionType = null;
 
 /**
  * Comma separated list of sites (domains) to allow or deny
@@ -5445,20 +5445,20 @@ KalturaSiteRestriction.prototype.siteRestrictionType = null;
  *
  * @var string
  */
-KalturaSiteRestriction.prototype.siteList = null;
+VidiunSiteRestriction.prototype.siteList = null;
 
 
-function KalturaStartWidgetSessionResponse()
+function VidiunStartWidgetSessionResponse()
 {
 }
-KalturaStartWidgetSessionResponse.prototype = new KalturaObjectBase();
+VidiunStartWidgetSessionResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var int
  * @readonly
  */
-KalturaStartWidgetSessionResponse.prototype.partnerId = null;
+VidiunStartWidgetSessionResponse.prototype.partnerId = null;
 
 /**
  * 
@@ -5466,7 +5466,7 @@ KalturaStartWidgetSessionResponse.prototype.partnerId = null;
  * @var string
  * @readonly
  */
-KalturaStartWidgetSessionResponse.prototype.ks = null;
+VidiunStartWidgetSessionResponse.prototype.vs = null;
 
 /**
  * 
@@ -5474,26 +5474,26 @@ KalturaStartWidgetSessionResponse.prototype.ks = null;
  * @var string
  * @readonly
  */
-KalturaStartWidgetSessionResponse.prototype.userId = null;
+VidiunStartWidgetSessionResponse.prototype.userId = null;
 
 
-function KalturaStatsEvent()
+function VidiunStatsEvent()
 {
 }
-KalturaStatsEvent.prototype = new KalturaObjectBase();
+VidiunStatsEvent.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  */
-KalturaStatsEvent.prototype.clientVer = null;
+VidiunStatsEvent.prototype.clientVer = null;
 
 /**
  * 
  *
- * @var KalturaStatsEventType
+ * @var VidiunStatsEventType
  */
-KalturaStatsEvent.prototype.eventType = null;
+VidiunStatsEvent.prototype.eventType = null;
 
 /**
  * the client's timestamp of this event
@@ -5501,70 +5501,70 @@ KalturaStatsEvent.prototype.eventType = null;
  *
  * @var float
  */
-KalturaStatsEvent.prototype.eventTimestamp = null;
+VidiunStatsEvent.prototype.eventTimestamp = null;
 
 /**
  * a unique string generated by the client that will represent the client-side session: the primary component will pass it on to other components that sprout from it
  *
  * @var string
  */
-KalturaStatsEvent.prototype.sessionId = null;
+VidiunStatsEvent.prototype.sessionId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaStatsEvent.prototype.partnerId = null;
+VidiunStatsEvent.prototype.partnerId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaStatsEvent.prototype.entryId = null;
+VidiunStatsEvent.prototype.entryId = null;
 
 /**
  * the UV cookie - creates in the operational system and should be passed on ofr every event 
  *
  * @var string
  */
-KalturaStatsEvent.prototype.uniqueViewer = null;
+VidiunStatsEvent.prototype.uniqueViewer = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaStatsEvent.prototype.widgetId = null;
+VidiunStatsEvent.prototype.widgetId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaStatsEvent.prototype.uiconfId = null;
+VidiunStatsEvent.prototype.uiconfId = null;
 
 /**
  * the partner's user id 
  *
  * @var string
  */
-KalturaStatsEvent.prototype.userId = null;
+VidiunStatsEvent.prototype.userId = null;
 
 /**
  * the timestamp along the video when the event happend 
  *
  * @var int
  */
-KalturaStatsEvent.prototype.currentPoint = null;
+VidiunStatsEvent.prototype.currentPoint = null;
 
 /**
  * the duration of the video in milliseconds - will make it much faster than quering the db for each entry 
  *
  * @var int
  */
-KalturaStatsEvent.prototype.duration = null;
+VidiunStatsEvent.prototype.duration = null;
 
 /**
  * will be retrieved from the request of the user 
@@ -5572,75 +5572,75 @@ KalturaStatsEvent.prototype.duration = null;
  * @var string
  * @readonly
  */
-KalturaStatsEvent.prototype.userIp = null;
+VidiunStatsEvent.prototype.userIp = null;
 
 /**
  * the time in milliseconds the event took
  *
  * @var int
  */
-KalturaStatsEvent.prototype.processDuration = null;
+VidiunStatsEvent.prototype.processDuration = null;
 
 /**
  * the id of the GUI control - will be used in the future to better understand what the user clicked
  *
  * @var string
  */
-KalturaStatsEvent.prototype.controlId = null;
+VidiunStatsEvent.prototype.controlId = null;
 
 /**
  * true if the user ever used seek in this session 
  *
  * @var bool
  */
-KalturaStatsEvent.prototype.seek = null;
+VidiunStatsEvent.prototype.seek = null;
 
 /**
  * timestamp of the new point on the timeline of the video after the user seeks 
  *
  * @var int
  */
-KalturaStatsEvent.prototype.newPoint = null;
+VidiunStatsEvent.prototype.newPoint = null;
 
 /**
  * the referrer of the client
  *
  * @var string
  */
-KalturaStatsEvent.prototype.referrer = null;
+VidiunStatsEvent.prototype.referrer = null;
 
 /**
  * will indicate if the event is thrown for the first video in the session
  *
  * @var bool
  */
-KalturaStatsEvent.prototype.isFirstInSession = null;
+VidiunStatsEvent.prototype.isFirstInSession = null;
 
 
-function KalturaStatsKmcEvent()
+function VidiunStatsVmcEvent()
 {
 }
-KalturaStatsKmcEvent.prototype = new KalturaObjectBase();
+VidiunStatsVmcEvent.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  */
-KalturaStatsKmcEvent.prototype.clientVer = null;
+VidiunStatsVmcEvent.prototype.clientVer = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaStatsKmcEvent.prototype.kmcEventActionPath = null;
+VidiunStatsVmcEvent.prototype.vmcEventActionPath = null;
 
 /**
  * 
  *
- * @var KalturaStatsKmcEventType
+ * @var VidiunStatsVmcEventType
  */
-KalturaStatsKmcEvent.prototype.kmcEventType = null;
+VidiunStatsVmcEvent.prototype.vmcEventType = null;
 
 /**
  * the client's timestamp of this event
@@ -5648,49 +5648,49 @@ KalturaStatsKmcEvent.prototype.kmcEventType = null;
  *
  * @var float
  */
-KalturaStatsKmcEvent.prototype.eventTimestamp = null;
+VidiunStatsVmcEvent.prototype.eventTimestamp = null;
 
 /**
  * a unique string generated by the client that will represent the client-side session: the primary component will pass it on to other components that sprout from it
  *
  * @var string
  */
-KalturaStatsKmcEvent.prototype.sessionId = null;
+VidiunStatsVmcEvent.prototype.sessionId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaStatsKmcEvent.prototype.partnerId = null;
+VidiunStatsVmcEvent.prototype.partnerId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaStatsKmcEvent.prototype.entryId = null;
+VidiunStatsVmcEvent.prototype.entryId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaStatsKmcEvent.prototype.widgetId = null;
+VidiunStatsVmcEvent.prototype.widgetId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaStatsKmcEvent.prototype.uiconfId = null;
+VidiunStatsVmcEvent.prototype.uiconfId = null;
 
 /**
  * the partner's user id 
  *
  * @var string
  */
-KalturaStatsKmcEvent.prototype.userId = null;
+VidiunStatsVmcEvent.prototype.userId = null;
 
 /**
  * will be retrieved from the request of the user 
@@ -5698,74 +5698,74 @@ KalturaStatsKmcEvent.prototype.userId = null;
  * @var string
  * @readonly
  */
-KalturaStatsKmcEvent.prototype.userIp = null;
+VidiunStatsVmcEvent.prototype.userIp = null;
 
 
-function KalturaSyndicationFeedEntryCount()
+function VidiunSyndicationFeedEntryCount()
 {
 }
-KalturaSyndicationFeedEntryCount.prototype = new KalturaObjectBase();
+VidiunSyndicationFeedEntryCount.prototype = new VidiunObjectBase();
 /**
  * the total count of entries that should appear in the feed without flavor filtering
  *
  * @var int
  */
-KalturaSyndicationFeedEntryCount.prototype.totalEntryCount = null;
+VidiunSyndicationFeedEntryCount.prototype.totalEntryCount = null;
 
 /**
  * count of entries that will appear in the feed (including all relevant filters)
  *
  * @var int
  */
-KalturaSyndicationFeedEntryCount.prototype.actualEntryCount = null;
+VidiunSyndicationFeedEntryCount.prototype.actualEntryCount = null;
 
 /**
  * count of entries that requires transcoding in order to be included in feed
  *
  * @var int
  */
-KalturaSyndicationFeedEntryCount.prototype.requireTranscodingCount = null;
+VidiunSyndicationFeedEntryCount.prototype.requireTranscodingCount = null;
 
 
-function KalturaSystemUser()
+function VidiunSystemUser()
 {
 }
-KalturaSystemUser.prototype = new KalturaObjectBase();
+VidiunSystemUser.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var int
  * @readonly
  */
-KalturaSystemUser.prototype.id = null;
+VidiunSystemUser.prototype.id = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSystemUser.prototype.email = null;
+VidiunSystemUser.prototype.email = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSystemUser.prototype.firstName = null;
+VidiunSystemUser.prototype.firstName = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSystemUser.prototype.lastName = null;
+VidiunSystemUser.prototype.lastName = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaSystemUser.prototype.password = null;
+VidiunSystemUser.prototype.password = null;
 
 /**
  * 
@@ -5773,22 +5773,14 @@ KalturaSystemUser.prototype.password = null;
  * @var int
  * @readonly
  */
-KalturaSystemUser.prototype.createdBy = null;
+VidiunSystemUser.prototype.createdBy = null;
 
 /**
  * 
  *
- * @var KalturaSystemUserStatus
+ * @var VidiunSystemUserStatus
  */
-KalturaSystemUser.prototype.status = null;
-
-/**
- * 
- *
- * @var int
- * @readonly
- */
-KalturaSystemUser.prototype.statusUpdatedAt = null;
+VidiunSystemUser.prototype.status = null;
 
 /**
  * 
@@ -5796,25 +5788,7 @@ KalturaSystemUser.prototype.statusUpdatedAt = null;
  * @var int
  * @readonly
  */
-KalturaSystemUser.prototype.createdAt = null;
-
-
-function KalturaSystemUserFilter()
-{
-}
-KalturaSystemUserFilter.prototype = new KalturaFilter();
-
-function KalturaSystemUserListResponse()
-{
-}
-KalturaSystemUserListResponse.prototype = new KalturaObjectBase();
-/**
- * 
- *
- * @var KalturaSystemUserArray
- * @readonly
- */
-KalturaSystemUserListResponse.prototype.objects = null;
+VidiunSystemUser.prototype.statusUpdatedAt = null;
 
 /**
  * 
@@ -5822,52 +5796,78 @@ KalturaSystemUserListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaSystemUserListResponse.prototype.totalCount = null;
+VidiunSystemUser.prototype.createdAt = null;
 
 
-function KalturaTubeMogulSyndicationFeed()
+function VidiunSystemUserFilter()
 {
 }
-KalturaTubeMogulSyndicationFeed.prototype = new KalturaBaseSyndicationFeed();
+VidiunSystemUserFilter.prototype = new VidiunFilter();
+
+function VidiunSystemUserListResponse()
+{
+}
+VidiunSystemUserListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaTubeMogulSyndicationFeedCategories
+ * @var VidiunSystemUserArray
  * @readonly
  */
-KalturaTubeMogulSyndicationFeed.prototype.category = null;
+VidiunSystemUserListResponse.prototype.objects = null;
 
-
-function KalturaTubeMogulSyndicationFeedFilter()
-{
-}
-KalturaTubeMogulSyndicationFeedFilter.prototype = new KalturaBaseSyndicationFeedFilter();
-
-function KalturaUiConf()
-{
-}
-KalturaUiConf.prototype = new KalturaObjectBase();
 /**
  * 
  *
  * @var int
  * @readonly
  */
-KalturaUiConf.prototype.id = null;
+VidiunSystemUserListResponse.prototype.totalCount = null;
+
+
+function VidiunTubeMogulSyndicationFeed()
+{
+}
+VidiunTubeMogulSyndicationFeed.prototype = new VidiunBaseSyndicationFeed();
+/**
+ * 
+ *
+ * @var VidiunTubeMogulSyndicationFeedCategories
+ * @readonly
+ */
+VidiunTubeMogulSyndicationFeed.prototype.category = null;
+
+
+function VidiunTubeMogulSyndicationFeedFilter()
+{
+}
+VidiunTubeMogulSyndicationFeedFilter.prototype = new VidiunBaseSyndicationFeedFilter();
+
+function VidiunUiConf()
+{
+}
+VidiunUiConf.prototype = new VidiunObjectBase();
+/**
+ * 
+ *
+ * @var int
+ * @readonly
+ */
+VidiunUiConf.prototype.id = null;
 
 /**
  * Name of the uiConf, this is not a primary key
  *
  * @var string
  */
-KalturaUiConf.prototype.name = null;
+VidiunUiConf.prototype.name = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConf.prototype.description = null;
+VidiunUiConf.prototype.description = null;
 
 /**
  * 
@@ -5875,50 +5875,14 @@ KalturaUiConf.prototype.description = null;
  * @var int
  * @readonly
  */
-KalturaUiConf.prototype.partnerId = null;
+VidiunUiConf.prototype.partnerId = null;
 
 /**
  * 
  *
- * @var KalturaUiConfObjType
+ * @var VidiunUiConfObjType
  */
-KalturaUiConf.prototype.objType = null;
-
-/**
- * 
- *
- * @var string
- * @readonly
- */
-KalturaUiConf.prototype.objTypeAsString = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaUiConf.prototype.width = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaUiConf.prototype.height = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaUiConf.prototype.htmlParams = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaUiConf.prototype.swfUrl = null;
+VidiunUiConf.prototype.objType = null;
 
 /**
  * 
@@ -5926,49 +5890,85 @@ KalturaUiConf.prototype.swfUrl = null;
  * @var string
  * @readonly
  */
-KalturaUiConf.prototype.confFilePath = null;
+VidiunUiConf.prototype.objTypeAsString = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunUiConf.prototype.width = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunUiConf.prototype.height = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConf.prototype.confFile = null;
+VidiunUiConf.prototype.htmlParams = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConf.prototype.confFileFeatures = null;
+VidiunUiConf.prototype.swfUrl = null;
+
+/**
+ * 
+ *
+ * @var string
+ * @readonly
+ */
+VidiunUiConf.prototype.confFilePath = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConf.prototype.confVars = null;
+VidiunUiConf.prototype.confFile = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunUiConf.prototype.confFileFeatures = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunUiConf.prototype.confVars = null;
 
 /**
  * 
  *
  * @var bool
  */
-KalturaUiConf.prototype.useCdn = null;
+VidiunUiConf.prototype.useCdn = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConf.prototype.tags = null;
+VidiunUiConf.prototype.tags = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConf.prototype.swfUrlVersion = null;
+VidiunUiConf.prototype.swfUrlVersion = null;
 
 /**
  * Entry creation date as Unix timestamp (In seconds)
@@ -5976,7 +5976,7 @@ KalturaUiConf.prototype.swfUrlVersion = null;
  * @var int
  * @readonly
  */
-KalturaUiConf.prototype.createdAt = null;
+VidiunUiConf.prototype.createdAt = null;
 
 /**
  * Entry creation date as Unix timestamp (In seconds)
@@ -5984,155 +5984,102 @@ KalturaUiConf.prototype.createdAt = null;
  * @var int
  * @readonly
  */
-KalturaUiConf.prototype.updatedAt = null;
+VidiunUiConf.prototype.updatedAt = null;
 
 /**
  * 
  *
- * @var KalturaUiConfCreationMode
+ * @var VidiunUiConfCreationMode
  */
-KalturaUiConf.prototype.creationMode = null;
+VidiunUiConf.prototype.creationMode = null;
 
 
-function KalturaUiConfFilter()
+function VidiunUiConfFilter()
 {
 }
-KalturaUiConfFilter.prototype = new KalturaFilter();
+VidiunUiConfFilter.prototype = new VidiunFilter();
 /**
  * 
  *
  * @var int
  */
-KalturaUiConfFilter.prototype.idEqual = null;
+VidiunUiConfFilter.prototype.idEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConfFilter.prototype.idIn = null;
+VidiunUiConfFilter.prototype.idIn = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConfFilter.prototype.nameLike = null;
+VidiunUiConfFilter.prototype.nameLike = null;
 
 /**
  * 
  *
- * @var KalturaUiConfObjType
+ * @var VidiunUiConfObjType
  */
-KalturaUiConfFilter.prototype.objTypeEqual = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaUiConfFilter.prototype.tagsMultiLikeOr = null;
+VidiunUiConfFilter.prototype.objTypeEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUiConfFilter.prototype.tagsMultiLikeAnd = null;
+VidiunUiConfFilter.prototype.tagsMultiLikeOr = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunUiConfFilter.prototype.tagsMultiLikeAnd = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUiConfFilter.prototype.createdAtGreaterThanOrEqual = null;
+VidiunUiConfFilter.prototype.createdAtGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUiConfFilter.prototype.createdAtLessThanOrEqual = null;
+VidiunUiConfFilter.prototype.createdAtLessThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUiConfFilter.prototype.updatedAtGreaterThanOrEqual = null;
+VidiunUiConfFilter.prototype.updatedAtGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUiConfFilter.prototype.updatedAtLessThanOrEqual = null;
+VidiunUiConfFilter.prototype.updatedAtLessThanOrEqual = null;
 
 
-function KalturaUiConfListResponse()
+function VidiunUiConfListResponse()
 {
 }
-KalturaUiConfListResponse.prototype = new KalturaObjectBase();
+VidiunUiConfListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaUiConfArray
+ * @var VidiunUiConfArray
  * @readonly
  */
-KalturaUiConfListResponse.prototype.objects = null;
-
-/**
- * 
- *
- * @var int
- * @readonly
- */
-KalturaUiConfListResponse.prototype.totalCount = null;
-
-
-function KalturaUploadResponse()
-{
-}
-KalturaUploadResponse.prototype = new KalturaObjectBase();
-/**
- * 
- *
- * @var string
- */
-KalturaUploadResponse.prototype.uploadTokenId = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaUploadResponse.prototype.fileSize = null;
-
-/**
- * 
- *
- * @var KalturaUploadErrorCode
- */
-KalturaUploadResponse.prototype.errorCode = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaUploadResponse.prototype.errorDescription = null;
-
-
-function KalturaUser()
-{
-}
-KalturaUser.prototype = new KalturaObjectBase();
-/**
- * 
- *
- * @var string
- */
-KalturaUser.prototype.id = null;
+VidiunUiConfListResponse.prototype.objects = null;
 
 /**
  * 
@@ -6140,105 +6087,158 @@ KalturaUser.prototype.id = null;
  * @var int
  * @readonly
  */
-KalturaUser.prototype.partnerId = null;
+VidiunUiConfListResponse.prototype.totalCount = null;
 
+
+function VidiunUploadResponse()
+{
+}
+VidiunUploadResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.screenName = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaUser.prototype.fullName = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaUser.prototype.email = null;
+VidiunUploadResponse.prototype.uploadTokenId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUser.prototype.dateOfBirth = null;
+VidiunUploadResponse.prototype.fileSize = null;
+
+/**
+ * 
+ *
+ * @var VidiunUploadErrorCode
+ */
+VidiunUploadResponse.prototype.errorCode = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.country = null;
+VidiunUploadResponse.prototype.errorDescription = null;
+
+
+function VidiunUser()
+{
+}
+VidiunUser.prototype = new VidiunObjectBase();
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunUser.prototype.id = null;
+
+/**
+ * 
+ *
+ * @var int
+ * @readonly
+ */
+VidiunUser.prototype.partnerId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.state = null;
+VidiunUser.prototype.screenName = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.city = null;
+VidiunUser.prototype.fullName = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.zip = null;
+VidiunUser.prototype.email = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunUser.prototype.dateOfBirth = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.thumbnailUrl = null;
+VidiunUser.prototype.country = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.description = null;
+VidiunUser.prototype.state = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.tags = null;
+VidiunUser.prototype.city = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunUser.prototype.zip = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunUser.prototype.thumbnailUrl = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunUser.prototype.description = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunUser.prototype.tags = null;
 
 /**
  * Admin tags can be updated only by using an admin session
  *
  * @var string
  */
-KalturaUser.prototype.adminTags = null;
+VidiunUser.prototype.adminTags = null;
 
 /**
  * 
  *
- * @var KalturaGender
+ * @var VidiunGender
  */
-KalturaUser.prototype.gender = null;
+VidiunUser.prototype.gender = null;
 
 /**
  * 
  *
- * @var KalturaUserStatus
+ * @var VidiunUserStatus
  */
-KalturaUser.prototype.status = null;
+VidiunUser.prototype.status = null;
 
 /**
  * Creation date as Unix timestamp (In seconds)
@@ -6246,7 +6246,7 @@ KalturaUser.prototype.status = null;
  * @var int
  * @readonly
  */
-KalturaUser.prototype.createdAt = null;
+VidiunUser.prototype.createdAt = null;
 
 /**
  * Last update date as Unix timestamp (In seconds)
@@ -6254,28 +6254,28 @@ KalturaUser.prototype.createdAt = null;
  * @var int
  * @readonly
  */
-KalturaUser.prototype.updatedAt = null;
+VidiunUser.prototype.updatedAt = null;
 
 /**
  * Can be used to store various partner related data as a string 
  *
  * @var string
  */
-KalturaUser.prototype.partnerData = null;
+VidiunUser.prototype.partnerData = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUser.prototype.indexedPartnerDataInt = null;
+VidiunUser.prototype.indexedPartnerDataInt = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUser.prototype.indexedPartnerDataString = null;
+VidiunUser.prototype.indexedPartnerDataString = null;
 
 /**
  * 
@@ -6283,102 +6283,102 @@ KalturaUser.prototype.indexedPartnerDataString = null;
  * @var int
  * @readonly
  */
-KalturaUser.prototype.storageSize = null;
+VidiunUser.prototype.storageSize = null;
 
 
-function KalturaUserFilter()
+function VidiunUserFilter()
 {
 }
-KalturaUserFilter.prototype = new KalturaFilter();
+VidiunUserFilter.prototype = new VidiunFilter();
 /**
  * 
  *
  * @var string
  */
-KalturaUserFilter.prototype.idEqual = null;
+VidiunUserFilter.prototype.idEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUserFilter.prototype.idIn = null;
+VidiunUserFilter.prototype.idIn = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUserFilter.prototype.partnerIdEqual = null;
+VidiunUserFilter.prototype.partnerIdEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUserFilter.prototype.screenNameLike = null;
+VidiunUserFilter.prototype.screenNameLike = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUserFilter.prototype.screenNameStartsWith = null;
+VidiunUserFilter.prototype.screenNameStartsWith = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUserFilter.prototype.emailLike = null;
+VidiunUserFilter.prototype.emailLike = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUserFilter.prototype.emailStartsWith = null;
+VidiunUserFilter.prototype.emailStartsWith = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUserFilter.prototype.tagsMultiLikeOr = null;
+VidiunUserFilter.prototype.tagsMultiLikeOr = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaUserFilter.prototype.tagsMultiLikeAnd = null;
+VidiunUserFilter.prototype.tagsMultiLikeAnd = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUserFilter.prototype.createdAtGreaterThanOrEqual = null;
+VidiunUserFilter.prototype.createdAtGreaterThanOrEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaUserFilter.prototype.createdAtLessThanOrEqual = null;
+VidiunUserFilter.prototype.createdAtLessThanOrEqual = null;
 
 
-function KalturaUserListResponse()
+function VidiunUserListResponse()
 {
 }
-KalturaUserListResponse.prototype = new KalturaObjectBase();
+VidiunUserListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaUserArray
+ * @var VidiunUserArray
  * @readonly
  */
-KalturaUserListResponse.prototype.objects = null;
+VidiunUserListResponse.prototype.objects = null;
 
 /**
  * 
@@ -6386,27 +6386,27 @@ KalturaUserListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaUserListResponse.prototype.totalCount = null;
+VidiunUserListResponse.prototype.totalCount = null;
 
 
-function KalturaWidget()
+function VidiunWidget()
 {
 }
-KalturaWidget.prototype = new KalturaObjectBase();
+VidiunWidget.prototype = new VidiunObjectBase();
 /**
  * 
  *
  * @var string
  * @readonly
  */
-KalturaWidget.prototype.id = null;
+VidiunWidget.prototype.id = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaWidget.prototype.sourceWidgetId = null;
+VidiunWidget.prototype.sourceWidgetId = null;
 
 /**
  * 
@@ -6414,7 +6414,7 @@ KalturaWidget.prototype.sourceWidgetId = null;
  * @var string
  * @readonly
  */
-KalturaWidget.prototype.rootWidgetId = null;
+VidiunWidget.prototype.rootWidgetId = null;
 
 /**
  * 
@@ -6422,43 +6422,35 @@ KalturaWidget.prototype.rootWidgetId = null;
  * @var int
  * @readonly
  */
-KalturaWidget.prototype.partnerId = null;
+VidiunWidget.prototype.partnerId = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaWidget.prototype.entryId = null;
+VidiunWidget.prototype.entryId = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaWidget.prototype.uiConfId = null;
+VidiunWidget.prototype.uiConfId = null;
 
 /**
  * 
  *
- * @var KalturaWidgetSecurityType
+ * @var VidiunWidgetSecurityType
  */
-KalturaWidget.prototype.securityType = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaWidget.prototype.securityPolicy = null;
+VidiunWidget.prototype.securityType = null;
 
 /**
  * 
  *
  * @var int
- * @readonly
  */
-KalturaWidget.prototype.createdAt = null;
+VidiunWidget.prototype.securityPolicy = null;
 
 /**
  * 
@@ -6466,14 +6458,22 @@ KalturaWidget.prototype.createdAt = null;
  * @var int
  * @readonly
  */
-KalturaWidget.prototype.updatedAt = null;
+VidiunWidget.prototype.createdAt = null;
+
+/**
+ * 
+ *
+ * @var int
+ * @readonly
+ */
+VidiunWidget.prototype.updatedAt = null;
 
 /**
  * Can be used to store various partner related data as a string 
  *
  * @var string
  */
-KalturaWidget.prototype.partnerData = null;
+VidiunWidget.prototype.partnerData = null;
 
 /**
  * 
@@ -6481,109 +6481,109 @@ KalturaWidget.prototype.partnerData = null;
  * @var string
  * @readonly
  */
-KalturaWidget.prototype.widgetHTML = null;
+VidiunWidget.prototype.widgetHTML = null;
 
 
-function KalturaWidgetFilter()
+function VidiunWidgetFilter()
 {
 }
-KalturaWidgetFilter.prototype = new KalturaFilter();
+VidiunWidgetFilter.prototype = new VidiunFilter();
 /**
  * 
  *
  * @var string
  */
-KalturaWidgetFilter.prototype.idEqual = null;
-
-/**
- * 
- *
- * @var string
- */
-KalturaWidgetFilter.prototype.idIn = null;
+VidiunWidgetFilter.prototype.idEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaWidgetFilter.prototype.sourceWidgetIdEqual = null;
+VidiunWidgetFilter.prototype.idIn = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaWidgetFilter.prototype.rootWidgetIdEqual = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaWidgetFilter.prototype.partnerIdEqual = null;
+VidiunWidgetFilter.prototype.sourceWidgetIdEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaWidgetFilter.prototype.entryIdEqual = null;
+VidiunWidgetFilter.prototype.rootWidgetIdEqual = null;
 
 /**
  * 
  *
  * @var int
  */
-KalturaWidgetFilter.prototype.uiConfIdEqual = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaWidgetFilter.prototype.createdAtGreaterThanOrEqual = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaWidgetFilter.prototype.createdAtLessThanOrEqual = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaWidgetFilter.prototype.updatedAtGreaterThanOrEqual = null;
-
-/**
- * 
- *
- * @var int
- */
-KalturaWidgetFilter.prototype.updatedAtLessThanOrEqual = null;
+VidiunWidgetFilter.prototype.partnerIdEqual = null;
 
 /**
  * 
  *
  * @var string
  */
-KalturaWidgetFilter.prototype.partnerDataLike = null;
+VidiunWidgetFilter.prototype.entryIdEqual = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunWidgetFilter.prototype.uiConfIdEqual = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunWidgetFilter.prototype.createdAtGreaterThanOrEqual = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunWidgetFilter.prototype.createdAtLessThanOrEqual = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunWidgetFilter.prototype.updatedAtGreaterThanOrEqual = null;
+
+/**
+ * 
+ *
+ * @var int
+ */
+VidiunWidgetFilter.prototype.updatedAtLessThanOrEqual = null;
+
+/**
+ * 
+ *
+ * @var string
+ */
+VidiunWidgetFilter.prototype.partnerDataLike = null;
 
 
-function KalturaWidgetListResponse()
+function VidiunWidgetListResponse()
 {
 }
-KalturaWidgetListResponse.prototype = new KalturaObjectBase();
+VidiunWidgetListResponse.prototype = new VidiunObjectBase();
 /**
  * 
  *
- * @var KalturaWidgetArray
+ * @var VidiunWidgetArray
  * @readonly
  */
-KalturaWidgetListResponse.prototype.objects = null;
+VidiunWidgetListResponse.prototype.objects = null;
 
 /**
  * 
@@ -6591,27 +6591,27 @@ KalturaWidgetListResponse.prototype.objects = null;
  * @var int
  * @readonly
  */
-KalturaWidgetListResponse.prototype.totalCount = null;
+VidiunWidgetListResponse.prototype.totalCount = null;
 
 
-function KalturaYahooSyndicationFeed()
+function VidiunYahooSyndicationFeed()
 {
 }
-KalturaYahooSyndicationFeed.prototype = new KalturaBaseSyndicationFeed();
+VidiunYahooSyndicationFeed.prototype = new VidiunBaseSyndicationFeed();
 /**
  * 
  *
- * @var KalturaYahooSyndicationFeedCategories
+ * @var VidiunYahooSyndicationFeedCategories
  * @readonly
  */
-KalturaYahooSyndicationFeed.prototype.category = null;
+VidiunYahooSyndicationFeed.prototype.category = null;
 
 /**
  * 
  *
- * @var KalturaYahooSyndicationFeedAdultValues
+ * @var VidiunYahooSyndicationFeedAdultValues
  */
-KalturaYahooSyndicationFeed.prototype.adultContent = null;
+VidiunYahooSyndicationFeed.prototype.adultContent = null;
 
 /**
  * feed description
@@ -6619,7 +6619,7 @@ KalturaYahooSyndicationFeed.prototype.adultContent = null;
  *
  * @var string
  */
-KalturaYahooSyndicationFeed.prototype.feedDescription = null;
+VidiunYahooSyndicationFeed.prototype.feedDescription = null;
 
 /**
  * feed landing page (i.e publisher website)
@@ -6627,1732 +6627,1732 @@ KalturaYahooSyndicationFeed.prototype.feedDescription = null;
  *
  * @var string
  */
-KalturaYahooSyndicationFeed.prototype.feedLandingPage = null;
+VidiunYahooSyndicationFeed.prototype.feedLandingPage = null;
 
 
-function KalturaYahooSyndicationFeedFilter()
+function VidiunYahooSyndicationFeedFilter()
 {
 }
-KalturaYahooSyndicationFeedFilter.prototype = new KalturaBaseSyndicationFeedFilter();
+VidiunYahooSyndicationFeedFilter.prototype = new VidiunBaseSyndicationFeedFilter();
 
 
-function KalturaAccessControlService(client)
+function VidiunAccessControlService(client)
 {
 	this.init(client);
 }
 
-KalturaAccessControlService.prototype = new KalturaServiceBase();
+VidiunAccessControlService.prototype = new VidiunServiceBase();
 
-KalturaAccessControlService.prototype.add = function(callback, accessControl)
+VidiunAccessControlService.prototype.add = function(callback, accessControl)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "accessControl", accessControl.toParams());
-	this.client.queueServiceActionCall("accesscontrol", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "accessControl", accessControl.toParams());
+	this.client.queueServiceActionCall("accesscontrol", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaAccessControlService.prototype.get = function(callback, id)
+VidiunAccessControlService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("accesscontrol", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("accesscontrol", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaAccessControlService.prototype.update = function(callback, id, accessControl)
+VidiunAccessControlService.prototype.update = function(callback, id, accessControl)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "accessControl", accessControl.toParams());
-	this.client.queueServiceActionCall("accesscontrol", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "accessControl", accessControl.toParams());
+	this.client.queueServiceActionCall("accesscontrol", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaAccessControlService.prototype.delete = function(callback, id)
+VidiunAccessControlService.prototype.delete = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("accesscontrol", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("accesscontrol", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaAccessControlService.prototype.listAction = function(callback, filter, pager)
+VidiunAccessControlService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("accesscontrol", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("accesscontrol", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaAdminconsoleService(client)
+function VidiunAdminconsoleService(client)
 {
 	this.init(client);
 }
 
-KalturaAdminconsoleService.prototype = new KalturaServiceBase();
+VidiunAdminconsoleService.prototype = new VidiunServiceBase();
 
-KalturaAdminconsoleService.prototype.listBatchJobs = function(callback, filter, pager)
+VidiunAdminconsoleService.prototype.listBatchJobs = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", toParams(filter));
+		this.client.addParam(vparams, "filter", toParams(filter));
 	if (pager != null)
-		this.client.addParam(kparams, "pager", toParams(pager));
-	this.client.queueServiceActionCall("adminconsole", "listBatchJobs", kparams);
+		this.client.addParam(vparams, "pager", toParams(pager));
+	this.client.queueServiceActionCall("adminconsole", "listBatchJobs", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaAdminUserService(client)
+function VidiunAdminUserService(client)
 {
 	this.init(client);
 }
 
-KalturaAdminUserService.prototype = new KalturaServiceBase();
+VidiunAdminUserService.prototype = new VidiunServiceBase();
 
-KalturaAdminUserService.prototype.updatePassword = function(callback, email, password, newEmail, newPassword)
+VidiunAdminUserService.prototype.updatePassword = function(callback, email, password, newEmail, newPassword)
 {
 	if(!newEmail)
 		newEmail = "";
 	if(!newPassword)
 		newPassword = "";
 
-	kparams = new Object();
-	this.client.addParam(kparams, "email", email);
-	this.client.addParam(kparams, "password", password);
-	this.client.addParam(kparams, "newEmail", newEmail);
-	this.client.addParam(kparams, "newPassword", newPassword);
-	this.client.queueServiceActionCall("adminuser", "updatePassword", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "email", email);
+	this.client.addParam(vparams, "password", password);
+	this.client.addParam(vparams, "newEmail", newEmail);
+	this.client.addParam(vparams, "newPassword", newPassword);
+	this.client.queueServiceActionCall("adminuser", "updatePassword", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaAdminUserService.prototype.resetPassword = function(callback, email)
+VidiunAdminUserService.prototype.resetPassword = function(callback, email)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "email", email);
-	this.client.queueServiceActionCall("adminuser", "resetPassword", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "email", email);
+	this.client.queueServiceActionCall("adminuser", "resetPassword", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaAdminUserService.prototype.login = function(callback, email, password)
+VidiunAdminUserService.prototype.login = function(callback, email, password)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "email", email);
-	this.client.addParam(kparams, "password", password);
-	this.client.queueServiceActionCall("adminuser", "login", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "email", email);
+	this.client.addParam(vparams, "password", password);
+	this.client.queueServiceActionCall("adminuser", "login", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaBaseEntryService(client)
+function VidiunBaseEntryService(client)
 {
 	this.init(client);
 }
 
-KalturaBaseEntryService.prototype = new KalturaServiceBase();
+VidiunBaseEntryService.prototype = new VidiunServiceBase();
 
-KalturaBaseEntryService.prototype.addFromUploadedFile = function(callback, entry, uploadTokenId, type)
+VidiunBaseEntryService.prototype.addFromUploadedFile = function(callback, entry, uploadTokenId, type)
 {
 	if(!type)
 		type = -1;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entry", entry.toParams());
-	this.client.addParam(kparams, "uploadTokenId", uploadTokenId);
-	this.client.addParam(kparams, "type", type);
-	this.client.queueServiceActionCall("baseentry", "addFromUploadedFile", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entry", entry.toParams());
+	this.client.addParam(vparams, "uploadTokenId", uploadTokenId);
+	this.client.addParam(vparams, "type", type);
+	this.client.queueServiceActionCall("baseentry", "addFromUploadedFile", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.get = function(callback, entryId, version)
+VidiunBaseEntryService.prototype.get = function(callback, entryId, version)
 {
 	if(!version)
 		version = -1;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "version", version);
-	this.client.queueServiceActionCall("baseentry", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "version", version);
+	this.client.queueServiceActionCall("baseentry", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.update = function(callback, entryId, baseEntry)
+VidiunBaseEntryService.prototype.update = function(callback, entryId, baseEntry)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "baseEntry", baseEntry.toParams());
-	this.client.queueServiceActionCall("baseentry", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "baseEntry", baseEntry.toParams());
+	this.client.queueServiceActionCall("baseentry", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.getByIds = function(callback, entryIds)
+VidiunBaseEntryService.prototype.getByIds = function(callback, entryIds)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryIds", entryIds);
-	this.client.queueServiceActionCall("baseentry", "getByIds", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryIds", entryIds);
+	this.client.queueServiceActionCall("baseentry", "getByIds", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.delete = function(callback, entryId)
+VidiunBaseEntryService.prototype.delete = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("baseentry", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("baseentry", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.listAction = function(callback, filter, pager)
+VidiunBaseEntryService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("baseentry", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("baseentry", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.count = function(callback, filter)
+VidiunBaseEntryService.prototype.count = function(callback, filter)
 {
 	if(!filter)
 		filter = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
-	this.client.queueServiceActionCall("baseentry", "count", kparams);
+		this.client.addParam(vparams, "filter", filter.toParams());
+	this.client.queueServiceActionCall("baseentry", "count", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.upload = function(callback, fileData)
+VidiunBaseEntryService.prototype.upload = function(callback, fileData)
 {
 
-	kparams = new Object();
-	kfiles = new Object();
-	this.client.addParam(kfiles, "fileData", fileData);
-	this.client.queueServiceActionCall("baseentry", "upload", kparams, kfiles);
+	vparams = new Object();
+	vfiles = new Object();
+	this.client.addParam(vfiles, "fileData", fileData);
+	this.client.queueServiceActionCall("baseentry", "upload", vparams, vfiles);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.updateThumbnailJpeg = function(callback, entryId, fileData)
+VidiunBaseEntryService.prototype.updateThumbnailJpeg = function(callback, entryId, fileData)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	kfiles = new Object();
-	this.client.addParam(kfiles, "fileData", fileData);
-	this.client.queueServiceActionCall("baseentry", "updateThumbnailJpeg", kparams, kfiles);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	vfiles = new Object();
+	this.client.addParam(vfiles, "fileData", fileData);
+	this.client.queueServiceActionCall("baseentry", "updateThumbnailJpeg", vparams, vfiles);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.updateThumbnailFromUrl = function(callback, entryId, url)
+VidiunBaseEntryService.prototype.updateThumbnailFromUrl = function(callback, entryId, url)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "url", url);
-	this.client.queueServiceActionCall("baseentry", "updateThumbnailFromUrl", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "url", url);
+	this.client.queueServiceActionCall("baseentry", "updateThumbnailFromUrl", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.updateThumbnailFromSourceEntry = function(callback, entryId, sourceEntryId, timeOffset)
+VidiunBaseEntryService.prototype.updateThumbnailFromSourceEntry = function(callback, entryId, sourceEntryId, timeOffset)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "sourceEntryId", sourceEntryId);
-	this.client.addParam(kparams, "timeOffset", timeOffset);
-	this.client.queueServiceActionCall("baseentry", "updateThumbnailFromSourceEntry", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "sourceEntryId", sourceEntryId);
+	this.client.addParam(vparams, "timeOffset", timeOffset);
+	this.client.queueServiceActionCall("baseentry", "updateThumbnailFromSourceEntry", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.flag = function(callback, moderationFlag)
+VidiunBaseEntryService.prototype.flag = function(callback, moderationFlag)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "moderationFlag", moderationFlag.toParams());
-	this.client.queueServiceActionCall("baseentry", "flag", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "moderationFlag", moderationFlag.toParams());
+	this.client.queueServiceActionCall("baseentry", "flag", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.reject = function(callback, entryId)
+VidiunBaseEntryService.prototype.reject = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("baseentry", "reject", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("baseentry", "reject", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.approve = function(callback, entryId)
+VidiunBaseEntryService.prototype.approve = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("baseentry", "approve", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("baseentry", "approve", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.listFlags = function(callback, entryId, pager)
+VidiunBaseEntryService.prototype.listFlags = function(callback, entryId, pager)
 {
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("baseentry", "listFlags", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("baseentry", "listFlags", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.anonymousRank = function(callback, entryId, rank)
+VidiunBaseEntryService.prototype.anonymousRank = function(callback, entryId, rank)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "rank", rank);
-	this.client.queueServiceActionCall("baseentry", "anonymousRank", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "rank", rank);
+	this.client.queueServiceActionCall("baseentry", "anonymousRank", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBaseEntryService.prototype.getExtraData = function(callback, entryId, extraDataParams)
+VidiunBaseEntryService.prototype.getExtraData = function(callback, entryId, extraDataParams)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "extraDataParams", extraDataParams.toParams());
-	this.client.queueServiceActionCall("baseentry", "getExtraData", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "extraDataParams", extraDataParams.toParams());
+	this.client.queueServiceActionCall("baseentry", "getExtraData", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaBulkUploadService(client)
+function VidiunBulkUploadService(client)
 {
 	this.init(client);
 }
 
-KalturaBulkUploadService.prototype = new KalturaServiceBase();
+VidiunBulkUploadService.prototype = new VidiunServiceBase();
 
-KalturaBulkUploadService.prototype.add = function(callback, conversionProfileId, csvFileData)
+VidiunBulkUploadService.prototype.add = function(callback, conversionProfileId, csvFileData)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "conversionProfileId", conversionProfileId);
-	kfiles = new Object();
-	this.client.addParam(kfiles, "csvFileData", csvFileData);
-	this.client.queueServiceActionCall("bulkupload", "add", kparams, kfiles);
+	vparams = new Object();
+	this.client.addParam(vparams, "conversionProfileId", conversionProfileId);
+	vfiles = new Object();
+	this.client.addParam(vfiles, "csvFileData", csvFileData);
+	this.client.queueServiceActionCall("bulkupload", "add", vparams, vfiles);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBulkUploadService.prototype.get = function(callback, id)
+VidiunBulkUploadService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("bulkupload", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("bulkupload", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaBulkUploadService.prototype.listAction = function(callback, pager)
+VidiunBulkUploadService.prototype.listAction = function(callback, pager)
 {
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("bulkupload", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("bulkupload", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaCategoryService(client)
+function VidiunCategoryService(client)
 {
 	this.init(client);
 }
 
-KalturaCategoryService.prototype = new KalturaServiceBase();
+VidiunCategoryService.prototype = new VidiunServiceBase();
 
-KalturaCategoryService.prototype.add = function(callback, category)
+VidiunCategoryService.prototype.add = function(callback, category)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "category", category.toParams());
-	this.client.queueServiceActionCall("category", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "category", category.toParams());
+	this.client.queueServiceActionCall("category", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaCategoryService.prototype.get = function(callback, id)
+VidiunCategoryService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("category", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("category", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaCategoryService.prototype.update = function(callback, id, category)
+VidiunCategoryService.prototype.update = function(callback, id, category)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "category", category.toParams());
-	this.client.queueServiceActionCall("category", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "category", category.toParams());
+	this.client.queueServiceActionCall("category", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaCategoryService.prototype.delete = function(callback, id)
+VidiunCategoryService.prototype.delete = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("category", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("category", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaCategoryService.prototype.listAction = function(callback, filter)
+VidiunCategoryService.prototype.listAction = function(callback, filter)
 {
 	if(!filter)
 		filter = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
-	this.client.queueServiceActionCall("category", "list", kparams);
+		this.client.addParam(vparams, "filter", filter.toParams());
+	this.client.queueServiceActionCall("category", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaConversionProfileService(client)
+function VidiunConversionProfileService(client)
 {
 	this.init(client);
 }
 
-KalturaConversionProfileService.prototype = new KalturaServiceBase();
+VidiunConversionProfileService.prototype = new VidiunServiceBase();
 
-KalturaConversionProfileService.prototype.add = function(callback, conversionProfile)
+VidiunConversionProfileService.prototype.add = function(callback, conversionProfile)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "conversionProfile", conversionProfile.toParams());
-	this.client.queueServiceActionCall("conversionprofile", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "conversionProfile", conversionProfile.toParams());
+	this.client.queueServiceActionCall("conversionprofile", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaConversionProfileService.prototype.get = function(callback, id)
+VidiunConversionProfileService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("conversionprofile", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("conversionprofile", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaConversionProfileService.prototype.update = function(callback, id, conversionProfile)
+VidiunConversionProfileService.prototype.update = function(callback, id, conversionProfile)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "conversionProfile", conversionProfile.toParams());
-	this.client.queueServiceActionCall("conversionprofile", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "conversionProfile", conversionProfile.toParams());
+	this.client.queueServiceActionCall("conversionprofile", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaConversionProfileService.prototype.delete = function(callback, id)
+VidiunConversionProfileService.prototype.delete = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("conversionprofile", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("conversionprofile", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaConversionProfileService.prototype.listAction = function(callback, filter, pager)
+VidiunConversionProfileService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("conversionprofile", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("conversionprofile", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaDataService(client)
+function VidiunDataService(client)
 {
 	this.init(client);
 }
 
-KalturaDataService.prototype = new KalturaServiceBase();
+VidiunDataService.prototype = new VidiunServiceBase();
 
-KalturaDataService.prototype.add = function(callback, dataEntry)
+VidiunDataService.prototype.add = function(callback, dataEntry)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "dataEntry", dataEntry.toParams());
-	this.client.queueServiceActionCall("data", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "dataEntry", dataEntry.toParams());
+	this.client.queueServiceActionCall("data", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaDataService.prototype.get = function(callback, entryId, version)
+VidiunDataService.prototype.get = function(callback, entryId, version)
 {
 	if(!version)
 		version = -1;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "version", version);
-	this.client.queueServiceActionCall("data", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "version", version);
+	this.client.queueServiceActionCall("data", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaDataService.prototype.update = function(callback, entryId, documentEntry)
+VidiunDataService.prototype.update = function(callback, entryId, documentEntry)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "documentEntry", documentEntry.toParams());
-	this.client.queueServiceActionCall("data", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "documentEntry", documentEntry.toParams());
+	this.client.queueServiceActionCall("data", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaDataService.prototype.delete = function(callback, entryId)
+VidiunDataService.prototype.delete = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("data", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("data", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaDataService.prototype.listAction = function(callback, filter, pager)
-{
-	if(!filter)
-		filter = null;
-	if(!pager)
-		pager = null;
-
-	kparams = new Object();
-	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
-	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("data", "list", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-function KalturaFlavorAssetService(client)
-{
-	this.init(client);
-}
-
-KalturaFlavorAssetService.prototype = new KalturaServiceBase();
-
-KalturaFlavorAssetService.prototype.get = function(callback, id)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("flavorasset", "get", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorAssetService.prototype.getByEntryId = function(callback, entryId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("flavorasset", "getByEntryId", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorAssetService.prototype.getWebPlayableByEntryId = function(callback, entryId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("flavorasset", "getWebPlayableByEntryId", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorAssetService.prototype.convert = function(callback, entryId, flavorParamsId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "flavorParamsId", flavorParamsId);
-	this.client.queueServiceActionCall("flavorasset", "convert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorAssetService.prototype.reconvert = function(callback, id)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("flavorasset", "reconvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorAssetService.prototype.delete = function(callback, id)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("flavorasset", "delete", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorAssetService.prototype.getDownloadUrl = function(callback, id)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("flavorasset", "getDownloadUrl", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorAssetService.prototype.getFlavorAssetsWithParams = function(callback, entryId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("flavorasset", "getFlavorAssetsWithParams", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-function KalturaFlavorParamsService(client)
-{
-	this.init(client);
-}
-
-KalturaFlavorParamsService.prototype = new KalturaServiceBase();
-
-KalturaFlavorParamsService.prototype.add = function(callback, flavorParams)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "flavorParams", flavorParams.toParams());
-	this.client.queueServiceActionCall("flavorparams", "add", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorParamsService.prototype.get = function(callback, id)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("flavorparams", "get", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorParamsService.prototype.update = function(callback, id, flavorParams)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "flavorParams", flavorParams.toParams());
-	this.client.queueServiceActionCall("flavorparams", "update", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorParamsService.prototype.delete = function(callback, id)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("flavorparams", "delete", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaFlavorParamsService.prototype.listAction = function(callback, filter, pager)
+VidiunDataService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("flavorparams", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("data", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaFlavorParamsService.prototype.getByConversionProfileId = function(callback, conversionProfileId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "conversionProfileId", conversionProfileId);
-	this.client.queueServiceActionCall("flavorparams", "getByConversionProfileId", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-function KalturaJobsService(client)
+function VidiunFlavorAssetService(client)
 {
 	this.init(client);
 }
 
-KalturaJobsService.prototype = new KalturaServiceBase();
+VidiunFlavorAssetService.prototype = new VidiunServiceBase();
 
-KalturaJobsService.prototype.getImportStatus = function(callback, jobId)
+VidiunFlavorAssetService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getImportStatus", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("flavorasset", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.deleteImport = function(callback, jobId)
+VidiunFlavorAssetService.prototype.getByEntryId = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deleteImport", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("flavorasset", "getByEntryId", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.abortImport = function(callback, jobId)
+VidiunFlavorAssetService.prototype.getWebPlayableByEntryId = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortImport", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("flavorasset", "getWebPlayableByEntryId", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.retryImport = function(callback, jobId)
+VidiunFlavorAssetService.prototype.convert = function(callback, entryId, flavorParamsId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryImport", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "flavorParamsId", flavorParamsId);
+	this.client.queueServiceActionCall("flavorasset", "convert", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.getBulkUploadStatus = function(callback, jobId)
+VidiunFlavorAssetService.prototype.reconvert = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getBulkUploadStatus", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("flavorasset", "reconvert", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.deleteBulkUpload = function(callback, jobId)
+VidiunFlavorAssetService.prototype.delete = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deleteBulkUpload", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("flavorasset", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.abortBulkUpload = function(callback, jobId)
+VidiunFlavorAssetService.prototype.getDownloadUrl = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortBulkUpload", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("flavorasset", "getDownloadUrl", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.retryBulkUpload = function(callback, jobId)
+VidiunFlavorAssetService.prototype.getFlavorAssetsWithParams = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryBulkUpload", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("flavorasset", "getFlavorAssetsWithParams", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.getConvertStatus = function(callback, jobId)
+function VidiunFlavorParamsService(client)
+{
+	this.init(client);
+}
+
+VidiunFlavorParamsService.prototype = new VidiunServiceBase();
+
+VidiunFlavorParamsService.prototype.add = function(callback, flavorParams)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getConvertStatus", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "flavorParams", flavorParams.toParams());
+	this.client.queueServiceActionCall("flavorparams", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.getConvertProfileStatus = function(callback, jobId)
+VidiunFlavorParamsService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getConvertProfileStatus", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("flavorparams", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.getRemoteConvertStatus = function(callback, jobId)
+VidiunFlavorParamsService.prototype.update = function(callback, id, flavorParams)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getRemoteConvertStatus", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "flavorParams", flavorParams.toParams());
+	this.client.queueServiceActionCall("flavorparams", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.deleteConvert = function(callback, jobId)
+VidiunFlavorParamsService.prototype.delete = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deleteConvert", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("flavorparams", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaJobsService.prototype.abortConvert = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortConvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryConvert = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryConvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.deleteRemoteConvert = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deleteRemoteConvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.abortRemoteConvert = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortRemoteConvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryRemoteConvert = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryRemoteConvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.deleteConvertProfile = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deleteConvertProfile", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.abortConvertProfile = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortConvertProfile", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryConvertProfile = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryConvertProfile", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.getPostConvertStatus = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getPostConvertStatus", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.deletePostConvert = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deletePostConvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.abortPostConvert = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortPostConvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryPostConvert = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryPostConvert", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.getPullStatus = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getPullStatus", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.deletePull = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deletePull", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.abortPull = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortPull", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryPull = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryPull", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.getExtractMediaStatus = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getExtractMediaStatus", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.deleteExtractMedia = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deleteExtractMedia", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.abortExtractMedia = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortExtractMedia", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryExtractMedia = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryExtractMedia", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.getNotificationStatus = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getNotificationStatus", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.deleteNotification = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deleteNotification", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.abortNotification = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortNotification", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryNotification = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryNotification", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.getMailStatus = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "getMailStatus", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.deleteMail = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "deleteMail", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.abortMail = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "abortMail", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryMail = function(callback, jobId)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.queueServiceActionCall("jobs", "retryMail", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.addMailJob = function(callback, mailJobData)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "mailJobData", mailJobData.toParams());
-	this.client.queueServiceActionCall("jobs", "addMailJob", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.addBatchJob = function(callback, batchJob)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "batchJob", batchJob.toParams());
-	this.client.queueServiceActionCall("jobs", "addBatchJob", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.getStatus = function(callback, jobId, jobType)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.addParam(kparams, "jobType", jobType);
-	this.client.queueServiceActionCall("jobs", "getStatus", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.deleteJob = function(callback, jobId, jobType)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.addParam(kparams, "jobType", jobType);
-	this.client.queueServiceActionCall("jobs", "deleteJob", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.abortJob = function(callback, jobId, jobType)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.addParam(kparams, "jobType", jobType);
-	this.client.queueServiceActionCall("jobs", "abortJob", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.retryJob = function(callback, jobId, jobType)
-{
-
-	kparams = new Object();
-	this.client.addParam(kparams, "jobId", jobId);
-	this.client.addParam(kparams, "jobType", jobType);
-	this.client.queueServiceActionCall("jobs", "retryJob", kparams);
-	if (!this.client.isMultiRequest())
-		this.client.doQueue(callback);
-};
-
-KalturaJobsService.prototype.listBatchJobs = function(callback, filter, pager)
+VidiunFlavorParamsService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", toParams(filter));
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", toParams(pager));
-	this.client.queueServiceActionCall("jobs", "listBatchJobs", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("flavorparams", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaMediaService(client)
+VidiunFlavorParamsService.prototype.getByConversionProfileId = function(callback, conversionProfileId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "conversionProfileId", conversionProfileId);
+	this.client.queueServiceActionCall("flavorparams", "getByConversionProfileId", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+function VidiunJobsService(client)
 {
 	this.init(client);
 }
 
-KalturaMediaService.prototype = new KalturaServiceBase();
+VidiunJobsService.prototype = new VidiunServiceBase();
 
-KalturaMediaService.prototype.addFromBulk = function(callback, mediaEntry, url, bulkUploadId)
+VidiunJobsService.prototype.getImportStatus = function(callback, jobId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mediaEntry", mediaEntry.toParams());
-	this.client.addParam(kparams, "url", url);
-	this.client.addParam(kparams, "bulkUploadId", bulkUploadId);
-	this.client.queueServiceActionCall("media", "addFromBulk", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getImportStatus", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.addFromUrl = function(callback, mediaEntry, url)
+VidiunJobsService.prototype.deleteImport = function(callback, jobId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mediaEntry", mediaEntry.toParams());
-	this.client.addParam(kparams, "url", url);
-	this.client.queueServiceActionCall("media", "addFromUrl", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deleteImport", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.addFromSearchResult = function(callback, mediaEntry, searchResult)
+VidiunJobsService.prototype.abortImport = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortImport", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryImport = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryImport", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getBulkUploadStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getBulkUploadStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deleteBulkUpload = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deleteBulkUpload", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortBulkUpload = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortBulkUpload", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryBulkUpload = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryBulkUpload", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getConvertStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getConvertStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getConvertProfileStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getConvertProfileStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getRemoteConvertStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getRemoteConvertStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deleteConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deleteConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deleteRemoteConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deleteRemoteConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortRemoteConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortRemoteConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryRemoteConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryRemoteConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deleteConvertProfile = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deleteConvertProfile", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortConvertProfile = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortConvertProfile", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryConvertProfile = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryConvertProfile", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getPostConvertStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getPostConvertStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deletePostConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deletePostConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortPostConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortPostConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryPostConvert = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryPostConvert", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getPullStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getPullStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deletePull = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deletePull", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortPull = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortPull", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryPull = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryPull", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getExtractMediaStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getExtractMediaStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deleteExtractMedia = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deleteExtractMedia", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortExtractMedia = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortExtractMedia", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryExtractMedia = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryExtractMedia", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getNotificationStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getNotificationStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deleteNotification = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deleteNotification", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortNotification = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortNotification", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryNotification = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryNotification", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getMailStatus = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "getMailStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deleteMail = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "deleteMail", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortMail = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "abortMail", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryMail = function(callback, jobId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.queueServiceActionCall("jobs", "retryMail", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.addMailJob = function(callback, mailJobData)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "mailJobData", mailJobData.toParams());
+	this.client.queueServiceActionCall("jobs", "addMailJob", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.addBatchJob = function(callback, batchJob)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "batchJob", batchJob.toParams());
+	this.client.queueServiceActionCall("jobs", "addBatchJob", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.getStatus = function(callback, jobId, jobType)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.addParam(vparams, "jobType", jobType);
+	this.client.queueServiceActionCall("jobs", "getStatus", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.deleteJob = function(callback, jobId, jobType)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.addParam(vparams, "jobType", jobType);
+	this.client.queueServiceActionCall("jobs", "deleteJob", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.abortJob = function(callback, jobId, jobType)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.addParam(vparams, "jobType", jobType);
+	this.client.queueServiceActionCall("jobs", "abortJob", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.retryJob = function(callback, jobId, jobType)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "jobId", jobId);
+	this.client.addParam(vparams, "jobType", jobType);
+	this.client.queueServiceActionCall("jobs", "retryJob", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunJobsService.prototype.listBatchJobs = function(callback, filter, pager)
+{
+	if(!filter)
+		filter = null;
+	if(!pager)
+		pager = null;
+
+	vparams = new Object();
+	if (filter != null)
+		this.client.addParam(vparams, "filter", toParams(filter));
+	if (pager != null)
+		this.client.addParam(vparams, "pager", toParams(pager));
+	this.client.queueServiceActionCall("jobs", "listBatchJobs", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+function VidiunMediaService(client)
+{
+	this.init(client);
+}
+
+VidiunMediaService.prototype = new VidiunServiceBase();
+
+VidiunMediaService.prototype.addFromBulk = function(callback, mediaEntry, url, bulkUploadId)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "mediaEntry", mediaEntry.toParams());
+	this.client.addParam(vparams, "url", url);
+	this.client.addParam(vparams, "bulkUploadId", bulkUploadId);
+	this.client.queueServiceActionCall("media", "addFromBulk", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunMediaService.prototype.addFromUrl = function(callback, mediaEntry, url)
+{
+
+	vparams = new Object();
+	this.client.addParam(vparams, "mediaEntry", mediaEntry.toParams());
+	this.client.addParam(vparams, "url", url);
+	this.client.queueServiceActionCall("media", "addFromUrl", vparams);
+	if (!this.client.isMultiRequest())
+		this.client.doQueue(callback);
+};
+
+VidiunMediaService.prototype.addFromSearchResult = function(callback, mediaEntry, searchResult)
 {
 	if(!mediaEntry)
 		mediaEntry = null;
 	if(!searchResult)
 		searchResult = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (mediaEntry != null)
-		this.client.addParam(kparams, "mediaEntry", mediaEntry.toParams());
+		this.client.addParam(vparams, "mediaEntry", mediaEntry.toParams());
 	if (searchResult != null)
-		this.client.addParam(kparams, "searchResult", searchResult.toParams());
-	this.client.queueServiceActionCall("media", "addFromSearchResult", kparams);
+		this.client.addParam(vparams, "searchResult", searchResult.toParams());
+	this.client.queueServiceActionCall("media", "addFromSearchResult", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.addFromUploadedFile = function(callback, mediaEntry, uploadTokenId)
+VidiunMediaService.prototype.addFromUploadedFile = function(callback, mediaEntry, uploadTokenId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mediaEntry", mediaEntry.toParams());
-	this.client.addParam(kparams, "uploadTokenId", uploadTokenId);
-	this.client.queueServiceActionCall("media", "addFromUploadedFile", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "mediaEntry", mediaEntry.toParams());
+	this.client.addParam(vparams, "uploadTokenId", uploadTokenId);
+	this.client.queueServiceActionCall("media", "addFromUploadedFile", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.addFromRecordedWebcam = function(callback, mediaEntry, webcamTokenId)
+VidiunMediaService.prototype.addFromRecordedWebcam = function(callback, mediaEntry, webcamTokenId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mediaEntry", mediaEntry.toParams());
-	this.client.addParam(kparams, "webcamTokenId", webcamTokenId);
-	this.client.queueServiceActionCall("media", "addFromRecordedWebcam", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "mediaEntry", mediaEntry.toParams());
+	this.client.addParam(vparams, "webcamTokenId", webcamTokenId);
+	this.client.queueServiceActionCall("media", "addFromRecordedWebcam", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.get = function(callback, entryId, version)
+VidiunMediaService.prototype.get = function(callback, entryId, version)
 {
 	if(!version)
 		version = -1;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "version", version);
-	this.client.queueServiceActionCall("media", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "version", version);
+	this.client.queueServiceActionCall("media", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.update = function(callback, entryId, mediaEntry)
+VidiunMediaService.prototype.update = function(callback, entryId, mediaEntry)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "mediaEntry", mediaEntry.toParams());
-	this.client.queueServiceActionCall("media", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "mediaEntry", mediaEntry.toParams());
+	this.client.queueServiceActionCall("media", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.delete = function(callback, entryId)
+VidiunMediaService.prototype.delete = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("media", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("media", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.listAction = function(callback, filter, pager)
+VidiunMediaService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("media", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("media", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.count = function(callback, filter)
+VidiunMediaService.prototype.count = function(callback, filter)
 {
 	if(!filter)
 		filter = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
-	this.client.queueServiceActionCall("media", "count", kparams);
+		this.client.addParam(vparams, "filter", filter.toParams());
+	this.client.queueServiceActionCall("media", "count", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.upload = function(callback, fileData)
+VidiunMediaService.prototype.upload = function(callback, fileData)
 {
 
-	kparams = new Object();
-	kfiles = new Object();
-	this.client.addParam(kfiles, "fileData", fileData);
-	this.client.queueServiceActionCall("media", "upload", kparams, kfiles);
+	vparams = new Object();
+	vfiles = new Object();
+	this.client.addParam(vfiles, "fileData", fileData);
+	this.client.queueServiceActionCall("media", "upload", vparams, vfiles);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.updateThumbnail = function(callback, entryId, timeOffset)
+VidiunMediaService.prototype.updateThumbnail = function(callback, entryId, timeOffset)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "timeOffset", timeOffset);
-	this.client.queueServiceActionCall("media", "updateThumbnail", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "timeOffset", timeOffset);
+	this.client.queueServiceActionCall("media", "updateThumbnail", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.updateThumbnailFromSourceEntry = function(callback, entryId, sourceEntryId, timeOffset)
+VidiunMediaService.prototype.updateThumbnailFromSourceEntry = function(callback, entryId, sourceEntryId, timeOffset)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "sourceEntryId", sourceEntryId);
-	this.client.addParam(kparams, "timeOffset", timeOffset);
-	this.client.queueServiceActionCall("media", "updateThumbnailFromSourceEntry", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "sourceEntryId", sourceEntryId);
+	this.client.addParam(vparams, "timeOffset", timeOffset);
+	this.client.queueServiceActionCall("media", "updateThumbnailFromSourceEntry", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.updateThumbnailJpeg = function(callback, entryId, fileData)
+VidiunMediaService.prototype.updateThumbnailJpeg = function(callback, entryId, fileData)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	kfiles = new Object();
-	this.client.addParam(kfiles, "fileData", fileData);
-	this.client.queueServiceActionCall("media", "updateThumbnailJpeg", kparams, kfiles);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	vfiles = new Object();
+	this.client.addParam(vfiles, "fileData", fileData);
+	this.client.queueServiceActionCall("media", "updateThumbnailJpeg", vparams, vfiles);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.updateThumbnailFromUrl = function(callback, entryId, url)
+VidiunMediaService.prototype.updateThumbnailFromUrl = function(callback, entryId, url)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "url", url);
-	this.client.queueServiceActionCall("media", "updateThumbnailFromUrl", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "url", url);
+	this.client.queueServiceActionCall("media", "updateThumbnailFromUrl", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.requestConversion = function(callback, entryId, fileFormat)
+VidiunMediaService.prototype.requestConversion = function(callback, entryId, fileFormat)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "fileFormat", fileFormat);
-	this.client.queueServiceActionCall("media", "requestConversion", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "fileFormat", fileFormat);
+	this.client.queueServiceActionCall("media", "requestConversion", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.flag = function(callback, moderationFlag)
+VidiunMediaService.prototype.flag = function(callback, moderationFlag)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "moderationFlag", moderationFlag.toParams());
-	this.client.queueServiceActionCall("media", "flag", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "moderationFlag", moderationFlag.toParams());
+	this.client.queueServiceActionCall("media", "flag", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.reject = function(callback, entryId)
+VidiunMediaService.prototype.reject = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("media", "reject", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("media", "reject", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.approve = function(callback, entryId)
+VidiunMediaService.prototype.approve = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("media", "approve", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("media", "approve", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.listFlags = function(callback, entryId, pager)
+VidiunMediaService.prototype.listFlags = function(callback, entryId, pager)
 {
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("media", "listFlags", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("media", "listFlags", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMediaService.prototype.anonymousRank = function(callback, entryId, rank)
+VidiunMediaService.prototype.anonymousRank = function(callback, entryId, rank)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "rank", rank);
-	this.client.queueServiceActionCall("media", "anonymousRank", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "rank", rank);
+	this.client.queueServiceActionCall("media", "anonymousRank", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaMixingService(client)
+function VidiunMixingService(client)
 {
 	this.init(client);
 }
 
-KalturaMixingService.prototype = new KalturaServiceBase();
+VidiunMixingService.prototype = new VidiunServiceBase();
 
-KalturaMixingService.prototype.add = function(callback, mixEntry)
+VidiunMixingService.prototype.add = function(callback, mixEntry)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mixEntry", mixEntry.toParams());
-	this.client.queueServiceActionCall("mixing", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "mixEntry", mixEntry.toParams());
+	this.client.queueServiceActionCall("mixing", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.get = function(callback, entryId, version)
+VidiunMixingService.prototype.get = function(callback, entryId, version)
 {
 	if(!version)
 		version = -1;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "version", version);
-	this.client.queueServiceActionCall("mixing", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "version", version);
+	this.client.queueServiceActionCall("mixing", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.update = function(callback, entryId, mixEntry)
+VidiunMixingService.prototype.update = function(callback, entryId, mixEntry)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "mixEntry", mixEntry.toParams());
-	this.client.queueServiceActionCall("mixing", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "mixEntry", mixEntry.toParams());
+	this.client.queueServiceActionCall("mixing", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.delete = function(callback, entryId)
+VidiunMixingService.prototype.delete = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("mixing", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("mixing", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.listAction = function(callback, filter, pager)
+VidiunMixingService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("mixing", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("mixing", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.count = function(callback, filter)
+VidiunMixingService.prototype.count = function(callback, filter)
 {
 	if(!filter)
 		filter = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
-	this.client.queueServiceActionCall("mixing", "count", kparams);
+		this.client.addParam(vparams, "filter", filter.toParams());
+	this.client.queueServiceActionCall("mixing", "count", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.cloneAction = function(callback, entryId)
+VidiunMixingService.prototype.cloneAction = function(callback, entryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.queueServiceActionCall("mixing", "clone", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.queueServiceActionCall("mixing", "clone", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.appendMediaEntry = function(callback, mixEntryId, mediaEntryId)
+VidiunMixingService.prototype.appendMediaEntry = function(callback, mixEntryId, mediaEntryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mixEntryId", mixEntryId);
-	this.client.addParam(kparams, "mediaEntryId", mediaEntryId);
-	this.client.queueServiceActionCall("mixing", "appendMediaEntry", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "mixEntryId", mixEntryId);
+	this.client.addParam(vparams, "mediaEntryId", mediaEntryId);
+	this.client.queueServiceActionCall("mixing", "appendMediaEntry", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.requestFlattening = function(callback, entryId, fileFormat, version)
+VidiunMixingService.prototype.requestFlattening = function(callback, entryId, fileFormat, version)
 {
 	if(!version)
 		version = -1;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "fileFormat", fileFormat);
-	this.client.addParam(kparams, "version", version);
-	this.client.queueServiceActionCall("mixing", "requestFlattening", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "fileFormat", fileFormat);
+	this.client.addParam(vparams, "version", version);
+	this.client.queueServiceActionCall("mixing", "requestFlattening", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.getMixesByMediaId = function(callback, mediaEntryId)
+VidiunMixingService.prototype.getMixesByMediaId = function(callback, mediaEntryId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mediaEntryId", mediaEntryId);
-	this.client.queueServiceActionCall("mixing", "getMixesByMediaId", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "mediaEntryId", mediaEntryId);
+	this.client.queueServiceActionCall("mixing", "getMixesByMediaId", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.getReadyMediaEntries = function(callback, mixId, version)
+VidiunMixingService.prototype.getReadyMediaEntries = function(callback, mixId, version)
 {
 	if(!version)
 		version = -1;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mixId", mixId);
-	this.client.addParam(kparams, "version", version);
-	this.client.queueServiceActionCall("mixing", "getReadyMediaEntries", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "mixId", mixId);
+	this.client.addParam(vparams, "version", version);
+	this.client.queueServiceActionCall("mixing", "getReadyMediaEntries", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaMixingService.prototype.anonymousRank = function(callback, entryId, rank)
+VidiunMixingService.prototype.anonymousRank = function(callback, entryId, rank)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "rank", rank);
-	this.client.queueServiceActionCall("mixing", "anonymousRank", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "rank", rank);
+	this.client.queueServiceActionCall("mixing", "anonymousRank", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaNotificationService(client)
+function VidiunNotificationService(client)
 {
 	this.init(client);
 }
 
-KalturaNotificationService.prototype = new KalturaServiceBase();
+VidiunNotificationService.prototype = new VidiunServiceBase();
 
-KalturaNotificationService.prototype.getClientNotification = function(callback, entryId, type)
+VidiunNotificationService.prototype.getClientNotification = function(callback, entryId, type)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryId", entryId);
-	this.client.addParam(kparams, "type", type);
-	this.client.queueServiceActionCall("notification", "getClientNotification", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryId", entryId);
+	this.client.addParam(vparams, "type", type);
+	this.client.queueServiceActionCall("notification", "getClientNotification", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaPartnerService(client)
+function VidiunPartnerService(client)
 {
 	this.init(client);
 }
 
-KalturaPartnerService.prototype = new KalturaServiceBase();
+VidiunPartnerService.prototype = new VidiunServiceBase();
 
-KalturaPartnerService.prototype.register = function(callback, partner, cmsPassword)
+VidiunPartnerService.prototype.register = function(callback, partner, cmsPassword)
 {
 	if(!cmsPassword)
 		cmsPassword = "";
 
-	kparams = new Object();
-	this.client.addParam(kparams, "partner", partner.toParams());
-	this.client.addParam(kparams, "cmsPassword", cmsPassword);
-	this.client.queueServiceActionCall("partner", "register", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "partner", partner.toParams());
+	this.client.addParam(vparams, "cmsPassword", cmsPassword);
+	this.client.queueServiceActionCall("partner", "register", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPartnerService.prototype.update = function(callback, partner, allowEmpty)
+VidiunPartnerService.prototype.update = function(callback, partner, allowEmpty)
 {
 	if(!allowEmpty)
 		allowEmpty = false;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "partner", partner.toParams());
-	this.client.addParam(kparams, "allowEmpty", allowEmpty);
-	this.client.queueServiceActionCall("partner", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "partner", partner.toParams());
+	this.client.addParam(vparams, "allowEmpty", allowEmpty);
+	this.client.queueServiceActionCall("partner", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPartnerService.prototype.getSecrets = function(callback, partnerId, adminEmail, cmsPassword)
+VidiunPartnerService.prototype.getSecrets = function(callback, partnerId, adminEmail, cmsPassword)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "partnerId", partnerId);
-	this.client.addParam(kparams, "adminEmail", adminEmail);
-	this.client.addParam(kparams, "cmsPassword", cmsPassword);
-	this.client.queueServiceActionCall("partner", "getSecrets", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "partnerId", partnerId);
+	this.client.addParam(vparams, "adminEmail", adminEmail);
+	this.client.addParam(vparams, "cmsPassword", cmsPassword);
+	this.client.queueServiceActionCall("partner", "getSecrets", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPartnerService.prototype.getInfo = function(callback)
+VidiunPartnerService.prototype.getInfo = function(callback)
 {
 
-	kparams = new Object();
-	this.client.queueServiceActionCall("partner", "getInfo", kparams);
+	vparams = new Object();
+	this.client.queueServiceActionCall("partner", "getInfo", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPartnerService.prototype.get = function(callback, partnerId)
+VidiunPartnerService.prototype.get = function(callback, partnerId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "partnerId", partnerId);
-	this.client.queueServiceActionCall("partner", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "partnerId", partnerId);
+	this.client.queueServiceActionCall("partner", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPartnerService.prototype.getUsage = function(callback, year, month, resolution)
+VidiunPartnerService.prototype.getUsage = function(callback, year, month, resolution)
 {
 	if(!year)
 		year = "";
@@ -8361,202 +8361,202 @@ KalturaPartnerService.prototype.getUsage = function(callback, year, month, resol
 	if(!resolution)
 		resolution = "days";
 
-	kparams = new Object();
-	this.client.addParam(kparams, "year", year);
-	this.client.addParam(kparams, "month", month);
-	this.client.addParam(kparams, "resolution", resolution);
-	this.client.queueServiceActionCall("partner", "getUsage", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "year", year);
+	this.client.addParam(vparams, "month", month);
+	this.client.addParam(vparams, "resolution", resolution);
+	this.client.queueServiceActionCall("partner", "getUsage", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaPlaylistService(client)
+function VidiunPlaylistService(client)
 {
 	this.init(client);
 }
 
-KalturaPlaylistService.prototype = new KalturaServiceBase();
+VidiunPlaylistService.prototype = new VidiunServiceBase();
 
-KalturaPlaylistService.prototype.add = function(callback, playlist, updateStats)
+VidiunPlaylistService.prototype.add = function(callback, playlist, updateStats)
 {
 	if(!updateStats)
 		updateStats = false;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "playlist", playlist.toParams());
-	this.client.addParam(kparams, "updateStats", updateStats);
-	this.client.queueServiceActionCall("playlist", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "playlist", playlist.toParams());
+	this.client.addParam(vparams, "updateStats", updateStats);
+	this.client.queueServiceActionCall("playlist", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPlaylistService.prototype.get = function(callback, id, version)
+VidiunPlaylistService.prototype.get = function(callback, id, version)
 {
 	if(!version)
 		version = -1;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "version", version);
-	this.client.queueServiceActionCall("playlist", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "version", version);
+	this.client.queueServiceActionCall("playlist", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPlaylistService.prototype.update = function(callback, id, playlist, updateStats)
+VidiunPlaylistService.prototype.update = function(callback, id, playlist, updateStats)
 {
 	if(!updateStats)
 		updateStats = false;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "playlist", playlist.toParams());
-	this.client.addParam(kparams, "updateStats", updateStats);
-	this.client.queueServiceActionCall("playlist", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "playlist", playlist.toParams());
+	this.client.addParam(vparams, "updateStats", updateStats);
+	this.client.queueServiceActionCall("playlist", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPlaylistService.prototype.delete = function(callback, id)
+VidiunPlaylistService.prototype.delete = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("playlist", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("playlist", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPlaylistService.prototype.listAction = function(callback, filter, pager)
+VidiunPlaylistService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("playlist", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("playlist", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPlaylistService.prototype.execute = function(callback, id, detailed)
+VidiunPlaylistService.prototype.execute = function(callback, id, detailed)
 {
 	if(!detailed)
 		detailed = false;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "detailed", detailed);
-	this.client.queueServiceActionCall("playlist", "execute", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "detailed", detailed);
+	this.client.queueServiceActionCall("playlist", "execute", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPlaylistService.prototype.executeFromContent = function(callback, playlistType, playlistContent, detailed)
+VidiunPlaylistService.prototype.executeFromContent = function(callback, playlistType, playlistContent, detailed)
 {
 	if(!detailed)
 		detailed = false;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "playlistType", playlistType);
-	this.client.addParam(kparams, "playlistContent", playlistContent);
-	this.client.addParam(kparams, "detailed", detailed);
-	this.client.queueServiceActionCall("playlist", "executeFromContent", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "playlistType", playlistType);
+	this.client.addParam(vparams, "playlistContent", playlistContent);
+	this.client.addParam(vparams, "detailed", detailed);
+	this.client.queueServiceActionCall("playlist", "executeFromContent", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPlaylistService.prototype.executeFromFilters = function(callback, filters, totalResults, detailed)
+VidiunPlaylistService.prototype.executeFromFilters = function(callback, filters, totalResults, detailed)
 {
 	if(!detailed)
 		detailed = false;
 
-	kparams = new Object();
+	vparams = new Object();
 	for(var index in filters)
 	{
 		var obj = filters[index];
-		this.client.addParam(kparams, "filters:" + index, obj.toParams());
+		this.client.addParam(vparams, "filters:" + index, obj.toParams());
 	}
-	this.client.addParam(kparams, "totalResults", totalResults);
-	this.client.addParam(kparams, "detailed", detailed);
-	this.client.queueServiceActionCall("playlist", "executeFromFilters", kparams);
+	this.client.addParam(vparams, "totalResults", totalResults);
+	this.client.addParam(vparams, "detailed", detailed);
+	this.client.queueServiceActionCall("playlist", "executeFromFilters", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaPlaylistService.prototype.getStatsFromContent = function(callback, playlistType, playlistContent)
+VidiunPlaylistService.prototype.getStatsFromContent = function(callback, playlistType, playlistContent)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "playlistType", playlistType);
-	this.client.addParam(kparams, "playlistContent", playlistContent);
-	this.client.queueServiceActionCall("playlist", "getStatsFromContent", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "playlistType", playlistType);
+	this.client.addParam(vparams, "playlistContent", playlistContent);
+	this.client.queueServiceActionCall("playlist", "getStatsFromContent", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaReportService(client)
+function VidiunReportService(client)
 {
 	this.init(client);
 }
 
-KalturaReportService.prototype = new KalturaServiceBase();
+VidiunReportService.prototype = new VidiunServiceBase();
 
-KalturaReportService.prototype.getGraphs = function(callback, reportType, reportInputFilter, dimension, objectIds)
+VidiunReportService.prototype.getGraphs = function(callback, reportType, reportInputFilter, dimension, objectIds)
 {
 	if(!dimension)
 		dimension = null;
 	if(!objectIds)
 		objectIds = null;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "reportType", reportType);
-	this.client.addParam(kparams, "reportInputFilter", reportInputFilter.toParams());
-	this.client.addParam(kparams, "dimension", dimension);
-	this.client.addParam(kparams, "objectIds", objectIds);
-	this.client.queueServiceActionCall("report", "getGraphs", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "reportType", reportType);
+	this.client.addParam(vparams, "reportInputFilter", reportInputFilter.toParams());
+	this.client.addParam(vparams, "dimension", dimension);
+	this.client.addParam(vparams, "objectIds", objectIds);
+	this.client.queueServiceActionCall("report", "getGraphs", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaReportService.prototype.getTotal = function(callback, reportType, reportInputFilter, objectIds)
+VidiunReportService.prototype.getTotal = function(callback, reportType, reportInputFilter, objectIds)
 {
 	if(!objectIds)
 		objectIds = null;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "reportType", reportType);
-	this.client.addParam(kparams, "reportInputFilter", reportInputFilter.toParams());
-	this.client.addParam(kparams, "objectIds", objectIds);
-	this.client.queueServiceActionCall("report", "getTotal", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "reportType", reportType);
+	this.client.addParam(vparams, "reportInputFilter", reportInputFilter.toParams());
+	this.client.addParam(vparams, "objectIds", objectIds);
+	this.client.queueServiceActionCall("report", "getTotal", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaReportService.prototype.getTable = function(callback, reportType, reportInputFilter, pager, order, objectIds)
+VidiunReportService.prototype.getTable = function(callback, reportType, reportInputFilter, pager, order, objectIds)
 {
 	if(!order)
 		order = null;
 	if(!objectIds)
 		objectIds = null;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "reportType", reportType);
-	this.client.addParam(kparams, "reportInputFilter", reportInputFilter.toParams());
-	this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.addParam(kparams, "order", order);
-	this.client.addParam(kparams, "objectIds", objectIds);
-	this.client.queueServiceActionCall("report", "getTable", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "reportType", reportType);
+	this.client.addParam(vparams, "reportInputFilter", reportInputFilter.toParams());
+	this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.addParam(vparams, "order", order);
+	this.client.addParam(vparams, "objectIds", objectIds);
+	this.client.queueServiceActionCall("report", "getTable", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaReportService.prototype.getUrlForReportAsCsv = function(callback, reportTitle, reportText, headers, reportType, reportInputFilter, dimension, pager, order, objectIds)
+VidiunReportService.prototype.getUrlForReportAsCsv = function(callback, reportTitle, reportText, headers, reportType, reportInputFilter, dimension, pager, order, objectIds)
 {
 	if(!dimension)
 		dimension = null;
@@ -8567,84 +8567,84 @@ KalturaReportService.prototype.getUrlForReportAsCsv = function(callback, reportT
 	if(!objectIds)
 		objectIds = null;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "reportTitle", reportTitle);
-	this.client.addParam(kparams, "reportText", reportText);
-	this.client.addParam(kparams, "headers", headers);
-	this.client.addParam(kparams, "reportType", reportType);
-	this.client.addParam(kparams, "reportInputFilter", reportInputFilter.toParams());
-	this.client.addParam(kparams, "dimension", dimension);
+	vparams = new Object();
+	this.client.addParam(vparams, "reportTitle", reportTitle);
+	this.client.addParam(vparams, "reportText", reportText);
+	this.client.addParam(vparams, "headers", headers);
+	this.client.addParam(vparams, "reportType", reportType);
+	this.client.addParam(vparams, "reportInputFilter", reportInputFilter.toParams());
+	this.client.addParam(vparams, "dimension", dimension);
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.addParam(kparams, "order", order);
-	this.client.addParam(kparams, "objectIds", objectIds);
-	this.client.queueServiceActionCall("report", "getUrlForReportAsCsv", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.addParam(vparams, "order", order);
+	this.client.addParam(vparams, "objectIds", objectIds);
+	this.client.queueServiceActionCall("report", "getUrlForReportAsCsv", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaSearchService(client)
+function VidiunSearchService(client)
 {
 	this.init(client);
 }
 
-KalturaSearchService.prototype = new KalturaServiceBase();
+VidiunSearchService.prototype = new VidiunServiceBase();
 
-KalturaSearchService.prototype.search = function(callback, search, pager)
+VidiunSearchService.prototype.search = function(callback, search, pager)
 {
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "search", search.toParams());
+	vparams = new Object();
+	this.client.addParam(vparams, "search", search.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("search", "search", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("search", "search", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSearchService.prototype.getMediaInfo = function(callback, searchResult)
+VidiunSearchService.prototype.getMediaInfo = function(callback, searchResult)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "searchResult", searchResult.toParams());
-	this.client.queueServiceActionCall("search", "getMediaInfo", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "searchResult", searchResult.toParams());
+	this.client.queueServiceActionCall("search", "getMediaInfo", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSearchService.prototype.searchUrl = function(callback, mediaType, url)
+VidiunSearchService.prototype.searchUrl = function(callback, mediaType, url)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "mediaType", mediaType);
-	this.client.addParam(kparams, "url", url);
-	this.client.queueServiceActionCall("search", "searchUrl", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "mediaType", mediaType);
+	this.client.addParam(vparams, "url", url);
+	this.client.queueServiceActionCall("search", "searchUrl", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSearchService.prototype.externalLogin = function(callback, searchSource, userName, password)
+VidiunSearchService.prototype.externalLogin = function(callback, searchSource, userName, password)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "searchSource", searchSource);
-	this.client.addParam(kparams, "userName", userName);
-	this.client.addParam(kparams, "password", password);
-	this.client.queueServiceActionCall("search", "externalLogin", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "searchSource", searchSource);
+	this.client.addParam(vparams, "userName", userName);
+	this.client.addParam(vparams, "password", password);
+	this.client.queueServiceActionCall("search", "externalLogin", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaSessionService(client)
+function VidiunSessionService(client)
 {
 	this.init(client);
 }
 
-KalturaSessionService.prototype = new KalturaServiceBase();
+VidiunSessionService.prototype = new VidiunServiceBase();
 
-KalturaSessionService.prototype.start = function(callback, secret, userId, type, partnerId, expiry, privileges)
+VidiunSessionService.prototype.start = function(callback, secret, userId, type, partnerId, expiry, privileges)
 {
 	if(!userId)
 		userId = "";
@@ -8657,652 +8657,652 @@ KalturaSessionService.prototype.start = function(callback, secret, userId, type,
 	if(!privileges)
 		privileges = null;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "secret", secret);
-	this.client.addParam(kparams, "userId", userId);
-	this.client.addParam(kparams, "type", type);
-	this.client.addParam(kparams, "partnerId", partnerId);
-	this.client.addParam(kparams, "expiry", expiry);
-	this.client.addParam(kparams, "privileges", privileges);
-	this.client.queueServiceActionCall("session", "start", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "secret", secret);
+	this.client.addParam(vparams, "userId", userId);
+	this.client.addParam(vparams, "type", type);
+	this.client.addParam(vparams, "partnerId", partnerId);
+	this.client.addParam(vparams, "expiry", expiry);
+	this.client.addParam(vparams, "privileges", privileges);
+	this.client.queueServiceActionCall("session", "start", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSessionService.prototype.startWidgetSession = function(callback, widgetId, expiry)
+VidiunSessionService.prototype.startWidgetSession = function(callback, widgetId, expiry)
 {
 	if(!expiry)
 		expiry = 86400;
 
-	kparams = new Object();
-	this.client.addParam(kparams, "widgetId", widgetId);
-	this.client.addParam(kparams, "expiry", expiry);
-	this.client.queueServiceActionCall("session", "startWidgetSession", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "widgetId", widgetId);
+	this.client.addParam(vparams, "expiry", expiry);
+	this.client.queueServiceActionCall("session", "startWidgetSession", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaStatsService(client)
+function VidiunStatsService(client)
 {
 	this.init(client);
 }
 
-KalturaStatsService.prototype = new KalturaServiceBase();
+VidiunStatsService.prototype = new VidiunServiceBase();
 
-KalturaStatsService.prototype.collect = function(callback, event)
+VidiunStatsService.prototype.collect = function(callback, event)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "event", event.toParams());
-	this.client.queueServiceActionCall("stats", "collect", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "event", event.toParams());
+	this.client.queueServiceActionCall("stats", "collect", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaStatsService.prototype.kmcCollect = function(callback, kmcEvent)
+VidiunStatsService.prototype.vmcCollect = function(callback, vmcEvent)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "kmcEvent", kmcEvent.toParams());
-	this.client.queueServiceActionCall("stats", "kmcCollect", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "vmcEvent", vmcEvent.toParams());
+	this.client.queueServiceActionCall("stats", "vmcCollect", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaStatsService.prototype.reportKceError = function(callback, kalturaCEError)
+VidiunStatsService.prototype.reportVceError = function(callback, vidiunCEError)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "kalturaCEError", kalturaCEError.toParams());
-	this.client.queueServiceActionCall("stats", "reportKceError", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "vidiunCEError", vidiunCEError.toParams());
+	this.client.queueServiceActionCall("stats", "reportVceError", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaSyndicationFeedService(client)
+function VidiunSyndicationFeedService(client)
 {
 	this.init(client);
 }
 
-KalturaSyndicationFeedService.prototype = new KalturaServiceBase();
+VidiunSyndicationFeedService.prototype = new VidiunServiceBase();
 
-KalturaSyndicationFeedService.prototype.add = function(callback, syndicationFeed)
+VidiunSyndicationFeedService.prototype.add = function(callback, syndicationFeed)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "syndicationFeed", syndicationFeed.toParams());
-	this.client.queueServiceActionCall("syndicationfeed", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "syndicationFeed", syndicationFeed.toParams());
+	this.client.queueServiceActionCall("syndicationfeed", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSyndicationFeedService.prototype.get = function(callback, id)
+VidiunSyndicationFeedService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("syndicationfeed", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("syndicationfeed", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSyndicationFeedService.prototype.update = function(callback, id, syndicationFeed)
+VidiunSyndicationFeedService.prototype.update = function(callback, id, syndicationFeed)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "syndicationFeed", syndicationFeed.toParams());
-	this.client.queueServiceActionCall("syndicationfeed", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "syndicationFeed", syndicationFeed.toParams());
+	this.client.queueServiceActionCall("syndicationfeed", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSyndicationFeedService.prototype.delete = function(callback, id)
+VidiunSyndicationFeedService.prototype.delete = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("syndicationfeed", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("syndicationfeed", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSyndicationFeedService.prototype.listAction = function(callback, filter, pager)
+VidiunSyndicationFeedService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("syndicationfeed", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("syndicationfeed", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSyndicationFeedService.prototype.getEntryCount = function(callback, feedId)
+VidiunSyndicationFeedService.prototype.getEntryCount = function(callback, feedId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "feedId", feedId);
-	this.client.queueServiceActionCall("syndicationfeed", "getEntryCount", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "feedId", feedId);
+	this.client.queueServiceActionCall("syndicationfeed", "getEntryCount", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSyndicationFeedService.prototype.requestConversion = function(callback, feedId)
+VidiunSyndicationFeedService.prototype.requestConversion = function(callback, feedId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "feedId", feedId);
-	this.client.queueServiceActionCall("syndicationfeed", "requestConversion", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "feedId", feedId);
+	this.client.queueServiceActionCall("syndicationfeed", "requestConversion", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaSystemService(client)
+function VidiunSystemService(client)
 {
 	this.init(client);
 }
 
-KalturaSystemService.prototype = new KalturaServiceBase();
+VidiunSystemService.prototype = new VidiunServiceBase();
 
-KalturaSystemService.prototype.ping = function(callback)
+VidiunSystemService.prototype.ping = function(callback)
 {
 
-	kparams = new Object();
-	this.client.queueServiceActionCall("system", "ping", kparams);
+	vparams = new Object();
+	this.client.queueServiceActionCall("system", "ping", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaUiConfService(client)
+function VidiunUiConfService(client)
 {
 	this.init(client);
 }
 
-KalturaUiConfService.prototype = new KalturaServiceBase();
+VidiunUiConfService.prototype = new VidiunServiceBase();
 
-KalturaUiConfService.prototype.add = function(callback, uiConf)
+VidiunUiConfService.prototype.add = function(callback, uiConf)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "uiConf", uiConf.toParams());
-	this.client.queueServiceActionCall("uiconf", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "uiConf", uiConf.toParams());
+	this.client.queueServiceActionCall("uiconf", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUiConfService.prototype.update = function(callback, id, uiConf)
+VidiunUiConfService.prototype.update = function(callback, id, uiConf)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "uiConf", uiConf.toParams());
-	this.client.queueServiceActionCall("uiconf", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "uiConf", uiConf.toParams());
+	this.client.queueServiceActionCall("uiconf", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUiConfService.prototype.get = function(callback, id)
+VidiunUiConfService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("uiconf", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("uiconf", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUiConfService.prototype.delete = function(callback, id)
+VidiunUiConfService.prototype.delete = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("uiconf", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("uiconf", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUiConfService.prototype.cloneAction = function(callback, id)
+VidiunUiConfService.prototype.cloneAction = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("uiconf", "clone", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("uiconf", "clone", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUiConfService.prototype.listTemplates = function(callback, filter, pager)
+VidiunUiConfService.prototype.listTemplates = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("uiconf", "listTemplates", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("uiconf", "listTemplates", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUiConfService.prototype.listAction = function(callback, filter, pager)
+VidiunUiConfService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("uiconf", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("uiconf", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaUploadService(client)
+function VidiunUploadService(client)
 {
 	this.init(client);
 }
 
-KalturaUploadService.prototype = new KalturaServiceBase();
+VidiunUploadService.prototype = new VidiunServiceBase();
 
-KalturaUploadService.prototype.getUploadTokenId = function(callback)
+VidiunUploadService.prototype.getUploadTokenId = function(callback)
 {
 
-	kparams = new Object();
-	this.client.queueServiceActionCall("upload", "getUploadTokenId", kparams);
+	vparams = new Object();
+	this.client.queueServiceActionCall("upload", "getUploadTokenId", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUploadService.prototype.uploadByTokenId = function(callback, fileData, uploadTokenId)
+VidiunUploadService.prototype.uploadByTokenId = function(callback, fileData, uploadTokenId)
 {
 
-	kparams = new Object();
-	kfiles = new Object();
-	this.client.addParam(kfiles, "fileData", fileData);
-	this.client.addParam(kparams, "uploadTokenId", uploadTokenId);
-	this.client.queueServiceActionCall("upload", "uploadByTokenId", kparams, kfiles);
+	vparams = new Object();
+	vfiles = new Object();
+	this.client.addParam(vfiles, "fileData", fileData);
+	this.client.addParam(vparams, "uploadTokenId", uploadTokenId);
+	this.client.queueServiceActionCall("upload", "uploadByTokenId", vparams, vfiles);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUploadService.prototype.getUploadedFileStatusByTokenId = function(callback, uploadTokenId)
+VidiunUploadService.prototype.getUploadedFileStatusByTokenId = function(callback, uploadTokenId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "uploadTokenId", uploadTokenId);
-	this.client.queueServiceActionCall("upload", "getUploadedFileStatusByTokenId", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "uploadTokenId", uploadTokenId);
+	this.client.queueServiceActionCall("upload", "getUploadedFileStatusByTokenId", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUploadService.prototype.upload = function(callback, fileData)
+VidiunUploadService.prototype.upload = function(callback, fileData)
 {
 
-	kparams = new Object();
-	kfiles = new Object();
-	this.client.addParam(kfiles, "fileData", fileData);
-	this.client.queueServiceActionCall("upload", "upload", kparams, kfiles);
+	vparams = new Object();
+	vfiles = new Object();
+	this.client.addParam(vfiles, "fileData", fileData);
+	this.client.queueServiceActionCall("upload", "upload", vparams, vfiles);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaUserService(client)
+function VidiunUserService(client)
 {
 	this.init(client);
 }
 
-KalturaUserService.prototype = new KalturaServiceBase();
+VidiunUserService.prototype = new VidiunServiceBase();
 
-KalturaUserService.prototype.add = function(callback, user)
+VidiunUserService.prototype.add = function(callback, user)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "user", user.toParams());
-	this.client.queueServiceActionCall("user", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "user", user.toParams());
+	this.client.queueServiceActionCall("user", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUserService.prototype.update = function(callback, userId, user)
+VidiunUserService.prototype.update = function(callback, userId, user)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "userId", userId);
-	this.client.addParam(kparams, "user", user.toParams());
-	this.client.queueServiceActionCall("user", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "userId", userId);
+	this.client.addParam(vparams, "user", user.toParams());
+	this.client.queueServiceActionCall("user", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUserService.prototype.get = function(callback, userId)
+VidiunUserService.prototype.get = function(callback, userId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "userId", userId);
-	this.client.queueServiceActionCall("user", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "userId", userId);
+	this.client.queueServiceActionCall("user", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUserService.prototype.delete = function(callback, userId)
+VidiunUserService.prototype.delete = function(callback, userId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "userId", userId);
-	this.client.queueServiceActionCall("user", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "userId", userId);
+	this.client.queueServiceActionCall("user", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUserService.prototype.listAction = function(callback, filter, pager)
+VidiunUserService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("user", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("user", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaUserService.prototype.notifyBan = function(callback, userId)
+VidiunUserService.prototype.notifyBan = function(callback, userId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "userId", userId);
-	this.client.queueServiceActionCall("user", "notifyBan", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "userId", userId);
+	this.client.queueServiceActionCall("user", "notifyBan", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaWidgetService(client)
+function VidiunWidgetService(client)
 {
 	this.init(client);
 }
 
-KalturaWidgetService.prototype = new KalturaServiceBase();
+VidiunWidgetService.prototype = new VidiunServiceBase();
 
-KalturaWidgetService.prototype.add = function(callback, widget)
+VidiunWidgetService.prototype.add = function(callback, widget)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "widget", widget.toParams());
-	this.client.queueServiceActionCall("widget", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "widget", widget.toParams());
+	this.client.queueServiceActionCall("widget", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaWidgetService.prototype.update = function(callback, id, widget)
+VidiunWidgetService.prototype.update = function(callback, id, widget)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.addParam(kparams, "widget", widget.toParams());
-	this.client.queueServiceActionCall("widget", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.addParam(vparams, "widget", widget.toParams());
+	this.client.queueServiceActionCall("widget", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaWidgetService.prototype.get = function(callback, id)
+VidiunWidgetService.prototype.get = function(callback, id)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "id", id);
-	this.client.queueServiceActionCall("widget", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "id", id);
+	this.client.queueServiceActionCall("widget", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaWidgetService.prototype.cloneAction = function(callback, widget)
+VidiunWidgetService.prototype.cloneAction = function(callback, widget)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "widget", widget.toParams());
-	this.client.queueServiceActionCall("widget", "clone", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "widget", widget.toParams());
+	this.client.queueServiceActionCall("widget", "clone", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaWidgetService.prototype.listAction = function(callback, filter, pager)
+VidiunWidgetService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("widget", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("widget", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaXInternalService(client)
+function VidiunXInternalService(client)
 {
 	this.init(client);
 }
 
-KalturaXInternalService.prototype = new KalturaServiceBase();
+VidiunXInternalService.prototype = new VidiunServiceBase();
 
-KalturaXInternalService.prototype.xAddBulkDownload = function(callback, entryIds, flavorParamsId)
+VidiunXInternalService.prototype.xAddBulkDownload = function(callback, entryIds, flavorParamsId)
 {
 	if(!flavorParamsId)
 		flavorParamsId = "";
 
-	kparams = new Object();
-	this.client.addParam(kparams, "entryIds", entryIds);
-	this.client.addParam(kparams, "flavorParamsId", flavorParamsId);
-	this.client.queueServiceActionCall("xinternal", "xAddBulkDownload", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "entryIds", entryIds);
+	this.client.addParam(vparams, "flavorParamsId", flavorParamsId);
+	this.client.queueServiceActionCall("xinternal", "xAddBulkDownload", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaSystemUserService(client)
+function VidiunSystemUserService(client)
 {
 	this.init(client);
 }
 
-KalturaSystemUserService.prototype = new KalturaServiceBase();
+VidiunSystemUserService.prototype = new VidiunServiceBase();
 
-KalturaSystemUserService.prototype.verifyPassword = function(callback, email, password)
+VidiunSystemUserService.prototype.verifyPassword = function(callback, email, password)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "email", email);
-	this.client.addParam(kparams, "password", password);
-	this.client.queueServiceActionCall("systemuser", "verifyPassword", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "email", email);
+	this.client.addParam(vparams, "password", password);
+	this.client.queueServiceActionCall("systemuser", "verifyPassword", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSystemUserService.prototype.generateNewPassword = function(callback)
+VidiunSystemUserService.prototype.generateNewPassword = function(callback)
 {
 
-	kparams = new Object();
-	this.client.queueServiceActionCall("systemuser", "generateNewPassword", kparams);
+	vparams = new Object();
+	this.client.queueServiceActionCall("systemuser", "generateNewPassword", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSystemUserService.prototype.setNewPassword = function(callback, userId, password)
+VidiunSystemUserService.prototype.setNewPassword = function(callback, userId, password)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "userId", userId);
-	this.client.addParam(kparams, "password", password);
-	this.client.queueServiceActionCall("systemuser", "setNewPassword", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "userId", userId);
+	this.client.addParam(vparams, "password", password);
+	this.client.queueServiceActionCall("systemuser", "setNewPassword", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSystemUserService.prototype.add = function(callback, systemUser)
+VidiunSystemUserService.prototype.add = function(callback, systemUser)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "systemUser", systemUser.toParams());
-	this.client.queueServiceActionCall("systemuser", "add", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "systemUser", systemUser.toParams());
+	this.client.queueServiceActionCall("systemuser", "add", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSystemUserService.prototype.get = function(callback, userId)
+VidiunSystemUserService.prototype.get = function(callback, userId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "userId", userId);
-	this.client.queueServiceActionCall("systemuser", "get", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "userId", userId);
+	this.client.queueServiceActionCall("systemuser", "get", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSystemUserService.prototype.getByEmail = function(callback, email)
+VidiunSystemUserService.prototype.getByEmail = function(callback, email)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "email", email);
-	this.client.queueServiceActionCall("systemuser", "getByEmail", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "email", email);
+	this.client.queueServiceActionCall("systemuser", "getByEmail", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSystemUserService.prototype.update = function(callback, userId, systemUser)
+VidiunSystemUserService.prototype.update = function(callback, userId, systemUser)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "userId", userId);
-	this.client.addParam(kparams, "systemUser", systemUser.toParams());
-	this.client.queueServiceActionCall("systemuser", "update", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "userId", userId);
+	this.client.addParam(vparams, "systemUser", systemUser.toParams());
+	this.client.queueServiceActionCall("systemuser", "update", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSystemUserService.prototype.delete = function(callback, userId)
+VidiunSystemUserService.prototype.delete = function(callback, userId)
 {
 
-	kparams = new Object();
-	this.client.addParam(kparams, "userId", userId);
-	this.client.queueServiceActionCall("systemuser", "delete", kparams);
+	vparams = new Object();
+	this.client.addParam(vparams, "userId", userId);
+	this.client.queueServiceActionCall("systemuser", "delete", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-KalturaSystemUserService.prototype.listAction = function(callback, filter, pager)
+VidiunSystemUserService.prototype.listAction = function(callback, filter, pager)
 {
 	if(!filter)
 		filter = null;
 	if(!pager)
 		pager = null;
 
-	kparams = new Object();
+	vparams = new Object();
 	if (filter != null)
-		this.client.addParam(kparams, "filter", filter.toParams());
+		this.client.addParam(vparams, "filter", filter.toParams());
 	if (pager != null)
-		this.client.addParam(kparams, "pager", pager.toParams());
-	this.client.queueServiceActionCall("systemuser", "list", kparams);
+		this.client.addParam(vparams, "pager", pager.toParams());
+	this.client.queueServiceActionCall("systemuser", "list", vparams);
 	if (!this.client.isMultiRequest())
 		this.client.doQueue(callback);
 };
 
-function KalturaClient(config)
+function VidiunClient(config)
 {
 	this.init(config);
 }
 
-KalturaClient.prototype = new KalturaClientBase()
+VidiunClient.prototype = new VidiunClientBase()
 /**
  * Add & Manage Access Controls
  *
- * @var KalturaAccessControlService
+ * @var VidiunAccessControlService
  */
-KalturaClient.prototype.accessControl = null;
+VidiunClient.prototype.accessControl = null;
 
 /**
  * admin console service lets you manage cross partner reports, activity, status and config. 
 	 * 
  *
- * @var KalturaAdminconsoleService
+ * @var VidiunAdminconsoleService
  */
-KalturaClient.prototype.adminconsole = null;
+VidiunClient.prototype.adminconsole = null;
 
 /**
  * Manage details for the administrative user
  *
- * @var KalturaAdminUserService
+ * @var VidiunAdminUserService
  */
-KalturaClient.prototype.adminUser = null;
+VidiunClient.prototype.adminUser = null;
 
 /**
  * Base Entry Service
  *
- * @var KalturaBaseEntryService
+ * @var VidiunBaseEntryService
  */
-KalturaClient.prototype.baseEntry = null;
+VidiunClient.prototype.baseEntry = null;
 
 /**
  * Bulk upload service is used to upload & manage bulk uploads using CSV files
  *
- * @var KalturaBulkUploadService
+ * @var VidiunBulkUploadService
  */
-KalturaClient.prototype.bulkUpload = null;
+VidiunClient.prototype.bulkUpload = null;
 
 /**
  * Add & Manage Categories
  *
- * @var KalturaCategoryService
+ * @var VidiunCategoryService
  */
-KalturaClient.prototype.category = null;
+VidiunClient.prototype.category = null;
 
 /**
  * Add & Manage Conversion Profiles
  *
- * @var KalturaConversionProfileService
+ * @var VidiunConversionProfileService
  */
-KalturaClient.prototype.conversionProfile = null;
+VidiunClient.prototype.conversionProfile = null;
 
 /**
  * Data service lets you manage data content (textual content)
  *
- * @var KalturaDataService
+ * @var VidiunDataService
  */
-KalturaClient.prototype.data = null;
+VidiunClient.prototype.data = null;
 
 /**
  * Retrieve information and invoke actions on Flavor Asset
  *
- * @var KalturaFlavorAssetService
+ * @var VidiunFlavorAssetService
  */
-KalturaClient.prototype.flavorAsset = null;
+VidiunClient.prototype.flavorAsset = null;
 
 /**
  * Add & Manage Flavor Params
  *
- * @var KalturaFlavorParamsService
+ * @var VidiunFlavorParamsService
  */
-KalturaClient.prototype.flavorParams = null;
+VidiunClient.prototype.flavorParams = null;
 
 /**
  * batch service lets you handle different batch process from remote machines.
@@ -9313,165 +9313,165 @@ KalturaClient.prototype.flavorParams = null;
 	 * If an object was aquired and should be returned to the pool in it's initial state - use the FreeExclusiveXX action 
 	 * 
  *
- * @var KalturaJobsService
+ * @var VidiunJobsService
  */
-KalturaClient.prototype.jobs = null;
+VidiunClient.prototype.jobs = null;
 
 /**
  * Media service lets you upload and manage media files (images / videos & audio)
  *
- * @var KalturaMediaService
+ * @var VidiunMediaService
  */
-KalturaClient.prototype.media = null;
+VidiunClient.prototype.media = null;
 
 /**
- * A Mix is an XML unique format invented by Kaltura, it allows the user to create a mix of videos and images, in and out points, transitions, text overlays, soundtrack, effects and much more...
+ * A Mix is an XML unique format invented by Vidiun, it allows the user to create a mix of videos and images, in and out points, transitions, text overlays, soundtrack, effects and much more...
 	 * Mixing service lets you create a new mix, manage its metadata and make basic manipulations.   
  *
- * @var KalturaMixingService
+ * @var VidiunMixingService
  */
-KalturaClient.prototype.mixing = null;
+VidiunClient.prototype.mixing = null;
 
 /**
  * Notification Service
  *
- * @var KalturaNotificationService
+ * @var VidiunNotificationService
  */
-KalturaClient.prototype.notification = null;
+VidiunClient.prototype.notification = null;
 
 /**
  * partner service allows you to change/manage your partner personal details and settings as well
  *
- * @var KalturaPartnerService
+ * @var VidiunPartnerService
  */
-KalturaClient.prototype.partner = null;
+VidiunClient.prototype.partner = null;
 
 /**
  * Playlist service lets you create,manage and play your playlists
 	 * Playlists could be static (containing a fixed list of entries) or dynamic (baseed on a filter)
  *
- * @var KalturaPlaylistService
+ * @var VidiunPlaylistService
  */
-KalturaClient.prototype.playlist = null;
+VidiunClient.prototype.playlist = null;
 
 /**
  * api for getting reports data by the report type and some inputFilter
  *
- * @var KalturaReportService
+ * @var VidiunReportService
  */
-KalturaClient.prototype.report = null;
+VidiunClient.prototype.report = null;
 
 /**
  * Search service allows you to search for media in various media providers
 	 * This service is being used mostly by the CW component
  *
- * @var KalturaSearchService
+ * @var VidiunSearchService
  */
-KalturaClient.prototype.search = null;
+VidiunClient.prototype.search = null;
 
 /**
  * Session service
  *
- * @var KalturaSessionService
+ * @var VidiunSessionService
  */
-KalturaClient.prototype.session = null;
+VidiunClient.prototype.session = null;
 
 /**
  * Stats Service
  *
- * @var KalturaStatsService
+ * @var VidiunStatsService
  */
-KalturaClient.prototype.stats = null;
+VidiunClient.prototype.stats = null;
 
 /**
  * Add & Manage Syndication Feeds
  *
- * @var KalturaSyndicationFeedService
+ * @var VidiunSyndicationFeedService
  */
-KalturaClient.prototype.syndicationFeed = null;
+VidiunClient.prototype.syndicationFeed = null;
 
 /**
  * System service is used for internal system helpers & to retrieve system level information
  *
- * @var KalturaSystemService
+ * @var VidiunSystemService
  */
-KalturaClient.prototype.system = null;
+VidiunClient.prototype.system = null;
 
 /**
  * UiConf service lets you create and manage your UIConfs for the various flash components
-	 * This service is used by the KMC-ApplicationStudio
+	 * This service is used by the VMC-ApplicationStudio
  *
- * @var KalturaUiConfService
+ * @var VidiunUiConfService
  */
-KalturaClient.prototype.uiConf = null;
+VidiunClient.prototype.uiConf = null;
 
 /**
  * Upload service is used to upload files and get the token that can be later used as a reference to the uploaded file
 	 * 
  *
- * @var KalturaUploadService
+ * @var VidiunUploadService
  */
-KalturaClient.prototype.upload = null;
+VidiunClient.prototype.upload = null;
 
 /**
- * Manage partner users on Kaltura's side
-	 * The userId in kaltura is the unique Id in the partner's system, and the [partnerId,Id] couple are unique key in kaltura's DB
+ * Manage partner users on Vidiun's side
+	 * The userId in vidiun is the unique Id in the partner's system, and the [partnerId,Id] couple are unique key in vidiun's DB
  *
- * @var KalturaUserService
+ * @var VidiunUserService
  */
-KalturaClient.prototype.user = null;
+VidiunClient.prototype.user = null;
 
 /**
  * widget service for full widget management
  *
- * @var KalturaWidgetService
+ * @var VidiunWidgetService
  */
-KalturaClient.prototype.widget = null;
+VidiunClient.prototype.widget = null;
 
 /**
- * Internal Service is used for actions that are used internally in Kaltura applications and might be changed in the future without any notice.
+ * Internal Service is used for actions that are used internally in Vidiun applications and might be changed in the future without any notice.
  *
- * @var KalturaXInternalService
+ * @var VidiunXInternalService
  */
-KalturaClient.prototype.xInternal = null;
+VidiunClient.prototype.xInternal = null;
 
 /**
  * System user service
  *
- * @var KalturaSystemUserService
+ * @var VidiunSystemUserService
  */
-KalturaClient.prototype.systemUser = null;
+VidiunClient.prototype.systemUser = null;
 
 
-KalturaClient.prototype.init = function(config)
+VidiunClient.prototype.init = function(config)
 {
-	KalturaClientBase.prototype.init.apply(this, arguments);
-	this.accessControl = new KalturaAccessControlService(this);
-	this.adminconsole = new KalturaAdminconsoleService(this);
-	this.adminUser = new KalturaAdminUserService(this);
-	this.baseEntry = new KalturaBaseEntryService(this);
-	this.bulkUpload = new KalturaBulkUploadService(this);
-	this.category = new KalturaCategoryService(this);
-	this.conversionProfile = new KalturaConversionProfileService(this);
-	this.data = new KalturaDataService(this);
-	this.flavorAsset = new KalturaFlavorAssetService(this);
-	this.flavorParams = new KalturaFlavorParamsService(this);
-	this.jobs = new KalturaJobsService(this);
-	this.media = new KalturaMediaService(this);
-	this.mixing = new KalturaMixingService(this);
-	this.notification = new KalturaNotificationService(this);
-	this.partner = new KalturaPartnerService(this);
-	this.playlist = new KalturaPlaylistService(this);
-	this.report = new KalturaReportService(this);
-	this.search = new KalturaSearchService(this);
-	this.session = new KalturaSessionService(this);
-	this.stats = new KalturaStatsService(this);
-	this.syndicationFeed = new KalturaSyndicationFeedService(this);
-	this.system = new KalturaSystemService(this);
-	this.uiConf = new KalturaUiConfService(this);
-	this.upload = new KalturaUploadService(this);
-	this.user = new KalturaUserService(this);
-	this.widget = new KalturaWidgetService(this);
-	this.xInternal = new KalturaXInternalService(this);
-	this.systemUser = new KalturaSystemUserService(this);
+	VidiunClientBase.prototype.init.apply(this, arguments);
+	this.accessControl = new VidiunAccessControlService(this);
+	this.adminconsole = new VidiunAdminconsoleService(this);
+	this.adminUser = new VidiunAdminUserService(this);
+	this.baseEntry = new VidiunBaseEntryService(this);
+	this.bulkUpload = new VidiunBulkUploadService(this);
+	this.category = new VidiunCategoryService(this);
+	this.conversionProfile = new VidiunConversionProfileService(this);
+	this.data = new VidiunDataService(this);
+	this.flavorAsset = new VidiunFlavorAssetService(this);
+	this.flavorParams = new VidiunFlavorParamsService(this);
+	this.jobs = new VidiunJobsService(this);
+	this.media = new VidiunMediaService(this);
+	this.mixing = new VidiunMixingService(this);
+	this.notification = new VidiunNotificationService(this);
+	this.partner = new VidiunPartnerService(this);
+	this.playlist = new VidiunPlaylistService(this);
+	this.report = new VidiunReportService(this);
+	this.search = new VidiunSearchService(this);
+	this.session = new VidiunSessionService(this);
+	this.stats = new VidiunStatsService(this);
+	this.syndicationFeed = new VidiunSyndicationFeedService(this);
+	this.system = new VidiunSystemService(this);
+	this.uiConf = new VidiunUiConfService(this);
+	this.upload = new VidiunUploadService(this);
+	this.user = new VidiunUserService(this);
+	this.widget = new VidiunWidgetService(this);
+	this.xInternal = new VidiunXInternalService(this);
+	this.systemUser = new VidiunSystemUserService(this);
 }

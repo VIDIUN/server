@@ -1,30 +1,30 @@
 <?php
-//include_once("KDLMediaInfoLoader.php");
-//include_once('KDLProcessor.php');
-//include_once 'KDLUtils.php';
+//include_once("VDLMediaInfoLoader.php");
+//include_once('VDLProcessor.php');
+//include_once 'VDLUtils.php';
 
 	/* ===========================
-	 * KDLWrap
+	 * VDLWrap
 	 */
-class KDLWrap
+class VDLWrap
 {
 	public 	$_targetList = array();
 	public	$_errors = array();
 	public	$_warnings = array();
 	public  $_rv=true;
 
-	static $TranscodersCdl2Kdl = array(
-		conversionEngineType::KALTURA_COM=>KDLTranscoders::KALTURA,
-		conversionEngineType::ON2=>KDLTranscoders::ON2,
-		conversionEngineType::FFMPEG=>KDLTranscoders::FFMPEG,
-		conversionEngineType::MENCODER=>KDLTranscoders::MENCODER,
-		conversionEngineType::ENCODING_COM=>KDLTranscoders::ENCODING_COM,
-		conversionEngineType::FFMPEG_AUX=>KDLTranscoders::FFMPEG_AUX,
-		conversionEngineType::FFMPEG_VP8=>KDLTranscoders::FFMPEG_VP8,
-		conversionEngineType::EXPRESSION_ENCODER3=>KDLTranscoders::EE3,
+	static $TranscodersCdl2Vdl = array(
+		conversionEngineType::VIDIUN_COM=>VDLTranscoders::VIDIUN,
+		conversionEngineType::ON2=>VDLTranscoders::ON2,
+		conversionEngineType::FFMPEG=>VDLTranscoders::FFMPEG,
+		conversionEngineType::MENCODER=>VDLTranscoders::MENCODER,
+		conversionEngineType::ENCODING_COM=>VDLTranscoders::ENCODING_COM,
+		conversionEngineType::FFMPEG_AUX=>VDLTranscoders::FFMPEG_AUX,
+		conversionEngineType::FFMPEG_VP8=>VDLTranscoders::FFMPEG_VP8,
+		conversionEngineType::EXPRESSION_ENCODER3=>VDLTranscoders::EE3,
 			
-		"quickTimeTools.QuickTimeTools"=>KDLTranscoders::QUICK_TIME_PLAYER_TOOLS,
-		//CHUNKED_FFMPEG is a special case, it is not porcessed (yet) by the KDL
+		"quickTimeTools.QuickTimeTools"=>VDLTranscoders::QUICK_TIME_PLAYER_TOOLS,
+		//CHUNKED_FFMPEG is a special case, it is not porcessed (yet) by the VDL
 		conversionEngineType::CHUNKED_FFMPEG=>conversionEngineType::CHUNKED_FFMPEG,
 	);
 	
@@ -33,12 +33,12 @@ class KDLWrap
 	 */
 	public static function CDLGenerateTargetFlavors($cdlMediaInfo=null, $cdlFlavorList)
 	{
-		$kdlWrap = new KDLWrap();
+		$vdlWrap = new VDLWrap();
 		if(!isset($cdlMediaInfo) || is_array($cdlMediaInfo)) {
-			return $kdlWrap->generateTargetFlavors(null, $cdlFlavorList);
+			return $vdlWrap->generateTargetFlavors(null, $cdlFlavorList);
 		}
 		else if(get_class($cdlMediaInfo)=='mediaInfo') {
-			return $kdlWrap->generateTargetFlavors($cdlMediaInfo, $cdlFlavorList);
+			return $vdlWrap->generateTargetFlavors($cdlMediaInfo, $cdlFlavorList);
 		}
 		else {
 			throw new Exception("Bad argument (".get_class($cdlMediaInfo)."), should be mediaInfo class");
@@ -50,13 +50,13 @@ class KDLWrap
 	 */
 	public static function CDLGenerateTargetFlavorsCmdLinesOnly($fileSizeKb, $cdlFlavorList)
 	{
-		$kdlWrap = new KDLWrap();
-		if($fileSizeKb<KDLSanityLimits::MinFileSize) {
-			$kdlWrap->_rv = false;
-			$kdlWrap->_errors[KDLConstants::ContainerIndex][] = KDLErrors::ToString(KDLErrors::SanityInvalidFileSize, $fileSizeKb);
-			return $kdlWrap;
+		$vdlWrap = new VDLWrap();
+		if($fileSizeKb<VDLSanityLimits::MinFileSize) {
+			$vdlWrap->_rv = false;
+			$vdlWrap->_errors[VDLConstants::ContainerIndex][] = VDLErrors::ToString(VDLErrors::SanityInvalidFileSize, $fileSizeKb);
+			return $vdlWrap;
 		}
-		return $kdlWrap->generateTargetFlavors(null, $cdlFlavorList);
+		return $vdlWrap->generateTargetFlavors(null, $cdlFlavorList);
 	}
 	
 	/* ------------------------------
@@ -64,28 +64,28 @@ class KDLWrap
 	 */
 	public static function GenerateIntermediateSource(mediaInfo $cdlMediaInfo, $cdlFlavorList=null)
 	{
-		$mediaSet = new KDLMediaDataSet();
+		$mediaSet = new VDLMediaDataSet();
 		self::ConvertMediainfoCdl2Mediadataset($cdlMediaInfo, $mediaSet);
 		
-		KalturaLog::log( "...S-->".$mediaSet->ToString());
+		VidiunLog::log( "...S-->".$mediaSet->ToString());
 
 		$profile = null;
 		if(isset($cdlFlavorList)) {
-			$profile = new KDLProfile();
+			$profile = new VDLProfile();
 			foreach($cdlFlavorList as $cdlFlavor) {
-				$kdlFlavor = self::ConvertFlavorCdl2Kdl($cdlFlavor);
-				$profile->_flavors[] = $kdlFlavor;
-				KalturaLog::log( "...F-->".$kdlFlavor->ToString());
+				$vdlFlavor = self::ConvertFlavorCdl2Vdl($cdlFlavor);
+				$profile->_flavors[] = $vdlFlavor;
+				VidiunLog::log( "...F-->".$vdlFlavor->ToString());
 			}
 		}
 		
-		$dlPrc = new KDLProcessor();
+		$dlPrc = new VDLProcessor();
 		
 		$interSrc = $dlPrc->GenerateIntermediateSource($mediaSet, $profile);
 		if(!isset($interSrc))
 			return null;
 		
-		return self::ConvertFlavorKdl2Cdl($interSrc);
+		return self::ConvertFlavorVdl2Cdl($interSrc);
 	}
 	
 	/* ------------------------------
@@ -94,43 +94,43 @@ class KDLWrap
 	private function generateTargetFlavors(mediaInfo $cdlMediaInfo=null, $cdlFlavorList)
 	{
 
-		$mediaSet = new KDLMediaDataSet();
+		$mediaSet = new VDLMediaDataSet();
 		if($cdlMediaInfo!=null) {
 			self::ConvertMediainfoCdl2Mediadataset($cdlMediaInfo, $mediaSet);
 		}
-		KalturaLog::log( "...S-->".$mediaSet->ToString());
+		VidiunLog::log( "...S-->".$mediaSet->ToString());
 		
-		$profile = new KDLProfile();
+		$profile = new VDLProfile();
 			/*
 			 * TEMPORARY - Look for WV cases in order to disable duplicate GOP generation. After a while this will be the default behaviour  
 			 */
 		$isForWideVine = false;
 		foreach($cdlFlavorList as $cdlFlavor) {
 
-			$kdlFlavor = self::ConvertFlavorCdl2Kdl($cdlFlavor);
-			if ($kdlFlavor->_errors)
+			$vdlFlavor = self::ConvertFlavorCdl2Vdl($cdlFlavor);
+			if ($vdlFlavor->_errors)
 			{
 				$this->_rv = false;
 				return $this;
 			}
 			
-			if(isset($kdlFlavor->_video) && preg_match('/widevine/', strtolower($kdlFlavor->_tags), $matches)){
+			if(isset($vdlFlavor->_video) && preg_match('/widevine/', strtolower($vdlFlavor->_tags), $matches)){
 				$isForWideVine = true;
 			}
-			$profile->_flavors[] = $kdlFlavor;
-			KalturaLog::log( "...F-->".$kdlFlavor->ToString());
+			$profile->_flavors[] = $vdlFlavor;
+			VidiunLog::log( "...F-->".$vdlFlavor->ToString());
 		}
 
 		if($isForWideVine==true) {
-			foreach($profile->_flavors as $k=>$kdlFlavor) {
-				if(isset($profile->_flavors[$k]->_video))
-					$profile->_flavors[$k]->_video->_forWideVine = true;
+			foreach($profile->_flavors as $v=>$vdlFlavor) {
+				if(isset($profile->_flavors[$v]->_video))
+					$profile->_flavors[$v]->_video->_forWideVine = true;
 			}
 		}
 
 		$trgList = array();
 		{
-			$dlPrc = new KDLProcessor();
+			$dlPrc = new VDLProcessor();
 
 			$dlPrc->Generate($mediaSet, $profile, $trgList);
 			$this->_errors   = $this->_errors   + $dlPrc->get_errors();
@@ -143,11 +143,11 @@ class KDLWrap
 
 		foreach ($trgList as $trg)
 		{
-			KalturaLog::log("...T-->" . $trg->ToString());
+			VidiunLog::log("...T-->" . $trg->ToString());
 			/*
-			 *  NOT COMMITED, to check with KDLFalvor
+			 *  NOT COMMITED, to check with VDLFalvor
 			 *
-		if($trg->IsValid()==false && ($trg->_flags & KDLFlavor::MissingContentNonComplyFlagBit)) {
+		if($trg->IsValid()==false && ($trg->_flags & VDLFlavor::MissingContentNonComplyFlagBit)) {
 			continue;
 		}
 		*/
@@ -156,7 +156,7 @@ class KDLWrap
 			 */
 			if ($trg->_cdlObject->getChunkedEncodeMode() == 1) {
 				$tmpTrans = clone $trg->_transcoders[0];
-				if($tmpTrans->_id==KDLTranscoders::FFMPEG) {
+				if($tmpTrans->_id==VDLTranscoders::FFMPEG) {
 					/*
 					 * Check compliance to Chunked Encoding requirements
 					 */
@@ -168,23 +168,23 @@ class KDLWrap
 					$duration = isset($trg->_container->_duration)? round($trg->_container->_duration/1000): null;;
 					$height = isset($trg->_video->_height)? $trg->_video->_height: null;
 					$msgStr = null;
-					$rv=KChunkedEncode::verifySupport($vcodec,$acodec,$format,$fps,$gop,$duration,$height,$msgStr);
+					$rv=VChunkedEncode::verifySupport($vcodec,$acodec,$format,$fps,$gop,$duration,$height,$msgStr);
 					if($rv===true){
 						$tmpTrans->_id=conversionEngineType::CHUNKED_FFMPEG;
 						array_unshift($trg->_transcoders,$tmpTrans);
 					}
 					else {
-						KalturaLog::log($msgStr);
+						VidiunLog::log($msgStr);
 					}
 				}
 			}
 
-			$cdlFlvrOut = self::ConvertFlavorKdl2Cdl($trg);
+			$cdlFlvrOut = self::ConvertFlavorVdl2Cdl($trg);
 			// Handle audio streams for ffmpeg command in case we are handling trimming a source with flavor_params -1
 			// in case we need to handle multiple audio streams we need to remove the "-map_metadata -1" command
 			// and replace it with the language mapping for the correct audio streams
 			// if only audio streams exist without video we ignore the video mapping
-			if (($cdlFlvrOut->getFlavorParamsId() == kClipAttributes::SYSTEM_DEFAULT_FLAVOR_PARAMS_ID || $cdlFlvrOut->getFlavorParamsId() === assetParamsPeer::TEMP_FLAVOR_PARAM_ID)
+			if (($cdlFlvrOut->getFlavorParamsId() == vClipAttributes::SYSTEM_DEFAULT_FLAVOR_PARAMS_ID || $cdlFlvrOut->getFlavorParamsId() === assetParamsPeer::TEMP_FLAVOR_PARAM_ID)
 				&& !is_null($cdlMediaInfo))
 			{
 				$contentStreams = json_decode($cdlMediaInfo->getContentStreams(), true);
@@ -210,7 +210,7 @@ class KDLWrap
 						/***
 						 * assetParamsPeer::TEMP_FLAVOR_PARAM_ID (-2 ) is a temporary flvor param id of type mpegts
 						 * we created it for clip \ concat flow only and we do not save it to the DB
-						 * in this flavor we do not have the -map_metadata -1(as it is added in KDLOperatorFfmpeg2_1_3)
+						 * in this flavor we do not have the -map_metadata -1(as it is added in VDLOperatorFfmpeg2_1_3)
 						 *  but we still want to add the map section to the ffmpeg engine so we will not loose multi audio
 						 * as such we concat to the '-f mpegts' the audio\video mapping
 						 */
@@ -238,28 +238,28 @@ class KDLWrap
 	 */
 	public static function CDLValidateProduct(mediaInfo $cdlSourceMediaInfo=null, flavorParamsOutput $cdlTarget, mediaInfo $cdlProductMediaInfo, $conversionEngine=null)
 	{
-		$kdlProduct = new KDLFlavor();
-		KDLWrap::ConvertMediainfoCdl2Mediadataset($cdlProductMediaInfo, $kdlProduct);
-		$kdlTarget = KDLWrap::ConvertFlavorCdl2Kdl($cdlTarget);
-		$kdlSource = new KDLFlavor();
+		$vdlProduct = new VDLFlavor();
+		VDLWrap::ConvertMediainfoCdl2Mediadataset($cdlProductMediaInfo, $vdlProduct);
+		$vdlTarget = VDLWrap::ConvertFlavorCdl2Vdl($cdlTarget);
+		$vdlSource = new VDLFlavor();
 		// Do not run product validation when the source is undefined
 		// in most cases - ForceCommand case
 		if($cdlSourceMediaInfo){
-			KDLWrap::ConvertMediainfoCdl2Mediadataset($cdlSourceMediaInfo, $kdlSource);
-			$kdlTarget->ValidateProduct($kdlSource, $kdlProduct);
+			VDLWrap::ConvertMediainfoCdl2Mediadataset($cdlSourceMediaInfo, $vdlSource);
+			$vdlTarget->ValidateProduct($vdlSource, $vdlProduct);
 		}
 		else {
 			//In case we have no source media info.
 			//This was added to fix cases where assets with size 0 were marked as ready. no "mediainfo" assets did not go through validation and got ready.
 			//The addition of the first validation indeed caused ffmpeg flow to fail (the firs part of the volition before the OR) but the meencoder generated invalid files.  
 			//The second part of the OR comes to handle cases were meencoder created faulty gray files that had only video/audio.
-			if(($kdlProduct->_video===null && $kdlProduct->_audio===null) 
-			|| (isset($conversionEngine) && $conversionEngine == conversionEngineType::MENCODER && !($kdlProduct->_video === null && $kdlProduct->_audio===null))) { 
+			if(($vdlProduct->_video===null && $vdlProduct->_audio===null) 
+			|| (isset($conversionEngine) && $conversionEngine == conversionEngineType::MENCODER && !($vdlProduct->_video === null && $vdlProduct->_audio===null))) { 
 				// "Invalid File - No media content.";
-				$kdlProduct->_errors[KDLConstants::ContainerIndex][] = KDLErrors::ToString(KDLErrors::NoValidMediaStream);
+				$vdlProduct->_errors[VDLConstants::ContainerIndex][] = VDLErrors::ToString(VDLErrors::NoValidMediaStream);
 			}
 		}
-		$product = KDLWrap::ConvertFlavorKdl2Cdl($kdlProduct);
+		$product = VDLWrap::ConvertFlavorVdl2Cdl($vdlProduct);
 		return $product;
 	}
 
@@ -269,16 +269,16 @@ class KDLWrap
 	public static function CDLProceessFlavorsForCollection($cdlFlavorList)
 	{
 
-		$kdlFlavorList = array();
+		$vdlFlavorList = array();
 		foreach($cdlFlavorList as $cdlFlavor) {
-			$kdlFlavor = KDLWrap::ConvertFlavorCdl2Kdl($cdlFlavor);
-			$kdlFlavorList[]=$kdlFlavor;
+			$vdlFlavor = VDLWrap::ConvertFlavorCdl2Vdl($cdlFlavor);
+			$vdlFlavorList[]=$vdlFlavor;
 		}
 		
-		$xml=KDLProcessor::ProceessFlavorsForCollection($kdlFlavorList);
-		KalturaLog::log(__METHOD__."-->".$xml."<--");
-		foreach ($kdlFlavorList as $kdlFlavor){
-			$kdlFlavor->_cdlObject->setVideoBitrate($kdlFlavor->_video->_bitRate);
+		$xml=VDLProcessor::ProceessFlavorsForCollection($vdlFlavorList);
+		VidiunLog::log(__METHOD__."-->".$xml."<--");
+		foreach ($vdlFlavorList as $vdlFlavor){
+			$vdlFlavor->_cdlObject->setVideoBitrate($vdlFlavor->_video->_bitRate);
 		}
 		return $xml;
 	}
@@ -288,9 +288,9 @@ class KDLWrap
 	 */
 	public static function CDLMediaInfo2Tags(mediaInfo $cdlMediaInfo, $tagList) 
 	{
-		$mediaSet = new KDLMediaDataSet();
+		$mediaSet = new VDLMediaDataSet();
 		self::ConvertMediainfoCdl2Mediadataset($cdlMediaInfo, $mediaSet);
-		KalturaLog::log( "...S-->".$mediaSet->ToString());
+		VidiunLog::log( "...S-->".$mediaSet->ToString());
 		$tagsOut = array();
 		$tagsOut = $mediaSet->ToTags($tagList);
 		return $tagsOut;
@@ -302,9 +302,9 @@ class KDLWrap
 	public static function CDLIsFLV(mediaInfo $cdlMediaInfo) 
 	{
 		$tagList[] = "flv";
-		$mediaSet = new KDLMediaDataSet();
+		$mediaSet = new VDLMediaDataSet();
 		self::ConvertMediainfoCdl2Mediadataset($cdlMediaInfo, $mediaSet);
-		KalturaLog::log("...S-->".$mediaSet->ToString());
+		VidiunLog::log("...S-->".$mediaSet->ToString());
 		$tagsOut = array();
 		$tagsOut = $mediaSet->ToTags($tagList);
 		if(count($tagsOut)==1) {
@@ -316,9 +316,9 @@ class KDLWrap
 	}
 	
 	/* ------------------------------
-	 * function ConvertFlavorKdl2Cdl
+	 * function ConvertFlavorVdl2Cdl
 	 */
-	public static function ConvertFlavorKdl2Cdl(KDLFlavor $target){
+	public static function ConvertFlavorVdl2Cdl(VDLFlavor $target){
 		$flavor = new flavorParamsOutputWrap();
 
 		$flavor->setFlavorParamsId($target->_id);
@@ -418,9 +418,9 @@ class KDLWrap
 		if($target->_pdf)
 			$flavor->putInCustomData('readonly',$target->_pdf->_readonly);
 		
-		$cdlOprSets = KDLWrap::convertOperatorsKdl2Cdl($target->_transcoders);
+		$cdlOprSets = VDLWrap::convertOperatorsVdl2Cdl($target->_transcoders);
 		if($target->_engineVersion==1) {
-			KalturaLog::log("\noperators==>\n".print_r($cdlOprSets,true));
+			VidiunLog::log("\noperators==>\n".print_r($cdlOprSets,true));
 			$flavor->setOperators($cdlOprSets->getSerialized());
 			$flavor->setEngineVersion(1);
 		}
@@ -432,10 +432,10 @@ class KDLWrap
 				$extra = $transObj->_extra;
 	
 					/* -------------------------
-					 * Translate KDL transcoders enums to CDL
+					 * Translate VDL transcoders enums to CDL
 					 */
 				$str = null;
-				$cdlTrnsId=array_search($transObj->_id,self::$TranscodersCdl2Kdl);
+				$cdlTrnsId=array_search($transObj->_id,self::$TranscodersCdl2Vdl);
 				if($cdlTrnsId!==false){
 					$str = $cdlTrnsId;
 					$commandLines[$cdlTrnsId]=$transObj->_cmd;
@@ -445,7 +445,7 @@ class KDLWrap
 				if($flavor->getFormat()=="mp4" 
 				&& in_array($cdlTrnsId, array(conversionEngineType::FFMPEG, conversionEngineType::CHUNKED_FFMPEG, 
 							      conversionEngineType::FFMPEG_AUX, conversionEngineType::FFMPEG_VP8, conversionEngineType::MENCODER))){
-					$fsAddonStr = kConvertJobData::CONVERSION_MILTI_COMMAND_LINE_SEPERATOR.kConvertJobData::CONVERSION_FAST_START_SIGN;
+					$fsAddonStr = vConvertJobData::CONVERSION_MILTI_COMMAND_LINE_SEPERATOR.vConvertJobData::CONVERSION_FAST_START_SIGN;
 					$commandLines[$cdlTrnsId].=$fsAddonStr;
 				}
 				
@@ -471,33 +471,33 @@ class KDLWrap
 		
 		//echo "flavor "; print_r($flavor);
 		
-		//KalturaLog::log(__METHOD__."\nflavorOutputParams==>\n".print_r($flavor,true));
+		//VidiunLog::log(__METHOD__."\nflavorOutputParams==>\n".print_r($flavor,true));
 		return $flavor;
 	}
 	
 	/* ------------------------------
-	 * function ConvertFlavorCdl2Kdl
+	 * function ConvertFlavorCdl2Vdl
 	 */
-	public static function ConvertFlavorCdl2Kdl($cdlFlavor)
+	public static function ConvertFlavorCdl2Vdl($cdlFlavor)
 	{
-		$kdlFlavor = new KDLFlavor();
+		$vdlFlavor = new VDLFlavor();
 		
-		$kdlFlavor->_name = $cdlFlavor->getName();
-		$kdlFlavor->_id = $cdlFlavor->getId();
-		$kdlFlavor->_type = $cdlFlavor->getType();
-		$kdlFlavor->_tags = $cdlFlavor->getTags();
+		$vdlFlavor->_name = $cdlFlavor->getName();
+		$vdlFlavor->_id = $cdlFlavor->getId();
+		$vdlFlavor->_type = $cdlFlavor->getType();
+		$vdlFlavor->_tags = $cdlFlavor->getTags();
 		if($cdlFlavor instanceof flavorParams)
 		{ 
-			$kdlFlavor->_clipStart = $cdlFlavor->getClipOffset();
-			$kdlFlavor->_clipDur = $cdlFlavor->getClipDuration();
+			$vdlFlavor->_clipStart = $cdlFlavor->getClipOffset();
+			$vdlFlavor->_clipDur = $cdlFlavor->getClipDuration();
 /**/
 			$multiStream = $cdlFlavor->getMultiStream();
 			if(isset($multiStream)) {
 						//Sample json string: {"detect":"auto","audio":{"mapping":[1,2]}}
 				$fromJson = json_decode($multiStream);
-				$kdlFlavor->_multiStream = isset($fromJson)? $fromJson: null;
+				$vdlFlavor->_multiStream = isset($fromJson)? $fromJson: null;
 			}
-			$kdlFlavor->_optimizationPolicy = $cdlFlavor->getOptimizationPolicy();
+			$vdlFlavor->_optimizationPolicy = $cdlFlavor->getOptimizationPolicy();
 			/*
 			 * 'IsEncrypted' was switched from true/false flag vals,
 			 * to 'mode' values 
@@ -507,67 +507,67 @@ class KDLWrap
 			 */
 			if(($tmpEncrypted=$cdlFlavor->getIsEncrypted())){
 				if($tmpEncrypted===true)
-					$kdlFlavor->_isEncrypted = 1; 
+					$vdlFlavor->_isEncrypted = 1; 
 				else if($tmpEncrypted>0)
-					$kdlFlavor->_isEncrypted = $tmpEncrypted;
+					$vdlFlavor->_isEncrypted = $tmpEncrypted;
 			}
 		}
 		else if($cdlFlavor instanceof flavorParamsOutput){
-			$kdlFlavor->_clipStart = $cdlFlavor->getClipOffset();
-			$kdlFlavor->_clipDur = $cdlFlavor->getClipDuration();		
+			$vdlFlavor->_clipStart = $cdlFlavor->getClipOffset();
+			$vdlFlavor->_clipDur = $cdlFlavor->getClipDuration();		
 		}
 		
-		$kdlFlavor->_cdlObject = $cdlFlavor;
+		$vdlFlavor->_cdlObject = $cdlFlavor;
 			/* 
 			 * Media container initialization
 			 */	
 		{
-			$kdlFlavor->_container = new KDLContainerData();
-			$kdlFlavor->_container->_id=$cdlFlavor->getFormat();
-	//		$kdlFlavor->_container->_duration=$api->getContainerDuration();
-	//		$kdlFlavor->_container->_bitRate=$api->getContainerBitRate();
-	//		$kdlFlavor->_container->_fileSize=$api->getFileSize();
-			if($kdlFlavor->_container->IsDataSet()==false)
-				$kdlFlavor->_container = null;
+			$vdlFlavor->_container = new VDLContainerData();
+			$vdlFlavor->_container->_id=$cdlFlavor->getFormat();
+	//		$vdlFlavor->_container->_duration=$api->getContainerDuration();
+	//		$vdlFlavor->_container->_bitRate=$api->getContainerBitRate();
+	//		$vdlFlavor->_container->_fileSize=$api->getFileSize();
+			if($vdlFlavor->_container->IsDataSet()==false)
+				$vdlFlavor->_container = null;
 		}
 			/* 
 			 * Video stream initialization
 			 */	
 		{
-			$kdlFlavor->_video = new KDLVideoData();
-			$kdlFlavor->_video->_id = $cdlFlavor->getVideoCodec();
-	//		$kdlFlavor->_video->_format = $api->getVideoFormat();
-	//		$kdlFlavor->_video->_duration = $api->getVideoDuration();
-			$kdlFlavor->_video->_bitRate = $cdlFlavor->getVideoBitRate();
-			$kdlFlavor->_video->_width = $cdlFlavor->getWidth();
-			$kdlFlavor->_video->_height = $cdlFlavor->getHeight();
-			$kdlFlavor->_video->_frameRate = $cdlFlavor->getFrameRate();
-			$kdlFlavor->_video->_gop = $cdlFlavor->getGopSize();
-			$kdlFlavor->_isTwoPass = $cdlFlavor->getTwoPass();
-			$kdlFlavor->_video->_arProcessingMode = $cdlFlavor->getAspectRatioProcessingMode();
-			$kdlFlavor->_video->_forceMult16 = $cdlFlavor->getForceFrameToMultiplication16();
+			$vdlFlavor->_video = new VDLVideoData();
+			$vdlFlavor->_video->_id = $cdlFlavor->getVideoCodec();
+	//		$vdlFlavor->_video->_format = $api->getVideoFormat();
+	//		$vdlFlavor->_video->_duration = $api->getVideoDuration();
+			$vdlFlavor->_video->_bitRate = $cdlFlavor->getVideoBitRate();
+			$vdlFlavor->_video->_width = $cdlFlavor->getWidth();
+			$vdlFlavor->_video->_height = $cdlFlavor->getHeight();
+			$vdlFlavor->_video->_frameRate = $cdlFlavor->getFrameRate();
+			$vdlFlavor->_video->_gop = $cdlFlavor->getGopSize();
+			$vdlFlavor->_isTwoPass = $cdlFlavor->getTwoPass();
+			$vdlFlavor->_video->_arProcessingMode = $cdlFlavor->getAspectRatioProcessingMode();
+			$vdlFlavor->_video->_forceMult16 = $cdlFlavor->getForceFrameToMultiplication16();
 			if($cdlFlavor instanceof flavorParams) {
-				$kdlFlavor->_video->_cbr = $cdlFlavor->getVideoConstantBitrate();
-				$kdlFlavor->_video->_bt = $cdlFlavor->getVideoBitrateTolerance();
-				$kdlFlavor->_video->_isGopInSec = $cdlFlavor->getIsGopInSec();
-				$kdlFlavor->_video->_isShrinkFramesizeToSource = !$cdlFlavor->getIsAvoidVideoShrinkFramesizeToSource();
-				$kdlFlavor->_video->_isShrinkBitrateToSource   = !$cdlFlavor->getIsAvoidVideoShrinkBitrateToSource();
-				$kdlFlavor->_video->_isFrameRateForLowBrAppleHls = $cdlFlavor->getIsVideoFrameRateForLowBrAppleHls();
-				$kdlFlavor->_video->_anamorphic = $cdlFlavor->getAnamorphicPixels();
-				$kdlFlavor->_video->_maxFrameRate = $cdlFlavor->getMaxFrameRate();
-//				$kdlFlavor->_video->_isForcedKeyFrames = !$cdlFlavor->getIsAvoidForcedKeyFrames();
+				$vdlFlavor->_video->_cbr = $cdlFlavor->getVideoConstantBitrate();
+				$vdlFlavor->_video->_bt = $cdlFlavor->getVideoBitrateTolerance();
+				$vdlFlavor->_video->_isGopInSec = $cdlFlavor->getIsGopInSec();
+				$vdlFlavor->_video->_isShrinkFramesizeToSource = !$cdlFlavor->getIsAvoidVideoShrinkFramesizeToSource();
+				$vdlFlavor->_video->_isShrinkBitrateToSource   = !$cdlFlavor->getIsAvoidVideoShrinkBitrateToSource();
+				$vdlFlavor->_video->_isFrameRateForLowBrAppleHls = $cdlFlavor->getIsVideoFrameRateForLowBrAppleHls();
+				$vdlFlavor->_video->_anamorphic = $cdlFlavor->getAnamorphicPixels();
+				$vdlFlavor->_video->_maxFrameRate = $cdlFlavor->getMaxFrameRate();
+//				$vdlFlavor->_video->_isForcedKeyFrames = !$cdlFlavor->getIsAvoidForcedKeyFrames();
 					/*
 					 * 'getForcedKeyFramesMode' should be used instead of obsolete 'getIsAvoidForcedKeyFrames' is obsolete.
 					 * But for backward compatibility (till switching of existing non-default settings to new 'getForcedKeyFramesMode'),
 					 * check both fields
 					 */
 				if($cdlFlavor->getIsAvoidForcedKeyFrames()!=0)
-					$kdlFlavor->_video->_forcedKeyFramesMode = 0;
+					$vdlFlavor->_video->_forcedKeyFramesMode = 0;
 				else
-					$kdlFlavor->_video->_forcedKeyFramesMode = $cdlFlavor->getForcedKeyFramesMode();
+					$vdlFlavor->_video->_forcedKeyFramesMode = $cdlFlavor->getForcedKeyFramesMode();
 
-				$kdlFlavor->_video->_isCropIMX = $cdlFlavor->getIsCropIMX();
-				$kdlFlavor->_video->_contentAwareness = $cdlFlavor->getContentAwareness();
+				$vdlFlavor->_video->_isCropIMX = $cdlFlavor->getIsCropIMX();
+				$vdlFlavor->_video->_contentAwareness = $cdlFlavor->getContentAwareness();
 					/*
 					 * Due to multiple WM support,
 					 * the single WM settings is turned into array as well
@@ -577,14 +577,14 @@ class KDLWrap
 					$fromJson = json_decode($watermarkData);
 					if(isset($fromJson)){
 						if(!is_array($fromJson)){
-							$kdlFlavor->_video->_watermarkData = array($fromJson);
+							$vdlFlavor->_video->_watermarkData = array($fromJson);
 						}
 						else {
-							$kdlFlavor->_video->_watermarkData = $fromJson;
+							$vdlFlavor->_video->_watermarkData = $fromJson;
 						}
 					}
 					else
-						$kdlFlavor->_video->_watermarkData = null;
+						$vdlFlavor->_video->_watermarkData = null;
 				}
 				
 					/*
@@ -594,115 +594,115 @@ class KDLWrap
 				if(isset($subtitlesData)) {
 					$fromJson = json_decode($subtitlesData);
 					if(isset($fromJson)){
-						$kdlFlavor->_video->_subtitlesData = $fromJson;
+						$vdlFlavor->_video->_subtitlesData = $fromJson;
 					}
 					else{
-						$kdlFlavor->_video->_subtitlesData = null;
+						$vdlFlavor->_video->_subtitlesData = null;
 					}
 				}
 			}
 			
-			if($kdlFlavor->_video->IsDataSet()==false)
-				$kdlFlavor->_video = null;
+			if($vdlFlavor->_video->IsDataSet()==false)
+				$vdlFlavor->_video = null;
 		}
 		
 			/* 
 			 * Audio stream initialization
 			 */	
 		{
-			$kdlFlavor->_audio = new KDLAudioData();
-			$kdlFlavor->_audio->_id = $cdlFlavor->getAudioCodec();
+			$vdlFlavor->_audio = new VDLAudioData();
+			$vdlFlavor->_audio->_id = $cdlFlavor->getAudioCodec();
 	//		$flavor->_audio->_format = $cdlFlavor->getAudioFormat();
 	//		$flavor->_audio->_duration = $cdlFlavor->getAudioDuration();
-			$kdlFlavor->_audio->_bitRate = $cdlFlavor->getAudioBitRate();
-			$kdlFlavor->_audio->_channels = $cdlFlavor->getAudioChannels();
-			$kdlFlavor->_audio->_sampleRate = $cdlFlavor->getAudioSampleRate();
-			$kdlFlavor->_audio->_resolution = $cdlFlavor->getAudioResolution();
-			if($kdlFlavor->_audio->IsDataSet()==false)
-				$kdlFlavor->_audio = null;
+			$vdlFlavor->_audio->_bitRate = $cdlFlavor->getAudioBitRate();
+			$vdlFlavor->_audio->_channels = $cdlFlavor->getAudioChannels();
+			$vdlFlavor->_audio->_sampleRate = $cdlFlavor->getAudioSampleRate();
+			$vdlFlavor->_audio->_resolution = $cdlFlavor->getAudioResolution();
+			if($vdlFlavor->_audio->IsDataSet()==false)
+				$vdlFlavor->_audio = null;
 		}
 		$operators = $cdlFlavor->getOperators();
 		$transObjArr = array();
-		//KalturaLog::log(__METHOD__."\nCDL Flavor==>\n".print_r($cdlFlavor,true));
+		//VidiunLog::log(__METHOD__."\nCDL Flavor==>\n".print_r($cdlFlavor,true));
 		if(!empty($operators) || $cdlFlavor->getEngineVersion()==1) {
-			$transObjArr = KDLWrap::convertOperatorsCdl2Kdl($operators);
-			$kdlFlavor->_engineVersion = 1;
+			$transObjArr = VDLWrap::convertOperatorsCdl2Vdl($operators);
+			$vdlFlavor->_engineVersion = 1;
 		}
 		else {
-			$kdlFlavor->_engineVersion = 0;
+			$vdlFlavor->_engineVersion = 0;
 			$trnsStr = $cdlFlavor->getConversionEngines();
 			$extraStr = $cdlFlavor->getConversionEnginesExtraParams();
-			$transObjArr=KDLUtils::parseTranscoderList($trnsStr, $extraStr);
+			$transObjArr=VDLUtils::parseTranscoderList($trnsStr, $extraStr);
 			if($cdlFlavor instanceof flavorParamsOutputWrap || $cdlFlavor instanceof flavorParamsOutput) {
 				$cmdLines = $cdlFlavor->getCommandLines();
 				foreach($transObjArr as $transObj){
 					$transObj->_cmd = $cmdLines[$transObj->_id];
 				}
 			}
-			KalturaLog::log("\ntranscoders==>\n".print_r($transObjArr,true));
+			VidiunLog::log("\ntranscoders==>\n".print_r($transObjArr,true));
 		}
 
-		KDLUtils::RecursiveScan($transObjArr, "transcoderSetFuncWrap", self::$TranscodersCdl2Kdl, "");
-		$kdlFlavor->_transcoders = $transObjArr;
+		VDLUtils::RecursiveScan($transObjArr, "transcoderSetFuncWrap", self::$TranscodersCdl2Vdl, "");
+		$vdlFlavor->_transcoders = $transObjArr;
 		
 		if($cdlFlavor instanceof flavorParamsOutputWrap) {
 			if($cdlFlavor->_isRedundant) {
-				$kdlFlavor->_flags = $kdlFlavor->_flags | KDLFlavor::RedundantFlagBit;
+				$vdlFlavor->_flags = $vdlFlavor->_flags | VDLFlavor::RedundantFlagBit;
 			}
 			if($cdlFlavor->_isNonComply) {
-				$kdlFlavor->_flags = $kdlFlavor->_flags | KDLFlavor::BitrateNonComplyFlagBit;
+				$vdlFlavor->_flags = $vdlFlavor->_flags | VDLFlavor::BitrateNonComplyFlagBit;
 			}
-			$kdlFlavor->_errors = $kdlFlavor->_errors + $cdlFlavor->_errors;
-			$kdlFlavor->_warnings = $kdlFlavor->_warnings + $cdlFlavor->_warnings;
+			$vdlFlavor->_errors = $vdlFlavor->_errors + $cdlFlavor->_errors;
+			$vdlFlavor->_warnings = $vdlFlavor->_warnings + $cdlFlavor->_warnings;
 		}
 		
 		if($cdlFlavor instanceof SwfFlavorParams || $cdlFlavor instanceof SwfFlavorParamsOutput) {
-			$kdlFlavor->_swf = new KDLSwfData();
-			$kdlFlavor->_swf->_flashVersion = $cdlFlavor->getFlashVersion();
-			$kdlFlavor->_swf->_zoom         = $cdlFlavor->getZoom();
-			$kdlFlavor->_swf->_zlib         = $cdlFlavor->getZlib();
-			$kdlFlavor->_swf->_jpegQuality  = $cdlFlavor->getJpegQuality();
-			$kdlFlavor->_swf->_sameWindow   = $cdlFlavor->getSameWindow();
-			$kdlFlavor->_swf->_insertStop   = $cdlFlavor->getInsertStop();
-			$kdlFlavor->_swf->_useShapes    = $cdlFlavor->getUseShapes();
-			$kdlFlavor->_swf->_storeFonts   = $cdlFlavor->getStoreFonts();
-			$kdlFlavor->_swf->_flatten      = $cdlFlavor->getFlatten();
-			$kdlFlavor->_swf->_poly2Bitmap	= $cdlFlavor->getPoly2bitmap();
+			$vdlFlavor->_swf = new VDLSwfData();
+			$vdlFlavor->_swf->_flashVersion = $cdlFlavor->getFlashVersion();
+			$vdlFlavor->_swf->_zoom         = $cdlFlavor->getZoom();
+			$vdlFlavor->_swf->_zlib         = $cdlFlavor->getZlib();
+			$vdlFlavor->_swf->_jpegQuality  = $cdlFlavor->getJpegQuality();
+			$vdlFlavor->_swf->_sameWindow   = $cdlFlavor->getSameWindow();
+			$vdlFlavor->_swf->_insertStop   = $cdlFlavor->getInsertStop();
+			$vdlFlavor->_swf->_useShapes    = $cdlFlavor->getUseShapes();
+			$vdlFlavor->_swf->_storeFonts   = $cdlFlavor->getStoreFonts();
+			$vdlFlavor->_swf->_flatten      = $cdlFlavor->getFlatten();
+			$vdlFlavor->_swf->_poly2Bitmap	= $cdlFlavor->getPoly2bitmap();
 		}
 		
 		if($cdlFlavor instanceof PdfFlavorParams || $cdlFlavor instanceof PdfFlavorParamsOutput) {
-			$kdlFlavor->_pdf = new KDLPdfData();
-			$kdlFlavor->_pdf->_resolution  = $cdlFlavor->getResolution();
-			$kdlFlavor->_pdf->_paperHeight = $cdlFlavor->getPaperHeight();
-			$kdlFlavor->_pdf->_paperWidth  = $cdlFlavor->getPaperWidth();
-			$kdlFlavor->_pdf->_readonly  = $cdlFlavor->getReadonly();
+			$vdlFlavor->_pdf = new VDLPdfData();
+			$vdlFlavor->_pdf->_resolution  = $cdlFlavor->getResolution();
+			$vdlFlavor->_pdf->_paperHeight = $cdlFlavor->getPaperHeight();
+			$vdlFlavor->_pdf->_paperWidth  = $cdlFlavor->getPaperWidth();
+			$vdlFlavor->_pdf->_readonly  = $cdlFlavor->getReadonly();
 		}
 		if($cdlFlavor instanceof ImageFlavorParams || $cdlFlavor instanceof ImageFlavorParamsOutput) {
-			$kdlFlavor->_image = new KDLImageData();
-			$kdlFlavor->_image->_densityWidth = $cdlFlavor->getDensityWidth();
-			$kdlFlavor->_image->_densityHeight = $cdlFlavor->getDensityHeight();
-			$kdlFlavor->_image->_sizeWidth = $cdlFlavor->getSizeWidth();
-			$kdlFlavor->_image->_sizeHeight = $cdlFlavor->getSizeHeight();
-			$kdlFlavor->_image->_depth = $cdlFlavor->getDepth();
-			$kdlFlavor->_image->_format = $cdlFlavor->getFormat();
+			$vdlFlavor->_image = new VDLImageData();
+			$vdlFlavor->_image->_densityWidth = $cdlFlavor->getDensityWidth();
+			$vdlFlavor->_image->_densityHeight = $cdlFlavor->getDensityHeight();
+			$vdlFlavor->_image->_sizeWidth = $cdlFlavor->getSizeWidth();
+			$vdlFlavor->_image->_sizeHeight = $cdlFlavor->getSizeHeight();
+			$vdlFlavor->_image->_depth = $cdlFlavor->getDepth();
+			$vdlFlavor->_image->_format = $cdlFlavor->getFormat();
 		}
 		
 		
-		//KalturaLog::log(__METHOD__."\nKDL Flavor==>\n".print_r($kdlFlavor,true));
-		if(is_null($kdlFlavor->_container))
+		//VidiunLog::log(__METHOD__."\nVDL Flavor==>\n".print_r($vdlFlavor,true));
+		if(is_null($vdlFlavor->_container))
 		{
-			KalturaLog::log("No Container Found On Flavor Convert Will Fail");
-			$kdlFlavor->_errors[KDLConstants::ContainerIndex][] = KDLErrors::ToString(KDLErrors::InvalidFlavorParamConfiguration);
+			VidiunLog::log("No Container Found On Flavor Convert Will Fail");
+			$vdlFlavor->_errors[VDLConstants::ContainerIndex][] = VDLErrors::ToString(VDLErrors::InvalidFlavorParamConfiguration);
 		}
-		return $kdlFlavor;
+		return $vdlFlavor;
 	}
 	
 	/* ------------------------------
 	 * function ConvertMediainfoCdl2Mediadataset
 	 */
-	public static function ConvertMediainfoCdl2Mediadataset(mediaInfo $cdlMediaInfo, KDLMediaDataSet &$medSet)
+	public static function ConvertMediainfoCdl2Mediadataset(mediaInfo $cdlMediaInfo, VDLMediaDataSet &$medSet)
 	{
-		$medSet->_container = new KDLContainerData();
+		$medSet->_container = new VDLContainerData();
 /**/
 		$contentStreams = $cdlMediaInfo->getContentStreams();
 		if(isset($contentStreams)) {
@@ -730,7 +730,7 @@ class KDLWrap
 		if($medSet->_container->IsDataSet()==false)
 			$medSet->_container = null;
 
-		$medSet->_video = new KDLVideoData();
+		$medSet->_video = new VDLVideoData();
 		$medSet->_video->_id = $cdlMediaInfo->getVideoCodecId();
 		$medSet->_video->_format = $cdlMediaInfo->getVideoFormat();
 		$medSet->_video->_duration = $cdlMediaInfo->getVideoDuration();
@@ -744,8 +744,8 @@ class KDLWrap
 		$medSet->_video->_complexityValue = $cdlMediaInfo->getComplexityValue();
 		$medSet->_video->_gop = $cdlMediaInfo->getMaxGOP();
 /*		{
-				$medLoader = new KDLMediaInfoLoader($cdlMediaInfo->getRawData());
-				$md = new KDLMediadataset();
+				$medLoader = new VDLMediaInfoLoader($cdlMediaInfo->getRawData());
+				$md = new VDLMediadataset();
 				$medLoader->Load($md);
 				if($md->_video)
 					$medSet->_video->_scanType = $md->_video->_scanType;
@@ -754,7 +754,7 @@ class KDLWrap
 		if($medSet->_video->IsDataSet()==false)
 			$medSet->_video = null;
 
-		$medSet->_audio = new KDLAudioData();
+		$medSet->_audio = new VDLAudioData();
 		$medSet->_audio->_id = $cdlMediaInfo->getAudioCodecId();
 		$medSet->_audio->_format = $cdlMediaInfo->getAudioFormat();
 		$medSet->_audio->_duration = $cdlMediaInfo->getAudioDuration();
@@ -773,10 +773,10 @@ class KDLWrap
 	 */
 	public static function ConvertMediainfoCdl2FlavorAsset(mediaInfo $cdlMediaInfo, flavorAsset &$fla)
 	{
-		KalturaLog::log("CDL mediaInfo==>\n".print_r($cdlMediaInfo,true));
-	  	$medSet = new KDLMediaDataSet();
+		VidiunLog::log("CDL mediaInfo==>\n".print_r($cdlMediaInfo,true));
+	  	$medSet = new VDLMediaDataSet();
 		self::ConvertMediainfoCdl2Mediadataset($cdlMediaInfo, $medSet);
-		KalturaLog::log("KDL mediaDataSet==>\n".print_r($medSet,true));
+		VidiunLog::log("VDL mediaDataSet==>\n".print_r($medSet,true));
 
 		$contBr = 0;
 		if(isset($medSet->_container)){
@@ -809,39 +809,39 @@ class KDLWrap
 		 */
 		if(isset($medSet->_contentStreams->audio) && isset($medSet->_contentStreams->audio[0]->audioLanguage)){
 			$lang = $medSet->_contentStreams->audio[0]->audioLanguage;
-			KalturaLog::log("Flavor asset(".$fla->getId().") language updated to ($lang)");
+			VidiunLog::log("Flavor asset(".$fla->getId().") language updated to ($lang)");
 			$fla->setLanguage($lang);
 		}
 
-		KalturaLog::log("CDL fl.Asset==>\n".print_r($fla,true));
+		VidiunLog::log("CDL fl.Asset==>\n".print_r($fla,true));
 		return $fla;
 	}
 
 	/* ------------------------------
-	 * function convertOperatorsCdl2Kdl
+	 * function convertOperatorsCdl2Vdl
 	 */
-	public static function convertOperatorsCdl2Kdl($operators)
+	public static function convertOperatorsCdl2Vdl($operators)
 	{
-		KalturaLog::log("\ncdlOperators==>\n".print_r($operators,true));
+		VidiunLog::log("\ncdlOperators==>\n".print_r($operators,true));
 		$transObjArr = array();
-		$oprSets = new kOperatorSets();
+		$oprSets = new vOperatorSets();
 		//		$operators = stripslashes($operators);
-		//KalturaLog::log(__METHOD__."\ncdlOperators(stripslsh)==>\n".print_r($operators,true));
+		//VidiunLog::log(__METHOD__."\ncdlOperators(stripslsh)==>\n".print_r($operators,true));
 		$oprSets->setSerialized($operators);
-		KalturaLog::log("\noperatorSets==>\n".print_r($oprSets,true));
+		VidiunLog::log("\noperatorSets==>\n".print_r($oprSets,true));
 		foreach ($oprSets->getSets() as $oprSet) {
 			if(count($oprSet)==1) {
 				$opr = $oprSet[0];
-				KalturaLog::log("\n1==>\n".print_r($oprSet,true));
-				$kdlOpr = new KDLOperationParams($opr);
-				$transObjArr[] = $kdlOpr;
+				VidiunLog::log("\n1==>\n".print_r($oprSet,true));
+				$vdlOpr = new VDLOperationParams($opr);
+				$transObjArr[] = $vdlOpr;
 			}
 			else {
 				$auxArr = array();
 				foreach ($oprSet as $opr) {
-					KalturaLog::log("\n2==>\n".print_r($oprSet,true));
-					$kdlOpr = new KDLOperationParams($opr);
-					$auxArr[] = $kdlOpr;
+					VidiunLog::log("\n2==>\n".print_r($oprSet,true));
+					$vdlOpr = new VDLOperationParams($opr);
+					$auxArr[] = $vdlOpr;
 				}
 				$transObjArr[] = $auxArr;
 			}
@@ -850,36 +850,36 @@ class KDLWrap
 	}
 
 	/* ------------------------------
-	 * function convertOperatorKdl2Cdl
+	 * function convertOperatorVdl2Cdl
 	 */
-	public static function convertOperatorKdl2Cdl($kdlOperator, $id=null)
+	public static function convertOperatorVdl2Cdl($vdlOperator, $id=null)
 	{
-		$opr = new kOperator();
+		$opr = new vOperator();
 		if(!$id || $id===false)
-			$opr->id = $kdlOperator->_id;
+			$opr->id = $vdlOperator->_id;
 		else
 			$opr->id = $id;
 		
-		$opr->extra = $kdlOperator->_extra;
-		$opr->command = $kdlOperator->_cmd;
-		$opr->config = $kdlOperator->_cfg;
-		$opr->params = $kdlOperator->_params;
-		$opr->isOptional = $kdlOperator->_isOptional;
+		$opr->extra = $vdlOperator->_extra;
+		$opr->command = $vdlOperator->_cmd;
+		$opr->config = $vdlOperator->_cfg;
+		$opr->params = $vdlOperator->_params;
+		$opr->isOptional = $vdlOperator->_isOptional;
 		return $opr;
 	}
 	
 	/* ------------------------------
-	 * function convertOperatorsKdl2Cdl
+	 * function convertOperatorsVdl2Cdl
 	 */
-	public static function convertOperatorsKdl2Cdl($kdlOperators)
+	public static function convertOperatorsVdl2Cdl($vdlOperators)
 	{
-	$cdlOprSets = new kOperatorSets();
-		foreach($kdlOperators as $transObj) {
+	$cdlOprSets = new vOperatorSets();
+		foreach($vdlOperators as $transObj) {
 			$auxArr = array();
 			if(is_array($transObj)) {
 				foreach($transObj as $tr) {
-					$key=array_search($tr->_id,self::$TranscodersCdl2Kdl);
-//					$opr = new kOperator();
+					$key=array_search($tr->_id,self::$TranscodersCdl2Vdl);
+//					$opr = new vOperator();
 //					if($key===false)
 //						$opr->id = $tr->_id;
 //					else
@@ -888,12 +888,12 @@ class KDLWrap
 //					$opr->command = $tr->_cmd;
 //					$opr->config = $tr->_cfg;
 //					$auxArr[] = $opr;
-					$auxArr[] = KDLWrap::convertOperatorKdl2Cdl($tr, $key);
+					$auxArr[] = VDLWrap::convertOperatorVdl2Cdl($tr, $key);
 				}
 			}
 			else {
-				$key=array_search($transObj->_id,self::$TranscodersCdl2Kdl);
-//				$opr = new kOperator();
+				$key=array_search($transObj->_id,self::$TranscodersCdl2Vdl);
+//				$opr = new vOperator();
 //				if($key===false)
 //					$opr->id = $transObj->_id;
 //				else
@@ -902,7 +902,7 @@ class KDLWrap
 //				$opr->command = $transObj->_cmd;
 //				$opr->config = $transObj->_cfg;
 //				$auxArr[] = $opr;
-				$auxArr[] = KDLWrap::convertOperatorKdl2Cdl($transObj, $key);
+				$auxArr[] = VDLWrap::convertOperatorVdl2Cdl($transObj, $key);
 			}
 			$cdlOprSets->addSet($auxArr);
 		}
@@ -942,14 +942,14 @@ class flavorParamsOutputWrap extends flavorParamsOutput {
 		 */
 function transcoderSetFuncWrap($oprObj, $transDictionary, $param2)
 {
-	$trId = KDLUtils::trima($oprObj->_id);
+	$trId = VDLUtils::trima($oprObj->_id);
 	if(!is_null($transDictionary) && array_key_exists($trId, $transDictionary)){
 		$oprObj->_id = $transDictionary[$trId];
 	}
 
-//	$oprObj->_engine = KDLWrap::GetEngineObject($oprObj->_id);
+//	$oprObj->_engine = VDLWrap::GetEngineObject($oprObj->_id);
 	$id = $oprObj->_id;
-	KalturaLog::log(":operators id=$id :");
+	VidiunLog::log(":operators id=$id :");
 	$engine=null;
 	if(isset($oprObj->_className) && class_exists($oprObj->_className)){
 		try {
@@ -961,36 +961,36 @@ function transcoderSetFuncWrap($oprObj, $transDictionary, $param2)
 	}
 	
 	if(isset($engine)) {
-		KalturaLog::log(__METHOD__.": the engine was successfully overloaded with $oprObj->_className");
+		VidiunLog::log(__METHOD__.": the engine was successfully overloaded with $oprObj->_className");
 	}
 	else {
 		switch($id){
-		case KDLTranscoders::KALTURA:
-		case KDLTranscoders::ON2:
-		case KDLTranscoders::FFMPEG:
-		case KDLTranscoders::MENCODER:
-		case KDLTranscoders::ENCODING_COM:
-		case KDLTranscoders::FFMPEG_AUX:
-		case KDLTranscoders::FFMPEG_VP8:
-		case KDLTranscoders::EE3:
-			$engine = new KDLOperatorWrapper($id);
+		case VDLTranscoders::VIDIUN:
+		case VDLTranscoders::ON2:
+		case VDLTranscoders::FFMPEG:
+		case VDLTranscoders::MENCODER:
+		case VDLTranscoders::ENCODING_COM:
+		case VDLTranscoders::FFMPEG_AUX:
+		case VDLTranscoders::FFMPEG_VP8:
+		case VDLTranscoders::EE3:
+			$engine = new VDLOperatorWrapper($id);
 			break;
-		case KDLTranscoders::QUICK_TIME_PLAYER_TOOLS:
-			$engine = KalturaPluginManager::loadObject('KDLOperatorBase', "quickTimeTools.QuickTimeTools");
+		case VDLTranscoders::QUICK_TIME_PLAYER_TOOLS:
+			$engine = VidiunPluginManager::loadObject('VDLOperatorBase', "quickTimeTools.QuickTimeTools");
 			break;
 		default:
-//		KalturaLog::log("in default :operators id=$id :");
-			$engine = KalturaPluginManager::loadObject('KDLOperatorBase', $id);
+//		VidiunLog::log("in default :operators id=$id :");
+			$engine = VidiunPluginManager::loadObject('VDLOperatorBase', $id);
 			break;
 		}
 	}
 
 	if(is_null($engine)) {
-		KalturaLog::log(__METHOD__.":ERROR - plugin manager returned with null");
+		VidiunLog::log(__METHOD__.":ERROR - plugin manager returned with null");
 	}
 	else {
 		$oprObj->_engine = $engine;
-		KalturaLog::log(__METHOD__."Engine object from plugin mgr==>\n".print_r($oprObj->_engine,true));
+		VidiunLog::log(__METHOD__."Engine object from plugin mgr==>\n".print_r($oprObj->_engine,true));
 	}
 	
 	return;

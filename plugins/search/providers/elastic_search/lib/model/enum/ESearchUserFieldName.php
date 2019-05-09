@@ -7,7 +7,7 @@ interface ESearchUserFieldName extends BaseEnum
 {
 	const SCREEN_NAME = 'screen_name';
 	const EMAIL = 'email';
-	const TYPE = 'kuser_type';
+	const TYPE = 'vuser_type';
 	const TAGS = 'tags';
 	const UPDATED_AT = 'updated_at';
 	const CREATED_AT = 'created_at';

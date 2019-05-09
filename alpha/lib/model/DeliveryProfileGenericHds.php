@@ -28,7 +28,7 @@ class DeliveryProfileGenericHds extends DeliveryProfileHds {
 		if ($this->params->getFileExtension())
 			$url .= "/name/a." . $this->params->getFileExtension();
 		
-		return kDeliveryUtils::formatGenericUrl($url, $this->getPattern(), $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $this->getPattern(), $this->params);
 	}
 	
 	protected function doGetFileSyncUrl(FileSync $fileSync)
@@ -37,7 +37,7 @@ class DeliveryProfileGenericHds extends DeliveryProfileHds {
 		$pattern = $this->getPattern();
 		if(is_null($pattern))
 			$pattern = '/hds-vod/{url}.f4m';
-		return kDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
 	}
 }
 

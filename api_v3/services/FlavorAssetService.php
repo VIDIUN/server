@@ -7,9 +7,9 @@
  * @package api
  * @subpackage services
  */
-class FlavorAssetService extends KalturaAssetService
+class FlavorAssetService extends VidiunAssetService
 {
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if(
 			$actionName == 'add' ||
@@ -30,7 +30,7 @@ class FlavorAssetService extends KalturaAssetService
 			return true;
 		}
 			
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 	
     /**
@@ -38,23 +38,23 @@ class FlavorAssetService extends KalturaAssetService
      *
      * @action add
      * @param string $entryId
-     * @param KalturaFlavorAsset $flavorAsset
-     * @return KalturaFlavorAsset
-     * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-     * @throws KalturaErrors::FLAVOR_ASSET_ALREADY_EXISTS
+     * @param VidiunFlavorAsset $flavorAsset
+     * @return VidiunFlavorAsset
+     * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+     * @throws VidiunErrors::FLAVOR_ASSET_ALREADY_EXISTS
      * @validateUser entry entryId edit
      */
-    function addAction($entryId, KalturaFlavorAsset $flavorAsset)
+    function addAction($entryId, VidiunFlavorAsset $flavorAsset)
     {
     	$dbEntry = entryPeer::retrieveByPK($entryId);
-    	if(!$dbEntry || $dbEntry->getType() != KalturaEntryType::MEDIA_CLIP || !in_array($dbEntry->getMediaType(), array(KalturaMediaType::VIDEO, KalturaMediaType::AUDIO)))
-    		throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+    	if(!$dbEntry || $dbEntry->getType() != VidiunEntryType::MEDIA_CLIP || !in_array($dbEntry->getMediaType(), array(VidiunMediaType::VIDEO, VidiunMediaType::AUDIO)))
+    		throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		
     	if(!is_null($flavorAsset->flavorParamsId))
     	{
     		$dbFlavorAsset = assetPeer::retrieveByEntryIdAndParams($entryId, $flavorAsset->flavorParamsId);
     		if($dbFlavorAsset)
-    			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ALREADY_EXISTS, $dbFlavorAsset->getId(), $flavorAsset->flavorParamsId);
+    			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ALREADY_EXISTS, $dbFlavorAsset->getId(), $flavorAsset->flavorParamsId);
     	}
     	
     	if(!is_null($flavorAsset->flavorParamsId))
@@ -80,7 +80,7 @@ class FlavorAssetService extends KalturaAssetService
 		$dbFlavorAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_QUEUED);
 		$dbFlavorAsset->save();
     	
-		$flavorAsset = KalturaFlavorAsset::getInstance($dbFlavorAsset, $this->getResponseProfile());
+		$flavorAsset = VidiunFlavorAsset::getInstance($dbFlavorAsset, $this->getResponseProfile());
 		return $flavorAsset;
     }
     
@@ -89,27 +89,27 @@ class FlavorAssetService extends KalturaAssetService
      *
      * @action update
      * @param string $id
-     * @param KalturaFlavorAsset $flavorAsset
-     * @return KalturaFlavorAsset
-     * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
+     * @param VidiunFlavorAsset $flavorAsset
+     * @return VidiunFlavorAsset
+     * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
      * @validateUser asset::entry id edit
      */
-    function updateAction($id, KalturaFlavorAsset $flavorAsset)
+    function updateAction($id, VidiunFlavorAsset $flavorAsset)
     {
    		$dbFlavorAsset = assetPeer::retrieveById($id);
    		if (!$dbFlavorAsset || !($dbFlavorAsset instanceof flavorAsset))
-   			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
+   			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
     	
 		$dbEntry = $dbFlavorAsset->getentry();
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $dbFlavorAsset->getEntryId());
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $dbFlavorAsset->getEntryId());
 			
 		
 		
     	$dbFlavorAsset = $flavorAsset->toUpdatableObject($dbFlavorAsset);
    		$dbFlavorAsset->save();
 		
-		$flavorAsset = KalturaFlavorAsset::getInstance($dbFlavorAsset, $this->getResponseProfile());
+		$flavorAsset = VidiunFlavorAsset::getInstance($dbFlavorAsset, $this->getResponseProfile());
 		return $flavorAsset;
     }
     
@@ -118,35 +118,35 @@ class FlavorAssetService extends KalturaAssetService
      *
      * @action setContent
      * @param string $id
-     * @param KalturaContentResource $contentResource
-     * @return KalturaFlavorAsset
-     * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED 
+     * @param VidiunContentResource $contentResource
+     * @return VidiunFlavorAsset
+     * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED 
 	 * @validateUser asset::entry id edit
      */
-    function setContentAction($id, KalturaContentResource $contentResource)
+    function setContentAction($id, VidiunContentResource $contentResource)
     {
    		$dbFlavorAsset = assetPeer::retrieveById($id);
    		if (!$dbFlavorAsset || !($dbFlavorAsset instanceof flavorAsset))
-   			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
+   			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
     	
 		$dbEntry = $dbFlavorAsset->getentry();
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $dbFlavorAsset->getEntryId());
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $dbFlavorAsset->getEntryId());
 			
 		
 		
 		$contentResource->validateEntry($dbFlavorAsset->getentry());
 		$contentResource->validateAsset($dbFlavorAsset);
-		$kContentResource = $contentResource->toObject();
-    	$this->attachContentResource($dbFlavorAsset, $kContentResource);
+		$vContentResource = $contentResource->toObject();
+    	$this->attachContentResource($dbFlavorAsset, $vContentResource);
 		$contentResource->entryHandled($dbFlavorAsset->getentry());
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbFlavorAsset));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbFlavorAsset));
 		
     	$newStatuses = array(
     	    asset::ASSET_STATUS_EXPORTING,
@@ -156,9 +156,9 @@ class FlavorAssetService extends KalturaAssetService
     	);
     	
     	if(in_array($dbFlavorAsset->getStatus(), $newStatuses))
-   			kEventsManager::raiseEvent(new kObjectAddedEvent($dbFlavorAsset));
+   			vEventsManager::raiseEvent(new vObjectAddedEvent($dbFlavorAsset));
    		
-		$flavorAsset = KalturaFlavorAsset::getInstance($dbFlavorAsset, $this->getResponseProfile());
+		$flavorAsset = VidiunFlavorAsset::getInstance($dbFlavorAsset, $this->getResponseProfile());
 		return $flavorAsset;
     }
     
@@ -171,7 +171,7 @@ class FlavorAssetService extends KalturaAssetService
 	{
 		$ext = pathinfo($fullPath, PATHINFO_EXTENSION);
 		$flavorAsset->setFileExt($ext);
-		$flavorAsset->setSize(kFile::fileSize($fullPath));
+		$flavorAsset->setSize(vFile::fileSize($fullPath));
 		$flavorAsset->incrementVersion();
 		$flavorAsset->save();
 		
@@ -179,7 +179,7 @@ class FlavorAssetService extends KalturaAssetService
 		
 		try 
 		{
-			kFileSyncUtils::moveFromFile($fullPath, $syncKey, true, $copyOnly);
+			vFileSyncUtils::moveFromFile($fullPath, $syncKey, true, $copyOnly);
 		}
 		catch (Exception $e) 
 		{
@@ -201,38 +201,38 @@ class FlavorAssetService extends KalturaAssetService
 	/**
 	 * @param flavorAsset $flavorAsset
 	 * @param string $url
-	 * @param kImportJobData $importJobData
+	 * @param vImportJobData $importJobData
 	 */
-	protected function attachUrl(flavorAsset $flavorAsset, $url, kImportJobData $importJobData = null)
+	protected function attachUrl(flavorAsset $flavorAsset, $url, vImportJobData $importJobData = null)
 	{
 		$flavorAsset->save();
 		
-		kJobsManager::addImportJob(null, $flavorAsset->getEntryId(), $this->getPartnerId(), $url, $flavorAsset, null, $importJobData);
+		vJobsManager::addImportJob(null, $flavorAsset->getEntryId(), $this->getPartnerId(), $url, $flavorAsset, null, $importJobData);
     }
     
 	/**
 	 * @param flavorAsset $flavorAsset
-	 * @param kUrlResource $contentResource
+	 * @param vUrlResource $contentResource
 	 */
-	protected function attachUrlResource(flavorAsset $flavorAsset, kUrlResource $contentResource)
+	protected function attachUrlResource(flavorAsset $flavorAsset, vUrlResource $contentResource)
 	{
     	$this->attachUrl($flavorAsset, $contentResource->getUrl(), $contentResource->getImportJobData());
     }
     
 	/**
 	 * @param flavorAsset $flavorAsset
-	 * @param KalturaSearchResultsResource $contentResource
+	 * @param VidiunSearchResultsResource $contentResource
 	 */
-	protected function KalturaSearchResultsResource(flavorAsset $flavorAsset, KalturaSearchResultsResource $contentResource)
+	protected function VidiunSearchResultsResource(flavorAsset $flavorAsset, VidiunSearchResultsResource $contentResource)
 	{
     	$contentResource->validatePropertyNotNull('result');
      	$contentResource->result->validatePropertyNotNull("searchSource");
      	
-		if ($contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_KALTURA ||
-			$contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER ||
-			$contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER_KSHOW ||
-			$contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_KALTURA_KSHOW ||
-			$contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS)
+		if ($contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_VIDIUN ||
+			$contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER ||
+			$contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER_VSHOW ||
+			$contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_VIDIUN_VSHOW ||
+			$contentResource->result->searchSource == entry::ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS)
 		{
 			$srcFlavorAsset = assetPeer::retrieveOriginalByEntryId($contentResource->result->id); 
 			$this->attachAsset($flavorAsset, $srcFlavorAsset);
@@ -245,9 +245,9 @@ class FlavorAssetService extends KalturaAssetService
     
 	/**
 	 * @param flavorAsset $flavorAsset
-	 * @param kLocalFileResource $contentResource
+	 * @param vLocalFileResource $contentResource
 	 */
-	protected function attachLocalFileResource(flavorAsset $flavorAsset, kLocalFileResource $contentResource)
+	protected function attachLocalFileResource(flavorAsset $flavorAsset, vLocalFileResource $contentResource)
 	{
 		if($contentResource->getIsReady())
 			return $this->attachFile($flavorAsset, $contentResource->getLocalFilePath(), $contentResource->getKeepOriginalFile());
@@ -284,10 +284,10 @@ class FlavorAssetService extends KalturaAssetService
 		$flavorAsset->save();
 		
         $newSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-        kFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
+        vFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
                 
-        $fileSync = kFileSyncUtils::getLocalFileSyncForKey($newSyncKey, false);
-        $fileSync = kFileSyncUtils::resolve($fileSync);
+        $fileSync = vFileSyncUtils::getLocalFileSyncForKey($newSyncKey, false);
+        $fileSync = vFileSyncUtils::resolve($fileSync);
         
         if(!$flavorAsset->isLocalReadyStatus())
 			$flavorAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_QUEUED);
@@ -298,11 +298,11 @@ class FlavorAssetService extends KalturaAssetService
     
 	/**
 	 * @param flavorAsset $flavorAsset
-	 * @param kFileSyncResource $contentResource
+	 * @param vFileSyncResource $contentResource
 	 */
-	protected function attachFileSyncResource(flavorAsset $flavorAsset, kFileSyncResource $contentResource)
+	protected function attachFileSyncResource(flavorAsset $flavorAsset, vFileSyncResource $contentResource)
 	{
-    	$syncable = kFileSyncObjectManager::retrieveObject($contentResource->getFileSyncObjectType(), $contentResource->getObjectId());
+    	$syncable = vFileSyncObjectManager::retrieveObject($contentResource->getFileSyncObjectType(), $contentResource->getObjectId());
     	$srcSyncKey = $syncable->getSyncKey($contentResource->getObjectSubType(), $contentResource->getVersion());
     	
         return $this->attachFileSync($flavorAsset, $srcSyncKey);
@@ -311,7 +311,7 @@ class FlavorAssetService extends KalturaAssetService
 	/**
 	 * @param flavorAsset $flavorAsset
 	 * @param IRemoteStorageResource $contentResource
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
 	 */
 	protected function attachRemoteStorageResource(flavorAsset $flavorAsset, IRemoteStorageResource $contentResource)
 	{
@@ -324,7 +324,7 @@ class FlavorAssetService extends KalturaAssetService
 		foreach($resources as $currentResource)
 		{
 			$storageProfile = StorageProfilePeer::retrieveByPK($currentResource->getStorageProfileId());
-			$fileSync = kFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
+			$fileSync = vFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
 		}
 		
 		if($flavorAsset->getIsOriginal())
@@ -334,39 +334,39 @@ class FlavorAssetService extends KalturaAssetService
 			
 		$flavorAsset->save();
 		
-		kBusinessPostConvertDL::handleConvertFinished(null, $flavorAsset);
+		vBusinessPostConvertDL::handleConvertFinished(null, $flavorAsset);
     }
     
 	/**
 	 * @param flavorAsset $flavorAsset
-	 * @param kContentResource $contentResource
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED
+	 * @param vContentResource $contentResource
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED
 	 */
-	protected function attachContentResource(flavorAsset $flavorAsset, kContentResource $contentResource)
+	protected function attachContentResource(flavorAsset $flavorAsset, vContentResource $contentResource)
 	{
     	switch($contentResource->getType())
     	{
-			case 'kUrlResource':
+			case 'vUrlResource':
 				return $this->attachUrlResource($flavorAsset, $contentResource);
 				
-			case 'kLocalFileResource':
+			case 'vLocalFileResource':
 				return $this->attachLocalFileResource($flavorAsset, $contentResource);
 				
-			case 'kFileSyncResource':
+			case 'vFileSyncResource':
 				return $this->attachFileSyncResource($flavorAsset, $contentResource);
 				
-			case 'kRemoteStorageResource':
-			case 'kRemoteStorageResources':
+			case 'vRemoteStorageResource':
+			case 'vRemoteStorageResources':
 				return $this->attachRemoteStorageResource($flavorAsset, $contentResource);
 				
 			default:
 				$msg = "Resource of type [" . get_class($contentResource) . "] is not supported";
-				KalturaLog::err($msg);
+				VidiunLog::err($msg);
 				
 				if($flavorAsset->getStatus() == flavorAsset::FLAVOR_ASSET_STATUS_QUEUED || $flavorAsset->getStatus() == flavorAsset::FLAVOR_ASSET_STATUS_NOT_APPLICABLE)
 				{
@@ -375,7 +375,7 @@ class FlavorAssetService extends KalturaAssetService
 					$flavorAsset->save();
 				}
 				
-				throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($contentResource));
+				throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($contentResource));
     	}
     }
     
@@ -392,15 +392,15 @@ class FlavorAssetService extends KalturaAssetService
 	 * 
 	 * @action get
 	 * @param string $id
-	 * @return KalturaFlavorAsset
+	 * @return VidiunFlavorAsset
 	 */
 	public function getAction($id)
 	{
 		$flavorAssetDb = assetPeer::retrieveById($id);
 		if (!$flavorAssetDb || !($flavorAssetDb instanceof flavorAsset))
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
 			
-		$flavorAsset = KalturaFlavorAsset::getInstance($flavorAssetDb, $this->getResponseProfile());
+		$flavorAsset = VidiunFlavorAsset::getInstance($flavorAssetDb, $this->getResponseProfile());
 		return $flavorAsset;
 	}
 	
@@ -409,25 +409,25 @@ class FlavorAssetService extends KalturaAssetService
 	 * 
 	 * @action getByEntryId
 	 * @param string $entryId
-	 * @return KalturaFlavorAssetArray
+	 * @return VidiunFlavorAssetArray
 	 * @deprecated Use thumbAsset.list instead
 	 */
 	public function getByEntryIdAction($entryId)
 	{
-		// entry could be "display_in_search = 2" - in that case we want to pull it although KN is off in services.ct for this action
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		// entry could be "display_in_search = 2" - in that case we want to pull it although VN is off in services.ct for this action
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$c->addAnd(entryPeer::ID, $entryId);
 		$criterionPartnerOrKn = $c->getNewCriterion(entryPeer::PARTNER_ID, $this->getPartnerId());
-		$criterionPartnerOrKn->addOr($c->getNewCriterion(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK));
+		$criterionPartnerOrKn->addOr($c->getNewCriterion(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK));
 		$c->addAnd($criterionPartnerOrKn);
 		// there could only be one entry because the query is by primary key.
 		// so using doSelectOne is safe.
 		$dbEntry = entryPeer::doSelectOne($c);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 					
 		$flavorAssetsDb = assetPeer::retrieveFlavorsByEntryId($entryId);
-		$flavorAssets = KalturaFlavorAssetArray::fromDbArray($flavorAssetsDb, $this->getResponseProfile());
+		$flavorAssets = VidiunFlavorAssetArray::fromDbArray($flavorAssetsDb, $this->getResponseProfile());
 		return $flavorAssets;
 	}
 	
@@ -435,24 +435,24 @@ class FlavorAssetService extends KalturaAssetService
 	 * List Flavor Assets by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaAssetFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaFlavorAssetListResponse
+	 * @param VidiunAssetFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunFlavorAssetListResponse
 	 */
-	function listAction(KalturaAssetFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunAssetFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if(!$filter)
 		{
-			$filter = new KalturaFlavorAssetFilter();
+			$filter = new VidiunFlavorAssetFilter();
 		}
-		elseif(! $filter instanceof KalturaFlavorAssetFilter)
+		elseif(! $filter instanceof VidiunFlavorAssetFilter)
 		{
-			$filter = $filter->cast('KalturaFlavorAssetFilter');
+			$filter = $filter->cast('VidiunFlavorAssetFilter');
 		}
 			
 		if(!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 		
 		$types = assetPeer::retrieveAllFlavorsTypes();
@@ -464,29 +464,29 @@ class FlavorAssetService extends KalturaAssetService
 	 * 
 	 * @action getWebPlayableByEntryId
 	 * @param string $entryId
-	 * @return KalturaFlavorAssetArray
+	 * @return VidiunFlavorAssetArray
 	 * 
 	 * @deprecated use baseEntry.getContextData instead
 	 */
 	public function getWebPlayableByEntryIdAction($entryId)
 	{
-		// entry could be "display_in_search = 2" - in that case we want to pull it although KN is off in services.ct for this action
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		// entry could be "display_in_search = 2" - in that case we want to pull it although VN is off in services.ct for this action
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$c->addAnd(entryPeer::ID, $entryId);
 		$criterionPartnerOrKn = $c->getNewCriterion(entryPeer::PARTNER_ID, $this->getPartnerId());
-		$criterionPartnerOrKn->addOr($c->getNewCriterion(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK));
+		$criterionPartnerOrKn->addOr($c->getNewCriterion(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK));
 		$c->addAnd($criterionPartnerOrKn);
 		// there could only be one entry because the query is by primary key.
 		// so using doSelectOne is safe.
 		$dbEntry = entryPeer::doSelectOne($c);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		
 		$flavorAssetsDb = assetPeer::retrieveReadyWebByEntryId($entryId);
 		if (count($flavorAssetsDb) == 0)
-			throw new KalturaAPIException(KalturaErrors::NO_FLAVORS_FOUND);
+			throw new VidiunAPIException(VidiunErrors::NO_FLAVORS_FOUND);
 			
-		$flavorAssets = KalturaFlavorAssetArray::fromDbArray($flavorAssetsDb, $this->getResponseProfile());
+		$flavorAssets = VidiunFlavorAssetArray::fromDbArray($flavorAssetsDb, $this->getResponseProfile());
 		
 		return $flavorAssets;
 	}
@@ -504,14 +504,14 @@ class FlavorAssetService extends KalturaAssetService
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
 		
 		
 		$flavorParamsDb = assetParamsPeer::retrieveByPK($flavorParamsId);
 		assetParamsPeer::setUseCriteriaFilter(false);
 		if (!$flavorParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $flavorParamsId);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $flavorParamsId);
 				
 		$validStatuses = array(
 			entryStatus::ERROR_CONVERTING,
@@ -520,34 +520,34 @@ class FlavorAssetService extends KalturaAssetService
 		);
 		
 		if (!in_array($dbEntry->getStatus(), $validStatuses))
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_STATUS);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_STATUS);
 			
 		$conversionProfile = $dbEntry->getconversionProfile2();
 		if(!$conversionProfile)
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $dbEntry->getConversionProfileId());
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $dbEntry->getConversionProfileId());
 		
 		$originalFlavorAsset = assetPeer::retrieveOriginalByEntryId($entryId);
 		if (is_null($originalFlavorAsset) || !$originalFlavorAsset->isLocalReadyStatus())
-			throw new KalturaAPIException(KalturaErrors::ORIGINAL_FLAVOR_ASSET_IS_MISSING);
+			throw new VidiunAPIException(VidiunErrors::ORIGINAL_FLAVOR_ASSET_IS_MISSING);
 
 		$srcSyncKey = $originalFlavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 		// if the file sync isn't local (wasn't synced yet) proxy request to other datacenter
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
 		/* @var $fileSync FileSync */
 		if(!$fileSync)
 		{
-			throw new KalturaAPIException(KalturaErrors::FILE_DOESNT_EXIST);
+			throw new VidiunAPIException(VidiunErrors::FILE_DOESNT_EXIST);
 		}
 		
 		if(!$local && $fileSync->getFileType() != FileSync::FILE_SYNC_FILE_TYPE_URL)
 		{
-			kFileUtils::dumpApiRequest(kDataCenterMgr::getRemoteDcExternalUrl($fileSync));
+			vFileUtils::dumpApiRequest(vDataCenterMgr::getRemoteDcExternalUrl($fileSync));
 		}
 		$err = "";
 		
 		$dynamicFlavorAttributes = $dbEntry->getDynamicFlavorAttributesForAssetParams($flavorParamsDb->getId());
 		
-		kBusinessPreConvertDL::decideAddEntryFlavor(null, $dbEntry->getId(), $flavorParamsId, $err, null, $dynamicFlavorAttributes, $priority);
+		vBusinessPreConvertDL::decideAddEntryFlavor(null, $dbEntry->getId(), $flavorParamsId, $err, null, $dynamicFlavorAttributes, $priority);
 	}
 	
 	/**
@@ -561,10 +561,10 @@ class FlavorAssetService extends KalturaAssetService
 	{
 		$flavorAssetDb = assetPeer::retrieveById($id);
 		if (!$flavorAssetDb || !($flavorAssetDb instanceof flavorAsset))
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
 			
 		if ($flavorAssetDb->getIsOriginal())
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_RECONVERT_ORIGINAL);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_RECONVERT_ORIGINAL);
 			
 		$flavorParamsId = $flavorAssetDb->getFlavorParamsId();
 		$entryId = $flavorAssetDb->getEntryId();
@@ -583,11 +583,11 @@ class FlavorAssetService extends KalturaAssetService
 	{
 		$flavorAssetDb = assetPeer::retrieveById($id);
 		if (!$flavorAssetDb || !($flavorAssetDb instanceof flavorAsset))
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
 			
 		$entry = $flavorAssetDb->getEntry();
 		if (!$entry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $flavorAssetDb->getEntryId());
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $flavorAssetDb->getEntryId());
 			
 		$flavorAssetDb->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_DELETED);
 		$flavorAssetDb->setDeletedAt(time());
@@ -601,26 +601,26 @@ class FlavorAssetService extends KalturaAssetService
 	 * @param string $id
 	 * @param int $storageId
 	 * @param bool $forceProxy
-	 * @param KalturaFlavorAssetUrlOptions $options
+	 * @param VidiunFlavorAssetUrlOptions $options
 	 * @return string
-	 * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::FLAVOR_ASSET_IS_NOT_READY
+	 * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::FLAVOR_ASSET_IS_NOT_READY
 	 */
-	public function getUrlAction($id, $storageId = null, $forceProxy = false, KalturaFlavorAssetUrlOptions $options = null)
+	public function getUrlAction($id, $storageId = null, $forceProxy = false, VidiunFlavorAssetUrlOptions $options = null)
 	{
 		if (!$options)
 		{
-			$options = new KalturaFlavorAssetUrlOptions();
+			$options = new VidiunFlavorAssetUrlOptions();
 		}
 		
 		$assetDb = assetPeer::retrieveById($id);
 		if (!$assetDb || !($assetDb instanceof flavorAsset))
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
 
 		$this->validateEntryEntitlement($assetDb->getEntryId(), $id);
 		
 		if (!$assetDb->isLocalReadyStatus())
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_IS_NOT_READY);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_IS_NOT_READY);
 	
 		if($storageId)
 			return $assetDb->getExternalUrl($storageId, $options->fileName);
@@ -628,24 +628,24 @@ class FlavorAssetService extends KalturaAssetService
 		// Validate for download
 		$entryDb = entryPeer::retrieveByPK($assetDb->getEntryId());
 		if(is_null($entryDb))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $assetDb->getEntryId());
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $assetDb->getEntryId());
 		
 		$shouldServeFlavor = false;
-		if($entryDb->getType() == entryType::MEDIA_CLIP &&!in_array($assetDb->getPartnerId(),kConf::get('legacy_get_url_partners', 'local', array())))
+		if($entryDb->getType() == entryType::MEDIA_CLIP &&!in_array($assetDb->getPartnerId(),vConf::get('legacy_get_url_partners', 'local', array())))
 		{
 			$shouldServeFlavor = true;
 			$preview = null;
 		}
 		else
 			$previewFileSize = null;
-		$ksObj = $this->getKs();
-		$ks = ($ksObj) ? $ksObj->getOriginalString() : null;
+		$vsObj = $this->getVs();
+		$vs = ($vsObj) ? $vsObj->getOriginalString() : null;
 
 		$referrer = null;
 		if($options && $options->referrer)
 			$referrer = $options->referrer;
 
-		$secureEntryHelper = new KSecureEntryHelper($entryDb, $ks, $referrer, ContextType::DOWNLOAD);
+		$secureEntryHelper = new VSecureEntryHelper($entryDb, $vs, $referrer, ContextType::DOWNLOAD);
 
 		if ($secureEntryHelper->shouldPreview())
 		{ 
@@ -658,7 +658,7 @@ class FlavorAssetService extends KalturaAssetService
 			$secureEntryHelper->validateForDownload();
 		
 		if (!$secureEntryHelper->isAssetAllowed($assetDb))
-			throw new KalturaAPIException(KalturaErrors::ASSET_NOT_ALLOWED, $id);
+			throw new VidiunAPIException(VidiunErrors::ASSET_NOT_ALLOWED, $id);
  
 		if ($shouldServeFlavor)
 			return $assetDb->getServeFlavorUrl($preview, $options->fileName);
@@ -671,18 +671,18 @@ class FlavorAssetService extends KalturaAssetService
 	 * 
 	 * @action getRemotePaths
 	 * @param string $id
-	 * @return KalturaRemotePathListResponse
-	 * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::FLAVOR_ASSET_IS_NOT_READY
+	 * @return VidiunRemotePathListResponse
+	 * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::FLAVOR_ASSET_IS_NOT_READY
 	 */
 	public function getRemotePathsAction($id)
 	{
 		$assetDb = assetPeer::retrieveById($id);
 		if (!$assetDb || !($assetDb instanceof flavorAsset))
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
 
 		if ($assetDb->getStatus() != asset::FLAVOR_ASSET_STATUS_READY)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_IS_NOT_READY);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_IS_NOT_READY);
 
 		$c = new Criteria();
 		$c->add(FileSyncPeer::OBJECT_TYPE, FileSyncObjectType::FLAVOR_ASSET);
@@ -694,8 +694,8 @@ class FlavorAssetService extends KalturaAssetService
 		$c->add(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_URL);
 		$fileSyncs = FileSyncPeer::doSelect($c);
 			
-		$listResponse = new KalturaRemotePathListResponse();
-		$listResponse->objects = KalturaRemotePathArray::fromDbArray($fileSyncs, $this->getResponseProfile());
+		$listResponse = new VidiunRemotePathListResponse();
+		$listResponse->objects = VidiunRemotePathArray::fromDbArray($fileSyncs, $this->getResponseProfile());
 		$listResponse->totalCount = count($listResponse->objects);
 		return $listResponse;
 	}
@@ -713,22 +713,22 @@ class FlavorAssetService extends KalturaAssetService
 	{
 		$flavorAssetDb = assetPeer::retrieveById($id);
 		if (!$flavorAssetDb || !($flavorAssetDb instanceof flavorAsset))
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $id);
 
 		$this->validateEntryEntitlement($flavorAssetDb->getEntryId(), $id);		
 			
 		if ($flavorAssetDb->getStatus() != flavorAsset::FLAVOR_ASSET_STATUS_READY)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_IS_NOT_READY);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_IS_NOT_READY);
 		
 		// Validate for download
 		$entryDb = entryPeer::retrieveByPK($flavorAssetDb->getEntryId());
 		if(is_null($entryDb))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $flavorAssetDb->getEntryId());
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $flavorAssetDb->getEntryId());
 		
 		$preview = null;
-		$ksObj = $this->getKs();
-		$ks = ($ksObj) ? $ksObj->getOriginalString() : null;
-		$secureEntryHelper = new KSecureEntryHelper($entryDb, $ks, null, ContextType::DOWNLOAD);
+		$vsObj = $this->getVs();
+		$vs = ($vsObj) ? $vsObj->getOriginalString() : null;
+		$secureEntryHelper = new VSecureEntryHelper($entryDb, $vs, null, ContextType::DOWNLOAD);
 		if ($secureEntryHelper->shouldPreview()) {
 			$preview = $flavorAssetDb->estimateFileSize($entryDb, $secureEntryHelper->getPreviewLength());
 		} else {
@@ -743,13 +743,13 @@ class FlavorAssetService extends KalturaAssetService
 	 * 
 	 * @action getFlavorAssetsWithParams
 	 * @param string $entryId
-	 * @return KalturaFlavorAssetWithParamsArray
+	 * @return VidiunFlavorAssetWithParamsArray
 	 */
 	public function getFlavorAssetsWithParamsAction($entryId)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		
 		// get all the flavor params of partner 0 and the current partner (note that partner 0 is defined as partner group in service.ct)
 		$c = new Criteria();
@@ -797,18 +797,18 @@ class FlavorAssetService extends KalturaAssetService
 		$usedFlavorParams = array();
 		
 		// loop over the flavor assets and add them, if it has flavor params add them too
-		$flavorAssetWithParamsArray = new KalturaFlavorAssetWithParamsArray();
+		$flavorAssetWithParamsArray = new VidiunFlavorAssetWithParamsArray();
 		foreach($flavorAssetsDb as $flavorAssetDb)
 		{
 			$flavorParamsId = $flavorAssetDb->getFlavorParamsId();
-			$flavorAssetWithParams = new KalturaFlavorAssetWithParams();
+			$flavorAssetWithParams = new VidiunFlavorAssetWithParams();
 			$flavorAssetWithParams->entryId = $entryId;
-			$flavorAsset = KalturaFlavorAsset::getInstance($flavorAssetDb, $this->getResponseProfile());
+			$flavorAsset = VidiunFlavorAsset::getInstance($flavorAssetDb, $this->getResponseProfile());
 			$flavorAssetWithParams->flavorAsset = $flavorAsset;
 			if (isset($flavorParamsArray[$flavorParamsId]))
 			{
 				$flavorParamsDb = $flavorParamsArray[$flavorParamsId];
-				$flavorParams = KalturaFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
+				$flavorParams = VidiunFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
 				$flavorParams->fromObject($flavorParamsDb, $this->getResponseProfile());
 				$flavorAssetWithParams->flavorParams = $flavorParams;
 
@@ -819,7 +819,7 @@ class FlavorAssetService extends KalturaAssetService
 //			else if ($flavorAssetDb->getIsOriginal())
 //			{
 //				// create a dummy flavor params
-//				$flavorParams = new KalturaFlavorParams();
+//				$flavorParams = new VidiunFlavorParams();
 //				$flavorParams->name = "Original source";
 //				$flavorAssetWithParams->flavorParams = $flavorParams;
 //			}
@@ -836,10 +836,10 @@ class FlavorAssetService extends KalturaAssetService
 				// to list it one more time
 				continue;
 			}
-			$flavorParams = KalturaFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
+			$flavorParams = VidiunFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
 			$flavorParams->fromObject($flavorParamsDb, $this->getResponseProfile());
 			
-			$flavorAssetWithParams = new KalturaFlavorAssetWithParams();
+			$flavorAssetWithParams = new VidiunFlavorAssetWithParams();
 			$flavorAssetWithParams->entryId = $entryId;
 			$flavorAssetWithParams->flavorParams = $flavorParams;
 			$flavorAssetWithParamsArray[] = $flavorAssetWithParams;
@@ -855,10 +855,10 @@ class FlavorAssetService extends KalturaAssetService
 	 * @action export
 	 * @param string $assetId
 	 * @param int $storageProfileId
-	 * @throws KalturaErrors::INVALID_FLAVOR_ASSET_ID
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::INTERNAL_SERVERL_ERROR
-	 * @return KalturaFlavorAsset The exported asset
+	 * @throws VidiunErrors::INVALID_FLAVOR_ASSET_ID
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::INTERNAL_SERVERL_ERROR
+	 * @return VidiunFlavorAsset The exported asset
 	 */
 	public function exportAction ( $assetId , $storageProfileId )
 	{
@@ -871,14 +871,14 @@ class FlavorAssetService extends KalturaAssetService
 	 * @action setAsSource
 	 * @param string $assetId
 	 * @validateUser entry entryId edit
-	 * @throws KalturaErrors::ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::ASSET_ID_NOT_FOUND
 	 */
 	public function setAsSourceAction($assetId)
 	{
 		// Retrieve required
 		$asset = assetPeer::retrieveById($assetId);
 		if(is_null($asset)) 
-			throw new KalturaAPIException(KalturaErrors::ASSET_ID_NOT_FOUND, $assetId);
+			throw new VidiunAPIException(VidiunErrors::ASSET_ID_NOT_FOUND, $assetId);
 		
 		if($asset->getIsOriginal())
 			return;
@@ -902,22 +902,22 @@ class FlavorAssetService extends KalturaAssetService
 	 * @action deleteLocalContent
 	 * @param string $assetId
 	 * @validateUser asset::entry assetId edit
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public function deleteLocalContentAction($assetId)
 	{
 		// Retrieve required
 		$asset = assetPeer::retrieveById($assetId);
 		if(is_null($asset))
-			throw new KalturaAPIException(KalturaErrors::ASSET_ID_NOT_FOUND, $assetId);
+			throw new VidiunAPIException(VidiunErrors::ASSET_ID_NOT_FOUND, $assetId);
 
 		$srcSyncKey = $asset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 
-		$externalFileSyncs = kFileSyncUtils::getReadyExternalFileSyncForKey($srcSyncKey);
+		$externalFileSyncs = vFileSyncUtils::getReadyExternalFileSyncForKey($srcSyncKey);
 		if (!$externalFileSyncs)
-			throw new KalturaAPIException(KalturaErrors::NO_EXTERNAL_CONTENT_EXISTS);
+			throw new VidiunAPIException(VidiunErrors::NO_EXTERNAL_CONTENT_EXISTS);
 
-		$fileSyncs = kFileSyncUtils::getReadyInternalFileSyncsForKey($srcSyncKey);
+		$fileSyncs = vFileSyncUtils::getReadyInternalFileSyncsForKey($srcSyncKey);
 		foreach ($fileSyncs as $fileSync){
 			/* @var $fileSync FileSync*/
 			$fileSync->setStatus(FileSync::FILE_SYNC_STATUS_DELETED);
@@ -933,35 +933,35 @@ class FlavorAssetService extends KalturaAssetService
 	 * @param string $ffprobeJson
 	 * @param string $duration
 	 *
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 * @return string command to transcode with
 	 */
 	public function serveAdStitchCmdAction($assetId, $ffprobeJson = null ,$duration = null)
 	{
 		$asset = assetPeer::retrieveById($assetId);
 		if(is_null($asset))
-			throw new KalturaAPIException(KalturaErrors::ASSET_ID_NOT_FOUND, $assetId);
+			throw new VidiunAPIException(VidiunErrors::ASSET_ID_NOT_FOUND, $assetId);
 
 		$flavorParamsId = $asset->getFlavorParamsId();
 
 		$flavorParamsDb = assetParamsPeer::retrieveByPK($flavorParamsId);
 
 		if (!$flavorParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $flavorParamsId);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $flavorParamsId);
 
 		$flavorParamsOutputDb = assetParamsOutputPeer::retrieveByAssetId($assetId);
 
 		if (!$flavorParamsOutputDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_OUTPUT_ID_NOT_FOUND, $assetId);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_OUTPUT_ID_NOT_FOUND, $assetId);
 
 		try
 		{
-			$cmdLine = kBusinessConvertDL::generateAdStitchingCmdline($flavorParamsDb, $flavorParamsOutputDb, $ffprobeJson, $duration);
+			$cmdLine = vBusinessConvertDL::generateAdStitchingCmdline($flavorParamsDb, $flavorParamsOutputDb, $ffprobeJson, $duration);
 			if (empty($cmdLine))
-				throw new KalturaAPIException(KalturaErrors::GENERATE_TRANSCODING_COMMAND_FAIL, $assetId, $ffprobeJson, 'Got null as response');
+				throw new VidiunAPIException(VidiunErrors::GENERATE_TRANSCODING_COMMAND_FAIL, $assetId, $ffprobeJson, 'Got null as response');
 			return $cmdLine;
-		} catch (kCoreException $e) {
-			throw new KalturaAPIException(KalturaErrors::GENERATE_TRANSCODING_COMMAND_FAIL, $assetId, $ffprobeJson, $e->getMessage());
+		} catch (vCoreException $e) {
+			throw new VidiunAPIException(VidiunErrors::GENERATE_TRANSCODING_COMMAND_FAIL, $assetId, $ffprobeJson, $e->getMessage());
 		}
 	}
 
@@ -973,16 +973,16 @@ class FlavorAssetService extends KalturaAssetService
 	 * @action getVolumeMap
 	 * @param string $flavorId Flavor id
 	 * @return file
-	 * @throws KalturaErrors::INVALID_FLAVOR_ASSET_ID
+	 * @throws VidiunErrors::INVALID_FLAVOR_ASSET_ID
 	 */
 	function getVolumeMapAction($flavorId)
 	{
 		$flavorAsset = assetPeer::retrieveById($flavorId);
 		if(!$flavorAsset)
-			throw new KalturaAPIException(KalturaErrors::INVALID_FLAVOR_ASSET_ID, $flavorId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_FLAVOR_ASSET_ID, $flavorId);
 
 		if(!myEntryUtils::isFlavorSupportedByPackager($flavorAsset, false))
-			throw new KalturaAPIException(KalturaErrors::GIVEN_ID_NOT_SUPPORTED);
+			throw new VidiunAPIException(VidiunErrors::GIVEN_ID_NOT_SUPPORTED);
 
 		$content = myEntryUtils::getVolumeMapContent($flavorAsset);
 		return $content;

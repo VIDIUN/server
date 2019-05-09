@@ -4,10 +4,10 @@
  * @subpackage lib.entitlement
  */
 
-class kCategoryElasticEntitlement extends kBaseElasticEntitlement
+class vCategoryElasticEntitlement extends vBaseElasticEntitlement
 {
 	protected static $entitlementContributors = array(
-		'kElasticDisplayAndMemberEntitlementDecorator',
-		'kElasticPrivacyContextEntitlementDecorator',
+		'vElasticDisplayAndMemberEntitlementDecorator',
+		'vElasticPrivacyContextEntitlementDecorator',
 	);
 }

@@ -3,7 +3,7 @@
  * @package plugins.tvinciDistribution
  * @subpackage api.objects
  */
-class KalturaTvinciDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunTvinciDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
 	 * @var string
@@ -22,7 +22,7 @@ class KalturaTvinciDistributionProfile extends KalturaConfigurableDistributionPr
 
 	/**
 	 * Tags array for Tvinci distribution
-	 * @var KalturaTvinciDistributionTagArray
+	 * @var VidiunTvinciDistributionTagArray
 	 */
 	public $tags;
 
@@ -51,11 +51,11 @@ class KalturaTvinciDistributionProfile extends KalturaConfigurableDistributionPr
 
 	/**
 	 * @param TvinciDistributionProfile $srcObj
-	 * @param KalturaDetachedResponseProfile $responseProfile
+	 * @param VidiunDetachedResponseProfile $responseProfile
 	 */
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
-		$this->tags = KalturaTvinciDistributionTagArray::fromDbArray($srcObj->getTags());
+		$this->tags = VidiunTvinciDistributionTagArray::fromDbArray($srcObj->getTags());
 	}
 }

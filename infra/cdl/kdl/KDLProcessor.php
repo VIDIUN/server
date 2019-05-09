@@ -1,9 +1,9 @@
 <?php
 
 	/* ===========================
-	 * KDLProcessor
+	 * VDLProcessor
 	 */
-	class KDLProcessor  {
+	class VDLProcessor  {
 
 		/* ---------------------
 		 * Data
@@ -14,7 +14,7 @@
 		 * Cont/Dtor
 		 */
 		public function __construct() {
-			$this->_srcDataSet = new KDLMediaDataSet();
+			$this->_srcDataSet = new VDLMediaDataSet();
 		}
 		public function __destruct() {
 		}
@@ -39,7 +39,7 @@
 		/* ------------------------------
 		 * function Generate
 		 */
-		public function Generate(KDLMediaDataSet $mediaSet, KDLProfile $profile, array &$targetList)
+		public function Generate(VDLMediaDataSet $mediaSet, VDLProfile $profile, array &$targetList)
 		{
 			if($mediaSet!=null && $mediaSet->IsDataSet()){
 				$rv=$this->Initialize($mediaSet);
@@ -52,22 +52,22 @@
 					if($this->_srcDataSet->_container && $this->_srcDataSet->_container->IsFormatOf(array("realmedia"))){
 						$rmSrc = $this->_srcDataSet;
 						$rmSrc->_errors=array();
-						$rmSrc->_video = new KDLVideoData;
+						$rmSrc->_video = new VDLVideoData;
 						$rmSrc->_video->_id = $rmSrc->_video->_format = "realvideo";
-						$rmSrc->_audio = new KDLAudioData;
+						$rmSrc->_audio = new VDLAudioData;
 						$rmSrc->_audio->_id = $rmSrc->_audio->_format = "realaudio";
-						$rmSrc->_warnings[KDLConstants::ContainerIndex][] = // "Product bitrate too low - ".$prdAud->_bitRate."kbps, required - ".$trgAud->_bitRate."kbps.";
-							KDLWarnings::ToString(KDLWarnings::RealMediaMissingContent);
-KalturaLog::log("An invalid source RealMedia file thatfails to provide valid mediaInfodata. Set up a flavor with 'default' params.");
+						$rmSrc->_warnings[VDLConstants::ContainerIndex][] = // "Product bitrate too low - ".$prdAud->_bitRate."kbps, required - ".$trgAud->_bitRate."kbps.";
+							VDLWarnings::ToString(VDLWarnings::RealMediaMissingContent);
+VidiunLog::log("An invalid source RealMedia file thatfails to provide valid mediaInfodata. Set up a flavor with 'default' params.");
 					}
 					/*
 					 * ARF (Webex) sources don't have proper mediaInfo, therefore turn on the Force flag to carry on with conversion processing
 					 */
 					else if(isset($mediaSet->_container) && $mediaSet->_container->_format=="arf"){
 						foreach($profile->_flavors as $fl)
-							$fl->_flags=$fl->_flags|KDLFlavor::ForceCommandLineFlagBit;
+							$fl->_flags=$fl->_flags|VDLFlavor::ForceCommandLineFlagBit;
 						$mediaSet->_errors = array();
-KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn on the Force flag to carry on with conversion processing.");
+VidiunLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn on the Force flag to carry on with conversion processing.");
 					}
 					else {
 						return false;
@@ -87,7 +87,7 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 		/* ------------------------------
 		 * Initialize
 		 */
-		public function Initialize(KDLMediaDataSet $mediaInfoObj) {
+		public function Initialize(VDLMediaDataSet $mediaInfoObj) {
 			$this->_srcDataSet = $mediaInfoObj;
 			if($this->_srcDataSet->Initialize()==false)
 				return false;
@@ -106,7 +106,7 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 		/* ------------------------------
 		 * GenerateTargetFlavors
 		 */
-		public function GenerateTargetFlavors(KDLProfile $profile, array &$targetList)
+		public function GenerateTargetFlavors(VDLProfile $profile, array &$targetList)
 		{
 //			if($this->_srcDataSet->_video) 
 			{
@@ -122,7 +122,7 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 		/* ------------------------------
 		 * GenerateIntermediateSource
 		 */
-		public function GenerateIntermediateSource(KDLMediaDataSet $mediaSet, KDLProfile $profile=null)
+		public function GenerateIntermediateSource(VDLMediaDataSet $mediaSet, VDLProfile $profile=null)
 		{
 			/*
 			 * Check minimal source validity, else get out
@@ -144,9 +144,9 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 			 * For ARF ==> webex plugin 
 			 */
 			if(isset($mediaSet->_container) && $mediaSet->_container->IsFormatOf(array("arf"))) {
-				$interSrcProfile = $this->setProfileWithIntermediateSource(KDLContainerTarget::WMV,
-						KDLVideoTarget::WVC1A, 4000, 1080,
-						KDLAudioTarget::WMA, 128, 0,
+				$interSrcProfile = $this->setProfileWithIntermediateSource(VDLContainerTarget::WMV,
+						VDLVideoTarget::WVC1A, 4000, 1080,
+						VDLAudioTarget::WMA, 128, 0,
 						1, "webexNbrplayer.WebexNbrplayer");
 					/*
 					 * Following creates 3 retries for Webex conversions.
@@ -164,9 +164,9 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 				 		 * FFmpeg 2.1 and higher handles G2M4
 				 		 */
 			else if(isset($mediaSet->_video) && $mediaSet->_video->IsFormatOf(array("gotomeeting","g2m3","gotomeeting3"/*,"g2m4","gotomeeting3"*/))) {
-				$interSrcProfile = $this->setProfileWithIntermediateSource(KDLContainerTarget::WMV,
-						KDLVideoTarget::WVC1A, 4000, 1080,
-						KDLAudioTarget::WMA, 128, 0,
+				$interSrcProfile = $this->setProfileWithIntermediateSource(VDLContainerTarget::WMV,
+						VDLVideoTarget::WVC1A, 4000, 1080,
+						VDLAudioTarget::WMA, 128, 0,
 						1, "expressionEncoder.ExpressionEncoder");
 			}
 			/*
@@ -185,9 +185,9 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 				    )
 				   )
 				{
-					$interSrcProfile = $this->setProfileWithIntermediateSource(KDLContainerTarget::MP4, 
-						KDLVideoTarget::H264H, 4000, 1080, 
-						KDLAudioTarget::AAC, 128, 0, 
+					$interSrcProfile = $this->setProfileWithIntermediateSource(VDLContainerTarget::MP4, 
+						VDLVideoTarget::H264H, 4000, 1080, 
+						VDLAudioTarget::AAC, 128, 0, 
 						1, "quickTimeTools.QuickTimeTools");
 			}
 			/*
@@ -196,11 +196,11 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 			else if(isset($mediaSet->_video) && $mediaSet->_video->IsFormatOf(array("xdvd","xdva","xdvb","xdvc","xdve","xdvf","xdv4","hdv2"))) {
 				foreach($profile->_flavors as $flvr){
 					foreach ($flvr->_transcoders as $trans) {
-						if($trans->_id==KDLTranscoders::ON2){
-							$interSrcProfile = $this->setProfileWithIntermediateSource(KDLContainerTarget::MP4, 
-								KDLVideoTarget::H264H, 4000, 1080, 
-								KDLAudioTarget::AAC, 128, 0, 
-								0, KDLTranscoders::FFMPEG);
+						if($trans->_id==VDLTranscoders::ON2){
+							$interSrcProfile = $this->setProfileWithIntermediateSource(VDLContainerTarget::MP4, 
+								VDLVideoTarget::H264H, 4000, 1080, 
+								VDLAudioTarget::AAC, 128, 0, 
+								0, VDLTranscoders::FFMPEG);
 							break;
 						}
 					}
@@ -215,10 +215,10 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 			else if(isset($mediaSet->_video) && !isset($mediaSet->_audio)) {
 	            foreach($profile->_flavors as $flvr) {
 	            	if(preg_match('/widevine/', strtolower($flvr->_tags), $matches)) {
-	                	$interSrcProfile = $this->setProfileWithIntermediateSource(KDLContainerTarget::MP4, 
-								KDLVideoTarget::H264H, 4000, 1080, 
-								KDLAudioTarget::AAC, 128, 0, 
-								0, KDLTranscoders::FFMPEG);
+	                	$interSrcProfile = $this->setProfileWithIntermediateSource(VDLContainerTarget::MP4, 
+								VDLVideoTarget::H264H, 4000, 1080, 
+								VDLAudioTarget::AAC, 128, 0, 
+								0, VDLTranscoders::FFMPEG);
 						$forceAudioStream = true;
 						break;
 					}
@@ -233,11 +233,11 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 				 && isset($mediaSet->_contentStreams->video[0]->progressiveSegmented) && $mediaSet->_contentStreams->video[0]->progressiveSegmented==true) {
 				foreach($profile->_flavors as $flvr){
 					foreach ($flvr->_transcoders as $trans) {
-						if($trans->_id==KDLTranscoders::FFMPEG){
-							$interSrcProfile = $this->setProfileWithIntermediateSource(KDLContainerTarget::MP4, 
-								KDLVideoTarget::H264H, 4000, 1080, 
-								KDLAudioTarget::AAC, 128, 0, 
-								0, KDLTranscoders::MENCODER);
+						if($trans->_id==VDLTranscoders::FFMPEG){
+							$interSrcProfile = $this->setProfileWithIntermediateSource(VDLContainerTarget::MP4, 
+								VDLVideoTarget::H264H, 4000, 1080, 
+								VDLAudioTarget::AAC, 128, 0, 
+								0, VDLTranscoders::MENCODER);
 							break;
 						}
 					}
@@ -249,10 +249,10 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 			
 			/*
 			else if($mediaSet->_video->IsFormatOf(array("tscc","tsc2"))) {
-				$interSrcProfile = $this->setProfileWithIntermediateSource(KDLContainerTarget::MP4, 
-						KDLVideoTarget::H264H, 4000, 1080, 
-						KDLAudioTarget::AAC, 128, 0, 
-						0, KDLTranscoders::FFMPEG);
+				$interSrcProfile = $this->setProfileWithIntermediateSource(VDLContainerTarget::MP4, 
+						VDLVideoTarget::H264H, 4000, 1080, 
+						VDLAudioTarget::AAC, 128, 0, 
+						0, VDLTranscoders::FFMPEG);
 			}
 			*/
 			
@@ -262,7 +262,7 @@ KalturaLog::log("ARF (Webex) sources don't have proper mediaInfo, therefore turn
 			if(!isset($interSrcProfile))
 				return null;
 
-KalturaLog::log("Automatic Intermediate Source will be generated");
+VidiunLog::log("Automatic Intermediate Source will be generated");
 			$targetList = array();
 			$this->Generate($mediaSet, $interSrcProfile, $targetList);
 			if(count($targetList)==0)
@@ -290,14 +290,14 @@ KalturaLog::log("Automatic Intermediate Source will be generated");
 		 */
 		public static function ProceessFlavorsForCollection($flavorList)
 		{
-			$ee3obj = new KDLExpressionEncoder3(KDLTranscoders::EE3);
+			$ee3obj = new VDLExpressionEncoder3(VDLTranscoders::EE3);
 			return $ee3obj->GenerateSmoothStreamingPresetFile($flavorList);
 		}
 		
 		/* ------------------------------
 		 * ValidateProductFlavors
 		 */
-		public function ValidateProductFlavors(KDLMediaDataSet $source, array $targetList, array $productList)
+		public function ValidateProductFlavors(VDLMediaDataSet $source, array $targetList, array $productList)
 		{
 		$rv = true;
 			foreach ($targetList as $trg) {
@@ -305,7 +305,7 @@ KalturaLog::log("Automatic Intermediate Source will be generated");
 					continue;
 				$prd = $trg->IsInArray($productList);
 				if($prd==null)
-					$this->_srcDataSet->_errors[KDLConstants::ContainerIndex][] = "Missing flavor (".$trg->_id.")";
+					$this->_srcDataSet->_errors[VDLConstants::ContainerIndex][] = "Missing flavor (".$trg->_id.")";
 				
 				if($trg->ValidateProduct($source, $prd)==false)
 					$rv = false;
@@ -340,35 +340,35 @@ KalturaLog::log("Automatic Intermediate Source will be generated");
 		*/
 		private function setProfileWithIntermediateSource($contId, $vidId, $vidBr, $vidHeight, $audId, $audBr, $audSr, $engVer, $engine)
 		{
-			$interSrcFlavor = new KDLFlavor();
+			$interSrcFlavor = new VDLFlavor();
 			$interSrcFlavor->_name = "Automatic Intermediate Source";
 			$interSrcFlavor->_id = 0;
-			$interSrcFlavor->_container = new KDLContainerData();
+			$interSrcFlavor->_container = new VDLContainerData();
 			$interSrcFlavor->_container->_id = $contId;
-			$vid = new KDLVideoData();
+			$vid = new VDLVideoData();
 				$vid->_id = $vidId;
 				$vid->_bitRate = $vidBr;
 				$vid->_height = $vidHeight;
 			$interSrcFlavor->_video = $vid;
-			$aud = new KDLAudioData();
+			$aud = new VDLAudioData();
 				$aud->_id = $audId;
 				$aud->_bitRate = $audBr;
 				$aud->_sampleRate = $audSr;
 			$interSrcFlavor->_audio = $aud;
 			$interSrcFlavor->_engineVersion = $engVer;
 			
-			$opr = new KDLOperationParams(); 
+			$opr = new VDLOperationParams(); 
 			$opr->Set($engine);
 			if($interSrcFlavor->_engineVersion==1) {
-				$opr->_engine = KalturaPluginManager::loadObject('KDLOperatorBase', $opr->_id);
+				$opr->_engine = VidiunPluginManager::loadObject('VDLOperatorBase', $opr->_id);
 			}
 			else {
-				$opr->_engine = new KDLOperatorWrapper($opr->_id);
+				$opr->_engine = new VDLOperatorWrapper($opr->_id);
 			}
 			if($opr->_engine==null)
 				return null;
 			$interSrcFlavor->_transcoders[] = $opr;
-			$interSrcProfile = new KDLProfile();
+			$interSrcProfile = new VDLProfile();
 			$interSrcProfile->_flavors[] = $interSrcFlavor;
 			
 			return $interSrcProfile;
@@ -377,9 +377,9 @@ KalturaLog::log("Automatic Intermediate Source will be generated");
 	}
 
 	/* ===========================
-	 * KDLProfile
+	 * VDLProfile
 	 */
-	class KDLProfile {
+	class VDLProfile {
 
 		/* ---------------------
 		 * Data

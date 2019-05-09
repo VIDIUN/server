@@ -1,11 +1,11 @@
 <?php
 /**
- * Used to ingest media that is already ingested to Kaltura system as a different file in the past, the new created flavor asset will be ready immediately using a file sync of link type that will point to the existing file sync.
+ * Used to ingest media that is already ingested to Vidiun system as a different file in the past, the new created flavor asset will be ready immediately using a file sync of link type that will point to the existing file sync.
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaFileSyncResource extends KalturaContentResource
+class VidiunFileSyncResource extends VidiunContentResource
 {
 	/**
 	 * The object type of the file sync object 
@@ -32,7 +32,7 @@ class KalturaFileSyncResource extends KalturaContentResource
 	public $version;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -46,7 +46,7 @@ class KalturaFileSyncResource extends KalturaContentResource
 	private static $map_between_objects = array('fileSyncObjectType', 'objectSubType', 'objectId', 'version');
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -54,12 +54,12 @@ class KalturaFileSyncResource extends KalturaContentResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kFileSyncResource();
+			$object_to_fill = new vFileSyncResource();
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

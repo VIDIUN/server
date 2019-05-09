@@ -1,13 +1,13 @@
 <?php
 
 require_once(dirname(__file__) . '/../request/infraRequestUtils.class.php');
-require_once(dirname(__file__) . '/kRendererBase.php');
+require_once(dirname(__file__) . '/vRendererBase.php');
 
 /*
  * @package server-infra
  * @subpackage renderers
  */
-class kRendererString implements kRendererBase
+class vRendererString implements vRendererBase
 {
 	protected $content;
 	protected $contentType;

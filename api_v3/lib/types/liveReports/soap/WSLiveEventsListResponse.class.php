@@ -3,8 +3,8 @@
 
 class WSLiveEventsListResponse extends WSBaseObject
 {				
-	function getKalturaObject() {
-		return new KalturaLiveEventsListResponse();
+	function getVidiunObject() {
+		return new VidiunLiveEventsListResponse();
 	}
 	
 	/**

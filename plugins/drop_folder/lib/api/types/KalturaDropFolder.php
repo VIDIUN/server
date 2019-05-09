@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage api.objects
  */
-class KalturaDropFolder extends KalturaObject implements IFilterable
+class VidiunDropFolder extends VidiunObject implements IFilterable
 {	
 	/**
 	 * @var int
@@ -31,13 +31,13 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 	public $description;
 	
 	/**
-	 * @var KalturaDropFolderType
+	 * @var VidiunDropFolderType
 	 * @filter eq,in
 	 */
 	public $type;
 	
 	/**
-	 * @var KalturaDropFolderStatus
+	 * @var VidiunDropFolderStatus
 	 * @filter eq,in
 	 */
 	public $status;
@@ -67,7 +67,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 	public $fileSizeCheckInterval;
 	
 	/**
-	 * @var KalturaDropFolderFileDeletePolicy
+	 * @var VidiunDropFolderFileDeletePolicy
 	 */
 	public $fileDeletePolicy;
 	
@@ -78,7 +78,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 	
 	
 	/**
-	 * @var KalturaDropFolderFileHandlerType
+	 * @var VidiunDropFolderFileHandlerType
 	 * @filter eq,in
 	 */
 	public $fileHandlerType;
@@ -90,7 +90,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 	public $fileNamePatterns;
 	
 	/**
-	 * @var KalturaDropFolderFileHandlerConfig
+	 * @var VidiunDropFolderFileHandlerConfig
 	 */
 	public $fileHandlerConfig;
 
@@ -101,7 +101,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 	public $tags;
 	
 	/**
-	 * @var KalturaDropFolderErrorCode
+	 * @var VidiunDropFolderErrorCode
 	 * @filter eq,in
 	 */
 	public $errorCode;
@@ -163,7 +163,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 	/**
 	* @var bool
 	*/
-	public $shouldValidateKS;
+	public $shouldValidateVS;
 	
 	/*
 	 * mapping between the field on this object (on the left) and the setter/getter on the entry object (on the right)  
@@ -195,7 +195,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 		'metadataProfileId',
 		'categoriesMetadataFieldName',
 		'enforceEntitlement',
-		'shouldValidateKS',
+		'shouldValidateVS',
 	 );
 		 
 	public function getMapBetweenObjects()
@@ -218,7 +218,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 		return $dbObject;
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		
@@ -227,7 +227,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 			$dbFileHandlerConfig = $source_object->getFileHandlerConfig();
 			if ($dbFileHandlerConfig)
 			{
-				$apiFileHandlerConfig = KalturaPluginManager::loadObject('KalturaDropFolderFileHandlerConfig', $source_object->getFileHandlerType());
+				$apiFileHandlerConfig = VidiunPluginManager::loadObject('VidiunDropFolderFileHandlerConfig', $source_object->getFileHandlerType());
 				if($apiFileHandlerConfig)
 				{
 					$apiFileHandlerConfig->fromObject($dbFileHandlerConfig);
@@ -235,7 +235,7 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 				}
 				else
 				{
-					KalturaLog::err("Cannot load API object for core file handler config type [" . $dbFileHandlerConfig->getHandlerType() . "]");
+					VidiunLog::err("Cannot load API object for core file handler config type [" . $dbFileHandlerConfig->getHandlerType() . "]");
 				}
 			}
 		}
@@ -287,30 +287,30 @@ class KalturaDropFolder extends KalturaObject implements IFilterable
 	
 	/**
 	 * @param int $type
-	 * @return KalturaDropFolder
+	 * @return VidiunDropFolder
 	 */
 	static function getInstanceByType ($type)
 	{
 		switch ($type) 
 		{
-			case KalturaDropFolderType::LOCAL:
-			    $obj = new KalturaDropFolder();
+			case VidiunDropFolderType::LOCAL:
+			    $obj = new VidiunDropFolder();
 				break;
 		    
-		    case KalturaDropFolderType::FTP:
-				$obj = new KalturaFtpDropFolder();
+		    case VidiunDropFolderType::FTP:
+				$obj = new VidiunFtpDropFolder();
 				break;
 				
-			case KalturaDropFolderType::SFTP:
-			    $obj = new KalturaSftpDropFolder();
+			case VidiunDropFolderType::SFTP:
+			    $obj = new VidiunSftpDropFolder();
 				break;
 			    
-			case KalturaDropFolderType::SCP:
-			    $obj = new KalturaScpDropFolder();
+			case VidiunDropFolderType::SCP:
+			    $obj = new VidiunScpDropFolder();
 				break;
 			    
 			default:
-				$obj = KalturaPluginManager::loadObject('KalturaDropFolder', $type);
+				$obj = VidiunPluginManager::loadObject('VidiunDropFolder', $type);
 				break;
 		}
 		

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-abstract class kJobData
+abstract class vJobData
 {
 	const MAX_ESTIMATED_EFFORT = 1099511627776; // 1 TB
 	const BATCH_JOB_DEFAULT_PRIORITY = 3;

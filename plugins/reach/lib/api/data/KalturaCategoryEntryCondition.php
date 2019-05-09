@@ -5,7 +5,7 @@
  * @subpackage api.objects 
  */
 
-class KalturaCategoryEntryCondition extends KalturaCondition
+class VidiunCategoryEntryCondition extends VidiunCondition
 {
 	/**
 	 * Category id to check condition for
@@ -17,13 +17,13 @@ class KalturaCategoryEntryCondition extends KalturaCondition
 	/**
 	 * Minimum category user level permission to validate
 	 *
-	 * @var KalturaCategoryUserPermissionLevel
+	 * @var VidiunCategoryUserPermissionLevel
 	 */
 	public $categoryUserPermission;
 	
 	/**
 	 * Comparing operator
-	 * @var KalturaSearchConditionComparison
+	 * @var VidiunSearchConditionComparison
 	 */
 	public $comparison;
 	
@@ -48,12 +48,12 @@ class KalturaCategoryEntryCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kCategoryEntryCondition();
+			$dbObject = new vCategoryEntryCondition();
 		
 		return parent::toObject($dbObject, $skip);
 	}

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class playManifestAction extends kalturaAction
+class playManifestAction extends vidiunAction
 {
 	
 	const URL = 'url';
@@ -21,7 +21,7 @@ class playManifestAction extends kalturaAction
 
 	/**
 	 * When this list start to contain plugins - 
-	 * conside moving it to either kConf or as a function on the enum.
+	 * conside moving it to either vConf or as a function on the enum.
 	 * @var array
 	 */ 
 	static protected $httpFormats = array(
@@ -62,7 +62,7 @@ class playManifestAction extends kalturaAction
 		"uiConfId" => 'ui',
 	);
 
-	const KALTURA_TOKEN_MARKER = '{kt}';
+	const VIDIUN_TOKEN_MARKER = '{kt}';
 	
 	/**
 	 * @var string
@@ -110,7 +110,7 @@ class playManifestAction extends kalturaAction
 	private $deliveryProfile = null;
 	
 	/**
-	 * @var KSecureEntryHelper
+	 * @var VSecureEntryHelper
 	 */
 	private $secureEntryHelper = null;
 	
@@ -141,10 +141,10 @@ class playManifestAction extends kalturaAction
 
 	const PLAY_LOCATION_INTERNAL = 'Internal';
 
-	static protected function validateKalturaToken($url, $urlToken)
+	static protected function validateVidiunToken($url, $urlToken)
 	{
-		$url = str_replace($urlToken, self::KALTURA_TOKEN_MARKER, $url);
-		$calcToken = sha1(kConf::get('url_token_secret') . $url);
+		$url = str_replace($urlToken, self::VIDIUN_TOKEN_MARKER, $url);
+		$calcToken = sha1(vConf::get('url_token_secret') . $url);
 		return $calcToken == $urlToken;
 	}
 	
@@ -158,34 +158,34 @@ class playManifestAction extends kalturaAction
 		// look for a valid token
 		$expiry = $this->getRequestParameter("expiry");
 		if ($expiry && $expiry <= time())
-			KExternalErrors::dieError(KExternalErrors::EXPIRED_TOKEN);
+			VExternalErrors::dieError(VExternalErrors::EXPIRED_TOKEN);
 
 		$urlToken = $this->getRequestParameter("kt");
 		if ($urlToken)
 		{
 			if ($_SERVER["REQUEST_METHOD"] != "GET" ||			// don't allow tokens in post requests since the token protects only the URI and not the post parameters 
-				!self::validateKalturaToken($_SERVER["REQUEST_URI"], $urlToken))
-				KExternalErrors::dieError(KExternalErrors::INVALID_TOKEN);
+				!self::validateVidiunToken($_SERVER["REQUEST_URI"], $urlToken))
+				VExternalErrors::dieError(VExternalErrors::INVALID_TOKEN);
 		}
 		
 		// initalize the context
-		$ksStr = $this->getRequestParameter("ks");
-		if($ksStr && !$urlToken)
+		$vsStr = $this->getRequestParameter("vs");
+		if($vsStr && !$urlToken)
 		{
 			try 
 			{
-				kCurrentContext::initKsPartnerUser($ksStr);
+				vCurrentContext::initVsPartnerUser($vsStr);
 			}
 			catch (Exception $ex)
 			{
-				KExternalErrors::dieError(KExternalErrors::INVALID_KS);	
+				VExternalErrors::dieError(VExternalErrors::INVALID_VS);	
 			}
 		}
 		else
 		{
-			$this->entry = kCurrentContext::initPartnerByEntryId($this->entryId);
+			$this->entry = vCurrentContext::initPartnerByEntryId($this->entryId);
 			if (!$this->entry || $this->entry->getStatus() == entryStatus::DELETED) {
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 			}
 		}
 		
@@ -195,21 +195,21 @@ class playManifestAction extends kalturaAction
 			return;
 		}
 
-		myPartnerUtils::addPartnerToCriteria ('entry' ,kCurrentContext::getCurrentPartnerId(), true);
+		myPartnerUtils::addPartnerToCriteria ('entry' ,vCurrentContext::getCurrentPartnerId(), true);
 
 		// enforce entitlement
-		kEntitlementUtils::initEntitlementEnforcement();
+		vEntitlementUtils::initEntitlementEnforcement();
 		
 		if(!$this->entry)
 		{
 			$this->entry = entryPeer::retrieveByPKNoFilter( $this->entryId );
 			if (!$this->entry || $this->entry->getStatus() == entryStatus::DELETED)
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		else
 		{
-			if(!kEntitlementUtils::isEntryEntitled($this->entry))
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			if(!vEntitlementUtils::isEntryEntitled($this->entry))
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		
 		myPartnerUtils::blockInactivePartner($this->entry->getPartnerId());
@@ -239,7 +239,7 @@ class playManifestAction extends kalturaAction
 
 		$context = $this->deliveryAttributes->getFormat() == self::DOWNLOAD ? ContextType::DOWNLOAD : ContextType::PLAY;
 		
-		$this->secureEntryHelper = new KSecureEntryHelper($this->entry, $ksStr, $referrer, $context, $keyValueHashes);
+		$this->secureEntryHelper = new VSecureEntryHelper($this->entry, $vsStr, $referrer, $context, $keyValueHashes);
 		
 		if ($this->secureEntryHelper->shouldPreview())
 		{
@@ -265,7 +265,7 @@ class playManifestAction extends kalturaAction
 			$this->entryId = $this->entry->getRootEntryId();
 			$this->entry = entryPeer::retrieveByPK($this->entryId);
 			if (!$this->entry || $this->entry->getStatus() == entryStatus::DELETED)
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 	}
 	
@@ -343,10 +343,10 @@ class playManifestAction extends kalturaAction
 	protected function enforceEncryption()
 	{
 		$playbackParams = array();
-		if (kConf::hasMap("optimized_playback"))
+		if (vConf::hasMap("optimized_playback"))
 		{
 			$partnerId = $this->entry->getPartnerId();
-			$optimizedPlayback = kConf::getMap("optimized_playback");
+			$optimizedPlayback = vConf::getMap("optimized_playback");
 			if (array_key_exists($partnerId, $optimizedPlayback))
 			{
 				$playbackParams = $optimizedPlayback[$partnerId];
@@ -357,11 +357,11 @@ class playManifestAction extends kalturaAction
 		if (array_key_exists('enforce_encryption', $playbackParams) && $playbackParams['enforce_encryption'])
 		{
 			if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on')
-				KExternalErrors::dieError(KExternalErrors::ACCESS_CONTROL_RESTRICTED, 'unencrypted manifest request - forbidden');
+				VExternalErrors::dieError(VExternalErrors::ACCESS_CONTROL_RESTRICTED, 'unencrypted manifest request - forbidden');
 
 			$allowedProtocols = array('https','rtmpe','rtmpte');
 			if (!in_array(strtolower($this->deliveryAttributes->getMediaProtocol()) , $allowedProtocols))
-				KExternalErrors::dieError(KExternalErrors::ACCESS_CONTROL_RESTRICTED, 'unencrypted playback protocol - forbidden');
+				VExternalErrors::dieError(VExternalErrors::ACCESS_CONTROL_RESTRICTED, 'unencrypted playback protocol - forbidden');
 		}
 	}
 	
@@ -373,16 +373,16 @@ class playManifestAction extends kalturaAction
 			if(!in_array($this->entry->getMediaType(), array(
 					entry::ENTRY_MEDIA_TYPE_VIDEO,
 					entry::ENTRY_MEDIA_TYPE_AUDIO)))
-				KExternalErrors::dieError(KExternalErrors::INVALID_ENTRY_TYPE);
+				VExternalErrors::dieError(VExternalErrors::INVALID_ENTRY_TYPE);
 			break;
 			
 		case entryType::PLAYLIST: 
 			if ($this->entry->getMediaType() != entry::ENTRY_MEDIA_TYPE_TEXT)
-				KExternalErrors::dieError(KExternalErrors::INVALID_ENTRY_TYPE);
+				VExternalErrors::dieError(VExternalErrors::INVALID_ENTRY_TYPE);
 			break;
 				
 		default:
-			KExternalErrors::dieError(KExternalErrors::INVALID_ENTRY_TYPE);
+			VExternalErrors::dieError(VExternalErrors::INVALID_ENTRY_TYPE);
 		}
 	}
 	
@@ -390,10 +390,10 @@ class playManifestAction extends kalturaAction
 	{
 		switch ($this->entry->getPartner()->getStorageServePriority())
 		{
-		case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY:
+		case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY:
 			return true;
 			
-		case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_FIRST:
+		case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_FIRST:
 			if ($hasLocalFlavors)
 				return true;
 			break;
@@ -427,8 +427,8 @@ class playManifestAction extends kalturaAction
 		if(!$key)
 			$key = $this->entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISM);
 			
-		$localFileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($key);
-		$remoteFileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($key);
+		$localFileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($key);
+		$remoteFileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($key);
 		
 		//To Remove - Until the migration process from asset sub type 3 to asset sub type 1 will be completed we need to support both formats
 		if(!$localFileSync && !$remoteFileSync)
@@ -438,8 +438,8 @@ class playManifestAction extends kalturaAction
 			{
 				return false;
 			}
-			$localFileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($key);
-			$remoteFileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($key);
+			$localFileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($key);
+			$remoteFileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($key);
 		}
 		
 		if ($this->shouldUseLocalFlavors($localFileSync, $remoteFileSync))
@@ -455,7 +455,7 @@ class playManifestAction extends kalturaAction
 		}
 		
 		if (!$this->deliveryAttributes->getManifestFileSync())
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 		
 		return true;
 	}
@@ -466,8 +466,8 @@ class playManifestAction extends kalturaAction
 		if (!$key)
 			return false;
 
-		$localFileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($key);
-		$remoteFileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($key);
+		$localFileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($key);
+		$remoteFileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($key);
 		if ($this->shouldUseLocalFlavors($localFileSync, $remoteFileSync))
 		{
 			$this->deliveryAttributes->setStorageId(null);
@@ -547,7 +547,7 @@ class playManifestAction extends kalturaAction
 			myPlaylistUtils::executeStitchedPlaylist($this->entry);
 		if (!$mediaEntry)
 		{
-			KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 
 		$this->setPlaylistFlavorAssets($durations, $mediaEntry->getId());
@@ -679,7 +679,7 @@ class playManifestAction extends kalturaAction
 			
 			switch ($servePriority)
 			{
-			case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY:
+			case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY:
 				$c->addAnd ( FileSyncPeer::FILE_TYPE , FileSync::FILE_SYNC_FILE_TYPE_URL, Criteria::NOT_EQUAL);
 				break;
 				
@@ -760,7 +760,7 @@ class playManifestAction extends kalturaAction
 		}
 	
 		if (!$this->deliveryAttributes->getFlavorAssets())
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 	
 		if ($oneOnly) {
 			$flavorAssets = $this->deliveryAttributes->getFlavorAssets();
@@ -818,11 +818,11 @@ class playManifestAction extends kalturaAction
 			
 		$storageProfile = StorageProfilePeer::retrieveByPK($this->deliveryAttributes->getStorageId());
 		if(!$storageProfile)
-			KExternalErrors::dieGracefully();			// TODO use a dieError
+			VExternalErrors::dieGracefully();			// TODO use a dieError
 				
 		// storage doesn't belong to the partner
 		if($storageProfile->getPartnerId() != $this->entry->getPartnerId())
-			KExternalErrors::dieGracefully();			// TODO use a dieError
+			VExternalErrors::dieGracefully();			// TODO use a dieError
 	}
 	
 	protected function initDeliveryProfile()
@@ -843,10 +843,10 @@ class playManifestAction extends kalturaAction
 	{
 		$flavorAssets = $this->deliveryAttributes->getFlavorAssets();
 		$flavorAsset = reset($flavorAssets);
-		list($fileName, $extension) = kAssetUtils::getFileName($this->entry, $flavorAsset);
+		list($fileName, $extension) = vAssetUtils::getFileName($this->entry, $flavorAsset);
 
 		$fileName = str_replace("\n", ' ', $fileName);
-		$fileName = kString::keepOnlyValidUrlChars($fileName);
+		$fileName = vString::keepOnlyValidUrlChars($fileName);
 
 		if ($extension)
 			$fileName .= ".$extension";
@@ -1010,19 +1010,19 @@ class playManifestAction extends kalturaAction
 
 	private function serveHDNetwork()
 	{
-		kApiCache::setConditionalCacheExpiry(600);		// the result contains a KS so we shouldn't cache it for a long time
+		vApiCache::setConditionalCacheExpiry(600);		// the result contains a VS so we shouldn't cache it for a long time
 
-        	if ($this->deliveryAttributes->getMediaProtocol() == 'https' && kConf::hasParam('cdn_api_host_https'))
+        	if ($this->deliveryAttributes->getMediaProtocol() == 'https' && vConf::hasParam('cdn_api_host_https'))
         	{
-            		$mediaUrl = "https://" . kConf::get('cdn_api_host_https');
+            		$mediaUrl = "https://" . vConf::get('cdn_api_host_https');
         	}
         	else
         	{
-            		$mediaUrl = "http://" . kConf::get('cdn_api_host');
+            		$mediaUrl = "http://" . vConf::get('cdn_api_host');
         	}
         	$mediaUrl .= str_replace("f4m", "smil", str_replace("hdnetwork", "hdnetworksmil", $_SERVER["REQUEST_URI"]));
 
-		$renderer = new kF4MManifestRenderer(array(), $this->entryId);
+		$renderer = new vF4MManifestRenderer(array(), $this->entryId);
 		$renderer->mediaUrl = $mediaUrl;
 		return $renderer;
 	}
@@ -1069,12 +1069,12 @@ class playManifestAction extends kalturaAction
 	{
 		$this->initFlavorParamsIds();
 
-		if (in_array($this->entry->getSource(), LiveEntry::$kalturaLiveSourceTypes) && !$this->deliveryAttributes->getServeVodFromLive())
+		if (in_array($this->entry->getSource(), LiveEntry::$vidiunLiveSourceTypes) && !$this->deliveryAttributes->getServeVodFromLive())
  		{
  			if (!$this->entry->isCurrentlyLive())
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_LIVE, "Entry [$this->entryId] is not broadcasting");
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_LIVE, "Entry [$this->entryId] is not broadcasting");
  			
- 			kApiCache::setExpiry(120);
+ 			vApiCache::setExpiry(120);
  		}
 
 		if($this->deliveryAttributes->getFormat() == PlaybackProtocol::MULTICAST_SL)
@@ -1163,7 +1163,7 @@ class playManifestAction extends kalturaAction
 	public function execute()
 	{
 		if($this->getRequestParameter("format", "Empty") !== PlaybackProtocol::APPLE_HTTP_TO_MC)
-			KExternalErrors::setResponseErrorCode(KExternalErrors::HTTP_STATUS_NOT_FOUND);
+			VExternalErrors::setResponseErrorCode(VExternalErrors::HTTP_STATUS_NOT_FOUND);
 		
 		$this->deliveryAttributes = new DeliveryProfileDynamicAttributes();
 		// Parse input parameters
@@ -1210,12 +1210,12 @@ class playManifestAction extends kalturaAction
 		$this->deliveryAttributes->setpreferredBitrate($this->getRequestParameter ( "preferredBitrate", null ));
 		$this->maxBitrate = $this->getRequestParameter ( "maxBitrate", null );
 		if(($this->maxBitrate) && ((!is_numeric($this->maxBitrate)) || ($this->maxBitrate <= 0)))
-			KExternalErrors::dieError(KExternalErrors::INVALID_MAX_BITRATE);
+			VExternalErrors::dieError(VExternalErrors::INVALID_MAX_BITRATE);
 		$this->deliveryAttributes->setMaxBitrate($this->maxBitrate);
 		
 		$this->minBitrate = $this->getRequestParameter ( "minBitrate", null );
 		if(($this->minBitrate) && ((!is_numeric($this->minBitrate)) || ($this->minBitrate <= 0)))
-			KExternalErrors::dieError(KExternalErrors::INVALID_MIN_BITRATE);
+			VExternalErrors::dieError(VExternalErrors::INVALID_MIN_BITRATE);
 		$this->deliveryAttributes->setMinBitrate($this->minBitrate);
 		
 		$this->deliveryAttributes->setStorageId($this->getRequestParameter ( "storageId", null ));
@@ -1273,14 +1273,14 @@ class playManifestAction extends kalturaAction
 				break;
 			
 			default:
-				KExternalErrors::dieError(KExternalErrors::INVALID_ENTRY_TYPE);
+				VExternalErrors::dieError(VExternalErrors::INVALID_ENTRY_TYPE);
 		}
 				
 		if (!$renderer)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'This format is unsupported');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'This format is unsupported');
 		
 		$renderer->contributors = array();
-		$config = new kManifestContributorConfig();
+		$config = new vManifestContributorConfig();
 		$config->format = $this->deliveryAttributes->getFormat();
 		$config->storageId = $this->deliveryAttributes->getStorageId();
 		$config->entryId = $this->entryId;
@@ -1289,10 +1289,10 @@ class playManifestAction extends kalturaAction
 		$config->hasSequence = $this->deliveryAttributes->getHasValidSequence();
 		$config->disableCaptions = $this->getRequestParameter("disableCaptions", false);
 
-		$contributors = KalturaPluginManager::getPluginInstances('IKalturaPlayManifestContributor');
+		$contributors = VidiunPluginManager::getPluginInstances('IVidiunPlayManifestContributor');
 		foreach ($contributors as $contributor)
 		{
-			/* @var $contributor IKalturaPlayManifestContributor */
+			/* @var $contributor IVidiunPlayManifestContributor */
 			$renderer->contributors = array_merge($renderer->contributors, $contributor->getManifestEditors($config));
 		}
 
@@ -1314,25 +1314,25 @@ class playManifestAction extends kalturaAction
 
 		// Handle caching
 		$canCacheAccessControl = false;
-		if (kConf::hasParam("force_caching_headers") && in_array($this->entry->getPartnerId(), kConf::get("force_caching_headers")))
+		if (vConf::hasParam("force_caching_headers") && in_array($this->entry->getPartnerId(), vConf::get("force_caching_headers")))
 		{
-			$renderer->cachingHeadersAge = kConf::get('play_manifest_cache_age', 'local', 60);
+			$renderer->cachingHeadersAge = vConf::get('play_manifest_cache_age', 'local', 60);
 			$renderer->forceCachingHeaders = true;
 		}
 		if (!$this->secureEntryHelper)
 		{
-			$canCacheAccessControl = true;			// TODO: reconsider this if/when expired ktokens will be used
+			$canCacheAccessControl = true;			// TODO: reconsider this if/when expired vtokens will be used
 		}
-		else if (!$this->secureEntryHelper->shouldDisableCache() && !$this->secureEntryHelper->isKsAdmin() &&
-			($this->secureEntryHelper->isKsWidget() || !$this->secureEntryHelper->hasRules()))
+		else if (!$this->secureEntryHelper->shouldDisableCache() && !$this->secureEntryHelper->isVsAdmin() &&
+			($this->secureEntryHelper->isVsWidget() || !$this->secureEntryHelper->hasRules()))
 		{
 			$canCacheAccessControl = true;
 		}
 		
 		if (!$renderer->tokenizer && $canCacheAccessControl)
 		{
-			// Note: kApiCache::hasExtraFields is checked in kManifestRenderers
-			$renderer->cachingHeadersAge = kConf::get('play_manifest_cache_age', 'local', 60);
+			// Note: vApiCache::hasExtraFields is checked in vManifestRenderers
+			$renderer->cachingHeadersAge = vConf::get('play_manifest_cache_age', 'local', 60);
 		}
 		if ($this->deliveryProfile && $this->deliveryProfile->getAdStitchingEnabled())
 			$renderer->cachingHeadersAge = 0;
@@ -1340,14 +1340,14 @@ class playManifestAction extends kalturaAction
 		
 		if (!$this->secureEntryHelper || !$this->secureEntryHelper->shouldDisableCache())
 		{
-			$cache = kPlayManifestCacher::getInstance();
+			$cache = vPlayManifestCacher::getInstance();
 			$cache->storeRendererToCache($renderer);
 		}
 
 		// Output the response
-		KExternalErrors::terminateDispatch();
+		VExternalErrors::terminateDispatch();
 
-		$renderer->setKsObject(kCurrentContext::$ks_object);
+		$renderer->setVsObject(vCurrentContext::$vs_object);
 		$renderer->setPlaybackContext($playbackContext);
 		$renderer->setDeliveryCode($deliveryCode);
 
@@ -1357,13 +1357,13 @@ class playManifestAction extends kalturaAction
 			if ($this->deliveryProfile->getDynamicAttributes()->getUsedEdgeServerIds() && count($this->deliveryProfile->getDynamicAttributes()->getUsedEdgeServerIds()))
 			{
 				$playLocation = implode(",", $this->deliveryProfile->getDynamicAttributes()->getUsedEdgeServerIds());
-			} else if ($this->secureEntryHelper->getScope()->getOutputVarByName(kIpAddressCondition::PARTNER_INTERNAL_IP))
+			} else if ($this->secureEntryHelper->getScope()->getOutputVarByName(vIpAddressCondition::PARTNER_INTERNAL_IP))
 			{
 				$playLocation = self::PLAY_LOCATION_INTERNAL;
 			}
 			header('X-ServerNodeIds:' . $playLocation);
 			$renderer->setPlayLocation($playLocation);
-			$renderer->setInternalIP($this->secureEntryHelper->getScope()->getOutputVarByName(kIpAddressCondition::PARTNER_INTERNAL_IP));
+			$renderer->setInternalIP($this->secureEntryHelper->getScope()->getOutputVarByName(vIpAddressCondition::PARTNER_INTERNAL_IP));
 		}
 		$renderer->output();
 	}

@@ -24,7 +24,7 @@
     <target>
 		ContributionWizard.swf
     </target>
-    <cssUrl>/content/uiconf/kaltura/drupal/styles_ContributionWizard.swf</cssUrl>
+    <cssUrl>/content/uiconf/vidiun/drupal/styles_ContributionWizard.swf</cssUrl>
   </UIConfig>
 
 </UIConfigList>

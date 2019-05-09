@@ -3,6 +3,6 @@
  * @package plugins.widevine
  * @subpackage api.filters.enum
  */
-class KalturaWidevineFlavorParamsOrderBy extends KalturaFlavorParamsOrderBy
+class VidiunWidevineFlavorParamsOrderBy extends VidiunFlavorParamsOrderBy
 {
 }

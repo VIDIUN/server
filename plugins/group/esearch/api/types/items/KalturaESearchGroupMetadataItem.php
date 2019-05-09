@@ -3,7 +3,7 @@
  * @package plugins.group
  * @subpackage api.objects
  */
-class KalturaESearchGroupMetadataItem extends KalturaESearchAbstractGroupItem
+class VidiunESearchGroupMetadataItem extends VidiunESearchAbstractGroupItem
 {
 	/**
 	 * @var string

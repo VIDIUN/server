@@ -3,7 +3,7 @@
  * This class will render the results of the webservices accroding to the required response type.
  *
  */
-class kalturaWebserviceRenderer
+class vidiunWebserviceRenderer
 {
 	const RESPONSE_TYPE_JSON = 1;
 	const RESPONSE_TYPE_XML = 2;
@@ -97,8 +97,8 @@ class kalturaWebserviceRenderer
 		elseif( $this->response_type == self::RESPONSE_TYPE_MRSS )
 		{
 			$content_type = "text/xml; charset=utf-8";
-			//$response =  kalturaRssRenderer::renderMrssFeed( objectWrapperBase::toArrayImpl ( $response_params  ) );
-			$mrss_renderer = new kalturaRssRenderer ( kalturaRssRenderer::TYPE_YAHOO ); 
+			//$response =  vidiunRssRenderer::renderMrssFeed( objectWrapperBase::toArrayImpl ( $response_params  ) );
+			$mrss_renderer = new vidiunRssRenderer ( vidiunRssRenderer::TYPE_YAHOO ); 
 			$response =  $mrss_renderer->renderMrssFeed( $response_params  );
 		}
 		else
@@ -233,7 +233,7 @@ class kalturaWebserviceRenderer
 	    {
 			$result = "";
 
-			if ( kArray::array_is_associative ( $array) )
+			if ( vArray::array_is_associative ( $array) )
 			{
 		    	foreach($array as $key => $val ) // subnode
 		        {
@@ -286,7 +286,7 @@ class kalturaWebserviceRenderer
 			if ( $this->escape_text )
 			{
 				// TODO - decide whether to encode or cdata or nothing - according to the name of the field
-				$escaped = kString::xmlEncode ( $array ) ;
+				$escaped = vString::xmlEncode ( $array ) ;
 				return $escaped;
 				/*
 				if ( $escaped != $array )
@@ -317,7 +317,7 @@ class kalturaWebserviceRenderer
 		{
 			return $num_prefix . $key;
 		}
-		elseif ( kString::beginsWith( $key , "__"  ) )
+		elseif ( vString::beginsWith( $key , "__"  ) )
 		{
 			$pat = "/^__[^_]*_(.*)$/" ;//
 			preg_match( $pat , $key , $suffix );

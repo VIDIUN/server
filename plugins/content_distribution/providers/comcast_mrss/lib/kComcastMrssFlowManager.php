@@ -3,10 +3,10 @@
  * @package plugins.comcastMrssDistribution
  * @subpackage lib
  */
-class kComcastMrssFlowManager implements kBatchJobStatusEventConsumer
+class vComcastMrssFlowManager implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -34,10 +34,10 @@ class kComcastMrssFlowManager implements kBatchJobStatusEventConsumer
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
 		$data = $dbBatchJob->getData();
-		if (!$data instanceof kDistributionJobData)
+		if (!$data instanceof vDistributionJobData)
 			return true;
 			
-		$comcastMrssCoreValueType = kPluginableEnumsManager::apiToCore('DistributionProviderType', ComcastMrssDistributionPlugin::getApiValue(ComcastMrssDistributionProviderType::COMCAST_MRSS));
+		$comcastMrssCoreValueType = vPluginableEnumsManager::apiToCore('DistributionProviderType', ComcastMrssDistributionPlugin::getApiValue(ComcastMrssDistributionProviderType::COMCAST_MRSS));
 		if ($data->getProviderType() != $comcastMrssCoreValueType)
 			return true;
 			
@@ -54,7 +54,7 @@ class kComcastMrssFlowManager implements kBatchJobStatusEventConsumer
 		);
 		
 		if (in_array($dbBatchJob->getJobType(), $jobTypesToFinish))
-			kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+			vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 		
 		return true;
 	}

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class streamclipperAction extends kalturaAction
+class streamclipperAction extends vidiunAction
 {
 	public function execute()
 	{
@@ -14,7 +14,7 @@ class streamclipperAction extends kalturaAction
 		$entry = entryPeer::retrieveByPKNoFilter( $entry_id );
 		if ( ! $entry )
 		{
-			KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		
 		if ( $entry->getType() != entryType::LIVE_STREAM || $entry->getStatus() == entryStatus::DELETED )

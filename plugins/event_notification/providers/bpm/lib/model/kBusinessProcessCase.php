@@ -2,7 +2,7 @@
 /**
  * @package plugins.businessProcessNotification
  */
-class kBusinessProcessCase
+class vBusinessProcessCase
 {
 	/**
 	 * @var string

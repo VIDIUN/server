@@ -7,7 +7,7 @@ class assetParamsConversionProfileFilter extends baseObjectFilter
 {
 	public function init()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue(array(
+		$this->fields = vArray::makeAssociativeDefaultValue(array(
 			"_eq_conversion_profile_id",
 			"_in_conversion_profile_id",
 			"_eq_asset_params_id",

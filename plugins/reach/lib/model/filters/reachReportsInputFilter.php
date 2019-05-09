@@ -39,8 +39,8 @@ class reachReportsInputFilter extends reportsInputFilter
 		{
 			$serviceType = self::$serviceTypeMapping[$serviceType];
 			$druid_filter[] = array(
-				kKavaReportsMgr::DRUID_DIMENSION => kKavaReportsMgr::DIMENSION_SERVICE_TYPE,
-				kKavaReportsMgr::DRUID_VALUES => explode(',', $serviceType)
+				vKavaReportsMgr::DRUID_DIMENSION => vKavaReportsMgr::DIMENSION_SERVICE_TYPE,
+				vKavaReportsMgr::DRUID_VALUES => explode(',', $serviceType)
 			);
 		}
 		
@@ -49,8 +49,8 @@ class reachReportsInputFilter extends reportsInputFilter
 		{
 			$serviceFeature = self::$serviceFeatureMapping[$serviceFeature];
 			$druid_filter[] = array(
-				kKavaReportsMgr::DRUID_DIMENSION => kKavaReportsMgr::DIMENSION_SERVICE_FEATURE,
-				kKavaReportsMgr::DRUID_VALUES => explode(',', $serviceFeature)
+				vKavaReportsMgr::DRUID_DIMENSION => vKavaReportsMgr::DIMENSION_SERVICE_FEATURE,
+				vKavaReportsMgr::DRUID_VALUES => explode(',', $serviceFeature)
 			);
 		}
 		
@@ -59,8 +59,8 @@ class reachReportsInputFilter extends reportsInputFilter
 		{
 			$turnAroundTime = self::$turnaroundTimeMapping[$turnAroundTime];
 			$druid_filter[] = array(
-				kKavaReportsMgr::DRUID_DIMENSION => kKavaReportsMgr::DIMENSION_TURNAROUND_TIME,
-				kKavaReportsMgr::DRUID_VALUES => explode(',', $turnAroundTime)
+				vKavaReportsMgr::DRUID_DIMENSION => vKavaReportsMgr::DIMENSION_TURNAROUND_TIME,
+				vKavaReportsMgr::DRUID_VALUES => explode(',', $turnAroundTime)
 			);
 		}
 	}

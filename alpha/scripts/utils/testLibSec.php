@@ -8,14 +8,14 @@ $dropFoldersCriteria->add(DropFolderPeer::STATUS, DropFolderStatus::ENABLED);
 $dropFoldersCriteria->add(DropFolderPeer::TYPE, DropFolderType::SFTP);
 $dropFolders = DropFolderPeer::doSelect($dropFoldersCriteria);
 
-KalturaLog::debug("Drop folders count [" . count($dropFolders) . "]");
+VidiunLog::debug("Drop folders count [" . count($dropFolders) . "]");
 foreach($dropFolders as $dropFolder)
 {
 	/* @var $dropFolder SftpDropFolder */
 	$dropFolderId = $dropFolder->getId();
 	$passed = true;
 	
-	$sftp = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP_SEC_LIB);
+	$sftp = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP_SEC_LIB);
 	/* @var $sftp sftpSecLibMgr */
 	
 	$dropFolderPublicKeyFile = uniqid('sftp-pub-');
@@ -39,7 +39,7 @@ foreach($dropFolders as $dropFolder)
 	}
 	catch (Exception $e)
 	{
-		KalturaLog::err("Drop folder [$dropFolderId] login failed: " . $e->getMessage());
+		VidiunLog::err("Drop folder [$dropFolderId] login failed: " . $e->getMessage());
 		
 		if(file_exists($dropFolderPublicKeyFile))
 			unlink($dropFolderPublicKeyFile);
@@ -60,13 +60,13 @@ foreach($dropFolders as $dropFolder)
 		{
 			if(!$sftp->fileExists("$path/$element"))
 			{
-				KalturaLog::debug("Drop folder [$dropFolderId] file [$path/$element] listed but does not exist");
+				VidiunLog::debug("Drop folder [$dropFolderId] file [$path/$element] listed but does not exist");
 				$passed = false;
 			}
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("Drop folder [$dropFolderId] file [$path/$element] existance check failed: " . $e->getMessage());
+			VidiunLog::debug("Drop folder [$dropFolderId] file [$path/$element] existance check failed: " . $e->getMessage());
 			$passed = false;
 		}
 			
@@ -76,7 +76,7 @@ foreach($dropFolders as $dropFolder)
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("Drop folder [$dropFolderId] file [$path/$element] size check failed: " . $e->getMessage());
+			VidiunLog::debug("Drop folder [$dropFolderId] file [$path/$element] size check failed: " . $e->getMessage());
 			$passed = false;
 		}
 		
@@ -85,9 +85,9 @@ foreach($dropFolders as $dropFolder)
 	}
 	
 	if($passed)
-		KalturaLog::notice("Drop folder [$dropFolderId] passed");
+		VidiunLog::notice("Drop folder [$dropFolderId] passed");
 	else
-		KalturaLog::err("Drop folder [$dropFolderId] failed");
+		VidiunLog::err("Drop folder [$dropFolderId] failed");
 }
 
 
@@ -99,14 +99,14 @@ $storageProfileCriteria->add(StorageProfilePeer::STATUS, StorageProfile::STORAGE
 $storageProfileCriteria->add(StorageProfilePeer::PROTOCOL, StorageProfile::STORAGE_PROTOCOL_SFTP);
 $storageProfiles = StorageProfilePeer::doSelect($storageProfileCriteria);
 
-KalturaLog::debug("Storage profiles count [" . count($storageProfiles) . "]");
+VidiunLog::debug("Storage profiles count [" . count($storageProfiles) . "]");
 foreach($storageProfiles as $storageProfile)
 {
 	/* @var $storageProfile StorageProfile */
 	$storageProfileId = $storageProfile->getId();
 	$passed = true;
 	
-	$sftp = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP_SEC_LIB);
+	$sftp = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP_SEC_LIB);
 	/* @var $sftp sftpSecLibMgr */
 	
 	try
@@ -115,7 +115,7 @@ foreach($storageProfiles as $storageProfile)
 	}
 	catch (Exception $e)
 	{
-		KalturaLog::err("Storage profile [$storageProfileId] login failed: " . $e->getMessage());
+		VidiunLog::err("Storage profile [$storageProfileId] login failed: " . $e->getMessage());
 		continue;
 	}
 	
@@ -130,13 +130,13 @@ foreach($storageProfiles as $storageProfile)
 		{
 			if(!$sftp->fileExists("$path/$element"))
 			{
-				KalturaLog::debug("Storage profile [$storageProfileId] file [$path/$element] listed but does not exist");
+				VidiunLog::debug("Storage profile [$storageProfileId] file [$path/$element] listed but does not exist");
 				$passed = false;
 			}
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("Storage profile [$storageProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
+			VidiunLog::debug("Storage profile [$storageProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
 			$passed = false;
 		}
 			
@@ -146,7 +146,7 @@ foreach($storageProfiles as $storageProfile)
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("Storage profile [$storageProfileId] file [$path/$element] size check failed: " . $e->getMessage());
+			VidiunLog::debug("Storage profile [$storageProfileId] file [$path/$element] size check failed: " . $e->getMessage());
 			$passed = false;
 		}
 		
@@ -155,9 +155,9 @@ foreach($storageProfiles as $storageProfile)
 	}
 	
 	if($passed)
-		KalturaLog::notice("Storage profile [$storageProfileId] passed");
+		VidiunLog::notice("Storage profile [$storageProfileId] passed");
 	else
-		KalturaLog::err("Storage profile [$storageProfileId] failed");
+		VidiunLog::err("Storage profile [$storageProfileId] failed");
 }
 
 
@@ -166,20 +166,20 @@ $distributionProfileCriteria->add(DistributionProfilePeer::STATUS, DistributionP
 $distributionProfileCriteria->add(DistributionProfilePeer::PROVIDER_TYPE, FtpDistributionPlugin::getDistributionProviderTypeCoreValue(FtpDistributionProviderType::FTP));
 $ftpDistributionProfiles = DistributionProfilePeer::doSelect($distributionProfileCriteria);
 
-KalturaLog::debug("FTP Distribution profiles count [" . count($ftpDistributionProfiles) . "]");
+VidiunLog::debug("FTP Distribution profiles count [" . count($ftpDistributionProfiles) . "]");
 foreach($ftpDistributionProfiles as $ftpDistributionProfile)
 {
 	/* @var $ftpDistributionProfile FtpDistributionProfile */
 	$ftpDistributionProfileId = $ftpDistributionProfile->getId();
-	if($ftpDistributionProfile->getProtocol() != kFileTransferMgrType::SFTP)
+	if($ftpDistributionProfile->getProtocol() != vFileTransferMgrType::SFTP)
 	{
-		KalturaLog::debug("FTP Distribution profile [$ftpDistributionProfileId] different protocol [" . $ftpDistributionProfile->getProtocol() . "]");
+		VidiunLog::debug("FTP Distribution profile [$ftpDistributionProfileId] different protocol [" . $ftpDistributionProfile->getProtocol() . "]");
 		continue;
 	}
 		
 	$passed = true;
 	
-	$sftp = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP_SEC_LIB);
+	$sftp = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP_SEC_LIB);
 	/* @var $sftp sftpSecLibMgr */
 	
 	$ftpDistributionProfilePublicKeyFile = uniqid('sftp-pub-');
@@ -204,7 +204,7 @@ foreach($ftpDistributionProfiles as $ftpDistributionProfile)
 	}
 	catch (Exception $e)
 	{
-		KalturaLog::err("FTP Distribution profile [$ftpDistributionProfileId] login failed: " . $e->getMessage());
+		VidiunLog::err("FTP Distribution profile [$ftpDistributionProfileId] login failed: " . $e->getMessage());
 		
 		if(file_exists($ftpDistributionProfilePublicKeyFile))
 			unlink($ftpDistributionProfilePublicKeyFile);
@@ -225,13 +225,13 @@ foreach($ftpDistributionProfiles as $ftpDistributionProfile)
 		{
 			if(!$sftp->fileExists("$path/$element"))
 			{
-				KalturaLog::debug("FTP Distribution profile [$ftpDistributionProfileId] file [$path/$element] listed but does not exist");
+				VidiunLog::debug("FTP Distribution profile [$ftpDistributionProfileId] file [$path/$element] listed but does not exist");
 				$passed = false;
 			}
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("FTP Distribution profile [$ftpDistributionProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
+			VidiunLog::debug("FTP Distribution profile [$ftpDistributionProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
 			$passed = false;
 		}
 			
@@ -241,7 +241,7 @@ foreach($ftpDistributionProfiles as $ftpDistributionProfile)
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("FTP Distribution profile [$ftpDistributionProfileId] file [$path/$element] size check failed: " . $e->getMessage());
+			VidiunLog::debug("FTP Distribution profile [$ftpDistributionProfileId] file [$path/$element] size check failed: " . $e->getMessage());
 			$passed = false;
 		}
 		
@@ -250,9 +250,9 @@ foreach($ftpDistributionProfiles as $ftpDistributionProfile)
 	}
 	
 	if($passed)
-		KalturaLog::notice("FTP Distribution profile [$ftpDistributionProfileId] passed");
+		VidiunLog::notice("FTP Distribution profile [$ftpDistributionProfileId] passed");
 	else
-		KalturaLog::err("FTP Distribution profile [$ftpDistributionProfileId] failed");
+		VidiunLog::err("FTP Distribution profile [$ftpDistributionProfileId] failed");
 }
 
 
@@ -263,7 +263,7 @@ $distributionProfileCriteria->add(DistributionProfilePeer::STATUS, DistributionP
 $distributionProfileCriteria->add(DistributionProfilePeer::PROVIDER_TYPE, HuluDistributionPlugin::getDistributionProviderTypeCoreValue(HuluDistributionProviderType::HULU));
 $huluDistributionProfiles = DistributionProfilePeer::doSelect($distributionProfileCriteria);
 
-KalturaLog::debug("Hulu Distribution profiles count [" . count($huluDistributionProfiles) . "]");
+VidiunLog::debug("Hulu Distribution profiles count [" . count($huluDistributionProfiles) . "]");
 foreach($huluDistributionProfiles as $huluDistributionProfile)
 {
 	/* @var $huluDistributionProfile HuluDistributionProfile */
@@ -271,7 +271,7 @@ foreach($huluDistributionProfiles as $huluDistributionProfile)
 		
 	$passed = true;
 	
-	$sftp = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP_SEC_LIB);
+	$sftp = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP_SEC_LIB);
 	/* @var $sftp sftpSecLibMgr */
 	
 	try
@@ -280,7 +280,7 @@ foreach($huluDistributionProfiles as $huluDistributionProfile)
 	}
 	catch (Exception $e)
 	{
-		KalturaLog::err("Hulu Distribution profile [$huluDistributionProfileId] login failed: " . $e->getMessage());
+		VidiunLog::err("Hulu Distribution profile [$huluDistributionProfileId] login failed: " . $e->getMessage());
 		continue;
 	}
 	
@@ -295,13 +295,13 @@ foreach($huluDistributionProfiles as $huluDistributionProfile)
 		{
 			if(!$sftp->fileExists("$path/$element"))
 			{
-				KalturaLog::debug("Hulu Distribution profile [$huluDistributionProfileId] file [$path/$element] listed but does not exist");
+				VidiunLog::debug("Hulu Distribution profile [$huluDistributionProfileId] file [$path/$element] listed but does not exist");
 				$passed = false;
 			}
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("Hulu Distribution profile [$huluDistributionProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
+			VidiunLog::debug("Hulu Distribution profile [$huluDistributionProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
 			$passed = false;
 		}
 			
@@ -311,7 +311,7 @@ foreach($huluDistributionProfiles as $huluDistributionProfile)
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("Hulu Distribution profile [$huluDistributionProfileId] file [$path/$element] size check failed: " . $e->getMessage());
+			VidiunLog::debug("Hulu Distribution profile [$huluDistributionProfileId] file [$path/$element] size check failed: " . $e->getMessage());
 			$passed = false;
 		}
 		
@@ -320,9 +320,9 @@ foreach($huluDistributionProfiles as $huluDistributionProfile)
 	}
 	
 	if($passed)
-		KalturaLog::notice("Hulu Distribution profile [$huluDistributionProfileId] passed");
+		VidiunLog::notice("Hulu Distribution profile [$huluDistributionProfileId] passed");
 	else
-		KalturaLog::err("Hulu Distribution profile [$huluDistributionProfileId] failed");
+		VidiunLog::err("Hulu Distribution profile [$huluDistributionProfileId] failed");
 }
 
 
@@ -333,14 +333,14 @@ $distributionProfileCriteria->add(DistributionProfilePeer::STATUS, DistributionP
 $distributionProfileCriteria->add(DistributionProfilePeer::PROVIDER_TYPE, QuickPlayDistributionPlugin::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY));
 $quickPlayDistributionProfiles = DistributionProfilePeer::doSelect($distributionProfileCriteria);
 
-KalturaLog::debug("Quick Play Distribution profiles count [" . count($quickPlayDistributionProfiles) . "]");
+VidiunLog::debug("Quick Play Distribution profiles count [" . count($quickPlayDistributionProfiles) . "]");
 foreach($quickPlayDistributionProfiles as $quickPlayDistributionProfile)
 {
 	/* @var $quickPlayDistributionProfile QuickPlayDistributionProfile */
 	$quickPlayDistributionProfileId = $quickPlayDistributionProfile->getId();
 	$passed = true;
 	
-	$sftp = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP_SEC_LIB);
+	$sftp = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP_SEC_LIB);
 	/* @var $sftp sftpSecLibMgr */
 	
 	try
@@ -349,7 +349,7 @@ foreach($quickPlayDistributionProfiles as $quickPlayDistributionProfile)
 	}
 	catch (Exception $e)
 	{
-		KalturaLog::err("Quick Play Distribution profile [$quickPlayDistributionProfileId] login failed: " . $e->getMessage());
+		VidiunLog::err("Quick Play Distribution profile [$quickPlayDistributionProfileId] login failed: " . $e->getMessage());
 		continue;
 	}
 	
@@ -364,13 +364,13 @@ foreach($quickPlayDistributionProfiles as $quickPlayDistributionProfile)
 		{
 			if(!$sftp->fileExists("$path/$element"))
 			{
-				KalturaLog::debug("Quick Play Distribution profile [$quickPlayDistributionProfileId] file [$path/$element] listed but does not exist");
+				VidiunLog::debug("Quick Play Distribution profile [$quickPlayDistributionProfileId] file [$path/$element] listed but does not exist");
 				$passed = false;
 			}
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("Quick Play Distribution profile [$quickPlayDistributionProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
+			VidiunLog::debug("Quick Play Distribution profile [$quickPlayDistributionProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
 			$passed = false;
 		}
 			
@@ -380,7 +380,7 @@ foreach($quickPlayDistributionProfiles as $quickPlayDistributionProfile)
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("Quick Play Distribution profile [$quickPlayDistributionProfileId] file [$path/$element] size check failed: " . $e->getMessage());
+			VidiunLog::debug("Quick Play Distribution profile [$quickPlayDistributionProfileId] file [$path/$element] size check failed: " . $e->getMessage());
 			$passed = false;
 		}
 		
@@ -389,9 +389,9 @@ foreach($quickPlayDistributionProfiles as $quickPlayDistributionProfile)
 	}
 	
 	if($passed)
-		KalturaLog::notice("Quick Play Distribution profile [$quickPlayDistributionProfileId] passed");
+		VidiunLog::notice("Quick Play Distribution profile [$quickPlayDistributionProfileId] passed");
 	else
-		KalturaLog::err("Quick Play Distribution profile [$quickPlayDistributionProfileId] failed");
+		VidiunLog::err("Quick Play Distribution profile [$quickPlayDistributionProfileId] failed");
 }
 
 
@@ -402,14 +402,14 @@ $distributionProfileCriteria->add(DistributionProfilePeer::STATUS, DistributionP
 $distributionProfileCriteria->add(DistributionProfilePeer::PROVIDER_TYPE, YouTubeDistributionPlugin::getDistributionProviderTypeCoreValue(YouTubeDistributionProviderType::YOUTUBE));
 $youTubeDistributionProfiles = DistributionProfilePeer::doSelect($distributionProfileCriteria);
 
-KalturaLog::debug("YouTube Distribution profiles count [" . count($youTubeDistributionProfiles) . "]");
+VidiunLog::debug("YouTube Distribution profiles count [" . count($youTubeDistributionProfiles) . "]");
 foreach($youTubeDistributionProfiles as $youTubeDistributionProfile)
 {
 	/* @var $youTubeDistributionProfile YouTubeDistributionProfile */
 	$youTubeDistributionProfileId = $youTubeDistributionProfile->getId();
 	$passed = true;
 	
-	$sftp = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP_SEC_LIB);
+	$sftp = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP_SEC_LIB);
 	/* @var $sftp sftpSecLibMgr */
 	
 	$youTubeDistributionProfilePublicKeyFile = uniqid('sftp-pub-');
@@ -427,7 +427,7 @@ foreach($youTubeDistributionProfiles as $youTubeDistributionProfile)
 	}
 	catch (Exception $e)
 	{
-		KalturaLog::err("YouTube Distribution profile [$youTubeDistributionProfileId] login failed: " . $e->getMessage());
+		VidiunLog::err("YouTube Distribution profile [$youTubeDistributionProfileId] login failed: " . $e->getMessage());
 		
 		if(file_exists($youTubeDistributionProfilePublicKeyFile))
 			unlink($youTubeDistributionProfilePublicKeyFile);
@@ -448,13 +448,13 @@ foreach($youTubeDistributionProfiles as $youTubeDistributionProfile)
 		{
 			if(!$sftp->fileExists("$path/$element"))
 			{
-				KalturaLog::debug("YouTube Distribution profile [$youTubeDistributionProfileId] file [$path/$element] listed but does not exist");
+				VidiunLog::debug("YouTube Distribution profile [$youTubeDistributionProfileId] file [$path/$element] listed but does not exist");
 				$passed = false;
 			}
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("YouTube Distribution profile [$youTubeDistributionProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
+			VidiunLog::debug("YouTube Distribution profile [$youTubeDistributionProfileId] file [$path/$element] existance check failed: " . $e->getMessage());
 			$passed = false;
 		}
 			
@@ -464,7 +464,7 @@ foreach($youTubeDistributionProfiles as $youTubeDistributionProfile)
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::debug("YouTube Distribution profile [$youTubeDistributionProfileId] file [$path/$element] size check failed: " . $e->getMessage());
+			VidiunLog::debug("YouTube Distribution profile [$youTubeDistributionProfileId] file [$path/$element] size check failed: " . $e->getMessage());
 			$passed = false;
 		}
 		
@@ -473,9 +473,9 @@ foreach($youTubeDistributionProfiles as $youTubeDistributionProfile)
 	}
 	
 	if($passed)
-		KalturaLog::notice("YouTube Distribution profile [$youTubeDistributionProfileId] passed");
+		VidiunLog::notice("YouTube Distribution profile [$youTubeDistributionProfileId] passed");
 	else
-		KalturaLog::err("YouTube Distribution profile [$youTubeDistributionProfileId] failed");
+		VidiunLog::err("YouTube Distribution profile [$youTubeDistributionProfileId] failed");
 }
 
 
@@ -493,7 +493,7 @@ $batchJobs = BatchJobPeer::doSelect($batchJobCriteria);
 
 while(count($batchJobs))
 {
-	KalturaLog::debug("Import Batch Jobs count [" . count($batchJobs) . "]");
+	VidiunLog::debug("Import Batch Jobs count [" . count($batchJobs) . "]");
 	
 	$batchJobId = null;
 	foreach($batchJobs as $batchJob)
@@ -503,7 +503,7 @@ while(count($batchJobs))
 		$batchJobPartnerId = $batchJob->getPartnerId();
 		
 		$jobData = $batchJob->getData();
-		if(!($jobData instanceof kImportJobData))
+		if(!($jobData instanceof vImportJobData))
 			continue;
 			
 		$parsedUrl = parse_url($jobData->getSrcFileUrl());
@@ -511,14 +511,14 @@ while(count($batchJobs))
 		$host = isset($parsedUrl['host']) ? $parsedUrl['host'] : null;	
 		if (!$host) 
 		{
-		    KalturaLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] Missing host");
+		    VidiunLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] Missing host");
 		    continue;
 		}
 	
 		$remotePath = isset($parsedUrl['path']) ? $parsedUrl['path'] : null;
 		if (!$remotePath) 
 		{
-		    KalturaLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] Missing path");
+		    VidiunLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] Missing path");
 		    continue;
 		}
 		
@@ -529,20 +529,20 @@ while(count($batchJobs))
 		
 		$privateKey = null;
 		$publicKey = null;
-		if($jobData instanceof kSshImportJobData)
+		if($jobData instanceof vSshImportJobData)
 		{
 			$privateKey = $jobData->getPrivateKey() ? $jobData->getPrivateKey() : null;
 			$publicKey  = $jobData->getPublicKey() ? $jobData->getPublicKey() : null;
 			$passPhrase = $jobData->getPassPhrase() ? $jobData->getPassPhrase() : null;
 		}
 		
-		KalturaLog::debug("Import Batch Job [$batchJobPartnerId::$batchJobId] host [$host] port [$port] remotePath [$remotePath] username [$username] password [$password]");
+		VidiunLog::debug("Import Batch Job [$batchJobPartnerId::$batchJobId] host [$host] port [$port] remotePath [$remotePath] username [$username] password [$password]");
 		if ($privateKey || $publicKey) {
-		    KalturaLog::debug("Private Key: $privateKey");
-		    KalturaLog::debug("Public Key: $publicKey");
+		    VidiunLog::debug("Private Key: $privateKey");
+		    VidiunLog::debug("Public Key: $publicKey");
 		}
 		
-		$sftp = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP_SEC_LIB);
+		$sftp = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP_SEC_LIB);
 		
 		$publicKeyFile = uniqid('sftp-pub-');
 		$privateKeyFile = uniqid('sftp-pvt-');
@@ -565,7 +565,7 @@ while(count($batchJobs))
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] login failed: " . $e->getMessage());
+			VidiunLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] login failed: " . $e->getMessage());
 			
 			if(file_exists($publicKeyFile))
 				unlink($publicKeyFile);
@@ -580,13 +580,13 @@ while(count($batchJobs))
 			$fileExists = $sftp->fileExists($remotePath);
 			if (!$fileExists) 
 			{
-			    KalturaLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] remote file [$remotePath] does not exist");
+			    VidiunLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] remote file [$remotePath] does not exist");
 			    continue;
 			}
 		}
 		catch (Exception $e)
 		{
-		    KalturaLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] remote file [$remotePath] existance check failed: " . $e->getMessage());
+		    VidiunLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] remote file [$remotePath] existance check failed: " . $e->getMessage());
 		    continue;
 		}
 		
@@ -596,11 +596,11 @@ while(count($batchJobs))
 		}
 		catch (Exception $e)
 		{
-		    KalturaLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] remote file [$remotePath] size check failed: " . $e->getMessage());
+		    VidiunLog::err("Import Batch Job [$batchJobPartnerId::$batchJobId] remote file [$remotePath] size check failed: " . $e->getMessage());
 		    continue;
 		}
 		
-		KalturaLog::notice("Import Batch Job [$batchJobPartnerId::$batchJobId] passed");
+		VidiunLog::notice("Import Batch Job [$batchJobPartnerId::$batchJobId] passed");
 	}
 	
 	$batchJobCriteria->add(BatchJobPeer::ID, $batchJobId, Criteria::LESS_THAN);
@@ -608,4 +608,4 @@ while(count($batchJobs))
 
 
 
-KalturaLog::debug("Done");
+VidiunLog::debug("Done");

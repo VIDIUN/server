@@ -11,7 +11,7 @@ require_once 'propel/engine/builder/om/php5/PHP5TableMapBuilder.php';
  * @package server-infra
  * @subpackage propel
  */
-class KalturaMapBuilderBuilder extends PHP5TableMapBuilder
+class VidiunMapBuilderBuilder extends PHP5TableMapBuilder
 {
 	/* (non-PHPdoc)
 	 * @see PHP5TableMapBuilder::addClassOpen()

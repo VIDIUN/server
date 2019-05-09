@@ -3,7 +3,7 @@
  * @package plugins.cielo24
  * @subpackage model.data
  */
-class kCielo24JobProviderData extends kIntegrationJobProviderData
+class vCielo24JobProviderData extends vIntegrationJobProviderData
 {
 	const CUSTOM_DATA_SPOKEN_LANGUAGE = "spokenLanguage";
 	
@@ -241,12 +241,12 @@ class kCielo24JobProviderData extends kIntegrationJobProviderData
 	}
 
 	/**
-	 * kVoicebaseJobProviderData constructor.
+	 * vVoicebaseJobProviderData constructor.
 	 * The VoiceBase job provider data must include the partner's additional params.
 	 */
 	public function __construct()
 	{
-		$partnerOptions = Cielo24Plugin::getPartnerCielo24Options(kCurrentContext::getCurrentPartnerId());
+		$partnerOptions = Cielo24Plugin::getPartnerCielo24Options(vCurrentContext::getCurrentPartnerId());
 
 		if($partnerOptions->defaultParams)
 			$this->setAdditionalParameters($partnerOptions->defaultParams);

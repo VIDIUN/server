@@ -1,4 +1,4 @@
-@LOG_DIR@/kaltura_apache_errors.log {
+@LOG_DIR@/vidiun_apache_errors.log {
  rotate 5
  daily
  missingok
@@ -9,10 +9,10 @@
  postrotate
  service @APACHE_SERVICE@ reload
  endscript
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_apache_access.log {
+@LOG_DIR@/vidiun_apache_access.log {
  rotate 5
  daily
  missingok
@@ -20,13 +20,13 @@
  dateext
  notifempty
  lastaction
- mv @LOG_DIR@/kaltura_apache_access.log-`/bin/date +%Y%m%d`.gz @EVENTS_LOGS_DIR@/`hostname`-kaltura_apache_access.log-`/bin/date +%Y%m%d-%H`.gz
+ mv @LOG_DIR@/vidiun_apache_access.log-`/bin/date +%Y%m%d`.gz @EVENTS_LOGS_DIR@/`hostname`-vidiun_apache_access.log-`/bin/date +%Y%m%d-%H`.gz
  service @APACHE_SERVICE@ reload
  endscript
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_apache_errors_ssl.log {
+@LOG_DIR@/vidiun_apache_errors_ssl.log {
  rotate 5
  daily
  missingok
@@ -37,10 +37,10 @@
  postrotate
  service @APACHE_SERVICE@ reload
  endscript
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_apache_access_ssl.log {
+@LOG_DIR@/vidiun_apache_access_ssl.log {
  rotate 5
  daily
  missingok
@@ -48,8 +48,8 @@
  dateext
  notifempty
  lastaction
- mv @LOG_DIR@/kaltura_apache_access_ssl.log-`/bin/date +%Y%m%d`.gz @EVENTS_LOGS_DIR@/`hostname`-kaltura_apache_access_ssl.log-`/bin/date +%Y%m%d-%H`.gz
+ mv @LOG_DIR@/vidiun_apache_access_ssl.log-`/bin/date +%Y%m%d`.gz @EVENTS_LOGS_DIR@/`hostname`-vidiun_apache_access_ssl.log-`/bin/date +%Y%m%d-%H`.gz
  service @APACHE_SERVICE@ reload
  endscript
- su root kaltura
+ su root vidiun
 }

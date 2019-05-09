@@ -3,16 +3,16 @@
  * @package plugins.httpNotification
  * @subpackage api.objects
  */
-class KalturaHttpNotificationDataText extends KalturaHttpNotificationData
+class VidiunHttpNotificationDataText extends VidiunHttpNotificationData
 {
 	/**
-	 * @var KalturaStringValue
+	 * @var VidiunStringValue
 	 */
 	public $content;
 	
 	/**
 	 * It's protected on purpose, used by getData
-	 * @see KalturaHttpNotificationDataText::getData()
+	 * @see VidiunHttpNotificationDataText::getData()
 	 * @var string
 	 */
 	protected $data;
@@ -23,7 +23,7 @@ class KalturaHttpNotificationDataText extends KalturaHttpNotificationData
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -31,22 +31,22 @@ class KalturaHttpNotificationDataText extends KalturaHttpNotificationData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if(is_null($dbObject))
-			$dbObject = new kHttpNotificationDataText();
+			$dbObject = new vHttpNotificationDataText();
 			
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}
 	 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kHttpNotificationDataText */
+		/* @var $dbObject vHttpNotificationDataText */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		if($this->shouldGet('content', $responseProfile))
@@ -54,16 +54,16 @@ class KalturaHttpNotificationDataText extends KalturaHttpNotificationData
 			$contentType = get_class($dbObject->getContent());
 			switch ($contentType)
 			{
-				case 'kStringValue':
-					$this->content = new KalturaStringValue();
+				case 'vStringValue':
+					$this->content = new VidiunStringValue();
 					break;
 					
-				case 'kEvalStringField':
-					$this->content = new KalturaEvalStringField();
+				case 'vEvalStringField':
+					$this->content = new VidiunEvalStringField();
 					break;
 					
 				default:
-					$this->content = KalturaPluginManager::loadObject('KalturaStringValue', $contentType);
+					$this->content = VidiunPluginManager::loadObject('VidiunStringValue', $contentType);
 					break;
 			}
 			
@@ -76,9 +76,9 @@ class KalturaHttpNotificationDataText extends KalturaHttpNotificationData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaHttpNotificationData::getData()
+	 * @see VidiunHttpNotificationData::getData()
 	 */
-	public function getData(kHttpNotificationDispatchJobData $jobData = null)
+	public function getData(vHttpNotificationDispatchJobData $jobData = null)
 	{
 		return $this->data;
 	}

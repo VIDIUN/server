@@ -49,10 +49,10 @@ class AuditTrailTableMap extends TableMap {
 		$this->addColumn('MASTER_PARTNER_ID', 'MasterPartnerId', 'INTEGER', false, null, null);
 		$this->addColumn('PARTNER_ID', 'PartnerId', 'INTEGER', false, null, null);
 		$this->addColumn('REQUEST_ID', 'RequestId', 'VARCHAR', false, 31, null);
-		$this->addColumn('KUSER_ID', 'KuserId', 'INTEGER', false, null, null);
+		$this->addColumn('VUSER_ID', 'VuserId', 'INTEGER', false, null, null);
 		$this->addColumn('ACTION', 'Action', 'VARCHAR', false, 31, null);
 		$this->addColumn('DATA', 'Data', 'LONGVARCHAR', false, null, null);
-		$this->addColumn('KS', 'Ks', 'VARCHAR', false, 511, null);
+		$this->addColumn('VS', 'Vs', 'VARCHAR', false, 511, null);
 		$this->addColumn('CONTEXT', 'Context', 'TINYINT', false, null, null);
 		$this->addColumn('ENTRY_POINT', 'EntryPoint', 'VARCHAR', false, 127, null);
 		$this->addColumn('SERVER_NAME', 'ServerName', 'VARCHAR', false, 63, null);

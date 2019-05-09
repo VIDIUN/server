@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaMediaInfo extends KalturaObject implements IFilterable
+class VidiunMediaInfo extends VidiunObject implements IFilterable
 {
 	/**
 	 * The id of the media info
@@ -97,7 +97,7 @@ class KalturaMediaInfo extends KalturaObject implements IFilterable
 	/**
 	 * The video bit rate mode
 	 * 
-	 * @var KalturaBitRateMode
+	 * @var VidiunBitRateMode
 	 * @requiresPermission read
 	 */
 	public $videoBitRateMode;
@@ -170,7 +170,7 @@ class KalturaMediaInfo extends KalturaObject implements IFilterable
 	/**
 	 * The audio bit rate mode
 	 * 
-	 * @var KalturaBitRateMode
+	 * @var VidiunBitRateMode
 	 * @requiresPermission read
 	 */
 	public $audioBitRateMode;

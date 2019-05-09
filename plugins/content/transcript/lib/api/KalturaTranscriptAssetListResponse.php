@@ -3,10 +3,10 @@
  * @package plugins.transcript
  * @subpackage api.objects
  */
-class KalturaTranscriptAssetListResponse extends KalturaListResponse
+class VidiunTranscriptAssetListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaTranscriptAssetArray
+	 * @var VidiunTranscriptAssetArray
 	 * @readonly
 	 */
 	public $objects;

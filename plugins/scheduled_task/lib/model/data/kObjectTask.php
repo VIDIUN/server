@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage model.data
  */
-class kObjectTask
+class vObjectTask
 {
 	/**
 	 * The type of the object task

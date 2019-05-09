@@ -1,4 +1,4 @@
-<!-- This xslt is used to take a feed representing kaltura entry (mrss - xml structure) and convert it to a OTT fitting feed -->
+<!-- This xslt is used to take a feed representing vidiun entry (mrss - xml structure) and convert it to a OTT fitting feed -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:exsl="http://exslt.org/common"
                 extension-element-prefixes="exsl"

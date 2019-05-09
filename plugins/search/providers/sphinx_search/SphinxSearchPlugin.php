@@ -2,10 +2,10 @@
 /**
  * @package plugins.sphinxSearch
  */
-class SphinxSearchPlugin extends KalturaPlugin implements IKalturaEventConsumers, IKalturaCriteriaFactory, IKalturaPending
+class SphinxSearchPlugin extends VidiunPlugin implements IVidiunEventConsumers, IVidiunCriteriaFactory, IVidiunPending
 {
 	const PLUGIN_NAME = 'sphinxSearch';
-	const SPHINX_SEARCH_MANAGER = 'kSphinxSearchManager';
+	const SPHINX_SEARCH_MANAGER = 'vSphinxSearchManager';
 	
 	public static function getPluginName()
 	{
@@ -23,12 +23,12 @@ class SphinxSearchPlugin extends KalturaPlugin implements IKalturaEventConsumers
 	}
 	
 	/**
-	 * Creates a new KalturaCriteria for the given object name
+	 * Creates a new VidiunCriteria for the given object name
 	 * 
 	 * @param string $objectType object type to create Criteria for.
-	 * @return KalturaCriteria derived object
+	 * @return VidiunCriteria derived object
 	 */
-	public static function getKalturaCriteria($objectType)
+	public static function getVidiunCriteria($objectType)
 	{
 		if ($objectType == "entry")
 			return new SphinxEntryCriteria();
@@ -36,23 +36,23 @@ class SphinxSearchPlugin extends KalturaPlugin implements IKalturaEventConsumers
 		if ($objectType == "category")
 			return new SphinxCategoryCriteria();
 			
-		if ($objectType == "kuser")
-			return new SphinxKuserCriteria();
+		if ($objectType == "vuser")
+			return new SphinxVuserCriteria();
 		
-		if ($objectType == "categoryKuser")
-			return new SphinxCategoryKuserCriteria();
+		if ($objectType == "categoryVuser")
+			return new SphinxCategoryVuserCriteria();
 			
 		return null;
 	}
 
 	/**
-	 * Returns a Kaltura dependency object that defines the relationship between two plugins.
+	 * Returns a Vidiun dependency object that defines the relationship between two plugins.
 	 *
-	 * @return array<KalturaDependency> The Kaltura dependency object
+	 * @return array<VidiunDependency> The Vidiun dependency object
 	 */
 	public static function dependsOn()
 	{
-		$searchDependency = new KalturaDependency(SearchPlugin::getPluginName());
+		$searchDependency = new VidiunDependency(SearchPlugin::getPluginName());
 		return array($searchDependency);
 	}
 }

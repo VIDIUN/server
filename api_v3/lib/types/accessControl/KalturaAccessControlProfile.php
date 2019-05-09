@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService AccessControlProfileService
  */
-class KalturaAccessControlProfile extends KalturaObject implements IRelatedFilterable 
+class VidiunAccessControlProfile extends VidiunObject implements IRelatedFilterable 
 {
 	/**
 	 * The id of the Access Control Profile
@@ -64,14 +64,14 @@ class KalturaAccessControlProfile extends KalturaObject implements IRelatedFilte
 	/**
 	 * True if this access control profile is the partner default
 	 *  
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isDefault;
 	
 	/**
 	 * Array of access control rules
 	 * 
-	 * @var KalturaRuleArray
+	 * @var VidiunRuleArray
 	 */
 	public $rules;
 	
@@ -89,7 +89,7 @@ class KalturaAccessControlProfile extends KalturaObject implements IRelatedFilte
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -106,7 +106,7 @@ class KalturaAccessControlProfile extends KalturaObject implements IRelatedFilte
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -115,17 +115,17 @@ class KalturaAccessControlProfile extends KalturaObject implements IRelatedFilte
 		
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(accessControlPeer::OM_CLASS);
+			$c = VidiunCriteria::create(accessControlPeer::OM_CLASS);
 			$c->add(accessControlPeer::SYSTEM_NAME, $this->systemName);
 			if(accessControlPeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		return parent::validateForInsert($propertiesToSkip);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -136,18 +136,18 @@ class KalturaAccessControlProfile extends KalturaObject implements IRelatedFilte
 		
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(accessControlPeer::OM_CLASS);
+			$c = VidiunCriteria::create(accessControlPeer::OM_CLASS);
 			$c->add(accessControlPeer::ID, $sourceObject->getId(), Criteria::NOT_EQUAL);
 			$c->add(accessControlPeer::SYSTEM_NAME, $this->systemName);
 			if(accessControlPeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		return parent::validateForUpdate($sourceObject, $propertiesToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbAccessControlProfile = null, $skip = array())
 	{

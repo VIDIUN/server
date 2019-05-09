@@ -16,10 +16,10 @@ class ErrorController extends Zend_Controller_Action
 
 		$exception = $errors->exception;
 		$this->view->exception	= $exception;
-		KalturaLog::err($exception);
+		VidiunLog::err($exception);
 
-		// handle kaltura session expired
-		if ($exception instanceof Kaltura_Client_Exception && strpos($exception->getMessage(), 'EXPIRED'))
+		// handle vidiun session expired
+		if ($exception instanceof Vidiun_Client_Exception && strpos($exception->getMessage(), 'EXPIRED'))
 		{
 			Infra_AuthHelper::getAuthInstance()->clearIdentity();
 			$this->_helper->redirector('login', 'user');
@@ -46,22 +46,22 @@ class ErrorController extends Zend_Controller_Action
 		$this->view->request = $this->getRequest();
 		Infra_AuthHelper::getAuthInstance()->clearIdentity();
 		$this->_helper->viewRenderer('error');
-		$this->view->code	= Kaltura_AdminException::ERROR_CODE_ACCESS_DENIED;
+		$this->view->code	= Vidiun_AdminException::ERROR_CODE_ACCESS_DENIED;
 		$this->getResponse()->setHttpResponseCode(403);
-		$this->getResponse()->setHeader(Kaltura_AdminException::KALTURA_HEADER_ERROR_CODE, $this->view->code, true);
+		$this->getResponse()->setHeader(Vidiun_AdminException::VIDIUN_HEADER_ERROR_CODE, $this->view->code, true);
 	}
 
 	protected function handleNotFoundException(Exception $ex)
 	{
-		$this->view->code	= Kaltura_AdminException::ERROR_CODE_PAGE_NOT_FOUND;
+		$this->view->code	= Vidiun_AdminException::ERROR_CODE_PAGE_NOT_FOUND;
 		$this->getResponse()->setHttpResponseCode(404);
-		$this->getResponse()->setHeader(Kaltura_AdminException::KALTURA_HEADER_ERROR_CODE, $this->view->code, true);
+		$this->getResponse()->setHeader(Vidiun_AdminException::VIDIUN_HEADER_ERROR_CODE, $this->view->code, true);
 	}
 
 	protected function handleApplicationException(Exception $ex)
 	{
-		$this->view->code	= Kaltura_AdminException::getErrorCode($ex);
+		$this->view->code	= Vidiun_AdminException::getErrorCode($ex);
 		$this->getResponse()->setHttpResponseCode(500);
-		$this->getResponse()->setHeader(Kaltura_AdminException::KALTURA_HEADER_ERROR_CODE, $this->view->code, true);
+		$this->getResponse()->setHeader(Vidiun_AdminException::VIDIUN_HEADER_ERROR_CODE, $this->view->code, true);
 	}
 }

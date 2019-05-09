@@ -4,10 +4,10 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectFilterEngine
  */
-abstract class KObjectFilterEngineBase
+abstract class VObjectFilterEngineBase
 {
 	/**
-	 * @var KalturaClient
+	 * @var VidiunClient
 	 */
 	protected $_client;
 
@@ -21,16 +21,16 @@ abstract class KObjectFilterEngineBase
 	 */
 	private $_pageIndex;
 
-	public function __construct(KalturaClient $client)
+	public function __construct(VidiunClient $client)
 	{
 		$this->_client = $client;
 	}
 
 	/**
-	 * @param KalturaFilter $filter
-	 * @return KalturaObjectListResponse
+	 * @param VidiunFilter $filter
+	 * @return VidiunObjectListResponse
 	 */
-	abstract function query(KalturaFilter $filter);
+	abstract function query(VidiunFilter $filter);
 
 	/**
 	 * @param int $pageIndex
@@ -65,11 +65,11 @@ abstract class KObjectFilterEngineBase
 	}
 
 	/**
-	 * @return KalturaFilterPager
+	 * @return VidiunFilterPager
 	 */
 	public function getPager()
 	{
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageIndex = $this->_pageIndex;
 		$pager->pageSize = $this->_pageSize;
 		return $pager;

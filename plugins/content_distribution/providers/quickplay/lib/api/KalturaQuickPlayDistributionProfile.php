@@ -3,7 +3,7 @@
  * @package plugins.quickPlayDistribution
  * @subpackage api.objects
  */
-class KalturaQuickPlayDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunQuickPlayDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
 	 * @var string

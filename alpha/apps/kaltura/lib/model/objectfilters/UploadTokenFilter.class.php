@@ -9,7 +9,7 @@ class UploadTokenFilter extends baseObjectFilter
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_eq_id",
 			"_in_id",
 			"_eq_user_id",
@@ -22,7 +22,7 @@ class UploadTokenFilter extends baseObjectFilter
 		$this->allowed_order_fields = array ( "created_at" );
 		
 		$this->aliases = array ( 
-			"user_id" => "kuser_id",
+			"user_id" => "vuser_id",
 		);
 			
 	}

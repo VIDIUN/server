@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class KalturaEffectType  extends KalturaEnum implements kEffectType
+class VidiunEffectType  extends VidiunEnum implements vEffectType
 {
 
 }

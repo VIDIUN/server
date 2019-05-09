@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-abstract class kESearchBaseFieldQuery extends kESearchBaseQuery
+abstract class vESearchBaseFieldQuery extends vESearchBaseQuery
 {
 	const BOOST_KEY = 'boost';
 	
@@ -54,7 +54,7 @@ abstract class kESearchBaseFieldQuery extends kESearchBaseQuery
 	 */
 	public function getShouldMoveToFilterContext()
 	{
-		if($this->getBoostFactor() == kESearchQueryManager::DEFAULT_BOOST_FACTOR)
+		if($this->getBoostFactor() == vESearchQueryManager::DEFAULT_BOOST_FACTOR)
 			return true;
 		return false;
 	}

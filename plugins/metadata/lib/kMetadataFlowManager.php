@@ -3,10 +3,10 @@
  * @package plugins.metadata
  * @subpackage lib
  */
-class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataChangedEventConsumer
+class vMetadataFlowManager implements vBatchJobStatusEventConsumer, vObjectDataChangedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -17,7 +17,7 @@ class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataC
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -26,7 +26,7 @@ class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataC
 		return true;
 	}
 	
-	protected function updatedTransformMetadata(BatchJob $dbBatchJob, kTransformMetadataJobData $data)
+	protected function updatedTransformMetadata(BatchJob $dbBatchJob, vTransformMetadataJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
@@ -42,7 +42,7 @@ class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataC
 		}
 	}
 	
-	protected function updatedTransformMetadataPending(BatchJob $dbBatchJob, kTransformMetadataJobData $data)
+	protected function updatedTransformMetadataPending(BatchJob $dbBatchJob, vTransformMetadataJobData $data)
 	{
 		if($data->getSrcXsl())
 		{
@@ -57,7 +57,7 @@ class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataC
 		return $dbBatchJob;
 	}
 	
-	protected function updatedTransformMetadataFinished(BatchJob $dbBatchJob, kTransformMetadataJobData $data)
+	protected function updatedTransformMetadataFinished(BatchJob $dbBatchJob, vTransformMetadataJobData $data)
 	{
 		if($data->getSrcXsl())
 		{
@@ -72,7 +72,7 @@ class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataC
 		return $dbBatchJob;
 	}
 	
-	protected function updatedTransformMetadataFailed(BatchJob $dbBatchJob, kTransformMetadataJobData $data)
+	protected function updatedTransformMetadataFailed(BatchJob $dbBatchJob, vTransformMetadataJobData $data)
 	{
 		if(!$data->getMetadataProfileId())
 			return $dbBatchJob;
@@ -91,7 +91,7 @@ class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataC
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDataChangedEventConsumer::shouldConsumeDataChangedEvent()
+	 * @see vObjectDataChangedEventConsumer::shouldConsumeDataChangedEvent()
 	 */
 	public function shouldConsumeDataChangedEvent(BaseObject $object, $previousVersion = null)
 	{
@@ -102,12 +102,12 @@ class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataC
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDataChangedEventConsumer::objectDataChanged()
+	 * @see vObjectDataChangedEventConsumer::objectDataChanged()
 	 */
 	public function objectDataChanged(BaseObject $object, $previousVersion = null, BatchJob $raisedJob = null)
 	{
 		// updated in the indexing server (sphinx)
-		$relatedObject = kMetadataManager::getObjectFromPeer($object);
+		$relatedObject = vMetadataManager::getObjectFromPeer($object);
 		if($relatedObject && $relatedObject instanceof IIndexable)
 		{
 			$relatedObject->setUpdatedAt(time());
@@ -134,15 +134,15 @@ class kMetadataFlowManager implements kBatchJobStatusEventConsumer, kObjectDataC
 
 				$filter = new MetadataFilter();
 				$filter->set('_eq_metadata_profile_id', $profileField->getMetadataProfileId());
-				$indexObjectType = kPluginableEnumsManager::apiToCore('IndexObjectType', MetadataPlugin::getApiValue(MetadataIndexObjectType::METADATA));
-				kJobsManager::addIndexJob($object->getPartnerId(), $indexObjectType, $filter, true);
+				$indexObjectType = vPluginableEnumsManager::apiToCore('IndexObjectType', MetadataPlugin::getApiValue(MetadataIndexObjectType::METADATA));
+				vJobsManager::addIndexJob($object->getPartnerId(), $indexObjectType, $filter, true);
 				$relatedMetadataProfiles[] = $profileField->getMetadataProfileId();
 			}
 		}
 
 		if($relatedObject instanceof entry)
 		{
-			kStorageExporter::reExportEntry($relatedObject);
+			vStorageExporter::reExportEntry($relatedObject);
 		}
 		return true;
 	}

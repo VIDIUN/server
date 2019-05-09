@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage ReportExport
  */
-class kReportExportGraphEngine extends kReportExportEngine
+class vReportExportGraphEngine extends vReportExportEngine
 {
 
 	const GRAPH_BY_DATE_ID = 'by_date_id';
@@ -12,17 +12,17 @@ class kReportExportGraphEngine extends kReportExportEngine
 	const GRAPH_MULTI_BY_NAME = 'multi_by_name';
 
 	protected static $report_to_graph_type = array(
-		KalturaReportType::CONTENT_DROPOFF => self::GRAPH_BY_NAME,
-		KalturaReportType::USER_CONTENT_DROPOFF => self::GRAPH_BY_NAME,
-		KalturaReportType::PLATFORMS => self::GRAPH_MULTI_BY_DATE_ID,
-		KalturaReportType::OPERATING_SYSTEM => self::GRAPH_MULTI_BY_NAME,
-		KalturaReportType::BROWSERS => self::GRAPH_MULTI_BY_NAME,
-		KalturaReportType::OPERATING_SYSTEM_FAMILIES => self::GRAPH_MULTI_BY_NAME,
+		VidiunReportType::CONTENT_DROPOFF => self::GRAPH_BY_NAME,
+		VidiunReportType::USER_CONTENT_DROPOFF => self::GRAPH_BY_NAME,
+		VidiunReportType::PLATFORMS => self::GRAPH_MULTI_BY_DATE_ID,
+		VidiunReportType::OPERATING_SYSTEM => self::GRAPH_MULTI_BY_NAME,
+		VidiunReportType::BROWSERS => self::GRAPH_MULTI_BY_NAME,
+		VidiunReportType::OPERATING_SYSTEM_FAMILIES => self::GRAPH_MULTI_BY_NAME,
 	);
 
 	public function createReport()
 	{
-		$result =  KBatchBase::$kClient->report->getGraphs($this->reportItem->reportType, $this->reportItem->filter,
+		$result =  VBatchBase::$vClient->report->getGraphs($this->reportItem->reportType, $this->reportItem->filter,
 			null, $this->reportItem->objectIds, $this->reportItem->responseOptions);
 		return $this->buildCsv($result);
 	}

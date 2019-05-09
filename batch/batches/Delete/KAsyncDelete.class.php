@@ -6,20 +6,20 @@
  * @package Scheduler
  * @subpackage Delete
  */
-class KAsyncDelete extends KJobHandlerWorker
+class VAsyncDelete extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::DELETE;
+		return VidiunBatchJobType::DELETE;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->deleteObjects($job, $job->data);
 	}
@@ -27,9 +27,9 @@ class KAsyncDelete extends KJobHandlerWorker
 	/**
 	 * Will take a single filter and call each item to be deleted 
 	 */
-	private function deleteObjects(KalturaBatchJob $job, KalturaDeleteJobData $data)
+	private function deleteObjects(VidiunBatchJob $job, VidiunDeleteJobData $data)
 	{
-		$engine = KDeletingEngine::getInstance($job->jobSubType);
+		$engine = VDeletingEngine::getInstance($job->jobSubType);
 		$engine->configure($job->partnerId, $data);
 	
 		$filter = clone $data->filter;
@@ -41,6 +41,6 @@ class KAsyncDelete extends KJobHandlerWorker
 			$continue = (bool) $deletedObjectsCount;
 		}
 		
-		return $this->closeJob($job, null, null, "Delete objects finished", KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, "Delete objects finished", VidiunBatchJobStatus::FINISHED);
 	}
 }

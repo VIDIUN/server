@@ -1,6 +1,6 @@
 <?php
 
-class kAkamaiLiveParams
+class vAkamaiLiveParams
 {
 	private $akamaiLiveWsdlUsername;
 	private $akamaiLiveWsdlPassword;

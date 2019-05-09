@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaDeliveryProfileGenericHttpBaseFilter extends KalturaDeliveryProfileFilter
+abstract class VidiunDeliveryProfileGenericHttpBaseFilter extends VidiunDeliveryProfileFilter
 {
 	static private $map_between_objects = array
 	(

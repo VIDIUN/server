@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAmazonS3StorageProfile extends KalturaStorageProfile
+class VidiunAmazonS3StorageProfile extends VidiunStorageProfile
 {
 	/**
-	 * @var KalturaAmazonS3StorageProfileFilesPermissionLevel
+	 * @var VidiunAmazonS3StorageProfileFilesPermissionLevel
 	 */
 	public $filesPermissionInS3;
 	
@@ -23,7 +23,7 @@ class KalturaAmazonS3StorageProfile extends KalturaStorageProfile
 	/**
 	 * @var string
 	 */
-	public $sseKmsKeyId;
+	public $sseVmsKeyId;
 	
 	/**
 	 * @var string
@@ -40,7 +40,7 @@ class KalturaAmazonS3StorageProfile extends KalturaStorageProfile
 		"filesPermissionInS3",
 		"s3Region",
 		"sseType",
-		"sseKmsKeyId",
+		"sseVmsKeyId",
 		"signatureType",
 		"endPoint",
 	);

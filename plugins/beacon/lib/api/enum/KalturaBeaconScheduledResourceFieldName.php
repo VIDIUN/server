@@ -3,7 +3,7 @@
  * @package plugins.beacon
  * @subpackage api.enum
  */
-class KalturaBeaconScheduledResourceFieldName extends KalturaStringEnum
+class VidiunBeaconScheduledResourceFieldName extends VidiunStringEnum
 {
 	const EVENT_TYPE = 'event_type';
 	const OBJECT_ID = 'object_id';

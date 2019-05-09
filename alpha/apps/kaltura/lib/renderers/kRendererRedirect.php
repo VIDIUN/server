@@ -1,16 +1,16 @@
 <?php
 
-require_once(dirname(__file__) . '/kRendererBase.php');
+require_once(dirname(__file__) . '/vRendererBase.php');
 
 /*
  * @package server-infra
  * @subpackage renderers
  */
-class kRendererRedirect implements kRendererBase
+class vRendererRedirect implements vRendererBase
 {
 	private $url;
 	private $statusCode;
-	public function __construct($url,$statusCode = KCurlHeaderResponse::HTTP_STATUS_REDIRECT_METHOD)
+	public function __construct($url,$statusCode = VCurlHeaderResponse::HTTP_STATUS_REDIRECT_METHOD)
 	{
 		$this->url = $url;
 		$this->statusCode = $statusCode;

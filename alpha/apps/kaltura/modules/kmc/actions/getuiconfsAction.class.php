@@ -1,32 +1,32 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class getuiconfsAction extends kalturaAction
+class getuiconfsAction extends vidiunAction
 {
 	public function execute ( ) 
 	{
 		header('Access-Control-Allow-Origin:*');
 
 		$this->partner_id = $this->getP ( "partner_id" );
-		$this->ks = $this->getP ( "ks" );
+		$this->vs = $this->getP ( "vs" );
 		$type = $this->getP("type");
 		
 		$this->partner = PartnerPeer::retrieveByPK($this->partner_id);
 		if (!$this->partner)
-			KExternalErrors::dieError( KExternalErrors::PARTNER_NOT_FOUND );
+			VExternalErrors::dieError( VExternalErrors::PARTNER_NOT_FOUND );
 					
 		if (!$this->partner->validateApiAccessControl())
-			KExternalErrors::dieError( KExternalErrors::SERVICE_ACCESS_CONTROL_RESTRICTED );
+			VExternalErrors::dieError( VExternalErrors::SERVICE_ACCESS_CONTROL_RESTRICTED );
 			
 		$this->templatePartnerId = $this->partner ? $this->partner->getTemplatePartnerId() : 0;
-		$this->isKDP3 = ($this->partner->getKmcVersion() != '1')? true: false;
+		$this->isVDP3 = ($this->partner->getVmcVersion() != '1')? true: false;
 
-		// FIXME: validate the ks!
+		// FIXME: validate the vs!
 		
 		
-		$partnerUiconfs = kmcUtils::getPartnersUiconfs($this->partner_id, $type);
+		$partnerUiconfs = vmcUtils::getPartnersUiconfs($this->partner_id, $type);
 		$partner_uiconfs_array = array();
 		foreach($partnerUiconfs as $uiconf)
 		{
@@ -44,22 +44,22 @@ class getuiconfsAction extends kalturaAction
 		}
 		
 		// default uiconf array
-		$this->kmc_swf_version = kConf::get('kmc_version');
-		$kmcGeneralUiConf = array();
-		$kmcGeneralTemplateUiConf = array();
+		$this->vmc_swf_version = vConf::get('vmc_version');
+		$vmcGeneralUiConf = array();
+		$vmcGeneralTemplateUiConf = array();
 		if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_HIDE_TEMPLATE_PARTNER_UICONFS, $this->partner->getId()))
 		{
-			$kmcGeneralUiConf = kmcUtils::getAllKMCUiconfs('kmc',   $this->kmc_swf_version, $this->templatePartnerId);
-			$kmcGeneralTemplateUiConf = kmcUtils::getAllKMCUiconfs('kmc',   $this->kmc_swf_version, $this->templatePartnerId);
+			$vmcGeneralUiConf = vmcUtils::getAllVMCUiconfs('vmc',   $this->vmc_swf_version, $this->templatePartnerId);
+			$vmcGeneralTemplateUiConf = vmcUtils::getAllVMCUiconfs('vmc',   $this->vmc_swf_version, $this->templatePartnerId);
 		}
 			
 		if($type == 'player')
 		{
-			$content_uiconfs_previewembed = kmcUtils::find_confs_by_usage_tag($kmcGeneralTemplateUiConf, "kmc_previewembed", true, $kmcGeneralUiConf);
+			$content_uiconfs_previewembed = vmcUtils::find_confs_by_usage_tag($vmcGeneralTemplateUiConf, "vmc_previewembed", true, $vmcGeneralUiConf);
 		}
 		else
 		{
-			$content_uiconfs_previewembed = kmcUtils::find_confs_by_usage_tag($kmcGeneralTemplateUiConf, "kmc_previewembed_list", true, $kmcGeneralUiConf);
+			$content_uiconfs_previewembed = vmcUtils::find_confs_by_usage_tag($vmcGeneralTemplateUiConf, "vmc_previewembed_list", true, $vmcGeneralUiConf);
 		}
 		
 		$default_uiconfs_array = array();
@@ -78,24 +78,24 @@ class getuiconfsAction extends kalturaAction
 			$default_uiconfs_array[] = $uiconf_array;
 		}
 		
-		$kdp508_uiconfs = array();
+		$vdp508_uiconfs = array();
 		if($type == 'player' && $this->partner->getEnable508Players())
 		{
-			$kdp508_uiconfs = kmcUtils::getPlayerUiconfsByTag('kdp508');
+			$vdp508_uiconfs = vmcUtils::getPlayerUiconfsByTag('vdp508');
 		}
 
 		// Add HTML5 v2.0.0 Preview Player
 		$v2_preview_players = array();
 		if( $type == 'player'&& PermissionPeer::isValidForPartner(PermissionName::FEATURE_HTML5_V2_PLAYER_PREVIEW, $this->partner_id)){
-			$v2_preview_players = kmcUtils::getPlayerUiconfsByTag('html5_v2_preview');
+			$v2_preview_players = vmcUtils::getPlayerUiconfsByTag('html5_v2_preview');
 		}
 		
 		$merged_list = array();
 		if(count($default_uiconfs_array))
 			foreach($default_uiconfs_array as $uiconf)
 				$merged_list[] = $uiconf;
-		if(count($kdp508_uiconfs))
-			foreach($kdp508_uiconfs as $uiconf)
+		if(count($vdp508_uiconfs))
+			foreach($vdp508_uiconfs as $uiconf)
 				$merged_list[] = $uiconf;
 		if(count($v2_preview_players))
 			foreach($v2_preview_players as $uiconf)

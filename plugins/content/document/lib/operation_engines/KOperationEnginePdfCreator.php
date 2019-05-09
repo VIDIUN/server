@@ -4,7 +4,7 @@
  * @package plugins.document
  * @subpackage lib
  */
-class KOperationEnginePdfCreator extends KOperationEngineDocument
+class VOperationEnginePdfCreator extends VOperationEngineDocument
 {
 	/**
 	 * @var string
@@ -43,7 +43,7 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 			'Zip archive data',
 	);
 	
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
 		if ($configFilePath) {
 			$configFilePath = realpath($configFilePath);
@@ -52,13 +52,13 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 		// bypassing PDF Creator for source PDF files
 		$inputExtension = strtolower(pathinfo($inFilePath, PATHINFO_EXTENSION));
 		if (($inputExtension == 'pdf') && (!$this->data->flavorParamsOutput->readonly)) {
-			KalturaLog::notice('Bypassing PDF Creator for source PDF files');
+			VidiunLog::notice('Bypassing PDF Creator for source PDF files');
 			if (!@copy($inFilePath, $this->outFilePath)) {
 				$error = '';
 				if (function_exists('error_get_last')) {
 					$error = error_get_last();
 				}
-				throw new KOperationEngineException('Cannot copy PDF file ['.$this->inFilePath.'] to ['.$this->outFilePath.'] - ['.$error.']');
+				throw new VOperationEngineException('Cannot copy PDF file ['.$this->inFilePath.'] to ['.$this->outFilePath.'] - ['.$error.']');
 			}
 			else {
 				// PDF input file copied as is to output file
@@ -75,7 +75,7 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 			$uniqueName = true;
 		}
 		else {
-			KalturaLog::notice('Could not rename input file ['.$inFilePath.'] with a unique name ['.$tmpUniqInFilePath.']');
+			VidiunLog::notice('Could not rename input file ['.$inFilePath.'] with a unique name ['.$tmpUniqInFilePath.']');
 			$realInFilePath = realpath($inFilePath);
 		}
 		
@@ -89,7 +89,7 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 		if ($uniqueName && in_array ( $ext, $newOfficeExtensions ) && $filePrefix == self::OLD_OFFICE_SIGNATURE) {
 			$RealInFilePathWithoutX = substr ( $realInFilePath, 0, - 1 );
 			if (rename ( $realInFilePath, $RealInFilePathWithoutX )){
-				KalturaLog::notice("renamed file [$realInFilePath] to [$RealInFilePathWithoutX]");
+				VidiunLog::notice("renamed file [$realInFilePath] to [$RealInFilePathWithoutX]");
 				$realInFilePath = $RealInFilePathWithoutX;
 			}
 		}
@@ -99,7 +99,7 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 		if (($inputExtension == 'pdf') && ($this->data->flavorParamsOutput->readonly == true)){
 			$tmpFile = $this->outFilePath.'.pdf';
 		}else{
-			$tmpFile = kFile::replaceExt(basename($realInFilePath), 'pdf');
+			$tmpFile = vFile::replaceExt(basename($realInFilePath), 'pdf');
 			$tmpFile = dirname($this->outFilePath).'/'.$tmpFile;
 		}
 		$this->outFilePath = $tmpFile;
@@ -122,12 +122,12 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 			@unlink($tmpUniqInFilePath);
 		}
 		
-		$sleepTimes = KBatchBase::$taskConfig->fileExistReties;
+		$sleepTimes = VBatchBase::$taskConfig->fileExistReties;
 		if (!$sleepTimes){
 			$sleepTimes = self::DEFAULT_SLEEP_TIMES;
 		}
 		
-		$sleepSeconds = KBatchBase::$taskConfig->fileExistInterval;
+		$sleepSeconds = VBatchBase::$taskConfig->fileExistInterval;
 		if (!$sleepSeconds){
 			$sleepSeconds = self::DEFAULT_SLEEP_SECONDS;
 		}
@@ -144,7 +144,7 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 			$data = file_get_contents($killPopupsPath);
 			$data = trim($data);
 			if(!empty($data)){
-				KalturaLog::notice("Convert popups warnings - " . $data);
+				VidiunLog::notice("Convert popups warnings - " . $data);
 				if(is_null($this->message))
 					$this->message = $data;
 				else 
@@ -154,19 +154,19 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 		}
 		
 		if (!file_exists(realpath($tmpFile))) {
-			throw new kTemporaryException('Temp PDF Creator file not found ['.$tmpFile.'] output file ['.$this->outFilePath.'] 
+			throw new vTemporaryException('Temp PDF Creator file not found ['.$tmpFile.'] output file ['.$this->outFilePath.'] 
 					Convert Engine message [' . $this->message . ']');
 		}else{
-			KalturaLog::notice('document temp  found ['.$tmpFile.'] output file ['.$this->outFilePath.']'); 
+			VidiunLog::notice('document temp  found ['.$tmpFile.'] output file ['.$this->outFilePath.']'); 
 		}
 		
 		$this->validateOutput($inFilePath, realpath($tmpFile));
 		
-		$fileUnlockRetries = KBatchBase::$taskConfig->params->fileUnlockRetries ;
+		$fileUnlockRetries = VBatchBase::$taskConfig->params->fileUnlockRetries ;
 		if(!$fileUnlockRetries){
 			$fileUnlockRetries = self::DEFAULT_FILE_UNLOCK_RETRIES;
 		}
-		$fileUnlockInterval = KBatchBase::$taskConfig->params->fileUnlockInterval;
+		$fileUnlockInterval = VBatchBase::$taskConfig->params->fileUnlockInterval;
 		if(!$fileUnlockInterval){
 			$fileUnlockInterval = self::DEFAULT_FILE_UNLOCK_INTERVAL; 
 		}
@@ -182,7 +182,7 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 			if (function_exists('error_get_last')) {
 				$error = error_get_last();
 			}
-			throw new KOperationEngineException('Cannot rename file ['.$tmpFile.'] to ['.$this->outFilePath.'] - ['.$error.']');
+			throw new VOperationEngineException('Cannot rename file ['.$tmpFile.'] to ['.$this->outFilePath.'] - ['.$error.']');
 		}
 		return true;
 	}
@@ -217,7 +217,7 @@ class KOperationEnginePdfCreator extends KOperationEngineDocument
 		
 	private function getKillPopupsPath() 
 	{
-		$killPopupsPath = KBatchBase::$taskConfig->params->killPopupsPath;
+		$killPopupsPath = VBatchBase::$taskConfig->params->killPopupsPath;
 		if(!$killPopupsPath){
 			$killPopupsPath = self::DEFAULT_KILL_POPUPS_PATH;
 		}

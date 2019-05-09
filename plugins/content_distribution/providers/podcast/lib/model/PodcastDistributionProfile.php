@@ -44,7 +44,7 @@ class PodcastDistributionProfile extends DistributionProfile
 		$entry = entryPeer::retrieveByPK($entryDistribution->getEntryId());
 		if(!$entry)
 		{
-			KalturaLog::err("Entry [" . $entryDistribution->getEntryId() . "] not found");
+			VidiunLog::err("Entry [" . $entryDistribution->getEntryId() . "] not found");
 			$validationErrors[] = $this->createValidationError($action, DistributionErrorType::INVALID_DATA, 'entry', 'entry not found');
 			return $validationErrors;
 		}
@@ -134,12 +134,12 @@ class PodcastDistributionProfile extends DistributionProfile
 		$podcastFeed->setStatus(syndicationFeed::SYNDICATION_ACTIVE);
 		$podcastFeed->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_SYSTEM);
 		$podcastFeed->setAllowEmbed(false);
-		$podcastFeed->setType(syndicationFeedType::KALTURA);
+		$podcastFeed->setType(syndicationFeedType::VIDIUN);
 		$podcastFeed->setAddXmlHeader(true);
 		$podcastFeed->save();
 		
 		$this->setFeedId($podcastFeed->getId());
-		KalturaLog::log("Podcast feed created id [" . $this->getFeedId() . "]");
+		VidiunLog::log("Podcast feed created id [" . $this->getFeedId() . "]");
 		
 		return parent::preSave($con);	
 	}
@@ -179,18 +179,18 @@ class PodcastDistributionProfile extends DistributionProfile
 
 		// creates playlist based on the filter XML
 		$playlist = new entry();
-		$playlist->setKuserId(kCurrentContext::$uid);
-		$playlist->setCreatorKuserId(kCurrentContext::$uid);
+		$playlist->setVuserId(vCurrentContext::$uid);
+		$playlist->setCreatorVuserId(vCurrentContext::$uid);
 		$playlist->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_SYSTEM);
 		$playlist->setPartnerId($this->getPartnerId());
 		$playlist->setStatus(entryStatus::READY);
-		$playlist->setKshowId(null);
+		$playlist->setVshowId(null);
 		$playlist->setType(entryType::PLAYLIST);
 		$playlist->setMediaType(entry::ENTRY_MEDIA_TYPE_XML);
 		$playlist->setDataContent($playlistContent);
 		$playlist->save();
 		
-		KalturaLog::log("Playlist [" . $playlist->getId() . "] created");
+		VidiunLog::log("Playlist [" . $playlist->getId() . "] created");
 		
 		// creates feed based on the playlist
 		$podcastFeed->setPlaylistId($playlist->getId());
@@ -209,11 +209,11 @@ class PodcastDistributionProfile extends DistributionProfile
 			$podcastFeed = syndicationFeedPeer::retrieveByPK($this->getFeedId());
 			if($podcastFeed && $podcastFeed instanceof genericSyndicationFeed)
 			{
-				$podcastFeed->setType(syndicationFeedType::KALTURA_XSLT);
+				$podcastFeed->setType(syndicationFeedType::VIDIUN_XSLT);
 				$podcastFeed->incrementVersion();
 				$podcastFeed->save();
 				$syncKey = $podcastFeed->getSyncKey(genericSyndicationFeed::FILE_SYNC_SYNDICATION_FEED_XSLT);
-				kFileSyncUtils::file_put_contents($syncKey, $this->xsl, false);
+				vFileSyncUtils::file_put_contents($syncKey, $this->xsl, false);
 				$this->xslModified = false;
 			}
 		}
@@ -235,7 +235,7 @@ class PodcastDistributionProfile extends DistributionProfile
 			return null;
 			
 		$syncKey = $feed->getSyncKey(genericSyndicationFeed::FILE_SYNC_SYNDICATION_FEED_XSLT);
-		$this->xsl = kFileSyncUtils::file_get_contents($syncKey, true, false);
+		$this->xsl = vFileSyncUtils::file_get_contents($syncKey, true, false);
 		return $this->xsl;
 	}
 	

@@ -11,7 +11,7 @@ class SphinxAnswerCuePointCriteria extends SphinxCuePointCriteria
 		if($filter->get('_eq_quiz_user_entry_id'))
 		{
 		    $userEntryId = $filter->get('_eq_quiz_user_entry_id');
-		    $searchValue = $userEntryId . kCurrentContext::getCurrentPartnerId() . QuizPlugin::SEARCH_TEXT_SUFFIX;
+		    $searchValue = $userEntryId . vCurrentContext::getCurrentPartnerId() . QuizPlugin::SEARCH_TEXT_SUFFIX;
 		    $this->addMatch("(@plugins_data $searchValue)");
 		}
 		$filter->unsetByName('_eq_quiz_user_entry_id');
@@ -21,7 +21,7 @@ class SphinxAnswerCuePointCriteria extends SphinxCuePointCriteria
 		    $userEntryIds = explode(',', $filter->get('_in_quiz_user_entry_id'));
 		    foreach($userEntryIds as &$userEntryId)
 		    {
-		      $userEntryId .= kCurrentContext::getCurrentPartnerId() . QuizPlugin::SEARCH_TEXT_SUFFIX;
+		      $userEntryId .= vCurrentContext::getCurrentPartnerId() . QuizPlugin::SEARCH_TEXT_SUFFIX;
 		    }
 		    $searchValues = implode(' | ', $userEntryIds);
 		    $this->addMatch("(@plugins_data ($searchValues))");

@@ -29,13 +29,13 @@ class GoogleVideoFeedRenderer extends SyndicationFeedRenderer{
 			$res .= $this->writeFullXmlNode('video:tag', rtrim(ltrim($this->stringToSafeXml($tag))), 3);
 		}
 		$res .= $this->writeFullXmlNode('video:category', $this->stringToSafeXml($e->categories), 3);
-		if($this->syndicationFeed->adultContent == KalturaGoogleSyndicationFeedAdultValues::NO)
+		if($this->syndicationFeed->adultContent == VidiunGoogleSyndicationFeedAdultValues::NO)
 		{
-			$familyFriendly = KalturaGoogleSyndicationFeedAdultValues::YES;
+			$familyFriendly = VidiunGoogleSyndicationFeedAdultValues::YES;
 		}
 		else
 		{
-			$familyFriendly = KalturaGoogleSyndicationFeedAdultValues::NO;
+			$familyFriendly = VidiunGoogleSyndicationFeedAdultValues::NO;
 		}
 		$res .= $this->writeFullXmlNode('video:family_friendly', $familyFriendly, 3);
 		$res .= $this->writeFullXmlNode('video:duration', $e->duration, 3);

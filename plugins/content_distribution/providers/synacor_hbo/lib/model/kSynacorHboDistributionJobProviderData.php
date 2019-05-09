@@ -3,7 +3,7 @@
  * @package plugins.synacorHboDistribution
  * @subpackage model.data
  */
-class kSynacorHboDistributionJobProviderData extends kDistributionJobProviderData
+class vSynacorHboDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class kSynacorHboDistributionJobProviderData extends kDistributionJobProviderDat
 	 */
 	private $distributionProfileId;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

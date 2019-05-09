@@ -17,7 +17,7 @@
  * @package Scheduler
  * @subpackage Capture-Thumbnail
  */
-class KAsyncCaptureThumb extends KJobHandlerWorker
+class VAsyncCaptureThumb extends VJobHandlerWorker
 {
 	const LOG_SUFFIX = '.log';
 	const BIF_TAG = 'bif';
@@ -25,48 +25,48 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 	const TEMP_FILE_POSTFIX = "temp_1.jpg";
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::CAPTURE_THUMB;
+		return VidiunBatchJobType::CAPTURE_THUMB;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->captureThumb($job, $job->data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getMaxJobsEachRun()
+	 * @see VJobHandlerWorker::getMaxJobsEachRun()
 	 */
 	protected function getMaxJobsEachRun()
 	{
 		return 1;
 	}
 	
-	private function captureThumb(KalturaBatchJob $job, KalturaCaptureThumbJobData $data)
+	private function captureThumb(VidiunBatchJob $job, VidiunCaptureThumbJobData $data)
 	{
-		$thumbParamsOutput = self::$kClient->thumbParamsOutput->get($data->thumbParamsOutputId);
+		$thumbParamsOutput = self::$vClient->thumbParamsOutput->get($data->thumbParamsOutputId);
 		
 		try
 		{
 			$mediaFile = trim($data->fileContainer->filePath);
 			
 			if(!file_exists($mediaFile))
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile does not exist", KalturaBatchJobStatus::RETRY);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile does not exist", VidiunBatchJobStatus::RETRY);
 			
 			if(!is_file($mediaFile))
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile is not a file", KalturaBatchJobStatus::FAILED);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile is not a file", VidiunBatchJobStatus::FAILED);
 				
-			$this->updateJob($job,"Capturing thumbnail on $mediaFile", KalturaBatchJobStatus::QUEUED);
+			$this->updateJob($job,"Capturing thumbnail on $mediaFile", VidiunBatchJobStatus::QUEUED);
 		}
 		catch(Exception $ex)
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 		
 		try
@@ -77,7 +77,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 			if (!$rootPath)
 				die();
 
-			if(KCsvWrapper::contains(self::BIF_TAG, $thumbParamsOutput->tags))
+			if(VCsvWrapper::contains(self::BIF_TAG, $thumbParamsOutput->tags))
 			{
 				return $this->createBifFile($job, $data, $rootPath, $mediaFile, $thumbParamsOutput);
 			}
@@ -87,16 +87,16 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 		catch(Exception $ex)
 		{
 			$this->unimpersonate();
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 	}
 	
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaCaptureThumbJobData $data
-	 * @return KalturaBatchJob
+	 * @param VidiunBatchJob $job
+	 * @param VidiunCaptureThumbJobData $data
+	 * @return VidiunBatchJob
 	 */
-	private function moveFile(KalturaBatchJob $job, KalturaCaptureThumbJobData $data)
+	private function moveFile(VidiunBatchJob $job, VidiunCaptureThumbJobData $data)
 	{
 		// creates a temp file path
 		$rootPath = self::createDir(self::$taskConfig->params->sharedTempPath);
@@ -136,7 +136,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 		$density = $thumbParamsOutput->density;
 		$rotate = $thumbParamsOutput->rotate;
 
-		$cropper = new KImageMagickCropper($srcPath, $targetPath, self::$taskConfig->params->ImageMagickCmd, true);
+		$cropper = new VImageMagickCropper($srcPath, $targetPath, self::$taskConfig->params->ImageMagickCmd, true);
 		return $cropper->crop($quality, $cropType, $width, $height, $cropX, $cropY, $cropWidth, $cropHeight, $scaleWidth, $scaleHeight, $bgcolor, $density, $rotate);
 	}
 	
@@ -148,15 +148,15 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 		$mediaInfoVidDur = null;
 		$mediaInfoScanType = null;
 		$mediaInfoVideoRotation = null;
-		$mediaInfoFilter = new KalturaMediaInfoFilter();
+		$mediaInfoFilter = new VidiunMediaInfoFilter();
 		$mediaInfoFilter->flavorAssetIdEqual = $srcAssetId;
 		$this->impersonate($partnerId);
-		$mediaInfoList = self::$kClient->mediaInfo->listAction($mediaInfoFilter);
+		$mediaInfoList = self::$vClient->mediaInfo->listAction($mediaInfoFilter);
 		$this->unimpersonate();
 		if($mediaInfoList->objects && count($mediaInfoList->objects))
 		{
 			$mediaInfo = reset($mediaInfoList->objects);
-			/* @var $mediaInfo KalturaMediaInfo */
+			/* @var $mediaInfo VidiunMediaInfo */
 			$mediaInfoWidth = $mediaInfo->videoWidth;
 			$mediaInfoHeight = $mediaInfo->videoHeight;
 			$mediaInfoDar = $mediaInfo->videoDar;
@@ -181,13 +181,13 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 	protected function createBasicThumb($job, $data, $rootPath, $mediaFile, $thumbParamsOutput)
 	{
 		$capturePath = null;
-		if($data->srcAssetType == KalturaAssetType::FLAVOR)
+		if($data->srcAssetType == VidiunAssetType::FLAVOR)
 		{
 			$capturePath = $this->createUniqFileName($rootPath);
 			list($mediaInfoWidth, $mediaInfoHeight, $mediaInfoDar, $mediaInfoVidDur, $mediaInfoScanType, $mediaInfoVideoRotation) = $this->getMediaInfoData($job->partnerId, $data->srcAssetId);
 
 			// generates the thumbnail
-			$thumbMaker = new KFFMpegThumbnailMaker($mediaFile, $capturePath, self::$taskConfig->params->FFMpegCmd);
+			$thumbMaker = new VFFMpegThumbnailMaker($mediaFile, $capturePath, self::$taskConfig->params->FFMpegCmd);
 			$videoOffset = max(0 ,min($thumbParamsOutput->videoOffset, $mediaInfoVidDur-1));
 			$params['dar'] = $mediaInfoDar;
 			$params['vidDur'] = $mediaInfoVidDur;
@@ -199,9 +199,9 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 
 			$created = $thumbMaker->createThumnail($videoOffset, $mediaInfoWidth, $mediaInfoHeight, $params);
 			if(!$created || !file_exists($capturePath))
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::THUMBNAIL_NOT_CREATED, "Thumbnail not created", KalturaBatchJobStatus::FAILED);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::THUMBNAIL_NOT_CREATED, "Thumbnail not created", VidiunBatchJobStatus::FAILED);
 
-			$this->updateJob($job, "Thumbnail captured [$capturePath]", KalturaBatchJobStatus::PROCESSING);
+			$this->updateJob($job, "Thumbnail captured [$capturePath]", VidiunBatchJobStatus::PROCESSING);
 		}
 
 		$thumbPath = $this->createUniqFileName($rootPath);
@@ -221,26 +221,26 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 
 
 		if(!$cropped || !file_exists($thumbPath))
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::THUMBNAIL_NOT_CREATED, "Thumbnail not cropped", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::THUMBNAIL_NOT_CREATED, "Thumbnail not cropped", VidiunBatchJobStatus::FAILED);
 
 		$data->thumbPath = $thumbPath;
 		$job = $this->moveFile($job, $data);
 
 		if($this->checkFileExists($job->data->thumbPath))
 		{
-			$updateData = new KalturaCaptureThumbJobData();
+			$updateData = new VidiunCaptureThumbJobData();
 			$updateData->thumbPath = $data->thumbPath;
-			return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED, $updateData);
+			return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED, $updateData);
 		}
 
-		return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', KalturaBatchJobStatus::FAILED, $data);
+		return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', VidiunBatchJobStatus::FAILED, $data);
 	}
 
 	protected function createBifFile($job, $data, $rootPath, $mediaFile, $thumbParamsOutput)
 	{
-		if($data->srcAssetType != KalturaAssetType::FLAVOR)
+		if($data->srcAssetType != VidiunAssetType::FLAVOR)
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::MISSING_ASSETS, 'Asset type not supported', KalturaBatchJobStatus::FAILED, $data);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::MISSING_ASSETS, 'Asset type not supported', VidiunBatchJobStatus::FAILED, $data);
 		}
 
 		$bifInterval = $this->getBifInterval($thumbParamsOutput);
@@ -250,8 +250,8 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 		$images = $this->createBifFrames($job, $data, $bifInterval, $thumbParamsOutput, $generalCapturePath, $mediaFile);
 
 		$finalBifPath = $generalCapturePath . '.bif';
-		KalturaLog::debug("Create bif file in path - [$finalBifPath]");
-		$bifCreator = new kBifCreator($images, $finalBifPath, $bifInterval);
+		VidiunLog::debug("Create bif file in path - [$finalBifPath]");
+		$bifCreator = new vBifCreator($images, $finalBifPath, $bifInterval);
 		$bifCreator->createBif();
 
 		$data->thumbPath = $finalBifPath;
@@ -261,21 +261,21 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 		$files = array_diff($files, array('.', '..'));
 		if($this->checkFileExists($job->data->thumbPath))
 		{
-			$updateData = new KalturaCaptureThumbJobData();
+			$updateData = new VidiunCaptureThumbJobData();
 			$updateData->thumbPath = $data->thumbPath;
 			$this->removeFiles($rootPath, $files);
-			return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED, $updateData);
+			return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED, $updateData);
 		}
 
 		$this->removeFiles($rootPath, $files);
-		return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', KalturaBatchJobStatus::FAILED, $data);
+		return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', VidiunBatchJobStatus::FAILED, $data);
 	}
 
 	protected function generateSingleThumbUsingFfmpeg($mediaFile, $capturePath, $mediaInfoVidDur, $mediaInfoDar,
 											  $mediaInfoScanType, $data, $mediaInfoWidth, $mediaInfoHeight, $captureVidSec)
 	{
-		KalturaLog::debug("capture new frame - [$capturePath]");
-		$thumbMaker = new KFFMpegThumbnailMaker($mediaFile, $capturePath, self::$taskConfig->params->FFMpegCmd);
+		VidiunLog::debug("capture new frame - [$capturePath]");
+		$thumbMaker = new VFFMpegThumbnailMaker($mediaFile, $capturePath, self::$taskConfig->params->FFMpegCmd);
 		$params['dar'] = $mediaInfoDar;
 		$params['vidDur'] = $mediaInfoVidDur;
 		$params['scanType'] = $mediaInfoScanType;
@@ -301,7 +301,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 		$cropped = $this->crop($capturePath ,$capturePath, $thumbParamsOutput);
 
 		if(!$cropped || !file_exists($capturePath))
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::THUMBNAIL_NOT_CREATED, "One of BIF frames was not cropped", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::THUMBNAIL_NOT_CREATED, "One of BIF frames was not cropped", VidiunBatchJobStatus::FAILED);
 	}
 
 
@@ -323,7 +323,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 			$mediaInfoScanType, $data, $mediaInfoWidth, $mediaInfoHeight, $captureVidSec);
 
 		if(!$created || !file_exists($capturePath))
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::THUMBNAIL_NOT_CREATED, "One of BIF frames was not created", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::THUMBNAIL_NOT_CREATED, "One of BIF frames was not created", VidiunBatchJobStatus::FAILED);
 
 		$this->cropFrame($capturePath, $thumbParamsOutput, $job);
 	}
@@ -334,7 +334,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 		$rootPath = self::createDir($folderPath);
 		if (!$rootPath)
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::CANNOT_CREATE_DIRECTORY, 'Can not create directory', KalturaBatchJobStatus::FAILED, $data);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::CANNOT_CREATE_DIRECTORY, 'Can not create directory', VidiunBatchJobStatus::FAILED, $data);
 		}
 		return $rootPath;
 	}
@@ -347,14 +347,14 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 
 		$captureVidSec = $bifInterval;
 		$count = floor($mediaInfoVidDur / $bifInterval);
-		KalturaLog::debug("Number of images to capture - [$count]");
+		VidiunLog::debug("Number of images to capture - [$count]");
 
 		$params = array($thumbParamsOutput->density, $thumbParamsOutput->quality, $mediaInfoVideoRotation, $thumbParamsOutput->cropX, $thumbParamsOutput->cropY,
 			$thumbParamsOutput->cropWidth, $thumbParamsOutput->cropHeight, $thumbParamsOutput->stripProfiles);
 		// 5 - always force setting the given dimensions
-		$shouldResizeByPackager = KThumbnailCapture::shouldResizeByPackager($params, 5, array($thumbParamsOutput->width, $thumbParamsOutput->height));
+		$shouldResizeByPackager = VThumbnailCapture::shouldResizeByPackager($params, 5, array($thumbParamsOutput->width, $thumbParamsOutput->height));
 		list($picWidth, $picHeight) = $shouldResizeByPackager ? array($thumbParamsOutput->width, $thumbParamsOutput->height) : array(null, null);
-		$this->updateJob($job, "Starting to capture [" . $count . "] thumbnails", KalturaBatchJobStatus::PROCESSING);
+		$this->updateJob($job, "Starting to capture [" . $count . "] thumbnails", VidiunBatchJobStatus::PROCESSING);
 		while($count--)
 		{
 			if($captureVidSec >= $mediaInfoVidDur)
@@ -367,7 +367,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 				$thumbCaptureByPackager = false;
 				$success = self::captureLocalThumbForBifUsingPackager($mediaFile, $capturePath, $captureVidSec, $picWidth, $picHeight);
 				$packagerResizeFullPath = $capturePath . self::TEMP_FILE_POSTFIX;
-				KalturaLog::debug("Packager capture is [$success] with dimension [$picWidth,$picHeight] and packagerResize [$shouldResizeByPackager] in path [$packagerResizeFullPath]");
+				VidiunLog::debug("Packager capture is [$success] with dimension [$picWidth,$picHeight] and packagerResize [$shouldResizeByPackager] in path [$packagerResizeFullPath]");
 				if(!$success)
 				{
 					$packagerRetries--;
@@ -375,7 +375,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 					$this->captureThumbUsingFfmpeg($mediaFile, $packagerResizeFullPath, $thumbParamsOutput, $mediaInfoVidDur, $mediaInfoDar, $mediaInfoScanType, $data, $mediaInfoWidth, $mediaInfoHeight, $captureVidSec, $job);
 					if($packagerRetries == 0)
 					{
-						KalturaLog::warning("Packager retries reached max value. Capturing thumb only using ffmpeg");
+						VidiunLog::warning("Packager retries reached max value. Capturing thumb only using ffmpeg");
 					}
 				}
 				$this->shouldCropImage($thumbCaptureByPackager, $shouldResizeByPackager, $packagerResizeFullPath, $thumbParamsOutput, $job);
@@ -388,7 +388,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 			$captureVidSec += $bifInterval;
 			$images[] = $capturePath;
 		}
-		$this->updateJob($job, "Captured all frames for BIF", KalturaBatchJobStatus::ALMOST_DONE);
+		$this->updateJob($job, "Captured all frames for BIF", VidiunBatchJobStatus::ALMOST_DONE);
 		return $images;
 	}
 
@@ -396,7 +396,7 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 	{
 		if ($thumbCaptureByPackager && $shouldResizeByPackager)
 		{
-			KalturaLog::debug("Image was resize in the packager -  setting path [$packagerResizeFullPath]");
+			VidiunLog::debug("Image was resize in the packager -  setting path [$packagerResizeFullPath]");
 		}
 		else //need to crop the image
 		{
@@ -406,15 +406,15 @@ class KAsyncCaptureThumb extends KJobHandlerWorker
 
 	public static function captureLocalThumbForBifUsingPackager($srcPath, $capturedThumbPath, $calc_vid_sec, $width = null, $height = null)
 	{
-		$packagerCaptureUrl = kConf::get('packager_local_thumb_capture_url', 'local', null);
+		$packagerCaptureUrl = vConf::get('packager_local_thumb_capture_url', 'local', null);
 		if (!$packagerCaptureUrl || !$srcPath)
 		{
 			return false;
 		}
 		$srcPath = strstr($srcPath, 'content');
 
-		list($packagerThumbCapture, $tempThumbPath) = KThumbnailCapture::generateThumbUrlWithOffset($srcPath, $calc_vid_sec, $packagerCaptureUrl, $capturedThumbPath, $width, $height);
-		return  KCurlWrapper::getDataFromFile($packagerThumbCapture, $tempThumbPath, null, true);
+		list($packagerThumbCapture, $tempThumbPath) = VThumbnailCapture::generateThumbUrlWithOffset($srcPath, $calc_vid_sec, $packagerCaptureUrl, $capturedThumbPath, $width, $height);
+		return  VCurlWrapper::getDataFromFile($packagerThumbCapture, $tempThumbPath, null, true);
 	}
 
 	protected function removeFiles($dirPath , $filesList = null)

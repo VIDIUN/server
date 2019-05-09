@@ -6,7 +6,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.services
  */
-class DistributionProviderService extends KalturaBaseService
+class DistributionProviderService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -14,7 +14,7 @@ class DistributionProviderService extends KalturaBaseService
 		$this->applyPartnerFilterForClass('GenericDistributionProvider');
 		
 		if(!ContentDistributionPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
 	}
 	
 	
@@ -22,17 +22,17 @@ class DistributionProviderService extends KalturaBaseService
 	 * List all distribution providers
 	 * 
 	 * @action list
-	 * @param KalturaDistributionProviderFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaDistributionProviderListResponse
+	 * @param VidiunDistributionProviderFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunDistributionProviderListResponse
 	 */
-	function listAction(KalturaDistributionProviderFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunDistributionProviderFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaDistributionProviderFilter();
+			$filter = new VidiunDistributionProviderFilter();
 			
 		$c = new Criteria();
-		if($filter instanceof KalturaGenericDistributionProviderFilter)
+		if($filter instanceof VidiunGenericDistributionProviderFilter)
 		{
 			$genericDistributionProviderFilter = new GenericDistributionProviderFilter();
 			$filter->toObject($genericDistributionProviderFilter);
@@ -42,23 +42,23 @@ class DistributionProviderService extends KalturaBaseService
 		$count = GenericDistributionProviderPeer::doCount($c);
 		
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 		$pager->attachToCriteria($c);
 		$list = GenericDistributionProviderPeer::doSelect($c);
 		
-		$response = new KalturaDistributionProviderListResponse();
-		$response->objects = KalturaDistributionProviderArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunDistributionProviderListResponse();
+		$response->objects = VidiunDistributionProviderArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = $count;
 	
-		$syndicationProvider = new KalturaSyndicationDistributionProvider();
+		$syndicationProvider = new VidiunSyndicationDistributionProvider();
 		$syndicationProvider->fromObject(SyndicationDistributionProvider::get());
 		$response->objects[] = $syndicationProvider;
 		$response->totalCount++;
 		
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaContentDistributionProvider');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunContentDistributionProvider');
 		foreach($pluginInstances as $pluginInstance)
 		{
-			$provider = $pluginInstance->getKalturaProvider();
+			$provider = $pluginInstance->getVidiunProvider();
 			if($provider)
 			{
 				$response->objects[] = $provider;

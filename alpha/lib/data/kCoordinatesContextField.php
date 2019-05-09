@@ -5,27 +5,27 @@
  * @package Core
  * @subpackage model.data
  */
-class kCoordinatesContextField extends kStringField
+class vCoordinatesContextField extends vStringField
 {
 	/**
 	 * The ip geo coder engine to be used
 	 * 
 	 * @var int of enum geoCoderType
 	 */
-	protected $geoCoderType = geoCoderType::KALTURA;
+	protected $geoCoderType = geoCoderType::VIDIUN;
 	
 	/* (non-PHPdoc)
-	 * @see kIntegerField::getFieldValue()
+	 * @see vIntegerField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null)
+	protected function getFieldValue(vScope $scope = null)
 	{
-		kApiCache::addExtraField(kApiCache::ECF_COORDINATES);
+		vApiCache::addExtraField(vApiCache::ECF_COORDINATES);
 
 		if(!$scope)
-			$scope = new kScope();
+			$scope = new vScope();
 			
 		$ip = $scope->getIp();
-		$ipGeo = kGeoCoderManager::getGeoCoder($this->getGeoCoderType());
+		$ipGeo = vGeoCoderManager::getGeoCoder($this->getGeoCoderType());
 		$coordinates = $ipGeo->getCoordinates($ip);
 		return implode(",", $coordinates);
 	}
@@ -47,7 +47,7 @@ class kCoordinatesContextField extends kStringField
 	}
 
 	/* (non-PHPdoc)
-	 * @see kStringValue::shouldDisableCache()
+	 * @see vStringValue::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{

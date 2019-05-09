@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFieldCompareCondition extends KalturaCompareCondition
+class VidiunFieldCompareCondition extends VidiunCompareCondition
 {
 	/**
 	 * Field to evaluate
-	 * @var KalturaIntegerField
+	 * @var VidiunIntegerField
 	 */
 	public $field;
 	 
@@ -20,37 +20,37 @@ class KalturaFieldCompareCondition extends KalturaCompareCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kFieldCompareCondition();
+			$dbObject = new vFieldCompareCondition();
 	
-		/* @var $dbObject kFieldCompareCondition */
+		/* @var $dbObject vFieldCompareCondition */
 		$dbObject->setField($this->field->toObject());
 			
 		return parent::toObject($dbObject, $skip);
 	}
 	 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kFieldMatchCondition */
+		/* @var $dbObject vFieldMatchCondition */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		$fieldType = get_class($dbObject->getField());
-		KalturaLog::debug("Loading KalturaIntegerField from type [$fieldType]");
+		VidiunLog::debug("Loading VidiunIntegerField from type [$fieldType]");
 		switch ($fieldType)
 		{
-			case 'kTimeContextField':
-				$this->field = new KalturaTimeContextField();
+			case 'vTimeContextField':
+				$this->field = new VidiunTimeContextField();
 				break;
 				
 			default:
-				$this->field = KalturaPluginManager::loadObject('KalturaIntegerField', $fieldType);
+				$this->field = VidiunPluginManager::loadObject('VidiunIntegerField', $fieldType);
 				break;
 		}
 		

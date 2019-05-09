@@ -3,7 +3,7 @@
  * @package plugins.attUverseDistribution
  * @subpackage model.data
  */
-class kAttUverseDistributionJobProviderData extends kDistributionJobProviderData
+class vAttUverseDistributionJobProviderData extends vDistributionJobProviderData
 {
 
 	
@@ -29,7 +29,7 @@ class kAttUverseDistributionJobProviderData extends kDistributionJobProviderData
 	public $remoteCaptionFileUrls;
 	
 	
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

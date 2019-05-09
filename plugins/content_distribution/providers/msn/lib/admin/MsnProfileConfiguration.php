@@ -6,7 +6,7 @@
 class Form_MsnProfileConfiguration extends Form_ConfigurableProfileConfiguration
 {
 	/**
-	 * @var Kaltura_Client_MsnDistribution_Type_MsnDistributionProfile
+	 * @var Vidiun_Client_MsnDistribution_Type_MsnDistributionProfile
 	 */
 	private $msnDistributionProfile;
 	
@@ -48,7 +48,7 @@ class Form_MsnProfileConfiguration extends Form_ConfigurableProfileConfiguration
 	{
 		$object = parent::getObject($objectType, $properties, $add_underscore, true);
 		
-		/* @var $object Kaltura_Client_MsnDistribution_Type_MsnDistributionProfile */
+		/* @var $object Vidiun_Client_MsnDistribution_Type_MsnDistributionProfile */
 		$requiredFlavorParamsIds = array();
 		if ($object->sourceFlavorParamsId != -1)
 			$requiredFlavorParamsIds[] = $object->sourceFlavorParamsId;
@@ -69,7 +69,7 @@ class Form_MsnProfileConfiguration extends Form_ConfigurableProfileConfiguration
 		return $object;
 	}
 	
-	public function addFlavorParamsFields(Kaltura_Client_Type_FlavorParamsListResponse $flavorParams, array $optionalFlavorParamsIds = array(), array $requiredFlavorParamsIds = array())
+	public function addFlavorParamsFields(Vidiun_Client_Type_FlavorParamsListResponse $flavorParams, array $optionalFlavorParamsIds = array(), array $requiredFlavorParamsIds = array())
 	{
 		$this->addFlavorsSelect($flavorParams, 'source_flavor_params_id', 'Source (1001)');
 		$this->addFlavorsSelect($flavorParams, 'wmv_flavor_params_id', 'WMV video file (1002)');
@@ -95,7 +95,7 @@ class Form_MsnProfileConfiguration extends Form_ConfigurableProfileConfiguration
 		parent::populateFromObject($object, $add_underscore);
 	}
 	
-	protected function addFlavorsSelect(Kaltura_Client_Type_FlavorParamsListResponse $flavorParams, $name, $label)
+	protected function addFlavorsSelect(Vidiun_Client_Type_FlavorParamsListResponse $flavorParams, $name, $label)
 	{
 		$element = new Zend_Form_Element_Select($name);
 		$element->setLabel($label);

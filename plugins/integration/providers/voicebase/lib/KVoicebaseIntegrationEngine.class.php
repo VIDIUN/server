@@ -3,30 +3,30 @@
  * @package plugins.voicebase
  * @subpackage Scheduler
  */
-class KVoicebaseIntegrationEngine implements KIntegrationCloserEngine
+class VVoicebaseIntegrationEngine implements VIntegrationCloserEngine
 {
 	private $baseEndpointUrl = null;
 	private $clientHelper = null;
 	
 	/* (non-PHPdoc)
-	 * @see KIntegrationCloserEngine::dispatch()
+	 * @see VIntegrationCloserEngine::dispatch()
 	 */
-	public function dispatch(KalturaBatchJob $job, KalturaIntegrationJobData &$data)
+	public function dispatch(VidiunBatchJob $job, VidiunIntegrationJobData &$data)
 	{
 		return $this->doDispatch($job, $data, $data->providerData);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KIntegrationCloserEngine::close()
+	 * @see VIntegrationCloserEngine::close()
 	 */
-	public function close(KalturaBatchJob $job, KalturaIntegrationJobData &$data)
+	public function close(VidiunBatchJob $job, VidiunIntegrationJobData &$data)
 	{
 		return $this->doClose($job, $data, $data->providerData);
 	}
 	
-	protected function doDispatch(KalturaBatchJob $job, KalturaIntegrationJobData &$data, KalturaVoicebaseJobProviderData $providerData)
+	protected function doDispatch(VidiunBatchJob $job, VidiunIntegrationJobData &$data, VidiunVoicebaseJobProviderData $providerData)
 	{
-		KalturaLog::info ("Starting dispatch - VoiceBase");
+		VidiunLog::info ("Starting dispatch - VoiceBase");
 		$entryId = $providerData->entryId;
 		$flavorAssetId = $providerData->flavorAssetId;
 		$spokenLanguage = $providerData->spokenLanguage;
@@ -37,11 +37,11 @@ class KVoicebaseIntegrationEngine implements KIntegrationCloserEngine
 		$fileLocation = $providerData->fileLocation;
 		$callBackUrl = $data->callbackNotificationUrl;
 	
-		KalturaLog::debug('callback is - ' . $callBackUrl);
+		VidiunLog::debug('callback is - ' . $callBackUrl);
 
 		$additionalParameters = json_decode($providerData->additionalParameters, true);
 		$this->clientHelper = VoicebasePlugin::getClientHelper($providerData->apiKey, $providerData->apiPassword, $additionalParameters);
-		$flavorUrl = KBatchBase::$kClient->flavorAsset->getUrl($flavorAssetId);
+		$flavorUrl = VBatchBase::$vClient->flavorAsset->getUrl($flavorAssetId);
 	
 		$externalId = $entryId . '_' . $job->id;
 		$externalEntryExists = $this->clientHelper->checkExistingExternalContent($externalId);
@@ -67,7 +67,7 @@ class KVoicebaseIntegrationEngine implements KIntegrationCloserEngine
 		return false;
 	}
 	
-	protected function doClose(KalturaBatchJob $job, KalturaIntegrationJobData &$data, KalturaVoicebaseJobProviderData $providerData)
+	protected function doClose(VidiunBatchJob $job, VidiunIntegrationJobData &$data, VidiunVoicebaseJobProviderData $providerData)
 	{
 		$entryId = $providerData->entryId;
 		$this->clientHelper = VoicebasePlugin::getClientHelper($providerData->apiKey, $providerData->apiPassword);

@@ -8,7 +8,7 @@
 	/********************
 	 * Base Chunked Encoding Session Manager module
 	 */
-	abstract class KBaseChunkedEncodeSessionManager
+	abstract class VBaseChunkedEncodeSessionManager
 	{
 		protected $name = null;	
 		protected $chunker = null;
@@ -25,7 +25,7 @@
 
 		protected $chunkExecutionDataArr = array();
 
-		protected $returnStatus = null;	// KChunkedEncodeReturnStatus
+		protected $returnStatus = null;	// VChunkedEncodeReturnStatus
 		protected $returnMessages = array();
 
 		protected $concurrencyHistogram = array();
@@ -34,11 +34,11 @@
 		/********************
 		 *
 		 */
-		public function __construct(KChunkedEncodeSetup $setup, $name=null)
+		public function __construct(VChunkedEncodeSetup $setup, $name=null)
 		{
-			$this->chunker = new KChunkedEncode($setup);
-			KalturaLog::log(date("Y-m-d H:i:s"));
-			KalturaLog::log("sessionData:".print_r($this,1));
+			$this->chunker = new VChunkedEncode($setup);
+			VidiunLog::log(date("Y-m-d H:i:s"));
+			VidiunLog::log("sessionData:".print_r($this,1));
 			
 			if(strlen($name)==0)
 				$this->name = null;
@@ -69,7 +69,7 @@
 				$this->CleanUp();
 			}
 			
-			$this->returnStatus = KChunkedEncodeReturnStatus::OK;
+			$this->returnStatus = VChunkedEncodeReturnStatus::OK;
 			if(file_exists($this->chunker->getSessionName())) {
 				copy($this->chunker->getSessionName(), $this->chunker->params->output);
 			}			
@@ -84,7 +84,7 @@
 			$chunker = $this->chunker;
 			$rv = $chunker->Initialize($msgStr);
 			if($rv!==true){
-				$this->returnStatus = KChunkedEncodeReturnStatus::InitializeError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::InitializeError;
 				$this->returnMessages[] = $msgStr;
 				return $rv;
 			}
@@ -100,7 +100,7 @@
 				$cmdLine = "time $cmdLine > $logFilename 2>&1";
 				$outFilename = $chunker->getChunkName($chunkIdx);
 				$videoCmdLines[$chunkIdx] = array($cmdLine, $outFilename);
-				KalturaLog::log($cmdLine);
+				VidiunLog::log($cmdLine);
 			}
 			$this->videoCmdLines = $videoCmdLines;
 			
@@ -141,9 +141,9 @@
 				if($idx<$maxChunks-1
 				&& $chunkData->stat->start+$chunkData->gap > $chunkData->stat->finish+10*$chunker->params->frameDuration){
 					$msgStr="Chunk id ($chunkData->index): chunk duration too short - ".($chunkData->stat->finish-$chunkData->stat->start.", should be $chunkData->gap");
-					KalturaLog::log($msgStr);
+					VidiunLog::log($msgStr);
 					$this->returnMessages[] = $msgStr;
-					$this->returnStatus = KChunkedEncodeReturnStatus::AnalyzeError;
+					$this->returnStatus = VChunkedEncodeReturnStatus::AnalyzeError;
 					return false;
 				}
 
@@ -153,22 +153,22 @@
 				$cmdLine = $chunker->BuildFixVideoCommandLine($toFixChunkIdx)." > $chunkFixName.log 2>&1";
 				$process = $this->executeCmdline($cmdLine, "$chunkFixName.log");
 				if($process==false){
-					KalturaLog::log($msgStr="Chunk ($chunkFixName) fix FAILED !");
+					VidiunLog::log($msgStr="Chunk ($chunkFixName) fix FAILED !");
 					$this->returnMessages[] = $msgStr;
-					$this->returnStatus = KChunkedEncodeReturnStatus::AnalyzeError;
+					$this->returnStatus = VChunkedEncodeReturnStatus::AnalyzeError;
 					return false;
 				}
 				$processArr[$toFixChunkIdx] = $process;
 			}
-			KalturaLog::log("waiting ...");
+			VidiunLog::log("waiting ...");
 			foreach($processArr as $idx=>$process) {
-				KProcessExecutionData::waitForCompletion($process);
+				VProcessExecutionData::waitForCompletion($process);
 				$chunkFixName = $chunker->getChunkName($idx, "fix");
-				$execData = new KProcessExecutionData($process, $chunkFixName.".log");
+				$execData = new VProcessExecutionData($process, $chunkFixName.".log");
 				if($execData->exitCode!=0) {
-					KalturaLog::log($msgStr="Chunk ($idx) fix FAILED, exitCode($execData->exitCode)!");
+					VidiunLog::log($msgStr="Chunk ($idx) fix FAILED, exitCode($execData->exitCode)!");
 					$this->returnMessages[] = $msgStr;
-					$this->returnStatus = KChunkedEncodeReturnStatus::AnalyzeError;
+					$this->returnStatus = VChunkedEncodeReturnStatus::AnalyzeError;
 					return false;
 				}
 			}
@@ -184,43 +184,43 @@
 			$concatFilenameLog = $this->chunker->getSessionName("concat");
 
 			$mergeCmd = $this->chunker->BuildMergeCommandLine();
-			KalturaLog::log("mergeCmd:$mergeCmd");
+			VidiunLog::log("mergeCmd:$mergeCmd");
 			$maxAttempts = 3;
 			for($attempt=0; $attempt<$maxAttempts; $attempt++) {
 
 				$process = $this->executeCmdline($mergeCmd, $concatFilenameLog);
 				if($process==false) {
-					KalturaLog::log("FAILED to merge (attempt:$attempt)!");
+					VidiunLog::log("FAILED to merge (attempt:$attempt)!");
 					$logTail = self::getLogTail($concatFilenameLog);
 					if(isset($logTail))
-						KalturaLog::log("Log dump:\n".$logTail);
+						VidiunLog::log("Log dump:\n".$logTail);
 					sleep(5);
 					continue;
 				}
-				KalturaLog::log("waiting ...");
-				KProcessExecutionData::waitForCompletion($process);
-				$execData = new KProcessExecutionData($process, $concatFilenameLog);
+				VidiunLog::log("waiting ...");
+				VProcessExecutionData::waitForCompletion($process);
+				$execData = new VProcessExecutionData($process, $concatFilenameLog);
 				if($execData->exitCode!=0) {
-					KalturaLog::log("FAILED to merge (attempt:$attempt, exitCode:$execData->exitCode)!");
+					VidiunLog::log("FAILED to merge (attempt:$attempt, exitCode:$execData->exitCode)!");
 					$logTail = self::getLogTail($concatFilenameLog);
 					if(isset($logTail))
-						KalturaLog::log("Log dump:\n".$logTail);
+						VidiunLog::log("Log dump:\n".$logTail);
 					sleep(5);
 					continue;
 				}
 				break;
 			}
 			if($attempt==$maxAttempts){
-				KalturaLog::log($msgStr="FAILED to merge, leaving!");
+				VidiunLog::log($msgStr="FAILED to merge, leaving!");
 				$this->returnMessages[] = $msgStr;
-				$this->returnStatus = KChunkedEncodeReturnStatus::MergeAttemptsError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::MergeAttemptsError;
 				return false;
 			}
 
 			if($this->chunker->ValidateMergedFile($msgStr)!=true){
-				KalturaLog::log($msgStr);
+				VidiunLog::log($msgStr);
 				$this->returnMessages[] = $msgStr;
-				$this->returnStatus = KChunkedEncodeReturnStatus::MergeThreshError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::MergeThreshError;
 				return false;
 			}
 			return true;
@@ -234,26 +234,26 @@
 			$this->finishTime = time();
 			$sessionData = $this;
 			$chunker = $this->chunker;
-			KalturaLog::log("sessionData:".print_r($sessionData,1));
+			VidiunLog::log("sessionData:".print_r($sessionData,1));
 
 			$msgStr = "Merged:";
 			$durStr = null;
 			$fileDtMrg = $chunker->mergedFileDt;
 			if(isset($fileDtMrg)){
-				KalturaLog::log("merged:".print_r($fileDtMrg,1));
+				VidiunLog::log("merged:".print_r($fileDtMrg,1));
 				$msgStr.= "file dur(v:".round($fileDtMrg->videoDuration/1000,4).",a:".round($fileDtMrg->audioDuration/1000,4).")";
 			}
 			if(isset($sessionData->refFileDt)) {
 				$fileDtRef = $sessionData->refFileDt;
-				KalturaLog::log("reference:".print_r($fileDtRef,1));
+				VidiunLog::log("reference:".print_r($fileDtRef,1));
 			}
 			$fileDtSrc = $chunker->sourceFileDt;
 			if(isset($fileDtSrc)){
-				KalturaLog::log("source:".print_r($fileDtSrc,1));
+				VidiunLog::log("source:".print_r($fileDtSrc,1));
 			}
 			
 			{
-				KalturaLog::log("CSV,idx,startedAt,user,system,elapsed,cpu");
+				VidiunLog::log("CSV,idx,startedAt,user,system,elapsed,cpu");
 				$userAcc = $systemAcc = $elapsedAcc = $cpuAcc = 0;
 				foreach($this->chunkExecutionDataArr as $idx=>$execData){
 					$userAcc+= $execData->user;
@@ -261,7 +261,7 @@
 					$elapsedAcc+= $execData->elapsed;
 					$cpuAcc+= $execData->cpu;
 					
-					KalturaLog::log("CSV,$idx,$execData->startedAt,$execData->user,$execData->system,$execData->elapsed,$execData->cpu");
+					VidiunLog::log("CSV,$idx,$execData->startedAt,$execData->user,$execData->system,$execData->elapsed,$execData->cpu");
 				}
 				$cnt = $chunker->GetMaxChunks();
 				if($cnt>0) {
@@ -275,7 +275,7 @@
 
 			}
 			
-//			KalturaLog::log("LogFile: ".$chunker->getSessionName("log"));
+//			VidiunLog::log("LogFile: ".$chunker->getSessionName("log"));
 
 			if(isset($this->concurrencyHistogram) && count($this->concurrencyHistogram)>0){
 				ksort($this->concurrencyHistogram);
@@ -289,19 +289,19 @@
 					$concurSum+= ($concur*$tm);
 					$tmSum+= $tm;
 				}
-				KalturaLog::log($ttlStr);
-				KalturaLog::log($tmStr);
+				VidiunLog::log($ttlStr);
+				VidiunLog::log($tmStr);
 				$concurrencyLevel = (round(($concurSum/$tmSum),2));
 			}
 
-			KalturaLog::log("***********************************************************");
-			KalturaLog::log("* Session Summary (".date("Y-m-d H:i:s").")");
-			KalturaLog::log("* ");
-			KalturaLog::log("ExecutionStats:chunks($cnt),accum(elapsed:$elapsedAcc,user:$userAcc,system:$systemAcc),average(elapsed:$elapsedAvg,user:$userAvg,system:$systemAvg,cpu:$cpuAvg)");
-			if($sessionData->returnStatus==KChunkedEncodeReturnStatus::AnalyzeError){
+			VidiunLog::log("***********************************************************");
+			VidiunLog::log("* Session Summary (".date("Y-m-d H:i:s").")");
+			VidiunLog::log("* ");
+			VidiunLog::log("ExecutionStats:chunks($cnt),accum(elapsed:$elapsedAcc,user:$userAcc,system:$systemAcc),average(elapsed:$elapsedAvg,user:$userAvg,system:$systemAvg,cpu:$cpuAvg)");
+			if($sessionData->returnStatus==VChunkedEncodeReturnStatus::AnalyzeError){
 				$msgStr.= ",analyze:BAD";
 			}
-			if($sessionData->returnStatus==KChunkedEncodeReturnStatus::OK){
+			if($sessionData->returnStatus==VChunkedEncodeReturnStatus::OK){
 				$msgStr.= ",analyze:OK";
 				if(isset($fileDtMrg)) {
 					$frameRateMode = stristr($fileDtMrg->rawData,"Frame rate mode                          : ");
@@ -328,7 +328,7 @@
 						$deltaStr.=$audioOk?",audio:OK":",audio:BAD";
 						$deltaStr.=($audioOk && $videoOk)?",delta:OK":",delta:BAD";
 						$deltaStr.= ",dur(v:".round($fileDtRef->videoDuration/1000,4).",a:".round($fileDtRef->audioDuration/1000,4).")";
-						KalturaLog::log("$deltaStr");
+						VidiunLog::log("$deltaStr");
 					}
 
 					$deltaStr = null;
@@ -344,18 +344,18 @@
 						$deltaStr.=$audioOk?",audio:OK":",audio:BAD";
 						$deltaStr.=($audioOk && $videoOk)?",delta:OK":",delta:BAD";
 						$deltaStr.= ",dur(v:".round($fileDtSrc->videoDuration/1000,6).",a:".round($fileDtSrc->audioDuration/1000,6).")";
-						KalturaLog::log("$deltaStr");
+						VidiunLog::log("$deltaStr");
 					}
 				}
 			}
 			
-			KalturaLog::log("$msgStr");
-			KalturaLog::log("OutputFile: ".realpath($chunker->getSessionName()));
+			VidiunLog::log("$msgStr");
+			VidiunLog::log("OutputFile: ".realpath($chunker->getSessionName()));
 			
 			$errStr = null;
 			$lasted = $this->finishTime - $this->createTime;
 				
-			if($sessionData->returnStatus==KChunkedEncodeReturnStatus::OK) {
+			if($sessionData->returnStatus==VChunkedEncodeReturnStatus::OK) {
 				$msgStr = "RESULT:Success"."  Lasted:".gmdate('H:i:s',$lasted)."/".($lasted)."s";
 				if(isset($concurrencyLevel)) {
 					$val = end($this->concurrencyHistogram);
@@ -367,8 +367,8 @@
 				$msgStr = $sessionData->getErrorMessage();
 				$msgStr = "RESULT:$msgStr";
 			}
-			KalturaLog::log($msgStr);
-			KalturaLog::log("***********************************************************");
+			VidiunLog::log($msgStr);
+			VidiunLog::log("***********************************************************");
 
 			$this->SerializeSession();
 		}
@@ -382,20 +382,20 @@
 			for($idx=0;$idx<$this->chunker->GetMaxChunks();$idx++){
 				$chunkName_wc = $this->chunker->getChunkName($idx,"*");
 				$cmd = "rm -f $chunkName_wc";
-				KalturaLog::log("cleanup cmd:$cmd");
+				VidiunLog::log("cleanup cmd:$cmd");
 				$rv = null; $op = null;
 				$output = exec($cmd, $op, $rv);
 			}
 			$mergedFilenameAudio = $this->chunker->getSessionName("audio");
 			$cmd = "rm -f $mergedFilenameAudio* ".$concatFilenameLog = $this->chunker->getSessionName("concat");
-			KalturaLog::log("cleanup cmd:$cmd");
+			VidiunLog::log("cleanup cmd:$cmd");
 			$rv = null; $op = null;
 			$output = exec($cmd, $op, $rv);
 			return;
 			$cmd = "rm -f $setup->output*.$this->videoChunkPostfix*";
 			$cmd.= " ".$this->chunker->getSessionName("audio")."*";
 			$cmd.= " ".$this->chunker->getSessionName("session");
-			KalturaLog::log("cleanup cmd:$cmd");
+			VidiunLog::log("cleanup cmd:$cmd");
 			$rv = null; $op = null;
 			$output = exec($cmd, $op, $rv);
 		}
@@ -405,7 +405,7 @@
 		 */
 		protected function executeCmdline($cmdLine, $logFile=null)
 		{
-			return KProcessExecutionData::executeCmdline($cmdLine);
+			return VProcessExecutionData::executeCmdline($cmdLine);
 		}
 
 		/********************
@@ -414,14 +414,14 @@
 		public function getErrorMessage()
 		{
 			switch($this->returnStatus){
-				case KChunkedEncodeReturnStatus::InitializeError: 	 $errStr = "InitializeError"; break;
-				case KChunkedEncodeReturnStatus::GenerateVideoError: $errStr = "GenerateVideoError"; break;
-				case KChunkedEncodeReturnStatus::GenerateAudioError: $errStr = "GenerateAudioError"; break;
-				case KChunkedEncodeReturnStatus::FixDriftError: 	 $errStr = "FixDriftError"; break;
-				case KChunkedEncodeReturnStatus::AnalyzeError: 		 $errStr = "AnalyzeError"; break;
-				case KChunkedEncodeReturnStatus::MergeError: 		 $errStr = "MergeError"; break;
-				case KChunkedEncodeReturnStatus::MergeAttemptsError: $errStr = "MergeAttemptsError"; break;
-				case KChunkedEncodeReturnStatus::MergeThreshError:   $errStr = "MergeThreshError"; break;
+				case VChunkedEncodeReturnStatus::InitializeError: 	 $errStr = "InitializeError"; break;
+				case VChunkedEncodeReturnStatus::GenerateVideoError: $errStr = "GenerateVideoError"; break;
+				case VChunkedEncodeReturnStatus::GenerateAudioError: $errStr = "GenerateAudioError"; break;
+				case VChunkedEncodeReturnStatus::FixDriftError: 	 $errStr = "FixDriftError"; break;
+				case VChunkedEncodeReturnStatus::AnalyzeError: 		 $errStr = "AnalyzeError"; break;
+				case VChunkedEncodeReturnStatus::MergeError: 		 $errStr = "MergeError"; break;
+				case VChunkedEncodeReturnStatus::MergeAttemptsError: $errStr = "MergeAttemptsError"; break;
+				case VChunkedEncodeReturnStatus::MergeThreshError:   $errStr = "MergeThreshError"; break;
 			}
 			$msgStr = "Failure - error($errStr/$this->returnStatus),message(".implode(',',$this->returnMessages).")";
 			return $msgStr;

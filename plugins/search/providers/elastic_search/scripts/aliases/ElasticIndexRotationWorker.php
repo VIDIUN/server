@@ -93,19 +93,19 @@ class ElasticIndexRotationWorker
 			);
 		}
 
-		KalturaLog::debug('Change Aliases request body: '.print_r($body, true));
+		VidiunLog::debug('Change Aliases request body: '.print_r($body, true));
 
 		if (!$this->dryRun)
 		{
 			$response = $this->client->changeAliases($body);
 			if (isset($response['acknowledged']))
 			{
-				KalturaLog::log('Changed Aliases');
+				VidiunLog::log('Changed Aliases');
 			}
 		}
 		else
 		{
-			KalturaLog::debug('Dry Run - Didn\'t changed aliases');
+			VidiunLog::debug('Dry Run - Didn\'t changed aliases');
 		}
 	}
 
@@ -182,7 +182,7 @@ class ElasticIndexRotationWorker
 		}
 		else
 		{
-			KalturaLog::debug("Dry run - creating index $newIndex");
+			VidiunLog::debug("Dry run - creating index $newIndex");
 		}
 
 		$aliasesToAdd[] = new ElasticIndexAlias($newIndex, $this->searchAlias);
@@ -213,7 +213,7 @@ class ElasticIndexRotationWorker
 
 	protected function createNewIndex($indexName)
 	{
-		KalturaLog::log("Going to create index $indexName");
+		VidiunLog::log("Going to create index $indexName");
 		try
 		{
 			$json = file_get_contents(ROOT_DIR . '/' . $this->mappingPath);

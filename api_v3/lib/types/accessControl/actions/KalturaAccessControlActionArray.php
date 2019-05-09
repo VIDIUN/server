@@ -2,13 +2,13 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRuleActionArray
+ * @deprecated use VidiunRuleActionArray
  */
-class KalturaAccessControlActionArray extends KalturaTypedArray
+class VidiunAccessControlActionArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaAccessControlActionArray();
+		$newArr = new VidiunAccessControlActionArray();
 		if ($arr == null)
 			return $newArr;
 
@@ -16,7 +16,7 @@ class KalturaAccessControlActionArray extends KalturaTypedArray
 		{
 			$nObj = self::getInstanceByDbObject($obj);
 			if(!$nObj)
-				throw new kCoreException("No API object found for core object [" . get_class($obj) . "] with type [" . $obj->getType() . "]", kCoreException::OBJECT_API_TYPE_NOT_FOUND);
+				throw new vCoreException("No API object found for core object [" . get_class($obj) . "] with type [" . $obj->getType() . "]", vCoreException::OBJECT_API_TYPE_NOT_FOUND);
 				
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
@@ -25,25 +25,25 @@ class KalturaAccessControlActionArray extends KalturaTypedArray
 		return $newArr;
 	}
 
-	static function getInstanceByDbObject(kRuleAction $dbObject)
+	static function getInstanceByDbObject(vRuleAction $dbObject)
 	{
 		switch($dbObject->getType())
 		{
 			case RuleActionType::BLOCK:
-				return new KalturaAccessControlBlockAction();
+				return new VidiunAccessControlBlockAction();
 			case RuleActionType::PREVIEW:
-				return new KalturaAccessControlPreviewAction();
+				return new VidiunAccessControlPreviewAction();
 			case RuleActionType::LIMIT_FLAVORS:
-				return new KalturaAccessControlLimitFlavorsAction();
+				return new VidiunAccessControlLimitFlavorsAction();
 			case RuleActionType::LIMIT_THUMBNAIL_CAPTURE:
-				return new KalturaAccessControlLimitThumbnailCaptureAction();
+				return new VidiunAccessControlLimitThumbnailCaptureAction();
 			default:
-				return KalturaPluginManager::loadObject('KalturaAccessControlAction', $dbObject->getType());
+				return VidiunPluginManager::loadObject('VidiunAccessControlAction', $dbObject->getType());
 		}
 	}
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaAccessControlAction");	
+		parent::__construct("VidiunAccessControlAction");	
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Will run KAsyncExtractMedia.class.php 
+ * Will run VAsyncExtractMedia.class.php 
  * 
  *
  * @package Scheduler
@@ -8,6 +8,6 @@
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncExtractMedia();
+$instance = new VAsyncExtractMedia();
 $instance->run(); 
 $instance->done();

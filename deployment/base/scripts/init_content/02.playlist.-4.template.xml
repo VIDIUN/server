@@ -18,7 +18,7 @@
 	</session>
 
 	<request service="playlist" action="add">
-		<playlist objectType="KalturaPlaylist">
+		<playlist objectType="VidiunPlaylist">
 			<playlistType>10</playlistType>
 			<name>Most recent videos</name>
 			<referenceId>PLAYLIST_MOST_RECENT</referenceId>
@@ -26,7 +26,7 @@
 			<userId>template</userId>
 			<totalResults>20</totalResults>
 			<filters objectType="array">
-				<item objectType="KalturaMediaEntryFilterForPlaylist">
+				<item objectType="VidiunMediaEntryFilterForPlaylist">
 					<limit>10</limit>
 					<mediaTypeEqual>1</mediaTypeEqual>
 					<orderBy>-created_at</orderBy>

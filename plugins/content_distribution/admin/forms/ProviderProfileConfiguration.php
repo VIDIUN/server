@@ -6,7 +6,7 @@
 abstract class Form_ProviderProfileConfiguration extends Form_DistributionConfiguration
 {
 	/**
-	 * @var Kaltura_Client_ContentDistribution_Type_DistributionProfile
+	 * @var Vidiun_Client_ContentDistribution_Type_DistributionProfile
 	 */
 	protected $distributionProfile;
 	
@@ -16,11 +16,11 @@ abstract class Form_ProviderProfileConfiguration extends Form_DistributionConfig
 	protected $partnerId;
 	
 	/**
-	 * @var Kaltura_Client_ContentDistribution_Enum_DistributionProviderType
+	 * @var Vidiun_Client_ContentDistribution_Enum_DistributionProviderType
 	 */
 	protected $providerType;
 	
-	public function __construct($partnerId, $providerType, Kaltura_Client_ContentDistribution_Type_DistributionProfile $distributionProfile = null)
+	public function __construct($partnerId, $providerType, Vidiun_Client_ContentDistribution_Type_DistributionProfile $distributionProfile = null)
 	{
 		$this->partnerId = $partnerId;
 		$this->providerType = $providerType;
@@ -29,14 +29,14 @@ abstract class Form_ProviderProfileConfiguration extends Form_DistributionConfig
 		parent::__construct();
 	}
 	
-	public function saveProviderAdditionalObjects(Kaltura_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
+	public function saveProviderAdditionalObjects(Vidiun_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
 	{
 		// called after the profile element is saved
 	}
 	
 	abstract protected function addProviderElements();
 	
-	public function resetUnUpdatebleAttributes(Kaltura_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
+	public function resetUnUpdatebleAttributes(Vidiun_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
 	{
 		// reset readonly attributes
 		$distributionProfile->id = null;
@@ -115,9 +115,9 @@ abstract class Form_ProviderProfileConfiguration extends Form_DistributionConfig
 		));
 		
 		$element = $this->getElement("{$action}_enabled");
-		$element->addMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionProfileActionStatus::DISABLED, 'Disabled');
-		$element->addMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionProfileActionStatus::MANUAL, 'Manual');
-		$element->addMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionProfileActionStatus::AUTOMATIC, 'Automatic');
+		$element->addMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionProfileActionStatus::DISABLED, 'Disabled');
+		$element->addMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionProfileActionStatus::MANUAL, 'Manual');
+		$element->addMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionProfileActionStatus::AUTOMATIC, 'Automatic');
 			
 		$this->addDisplayGroup(
 			array(
@@ -138,18 +138,18 @@ abstract class Form_ProviderProfileConfiguration extends Form_DistributionConfig
 		$metadataProfiles = null;
 		try
 		{
-			$metadataProfileFilter = new Kaltura_Client_Metadata_Type_MetadataProfileFilter();
-			$metadataProfileFilter->metadataObjectTypeEqual = Kaltura_Client_Metadata_Enum_MetadataObjectType::ENTRY;
+			$metadataProfileFilter = new Vidiun_Client_Metadata_Type_MetadataProfileFilter();
+			$metadataProfileFilter->metadataObjectTypeEqual = Vidiun_Client_Metadata_Enum_MetadataObjectType::ENTRY;
 			
 			$client = Infra_ClientHelper::getClient();
-			$metadataPlugin = Kaltura_Client_Metadata_Plugin::get($client);
+			$metadataPlugin = Vidiun_Client_Metadata_Plugin::get($client);
 			Infra_ClientHelper::impersonate($this->partnerId);
 			$metadataProfileList = $metadataPlugin->metadataProfile->listAction($metadataProfileFilter);
 			Infra_ClientHelper::unimpersonate();
 			
 			$metadataProfiles = $metadataProfileList->objects;
 		}
-		catch (Kaltura_Client_Exception $e)
+		catch (Vidiun_Client_Exception $e)
 		{
 			$metadataProfiles = null;
 		}

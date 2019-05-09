@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage api.en
  */
-class KalturaScoreType  extends KalturaEnum
+class VidiunScoreType  extends VidiunEnum
 {
 	const HIGHEST = 1;
 	const LOWEST = 2;

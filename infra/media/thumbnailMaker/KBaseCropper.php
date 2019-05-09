@@ -3,7 +3,7 @@
  * @package server-infra
  * @subpackage Media
  */
-abstract class KBaseCropper
+abstract class VBaseCropper
 {
 	/**
 	 * @var string
@@ -58,34 +58,34 @@ abstract class KBaseCropper
 		$cmd = $this->getCommand($quality, $cropType, $width, $height, $cropX, $cropY, $cropWidth, $cropHeight, $scaleWidth, $scaleHeight, $bgcolor, $density, $forceRotation, $strip);
 		if($cmd)
 		{
-			KalturaLog::info("Executing: $cmd");
+			VidiunLog::info("Executing: $cmd");
 			$returnValue = null;
 			exec($cmd, $output, $returnValue);
-			KalturaLog::debug("Returned value: $returnValue Output: " .  print_r($output, true));
+			VidiunLog::debug("Returned value: $returnValue Output: " .  print_r($output, true));
 			
 			//Avoid certain images the image magic throws "no pixels defined in cache ... @ cache.c/OpenPixelCache/3789" exception but still generates the cropped image
 			$outputAsString = implode(" ", $output);
 			if($returnValue && strpos($outputAsString, "no pixels defined in cache") === false && strpos($outputAsString, "cache.c/OpenPixelCache") === false )
 				return false;
 
-			// Support animated gifs - KImageMagick generates multiple images with a postfix of '-<frame num>'
-			if (!file_exists($this->targetPath) || !kFile::fileSize($this->targetPath))
+			// Support animated gifs - VImageMagick generates multiple images with a postfix of '-<frame num>'
+			if (!file_exists($this->targetPath) || !vFile::fileSize($this->targetPath))
 			{
 				$targetFiledir = pathinfo($this->targetPath, PATHINFO_DIRNAME);
 				$targetFilename = pathinfo($this->targetPath, PATHINFO_FILENAME);
 				$targetFileext = pathinfo($this->targetPath, PATHINFO_EXTENSION);
 				
 				$firstFrameTargetFile = "$targetFiledir/$targetFilename-0.$targetFileext";
-				if (file_exists($firstFrameTargetFile) && kFile::fileSize($firstFrameTargetFile))
+				if (file_exists($firstFrameTargetFile) && vFile::fileSize($firstFrameTargetFile))
 				{
-					kFile::moveFile($firstFrameTargetFile, $this->targetPath);
+					vFile::moveFile($firstFrameTargetFile, $this->targetPath);
 				}
 			}			
 				
 			return true;
 		}
 		
-		KalturaLog::info("No conversion required, copying source[$this->srcPath] to target[$this->targetPath]");
+		VidiunLog::info("No conversion required, copying source[$this->srcPath] to target[$this->targetPath]");
 		return copy($this->srcPath, $this->targetPath);
 	}
 	

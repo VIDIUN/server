@@ -49,7 +49,7 @@ class EntryVendorTaskTableMap extends TableMap {
 		$this->addColumn('PRICE', 'Price', 'FLOAT', true, null, null);
 		$this->addColumn('CATALOG_ITEM_ID', 'CatalogItemId', 'INTEGER', true, null, null);
 		$this->addColumn('REACH_PROFILE_ID', 'ReachProfileId', 'INTEGER', true, null, null);
-		$this->addColumn('KUSER_ID', 'KuserId', 'INTEGER', true, null, null);
+		$this->addColumn('VUSER_ID', 'VuserId', 'INTEGER', true, null, null);
 		$this->addColumn('VERSION', 'Version', 'INTEGER', false, null, null);
 		$this->addColumn('CONTEXT', 'Context', 'VARCHAR', false, 256, null);
 		$this->addColumn('CUSTOM_DATA', 'CustomData', 'LONGVARCHAR', false, null, null);

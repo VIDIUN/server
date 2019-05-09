@@ -16,7 +16,7 @@
     <multirequest>
         <!-- Server-Node is down -->
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Server Node Down</name>
                 <systemName>Server_Node_Down</systemName>
                 <description>Email notification template to be sent when a server node stopped sending heart beats.</description>
@@ -24,12 +24,12 @@
                 <eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
                 <eventObjectType>39</eventObjectType> <!-- EventNotificationEventObjectType::SERVER_NODE -->
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventObjectChangedCondition">
+                    <item objectType="VidiunEventObjectChangedCondition">
                         <description>Server Node status changed </description>
                         <modifiedColumns>server_node.STATUS</modifiedColumns>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
-                        <field objectType="KalturaEvalBooleanField">
+                    <item objectType="VidiunEventFieldCondition">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getObject() instanceof EdgeServerNode &amp;&amp; $scope->getObject()->getStatus() == ServerNodeStatus::NOT_REGISTERED</code>
                         </field>
                     </item>
@@ -40,24 +40,24 @@
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>server_node_hostname</key>
                         <description>Server-Node hostname</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getHostName()</code>
                         </value>
                     </item>

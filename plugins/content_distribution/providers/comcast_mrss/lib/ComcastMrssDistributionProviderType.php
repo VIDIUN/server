@@ -3,7 +3,7 @@
  * @package plugins.comcastMrssDistribution
  * @subpackage lib
  */
-class ComcastMrssDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class ComcastMrssDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const COMCAST_MRSS = 'COMCAST_MRSS';
 	

@@ -5,21 +5,21 @@
  * @package plugins.bulkUploadFilter
  * @subpackage api.objects
  */
-class KalturaBulkServiceFilterDataBase extends KalturaBulkServiceData
+class VidiunBulkServiceFilterDataBase extends VidiunBulkServiceData
 {
 	/**
 	 * Filter for extracting the objects list to upload
-	 * @var KalturaFilter
+	 * @var VidiunFilter
 	 */
 	public $filter;
 
 
 	public function getType ()
 	{
-		return kPluginableEnumsManager::apiToCore("BulkUploadType", BulkUploadFilterPlugin::getApiValue(BulkUploadFilterType::FILTER));
+		return vPluginableEnumsManager::apiToCore("BulkUploadType", BulkUploadFilterPlugin::getApiValue(BulkUploadFilterType::FILTER));
 	}
 
-	public function toBulkUploadJobData(KalturaBulkUploadJobData $jobData)
+	public function toBulkUploadJobData(VidiunBulkUploadJobData $jobData)
 	{
 		$jobData->filter = $this->filter;
 	}

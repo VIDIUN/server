@@ -2,10 +2,10 @@
 /**
  * @package plugins.audit
  */
-class AuditPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaServices, IKalturaEventConsumers
+class AuditPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunServices, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'audit';
-	const AUDIT_TRAIL_MANAGER = 'kAuditTrailManager';
+	const AUDIT_TRAIL_MANAGER = 'vAuditTrailManager';
 	
 	public static function getPluginName()
 	{

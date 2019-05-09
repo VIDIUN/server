@@ -1,5 +1,5 @@
 <?php
-class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventConsumer
+class vVirusScanFlowManager implements vBatchJobStatusEventConsumer, vObjectAddedEventConsumer
 {
 	
 	private static $assetIdsToScan = array();
@@ -15,11 +15,11 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 		foreach ($fileSyncList as $fileSync)
 		{
 			// resume file sync added event
-			kEventsManager::continueEvent(new kObjectAddedEvent($fileSync), 'kVirusScanFlowManager');
+			vEventsManager::continueEvent(new vObjectAddedEvent($fileSync), 'vVirusScanFlowManager');
 		}
 
 		// resume flavor asset added event consumption
-		kEventsManager::continueEvent(new kObjectAddedEvent($flavorAsset), 'kVirusScanFlowManager');
+		vEventsManager::continueEvent(new vObjectAddedEvent($flavorAsset), 'vVirusScanFlowManager');
 	}
 	
 	
@@ -83,7 +83,7 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 				
 				// suitable virus scan profile found - create scan job
 				$syncKey = $object->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-				kVirusScanJobsManager::addVirusScanJob($raisedJob, $object->getPartnerId(), $object->getEntryId(), $object->getId(), $syncKey, $profile->getEngineType(), $profile->getActionIfInfected());
+				vVirusScanJobsManager::addVirusScanJob($raisedJob, $object->getPartnerId(), $object->getEntryId(), $object->getId(), $syncKey, $profile->getEngineType(), $profile->getActionIfInfected());
 				return false; // pause other event consumers until virus scan job is finished
 			}
 		}
@@ -92,12 +92,12 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
 		// virus scan only works in api_v3 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || !kCurrentContext::isApiV3Context())
+		if (!class_exists('vCurrentContext') || !vCurrentContext::isApiV3Context())
 			return false;
 		if($object instanceof asset)
 		{
@@ -115,7 +115,7 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -131,17 +131,17 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 		}
 		
 		if (!$response) {
-			KalturaLog::info('Stopping consumption of event ['.get_class($object).']');
+			VidiunLog::info('Stopping consumption of event ['.get_class($object).']');
 		}
 		return $response;	
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
-		if (!class_exists('kCurrentContext') || !kCurrentContext::isApiV3Context())
+		if (!class_exists('vCurrentContext') || !vCurrentContext::isApiV3Context())
 			return false;
 			
 		if($dbBatchJob->getJobType() == VirusScanPlugin::getBatchJobTypeCoreValue(VirusScanBatchJobType::VIRUS_SCAN))
@@ -151,7 +151,7 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -160,7 +160,7 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 		return true;
 	}
 		
-	protected function updatedVirusScan(BatchJob $dbBatchJob, kVirusScanJobData $data)
+	protected function updatedVirusScan(BatchJob $dbBatchJob, vVirusScanJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
@@ -174,19 +174,19 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 		}
 	}
 	
-	protected function updatedVirusScanFinished(BatchJob $dbBatchJob, kVirusScanJobData $data)
+	protected function updatedVirusScanFinished(BatchJob $dbBatchJob, vVirusScanJobData $data)
 	{
 		$flavorAsset = assetPeer::retrieveById($data->getFlavorAssetId());
 		if (!$flavorAsset)
 		{
-			KalturaLog::err('Flavor asset not found with id ['.$data->getFlavorAssetId().']');
+			VidiunLog::err('Flavor asset not found with id ['.$data->getFlavorAssetId().']');
 			throw new Exception('Flavor asset not found with id ['.$data->getFlavorAssetId().']');
 		}
 				
 		switch ($data->getScanResult())
 		{
-			case KalturaVirusScanJobResult::FILE_WAS_CLEANED:									
-			case KalturaVirusScanJobResult::FILE_IS_CLEAN:
+			case VidiunVirusScanJobResult::FILE_WAS_CLEANED:									
+			case VidiunVirusScanJobResult::FILE_IS_CLEAN:
 			    $entry = $flavorAsset->getentry();
 			    if ($entry->getStatus() == VirusScanPlugin::getEntryStatusCoreValue(VirusScanEntryStatus::SCAN_FAILURE))
 			    {
@@ -206,10 +206,10 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 				$this->resumeEvents($flavorAsset, $dbBatchJob);
 				break;
 				
-			case KalturaVirusScanJobResult::FILE_INFECTED:
+			case VidiunVirusScanJobResult::FILE_INFECTED:
 				$entry = $flavorAsset->getentry();
 				if (!$entry) {
-					KalturaLog::err('Entry not found with id ['.$entry->getId().']');
+					VidiunLog::err('Entry not found with id ['.$entry->getId().']');
 				}
 				else {
 					$entry->setStatus(VirusScanPlugin::getEntryStatusCoreValue(VirusScanEntryStatus::INFECTED));
@@ -217,16 +217,16 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 				}
 				
 				// delete flavor asset and entry if defined in virus scan profile	
-				if ( $data->getVirusFoundAction() == KalturaVirusFoundAction::CLEAN_DELETE ||
-					 $data->getVirusFoundAction() == KalturaVirusFoundAction::DELETE          )
+				if ( $data->getVirusFoundAction() == VidiunVirusFoundAction::CLEAN_DELETE ||
+					 $data->getVirusFoundAction() == VidiunVirusFoundAction::DELETE          )
 				{
 					$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-					$filePath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
-					KalturaLog::info('FlavorAsset ['.$flavorAsset->getId().'] marked as deleted');
+					$filePath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
+					VidiunLog::info('FlavorAsset ['.$flavorAsset->getId().'] marked as deleted');
 					$flavorAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_DELETED);
 					$flavorAsset->setDeletedAt(time());
 					$flavorAsset->save();
-					KalturaLog::info('Physically deleting file ['.$filePath.']');
+					VidiunLog::info('Physically deleting file ['.$filePath.']');
 					unlink($filePath);
 					if ($entry)	{
 						myEntryUtils::deleteEntry($entry);
@@ -237,7 +237,7 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 					$flavorAsset->save();
 				}				
 				
-				myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
+				myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
 				// do not resume flavor asset added event consumption
 				break;
 		}		
@@ -245,7 +245,7 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 		return $dbBatchJob;
 	}
 	
-	protected function updatedVirusScanFailed(BatchJob $dbBatchJob, kVirusScanJobData $data)
+	protected function updatedVirusScanFailed(BatchJob $dbBatchJob, vVirusScanJobData $data)
 	{
 		$entry = entryPeer::retrieveByPKNoFilter($dbBatchJob->getEntryId());
 		if ($entry)
@@ -253,11 +253,11 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 		    self::setEntryStatusBeforeScanFailure($entry, $entry->getStatus());
 			$entry->setStatus(VirusScanPlugin::getEntryStatusCoreValue(VirusScanEntryStatus::SCAN_FAILURE));
 			$entry->save();
-			myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
+			myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
 		}
 		else
 		{
-			KalturaLog::err('Entry not found with id ['.$dbBatchJob->getEntryId().']');
+			VidiunLog::err('Entry not found with id ['.$dbBatchJob->getEntryId().']');
 			throw new Exception('Entry not found with id ['.$dbBatchJob->getEntryId().']');
 		}
 		$flavorAsset = assetPeer::retrieveById($data->getFlavorAssetId());
@@ -269,7 +269,7 @@ class kVirusScanFlowManager implements kBatchJobStatusEventConsumer, kObjectAdde
 		}
 		else
 		{
-			KalturaLog::err('Flavor asset not found with id ['.$data->getFlavorAssetId().']');
+			VidiunLog::err('Flavor asset not found with id ['.$data->getFlavorAssetId().']');
 			throw new Exception('Flavor asset not found with id ['.$data->getFlavorAssetId().']');
 		}					
 		// do not resume flavor asset added event consumption

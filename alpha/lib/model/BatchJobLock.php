@@ -21,7 +21,7 @@ class BatchJobLock extends BaseBatchJobLock implements IBaseObject {
 	}
 	
 	public function setObjectType($v) {
-		$objectType = kPluginableEnumsManager::apiToCore('BatchJobObjectType', $v);
+		$objectType = vPluginableEnumsManager::apiToCore('BatchJobObjectType', $v);
 		parent::setObjectType($objectType);
 	}
 	
@@ -33,7 +33,7 @@ class BatchJobLock extends BaseBatchJobLock implements IBaseObject {
 	public function getObjectType()
 	{
 		$objectType = parent::getObjectType();
-		return kPluginableEnumsManager::coreToApi('BatchJobObjectType', $objectType);
+		return vPluginableEnumsManager::coreToApi('BatchJobObjectType', $objectType);
 	}
     
 } // BatchJobLock

@@ -5,7 +5,7 @@
  * @relatedService ScheduleEventResourceService
  * @abstract
  */
-class KalturaScheduleEventResource extends KalturaObject implements IRelatedFilterable
+class VidiunScheduleEventResource extends VidiunObject implements IRelatedFilterable
 {
 	/**
 	 * @var int
@@ -56,7 +56,7 @@ class KalturaScheduleEventResource extends KalturaObject implements IRelatedFilt
 	 );
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -80,7 +80,7 @@ class KalturaScheduleEventResource extends KalturaObject implements IRelatedFilt
 	}
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert($propertiesToSkip)
+	 * @see VidiunObject::validateForInsert($propertiesToSkip)
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -91,19 +91,19 @@ class KalturaScheduleEventResource extends KalturaObject implements IRelatedFilt
 		$c->add(ScheduleEventResourcePeer::RESOURCE_ID, $this->resourceId);
 		$c->add(ScheduleEventResourcePeer::EVENT_ID, $this->eventId);
 		if(ScheduleEventResourcePeer::doCount($c))
-			throw new KalturaAPIException(KalturaErrors::SCHEDULE_EVENT_RESOURCE_ALREADY_EXISTS, $this->eventId, $this->resourceId);
+			throw new VidiunAPIException(VidiunErrors::SCHEDULE_EVENT_RESOURCE_ALREADY_EXISTS, $this->eventId, $this->resourceId);
 
 		if (is_null(ScheduleEventPeer::retrieveByPK($this->eventId)))
-			throw new KalturaAPIException(KalturaErrors::SCHEDULE_EVENT_ID_NOT_FOUND, $this->eventId);
+			throw new VidiunAPIException(VidiunErrors::SCHEDULE_EVENT_ID_NOT_FOUND, $this->eventId);
 
 		if (is_null(ScheduleResourcePeer::retrieveByPK($this->resourceId)) && $this->resourceId != 0)
-			throw new KalturaAPIException(KalturaErrors::SCHEDULE_RESOURCE_ID_NOT_FOUND, $this->resourceId);
+			throw new VidiunAPIException(VidiunErrors::SCHEDULE_RESOURCE_ID_NOT_FOUND, $this->resourceId);
 
 		return parent::validateForInsert($propertiesToSkip);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{

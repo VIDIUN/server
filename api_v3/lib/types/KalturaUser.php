@@ -4,13 +4,13 @@
  * @subpackage objects
  * @relatedService UserService
  */
-class KalturaUser extends KalturaBaseUser
+class VidiunUser extends VidiunBaseUser
 {
 	const MAX_NAME_LEN = 40;
 	private static $names = array('firstName', 'lastName', 'fullName', 'screenName');
 
 	/**
-	 * @var KalturaUserType
+	 * @var VidiunUserType
 	 * @filter eq,in
 	 */
 	public $type;
@@ -21,7 +21,7 @@ class KalturaUser extends KalturaBaseUser
 	public $dateOfBirth;
 
 	/**
-	 * @var KalturaGender
+	 * @var VidiunGender
 	 */
 	public $gender;
 
@@ -93,7 +93,7 @@ class KalturaUser extends KalturaBaseUser
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kuser();
+			$dbObject = new vuser();
 
 
 		parent::toObject($dbObject, $skip);
@@ -102,14 +102,14 @@ class KalturaUser extends KalturaBaseUser
 		// full name is deprecated and was split to firstName + lastName
 		// this is for backward compatibility with older clients
 		if ($this->fullName && !$this->firstName) {
-			list($firstName, $lastName) = kString::nameSplit($this->fullName);
+			list($firstName, $lastName) = vString::nameSplit($this->fullName);
 			$dbObject->setFirstName($firstName);
 			$dbObject->setLastName($lastName);
 		}
 
 		return $dbObject;
 	}
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!$sourceObject)
 			return;
@@ -138,11 +138,11 @@ class KalturaUser extends KalturaBaseUser
 	private function verifyMaxLength()
 	{
 		if (strlen($this->firstName) > self::MAX_NAME_LEN)
-			$this->firstName = kString::alignUtf8String($this->firstName, self::MAX_NAME_LEN);
+			$this->firstName = vString::alignUtf8String($this->firstName, self::MAX_NAME_LEN);
 		if (strlen($this->lastName) > self::MAX_NAME_LEN)
-			$this->lastName = kString::alignUtf8String($this->lastName, self::MAX_NAME_LEN);
+			$this->lastName = vString::alignUtf8String($this->lastName, self::MAX_NAME_LEN);
 		if (strlen($this->fullName) > self::MAX_NAME_LEN)
-			$this->fullName = kString::alignUtf8String($this->fullName, self::MAX_NAME_LEN);
+			$this->fullName = vString::alignUtf8String($this->fullName, self::MAX_NAME_LEN);
 	}
 
 	public function validateForInsert($propertiesToSkip = array())

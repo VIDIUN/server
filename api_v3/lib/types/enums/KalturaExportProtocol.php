@@ -3,9 +3,9 @@
  * @package api
  * @subpackage enum
  */
-class KalturaExportProtocol extends KalturaEnum
+class VidiunExportProtocol extends VidiunEnum
 {
-	const KALTURA_DC = 0;
+	const VIDIUN_DC = 0;
 	const FTP = 1;
 	const SCP = 2;
 	const SFTP = 3;

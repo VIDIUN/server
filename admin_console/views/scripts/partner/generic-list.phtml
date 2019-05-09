@@ -23,9 +23,9 @@
 			</tr>
 		</tfoot>
 		<tbody>
-			<?php foreach($this->paginator as /* Kaltura_Client_Type_Partner */ $partner): ?>
+			<?php foreach($this->paginator as /* Vidiun_Client_Type_Partner */ $partner): ?>
 			<tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Enum_PartnerStatus', $partner->status); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Enum_PartnerStatus', $partner->status); ?></td>
 				<td><?php echo $partner->id; ?></td>
 				<td><?php echo $partner->name; ?></td>
 				<td><?php echo $partner->website; ?></td>
@@ -36,11 +36,11 @@
 				<td>
 					<select class="options" onchange="doAction(this.value, <?php echo $partner->id; ?>)">
 						<option value=""><?php echo $this->translate('Select Action'); ?></option>
-						<?php if (Infra_AclHelper::isAllowed('partner','kmc-redirect')): ?>
+						<?php if (Infra_AclHelper::isAllowed('partner','vmc-redirect')): ?>
 							<option value="manage" ><?php echo $this->translate('Manage'); ?></option>
 						<?php endif; ?>	
-						<?php if (Infra_AclHelper::isAllowed('partner','kmc-users')): ?>
-							<option value="kmcUsers" ><?php echo $this->translate('KMC Users'); ?></option>
+						<?php if (Infra_AclHelper::isAllowed('partner','vmc-users')): ?>
+							<option value="vmcUsers" ><?php echo $this->translate('VMC Users'); ?></option>
 						<?php endif; ?>
 						<?php if (Infra_AclHelper::isAllowed('widget','list')): ?>
 							<option value="widgets" ><?php echo $this->translate('Widgets'); ?></option>
@@ -53,9 +53,9 @@
 								<option value="remoteStorage"><?php echo $this->translate('Remote Storage'); ?></option>
 							<?php endif; ?>	
 							<?php if (Infra_AclHelper::isAllowed('partner','block')): ?>		
-								<?php if ($partner->status == Kaltura_Client_Enum_PartnerStatus::ACTIVE): ?>
+								<?php if ($partner->status == Vidiun_Client_Enum_PartnerStatus::ACTIVE): ?>
 									<option value="block"><?php echo $this->translate('Block'); ?></option>
-								<?php elseif ($partner->status == Kaltura_Client_Enum_PartnerStatus::BLOCKED): ?>
+								<?php elseif ($partner->status == Vidiun_Client_Enum_PartnerStatus::BLOCKED): ?>
 									<option value="unblock"><?php echo $this->translate('Unblock'); ?></option>
 								<?php endif; ?>
 							<?php endif; ?>
@@ -130,11 +130,11 @@ function doAction(action, partnerId) {
 	jQuery('select.options').val('');
 }
 
-function kmcUsers(partnerId) {
-	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'kmc-users', 'partner_id' => '')); ?>' + partnerId;
+function vmcUsers(partnerId) {
+	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'vmc-users', 'partner_id' => '')); ?>' + partnerId;
 	
-	jQuery('#partner-kmc-users-dialog').remove();
-	var dialogDiv = jQuery('<div id="partner-kmc-users-dialog"><?php echo $this->translate('Loading...'); ?></div>').appendTo('body');
+	jQuery('#partner-vmc-users-dialog').remove();
+	var dialogDiv = jQuery('<div id="partner-vmc-users-dialog"><?php echo $this->translate('Loading...'); ?></div>').appendTo('body');
 	
 	dialogDiv.dialog({
 		bgiframe: true,
@@ -162,7 +162,7 @@ function widgets(partnerId) {
 }
 
 function manage(partnerId) {
-	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'kmc-redirect', 'partner_id' => ''), null, true); ?>' + partnerId;
+	var url = '<?php echo $this->url(array('controller' => 'partner', 'action' => 'vmc-redirect', 'partner_id' => ''), null, true); ?>' + partnerId;
 	window.open(url);
 }
 
@@ -217,7 +217,7 @@ function block(partnerId)
 	{
 		changeStatus(
 			partnerId, 
-			<?php echo Kaltura_Client_Enum_PartnerStatus::BLOCKED; ?>, 
+			<?php echo Vidiun_Client_Enum_PartnerStatus::BLOCKED; ?>, 
 			function() {
 				alert('<?php echo $this->translate('partner was blocked');?>');
 			}
@@ -232,7 +232,7 @@ function unblock(partnerId)
 	{
 		changeStatus(
 			partnerId, 
-			<?php echo Kaltura_Client_Enum_PartnerStatus::ACTIVE; ?>, 
+			<?php echo Vidiun_Client_Enum_PartnerStatus::ACTIVE; ?>, 
 			function() {
 				alert('<?php echo $this->translate('partner was unblocked');?>');
 			}
@@ -247,7 +247,7 @@ function remove(partnerId)
 	{
 		changeStatus(
 			partnerId, 
-			<?php echo Kaltura_Client_Enum_PartnerStatus::FULL_BLOCK; ?>, 
+			<?php echo Vidiun_Client_Enum_PartnerStatus::FULL_BLOCK; ?>, 
 			function() {
 				alert('<?php echo $this->translate('partner was removed');?>');
 			}

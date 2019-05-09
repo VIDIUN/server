@@ -1,8 +1,8 @@
 <?php
-class kBatchJobLogManager implements kObjectCreatedEventConsumer, kObjectChangedEventConsumer
+class vBatchJobLogManager implements vObjectCreatedEventConsumer, vObjectChangedEventConsumer
 {
 	/* (non-PHPdoc)
-     * @see kObjectChangedEventConsumer::objectChanged()
+     * @see vObjectChangedEventConsumer::objectChanged()
      */
     public function objectChanged (BaseObject $object, array $modifiedColumns)
     {
@@ -14,7 +14,7 @@ class kBatchJobLogManager implements kObjectCreatedEventConsumer, kObjectChanged
             return;
         }
         
-        KalturaLog::info("Handling batch job log object with Id [" . $batchJobLog->getId() ."]");
+        VidiunLog::info("Handling batch job log object with Id [" . $batchJobLog->getId() ."]");
                 
         $batchJobLog = $this->copyModifiedColumns($batchJobLog, $object, $modifiedColumns);
         
@@ -22,7 +22,7 @@ class kBatchJobLogManager implements kObjectCreatedEventConsumer, kObjectChanged
     }
 
 	/* (non-PHPdoc)
-     * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+     * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
      */
     public function shouldConsumeChangedEvent (BaseObject $object, array $modifiedColumns)
     {
@@ -36,7 +36,7 @@ class kBatchJobLogManager implements kObjectCreatedEventConsumer, kObjectChanged
     }
 
 	/* (non-PHPdoc)
-     * @see kObjectCreatedEventConsumer::objectCreated()
+     * @see vObjectCreatedEventConsumer::objectCreated()
      */
     public function objectCreated (BaseObject $object)
     {
@@ -49,7 +49,7 @@ class kBatchJobLogManager implements kObjectCreatedEventConsumer, kObjectChanged
     }
 
 	/* (non-PHPdoc)
-     * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+     * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
      */
     public function shouldConsumeCreatedEvent (BaseObject $object)
     {
@@ -92,7 +92,7 @@ class kBatchJobLogManager implements kObjectCreatedEventConsumer, kObjectChanged
 	        }
 	        catch (PropelException $e)
 	        {
-	            KalturaLog::err("Could not set value for BatchJobLog field $fieldName, exception thrown: ".$e->getMessage());
+	            VidiunLog::err("Could not set value for BatchJobLog field $fieldName, exception thrown: ".$e->getMessage());
 	        }
 	        
 	        if($fieldPosLog != -1)
@@ -101,7 +101,7 @@ class kBatchJobLogManager implements kObjectCreatedEventConsumer, kObjectChanged
 	        {
 	            //set param_1 for the $batchJobLog
         	    $batchJobData = $batchJob->getData();
-        	    /* @var $batchJobData kBulkUploadJobData */
+        	    /* @var $batchJobData vBulkUploadJobData */
         	    $batchJobLog->setParam1($batchJobData->getBulkUploadObjectType());
 	        }
 	    }	 

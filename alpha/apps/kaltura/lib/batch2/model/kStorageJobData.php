@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kStorageJobData extends kJobData
+class vStorageJobData extends vJobData
 {
 	/**
 	 * @var string

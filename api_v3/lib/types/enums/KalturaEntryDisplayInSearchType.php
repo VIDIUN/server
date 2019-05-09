@@ -3,6 +3,6 @@
  * @package api
  * @subpackage enum
  */
-class KalturaEntryDisplayInSearchType extends KalturaEnum implements EntryDisplayInSearchType
+class VidiunEntryDisplayInSearchType extends VidiunEnum implements EntryDisplayInSearchType
 {
 }

@@ -83,7 +83,7 @@ class Form_PartnerConfigurationLimitSubForm extends Zend_Form_SubForm
 		}
 	}
 	
-	public function populateFromObject(Form_PartnerConfiguration $form, Kaltura_Client_SystemPartner_Type_SystemPartnerConfiguration $partnerConfiguration, Kaltura_Client_SystemPartner_Type_SystemPartnerLimit $object, $add_underscore = true)
+	public function populateFromObject(Form_PartnerConfiguration $form, Vidiun_Client_SystemPartner_Type_SystemPartnerConfiguration $partnerConfiguration, Vidiun_Client_SystemPartner_Type_SystemPartnerLimit $object, $add_underscore = true)
 	{
 		$isPermitted = true;
 		if(count($this->requiredPartnerPermissions))
@@ -94,7 +94,7 @@ class Form_PartnerConfigurationLimitSubForm extends Zend_Form_SubForm
 			{
 				foreach($partnerConfiguration->permissions as $permission)
 				{
-					if(isset($requiredPartnerPermissions[$permission->name]) && $permission->status == Kaltura_Client_Enum_PermissionStatus::ACTIVE)
+					if(isset($requiredPartnerPermissions[$permission->name]) && $permission->status == Vidiun_Client_Enum_PermissionStatus::ACTIVE)
 					{
 						unset($requiredPartnerPermissions[$permission->name]);
 					}
@@ -136,9 +136,9 @@ class Form_PartnerConfigurationLimitSubForm extends Zend_Form_SubForm
 	{
 		$object = null;
 		if($this->withOverage)
-			$object = new Kaltura_Client_SystemPartner_Type_SystemPartnerOveragedLimit();
+			$object = new Vidiun_Client_SystemPartner_Type_SystemPartnerOveragedLimit();
 		else
-			$object = new Kaltura_Client_SystemPartner_Type_SystemPartnerLimit();
+			$object = new Vidiun_Client_SystemPartner_Type_SystemPartnerLimit();
 		
 		foreach($properties as $prop => $value)
 		{

@@ -1,6 +1,6 @@
 <?php
 /**
- * Dates candidates generator for Kaltura scheduling
+ * Dates candidates generator for Vidiun scheduling
  *
  * @package infra
  * @subpackage general

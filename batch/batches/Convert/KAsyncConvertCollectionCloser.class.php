@@ -16,23 +16,23 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KAsyncConvertCollectionCloser extends KJobCloserWorker
+class VAsyncConvertCollectionCloser extends VJobCloserWorker
 {
 	private $localTempPath;
 	private $sharedTempPath;
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::CONVERT_COLLECTION;
+		return VidiunBatchJobType::CONVERT_COLLECTION;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->closeConvert($job, $job->data);
 	}
@@ -46,24 +46,24 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 		$res = self::createDir( $this->localTempPath );
 		if ( !$res )
 		{
-			KalturaLog::err( "Cannot continue conversion without temp local directory");
+			VidiunLog::err( "Cannot continue conversion without temp local directory");
 			return null;
 		}
 		
 		$res = self::createDir( $this->sharedTempPath );
 		if ( !$res )
 		{
-			KalturaLog::err( "Cannot continue conversion without temp shared directory");
+			VidiunLog::err( "Cannot continue conversion without temp shared directory");
 			return null;
 		}
 			
 		return parent::run($jobs);
 	}
 	
-	private function closeConvert(KalturaBatchJob $job, KalturaConvertCollectionJobData $data)
+	private function closeConvert(VidiunBatchJob $job, VidiunConvertCollectionJobData $data)
 	{
 		if(($job->queueTime + self::$taskConfig->params->maxTimeBeforeFail) < time())
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', VidiunBatchJobStatus::FAILED);
 
 		$filesToDownload = array(
 			"{$data->destDirRemoteUrl}/{$data->destFileName}.log",
@@ -88,13 +88,13 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 			$filesToDownload[] = $flavor->destFileSyncRemoteUrl;
 			$err = null;
 			if(!$this->fetchFile($flavor->destFileSyncRemoteUrl, $flavor->destFileSyncLocalPath, $err))
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::REMOTE_DOWNLOAD_FAILED, $err, KalturaBatchJobStatus::ALMOST_DONE);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::REMOTE_DOWNLOAD_FAILED, $err, VidiunBatchJobStatus::ALMOST_DONE);
 		}
 		
 		return $this->moveFiles($job, $data);
 	}
 	
-	private function moveFiles(KalturaBatchJob $job, KalturaConvertCollectionJobData $data)
+	private function moveFiles(VidiunBatchJob $job, VidiunConvertCollectionJobData $data)
 	{
 		clearstatcache();
 		$files2move = array();
@@ -114,7 +114,7 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 				
 			$destPath = "{$this->sharedTempPath}/$fileName";
 			$sharedPath = $this->translateLocalPath2Shared($destPath);
-			$fileSize = kFile::fileSize($srcPath);
+			$fileSize = vFile::fileSize($srcPath);
 			
 			$files2move[] = array(
 				'from' => $srcPath,
@@ -129,7 +129,7 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 			$srcPath = $flavor->destFileSyncLocalPath;
 			$destPath = $this->sharedTempPath . DIRECTORY_SEPARATOR . basename($srcPath);
 			$sharedPath = $this->translateLocalPath2Shared($destPath);
-			$fileSize = kFile::fileSize($srcPath);
+			$fileSize = vFile::fileSize($srcPath);
 			
 			$flavor->destFileSyncLocalPath = $sharedPath;
 			if(self::$taskConfig->params->isRemote)
@@ -152,12 +152,12 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 			if(file_exists($destPath))
 				unlink($destPath);
 				
-			KalturaLog::info("rename($srcPath, $destPath)");
+			VidiunLog::info("rename($srcPath, $destPath)");
 			rename($srcPath, $destPath);
 		
-			if(!file_exists($destPath) || kFile::fileSize($destPath) != $fileSize)
+			if(!file_exists($destPath) || vFile::fileSize($destPath) != $fileSize)
 			{
-				KalturaLog::err("Error: moving file [$srcPath] failed");
+				VidiunLog::err("Error: moving file [$srcPath] failed");
 				die();
 			}
 			$this->setFilePermissions($destPath);
@@ -166,12 +166,12 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 		$data->destDirLocalPath = $this->translateLocalPath2Shared($this->sharedTempPath);
 		if($this->checkFilesArrayExist($files2move))
 		{
-			$job->status = KalturaBatchJobStatus::FINISHED;
+			$job->status = VidiunBatchJobStatus::FINISHED;
 			$job->message = "Files moved to shared";
 		}
 		else
 		{
-			$job->status = KalturaBatchJobStatus::ALMOST_DONE;
+			$job->status = VidiunBatchJobStatus::ALMOST_DONE;
 			$job->message = "Files not moved correctly";
 		}
 		return $this->closeJob($job, null, null, $job->message, $job->status, $data);
@@ -187,7 +187,7 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 	{
 		try
 		{
-			$curlWrapper = new KCurlWrapper();
+			$curlWrapper = new VCurlWrapper();
 			$curlHeaderResponse = $curlWrapper->getHeader($srcFileSyncRemoteUrl, true);
 			if(!$curlHeaderResponse || $curlWrapper->getError())
 			{
@@ -195,13 +195,13 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 				return false;
 			}
 			
-			if($curlHeaderResponse->code != KCurlHeaderResponse::HTTP_STATUS_OK)
+			if($curlHeaderResponse->code != VCurlHeaderResponse::HTTP_STATUS_OK)
 			{
 				$errDescription = "HTTP Error: " . $curlHeaderResponse->code . " " . $curlHeaderResponse->codeName;
 				return false;
 			}
 			$fileSize = null;
-			KalturaLog::debug("Headers:\n" . print_r($curlHeaderResponse->headers, true));
+			VidiunLog::debug("Headers:\n" . print_r($curlHeaderResponse->headers, true));
 			if(isset($curlHeaderResponse->headers['content-length']))
 				$fileSize = $curlHeaderResponse->headers['content-length'];
 			$curlWrapper->close();
@@ -209,22 +209,22 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 			if($fileSize && file_exists($srcFileSyncLocalPath))
 			{
 				clearstatcache();
-				$actualFileSize = kFile::fileSize($srcFileSyncLocalPath);
+				$actualFileSize = vFile::fileSize($srcFileSyncLocalPath);
 				
 				if($actualFileSize == $fileSize)
 				{
-					KalturaLog::log("File [$srcFileSyncLocalPath] already exists with right size[$fileSize]");
+					VidiunLog::log("File [$srcFileSyncLocalPath] already exists with right size[$fileSize]");
 					return true;
 				}
 				
-				KalturaLog::log("File [$srcFileSyncLocalPath] already exists with wrong size[$actualFileSize] expected size[$fileSize]");
-				KalturaLog::info("Unlink file[$srcFileSyncLocalPath]");
+				VidiunLog::log("File [$srcFileSyncLocalPath] already exists with wrong size[$actualFileSize] expected size[$fileSize]");
+				VidiunLog::info("Unlink file[$srcFileSyncLocalPath]");
 				unlink($srcFileSyncLocalPath);
 			}
 			
-			$curlWrapper = new KCurlWrapper();
+			$curlWrapper = new VCurlWrapper();
 			$res = $curlWrapper->exec($srcFileSyncRemoteUrl, $srcFileSyncLocalPath, null, true);
-			KalturaLog::debug("Curl results: $res");
+			VidiunLog::debug("Curl results: $res");
 		
 			if(!$res || $curlWrapper->getError())
 			{
@@ -241,8 +241,8 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 			}
 			
 			clearstatcache();
-			$actualFileSize = kFile::fileSize($srcFileSyncLocalPath);
-			KalturaLog::info("Fetched file to [$srcFileSyncLocalPath] size[$actualFileSize]");
+			$actualFileSize = vFile::fileSize($srcFileSyncLocalPath);
+			VidiunLog::info("Fetched file to [$srcFileSyncLocalPath] size[$actualFileSize]");
 				
 			if($fileSize)
 			{
@@ -262,7 +262,7 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 		return true;
 	}
 	
-	protected function updateExclusiveJob($jobId, KalturaBatchJob $job)
+	protected function updateExclusiveJob($jobId, VidiunBatchJob $job)
 	{
 		$flavors = null;
 		if($job->data && $job->data->flavors)
@@ -270,6 +270,6 @@ class KAsyncConvertCollectionCloser extends KJobCloserWorker
 			$flavors = $job->data->flavors;
 			$job->data->flavors = null;
 		}
-		return self::$kClient->batch->updateExclusiveConvertCollectionJob($jobId, $this->getExclusiveLockKey(), $job, $flavors);
+		return self::$vClient->batch->updateExclusiveConvertCollectionJob($jobId, $this->getExclusiveLockKey(), $job, $flavors);
 	}
 }

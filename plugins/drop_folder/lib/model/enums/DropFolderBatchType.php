@@ -4,7 +4,7 @@
  * @package plugins.dropFolder
  * @subpackage model.enum
  */ 
-class DropFolderBatchType implements IKalturaPluginEnum, BatchJobType
+class DropFolderBatchType implements IVidiunPluginEnum, BatchJobType
 {
 	const DROP_FOLDER_WATCHER = 'DropFolderWatcher';
 	const DROP_FOLDER_CONTENT_PROCESSOR = 'DropFolderContentProcessor';

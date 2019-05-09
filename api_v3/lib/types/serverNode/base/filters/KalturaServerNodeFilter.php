@@ -3,27 +3,27 @@
  * @package api
  * @subpackage filters
  */
-class KalturaServerNodeFilter extends KalturaServerNodeBaseFilter
+class VidiunServerNodeFilter extends VidiunServerNodeBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
 		return new ServerNodeFilter();
 	}
 	
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager, $type);
-		$response = new KalturaServerNodeListResponse();
-		$response->objects = KalturaServerNodeArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunServerNodeListResponse();
+		$response->objects = VidiunServerNodeArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 	
 		return $response;
 	}
 	
-	protected function doGetListResponse(KalturaFilterPager $pager, $type = null)
+	protected function doGetListResponse(VidiunFilterPager $pager, $type = null)
 	{
 		$c = new Criteria();
 			
@@ -40,7 +40,7 @@ class KalturaServerNodeFilter extends KalturaServerNodeBaseFilter
 		return array($list, $totalCount);
 	}
 
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		return $this->getTypeListResponse($pager, $responseProfile);
 	}

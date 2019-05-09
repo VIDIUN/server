@@ -268,7 +268,7 @@ class S3 {
 			trigger_error('S3::inputFile(): Unable to open input file: '.$file, E_USER_WARNING);
 			return false;
 		}
-		return array('file' => $file, 'size' => kFile::fileSize($file),
+		return array('file' => $file, 'size' => vFile::fileSize($file),
 		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :
 		base64_encode(md5_file($file, true))) : '');
 	}
@@ -326,7 +326,7 @@ class S3 {
 			$rest->size = $input['size'];
 		else {
 			if (isset($input['file']))
-				$rest->size = kFile::fileSize($input['file']);
+				$rest->size = vFile::fileSize($input['file']);
 			elseif (isset($input['data']))
 				$rest->size = strlen($input['data']);
 		}
@@ -1228,7 +1228,7 @@ final class S3Request {
 		curl_setopt($curl, CURLOPT_USERAGENT, 'S3/php');
 
 		if (S3::$useSSL) {
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, KCurlWrapper::getSslVerifyHostValue());
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, VCurlWrapper::getSslVerifyHostValue());
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
 		}
 

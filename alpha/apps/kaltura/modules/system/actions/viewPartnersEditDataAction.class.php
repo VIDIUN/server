@@ -4,7 +4,7 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 require_once ( __DIR__ . "/viewPartnersAction.class.php" );
 
 /**
@@ -12,7 +12,7 @@ require_once ( __DIR__ . "/viewPartnersAction.class.php" );
  * @subpackage system
  * @deprecated
  */
-class viewPartnersEditDataAction extends kalturaSystemAction
+class viewPartnersEditDataAction extends vidiunSystemAction
 {
 	public function execute()
 	{
@@ -27,7 +27,7 @@ class viewPartnersEditDataAction extends kalturaSystemAction
 		if ( $data ) 
 		{
 			$time_str = strftime( "-%Y-%d-%m_%H-%M-%S" , time() ); 
-			kFile::moveFile ( $file_path , $file_path.$time_str );
+			vFile::moveFile ( $file_path , $file_path.$time_str );
 			file_put_contents( $file_path , $data ); // sync - OK
 		}
 		else

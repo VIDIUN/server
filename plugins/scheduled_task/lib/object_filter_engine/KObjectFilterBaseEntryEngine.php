@@ -4,13 +4,13 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectFilterEngine
  */
-class KObjectFilterBaseEntryEngine extends KObjectFilterEngineBase
+class VObjectFilterBaseEntryEngine extends VObjectFilterEngineBase
 {
 	/**
-	 * @param KalturaFilter $filter
+	 * @param VidiunFilter $filter
 	 * @return array
 	 */
-	public function query(KalturaFilter $filter)
+	public function query(VidiunFilter $filter)
 	{
 		return $this->_client->baseEntry->listAction($filter, $this->getPager());
 	}

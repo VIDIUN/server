@@ -2,10 +2,10 @@
 /**
  * @package plugins.attUverseDistribution
  */
-class AttUverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers, IKalturaServices
+class AttUverseDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers, IVidiunServices
 {
 	const PLUGIN_NAME = 'attUverseDistribution';
-	const ATT_UVERSE_EVENT_CONSUMER = 'kAttUverseDistributionEventConsumer';
+	const ATT_UVERSE_EVENT_CONSUMER = 'vAttUverseDistributionEventConsumer';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -18,12 +18,12 @@ class AttUverseDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -84,7 +84,7 @@ class AttUverseDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::ATT_UVERSE)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::ATT_UVERSE)
 		{										
 			if($baseClass == 'IDistributionEngineSubmit')
 				return 'AttUverseDistributionEngine';
@@ -93,23 +93,23 @@ class AttUverseDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 				return 'AttUverseDistributionEngine';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::ATT_UVERSE)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::ATT_UVERSE)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_AttUverseProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_AttUverseDistribution_Type_AttUverseDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_AttUverseDistribution_Type_AttUverseDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(AttUverseDistributionProviderType::ATT_UVERSE))
-			return 'KalturaAttUverseDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(AttUverseDistributionProviderType::ATT_UVERSE))
+			return 'VidiunAttUverseDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(AttUverseDistributionProviderType::ATT_UVERSE))
-			return 'kAttUverseDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(AttUverseDistributionProviderType::ATT_UVERSE))
+			return 'vAttUverseDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AttUverseDistributionProviderType::ATT_UVERSE))
-			return 'KalturaAttUverseDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AttUverseDistributionProviderType::ATT_UVERSE))
+			return 'VidiunAttUverseDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AttUverseDistributionProviderType::ATT_UVERSE))
 			return 'AttUverseDistributionProfile';
@@ -130,11 +130,11 @@ class AttUverseDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaAttUverseDistributionProvider();
+		$distributionProvider = new VidiunAttUverseDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -153,7 +153,7 @@ class AttUverseDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -168,8 +168,8 @@ class AttUverseDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -177,11 +177,11 @@ class AttUverseDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

@@ -2,9 +2,9 @@
 /**
  * @package api
  * @subpackage enum
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaSiteRestrictionType extends KalturaEnum
+class VidiunSiteRestrictionType extends VidiunEnum
 {
 	const RESTRICT_SITE_LIST = 0;
 	const ALLOW_SITE_LIST = 1;

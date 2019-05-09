@@ -25,7 +25,7 @@ exclude-result-prefixes="xs">
 					<itunes:name>John Doe</itunes:name>
 					<itunes:email>john.doe@example.com</itunes:email>
 				</itunes:owner>
-				<itunes:image href="http://corp.kaltura.com/images/header/kalturaLogo.png" />
+				<itunes:image href="http://corp.vidiun.com/images/header/vidiunLogo.png" />
 				<itunes:category text="TV &amp; Film">
 				</itunes:category>
 				<xsl:apply-templates name="item"
@@ -36,7 +36,7 @@ exclude-result-prefixes="xs">
   </xsl:template>
   <xsl:template name="item" match="item">
 	<xsl:variable name="podFlvor" select="distribution[@distributionProfileName=$distributionProfileName]/flavorAssetIds/flavorAssetId" />
-	<xsl:variable name="server" select="'http://www.kaltura.com'" />
+	<xsl:variable name="server" select="'http://www.vidiun.com'" />
 		<item>
 			<title>
 			  <xsl:value-of select="name" />		

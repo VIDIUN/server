@@ -1,19 +1,19 @@
 <?php
 
-require_once(KALTURA_ROOT_PATH . '/alpha/apps/kaltura/lib/cache/kCacheManager.php');
-require_once(KALTURA_ROOT_PATH . '/vendor/facebook-sdk-php-v5-customized/autoload.php');
+require_once(VIDIUN_ROOT_PATH . '/alpha/apps/vidiun/lib/cache/vCacheManager.php');
+require_once(VIDIUN_ROOT_PATH . '/vendor/facebook-sdk-php-v5-customized/autoload.php');
 
 /**
  * Saves key/value in the custom data of the provider given
  *  @package infra
  *  @subpackage general
  */
-class kDistributionPersistentDataHandler implements \Facebook\PersistentData\PersistentDataInterface{
+class vDistributionPersistentDataHandler implements \Facebook\PersistentData\PersistentDataInterface{
 
 	private $accessURL;
 
 	/**
-	 * expecting http://hostname/api_v3/index.php?service=contentdistribution_distributionprofile&&id=@id&distributionProfile%3AobjectType=KalturaFacebookDistributionProfile&ks=bxgsxvsxs
+	 * expecting http://hostname/api_v3/index.php?service=contentdistribution_distributionprofile&&id=@id&distributionProfile%3AobjectType=VidiunFacebookDistributionProfile&vs=bxgsxvsxs
 	 * @param string $accessURL
 	 * @throws Exception
 	 */

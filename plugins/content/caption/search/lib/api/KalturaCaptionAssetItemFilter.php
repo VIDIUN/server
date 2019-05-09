@@ -3,7 +3,7 @@
  * @package plugins.captionSearch
  * @subpackage api.filters
  */
-class KalturaCaptionAssetItemFilter extends KalturaCaptionAssetFilter
+class VidiunCaptionAssetItemFilter extends VidiunCaptionAssetFilter
 {
 	static private $map_between_objects = array
 	(
@@ -49,29 +49,29 @@ class KalturaCaptionAssetItemFilter extends KalturaCaptionAssetFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getTypeListResponse()
+	 * @see VidiunAssetFilter::getTypeListResponse()
 	 */
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, array $types = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, array $types = null)
 	{
 		$captionItemQueryToFilter = new ESearchCaptionQueryFromFilter();
 
 		$captionAssetItemFilter = new CaptionAssetItemFilter();
 		$this->toObject($captionAssetItemFilter);
 
-		$captionAssetItemCorePager = new kFilterPager();
+		$captionAssetItemCorePager = new vFilterPager();
 		$pager->toObject($captionAssetItemCorePager);
 
 		try
 		{
 			list($captionAssetItems, $objectsCount) = $captionItemQueryToFilter->retrieveElasticQueryCaptions($captionAssetItemFilter, $captionAssetItemCorePager, false);
 		}
-		catch (kESearchException $e)
+		catch (vESearchException $e)
 		{
 			elasticSearchUtils::handleSearchException($e);
 		}
 
-		$list = KalturaCaptionAssetItemArray::fromDbArray($captionAssetItems, $responseProfile);
-		$response = new KalturaCaptionAssetItemListResponse();
+		$list = VidiunCaptionAssetItemArray::fromDbArray($captionAssetItems, $responseProfile);
+		$response = new VidiunCaptionAssetItemListResponse();
 		$response->objects = $list;
 		$response->totalCount = $objectsCount;
 		return $response;
@@ -108,7 +108,7 @@ class KalturaCaptionAssetItemFilter extends KalturaCaptionAssetFilter
 	public $partnerDescriptionMultiLikeAnd;
 
 	/**
-	 * @var KalturaLanguage
+	 * @var VidiunLanguage
 	 */
 	public $languageEqual;
 

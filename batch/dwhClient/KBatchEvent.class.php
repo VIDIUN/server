@@ -30,7 +30,7 @@
  * @package Scheduler
  * @subpackage DWH
  */
-class KBatchEvent extends KDwhEventBase
+class VBatchEvent extends VDwhEventBase
 {
 	const EVENT_JOB_UPDATE = 1;
 	const EVENT_JOB_FREE = 2;

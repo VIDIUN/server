@@ -3,12 +3,12 @@
 /**
  * Auto-generated class.
  * 
- * Used to search KalturaDocumentEntry attributes. Use KalturaDocumentEntryMatchAttribute enum to provide attribute name.
+ * Used to search VidiunDocumentEntry attributes. Use VidiunDocumentEntryMatchAttribute enum to provide attribute name.
 */
-class KalturaDocumentEntryMatchAttributeCondition extends KalturaSearchMatchAttributeCondition
+class VidiunDocumentEntryMatchAttributeCondition extends VidiunSearchMatchAttributeCondition
 {
 	/**
-	 * @var KalturaDocumentEntryMatchAttribute
+	 * @var VidiunDocumentEntryMatchAttribute
 	 */
 	public $attribute;
 

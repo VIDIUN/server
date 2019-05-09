@@ -32,7 +32,7 @@ class FreewheelDistributionProfile extends DistributionProfile
 		$entry = entryPeer::retrieveByPK($entryDistribution->getEntryId());
 		if(!$entry)
 		{
-			KalturaLog::err("Entry [" . $entryDistribution->getEntryId() . "] not found");
+			VidiunLog::err("Entry [" . $entryDistribution->getEntryId() . "] not found");
 			$validationErrors[] = $this->createValidationError($action, DistributionErrorType::INVALID_DATA, 'entry', 'entry not found');
 			return $validationErrors;
 		}

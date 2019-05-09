@@ -3,7 +3,7 @@
  * @package plugins.businessProcessNotification
  * @subpackage model.data
  */
-class kBusinessProcessNotificationDispatchJobData extends kEventNotificationDispatchJobData
+class vBusinessProcessNotificationDispatchJobData extends vEventNotificationDispatchJobData
 {
 	/**
 	 * Define the business-process server id
@@ -89,7 +89,7 @@ class kBusinessProcessNotificationDispatchJobData extends kEventNotificationDisp
 		if($this->serverId != 0)
 			return BusinessProcessServerPeer::retrieveByPK($this->serverId);
 		else
-			return BusinessProcessServerPeer::retrieveByDc(kDataCenterMgr::getCurrentDcId());
+			return BusinessProcessServerPeer::retrieveByDc(vDataCenterMgr::getCurrentDcId());
 	}
 
 	/**

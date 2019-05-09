@@ -3,19 +3,19 @@
  * @package Core
  * @subpackage ExternalServices
  */
-class myKalturaServices extends myBaseMediaSource implements IMediaSource
+class myVidiunServices extends myBaseMediaSource implements IMediaSource
 {
-	const AUTH_SALT = "myKalturaServices:gogog123";
+	const AUTH_SALT = "myVidiunServices:gogog123";
 	const AUTH_INTERVAL = 3600;
 	
 	const MAX_PAGE_SIZE = 30;
 	
 	protected $supported_media_types = 7; // support all media//self::SUPPORT_MEDIA_TYPE_VIDEO + (int)self::SUPPORT_MEDIA_TYPE_IMAGE;  
-	protected $source_name = "Kaltura";
+	protected $source_name = "Vidiun";
 	protected $auth_method = array ( self::AUTH_METHOD_PUBLIC );//, self::AUTH_METHOD_USER_PASS);
 	protected $search_in_user = true; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_kaltura.gif";
-	protected $id = entry::ENTRY_MEDIA_SOURCE_KALTURA;
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_vidiun.gif";
+	protected $id = entry::ENTRY_MEDIA_SOURCE_VIDIUN;
 	
 	private static $NEED_MEDIA_INFO = "0";
 	
@@ -89,21 +89,21 @@ class myKalturaServices extends myBaseMediaSource implements IMediaSource
 		$act->setSortAlias( "ids" );
 		$act->skip_count = true;
 		
-//		$kaltura_media_type = self::getKalturaMediaType ( $media_type );
+//		$vidiun_media_type = self::getVidiunMediaType ( $media_type );
 
 		$act->setMediaType ( $media_type );
 		
 		$fetch = true;
 		if ( $authData != null )
 		{
-			list ( $kuser_id , $hash ) = explode ( "I" , $authData );
+			list ( $vuser_id , $hash ) = explode ( "I" , $authData );
 			$fetch = false;
-			$hash_res  = kString::verifyExpiryHash( $kuser_id , self::AUTH_SALT  , $hash , self::AUTH_INTERVAL );
+			$hash_res  = vString::verifyExpiryHash( $vuser_id , self::AUTH_SALT  , $hash , self::AUTH_INTERVAL );
 			
 			if ( 0 < $hash_res )
 			{
 				$fetch = true;
-				$act->setOnlyForKuser ( $kuser_id );
+				$act->setOnlyForVuser ( $vuser_id );
 			}
 
 			if ( ! $fetch )
@@ -166,19 +166,19 @@ class myKalturaServices extends myBaseMediaSource implements IMediaSource
 	
 	/**
 	*/
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		$status = 'error';
 		$message = '';
 		$authData = null;
 		
-		$kuser = kuserPeer::getKuserByScreenName( $userName );
-		if ( $kuser )
+		$vuser = vuserPeer::getVuserByScreenName( $userName );
+		if ( $vuser )
 		{
-			$loginData = $kuser->getLoginData();
+			$loginData = $vuser->getLoginData();
 			if ($loginData && $loginData->isPasswordValid($password))
 			{
-				$authData= self::createHashString ( $kuser->getId() );
+				$authData= self::createHashString ( $vuser->getId() );
 				
 				$status = "ok";
 			}
@@ -189,10 +189,10 @@ class myKalturaServices extends myBaseMediaSource implements IMediaSource
 	
 	
 
-	private static function createHashString ( $kuser_id )	
+	private static function createHashString ( $vuser_id )	
 	{
-		$hash = kString::expiryHash($kuser_id , self::AUTH_SALT  , self::AUTH_INTERVAL  ) ;
-		$authData= $kuser_id . "I" . $hash;
+		$hash = vString::expiryHash($vuser_id , self::AUTH_SALT  , self::AUTH_INTERVAL  ) ;
+		$authData= $vuser_id . "I" . $hash;
 		return $authData;
 	}
 	

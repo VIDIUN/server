@@ -22,7 +22,7 @@ abstract class LiveEntry extends entry
 	const CUSTOM_DATA_VIEW_MODE = "view_mode";
 	const CUSTOM_DATA_RECORDING_STATUS = "recording_status";
 
-	static $kalturaLiveSourceTypes = array(EntrySourceType::LIVE_STREAM, EntrySourceType::LIVE_CHANNEL, EntrySourceType::LIVE_STREAM_ONTEXTDATA_CAPTIONS);
+	static $vidiunLiveSourceTypes = array(EntrySourceType::LIVE_STREAM, EntrySourceType::LIVE_CHANNEL, EntrySourceType::LIVE_STREAM_ONTEXTDATA_CAPTIONS);
 	
 	protected $decidingLiveProfile = false;
 	
@@ -33,8 +33,8 @@ abstract class LiveEntry extends entry
 	{
 		if($this->getStatus() == entryStatus::DELETED || $this->getModerationStatus() == moderation::MODERATION_STATUS_BLOCK)
 		{
-			KalturaLog::log("rejected live stream entry - not serving thumbnail");
-			KExternalErrors::dieError(KExternalErrors::ENTRY_DELETED_MODERATED);
+			VidiunLog::log("rejected live stream entry - not serving thumbnail");
+			VExternalErrors::dieError(VExternalErrors::ENTRY_DELETED_MODERATED);
 		}
 		$contentPath = myContentStorage::getFSContentRootPath();
 		
@@ -52,14 +52,14 @@ abstract class LiveEntry extends entry
 		{
 			$fileSyncVersion = $partner->getLiveThumbEntryVersion();
 			$liveEntryKey = $liveThumbEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA,$fileSyncVersion);
-			$contentPath = kFileSyncUtils::getLocalFilePathForKey($liveEntryKey);
+			$contentPath = vFileSyncUtils::getLocalFilePathForKey($liveEntryKey);
 			if ($contentPath)
 			{
 				$msgPath = $contentPath;
 				$liveEntryExist = true;
 			}
 			else
-				KalturaLog::err('no local file sync for audio entry id');
+				VidiunLog::err('no local file sync for audio entry id');
 		}
 
 		if (!$liveEntryExist)
@@ -81,7 +81,7 @@ abstract class LiveEntry extends entry
 				return true;
 			}
 			
-			KalturaLog::log("Sub type provided [$sub_type] is not one of knowen LiveEntry sub types validating from parent");
+			VidiunLog::log("Sub type provided [$sub_type] is not one of knowen LiveEntry sub types validating from parent");
 			return parent::validateFileSyncSubType($sub_type);
 		
 	}
@@ -155,12 +155,12 @@ abstract class LiveEntry extends entry
 		if ($this->alreadyInSave)
 			return parent::postUpdate($con);
 		
-		//When working with Kaltura live recording the recorded entry is playable immediately after the first duration reporting
+		//When working with Vidiun live recording the recorded entry is playable immediately after the first duration reporting
 		//Check the entry is no the replacement one to avoid marking replacement recorded entries as Ready before all conversion are done 
 		if($this->isColumnModified(entryPeer::LENGTH_IN_MSECS) && $this->getLengthInMsecs() > 0 && $this->getRecordStatus() !== RecordStatus::DISABLED && $this->getRecordedEntryId())
 		{
 			$recordedEntry = entryPeer::retrieveByPK($this->getRecordedEntryId());
-			if($recordedEntry && $recordedEntry->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE)
+			if($recordedEntry && $recordedEntry->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE)
 			{
 				if($recordedEntry->getStatus() != entryStatus::READY)
 					$recordedEntry->setStatus(entryStatus::READY);
@@ -172,7 +172,7 @@ abstract class LiveEntry extends entry
 		if((!$this->decidingLiveProfile && $this->conversion_profile_id && isset($this->oldCustomDataValues[LiveEntry::CUSTOM_DATA_NAMESPACE_MEDIA_SERVERS])) || $this->isColumnModified(entryPeer::CONVERSION_PROFILE_ID))
 		{
 			$this->decidingLiveProfile = true;
-			kBusinessConvertDL::decideLiveProfile($this);
+			vBusinessConvertDL::decideLiveProfile($this);
 		}
 		
 		return parent::postUpdate($con);
@@ -189,7 +189,7 @@ abstract class LiveEntry extends entry
 		parent::postInsert($con);
 	
 		if ($this->conversion_profile_id)
-			kBusinessConvertDL::decideLiveProfile($this);
+			vBusinessConvertDL::decideLiveProfile($this);
 	}
 	
 	public function setOfflineMessage($v)
@@ -318,7 +318,7 @@ abstract class LiveEntry extends entry
 	
 	public function setLiveStreamConfigurations(array $v)
 	{
-		if (!in_array($this->getSource(), self::$kalturaLiveSourceTypes) )
+		if (!in_array($this->getSource(), self::$vidiunLiveSourceTypes) )
 			$this->putInCustomData('live_stream_configurations', $v);
 	}
 	
@@ -332,7 +332,7 @@ abstract class LiveEntry extends entry
 		$configurations = $this->getLiveStreamConfigurations($protocol, $tag, $currentDcOnly, $flavorParamsIds, $format);
 		foreach($configurations as $configuration)
 		{
-			/* @var $configuration kLiveStreamConfiguration */
+			/* @var $configuration vLiveStreamConfiguration */
 			if($configuration->getProtocol() == $format)
 				return $configuration;
 		}
@@ -343,7 +343,7 @@ abstract class LiveEntry extends entry
 	public function getLiveStreamConfigurations($protocol = 'http', $tag = null, $currentDcOnly = false, array $flavorParamsIds = array(), $format = null)
 	{
 		$configurations = array();
-		if (!in_array($this->getSource(), self::$kalturaLiveSourceTypes))
+		if (!in_array($this->getSource(), self::$vidiunLiveSourceTypes))
 		{
 			$configurations = $this->getFromCustomData('live_stream_configurations', null, array());
 			if($configurations && $this->getPushPublishEnabled())
@@ -355,35 +355,35 @@ abstract class LiveEntry extends entry
 			return $configurations;
 		}
 
-		$cdnApiHost = kConf::get("cdn_api_host");
+		$cdnApiHost = vConf::get("cdn_api_host");
 		$baseManifestUrl = "$protocol://$cdnApiHost/p/{$this->partner_id}/sp/{$this->partner_id}00/playManifest/entryId/{$this->id}/protocol/$protocol";
 
-		$configuration = new kLiveStreamConfiguration();
+		$configuration = new vLiveStreamConfiguration();
 		$configuration->setProtocol(PlaybackProtocol::HDS);
 		$configuration->setUrl($baseManifestUrl . "/format/hds/a.f4m");
 		$configurations[] = $configuration;
 
-		$configuration = new kLiveStreamConfiguration();
+		$configuration = new vLiveStreamConfiguration();
 		$configuration->setProtocol(PlaybackProtocol::HLS);
 		$configuration->setUrl($baseManifestUrl . "/format/applehttp/a.m3u8");
 		$configurations[] = $configuration;
 
-		$configuration = new kLiveStreamConfiguration();
+		$configuration = new vLiveStreamConfiguration();
 		$configuration->setProtocol(PlaybackProtocol::APPLE_HTTP);
 		$configuration->setUrl($baseManifestUrl . "/format/applehttp/a.m3u8");
 		$configurations[] = $configuration;
 
-		$configuration = new kLiveStreamConfiguration();
+		$configuration = new vLiveStreamConfiguration();
 		$configuration->setProtocol(PlaybackProtocol::APPLE_HTTP_TO_MC);
 		$configuration->setUrl($baseManifestUrl . "/format/applehttp_to_mc/a.m3u8");
 		$configurations[] = $configuration;
 
-		$configuration = new kLiveStreamConfiguration();
+		$configuration = new vLiveStreamConfiguration();
 		$configuration->setProtocol(PlaybackProtocol::SILVER_LIGHT);
 		$configuration->setUrl($baseManifestUrl . "/format/sl/Manifest");
 		$configurations[] = $configuration;
 
-		$configuration = new kLiveStreamConfiguration();
+		$configuration = new vLiveStreamConfiguration();
 		$configuration->setProtocol(PlaybackProtocol::MPEG_DASH);
 		$configuration->setUrl($baseManifestUrl . "/format/mpegdash/manifest.mpd");
 		$configurations[] = $configuration;
@@ -413,8 +413,8 @@ abstract class LiveEntry extends entry
 			$serverNode = ServerNodePeer::retrieveActiveMediaServerNode(null, $liveEntryServerNode->getServerNodeId());
 			if($serverNode)
 			{
-				KalturaLog::debug("mediaServer->getDc [" . $serverNode->getDc() . "] == kDataCenterMgr::getCurrentDcId [" . kDataCenterMgr::getCurrentDcId() . "]");
-				if($serverNode->getDc() == kDataCenterMgr::getCurrentDcId())
+				VidiunLog::debug("mediaServer->getDc [" . $serverNode->getDc() . "] == vDataCenterMgr::getCurrentDcId [" . vDataCenterMgr::getCurrentDcId() . "]");
+				if($serverNode->getDc() == vDataCenterMgr::getCurrentDcId())
 					return $serverNode;
 			}
 		}
@@ -426,7 +426,7 @@ abstract class LiveEntry extends entry
 		if ($liveEntryServerNode)
 			return ServerNodePeer::retrieveActiveMediaServerNode(null, $liveEntryServerNode->getServerNodeId());
 
-		KalturaLog::info("No Valid Media Servers Were Found For Current Live Entry [" . $this->getEntryId() . "]" );
+		VidiunLog::info("No Valid Media Servers Were Found For Current Live Entry [" . $this->getEntryId() . "]" );
 		return null;
 	}
 
@@ -444,17 +444,17 @@ abstract class LiveEntry extends entry
 				$hostnames[$liveEntryServerNode->getServerType()] = $serverNode->getHostname();
 		}
 		
-		KalturaLog::info("media servers hostnames: " . print_r($hostnames,true));
+		VidiunLog::info("media servers hostnames: " . print_r($hostnames,true));
 		return $hostnames;
 	}
 
 	public function canViewExplicitLive()
 	{
-		$isAdmin = kCurrentContext::$ks_object && kCurrentContext::$ks_object->isAdmin();
-		$userIsOwner = kCurrentContext::getCurrentKsKuserId() == $this->getKuserId();
-		$isUserAllowedPreview = $this->isEntitledKuserEdit(kCurrentContext::getCurrentKsKuserId());
-		$isMediaServerPartner = (kCurrentContext::$ks_partner_id == Partner::MEDIA_SERVER_PARTNER_ID);
-		$cannotViewExplicit = kCurrentContext::$ks_object ? kCurrentContext::$ks_object->verifyPrivileges(ks::PRIVILEGE_RESTRICT_EXPLICIT_LIVE_VIEW, ks::PRIVILEGE_WILDCARD): false;		
+		$isAdmin = vCurrentContext::$vs_object && vCurrentContext::$vs_object->isAdmin();
+		$userIsOwner = vCurrentContext::getCurrentVsVuserId() == $this->getVuserId();
+		$isUserAllowedPreview = $this->isEntitledVuserEdit(vCurrentContext::getCurrentVsVuserId());
+		$isMediaServerPartner = (vCurrentContext::$vs_partner_id == Partner::MEDIA_SERVER_PARTNER_ID);
+		$cannotViewExplicit = vCurrentContext::$vs_object ? vCurrentContext::$vs_object->verifyPrivileges(vs::PRIVILEGE_RESTRICT_EXPLICIT_LIVE_VIEW, vs::PRIVILEGE_WILDCARD): false;		
 		if (!$isAdmin && ((!$userIsOwner && !$isUserAllowedPreview && !$isMediaServerPartner)||$cannotViewExplicit))
 			return false;
 		return true;
@@ -480,7 +480,7 @@ abstract class LiveEntry extends entry
 		{
 			/* @var WowzaMediaServerNode $serverNode*/
 			$serverNode = ServerNodePeer::retrieveActiveMediaServerNode(null, $liveEntryServerNode->getServerNodeId());
-			if($serverNode->getDc() == kDataCenterMgr::getCurrentDcId())
+			if($serverNode->getDc() == vDataCenterMgr::getCurrentDcId())
 			{
 				if ($this->getExplicitLive() && !$this->canViewExplicitLive() && !$liveEntryServerNode->getIsPlayableUser())
 					return false;
@@ -493,7 +493,7 @@ abstract class LiveEntry extends entry
 	
 	private static function getCacheType()
 	{
-		return kCacheManager::CACHE_TYPE_LIVE_MEDIA_SERVER . '_' . kDataCenterMgr::getCurrentDcId();
+		return vCacheManager::CACHE_TYPE_LIVE_MEDIA_SERVER . '_' . vDataCenterMgr::getCurrentDcId();
 	}
 
 	/**
@@ -507,19 +507,19 @@ abstract class LiveEntry extends entry
 			return false;
 		
 		$cacheType = self::getCacheType();
-		$cacheStore = kCacheManager::getSingleLayerCache($cacheType);
+		$cacheStore = vCacheManager::getSingleLayerCache($cacheType);
 		if(! $cacheStore)
 		{
-			KalturaLog::warning("Cache store [$cacheType] not found");
+			VidiunLog::warning("Cache store [$cacheType] not found");
 			$lastUpdate = time() - $liveEntryServerNode->getUpdatedAt(null);
-			$expiry = kConf::get('media_server_cache_expiry', 'local', self::DEFAULT_CACHE_EXPIRY);
+			$expiry = vConf::get('media_server_cache_expiry', 'local', self::DEFAULT_CACHE_EXPIRY);
 			
 			return $lastUpdate <= $expiry;
 		}
 		
 		$key = $this->getEntryServerNodeCacheKey($liveEntryServerNode);
 		$ans = $cacheStore->get($key);
-		KalturaLog::debug("Get cache key [$key] from store [$cacheType] returned [$ans]");
+		VidiunLog::debug("Get cache key [$key] from store [$cacheType] returned [$ans]");
 		return $ans;
 	}
 
@@ -532,41 +532,41 @@ abstract class LiveEntry extends entry
 	private function storeInCache($key)
 	{
 		$cacheType = self::getCacheType();
-		$cacheStore = kCacheManager::getSingleLayerCache($cacheType);
+		$cacheStore = vCacheManager::getSingleLayerCache($cacheType);
 		if(! $cacheStore) {
-			KalturaLog::debug("cacheStore is null. cacheType: $cacheType . returning false");
+			VidiunLog::debug("cacheStore is null. cacheType: $cacheType . returning false");
 			return false;
 		}
-		KalturaLog::debug("Set cache key [$key] from store [$cacheType] ");
-		return $cacheStore->set($key, true, kConf::get('media_server_cache_expiry', 'local', self::DEFAULT_CACHE_EXPIRY));
+		VidiunLog::debug("Set cache key [$key] from store [$cacheType] ");
+		return $cacheStore->set($key, true, vConf::get('media_server_cache_expiry', 'local', self::DEFAULT_CACHE_EXPIRY));
 	}
 
 	/**
 	 * @param EntryServerNodeType $mediaServerIndex
 	 * @param $hostname
 	 * @throws Exception
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 * @throws PropelException
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	public function setMediaServer($mediaServerIndex, $hostname, $liveEntryStatus, $applicationName = null)
 	{
 		/* @var $mediaServerNode MediaServerNode */
 		$mediaServerNode = ServerNodePeer::retrieveActiveMediaServerNode($hostname);
 		if (!$mediaServerNode)
-			throw new kCoreException("Media server with host name [$hostname] not found", kCoreException::MEDIA_SERVER_NOT_FOUND);
+			throw new vCoreException("Media server with host name [$hostname] not found", vCoreException::MEDIA_SERVER_NOT_FOUND);
 
 		$dbLiveEntryServerNode = $this->getLiveEntryServerNode($hostname, $mediaServerIndex, $liveEntryStatus, $mediaServerNode->getId(), $applicationName);
 		
 		if($liveEntryStatus === EntryServerNodeStatus::PLAYABLE)
 		{
 			if(is_null($this->getFirstBroadcast()) && $mediaServerIndex == EntryServerNodeType::LIVE_PRIMARY)
-				$this->setFirstBroadcast(kApiCache::getTime());
+				$this->setFirstBroadcast(vApiCache::getTime());
 			
 			$key = $this->getEntryServerNodeCacheKey($dbLiveEntryServerNode);
 			if($this->storeInCache($key) && $this->isMediaServerRegistered($mediaServerIndex, $hostname))
 			{
-				KalturaLog::debug("cached and registered - index: $mediaServerIndex, hostname: $hostname");
+				VidiunLog::debug("cached and registered - index: $mediaServerIndex, hostname: $hostname");
 				return;
 			}
 		}
@@ -582,7 +582,7 @@ abstract class LiveEntry extends entry
 		
 		if (!$dbLiveEntryServerNode)
 		{
-			KalturaLog::debug("About to register new media server with index: [$mediaServerIndex], hostname: [$hostname], status: [$liveEntryStatus]");
+			VidiunLog::debug("About to register new media server with index: [$mediaServerIndex], hostname: [$hostname], status: [$liveEntryStatus]");
 			$shouldSave = true;
 			$dbLiveEntryServerNode = new LiveEntryServerNode();
 			$dbLiveEntryServerNode->setEntryId($this->getId());
@@ -590,7 +590,7 @@ abstract class LiveEntry extends entry
 			$dbLiveEntryServerNode->setServerNodeId($serverNodeId);
 			$dbLiveEntryServerNode->setPartnerId($this->getPartnerId());
 			$dbLiveEntryServerNode->setStatus($liveEntryStatus);
-			$dbLiveEntryServerNode->setDc(kDataCenterMgr::getCurrentDcId());
+			$dbLiveEntryServerNode->setDc(vDataCenterMgr::getCurrentDcId());
 			
 			if($applicationName)
 				$dbLiveEntryServerNode->setApplicationName($applicationName);
@@ -602,16 +602,16 @@ abstract class LiveEntry extends entry
 			$dbLiveEntryServerNode->setStatus($liveEntryStatus);	
 		}
 		
-		if (kDataCenterMgr::getCurrentDcId() !== $dbLiveEntryServerNode->getDc())
+		if (vDataCenterMgr::getCurrentDcId() !== $dbLiveEntryServerNode->getDc())
 		{
 			$shouldSave = true;
-			$dbLiveEntryServerNode->setDc(kDataCenterMgr::getCurrentDcId());
+			$dbLiveEntryServerNode->setDc(vDataCenterMgr::getCurrentDcId());
 		}
 		
 		if ($dbLiveEntryServerNode->getServerNodeId() !== $serverNodeId)
 		{
 			$shouldSave = true;
-			KalturaLog::debug("Updating media server id from [" . $dbLiveEntryServerNode->getServerNodeId() . "] to [$serverNodeId]");
+			VidiunLog::debug("Updating media server id from [" . $dbLiveEntryServerNode->getServerNodeId() . "] to [$serverNodeId]");
 			$dbLiveEntryServerNode->setServerNodeId($serverNodeId);
 		}
 		
@@ -655,7 +655,7 @@ abstract class LiveEntry extends entry
 		$dbLiveEntryServerNode = EntryServerNodePeer::retrieveByEntryIdAndServerType($this->getId(), $index);
 		if ($dbLiveEntryServerNode)
 			return true;
-		KalturaLog::info("mediaServer is not registered. hostname: $hostname , index: $index ");
+		VidiunLog::info("mediaServer is not registered. hostname: $hostname , index: $index ");
 		return false;
 	}
 	
@@ -668,9 +668,9 @@ abstract class LiveEntry extends entry
 		/* @var $dbLiveEntryServerNode LiveEntryServerNode */
 		foreach($dbLiveEntryServerNodes as $dbLiveEntryServerNode)
 		{
-			if ($dbLiveEntryServerNode->getDc() === kDataCenterMgr::getCurrentDcId() && !$this->isCacheValid($dbLiveEntryServerNode))
+			if ($dbLiveEntryServerNode->getDc() === vDataCenterMgr::getCurrentDcId() && !$this->isCacheValid($dbLiveEntryServerNode))
 			{
-				KalturaLog::info("Removing media server id [" . $dbLiveEntryServerNode->getServerNodeId() . "]");
+				VidiunLog::info("Removing media server id [" . $dbLiveEntryServerNode->getServerNodeId() . "]");
 				$dbLiveEntryServerNode->deleteOrMarkForDeletion();
 			}
 		}
@@ -694,7 +694,7 @@ abstract class LiveEntry extends entry
 
 	public function setLiveStatus ($v, $mediaServerIndex)
 	{
-		throw new KalturaAPIException("This function is deprecated - you cannot set the live status");
+		throw new VidiunAPIException("This function is deprecated - you cannot set the live status");
 	}
 
 	public function setSegmentDuration($v)
@@ -757,7 +757,7 @@ abstract class LiveEntry extends entry
 	public function attachPendingMediaEntry(entry $entry, $requiredDuration, $offset, $duration)
 	{
 		$attachedPendingMediaEntries = $this->getAttachedPendingMediaEntries();
-		$attachedPendingMediaEntries[$entry->getId()] = new kPendingMediaEntry($entry->getId(), kDataCenterMgr::getCurrentDcId(), $requiredDuration, $offset, $duration);
+		$attachedPendingMediaEntries[$entry->getId()] = new vPendingMediaEntry($entry->getId(), vDataCenterMgr::getCurrentDcId(), $requiredDuration, $offset, $duration);
 		
 		$this->setAttachedPendingMediaEntries($attachedPendingMediaEntries);
 	}
@@ -819,7 +819,7 @@ abstract class LiveEntry extends entry
 		$criteria->add(BatchJobLockPeer::PARTNER_ID, $this->getPartnerId());
 		$criteria->add(BatchJobLockPeer::ENTRY_ID, $this->getId());
 		$criteria->add(BatchJobLockPeer::JOB_TYPE, BatchJobType::CONVERT_LIVE_SEGMENT);
-		$criteria->add(BatchJobLockPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$criteria->add(BatchJobLockPeer::DC, vDataCenterMgr::getCurrentDcId());
 		
 		$batchJob = BatchJobLockPeer::doSelectOne($criteria);
 		if($batchJob)
@@ -828,13 +828,13 @@ abstract class LiveEntry extends entry
 		return false;
 	}
 	
-	public function setRecordingOptions(kLiveEntryRecordingOptions $recordingOptions)
+	public function setRecordingOptions(vLiveEntryRecordingOptions $recordingOptions)
 	{
 		$this->putInCustomData(LiveEntry::CUSTOM_DATA_RECORD_OPTIONS, serialize($recordingOptions));
 	}
 	
 	/**
-	 * @return kLiveEntryRecordingOptions
+	 * @return vLiveEntryRecordingOptions
 	 */
 	public function getRecordingOptions()
 	{
@@ -865,7 +865,7 @@ abstract class LiveEntry extends entry
 		{
 			$url = null;
 			$protocol = null;
-			foreach (array(KalturaPlaybackProtocol::HLS, KalturaPlaybackProtocol::APPLE_HTTP) as $hlsProtocol)
+			foreach (array(VidiunPlaybackProtocol::HLS, VidiunPlaybackProtocol::APPLE_HTTP) as $hlsProtocol)
 			{
 				$config = $this->getLiveStreamConfigurationByProtocol($hlsProtocol, requestUtils::PROTOCOL_HTTP, null, true);
 				if ($config)
@@ -878,7 +878,7 @@ abstract class LiveEntry extends entry
 				
 			if($url)
 			{
-				KalturaLog::info('Determining status of live stream URL [' .$url. ']');
+				VidiunLog::info('Determining status of live stream URL [' .$url. ']');
 				$dpda= new DeliveryProfileDynamicAttributes();
 				$dpda->setEntryId($this->getEntryId());
 				$dpda->setFormat($protocol);
@@ -906,7 +906,7 @@ abstract class LiveEntry extends entry
 			{
 				if ($recordedEntry->getReachedMaxRecordingDuration()) 
 				{
-					KalturaLog::err("Entry [{$this->getId()}] has already reached its maximal recording duration.");
+					VidiunLog::err("Entry [{$this->getId()}] has already reached its maximal recording duration.");
 					return $maxRecordingDuration + 1;
 				}
 				// if entry is in replacement, the replacement duration is more accurate
@@ -934,7 +934,7 @@ abstract class LiveEntry extends entry
 				$recordedEntry->setReachedMaxRecordingDuration(true);
 				$recordedEntry->save();
 			}
-			KalturaLog::err("Entry [{$this->getId()}] duration [" . $lastDuration . "] and current duration [$currentDuration] is more than max allowed duration [$maxRecordingDuration]");
+			VidiunLog::err("Entry [{$this->getId()}] duration [" . $lastDuration . "] and current duration [$currentDuration] is more than max allowed duration [$maxRecordingDuration]");
 			return $maxRecordingDuration + 1;
 		}
 		

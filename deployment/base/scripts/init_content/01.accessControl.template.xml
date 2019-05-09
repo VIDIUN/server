@@ -17,7 +17,7 @@
 		<privileges></privileges> 
 	</session>
 	<request service="accessControlProfile" action="add">
-		<accessControlProfile objectType="KalturaAccessControlProfile">
+		<accessControlProfile objectType="VidiunAccessControlProfile">
 			<name>Default</name>
 			<systemName>Default</systemName>
 			<description>Default access control profile</description>

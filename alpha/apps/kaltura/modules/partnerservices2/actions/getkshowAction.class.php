@@ -3,72 +3,72 @@
  * @package api
  * @subpackage ps2
  */
-class getkshowAction extends defPartnerservices2Action
+class getvshowAction extends defPartnerservices2Action
 {
 	public function describe()
 	{
 		return 
 			array (
-				"display_name" => "getKShow",
+				"display_name" => "getVShow",
 				"desc" => "" ,
 				"in" => array (
 					"mandatory" => array ( 
-						"kshow_id" => array ("type" => "string", "desc" => "")
+						"vshow_id" => array ("type" => "string", "desc" => "")
 						),
 					"optional" => array (
 						"detailed" => array ("type" => "boolean", "desc" => "")
 						)
 					),
 				"out" => array (
-					"kshow" => array ("type" => "kshow", "desc" => "")
+					"vshow" => array ("type" => "vshow", "desc" => "")
 					),
 				"errors" => array (
-					APIErrors::INVALID_KSHOW_ID ,
+					APIErrors::INVALID_VSHOW_ID ,
 				)
 			); 
 	}
 
-	// ask to fetch the kuser from puser_kuser 
-	public function needKuserFromPuser ( )	
+	// ask to fetch the vuser from puser_vuser 
+	public function needVuserFromPuser ( )	
 	{	
-		$kshow_id = $this->getPM ( "kshow_id" );
-		if ( $kshow_id == kshow::KSHOW_ID_USE_DEFAULT )			return parent::KUSER_DATA_KUSER_ID_ONLY ;
-		return self::KUSER_DATA_NO_KUSER;	
+		$vshow_id = $this->getPM ( "vshow_id" );
+		if ( $vshow_id == vshow::VSHOW_ID_USE_DEFAULT )			return parent::VUSER_DATA_VUSER_ID_ONLY ;
+		return self::VUSER_DATA_NO_VUSER;	
 	}
 		
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		$kshow_id = $this->getPM ( "kshow_id" );
+		$vshow_id = $this->getPM ( "vshow_id" );
 		$detailed = $this->getP ( "detailed" , false );
-		$kshow_indexedCustomData3 = $this->getP ( "indexedCustomData3" );
-		$kshow = null;
+		$vshow_indexedCustomData3 = $this->getP ( "indexedCustomData3" );
+		$vshow = null;
         
-		if ( $kshow_id == kshow::KSHOW_ID_USE_DEFAULT )
+		if ( $vshow_id == vshow::VSHOW_ID_USE_DEFAULT )
         {
-            // see if the partner has some default kshow to add to
-            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser );
-            if ( $kshow ) $kshow_id = $kshow->getId();
+            // see if the partner has some default vshow to add to
+            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser );
+            if ( $vshow ) $vshow_id = $vshow->getId();
         }
-		elseif ( $kshow_id )
+		elseif ( $vshow_id )
 		{
-			$kshow = kshowPeer::retrieveByPK( $kshow_id );
+			$vshow = vshowPeer::retrieveByPK( $vshow_id );
 		}
-		elseif ( $kshow_indexedCustomData3 )
+		elseif ( $vshow_indexedCustomData3 )
 		{
-			$kshow = kshowPeer::retrieveByIndexedCustomData3( $kshow_indexedCustomData3 );
+			$vshow = vshowPeer::retrieveByIndexedCustomData3( $vshow_indexedCustomData3 );
 		}
 
-		if ( ! $kshow )
+		if ( ! $vshow )
 		{
-			$this->addError ( APIErrors::INVALID_KSHOW_ID , $kshow_id );
+			$this->addError ( APIErrors::INVALID_VSHOW_ID , $vshow_id );
 		}
 		else
 		{
 			$level = ( $detailed ? objectWrapperBase::DETAIL_LEVEL_DETAILED : objectWrapperBase::DETAIL_LEVEL_REGULAR );
-			$wrapper = objectWrapperBase::getWrapperClass( $kshow , $level );
+			$wrapper = objectWrapperBase::getWrapperClass( $vshow , $level );
 			// TODO - remove this code when cache works properly when saving objects (in their save method)
-			$wrapper->removeFromCache( "kshow" , $kshow_id );
-			$this->addMsg ( "kshow" , $wrapper ) ;
+			$wrapper->removeFromCache( "vshow" , $vshow_id );
+			$this->addMsg ( "vshow" , $wrapper ) ;
 		}
 	}
 }

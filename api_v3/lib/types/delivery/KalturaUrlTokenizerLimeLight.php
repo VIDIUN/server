@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerLimeLight extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerLimeLight extends VidiunUrlTokenizer {
 
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kLimeLightUrlTokenizer();
+			$dbObject = new vLimeLightUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

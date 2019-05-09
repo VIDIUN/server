@@ -10,10 +10,10 @@ class addentryAction extends defPartnerservices2Action
         return
             array(
                 "display_name" => "addEntry",
-                "desc" => "Add entry to a kshow" ,
+                "desc" => "Add entry to a vshow" ,
                 "in" => array(
                     "mandatory" => array(
-                        "kshow_id" => array("type" => "string", "desc" => "Add the entry to this kshow"),
+                        "vshow_id" => array("type" => "string", "desc" => "Add the entry to this vshow"),
                         "entry" => array("type" => "entry", "desc" => "Description of entry object"),
 
                         // TODO: HOW TO DESCRIBE MULTIPLE ENTRIES?
@@ -32,15 +32,15 @@ class addentryAction extends defPartnerservices2Action
         */
                         ) ,
                     "optional" => array (
-                        "uid" => array("type" => "string", "desc" => "The user id of the partner. Is exists, the ks will be generated for this user and "),
+                        "uid" => array("type" => "string", "desc" => "The user id of the partner. Is exists, the vs will be generated for this user and "),
                			"quick_edit" => array("type" => "boolean", "desc" => "automatically add the entry to the roughcut"),
                         )
                     ),
                 "out" => array (
-                    "ks" => array("type" => "string", "desc" => "Kaltura Session - a token used as an input for the rest of the services") ,
+                    "vs" => array("type" => "string", "desc" => "Vidiun Session - a token used as an input for the rest of the services") ,
                     ),
                 "errors" => array (
-                    APIErrors::INVALID_KSHOW_ID,
+                    APIErrors::INVALID_VSHOW_ID,
                     APIErrors::INVALID_ENTRY_ID,
                     APIErrors::NO_ENTRIES_ADDED,
                     APIErrors::UNKNOWN_MEDIA_SOURCE,
@@ -48,12 +48,12 @@ class addentryAction extends defPartnerservices2Action
             );
     }
 
-    // check to see if already exists in the system = ask to fetch the puser & the kuser
-    // don't ask for  KUSER_DATA_KUSER_DATA - because then we won't tell the difference between a missing kuser and a missing puser_kuser
-    public function needKuserFromPuser ( )
+    // check to see if already exists in the system = ask to fetch the puser & the vuser
+    // don't ask for  VUSER_DATA_VUSER_DATA - because then we won't tell the difference between a missing vuser and a missing puser_vuser
+    public function needVuserFromPuser ( )
     {
-        // need the kuser_id to set as the kuser of this entry
-        return self::KUSER_DATA_KUSER_ID_ONLY;
+        // need the vuser_id to set as the vuser of this entry
+        return self::VUSER_DATA_VUSER_ID_ONLY;
     }
 
     protected function addUserOnDemand ( )
@@ -72,21 +72,21 @@ class addentryAction extends defPartnerservices2Action
      Will allow creation of multiple entries
      ASSUME - the prefix of the entries is entryX_ where X is the index starting at 1
      */
-    public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+    public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
     {
 //        $logger = sfLogger::getInstance();
         self::$escape_text = true;
 
-/*		if ( !$puser_kuser )
+/*		if ( !$puser_vuser )
         {
             $this->addError( "No such user ..." );
             return;
 
         }
     */
-        // TODO - validate if the user can add entries to this kshow
+        // TODO - validate if the user can add entries to this vshow
 
-        $kshow_id = $this->getP ( "kshow_id" );
+        $vshow_id = $this->getP ( "vshow_id" );
         $show_entry_id = $this->getP ( "show_entry_id" );
         $conversion_quality = $this->getP ( "conversionquality" ); // must be all lower case
         
@@ -109,92 +109,92 @@ class addentryAction extends defPartnerservices2Action
 		    $entryFullPath = "$content/content/webcam/$filename.flv";
 			if(!file_exists($entryFullPath))
 			{
-				$remoteDCHost = kDataCenterMgr::getRemoteDcExternalUrlByDcId(1 - kDataCenterMgr::getCurrentDcId());
+				$remoteDCHost = vDataCenterMgr::getRemoteDcExternalUrlByDcId(1 - vDataCenterMgr::getCurrentDcId());
 				if($remoteDCHost)
-					kFileUtils::dumpApiRequest($remoteDCHost);
+					vFileUtils::dumpApiRequest($remoteDCHost);
 				
 				$this->addError(APIErrors::INVALID_FILE_NAME, $filename);
 				return ;
 			}
 		}
         
-        if( strpos($kshow_id, 'entry-') !== false && !$show_entry_id )
+        if( strpos($vshow_id, 'entry-') !== false && !$show_entry_id )
         {
-        	$show_entry_id = substr($kshow_id, 6);
+        	$show_entry_id = substr($vshow_id, 6);
         }
         
         $screen_name = $this->getP ( "screen_name" );
         $site_url = $this->getP ( "site_url" );
 
-        $null_kshow = true;
+        $null_vshow = true;
 
         if ( $show_entry_id  )
         {
-            // in this case we have the show_entry_id (of the relevant roughcut) - it suppresses the kshow_id
+            // in this case we have the show_entry_id (of the relevant roughcut) - it suppresses the vshow_id
             $show_entry = entryPeer::retrieveByPK( $show_entry_id );
             if ( $show_entry  )
             {
-                $kshow_id = $show_entry->getKshowId();
+                $vshow_id = $show_entry->getVshowId();
             }
             else
             {
-                $kshow_id = null;
+                $vshow_id = null;
             }
         }
 
-		if ( $kshow_id === kshow::SANDBOX_ID )
+		if ( $vshow_id === vshow::SANDBOX_ID )
 		{
 			$this->addError ( APIErrors::SANDBOX_ALERT );
 			return ;
 		}
 		
-		$default_kshow_name = $this->getP ( "entry_name" , null );
-		if ( ! $default_kshow_name ) $default_kshow_name = $this->getP ( "entry1_name" , null );		 
-        if ( $kshow_id == kshow::KSHOW_ID_USE_DEFAULT )
+		$default_vshow_name = $this->getP ( "entry_name" , null );
+		if ( ! $default_vshow_name ) $default_vshow_name = $this->getP ( "entry1_name" , null );		 
+        if ( $vshow_id == vshow::VSHOW_ID_USE_DEFAULT )
         {
-            // see if the partner has some default kshow to add to
-            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser , null , false , $default_kshow_name );
-            $null_kshow = false;
-            if ( $kshow ) $kshow_id = $kshow->getId();
+            // see if the partner has some default vshow to add to
+            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser , null , false , $default_vshow_name );
+            $null_vshow = false;
+            if ( $vshow ) $vshow_id = $vshow->getId();
         }
-		elseif ( $kshow_id == kshow::KSHOW_ID_CREATE_NEW )
+		elseif ( $vshow_id == vshow::VSHOW_ID_CREATE_NEW )
         {
-            // if the partner allows - create a new kshow 
-            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser , null , true , $default_kshow_name);
-            $null_kshow = false;
-            if ( $kshow ) $kshow_id = $kshow->getId();
+            // if the partner allows - create a new vshow 
+            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser , null , true , $default_vshow_name);
+            $null_vshow = false;
+            if ( $vshow ) $vshow_id = $vshow->getId();
         }        
         else
         {
-            $kshow = kshowPeer::retrieveByPK( $kshow_id );
+            $vshow = vshowPeer::retrieveByPK( $vshow_id );
         }
 
-        if ( ! $kshow )
+        if ( ! $vshow )
         {
-            // the partner is attempting to add an entry to some invalid or non-existing kwho
-            $this->addError( APIErrors::INVALID_KSHOW_ID, $kshow_id );
+            // the partner is attempting to add an entry to some invalid or non-existing vwho
+            $this->addError( APIErrors::INVALID_VSHOW_ID, $vshow_id );
             return;
         }
 
-        // find permissions from kshow
-		$permissions = $kshow->getPermissions();
+        // find permissions from vshow
+		$permissions = $vshow->getPermissions();
 		
-        $kuser_id = $puser_kuser->getKuserId();
+        $vuser_id = $puser_vuser->getVuserId();
 		
 		// TODO - once the CW 
-        $quick_edit = myPolicyMgr::getPolicyFor( "allowQuickEdit" , /*$this->getP ( "quick_edit" , null ),*/ $kshow, $partner );
+        $quick_edit = myPolicyMgr::getPolicyFor( "allowQuickEdit" , /*$this->getP ( "quick_edit" , null ),*/ $vshow, $partner );
         // let the user override the quick_edit propery
 		if ( $this->getP ( "quick_edit" ) == '0' ||  $this->getP ( "quick_edit" ) == "false"  ) $quick_edit = false 	;
         if ( $quick_edit == '0' || $quick_edit === "false" || !$quick_edit || $quick_edit == false  )
         {
-			KalturaLog::err ( '$quick_edit: [' . $quick_edit . ']' );        	
+			VidiunLog::err ( '$quick_edit: [' . $quick_edit . ']' );        	
             $quick_edit = false;
             
             //$quick_edit = true;
         }
 
         // works in one of 2 ways:
-        // 1. get no requested name - will create a new kshow and return its details
+        // 1. get no requested name - will create a new vshow and return its details
         // 2. get some name - tries to fetch by name. if already exists - return it
         $new_entry_count = 0;
         $entries = array();
@@ -216,7 +216,7 @@ class addentryAction extends defPartnerservices2Action
                 continue;
             }
 
-            // get the new properties for the kuser from the request
+            // get the new properties for the vuser from the request
             $entry = new entry();
 
             $obj_wrapper = objectWrapperBase::getWrapperClass( $entry , 0 );
@@ -231,14 +231,14 @@ class addentryAction extends defPartnerservices2Action
             // check that mandatory fields were set
             // TODO
 
-            KalturaLog::err ( "addentry: fields_modified: " . print_r ( $fields_modified , true ) );
+            VidiunLog::err ( "addentry: fields_modified: " . print_r ( $fields_modified , true ) );
 
             $entry_source = $entry->getSource() ;
             
             if (!$entry->getType()) // this is the default for backward compatiblity
 	            $entry->setType(entryType::MEDIA_CLIP);
 	            
-			$token = $this->getKsUniqueString();
+			$token = $this->getVsUniqueString();
             
 	        $entry_full_path = "";
 			if ( $entry_source == entry::ENTRY_MEDIA_SOURCE_FILE )
@@ -248,7 +248,7 @@ class addentryAction extends defPartnerservices2Action
                 $file_extension = strtolower(pathinfo( $this->getP ( $prefix .  "realFilename" ) , PATHINFO_EXTENSION  ));
                 $entry_full_path = myUploadUtils::getUploadPath( $token , $file_alias , null , $file_extension );
             	if (!file_exists($entry_full_path)) {
-                	KalturaLog::err ( "Invalid UPLOAD PATH [".$entry_full_path."] while trying to add entry for partner id [".$partner_id."] with token [".$token."] & original name [".$this->getP($prefix."name")."]");
+                	VidiunLog::err ( "Invalid UPLOAD PATH [".$entry_full_path."] while trying to add entry for partner id [".$partner_id."] with token [".$token."] & original name [".$this->getP($prefix."name")."]");
                 	$this->addError(APIErrors::INVALID_FILE_NAME);
                 	continue;
                 }
@@ -282,10 +282,10 @@ class addentryAction extends defPartnerservices2Action
             else
             {
             	// HACK - if the conversion_quality was not set in the proper way - 
-            	// see if the partner_data holds a hack - string that starts with conversionQuality= - this is set when the CW is opened in the KMC
+            	// see if the partner_data holds a hack - string that starts with conversionQuality= - this is set when the CW is opened in the VMC
             	// the conversionQuality is of format conversionQuality=XXX;<the rest of the text>
             	// 
-            	if ( kString::beginsWith( $entry->getPartnerData() , "conversionQuality:" ) )
+            	if ( vString::beginsWith( $entry->getPartnerData() , "conversionQuality:" ) )
             	{
             		$partner_data_arr = explode ( ";" , $entry->getPartnerData() , 2 );
             		$conversion_quality_arr = explode ( ":" , $partner_data_arr[0] );
@@ -300,10 +300,10 @@ class addentryAction extends defPartnerservices2Action
             $entry_modified = false;
             $create_entry = true;
 
-            // I don't remember why we set the kshow to null every time ...
+            // I don't remember why we set the vshow to null every time ...
             // but when we fetched it automatically - hang on to it !
-            if ( $null_kshow )	$kshow = null;
-            if( $entry_source == entry::ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS ||  $entry_source == "100")
+            if ( $null_vshow )	$vshow = null;
+            if( $entry_source == entry::ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS ||  $entry_source == "100")
             {
 				if ($entry_source == "100")
             		$entry_id = $this->getP ("media{$i}_id" );
@@ -338,13 +338,13 @@ class addentryAction extends defPartnerservices2Action
             {
                 $entry->setPartnerId( $partner_id );
                 $entry->setSubpId ( $subp_id );
-                $entry->setKuserId( $kuser_id );
-                $entry->setCreatorKuserId( $kuser_id );
-                $entry->setKshowId ( $kshow_id );
+                $entry->setVuserId( $vuser_id );
+                $entry->setCreatorVuserId( $vuser_id );
+                $entry->setVshowId ( $vshow_id );
                 $entry->setSiteUrl ( $site_url );
                 $entry->setScreenName( $screen_name );
                 if ( $this->getGroup() ) $entry->setGroupId ( $this->getGroup() );
-                if ( $entry->getPermissions () === null ) $entry->setPermissions( $permissions ); // inherited from the enclosing kshow
+                if ( $entry->getPermissions () === null ) $entry->setPermissions( $permissions ); // inherited from the enclosing vshow
                 $entry->setDefaultModerationStatus ( );
                 $entry->save();
 
@@ -401,11 +401,11 @@ class addentryAction extends defPartnerservices2Action
                     $paramsArray['entry_to_time'] = $this->getP ( $prefix .  "toTime" , 0 );
                     
                 }
-                elseif( $entry_source == entry::ENTRY_MEDIA_SOURCE_KALTURA ||
-                        $entry_source == entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER ||
-                        $entry_source == entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER_KSHOW ||
-                        $entry_source == entry::ENTRY_MEDIA_SOURCE_KALTURA_KSHOW ||
-                        $entry_source == entry::ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS) // we might reach here if we can't find the existing entry
+                elseif( $entry_source == entry::ENTRY_MEDIA_SOURCE_VIDIUN ||
+                        $entry_source == entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER ||
+                        $entry_source == entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER_VSHOW ||
+                        $entry_source == entry::ENTRY_MEDIA_SOURCE_VIDIUN_VSHOW ||
+                        $entry_source == entry::ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS) // we might reach here if we can't find the existing entry
                 {
                     // optimize - no need to actually go through the import and conversion phase
                     // find the source entry_id from the url
@@ -424,8 +424,8 @@ class addentryAction extends defPartnerservices2Action
                     {
                         // copy worked ok - no need to use insertEntryHelper
                         //$entry->setStatus ( entryStatus::READY );
-                        // force the data to be ready even if the policy is to moderate - this is kaltura's content and was already approved
-                        // (roman) true argument removed, so kaltura's content will be moderated according to partner's moderation settings
+                        // force the data to be ready even if the policy is to moderate - this is vidiun's content and was already approved
+                        // (roman) true argument removed, so vidiun's content will be moderated according to partner's moderation settings
                         $entry->setStatusReady ();
                         $insert = false;
                         $entry_modified = true;
@@ -453,9 +453,9 @@ class addentryAction extends defPartnerservices2Action
 
                 if ( $insert )
                 {
-                    KalturaLog::err ( "paramsArray" . print_r ( $paramsArray , true ) );
+                    VidiunLog::err ( "paramsArray" . print_r ( $paramsArray , true ) );
 
-                    $insert_entry_helper = new myInsertEntryHelper($this , $kuser_id, $kshow_id, $paramsArray );
+                    $insert_entry_helper = new myInsertEntryHelper($this , $vuser_id, $vshow_id, $paramsArray );
                     $insert_entry_helper->setPartnerId( $partner_id , $subp_id );
                     $insert_entry_helper->insertEntry( $token , $entry->getType() , $entry->getId() , $entry->getName() , $entry->getTags() , $entry );
                     $insert_entry_helper->getEntry();
@@ -464,35 +464,35 @@ class addentryAction extends defPartnerservices2Action
                 }
             } // create_entry = true
 
-			KalturaLog::err ( 'id: ' . $entry->getId() . ' $quick_edit:' . $quick_edit );
+			VidiunLog::err ( 'id: ' . $entry->getId() . ' $quick_edit:' . $quick_edit );
 
             if ( $quick_edit )
             {
-            	KalturaLog::info("quick edit with kshow_id [$kshow_id]");
-                if ( !$kshow) $kshow = kshowPeer::retrieveByPK( $kshow_id ); // this i
-                if ( !$kshow )
+            	VidiunLog::info("quick edit with vshow_id [$vshow_id]");
+                if ( !$vshow) $vshow = vshowPeer::retrieveByPK( $vshow_id ); // this i
+                if ( !$vshow )
                 {
                     // BAD - this shount not be !
-                    $this->addError( APIErrors::INVALID_KSHOW_ID, $kshow_id );
+                    $this->addError( APIErrors::INVALID_VSHOW_ID, $vshow_id );
                     return ;
                 }
 
-                $metadata = $kshow->getMetadata();
+                $metadata = $vshow->getMetadata();
                 if ($metadata !== null) // probably the roughcut doesnt exist
                 {
-	                $relevant_kshow_version = 1 + $kshow->getVersion(); // the next metadata will be the first relevant version for this new entry
+	                $relevant_vshow_version = 1 + $vshow->getVersion(); // the next metadata will be the first relevant version for this new entry
 	
 	                $version_info = array();
-					$version_info["KuserId"] = $puser_kuser->getKuserId();
+					$version_info["VuserId"] = $puser_vuser->getVuserId();
 					$version_info["PuserId"] = $puser_id;
-					$version_info["ScreenName"] = $puser_kuser->getPuserName();
+					$version_info["ScreenName"] = $puser_vuser->getPuserName();
 				
-	                $new_metadata = myMetadataUtils::addEntryToMetadata ( $metadata , $entry ,$relevant_kshow_version, $version_info );
+	                $new_metadata = myMetadataUtils::addEntryToMetadata ( $metadata , $entry ,$relevant_vshow_version, $version_info );
 	                $entry_modified = true;
 	                if ( $new_metadata )
 	                {
 	                    // TODO - add thumbnail only for entries that are worthy - check they are not moderated !
-	                    $thumb_modified = myKshowUtils::updateThumbnail ( $kshow , $entry , false );
+	                    $thumb_modified = myVshowUtils::updateThumbnail ( $vshow , $entry , false );
 	
 	                    if ( $thumb_modified )
 	                    {
@@ -501,16 +501,16 @@ class addentryAction extends defPartnerservices2Action
 	                    // it is very important to increment the version count because even if the entry is deferred
 	                    // it will be added on the next version
 	
-		                if ( ! $kshow->getHasRoughcut (  ) )
+		                if ( ! $vshow->getHasRoughcut (  ) )
 		                {
-		                	// make sure the kshow now does have a roughcut
-		                	$kshow->setHasRoughcut ( true );	
-		                	$kshow->save();
+		                	// make sure the vshow now does have a roughcut
+		                	$vshow->setHasRoughcut ( true );	
+		                	$vshow->save();
 		                }
 	
-	                    $kshow->setMetadata ( $new_metadata, true ) ;
+	                    $vshow->setMetadata ( $new_metadata, true ) ;
 	                }
-	                // no need to save kshow - the modification of the metadata was done to the show_entry which will propagate any chages to the kshow in it's own save method
+	                // no need to save vshow - the modification of the metadata was done to the show_entry which will propagate any chages to the vshow in it's own save method
                 }
             }
 
@@ -523,7 +523,7 @@ class addentryAction extends defPartnerservices2Action
             {
             	$not_id = null;
             	// send a synch notification
-                @list ( $not_id  ,  $not , $url , $params , $serialized_params )= myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD , $entry , null , null );
+                @list ( $not_id  ,  $not , $url , $params , $serialized_params )= myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD , $entry , null , null );
                 if ($not_id)
                 {
 	                $notification_ids[] = $not_id;
@@ -535,10 +535,10 @@ class addentryAction extends defPartnerservices2Action
             $entries [ $prefix ] = $wrapper;
             //$this->addMsg ( $prefix , $wrapper);
 
-            // because the kshow's entrys field was changes do to this update, we have to remove object from cahce
+            // because the vshow's entrys field was changes do to this update, we have to remove object from cahce
             // TODO - think of some reverse way to automatically remove from the cache from within the wrapper
-            // call some - update cache where the kshow_id plays a part in the update
-            $wrapper->removeFromCache( "kshow" , $kshow_id , "entrys" );
+            // call some - update cache where the vshow_id plays a part in the update
+            $wrapper->removeFromCache( "vshow" , $vshow_id , "entrys" );
 
             $this->addDebug ( "added_fields" , $fields_modified , $prefix );
         }

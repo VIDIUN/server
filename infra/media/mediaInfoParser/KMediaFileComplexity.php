@@ -3,7 +3,7 @@
 		/********************
 		 *
 		 */
-	class KMediaComplexityStatistics {
+	class VMediaComplexityStatistics {
 		public $complexityValue = 0;
 		public $renditionData = null;
 			
@@ -16,7 +16,7 @@
 		/********************
 		 *
 		 */
-	class KMediaComplexityFramesData {
+	class VMediaComplexityFramesData {
 		public $cnt  = 0;
 		public $size = 0;
 	}
@@ -24,7 +24,7 @@
 	/**
 	 * 
 	 */
-	class KMediaFileComplexity {
+	class VMediaFileComplexity {
 		/**
 		 * 
 		 * @param unknown_type $ffmpegBin
@@ -98,11 +98,11 @@
 		 * @param unknown_type $complexityFilename
 		 * @param unknown_type $start
 		 * @param unknown_type $duration
-		 * @return NULL|KMediaComplexityStatistics
+		 * @return NULL|VMediaComplexityStatistics
 		 */
 		public function Evaluate($sourceFilename, $complexityFilename, $start=null, $duration=null)
 		{
-			KalturaLog::log("sourceFilename($sourceFilename), complexityFilename($complexityFilename), start($start), duration($duration)");
+			VidiunLog::log("sourceFilename($sourceFilename), complexityFilename($complexityFilename), start($start), duration($duration)");
 			$logFilename = pathinfo($complexityFilename, PATHINFO_DIRNAME).'/'.pathinfo($complexityFilename, PATHINFO_FILENAME)."_printout.log";
 
 			$startedAt = time();
@@ -110,16 +110,16 @@
 			$cmdLine = $this->buildCmdLine($sourceFilename, $complexityFilename, $start, $duration);
 			$cmdLine.= " -loglevel debug > $logFilename 2>&1 ";
 			
-			KalturaLog::log($cmdLine);
+			VidiunLog::log($cmdLine);
 
 			$lastLine=exec($cmdLine , $outputArr, $rv);
 			if($rv!=0) {
-				KalturaLog::log("ERROR: failed to execute Complexity test.");
+				VidiunLog::log("ERROR: failed to execute Complexity test.");
 				return null;
 			}
-			$stat = new KMediaComplexityStatistics();
+			$stat = new VMediaComplexityStatistics();
 			
-			$medPrsr = new KMediaInfoMediaParser($complexityFilename, $this->mediaInfoBin, $this->ffmpegBin, $this->ffprobeBin);
+			$medPrsr = new VMediaInfoMediaParser($complexityFilename, $this->mediaInfoBin, $this->ffmpegBin, $this->ffprobeBin);
 			$stat->renditionData = $medPrsr->getMediaInfo();
 
 			$stat->complexityValue = $stat->renditionData->videoBitRate;
@@ -131,8 +131,8 @@
 			$stat->startedAt = $startedAt;
 			$stat->finishedAt = time();
 
-			KalturaLog::log(print_r($stat,1));
-			KalturaLog::log("Complexity Results: bitrate($stat->complexityValue),rendition($complexityFilename),time(".($stat->finishedAt-$stat->startedAt).")");
+			VidiunLog::log(print_r($stat,1));
+			VidiunLog::log("Complexity Results: bitrate($stat->complexityValue),rendition($complexityFilename),time(".($stat->finishedAt-$stat->startedAt).")");
 
 			return $stat;
 		}
@@ -145,11 +145,11 @@
 		 * @param unknown_type $complexityFilename
 		 * @param unknown_type $start
 		 * @param unknown_type $duration
-		 * @return Ambigous <NULL, KMediaComplexityStatistics>
+		 * @return Ambigous <NULL, VMediaComplexityStatistics>
 		 */
 		public function EvaluateSampled($sourceFilename, $sourceData, $complexityFilename, $start=null, $duration=null)
 		{
-			KalturaLog::log("sourceFilename($sourceFilename), complexityFilename($complexityFilename), start($start), duration($duration)");
+			VidiunLog::log("sourceFilename($sourceFilename), complexityFilename($complexityFilename), start($start), duration($duration)");
 
 				/*
 				 * Determine the sampling start time and duration
@@ -176,11 +176,11 @@
 				 * Limit the complexity evaluation FPS to 'reasonable' values,
 				 * in order to avoid processing overloading in cases with huge/invalid FPS values.
 				 */
-			if(!isset($sourceData->videoFrameRate) || $sourceData->videoFrameRate>KDLSanityLimits::MaxFramerate){
-				$this->fps = KDLSanityLimits::MaxFramerate;
+			if(!isset($sourceData->videoFrameRate) || $sourceData->videoFrameRate>VDLSanityLimits::MaxFramerate){
+				$this->fps = VDLSanityLimits::MaxFramerate;
 			}
 			else if($sourceData->videoFrameRate==0){
-				$this->fps = KDLConstants::MaxFramerate;
+				$this->fps = VDLConstants::MaxFramerate;
 			}
 			
 				/*
@@ -243,10 +243,10 @@
 			$finishedAt = time();
 
 			if(!(isset($stat) && isset($framesStat))){
-				KalturaLog::log("Missing sampling data, leaving ...");
+				VidiunLog::log("Missing sampling data, leaving ...");
 				return null;
 			}
-			KalturaLog::log("Frame types stat:".print_r($framesStat,1));
+			VidiunLog::log("Frame types stat:".print_r($framesStat,1));
 			$stat->complexityValue = self::estimateBitrate(60, 60*3, $framesStat, $sourceData->videoFrameRate);
 			if(isset($framesStat->y)){
 				$stat->y = round($framesStat->y/$pointsCnt,6);
@@ -257,12 +257,12 @@
 			$stat->startedAt = $startedAt;
 			$stat->finishedAt = $finishedAt;
 			
-			KalturaLog::log("ComplexitySampled: source(br:".($sourceData->videoBitRate).",h:".$sourceData->videoHeight.",".$sourceFilename.")");
+			VidiunLog::log("ComplexitySampled: source(br:".($sourceData->videoBitRate).",h:".$sourceData->videoHeight.",".$sourceFilename.")");
 			$msgStr = "ComplexitySampled: Result - bitrate(".$stat->complexityValue."),dur($duration),sampling(points:$pointsCnt,stepInterval:$stepInterval,samplingDur:$samplingPointDuration)";
 			if(isset($stat->y))
 				$msgStr.= ",psnr(y:$stat->y,avg:$stat->avg,cnt:$stat->cnt)";
 			$msgStr.= ",exec.time($diff)";
-			KalturaLog::log($msgStr);
+			VidiunLog::log($msgStr);
 			return $stat;
 		}
 
@@ -280,14 +280,14 @@
 			 * estimateDuration
 			 * estimatedKeyFrameCount - I frame count that shoudl represent both the ForcedKF's and scenecut flavors. Typically - duration_in_sec * 3
 			 */
-			KalturaLog::log("estimateDuration($estimateDuration), estimatedKeyFrameCount($estimatedKeyFrameCount), fps($fps), frameStat:".print_r($framesStat,1));
+			VidiunLog::log("estimateDuration($estimateDuration), estimatedKeyFrameCount($estimatedKeyFrameCount), fps($fps), frameStat:".print_r($framesStat,1));
 			
 			$estimatedSize = ($framesStat->I->size/$framesStat->I->cnt)*$estimatedKeyFrameCount;
 			$p2bRatio = ($framesStat->P->size + $framesStat->B->size)/($framesStat->P->cnt + $framesStat->B->cnt);
 			$estimatedSize+= ($estimateDuration*$fps-$estimatedKeyFrameCount)*$p2bRatio;
 			$complexityValue = round($estimatedSize*8/$estimateDuration/1024);
 
-			KalturaLog::log("complexityValue($complexityValue), (fps:$fps,estimatedKeyFrameCount:$estimatedKeyFrameCount,p2bRatio:$p2bRatio,estimatedSize:$estimatedSize)");
+			VidiunLog::log("complexityValue($complexityValue), (fps:$fps,estimatedKeyFrameCount:$estimatedKeyFrameCount,p2bRatio:$p2bRatio,estimatedSize:$estimatedSize)");
 			return $complexityValue;
 		}
 		
@@ -301,7 +301,7 @@
 		 */
 		protected function buildCmdLine($sourceFilename, $outputFilename, $start=null, $duration=null)
 		{
-			KalturaLog::log("sourceFilename($sourceFilename), outputFilename($outputFilename), start($start), duration($duration)");
+			VidiunLog::log("sourceFilename($sourceFilename), outputFilename($outputFilename), start($start), duration($duration)");
 			$ffmpegBin = $this->ffmpegBin;
 			
 			if(!isset($start)) 	  $start = $this->start;
@@ -333,7 +333,7 @@
 			if(isset($fps)) $cmdLine.= " -r $fps";
 			if(isset($duration)) $cmdLine.= " -t $duration";
 			$cmdLine.= " -f mp4 -threads 4 -y $outputFilename";
-			KalturaLog::log($cmdLine);
+			VidiunLog::log($cmdLine);
 			return $cmdLine;
 		}
 		
@@ -344,16 +344,16 @@
 		 */
 		protected static function parsePrintout($fileName)
 		{
-			KalturaLog::log("fileName($fileName)");
+			VidiunLog::log("fileName($fileName)");
 			$fHd = fopen($fileName, "r");
 			if(!isset($fHd))
 				return null;
 			
 			$framesStat = new stdClass();
 			$framesStat->num = 0;
-			$framesStat->I = new KMediaComplexityFramesData();
-			$framesStat->P = new KMediaComplexityFramesData();
-			$framesStat->B = new KMediaComplexityFramesData();
+			$framesStat->I = new VMediaComplexityFramesData();
+			$framesStat->P = new VMediaComplexityFramesData();
+			$framesStat->B = new VMediaComplexityFramesData();
 
 			while(1){
 				if(($line=fgets($fHd))==false)
@@ -364,8 +364,8 @@
 	//		sscanf($line,"PSNR y:%s u:%s v:%s average:%s min:%s max:%s", &$yVal, &$uVal, &$vVal, &$avgVal, &$minVal, &$maxVal);
 	// [libx264 @ 0x1ea33a0] frame=  44 QP=25.33 NAL=2 Slice:P Poc:88  I:501  P:881  SKIP:238  size=17499 bytes
 				sscanf($line, "frame=  %d QP=%g NAL=%d Slice:%s Poc:%d  I:%d  P:%d  SKIP:%d  size=%d ", $framesStat->num, $qp, $nal, $slice, $poc, $i, $p, $skip, $size);
-				KalturaLog::log($line);
-				KalturaLog::log("$framesStat->num,$qp,$nal,$slice,$poc, $i, $p, $skip, $size");
+				VidiunLog::log($line);
+				VidiunLog::log("$framesStat->num,$qp,$nal,$slice,$poc, $i, $p, $skip, $size");
 				switch($slice){
 				case "I":
 					$framesStat->I->size+= $size;

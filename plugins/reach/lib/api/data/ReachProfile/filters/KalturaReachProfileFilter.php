@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.filters
  */
-class KalturaReachProfileFilter extends KalturaReachProfileBaseFilter
+class VidiunReachProfileFilter extends VidiunReachProfileBaseFilter
 {
 	protected function getCoreFilter()
 	{
@@ -11,9 +11,9 @@ class KalturaReachProfileFilter extends KalturaReachProfileBaseFilter
 	}
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaRelatedFilter::getListResponse()
+ 	 * @see VidiunRelatedFilter::getListResponse()
  	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$c = new Criteria();
 		$filter = $this->toObject();
@@ -27,12 +27,12 @@ class KalturaReachProfileFilter extends KalturaReachProfileBaseFilter
 			$totalCount = ($pager->pageIndex - 1) * $pager->pageSize + $resultCount;
 		else
 		{
-			KalturaFilterPager::detachFromCriteria($c);
+			VidiunFilterPager::detachFromCriteria($c);
 			$totalCount = ReachProfilePeer::doCount($c);
 		}
 		
-		$response = new KalturaReachProfileListResponse();
-		$response->objects = KalturaReachProfileArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunReachProfileListResponse();
+		$response->objects = VidiunReachProfileArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;
 	}

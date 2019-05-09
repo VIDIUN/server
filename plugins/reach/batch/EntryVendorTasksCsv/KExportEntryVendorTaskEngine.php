@@ -4,7 +4,7 @@
  * @subpackage ExportCsv
  */
 
-class KExportEntryVendorTaskEngine extends KObjectExportEngine
+class VExportEntryVendorTaskEngine extends VObjectExportEngine
 {
 	private $apiError = null;
 	
@@ -35,25 +35,25 @@ class KExportEntryVendorTaskEngine extends KObjectExportEngine
 	
 	public function fillCsv(&$csvFile, &$data)
 	{
-		KalturaLog::info('Exporting content for entry vendor task items');
+		VidiunLog::info('Exporting content for entry vendor task items');
 		$filter = clone $data->filter;
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		$pager->pageIndex = 1;
 		
 		$this->addHeaderRowToCsv($csvFile, array());
 		$lastCreatedAt = 0;
 		$totalCount = 0;
-		$filter->orderBy = KalturaEntryVendorTaskOrderBy::CREATED_AT_ASC;
+		$filter->orderBy = VidiunEntryVendorTaskOrderBy::CREATED_AT_ASC;
 		do {
 			if ($lastCreatedAt) {
 				$filter->createdAtGreaterThanOrEqual = $lastCreatedAt;
 			}
 			try {
-				$entryVendorTaskList = KBatchBase::$kClient->entryVendorTask->listAction($filter, $pager);
+				$entryVendorTaskList = VBatchBase::$vClient->entryVendorTask->listAction($filter, $pager);
 				$returnedSize = count($entryVendorTaskList->objects);
 			} catch (Exception $e) {
-				KalturaLog::info("Couldn't list entry Vendor Tasks on page: [$pager->pageIndex]" . $e->getMessage());
+				VidiunLog::info("Couldn't list entry Vendor Tasks on page: [$pager->pageIndex]" . $e->getMessage());
 				$this->apiError = $e;
 				return;
 			}
@@ -61,7 +61,7 @@ class KExportEntryVendorTaskEngine extends KObjectExportEngine
 			$this->addEntryVendorTasksToCsv($entryVendorTaskList->objects, $csvFile);
 			$tasksCount = count($entryVendorTaskList->objects);
 			$totalCount += $tasksCount;
-			KalturaLog::debug("Adding More - $tasksCount totalCount - " . $totalCount);
+			VidiunLog::debug("Adding More - $tasksCount totalCount - " . $totalCount);
 			unset($entryVendorTaskList);
 			if (function_exists('gc_collect_cycles')) // php 5.3 and above
 				gc_collect_cycles();
@@ -74,7 +74,7 @@ class KExportEntryVendorTaskEngine extends KObjectExportEngine
 	protected function addHeaderRowToCsv($csvFile, $additionalFields)
 	{
 		$headerRow = 'Task id,createdAt,finishTime,entryId,status,reachProfileId,turnaroundTime,serviceType,serviceFeature,price,userId,moderatingUser,errDescription,notes,accuracy,context,partnerData';
-		KCsvWrapper::sanitizedFputCsv($csvFile, explode(',', $headerRow));
+		VCsvWrapper::sanitizedFputCsv($csvFile, explode(',', $headerRow));
 		return $csvFile;
 	}
 	
@@ -95,7 +95,7 @@ class KExportEntryVendorTaskEngine extends KObjectExportEngine
 		}
 		
 		foreach ($entryVendorTaskIdToRow as $key => $val) {
-			KCsvWrapper::sanitizedFputCsv($csvFile, $val);
+			VCsvWrapper::sanitizedFputCsv($csvFile, $val);
 		}
 	}
 	
@@ -158,7 +158,7 @@ class KExportEntryVendorTaskEngine extends KObjectExportEngine
 		if (isset(self::$catalogItemData[$id]))
 			return self::$catalogItemData[$id];
 		
-		$vendorCatalogItem = KBatchBase::$kClient->vendorCatalogItem->get($id);
+		$vendorCatalogItem = VBatchBase::$vClient->vendorCatalogItem->get($id);
 		if (!$vendorCatalogItem)
 			return null;
 		

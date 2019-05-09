@@ -6,7 +6,7 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaValue extends KalturaObject
+abstract class VidiunValue extends VidiunObject
 {
 	/**
 	 * @var string
@@ -20,7 +20,7 @@ abstract class KalturaValue extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

@@ -3,7 +3,7 @@
  * Enable transcript assets management for entry objects
  * @package plugins.transcript
  */
-class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKalturaObjectLoader, IKalturaPending, IKalturaTypeExtender, IKalturaSearchDataContributor
+class TranscriptPlugin extends VidiunPlugin implements IVidiunEnumerator, IVidiunObjectLoader, IVidiunPending, IVidiunTypeExtender, IVidiunSearchDataContributor
 {
 	const PLUGIN_NAME = 'transcript';
 	const ENTRY_TRANSCRIPT_PREFIX = 'tr_pref';
@@ -13,7 +13,7 @@ class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKal
 
 
     /* (non-PHPdoc)
-     * @see IKalturaPlugin::getPluginName()
+     * @see IVidiunPlugin::getPluginName()
      */
 	public static function getPluginName()
 	{
@@ -21,7 +21,7 @@ class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -35,7 +35,7 @@ class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKal
 	}
 	
     /* (non-PHPdoc)
-     * @see IKalturaTypeExtender::getExtendedTypes()
+     * @see IVidiunTypeExtender::getExtendedTypes()
      */
      public static function getExtendedTypes($baseClass, $enumValue)
      {
@@ -50,18 +50,18 @@ class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKal
     }
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaAsset' && $enumValue == self::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT))
-			return new KalturaTranscriptAsset();
+		if($baseClass == 'VidiunAsset' && $enumValue == self::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT))
+			return new VidiunTranscriptAsset();
 	
 		return null;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -72,11 +72,11 @@ class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKal
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$dependency = new KalturaDependency(AttachmentPlugin::getPluginName());
+		$dependency = new VidiunDependency(AttachmentPlugin::getPluginName());
 		return array($dependency);
 	}
 
@@ -85,8 +85,8 @@ class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKal
 	 */
 	public static function getAssetTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('assetType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('assetType', $value);
 	}
 	
 	/**
@@ -94,11 +94,11 @@ class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKal
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 	/* (non-PHPdoc)
- * @see IKalturaSearchDataContributor::getSearchData()
+ * @see IVidiunSearchDataContributor::getSearchData()
  */
 	public static function getSearchData(BaseObject $object)
 	{
@@ -123,7 +123,7 @@ class TranscriptPlugin extends KalturaPlugin implements IKalturaEnumerator, IKal
 				continue;
 
 			$syncKey = $transcriptAsset->getSyncKey(asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			$content = kFileSyncUtils::file_get_contents($syncKey, true, false);
+			$content = vFileSyncUtils::file_get_contents($syncKey, true, false);
 			
 			//Get values from string file
 			$matches = array();

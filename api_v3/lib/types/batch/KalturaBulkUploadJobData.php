@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploadJobData extends KalturaJobData
+class VidiunBulkUploadJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -20,7 +20,7 @@ class KalturaBulkUploadJobData extends KalturaJobData
 	
 	/**
 	 * Selected profile id for all bulk entries
-	 * @deprecated set this parameter on the KalturaBulkUploadEntryData instead
+	 * @deprecated set this parameter on the VidiunBulkUploadEntryData instead
 	 * @readonly
 	 * @var int
 	 */
@@ -66,7 +66,7 @@ class KalturaBulkUploadJobData extends KalturaJobData
 	
 	/**
 	 * Type of object for bulk upload
-	 * @var KalturaBulkUploadObjectType
+	 * @var VidiunBulkUploadObjectType
 	 * @readonly
 	 */
 	public $bulkUploadObjectType;
@@ -80,13 +80,13 @@ class KalturaBulkUploadJobData extends KalturaJobData
 	/**
 	 * Data pertaining to the objects being uploaded
 	 * @readonly
-	 * @var KalturaBulkUploadObjectData
+	 * @var VidiunBulkUploadObjectData
 	 */
 	public $objectData;
 	
 	/**
 	 * Type of bulk upload
-	 * @var KalturaBulkUploadType
+	 * @var VidiunBulkUploadType
 	 * @readonly
 	 */
 	public $type;
@@ -129,7 +129,7 @@ class KalturaBulkUploadJobData extends KalturaJobData
 
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -137,46 +137,46 @@ class KalturaBulkUploadJobData extends KalturaJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if (is_null($object_to_fill))
 		{
-			throw new KalturaAPIException(KalturaErrors::OBJECT_TYPE_ABSTRACT, "KalturaBulkUploadJobData");
+			throw new VidiunAPIException(VidiunErrors::OBJECT_TYPE_ABSTRACT, "VidiunBulkUploadJobData");
 		}
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		
-	    /* @var $source_object kBulkUploadJobData */
+	    /* @var $source_object vBulkUploadJobData */
 	    
 	    if($this->shouldGet('objectData', $responseProfile))
 	    {
 		    $this->objectData = null;
 		    switch (get_class($source_object->getObjectData()))
 		    {
-		        case 'kBulkUploadEntryData':
-		            $this->objectData = new KalturaBulkUploadEntryData();
+		        case 'vBulkUploadEntryData':
+		            $this->objectData = new VidiunBulkUploadEntryData();
 		            break;
-		        case 'kBulkUploadCategoryData':
-		            $this->objectData = new KalturaBulkUploadCategoryData();
+		        case 'vBulkUploadCategoryData':
+		            $this->objectData = new VidiunBulkUploadCategoryData();
 		            break;
-		        case 'kBulkUploadCategoryUserData':
-		            $this->objectData = new KalturaBulkUploadCategoryUserData();
+		        case 'vBulkUploadCategoryUserData':
+		            $this->objectData = new VidiunBulkUploadCategoryUserData();
 		            break;
-		        case 'kBulkUploadUserData':
-		            $this->objectData = new KalturaBulkUploadUserData();
+		        case 'vBulkUploadUserData':
+		            $this->objectData = new VidiunBulkUploadUserData();
 		            break;
-		        case 'kBulkUploadCategoryEntryData':
-		            $this->objectData = new KalturaBulkUploadCategoryEntryData();
+		        case 'vBulkUploadCategoryEntryData':
+		            $this->objectData = new VidiunBulkUploadCategoryEntryData();
 		            break;
 		        default:
 		            break;
@@ -199,7 +199,7 @@ class KalturaBulkUploadJobData extends KalturaJobData
 		if(is_null($subType))
 			return null;
 			
-		return kPluginableEnumsManager::apiToCore('BulkUploadType', $subType);
+		return vPluginableEnumsManager::apiToCore('BulkUploadType', $subType);
 	}
 	
 	/**
@@ -211,7 +211,7 @@ class KalturaBulkUploadJobData extends KalturaJobData
 		if(is_null($subType))
 			return null;
 			
-		return kPluginableEnumsManager::coreToApi('BulkUploadType', $subType);
+		return vPluginableEnumsManager::coreToApi('BulkUploadType', $subType);
 	}
 	
 	public function setType()

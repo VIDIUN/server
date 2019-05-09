@@ -2,7 +2,7 @@
 /**
  * @package plugins.FeedDropFolder
  */
-class KFeedDropFolderEngine extends KDropFolderEngine 
+class VFeedDropFolderEngine extends VDropFolderEngine 
 {
 	const DEFAULT_CONTENT_ITEM_SIZE = 1;
 	
@@ -18,11 +18,11 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 	protected $pass;
 	
 	/* (non-PHPdoc)
-	 * @see KDropFolderEngine::watchFolder()
+	 * @see VDropFolderEngine::watchFolder()
 	 */
-	public function watchFolder(KalturaDropFolder $dropFolder) {
-		/* @var $dropFolder KalturaFeedDropFolder */		
-		KalturaLog::info("Watching drop folder with ID [" . $dropFolder->id . "]");
+	public function watchFolder(VidiunDropFolder $dropFolder) {
+		/* @var $dropFolder VidiunFeedDropFolder */		
+		VidiunLog::info("Watching drop folder with ID [" . $dropFolder->id . "]");
 		$this->dropFolder = $dropFolder;
 		
 		//Get Drop Folder feed and import it into a SimpleXMLElement
@@ -34,11 +34,11 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 		$feedItems = $feed->xpath ($this->dropFolder->feedItemInfo->itemXPath);
 		if ($this->dropFolder->itemHandlingLimit > 0 && count ($feedItems) > $this->dropFolder->itemHandlingLimit)
 		{
-			KalturaLog::err("Reached pulling limit for drop folder ID [" . $this->dropFolder->id . "].");
+			VidiunLog::err("Reached pulling limit for drop folder ID [" . $this->dropFolder->id . "].");
 			
 			array_splice ($feedItems, $this->dropFolder->itemHandlingLimit);
 			
-			$dropFolderUpdate = new KalturaFeedDropFolder();
+			$dropFolderUpdate = new VidiunFeedDropFolder();
 			$dropFolderUpdate->errorDescription = FeedDropFolderPlugin::ERROR_MESSAGE_INCOMPLETE_HANDLING . $this->dropFolder->id;
 			$this->dropFolderPlugin->dropFolder->update($this->dropFolder->id, $dropFolderUpdate);
 		}
@@ -48,9 +48,9 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 		$counter = 0;
 		foreach ($feedItems as $feedItem)
 		{
-			if ($counter > intval ( KBatchBase::$taskConfig->params->mrss->limitProcessEachRun))
+			if ($counter > intval ( VBatchBase::$taskConfig->params->mrss->limitProcessEachRun))
 			{
-				KalturaLog::info('Finished current run.');
+				VidiunLog::info('Finished current run.');
 				break;
 			}
 			
@@ -58,14 +58,14 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 			$uniqueId = strval($this->getSingleXPathResult($this->dropFolder->feedItemInfo->itemUniqueIdentifierXPath, $feedItem));
 			if (is_null($uniqueId) || $uniqueId === '')
 			{
-				KalturaLog::err("No unique identifier for the current feed item! Skipping.");
+				VidiunLog::err("No unique identifier for the current feed item! Skipping.");
 				continue;
 			}
 			
 			//If we already encountered this uniqueId in this run- ignore subsequent iterations.
 			if (in_array ($uniqueId, $this->handledUniqueIds))
 			{
-				KalturaLog::err("The unique identifer value [$uniqueId] was encountered before during this scan of the feed. Ignoring.");
+				VidiunLog::err("The unique identifer value [$uniqueId] was encountered before during this scan of the feed. Ignoring.");
 				continue;
 			}
 			
@@ -73,13 +73,13 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 			if (!array_key_exists($uniqueId, $existingDropFolderFilesMap))
 			{
 				//In this case, we are required to add this item as a new drop folder file
-				KalturaLog::info("Item not found in drop folder file list- adding as new drop folder file.");
+				VidiunLog::info("Item not found in drop folder file list- adding as new drop folder file.");
 				$this->handleItemAdded ($uniqueId, $feedItem);
 				$counter++;
 			}
 			else
 			{
-				KalturaLog::info("Item found in drop folder file list- adding as existing drop folder file.");
+				VidiunLog::info("Item found in drop folder file list- adding as existing drop folder file.");
 				$dropFolderFile = $existingDropFolderFilesMap[$uniqueId];
 				unset ($existingDropFolderFilesMap[$uniqueId]);
 				//if file exist in the folder remove it from the map
@@ -104,7 +104,7 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 	 * @param string $uniqueId
 	 * @param SimpleXMLElement $feedItem
 	 * @param bool $contentUpdateRequired
-	 * @return Ambigous <KalturaDropFolderFile, MultiRequestSubResult, unknown, NULL, multitype:, multitype:string unknown , multitype:mixed string >|NULL
+	 * @return Ambigous <VidiunDropFolderFile, MultiRequestSubResult, unknown, NULL, multitype:, multitype:string unknown , multitype:mixed string >|NULL
 	 */
 	protected function handleItemAdded ($uniqueId, SimpleXMLElement $feedItem, $contentUpdateRequired = true)
 	{
@@ -125,7 +125,7 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 			
 			$feedPath = $this->saveFeedItemToDisk ($feedItem, $contentUpdateRequired);
 			
-			$newDropFolderFile = new KalturaFeedDropFolderFile();
+			$newDropFolderFile = new VidiunFeedDropFolderFile();
 	    	$newDropFolderFile->dropFolderId = $this->dropFolder->id;
 	    	$newDropFolderFile->fileName = $uniqueId;
 	    	$newDropFolderFile->lastModificationTime = strval($this->getSingleXPathResult($this->dropFolder->feedItemInfo->itemPublishDateXPath, $feedItem)); 
@@ -163,16 +163,16 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 	    	
 	    	$newDropFolderFile->feedXmlPath = $feedPath;
 			//No such thing as an 'uploading' MRSS drop folder file - if the file is detected, it is ready for upload. Immediately update status to 'pending'
-	    	KBatchBase::$kClient->startMultiRequest();
+	    	VBatchBase::$vClient->startMultiRequest();
 			$dropFolderFile = $this->dropFolderFileService->add($newDropFolderFile);
-			$this->dropFolderFileService->updateStatus($dropFolderFile->id, KalturaDropFolderFileStatus::PENDING);
-			$result = KBatchBase::$kClient->doMultiRequest();
+			$this->dropFolderFileService->updateStatus($dropFolderFile->id, VidiunDropFolderFileStatus::PENDING);
+			$result = VBatchBase::$vClient->doMultiRequest();
 			
 			return $dropFolderFile;
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Cannot add new drop folder file with name ['.$feedItem->guid.'] - '.$e->getMessage());
+			VidiunLog::err('Cannot add new drop folder file with name ['.$feedItem->guid.'] - '.$e->getMessage());
 			return null;
 		}
 	}
@@ -207,7 +207,7 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 			$contentUrls = $feedItem->xpath ($this->dropFolder->feedItemInfo->itemContentUrlXPath);
 			foreach ($contentUrls as $contentItem)
 			{
-				KalturaLog::info ("Reconstructing URL to include user and password: " . $this->user . "/" . $this->pass);
+				VidiunLog::info ("Reconstructing URL to include user and password: " . $this->user . "/" . $this->pass);
 				$urlComponents = parse_url (strval($contentItem[0]));
 				
 				$protocol = isset ($urlComponents['scheme']) ? $urlComponents['scheme'] : null;
@@ -223,26 +223,26 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 		
 		$feedFileName = uniqid ("dropFolderFile_{$this->dropFolder->id}_" . time() . '_');
 		
-		$rootPath = KBatchBase::$taskConfig->params->mrss->xmlPath;
-		$res = KBatchBase::createDir($rootPath);
+		$rootPath = VBatchBase::$taskConfig->params->mrss->xmlPath;
+		$res = VBatchBase::createDir($rootPath);
 		if ( !$res )
 		{
-			KalturaLog::err( "Cannot save XML item without shared directory");
+			VidiunLog::err( "Cannot save XML item without shared directory");
 			die();
 		}
 		
 		$feedItemPath = $rootPath . DIRECTORY_SEPARATOR. $feedFileName;
 		$res = file_put_contents($feedItemPath, $feedItem->saveXML());
-		chmod($feedItemPath, KBatchBase::$taskConfig->chmod ? octdec(KBatchBase::$taskConfig->chmod) : 0660);
+		chmod($feedItemPath, VBatchBase::$taskConfig->chmod ? octdec(VBatchBase::$taskConfig->chmod) : 0660);
 		return $feedItemPath;
 	}
 	
 	/**
 	 * Decide whether to update content/metadata of an existing drop folder file
-	 * @param KalturaDropFolderFile $existingDropFolderFile
+	 * @param VidiunDropFolderFile $existingDropFolderFile
 	 * @param SimpleXMLElement $feedItem
 	 */
-	protected function handleExistingItem (KalturaFeedDropFolderFile $existingDropFolderFile, SimpleXMLElement $feedItem)
+	protected function handleExistingItem (VidiunFeedDropFolderFile $existingDropFolderFile, SimpleXMLElement $feedItem)
 	{
 		//check whether the hash has changed - in this case the content needs to be updated.
 		$feedItemHash = strval($this->getSingleXPathResult($this->dropFolder->feedItemInfo->itemHashXPath, $feedItem));
@@ -250,7 +250,7 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 		{
 			if ($feedItemHash != $existingDropFolderFile->hash)
 			{
-				KalturaLog::info('Hash has changed for drop folder file named ['. $existingDropFolderFile->fileName .'] - content will be updated.');
+				VidiunLog::info('Hash has changed for drop folder file named ['. $existingDropFolderFile->fileName .'] - content will be updated.');
 				$this->handleItemAdded($existingDropFolderFile->fileName, $feedItem);
 				return true;
 			}
@@ -260,7 +260,7 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 		$pubDate = strval($this->getSingleXPathResult($this->dropFolder->feedItemInfo->itemPublishDateXPath, $feedItem));
 		if ($pubDate != $existingDropFolderFile->lastModificationTime)
 		{
-			KalturaLog::info('Publish date has changed for drop folder file named ['. $existingDropFolderFile->fileName .'] - content will be updated.');
+			VidiunLog::info('Publish date has changed for drop folder file named ['. $existingDropFolderFile->fileName .'] - content will be updated.');
 			$this->handleItemAdded($existingDropFolderFile->fileName, $feedItem, false);
 			return true;
 		}
@@ -270,9 +270,9 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 	}
 
 	/* (non-PHPdoc)
-	 * @see KDropFolderEngine::processFolder()
+	 * @see VDropFolderEngine::processFolder()
 	 */
-	public function processFolder(KalturaBatchJob $job, KalturaDropFolderContentProcessorJobData $data) {
+	public function processFolder(VidiunBatchJob $job, VidiunDropFolderContentProcessorJobData $data) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -285,7 +285,7 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 	{
 		if (!$fieldXpath)
 		{
-			KalturaLog::info("XPath not provided.");
+			VidiunLog::info("XPath not provided.");
 			return null;
 		}
 		$dom = dom_import_simplexml($element);
@@ -308,7 +308,7 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 		$allBitrates = $feedItem->xpath ($this->dropFolder->feedItemInfo->itemContentBitrateXPath);
 		if (!count($allBitrates))
 		{
-			KalturaLog::info("No bitrate tags found ");
+			VidiunLog::info("No bitrate tags found ");
 			return;
 		}
 		
@@ -350,9 +350,9 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 		}
 		curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-		if (isset(KBatchBase::$taskConfig->params->mrss->curlTimeout))
+		if (isset(VBatchBase::$taskConfig->params->mrss->curlTimeout))
 		{
-			curl_setopt($ch, CURLOPT_TIMEOUT, KBatchBase::$taskConfig->params->mrss->curlTimeout);
+			curl_setopt($ch, CURLOPT_TIMEOUT, VBatchBase::$taskConfig->params->mrss->curlTimeout);
 		}
 		
 		$res = curl_exec($ch);
@@ -360,35 +360,35 @@ class KFeedDropFolderEngine extends KDropFolderEngine
 		
 		if(is_string($res))
 		{
-			KalturaLog::info("For URL [$url], the curl result is: " . substr($res, 0, 1000));
+			VidiunLog::info("For URL [$url], the curl result is: " . substr($res, 0, 1000));
 		}
 		return $res;
 	}
 
 	/**
 	 * Mark file status as PURGED
-	 * @param KalturaDropFolderFile $dropFolderFile
+	 * @param VidiunDropFolderFile $dropFolderFile
 	 */
 	protected function handleFeedItemPurged($dropFolderFile)
 	{
 		try 
 		{
-			if ($this->dropFolder->fileDeletePolicy == KalturaDropFolderFileDeletePolicy::AUTO_DELETE && 
+			if ($this->dropFolder->fileDeletePolicy == VidiunDropFolderFileDeletePolicy::AUTO_DELETE && 
 				$this->dropFolder->autoFileDeleteDays)
 			{
 				$deleteAt = $this->dropFolder->autoFileDeleteDays*24*60*60 + $dropFolderFile->createdAt;
 				if (time () < $deleteAt)
 				{
-					KalturaLog::info ("Drop Folder File is not ready to be purged.");
+					VidiunLog::info ("Drop Folder File is not ready to be purged.");
 					return;
 				}	
 			}
 			
-			return $this->dropFolderFileService->updateStatus($dropFolderFile->id, KalturaDropFolderFileStatus::PURGED);
+			return $this->dropFolderFileService->updateStatus($dropFolderFile->id, VidiunDropFolderFileStatus::PURGED);
 		}
 		catch(Exception $e)
 		{
-			$this->handleFileError($dropFolderFileId, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_UPDATE_FILE, 
+			$this->handleFileError($dropFolderFileId, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_UPDATE_FILE, 
 									DropFolderPlugin::ERROR_UPDATE_FILE_MESSAGE, $e);
 			
 			return null;

@@ -6,7 +6,7 @@
  * @service accessControl
  * @deprecated use accessControlProfile service instead
  */
-class AccessControlService extends KalturaBaseService
+class AccessControlService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -18,10 +18,10 @@ class AccessControlService extends KalturaBaseService
 	 * Add new Access Control Profile
 	 * 
 	 * @action add
-	 * @param KalturaAccessControl $accessControl
-	 * @return KalturaAccessControl
+	 * @param VidiunAccessControl $accessControl
+	 * @return VidiunAccessControl
 	 */
-	function addAction(KalturaAccessControl $accessControl)
+	function addAction(VidiunAccessControl $accessControl)
 	{
 		$accessControl->validatePropertyMinLength("name", 1);
 		$accessControl->partnerId = $this->getPartnerId();
@@ -30,7 +30,7 @@ class AccessControlService extends KalturaBaseService
 		$accessControl->toObject($dbAccessControl);
 		$dbAccessControl->save();
 		
-		$accessControl = new KalturaAccessControl();
+		$accessControl = new VidiunAccessControl();
 		$accessControl->fromObject($dbAccessControl, $this->getResponseProfile());
 		return $accessControl;
 	}
@@ -40,15 +40,15 @@ class AccessControlService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaAccessControl
+	 * @return VidiunAccessControl
 	 */
 	function getAction($id)
 	{
 		$dbAccessControl = accessControlPeer::retrieveByPK($id);
 		if (!$dbAccessControl)
-			throw new KalturaAPIException(KalturaErrors::ACCESS_CONTROL_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::ACCESS_CONTROL_ID_NOT_FOUND, $id);
 			
-		$accessControl = new KalturaAccessControl();
+		$accessControl = new VidiunAccessControl();
 		$accessControl->fromObject($dbAccessControl, $this->getResponseProfile());
 		return $accessControl;
 	}
@@ -58,23 +58,23 @@ class AccessControlService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaAccessControl $accessControl
-	 * @return KalturaAccessControl
+	 * @param VidiunAccessControl $accessControl
+	 * @return VidiunAccessControl
 	 * 
-	 * @throws KalturaErrors::ACCESS_CONTROL_ID_NOT_FOUND
-	 * @throws KalturaErrors::ACCESS_CONTROL_NEW_VERSION_UPDATE
+	 * @throws VidiunErrors::ACCESS_CONTROL_ID_NOT_FOUND
+	 * @throws VidiunErrors::ACCESS_CONTROL_NEW_VERSION_UPDATE
 	 */
-	function updateAction($id, KalturaAccessControl $accessControl)
+	function updateAction($id, VidiunAccessControl $accessControl)
 	{
 		$dbAccessControl = accessControlPeer::retrieveByPK($id);
 		if (!$dbAccessControl)
-			throw new KalturaAPIException(KalturaErrors::ACCESS_CONTROL_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::ACCESS_CONTROL_ID_NOT_FOUND, $id);
 	
 		$rules = $dbAccessControl->getRulesArray();
 		foreach($rules as $rule)
 		{
-			if(!($rule instanceof kAccessControlRestriction))
-				throw new KalturaAPIException(KalturaErrors::ACCESS_CONTROL_NEW_VERSION_UPDATE, $id);
+			if(!($rule instanceof vAccessControlRestriction))
+				throw new VidiunAPIException(VidiunErrors::ACCESS_CONTROL_NEW_VERSION_UPDATE, $id);
 		}
 		
 		$accessControl->validatePropertyMinLength("name", 1, true);
@@ -82,7 +82,7 @@ class AccessControlService extends KalturaBaseService
 		$accessControl->toUpdatableObject($dbAccessControl);
 		$dbAccessControl->save();
 		
-		$accessControl = new KalturaAccessControl();
+		$accessControl = new VidiunAccessControl();
 		$accessControl->fromObject($dbAccessControl, $this->getResponseProfile());
 		return $accessControl;
 	}
@@ -97,25 +97,25 @@ class AccessControlService extends KalturaBaseService
 	{
 		$dbAccessControl = accessControlPeer::retrieveByPK($id);
 		if (!$dbAccessControl)
-			throw new KalturaAPIException(KalturaErrors::ACCESS_CONTROL_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::ACCESS_CONTROL_ID_NOT_FOUND, $id);
 
 		if ($dbAccessControl->getIsDefault())
-			throw new KalturaAPIException(KalturaErrors::CANNOT_DELETE_DEFAULT_ACCESS_CONTROL);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_DELETE_DEFAULT_ACCESS_CONTROL);
 
 		$dbAccessControl->setDeletedAt(time());
 		try
 		{
 			$dbAccessControl->save();
 		}
-		catch(kCoreException $e)
+		catch(vCoreException $e)
 		{
 			$code = $e->getCode();
 			switch($code)
 			{
-				case kCoreException::EXCEEDED_MAX_ENTRIES_PER_ACCESS_CONTROL_UPDATE_LIMIT :
-					throw new KalturaAPIException(KalturaErrors::EXCEEDED_ENTRIES_PER_ACCESS_CONTROL_FOR_UPDATE, $id);
-				case kCoreException::NO_DEFAULT_ACCESS_CONTROL :
-					throw new KalturaAPIException(KalturaErrors::CANNOT_TRANSFER_ENTRIES_TO_ANOTHER_ACCESS_CONTROL_OBJECT);
+				case vCoreException::EXCEEDED_MAX_ENTRIES_PER_ACCESS_CONTROL_UPDATE_LIMIT :
+					throw new VidiunAPIException(VidiunErrors::EXCEEDED_ENTRIES_PER_ACCESS_CONTROL_FOR_UPDATE, $id);
+				case vCoreException::NO_DEFAULT_ACCESS_CONTROL :
+					throw new VidiunAPIException(VidiunErrors::CANNOT_TRANSFER_ENTRIES_TO_ANOTHER_ACCESS_CONTROL_OBJECT);
 				default:
 					throw $e;
 			}
@@ -126,17 +126,17 @@ class AccessControlService extends KalturaBaseService
 	 * List Access Control Profiles by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaFilterPager $filter
-	 * @param KalturaAccessControlFilter $pager
-	 * @return KalturaAccessControlListResponse
+	 * @param VidiunFilterPager $filter
+	 * @param VidiunAccessControlFilter $pager
+	 * @return VidiunAccessControlListResponse
 	 */
-	function listAction(KalturaAccessControlFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunAccessControlFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaAccessControlFilter();
+			$filter = new VidiunAccessControlFilter();
 			
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());  
 	}

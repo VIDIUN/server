@@ -6,7 +6,7 @@
  * @package    Core
  * @subpackage externalServices
  */
-class flickrAction extends kalturaAction
+class flickrAction extends vidiunAction
 {
 	public function execute()
 	{
@@ -14,21 +14,21 @@ class flickrAction extends kalturaAction
 		
 		$frob = @$_REQUEST['frob'];
 			
-		$kalt_token = @$_COOKIE['flickr_kalttoken'];
+		$vidi_token = @$_COOKIE['flickr_viditoken'];
 
-		if (!$kalt_token)
+		if (!$vidi_token)
 		{
-			$kuserId = $this->getLoggedInUserId();
-			if ($kuserId)
-				$kalt_token = $kuserId.':';
+			$vuserId = $this->getLoggedInUserId();
+			if ($vuserId)
+				$vidi_token = $vuserId.':';
 		}
 		else
-			$kalt_token = base64_decode($kalt_token);
+			$vidi_token = base64_decode($vidi_token);
 
-		if (!$frob || !$kalt_token)
+		if (!$frob || !$vidi_token)
 			return;
 
-		myFlickrServices::setKuserToken($kalt_token, $frob);
+		myFlickrServices::setVuserToken($vidi_token, $frob);
 
 		return;
 	}

@@ -3,10 +3,10 @@
  * @package plugins.youTubeDistribution
  * @subpackage api.objects
  */
-class KalturaYouTubeDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunYouTubeDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
-	 * @var KalturaYouTubeDistributionFeedSpecVersion
+	 * @var VidiunYouTubeDistributionFeedSpecVersion
 	 */
 	public $feedSpecVersion;
 

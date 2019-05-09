@@ -3,6 +3,6 @@
  * @package plugins.attUverseDistribution
  * @subpackage api.filters
  */
-class KalturaAttUverseDistributionProviderFilter extends KalturaAttUverseDistributionProviderBaseFilter
+class VidiunAttUverseDistributionProviderFilter extends VidiunAttUverseDistributionProviderBaseFilter
 {
 }

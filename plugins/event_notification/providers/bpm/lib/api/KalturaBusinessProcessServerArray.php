@@ -3,21 +3,21 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.objects
  */
-class KalturaBusinessProcessServerArray extends KalturaTypedArray
+class VidiunBusinessProcessServerArray extends VidiunTypedArray
 {
 	public static function fromDbArray($arr)
 	{
-		$newArr = new KalturaBusinessProcessServerArray();
+		$newArr = new VidiunBusinessProcessServerArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
 			/* @var $obj BusinessProcessServer */
-    		$nObj = KalturaBusinessProcessServer::getInstanceByType($obj->getType());
+    		$nObj = VidiunBusinessProcessServer::getInstanceByType($obj->getType());
     		if(!$nObj)
     		{
-    			KalturaLog::err("Business-Process server could not find matching type for [" . $obj->getType() . "]");
+    			VidiunLog::err("Business-Process server could not find matching type for [" . $obj->getType() . "]");
     			continue;
     		}
 			$nObj->fromObject($obj);
@@ -29,6 +29,6 @@ class KalturaBusinessProcessServerArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaBusinessProcessServer");	
+		parent::__construct("VidiunBusinessProcessServer");	
 	}
 }

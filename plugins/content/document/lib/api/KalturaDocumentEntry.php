@@ -3,12 +3,12 @@
  * @package plugins.document
  * @subpackage api.objects
  */
-class KalturaDocumentEntry extends KalturaBaseEntry
+class VidiunDocumentEntry extends VidiunBaseEntry
 {
 	/**
 	 * The type of the document
 	 *
-	 * @var KalturaDocumentType
+	 * @var VidiunDocumentType
 	 * @insertonly
 	 * @filter eq,in
 	 */
@@ -31,7 +31,7 @@ class KalturaDocumentEntry extends KalturaBaseEntry
 	
 	public function __construct()
 	{
-		$this->type = KalturaEntryType::DOCUMENT;
+		$this->type = VidiunEntryType::DOCUMENT;
 	}
 	
 	public function getMapBetweenObjects()

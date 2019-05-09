@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaMediaServerStatus extends KalturaObject
+class VidiunMediaServerStatus extends VidiunObject
 {
 	private static $mapBetweenObjects = array
 	(
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

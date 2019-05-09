@@ -14,21 +14,21 @@ class serveMultiFileAction extends sfAction
 		$hash = $this->getRequestParameter( "hash" );
 
 		// validate hash
-		$currentDc = kDataCenterMgr::getCurrentDc();
+		$currentDc = vDataCenterMgr::getCurrentDc();
 		$currentDcId = $currentDc["id"];
 		$expectedHash = md5($currentDc["secret" ] . $fileSyncIds);
 		if ($hash !== $expectedHash)  
 		{
 			$error = "Invalid hash - ids [$fileSyncIds] got [$hash] expected [$expectedHash]";
-			KalturaLog::err($error); 
-			KExternalErrors::dieError(KExternalErrors::INVALID_TOKEN);
+			VidiunLog::err($error); 
+			VExternalErrors::dieError(VExternalErrors::INVALID_TOKEN);
 		}
 		
 		// load file syncs
 		$fileSyncs = FileSyncPeer::retrieveByPks(explode(',', $fileSyncIds));
 		if ($fileSyncs)
 		{
-			KalturaMonitorClient::initApiMonitor(false, 'extwidget.serveMultiFile', $fileSyncs[0]->getPartnerId());
+			VidiunMonitorClient::initApiMonitor(false, 'extwidget.serveMultiFile', $fileSyncs[0]->getPartnerId());
 		}
 		
 		// resolve file syncs
@@ -38,26 +38,26 @@ class serveMultiFileAction extends sfAction
 			if ( $fileSync->getDc() != $currentDcId )
 			{
 				$error = "FileSync id [".$fileSync->getId()."] does not belong to this DC";
-				KalturaLog::err($error);
-				KExternalErrors::dieError(KExternalErrors::BAD_QUERY);
+				VidiunLog::err($error);
+				VExternalErrors::dieError(VExternalErrors::BAD_QUERY);
 			}
 			
 			// resolve if file_sync is link
-			$fileSyncResolved = kFileSyncUtils::resolve($fileSync);
+			$fileSyncResolved = vFileSyncUtils::resolve($fileSync);
 			
 			// check if file sync path leads to a file or a directory
 			$resolvedPath = $fileSyncResolved->getFullPath();
 			if (is_dir($resolvedPath))
 			{
 				$error = "FileSync id [".$fileSync->getId()."] is a directory";
-				KalturaLog::err($error);
-				KExternalErrors::dieError(KExternalErrors::BAD_QUERY);
+				VidiunLog::err($error);
+				VExternalErrors::dieError(VExternalErrors::BAD_QUERY);
 			}
 						
 			if (!file_exists($resolvedPath))
 			{
 				$error = "Path [$resolvedPath] for fileSync id [".$fileSync->getId()."] does not exist";
-				KalturaLog::err($error);
+				VidiunLog::err($error);
 				continue;
 			}
 			
@@ -73,11 +73,11 @@ class serveMultiFileAction extends sfAction
 			echo "Content-Type: application/octet-stream\n";
 			echo "Content-Disposition: form-data; name=\"$id\"\n\n";
 
-			echo kFileSyncUtils::getLocalContentsByFileSync($resolvedFileSync);//already checked that file
+			echo vFileSyncUtils::getLocalContentsByFileSync($resolvedFileSync);//already checked that file
 			echo "\n";
 		}
 		echo "--$boundary--\n";
 		
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 }

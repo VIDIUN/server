@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage model.data
  */
-class kAccessControlDrmPolicyAction extends kRuleAction
+class vAccessControlDrmPolicyAction extends vRuleAction
 {
 	/**
 	 * @var int

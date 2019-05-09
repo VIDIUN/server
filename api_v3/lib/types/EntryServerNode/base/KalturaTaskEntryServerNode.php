@@ -5,7 +5,7 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaTaskEntryServerNode extends KalturaEntryServerNode
+abstract class VidiunTaskEntryServerNode extends VidiunEntryServerNode
 {
 
 }

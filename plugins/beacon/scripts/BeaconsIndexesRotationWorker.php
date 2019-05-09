@@ -18,12 +18,12 @@ class BeaconsIndexesRotationWorker extends ElasticIndexRotationWorker
 			$count++;
 			if ($count >= $this->maxNumberOfIndices) //remove old search aliases and old indexes we assume maxNumberOfIndices > 1
 			{
-				$aliasesToRemove[] = new ElasticIndexAlias($index, $this->indexPattern . kBeacon::ELASTIC_INDEX_OLD_POSTFIX . ($count - 1));
+				$aliasesToRemove[] = new ElasticIndexAlias($index, $this->indexPattern . vBeacon::ELASTIC_INDEX_OLD_POSTFIX . ($count - 1));
 				$aliasesToRemove[] = new ElasticIndexAlias($index, $this->searchAlias);
 			}
 			else //Add old indices allies
 			{
-				$aliasesToAdd[]  = new ElasticIndexAlias($index, $this->indexPattern . kBeacon::ELASTIC_INDEX_OLD_POSTFIX . $count);
+				$aliasesToAdd[]  = new ElasticIndexAlias($index, $this->indexPattern . vBeacon::ELASTIC_INDEX_OLD_POSTFIX . $count);
 			}
 		}
 	}

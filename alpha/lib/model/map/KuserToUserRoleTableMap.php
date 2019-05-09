@@ -2,7 +2,7 @@
 
 
 /**
- * This class defines the structure of the 'kuser_to_user_role' table.
+ * This class defines the structure of the 'vuser_to_user_role' table.
  *
  *
  *
@@ -14,12 +14,12 @@
  * @package Core
  * @subpackage model.map
  */
-class KuserToUserRoleTableMap extends TableMap {
+class VuserToUserRoleTableMap extends TableMap {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'Core.KuserToUserRoleTableMap';
+	const CLASS_NAME = 'Core.VuserToUserRoleTableMap';
 
 	/**
 	 * Initialize the table attributes, columns and validators
@@ -31,14 +31,14 @@ class KuserToUserRoleTableMap extends TableMap {
 	public function initialize()
 	{
 	  // attributes
-		$this->setName('kuser_to_user_role');
-		$this->setPhpName('KuserToUserRole');
-		$this->setClassname('KuserToUserRole');
+		$this->setName('vuser_to_user_role');
+		$this->setPhpName('VuserToUserRole');
+		$this->setClassname('VuserToUserRole');
 		$this->setPackage('Core');
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', true, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', true, null, null);
 		$this->addForeignKey('USER_ROLE_ID', 'UserRoleId', 'INTEGER', 'user_role', 'ID', true, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -50,8 +50,8 @@ class KuserToUserRoleTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
     $this->addRelation('UserRole', 'UserRole', RelationMap::MANY_TO_ONE, array('user_role_id' => 'id', ), null, null);
 	} // buildRelations()
 
-} // KuserToUserRoleTableMap
+} // VuserToUserRoleTableMap

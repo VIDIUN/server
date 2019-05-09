@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<head>
-		<title>Kaltura - Flickr login</title>
+		<title>Vidiun - Flickr login</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="stylesheet" type="text/css" media="all" href="/css/corp_layout.css" />
@@ -33,7 +33,7 @@
 						</div><!-- end side1 -->
 					</div>
 					<div class="bottom">
-						<p>Powered by <a href="http://www.kaltura.com" style="padding-right:20px; background: url(/favicon.ico) right 0 no-repeat;">Kaltura</a></p>
+						<p>Powered by <a href="http://www.vidiun.com" style="padding-right:20px; background: url(/favicon.ico) right 0 no-repeat;">Vidiun</a></p>
 					</div>
 				</div><!-- end #row1 -->
 			</div><!-- end #contWrap -->

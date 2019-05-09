@@ -18,7 +18,7 @@ CREATE TABLE `short_link`
 	`updated_at` DATETIME,
 	`expires_at` DATETIME,
 	`partner_id` INTEGER,
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`name` VARCHAR(63),
 	`system_name` VARCHAR(63),
 	`full_url` VARCHAR(255),
@@ -26,7 +26,7 @@ CREATE TABLE `short_link`
 	PRIMARY KEY (`id`),
 	KEY `int_id`(`int_id`),
 	KEY `partner_id`(`partner_id`),
-	KEY `kuser_partner_name`(`partner_id`, `kuser_id`, `system_name`)
+	KEY `vuser_partner_name`(`partner_id`, `vuser_id`, `system_name`)
 )Type=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier

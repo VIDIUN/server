@@ -3,7 +3,7 @@
 /**
  * Auto-generated enum class
 */
-class KalturaPlaylistCompareAttribute extends KalturaBaseEntryCompareAttribute
+class VidiunPlaylistCompareAttribute extends VidiunBaseEntryCompareAttribute
 {
 }
 

@@ -4,7 +4,7 @@
  * @package plugins.systemPartner
  * @subpackage model.enum
  */ 
-class SystemPartnerPermissionName implements IKalturaPluginEnum, PermissionName
+class SystemPartnerPermissionName implements IVidiunPluginEnum, PermissionName
 {
 	const SYSTEM_ADMIN_PUBLISHER_CONFIG_TECH_DATA = 'SYSTEM_ADMIN_PUBLISHER_CONFIG_TECH_DATA';
 	const SYSTEM_ADMIN_PUBLISHER_CONFIG_ACCOUNT_INFO = 'SYSTEM_ADMIN_PUBLISHER_CONFIG_ACCOUNT_INFO';

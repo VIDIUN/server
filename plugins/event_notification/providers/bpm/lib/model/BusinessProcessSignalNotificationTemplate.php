@@ -17,10 +17,10 @@ class BusinessProcessSignalNotificationTemplate extends BusinessProcessNotificat
 	/* (non-PHPdoc)
 	 * @see BatchEventNotificationTemplate::dispatch()
 	 */
-	public function dispatch(kScope $scope)
+	public function dispatch(vScope $scope)
 	{
 		$jobData = $this->getJobData($scope);
-		/* @var $jobData kBusinessProcessNotificationDispatchJobData */
+		/* @var $jobData vBusinessProcessNotificationDispatchJobData */
 		if(!$jobData->getObject())
 		{
 			return;
@@ -28,14 +28,14 @@ class BusinessProcessSignalNotificationTemplate extends BusinessProcessNotificat
 
 		// check if event template is dispatching from a batch job event, if so, try to get the right case to signal
 		$currentCaseId = null;
-		if ($scope instanceof kEventScope && $scope->getEvent() instanceof IKalturaBatchJobRelatedEvent)
+		if ($scope instanceof vEventScope && $scope->getEvent() instanceof IVidiunBatchJobRelatedEvent)
 		{
-			/** @var IKalturaBatchJobRelatedEvent $currentEvent */
+			/** @var IVidiunBatchJobRelatedEvent $currentEvent */
 			$currentEvent = $scope->getEvent();
 			$eventBatchJob = $currentEvent->getBatchJob();
 			$eventJobData = $eventBatchJob->getData();
-			// kIntegrationJobData is not one of our dependant plugins
-			if (class_exists('kIntegrationJobData') && $eventJobData instanceof kIntegrationJobData)
+			// vIntegrationJobData is not one of our dependant plugins
+			if (class_exists('vIntegrationJobData') && $eventJobData instanceof vIntegrationJobData)
 			{
 				$eventJobTriggerData = $eventJobData->getTriggerData();
 				if ($eventJobTriggerData instanceof IBusinessProcessCaseIdRelated)

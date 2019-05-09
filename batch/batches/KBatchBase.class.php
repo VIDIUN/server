@@ -4,14 +4,14 @@
  *
  * @package Scheduler
  */
-abstract class KBatchBase implements IKalturaLogger
+abstract class VBatchBase implements IVidiunLogger
 {
 	const PRIVILEGE_BATCH_JOB_TYPE = "jobtype";
 	const DEFAULT_SLEEP_INTERVAL = 5;
 	const DEFUALT_API_RETRIES_ATTEMPS = 3;
 	
 	/**
-	 * @var KSchedularTaskConfig
+	 * @var VSchedularTaskConfig
 	 */
 	public static $taskConfig;
 
@@ -26,14 +26,14 @@ abstract class KBatchBase implements IKalturaLogger
 	private $start;
 
 	/**
-	 * @var KalturaClient
+	 * @var VidiunClient
 	 */
-	public static $kClient = null;
+	public static $vClient = null;
 
 	/**
-	 * @var KalturaConfiguration
+	 * @var VidiunConfiguration
 	 */
-	public static $kClientConfig = null;
+	public static $vClientConfig = null;
 	
 	/**
 	 * @var string
@@ -70,11 +70,11 @@ abstract class KBatchBase implements IKalturaLogger
 			case E_NOTICE:
 			case E_STRICT:
 			case E_USER_NOTICE:
-				KalturaLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), KalturaLog::NOTICE);
+				VidiunLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), VidiunLog::NOTICE);
 				break;
 			case E_USER_WARNING:
 			case E_WARNING:
-				KalturaLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), KalturaLog::WARN);
+				VidiunLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), VidiunLog::WARN);
 				break;
 		}
 	}
@@ -82,8 +82,8 @@ abstract class KBatchBase implements IKalturaLogger
 	public function done()
 	{
 		$done = "Done after [" . (microtime ( true ) - $this->start ) . "] seconds";
-		KalturaLog::info($done);
-		KalturaLog::stderr($done, KalturaLog::INFO);
+		VidiunLog::info($done);
+		VidiunLog::stderr($done, VidiunLog::INFO);
 	}
 
 	/**
@@ -104,22 +104,22 @@ abstract class KBatchBase implements IKalturaLogger
 	}
 
 	/**
-	 * @return KalturaClient
+	 * @return VidiunClient
 	 */
 	protected function getClient()
 	{
-		return self::$kClient;
+		return self::$vClient;
 	}
 
 
 	static public function impersonate($partnerId)
 	{
-		self::$kClient->setPartnerId($partnerId);
+		self::$vClient->setPartnerId($partnerId);
 	}
 
 	static public function unimpersonate()
 	{
-		self::$kClient->setPartnerId(self::$taskConfig->getPartnerId());
+		self::$vClient->setPartnerId(self::$taskConfig->getPartnerId());
 	}
 
 	protected function getSchedulerId()
@@ -157,7 +157,7 @@ abstract class KBatchBase implements IKalturaLogger
 	 */
 	protected function onBatchUp()
 	{
-		$this->onEvent(KBatchEvent::EVENT_BATCH_UP);
+		$this->onEvent(VBatchEvent::EVENT_BATCH_UP);
 	}
 
 	/**
@@ -165,7 +165,7 @@ abstract class KBatchBase implements IKalturaLogger
 	 */
 	protected function onBatchDown()
 	{
-		$this->onEvent(KBatchEvent::EVENT_BATCH_DOWN);
+		$this->onEvent(VBatchEvent::EVENT_BATCH_DOWN);
 	}
 
 	/**
@@ -175,7 +175,7 @@ abstract class KBatchBase implements IKalturaLogger
 	 */
 	protected function onFileEvent($file, $size, $event_id)
 	{
-		$event = new KBatchEvent();
+		$event = new VBatchEvent();
 		$event->value_1 = $size;
 		$event->value_2 = $file;
 
@@ -184,12 +184,12 @@ abstract class KBatchBase implements IKalturaLogger
 
 	/**
 	 * @param int $event_id
-	 * @param KBatchEvent $event
+	 * @param VBatchEvent $event
 	 */
-	protected function onEvent($event_id, KBatchEvent $event = null)
+	protected function onEvent($event_id, VBatchEvent $event = null)
 	{
 		if(is_null($event))
-			$event = new KBatchEvent();
+			$event = new VBatchEvent();
 
 		$event->batch_client_version = "1.0";
 		$event->batch_event_time = time();
@@ -203,17 +203,17 @@ abstract class KBatchBase implements IKalturaLogger
 		$event->location_id = $this->getSchedulerId();
 		$event->host_name = $this->getSchedulerName();
 
-		KDwhClient::send($event);
+		VDwhClient::send($event);
 	}
 
 	/**
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VSchedularTaskConfig $taskConfig
 	 */
 	public function __construct($taskConfig = null)
 	{
 		/*
 		 *  argv[0] - the script name
-		 *  argv[1] - serialized KSchedulerConfig config
+		 *  argv[1] - serialized VSchedulerConfig config
 		 */
 		global $argv, $g_context;
 
@@ -236,48 +236,48 @@ abstract class KBatchBase implements IKalturaLogger
 		date_default_timezone_set(self::$taskConfig->getTimezone());
 
 		// clear seperator between executions
-		KalturaLog::debug('___________________________________________________________________________________');
-		KalturaLog::stderr('___________________________________________________________________________________', KalturaLog::DEBUG);
-		KalturaLog::info(file_get_contents(dirname( __FILE__ ) . "/../VERSION.txt"));
+		VidiunLog::debug('___________________________________________________________________________________');
+		VidiunLog::stderr('___________________________________________________________________________________', VidiunLog::DEBUG);
+		VidiunLog::info(file_get_contents(dirname( __FILE__ ) . "/../VERSION.txt"));
 
-		if(! (self::$taskConfig instanceof KSchedularTaskConfig))
+		if(! (self::$taskConfig instanceof VSchedularTaskConfig))
 		{
-			KalturaLog::err('config is not a KSchedularTaskConfig');
+			VidiunLog::err('config is not a VSchedularTaskConfig');
 			die;
 		}
 
-		KalturaLog::debug("set_time_limit({".self::$taskConfig->maximumExecutionTime."})");
+		VidiunLog::debug("set_time_limit({".self::$taskConfig->maximumExecutionTime."})");
 		set_time_limit(self::$taskConfig->maximumExecutionTime);
 
 
-		KalturaLog::info('Batch index [' . $this->getIndex() . '] session key [' . $this->sessionKey . ']');
+		VidiunLog::info('Batch index [' . $this->getIndex() . '] session key [' . $this->sessionKey . ']');
 
-		self::$kClientConfig = new KalturaConfiguration();
-		self::$kClientConfig->setLogger($this);
-		self::$kClientConfig->serviceUrl = self::$taskConfig->getServiceUrl();
-		self::$kClientConfig->curlTimeout = self::$taskConfig->getCurlTimeout();
+		self::$vClientConfig = new VidiunConfiguration();
+		self::$vClientConfig->setLogger($this);
+		self::$vClientConfig->serviceUrl = self::$taskConfig->getServiceUrl();
+		self::$vClientConfig->curlTimeout = self::$taskConfig->getCurlTimeout();
 
 		if(isset(self::$taskConfig->clientConfig))
 		{
 			foreach(self::$taskConfig->clientConfig as $attr => $value)
-				self::$kClientConfig->$attr = $value;
+				self::$vClientConfig->$attr = $value;
 		}
 
-		self::$kClient = new KalturaClient(self::$kClientConfig);
-		self::$kClient->setPartnerId(self::$taskConfig->getPartnerId());
+		self::$vClient = new VidiunClient(self::$vClientConfig);
+		self::$vClient->setPartnerId(self::$taskConfig->getPartnerId());
 
 		self::$clientTag = 'batch: ' . self::$taskConfig->getSchedulerName() . ' ' . get_class($this) . " index: {$this->getIndex()} sessionId: " . UniqueId::get();
-		self::$kClient->setClientTag(self::$clientTag);
+		self::$vClient->setClientTag(self::$clientTag);
 		
-		//$ks = self::$kClient->session->start($secret, "user-2", KalturaSessionType::ADMIN);
-		$ks = $this->createKS();
-		self::$kClient->setKs($ks);
+		//$vs = self::$vClient->session->start($secret, "user-2", VidiunSessionType::ADMIN);
+		$vs = $this->createVS();
+		self::$vClient->setVs($vs);
 
-		KDwhClient::setEnabled(self::$taskConfig->getDwhEnabled());
-		KDwhClient::setFileName(self::$taskConfig->getDwhPath());
+		VDwhClient::setEnabled(self::$taskConfig->getDwhEnabled());
+		VDwhClient::setFileName(self::$taskConfig->getDwhPath());
 		$this->onBatchUp();
 
-		KScheduleHelperManager::saveRunningBatch($this->getName(), $this->getIndex());
+		VScheduleHelperManager::saveRunningBatch($this->getName(), $this->getIndex());
 	}
 
 	protected function getParams($name)
@@ -305,10 +305,10 @@ abstract class KBatchBase implements IKalturaLogger
 	 * @param string $extraPrivileges
 	 * @return string
 	 */
-	protected function createKS($extraPrivileges = null)
+	protected function createVS($extraPrivileges = null)
 	{
 		$partnerId = self::$taskConfig->getPartnerId();
-		$sessionType = KalturaSessionType::ADMIN;
+		$sessionType = VidiunSessionType::ADMIN;
 		$puserId = 'batchUser';
 		$privileges = implode(',', $this->getPrivileges());
 		if($extraPrivileges)
@@ -335,15 +335,15 @@ abstract class KBatchBase implements IKalturaLogger
 	}
 
 	/**
-	 * Replace the current client ks with a new ks that also have $privileges append to it
+	 * Replace the current client vs with a new vs that also have $privileges append to it
 	 * @param string $privileges
 	 */
-	protected function appendPrivilegesToKs($privileges)
+	protected function appendPrivilegesToVs($privileges)
 	{
 		if(!empty($privileges))
 		{
-			$newKS = $this->createKS($privileges);
-			self::$kClient->setKs($newKS);
+			$newVS = $this->createVS($privileges);
+			self::$vClient->setVs($newVS);
 		}
 	}
 
@@ -417,10 +417,10 @@ abstract class KBatchBase implements IKalturaLogger
 	protected static function foldersize($path)
 	{
 	  if(!file_exists($path)) return 0;
-	  if(is_file($path)) return kFile::fileSize($path);
+	  if(is_file($path)) return vFile::fileSize($path);
 	  $ret = 0;
 	  foreach(glob($path."/*") as $fn)
-	    $ret += KBatchBase::foldersize($fn);
+	    $ret += VBatchBase::foldersize($fn);
 	  return $ret;
 	}
 
@@ -432,7 +432,7 @@ abstract class KBatchBase implements IKalturaLogger
 			if(self::$taskConfig->getDirectoryChmod())
 				$chmod = octdec(self::$taskConfig->getDirectoryChmod());
 				
-			KalturaLog::debug("chmod($filePath, $chmod)");
+			VidiunLog::debug("chmod($filePath, $chmod)");
 			@chmod($filePath, $chmod);
 			$dir = dir($filePath);
 			while (false !== ($file = $dir->read()))
@@ -448,7 +448,7 @@ abstract class KBatchBase implements IKalturaLogger
 			if(self::$taskConfig->getChmod())
 				$chmod = octdec(self::$taskConfig->getChmod());
 		
-			KalturaLog::debug("chmod($filePath, $chmod)");
+			VidiunLog::debug("chmod($filePath, $chmod)");
 			@chmod($filePath, $chmod);
 		}
 	}
@@ -464,7 +464,7 @@ abstract class KBatchBase implements IKalturaLogger
 		
 		if($this->isUnitTest)
 		{
-			KalturaLog::debug("Is in unit test");
+			VidiunLog::debug("Is in unit test");
 			return true;
 		}
 
@@ -473,17 +473,17 @@ abstract class KBatchBase implements IKalturaLogger
 			// - the response from the client (to check the client size beaviour)
 		if(is_null($directorySync))
 			$directorySync = is_dir($file);
-		KalturaLog::info("Check File Exists[$file] size[$size] isDir[$directorySync]");
+		VidiunLog::info("Check File Exists[$file] size[$size] isDir[$directorySync]");
 		if(is_null($size))
 		{
 			clearstatcache();
 			if($directorySync)
-				$size=KBatchBase::foldersize($file);
+				$size=VBatchBase::foldersize($file);
 			else
-				$size = kFile::fileSize($file);
+				$size = vFile::fileSize($file);
 			if($size === false)
 			{
-				KalturaLog::debug("Size not found on file [$file]");
+				VidiunLog::debug("Size not found on file [$file]");
 				return false;
 			}
 		}
@@ -493,27 +493,27 @@ abstract class KBatchBase implements IKalturaLogger
 
 		while($retries > 0)
 		{
-			$check = self::$kClient->batch->checkFileExists($file, $size);
+			$check = self::$vClient->batch->checkFileExists($file, $size);
 				// In case of directorySync - do not check client sizeOk - to be revised
 			if($check->exists && ($check->sizeOk || $directorySync))
 			{
-				$this->onFileEvent($file, $size, KBatchEvent::EVENT_FILE_EXISTS);
+				$this->onFileEvent($file, $size, VBatchEvent::EVENT_FILE_EXISTS);
 				return true;
 			}
-			$this->onFileEvent($file, $size, KBatchEvent::EVENT_FILE_DOESNT_EXIST);
+			$this->onFileEvent($file, $size, VBatchEvent::EVENT_FILE_DOESNT_EXIST);
 
 			sleep($interval);
 			$retries --;
 		}
 
-		KalturaLog::log("Passed max retries");
+		VidiunLog::log("Passed max retries");
 		return false;
 	}
 
 	public function __destruct()
 	{
 		$this->onBatchDown();
-		KScheduleHelperManager::unlinkRunningBatch($this->getName(), $this->getIndex());
+		VScheduleHelperManager::unlinkRunningBatch($this->getName(), $this->getIndex());
 	}
 
 	/**
@@ -523,7 +523,7 @@ abstract class KBatchBase implements IKalturaLogger
 	{
 		$type = self::$taskConfig->type;
 		$file = "$type.cmd";
-		KScheduleHelperManager::saveCommand($file, $commands);
+		VScheduleHelperManager::saveCommand($file, $commands);
 	}
 
 	/**
@@ -537,13 +537,13 @@ abstract class KBatchBase implements IKalturaLogger
 		{
 			if(! file_exists($path))
 			{
-				KalturaLog::info("Creating temp directory [$path]");
+				VidiunLog::info("Creating temp directory [$path]");
 				mkdir($path, $rights, true);
 			}
 			else
 			{
 				// already exists but not a directory
-				KalturaLog::err("Cannot create temp directory [$path] due to an error. Please fix and restart");
+				VidiunLog::err("Cannot create temp directory [$path] due to an error. Please fix and restart");
 				return null;
 			}
 		}
@@ -553,7 +553,7 @@ abstract class KBatchBase implements IKalturaLogger
 
 	protected function getMonitorPath()
 	{
-		return 'killer/KBatchKillerExe.php';
+		return 'killer/VBatchKillerExe.php';
 	}
 
 	protected function startMonitor(array $files)
@@ -561,7 +561,7 @@ abstract class KBatchBase implements IKalturaLogger
 		if($this->monitorHandle && is_resource($this->monitorHandle))
 			return;
 
-		$killConfig = new KBatchKillerConfig();
+		$killConfig = new VBatchKillerConfig();
 
 		$killConfig->pid = getmypid();
 		$killConfig->maxIdleTime = self::$taskConfig->getMaxIdleTime();
@@ -570,7 +570,7 @@ abstract class KBatchBase implements IKalturaLogger
 			Do not run killer process w/out set config->maxIdle
 			*/
 		if($killConfig->maxIdleTime<=0 || is_null($killConfig->maxIdleTime) ) {
-			KalturaLog::info(__METHOD__.': The MaxIdleTime is not set properly. The Killer job will not run');
+			VidiunLog::info(__METHOD__.': The MaxIdleTime is not set properly. The Killer job will not run');
 			return;
 		}
 		$killConfig->files = $files;
@@ -594,8 +594,8 @@ abstract class KBatchBase implements IKalturaLogger
 		$descriptorspec = array(); // stdin is a pipe that the child will read from
 		$other_options = array('suppress_errors' => FALSE, 'bypass_shell' => FALSE);
 
-		KalturaLog::log("Now executing [$cmdLine]");
-		KalturaLog::debug('Starting monitor');
+		VidiunLog::log("Now executing [$cmdLine]");
+		VidiunLog::debug('Starting monitor');
 		$this->monitorHandle = proc_open($cmdLine, $descriptorspec, $pipes, null, null, $other_options);
 	}
 
@@ -604,7 +604,7 @@ abstract class KBatchBase implements IKalturaLogger
 		if(!$this->monitorHandle || !is_resource($this->monitorHandle))
 			return;
 
-		KalturaLog::debug('Stoping monitor');
+		VidiunLog::debug('Stoping monitor');
 
 		$status = proc_get_status($this->monitorHandle);
 		if($status['running'] == true)
@@ -645,7 +645,7 @@ abstract class KBatchBase implements IKalturaLogger
 			if (file_exists($fileName))
 				return true;
 
-			KalturaLog::log("File $fileName does not exist, try $retry, waiting $interval seconds");
+			VidiunLog::log("File $fileName does not exist, try $retry, waiting $interval seconds");
 			sleep($interval);
 		}
 		return false;
@@ -653,7 +653,7 @@ abstract class KBatchBase implements IKalturaLogger
 
 	function log($message)
 	{
-		KalturaLog::log($message);
+		VidiunLog::log($message);
 	}
 
 	/**
@@ -664,16 +664,16 @@ abstract class KBatchBase implements IKalturaLogger
 	public static function createTempClearFile($path, $key)
 	{
 		$iv = self::getIV();
-		$tempPath = kEncryptFileUtils::getClearTempPath($path);
-		KalturaLog::info("Creating tempFile with Key is: [$key] iv: [$iv] for path [$path] at [$tempPath]");
-		if (kEncryptFileUtils::decryptFile($path, $key, $iv, $tempPath))
+		$tempPath = vEncryptFileUtils::getClearTempPath($path);
+		VidiunLog::info("Creating tempFile with Key is: [$key] iv: [$iv] for path [$path] at [$tempPath]");
+		if (vEncryptFileUtils::decryptFile($path, $key, $iv, $tempPath))
 			return $tempPath;
 		return null;
 	}
 	
 	public static function getIV()
 	{
-		return kConf::get("encryption_iv");
+		return vConf::get("encryption_iv");
 	}
 
 	public static function tryExecuteApiCall($callback, $params, $numOfRetries = self::DEFUALT_API_RETRIES_ATTEMPS, $apiIntervalInSec = self::DEFAULT_SLEEP_INTERVAL)
@@ -683,13 +683,13 @@ abstract class KBatchBase implements IKalturaLogger
 			try 
 			{
 				$res = call_user_func_array($callback, $params);
-				if (KBatchBase::$kClient->isError($res))
+				if (VBatchBase::$vClient->isError($res))
 					throw new APIException($res);
 				return $res;
 			}
 			catch  (Exception $ex) {
-				KalturaLog::warning("API Call for " . print_r($callback, true) . " failed number of retires $numOfRetries");
-				KalturaLog::err($ex->getMessage());
+				VidiunLog::warning("API Call for " . print_r($callback, true) . " failed number of retires $numOfRetries");
+				VidiunLog::err($ex->getMessage());
 				sleep($apiIntervalInSec);
 			}
 		}

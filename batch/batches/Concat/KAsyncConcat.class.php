@@ -5,7 +5,7 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KAsyncConcat extends KJobHandlerWorker
+class VAsyncConcat extends VJobHandlerWorker
 {
 	const LiveChunkDuration = 900000;	// msec (15*60*1000);
 	const MaxChunkDelta 	= 150;		// msec
@@ -22,20 +22,20 @@ class KAsyncConcat extends KJobHandlerWorker
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see KBatchBase::getJobType()
+	 * @see VBatchBase::getJobType()
 	 */
 	protected function getJobType()
 	{
-		return KalturaBatchJobType::CONCAT;
+		return VidiunBatchJobType::CONCAT;
 	}
 	
 	public static function getType()
 	{
-		return KalturaBatchJobType::CONCAT;
+		return VidiunBatchJobType::CONCAT;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::run()
+	 * @see VJobHandlerWorker::run()
 	 */
 	public function run($jobs = null)
 	{
@@ -46,13 +46,13 @@ class KAsyncConcat extends KJobHandlerWorker
 		$res = self::createDir( $this->localTempPath );
 		if ( !$res )
 		{
-			KalturaLog::err( "Cannot continue conversion without temp local directory");
+			VidiunLog::err( "Cannot continue conversion without temp local directory");
 			return null;
 		}
 		$res = self::createDir( $this->sharedTempPath );
 		if ( !$res )
 		{
-			KalturaLog::err( "Cannot continue conversion without temp shared directory");
+			VidiunLog::err( "Cannot continue conversion without temp shared directory");
 			return null;
 		}
 		
@@ -61,21 +61,21 @@ class KAsyncConcat extends KJobHandlerWorker
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->concat($job, $job->data);
 	}
 
-	protected function concat(KalturaBatchJob $job, KalturaConcatJobData $data)
+	protected function concat(VidiunBatchJob $job, VidiunConcatJobData $data)
 	{
-		$this->updateJob($job, "Files concatenation started", KalturaBatchJobStatus::PROCESSING);
+		$this->updateJob($job, "Files concatenation started", VidiunBatchJobStatus::PROCESSING);
 		$jobData = $job->data;
 		
-		$ffmpegBin = KBatchBase::$taskConfig->params->ffmpegCmd;
-		$ffprobeBin = isset(KBatchBase::$taskConfig->params->ffprobeCmd)? KBatchBase::$taskConfig->params->ffprobeCmd: "ffprobe";
-		$mediaInfoBin = isset(KBatchBase::$taskConfig->params->mediaInfoCmd)? KBatchBase::$taskConfig->params->mediaInfoCmd: "mediainfo";
+		$ffmpegBin = VBatchBase::$taskConfig->params->ffmpegCmd;
+		$ffprobeBin = isset(VBatchBase::$taskConfig->params->ffprobeCmd)? VBatchBase::$taskConfig->params->ffprobeCmd: "ffprobe";
+		$mediaInfoBin = isset(VBatchBase::$taskConfig->params->mediaInfoCmd)? VBatchBase::$taskConfig->params->mediaInfoCmd: "mediainfo";
 		$fileName = "{$job->entryId}_{$data->flavorAssetId}.mp4";
 		$localTempFilePath = $this->localTempPath . DIRECTORY_SEPARATOR . $fileName;
 		$sharedTempFilePath = $this->sharedTempPath . DIRECTORY_SEPARATOR . $fileName;
@@ -83,50 +83,50 @@ class KAsyncConcat extends KJobHandlerWorker
 		$srcFiles = array();
 		foreach($data->srcFiles as $srcFile)
 		{
-			/* @var $srcFile KalturaString */
+			/* @var $srcFile VidiunString */
 			$srcFiles[] = $srcFile->value;
 		}
 
 		$result = $this->concatFiles($ffmpegBin, $ffprobeBin, $srcFiles, $localTempFilePath, $data->offset, $data->duration,$data->shouldSort);
 		if(! $result)
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, null, "Failed to concat files", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, null, "Failed to concat files", VidiunBatchJobStatus::FAILED);
 
 		try
 		{
 			// get the concatenated duration
-			$mediaInfoParser = new KMediaInfoMediaParser($localTempFilePath, $mediaInfoBin);
+			$mediaInfoParser = new VMediaInfoMediaParser($localTempFilePath, $mediaInfoBin);
 			$data->concatenatedDuration = $mediaInfoParser->getMediaInfo()->videoDuration;
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::warning('failed to get concatenatedDuration ' . print_r($ex));
+			VidiunLog::warning('failed to get concatenatedDuration ' . print_r($ex));
 		}
 
 		return $this->moveFile($job, $data, $localTempFilePath, $sharedTempFilePath);
 	}
 
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaConcatJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunConcatJobData $data
 	 * @param string $localTempFilePath
 	 * @param string $sharedTempFilePath
-	 * @return KalturaBatchJob
+	 * @return VidiunBatchJob
 	 */
-	protected function moveFile(KalturaBatchJob $job, KalturaConcatJobData $data, $localTempFilePath, $sharedTempFilePath)
+	protected function moveFile(VidiunBatchJob $job, VidiunConcatJobData $data, $localTempFilePath, $sharedTempFilePath)
 	{
-		$this->updateJob($job, "Moving file from [$localTempFilePath] to [$sharedTempFilePath]", KalturaBatchJobStatus::MOVEFILE);
+		$this->updateJob($job, "Moving file from [$localTempFilePath] to [$sharedTempFilePath]", VidiunBatchJobStatus::MOVEFILE);
 		
-		kFile::moveFile($localTempFilePath, $sharedTempFilePath, true);
+		vFile::moveFile($localTempFilePath, $sharedTempFilePath, true);
 		clearstatcache();
-		$fileSize = kFile::fileSize($sharedTempFilePath);
+		$fileSize = vFile::fileSize($sharedTempFilePath);
 
 		$this->setFilePermissions($sharedTempFilePath);
 
 		if(!$this->checkFileExists($sharedTempFilePath, $fileSize))
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', KalturaBatchJobStatus::RETRY);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', VidiunBatchJobStatus::RETRY);
 			
 		$data->destFilePath = $sharedTempFilePath;
-		return $this->closeJob($job, null, null, 'Succesfully moved file', KalturaBatchJobStatus::FINISHED, $data);
+		return $this->closeJob($job, null, null, 'Succesfully moved file', VidiunBatchJobStatus::FINISHED, $data);
 	}
 
 	/**
@@ -166,13 +166,13 @@ class KAsyncConcat extends KJobHandlerWorker
 				/*
 				 * Get chunk file media-info
 				 */
-			$ffParser = new KFFMpegMediaParser($fileName, $ffmpegBin, $ffprobeBin);
+			$ffParser = new VFFMpegMediaParser($fileName, $ffmpegBin, $ffprobeBin);
 			$mi = null;
 			try {
 				$mi = $ffParser->getMediaInfo();
 			}
 			catch(Exception $ex) {
-				KalturaLog::log(print_r($ex,1));
+				VidiunLog::log(print_r($ex,1));
 			}
 				/*
 				 * Calculate chunk-br for the cliping flow
@@ -224,14 +224,14 @@ class KAsyncConcat extends KJobHandlerWorker
 					 *
 					 * If the duration is too small - stop/start flow, don't fix 
 					 *
-					if(KAsyncConcat::LiveChunkDuration-$duration>30000){
+					if(VAsyncConcat::LiveChunkDuration-$duration>30000){
 						$fixLargeDeltaFlag = false;
 					}
-					else if(abs($duration-KAsyncConcat::LiveChunkDuration)>KAsyncConcat::MaxChunkDelta){
+					else if(abs($duration-VAsyncConcat::LiveChunkDuration)>VAsyncConcat::MaxChunkDelta){
 						$fixLargeDeltaFlag = true;
 					}
 				}
-				KalturaLog::log("Chunk duration($duration), Wowza chunk setting(".KAsyncConcat::LiveChunkDuration."),max-allowed-delta(".KAsyncConcat::MaxChunkDelta."),fixLargeDeltaFlag($fixLargeDeltaFlag) ");
+				VidiunLog::log("Chunk duration($duration), Wowza chunk setting(".VAsyncConcat::LiveChunkDuration."),max-allowed-delta(".VAsyncConcat::MaxChunkDelta."),fixLargeDeltaFlag($fixLargeDeltaFlag) ");
 			}
 				*/
 		}
@@ -277,7 +277,7 @@ class KAsyncConcat extends KJobHandlerWorker
 			 * otherwise - normal single input
 			 *
 		if($fixLargeDeltaFlag && $audioParamStr) {
-			KalturaLog::log("Will attempt to fix the audio-video drift ");
+			VidiunLog::log("Will attempt to fix the audio-video drift ");
 			$cmdStr = "$ffmpegBin -probesize 15M -analyzeduration 25M -i $concateStr -probesize 15M -analyzeduration 25M -i $concateStr";
 			$cmdStr.= " -map 0:v -map 1:a $videoParamStr $audioParamStr";
 		}
@@ -287,7 +287,7 @@ class KAsyncConcat extends KJobHandlerWorker
 		}
 		$cmdStr .= " $clipStr -f mp4 -y $outFilename 2>&1";
 	
-		KalturaLog::debug("Executing [$cmdStr]");
+		VidiunLog::debug("Executing [$cmdStr]");
 		$output = system($cmdStr, $rv);
 		return ($rv == 0) ? true : false;
 	}

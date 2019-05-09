@@ -7,7 +7,7 @@
  * Add event consumer to consume new email jobs and dispath event notification instead
  * Untill all mails are sent throgh events
  */
-class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaPending, IKalturaObjectLoader, IKalturaEnumerator
+class EmailNotificationPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunPending, IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'emailNotification';
 	
@@ -17,7 +17,7 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 	const EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -25,7 +25,7 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -37,7 +37,7 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -54,7 +54,7 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -62,22 +62,22 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 			return EventNotificationTemplatePeer::retrieveTypeByPK(self::getEmailNotificationTemplateTypeCoreValue(EmailNotificationTemplateType::EMAIL), $constructorArgs['objectId']);
 		
 			
-		if ($baseClass == 'KEmailNotificationRecipientEngine')
+		if ($baseClass == 'VEmailNotificationRecipientEngine')
 		{
 			list($recipientJobData) = $constructorArgs;
 			switch ($enumValue)	
 			{
-				case KalturaEmailNotificationRecipientProviderType::CATEGORY:
-					return new KEmailNotificationCategoryRecipientEngine($recipientJobData);
+				case VidiunEmailNotificationRecipientProviderType::CATEGORY:
+					return new VEmailNotificationCategoryRecipientEngine($recipientJobData);
 					break;
-				case KalturaEmailNotificationRecipientProviderType::STATIC_LIST:
-					return new KEmailNotificationStaticRecipientEngine($recipientJobData);
+				case VidiunEmailNotificationRecipientProviderType::STATIC_LIST:
+					return new VEmailNotificationStaticRecipientEngine($recipientJobData);
 					break;
-				case KalturaEmailNotificationRecipientProviderType::USER:
-					return new KEmailNotificationUserRecipientEngine($recipientJobData);
+				case VidiunEmailNotificationRecipientProviderType::USER:
+					return new VEmailNotificationUserRecipientEngine($recipientJobData);
 					break;
-				case KalturaEmailNotificationRecipientProviderType::GROUP:
-					return new KEMailNotificationGroupRecipientEngine($recipientJobData);
+				case VidiunEmailNotificationRecipientProviderType::GROUP:
+					return new VEMailNotificationGroupRecipientEngine($recipientJobData);
 					break;
 			}
 		}
@@ -98,42 +98,42 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KalturaEventNotificationDispatchJobData' && $enumValue == self::getEmailNotificationTemplateTypeCoreValue(EmailNotificationTemplateType::EMAIL))
-			return 'KalturaEmailNotificationDispatchJobData';
+		if($baseClass == 'VidiunEventNotificationDispatchJobData' && $enumValue == self::getEmailNotificationTemplateTypeCoreValue(EmailNotificationTemplateType::EMAIL))
+			return 'VidiunEmailNotificationDispatchJobData';
 	
 		if($baseClass == 'EventNotificationTemplate' && $enumValue == self::getEmailNotificationTemplateTypeCoreValue(EmailNotificationTemplateType::EMAIL))
 			return 'EmailNotificationTemplate';
 	
-		if($baseClass == 'KalturaEventNotificationTemplate' && $enumValue == self::getEmailNotificationTemplateTypeCoreValue(EmailNotificationTemplateType::EMAIL))
-			return 'KalturaEmailNotificationTemplate';
+		if($baseClass == 'VidiunEventNotificationTemplate' && $enumValue == self::getEmailNotificationTemplateTypeCoreValue(EmailNotificationTemplateType::EMAIL))
+			return 'VidiunEmailNotificationTemplate';
 	
-		if($baseClass == 'Form_EventNotificationTemplateConfiguration' && $enumValue == Kaltura_Client_EventNotification_Enum_EventNotificationTemplateType::EMAIL)
+		if($baseClass == 'Form_EventNotificationTemplateConfiguration' && $enumValue == Vidiun_Client_EventNotification_Enum_EventNotificationTemplateType::EMAIL)
 			return 'Form_EmailNotificationTemplateConfiguration';
 	
-		if($baseClass == 'Kaltura_Client_EventNotification_Type_EventNotificationTemplate' && $enumValue == Kaltura_Client_EventNotification_Enum_EventNotificationTemplateType::EMAIL)
-			return 'Kaltura_Client_EmailNotification_Type_EmailNotificationTemplate';
+		if($baseClass == 'Vidiun_Client_EventNotification_Type_EventNotificationTemplate' && $enumValue == Vidiun_Client_EventNotification_Enum_EventNotificationTemplateType::EMAIL)
+			return 'Vidiun_Client_EmailNotification_Type_EmailNotificationTemplate';
 	
-		if($baseClass == 'KDispatchEventNotificationEngine' && $enumValue == KalturaEventNotificationTemplateType::EMAIL)
-			return 'KDispatchEmailNotificationEngine';
+		if($baseClass == 'VDispatchEventNotificationEngine' && $enumValue == VidiunEventNotificationTemplateType::EMAIL)
+			return 'VDispatchEmailNotificationEngine';
 			
 		return null;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn() 
 	{
-		$minVersion = new KalturaVersion(
+		$minVersion = new VidiunVersion(
 			self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR,
 			self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR,
 			self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD
 		);
-		$dependency = new KalturaDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $minVersion);
+		$dependency = new VidiunDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $minVersion);
 		
 		return array($dependency);
 	}
@@ -143,8 +143,8 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 	 */
 	public static function getEmailNotificationFileSyncObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('FileSyncObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('FileSyncObjectType', $value);
 	}
 	
 	/**
@@ -152,8 +152,8 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 	 */
 	public static function getEmailNotificationTemplateTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('EventNotificationTemplateType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('EventNotificationTemplateType', $value);
 	}
 	
 	/**
@@ -161,6 +161,6 @@ class EmailNotificationPlugin extends KalturaPlugin implements IKalturaPermissio
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

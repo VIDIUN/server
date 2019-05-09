@@ -2,11 +2,11 @@
 /**
  * A key (boolean) value pair representation to return an array of key-(boolean)value pairs (associative array)
  * 
- * @see KalturaKeyBooleanValueArray
+ * @see VidiunKeyBooleanValueArray
  * @package api
  * @subpackage objects
  */
-class KalturaKeyBooleanValue extends KalturaObject
+class VidiunKeyBooleanValue extends VidiunObject
 {
 	/**
 	 * @var string

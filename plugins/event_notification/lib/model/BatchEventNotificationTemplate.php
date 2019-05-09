@@ -9,29 +9,29 @@ abstract class BatchEventNotificationTemplate extends EventNotificationTemplate
 {
 	/**
 	 * Returns job data for dispatching the event notification
-	 * @param kScope $scope
-	 * @return kEventNotificationDispatchJobData
+	 * @param vScope $scope
+	 * @return vEventNotificationDispatchJobData
 	 */
-	abstract protected function getJobData(kScope $scope = null);
+	abstract protected function getJobData(vScope $scope = null);
 	
 	/* (non-PHPdoc)
 	 * @see EventNotificationTemplate::dispatch()
 	 */
-	public function dispatch(kScope $scope)
+	public function dispatch(vScope $scope)
 	{
 		$jobData = $this->getJobData($scope);
 		return $this->dispatchJob($scope, $jobData);
 	}
 	
-	protected function dispatchJob(kScope $scope, kEventNotificationDispatchJobData $jobData, $eventNotificationType = null)
+	protected function dispatchJob(vScope $scope, vEventNotificationDispatchJobData $jobData, $eventNotificationType = null)
 	{
 		$entryId = null;
 		$parentJob = null;
 		
-		if($scope instanceof kEventScope)
+		if($scope instanceof vEventScope)
 		{
 			$event = $scope->getEvent();
-			if($event instanceof kApplicativeEvent)
+			if($event instanceof vApplicativeEvent)
 			{
 				$parentJob = $event->getRaisedJob();
 			}
@@ -59,13 +59,13 @@ abstract class BatchEventNotificationTemplate extends EventNotificationTemplate
 
 	/**
 	 * @param int $eventNotificationType
-	 * @param kEventNotificationDispatchJobData $jobData
+	 * @param vEventNotificationDispatchJobData $jobData
 	 * @param string $partnerId
 	 * @param string $entryId
 	 * @param BatchJob $parentJob
 	 * @return BatchJob
 	 */
-	protected function addEventNotificationDispatchJob($eventNotificationType, kEventNotificationDispatchJobData $jobData, $partnerId = null, $entryId = null, BatchJob $parentJob = null) 
+	protected function addEventNotificationDispatchJob($eventNotificationType, vEventNotificationDispatchJobData $jobData, $partnerId = null, $entryId = null, BatchJob $parentJob = null) 
 	{
 		$jobType = EventNotificationPlugin::getBatchJobTypeCoreValue(EventNotificationBatchType::EVENT_NOTIFICATION_HANDLER);
 		$batchJob = null;
@@ -79,21 +79,21 @@ abstract class BatchEventNotificationTemplate extends EventNotificationTemplate
 			$batchJob = new BatchJob();
 			$batchJob->setEntryId($entryId);
 			if (!$partnerId)
-				$partnerId = kCurrentContext::getCurrentPartnerId();
+				$partnerId = vCurrentContext::getCurrentPartnerId();
 				
 			$batchJob->setPartnerId($partnerId);
 		}
 		
-		KalturaLog::log("Creating event notification dispatch job on template id [" . $jobData->getTemplateId() . "] engine[$eventNotificationType]");
+		VidiunLog::log("Creating event notification dispatch job on template id [" . $jobData->getTemplateId() . "] engine[$eventNotificationType]");
 		
 		$batchJob->setObjectId($entryId);
 		$batchJob->setObjectType(BatchJobObjectType::ENTRY);
 		$batchJob->setStatus(BatchJob::BATCHJOB_STATUS_DONT_PROCESS);
 		
-		$batchJob = kJobsManager::addJob($batchJob, $jobData, $jobType, $eventNotificationType);
+		$batchJob = vJobsManager::addJob($batchJob, $jobData, $jobType, $eventNotificationType);
 		$jobData->setJobId($batchJob->getId());
 		$batchJob->setData($jobData);
 		
-		return kJobsManager::updateBatchJob($batchJob, BatchJob::BATCHJOB_STATUS_PENDING);
+		return vJobsManager::updateBatchJob($batchJob, BatchJob::BATCHJOB_STATUS_PENDING);
 	}
 }

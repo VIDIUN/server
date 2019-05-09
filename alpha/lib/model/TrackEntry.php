@@ -31,13 +31,13 @@ class TrackEntry extends BaseTrackEntry
 		// can be switched of once we decide this is not needed
 		if ( true )
 		{
-			if ( ! $te->getKs() ) $te->setKs ( kCurrentContext::$ks );
-			if ( ! $te->getPartnerId() ) $te->setPartnerId( kCurrentContext::$partner_id );
-			if ( ! $te->getPsVersion() ) $te->setPsVersion( kCurrentContext::$ps_vesion );
-			if ( ! $te->getHostName() ) $te->setHostName( kCurrentContext::$host );
-			if ( ! $te->getUid() ) $te->setUid(  kCurrentContext::$uid );
-			if ( ! $te->getUserIp() ) $te->setUserIp( kCurrentContext::$user_ip );
-			$te->setContext( kCurrentContext::$client_version . "|" .  kCurrentContext::$client_lang . "|" . kCurrentContext::$service . "|" . kCurrentContext::$action );
+			if ( ! $te->getVs() ) $te->setVs ( vCurrentContext::$vs );
+			if ( ! $te->getPartnerId() ) $te->setPartnerId( vCurrentContext::$partner_id );
+			if ( ! $te->getPsVersion() ) $te->setPsVersion( vCurrentContext::$ps_vesion );
+			if ( ! $te->getHostName() ) $te->setHostName( vCurrentContext::$host );
+			if ( ! $te->getUid() ) $te->setUid(  vCurrentContext::$uid );
+			if ( ! $te->getUserIp() ) $te->setUserIp( vCurrentContext::$user_ip );
+			$te->setContext( vCurrentContext::$client_version . "|" .  vCurrentContext::$client_lang . "|" . vCurrentContext::$service . "|" . vCurrentContext::$action );
 			$te->setSessionId((string)(new UniqueId()));
 			$te->save();
 		}

@@ -30,7 +30,7 @@ function investigate ( entry_id )
 function playEntry ( entry_id )
 {
 	//alert ( "playEntry:" + entry_id );
-	player = document.getElementById("kaltura_player");
+	player = document.getElementById("vidiun_player");
 	if ( player )
 	{
 		if ( player.insertMedia )
@@ -199,7 +199,7 @@ if ( $is_playlist )
 }
 else
 {
-	if ( $widget ) echo $widget->getWidgetHtml( "kaltura_player" );
+	if ( $widget ) echo $widget->getWidgetHtml( "vidiun_player" );
 	else echo "No widget to display";
 }
 ?>

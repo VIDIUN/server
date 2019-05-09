@@ -28,7 +28,7 @@ class BusinessProcessServerFilter extends baseObjectFilter
 	 * @see myBaseObject::init()
 	 */
 	protected function init() {
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_eq_id",
 			"_in_id",
 			"_notin_id",

@@ -17,18 +17,18 @@ class YahooDistributionFeedHelper
 	protected $xpath;
 	
 	/**
-	 * @var KalturaYahooDistributionProfile
+	 * @var VidiunYahooDistributionProfile
 	 */
 	protected $distributionProfile;
 
 	/**
-	 * @var KalturaEntryDistribution
+	 * @var VidiunEntryDistribution
 	 */
 	protected $entryDistribution;
 	/**
 	 * 
 	 * Provider data object
-	 * @var KalturaYouTubeDistributionJobProviderData
+	 * @var VidiunYouTubeDistributionJobProviderData
 	 */
 	protected $providerData;
 	
@@ -43,10 +43,10 @@ class YahooDistributionFeedHelper
 	/**
 	 * @param $templateName
 	 * @param $distributionProfile
-	 * @param KalturaYahooDistributionJobProviderData $providerData
-	 * @param KalturaDistributionJobData $data
+	 * @param VidiunYahooDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
 	 */
-	public function __construct($templateName, KalturaYahooDistributionProfile $distributionProfile, KalturaYahooDistributionJobProviderData $providerData, $entryDistribution, $flavorAssets)
+	public function __construct($templateName, VidiunYahooDistributionProfile $distributionProfile, VidiunYahooDistributionJobProviderData $providerData, $entryDistribution, $flavorAssets)
 	{		
 		$this->distributionProfile = $distributionProfile;
 		$this->providerData = $providerData;
@@ -57,20 +57,20 @@ class YahooDistributionFeedHelper
 		}		
 		$this->flavorAssets = $flavorAssets;
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml_templates/' . $templateName;
-		$this->doc = new KDOMDocument();
+		$this->doc = new VDOMDocument();
 		$this->doc->load($xmlTemplate);		
 		$this->xpath = new DOMXPath($this->doc);	
 	}
 	
 	public function setFieldsForSubmit()
 	{
-		$startTime = $this->getValueForField(KalturaYahooDistributionField::VIDEO_VALID_TIME);
+		$startTime = $this->getValueForField(VidiunYahooDistributionField::VIDEO_VALID_TIME);
 		if (is_null($startTime)) {
 		    $startTime = time() - 24*60*60;  // yesterday, to make the video public by default
 		}
 		$this->setVideoValidTime($startTime);
 		
-		$endTime = $this->getValueForField(KalturaYahooDistributionField::VIDEO_EXPIRATION_TIME);
+		$endTime = $this->getValueForField(VidiunYahooDistributionField::VIDEO_EXPIRATION_TIME);
 		if ($endTime && intval($endTime)) {
 			$this->setVideoExpirationTime($endTime);        
 		}
@@ -79,25 +79,25 @@ class YahooDistributionFeedHelper
 			$this->deleteVideoExpirtaionTimeTag();
 		}		
 		
-		$this->setContactTelephone($this->getValueForField(KalturaYahooDistributionField::CONTACT_TELEPHONE));
-		$this->setContactEmail($this->getValueForField(KalturaYahooDistributionField::CONTACT_EMAIL));					
-		$this->setVideoModifiedDate($this->getValueForField(KalturaYahooDistributionField::VIDEO_MODIFIED_DATE));		
-		$this->setVideoFeedItemId($this->getValueForField(KalturaYahooDistributionField::VIDEO_FEEDITEM_ID));
-		$this->setVideoTitle($this->getValueForField(KalturaYahooDistributionField::VIDEO_TITLE));
-		$this->setVideoDescription($this->getValueForField(KalturaYahooDistributionField::VIDEO_DESCRIPTION));
-		$this->setVideoCategories($this->getValueForField(KalturaYahooDistributionField::VIDEO_ROUTING));
-		$this->setVideoKeywords($this->getValueForField(KalturaYahooDistributionField::VIDEO_KEYWORDS));		
-		$this->setLinkTitleAndUrl($this->getValueForField(KalturaYahooDistributionField::VIDEO_LINK_TITLE),
-								  $this->getValueForField(KalturaYahooDistributionField::VIDEO_LINK_URL));		
-		$this->setVideoDuration($this->getValueForField(KalturaYahooDistributionField::VIDEO_DURATION));		
+		$this->setContactTelephone($this->getValueForField(VidiunYahooDistributionField::CONTACT_TELEPHONE));
+		$this->setContactEmail($this->getValueForField(VidiunYahooDistributionField::CONTACT_EMAIL));					
+		$this->setVideoModifiedDate($this->getValueForField(VidiunYahooDistributionField::VIDEO_MODIFIED_DATE));		
+		$this->setVideoFeedItemId($this->getValueForField(VidiunYahooDistributionField::VIDEO_FEEDITEM_ID));
+		$this->setVideoTitle($this->getValueForField(VidiunYahooDistributionField::VIDEO_TITLE));
+		$this->setVideoDescription($this->getValueForField(VidiunYahooDistributionField::VIDEO_DESCRIPTION));
+		$this->setVideoCategories($this->getValueForField(VidiunYahooDistributionField::VIDEO_ROUTING));
+		$this->setVideoKeywords($this->getValueForField(VidiunYahooDistributionField::VIDEO_KEYWORDS));		
+		$this->setLinkTitleAndUrl($this->getValueForField(VidiunYahooDistributionField::VIDEO_LINK_TITLE),
+								  $this->getValueForField(VidiunYahooDistributionField::VIDEO_LINK_URL));		
+		$this->setVideoDuration($this->getValueForField(VidiunYahooDistributionField::VIDEO_DURATION));		
 	}
 	
 	public function setFieldsForDelete()
 	{
-		$this->setVideoFeedItemId($this->getValueForField(KalturaYahooDistributionField::VIDEO_FEEDITEM_ID));
-		$this->setVideoTitle($this->getValueForField(KalturaYahooDistributionField::VIDEO_TITLE));
+		$this->setVideoFeedItemId($this->getValueForField(VidiunYahooDistributionField::VIDEO_FEEDITEM_ID));
+		$this->setVideoTitle($this->getValueForField(VidiunYahooDistributionField::VIDEO_TITLE));
 		//valid time
-		$startTime = $this->getValueForField(KalturaYahooDistributionField::VIDEO_VALID_TIME);
+		$startTime = $this->getValueForField(VidiunYahooDistributionField::VIDEO_VALID_TIME);
 		if (is_null($startTime)) {
 		    $startTime = time() - 24*60*60;  // yesterday, to make the video public by default
 		}
@@ -155,17 +155,17 @@ class YahooDistributionFeedHelper
 	
 	public function setContactTelephone($value)
 	{
-		kXml::setNodeValue($this->xpath,'/CMSFEED/CONTACT/@TELEPHONE', $value);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/CONTACT/@TELEPHONE', $value);
 	}
 	
 	public function setContactEmail($value)
 	{
-		kXml::setNodeValue($this->xpath,'/CMSFEED/CONTACT/@EMAIL', $value);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/CONTACT/@EMAIL', $value);
 	}
 		
 	public function setVideoType($value)
 	{
-		kXml::setNodeValue($this->xpath,'/CMSFEED/VIDEO/@TYPE', $value);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/VIDEO/@TYPE', $value);
 	}
 	
 	public function setVideoModifiedDate($value)
@@ -173,23 +173,23 @@ class YahooDistributionFeedHelper
 		$dateTime = new DateTime('@'.$value);
 		$dateTime->setTimezone(new DateTimeZone(self::VIDEO_TIME_ZONE));
 		$date = $dateTime->format(self::VIDEO_TIME_FORMAT);
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/MODIFIEDDATE', $date);
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/MODIFIEDDATE/@TZ', self::VIDEO_TIME_ZONE_CODE);	
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/MODIFIEDDATE', $date);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/MODIFIEDDATE/@TZ', self::VIDEO_TIME_ZONE_CODE);	
 	}
 		
 	public function setVideoFeedItemId($value)
 	{		
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/@ID', $value);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/@ID', $value);
 	}
 	
 	public function setVideoTitle($value)
 	{
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/TITLE', $value);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/TITLE', $value);
 	}
 	
 	public function setVideoDescription($value)
 	{
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/DESCRIPTION', $value);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/DESCRIPTION', $value);
 	}
 	
 	public function setVideoCategories($value)
@@ -204,7 +204,7 @@ class YahooDistributionFeedHelper
 			{
 				if ($category){
 					$routingContentNode = $node->cloneNode(true);									
-					kXml::setNodeValue($this->xpath,'.', $category, $routingContentNode);					
+					vXml::setNodeValue($this->xpath,'.', $category, $routingContentNode);					
 					$parentNode->insertBefore($routingContentNode,$node);
 				}
 			}
@@ -214,7 +214,7 @@ class YahooDistributionFeedHelper
 	
 	public function setVideoKeywords($value)
 	{
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/KEYWORDS', $value);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/KEYWORDS', $value);
 	}
 	
 	
@@ -230,11 +230,11 @@ class YahooDistributionFeedHelper
 			{
 				$titleContentNode = $node->cloneNode(true);		
 				//set attribute as title
-				kXml::setNodeValue($this->xpath,'./@TITLE', $value, $titleContentNode);
+				vXml::setNodeValue($this->xpath,'./@TITLE', $value, $titleContentNode);
 				//set value as url			
 				if (isset($urlValues[$key]))
 				{			
-					kXml::setNodeValue($this->xpath,'.', $urlValues[$key], $titleContentNode);
+					vXml::setNodeValue($this->xpath,'.', $urlValues[$key], $titleContentNode);
 				}					
 				$parentNode->insertBefore($titleContentNode,$node);
 			}
@@ -244,7 +244,7 @@ class YahooDistributionFeedHelper
 				for ($i=count($titleValues); $i<count($urlValues) ; $i++ )
 				{
 					$titleContentNode = $node->cloneNode(true);	
-					kXml::setNodeValue($this->xpath,'.', $urlValues[$i], $titleContentNode);
+					vXml::setNodeValue($this->xpath,'.', $urlValues[$i], $titleContentNode);
 					$parentNode->insertBefore($titleContentNode,$node);				
 				}
 			}
@@ -257,8 +257,8 @@ class YahooDistributionFeedHelper
 		$dateTime = new DateTime('@'.$value);
 		$dateTime->setTimezone(new DateTimeZone(self::VIDEO_TIME_ZONE));
 		$date = $dateTime->format(self::VIDEO_TIME_FORMAT);
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/VALIDTIME', $date);
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/VALIDTIME/@TZ', self::VIDEO_TIME_ZONE_CODE);	
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/VALIDTIME', $date);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/VALIDTIME/@TZ', self::VIDEO_TIME_ZONE_CODE);	
 	}
 	
 	public function setVideoExpirationTime($value)
@@ -266,8 +266,8 @@ class YahooDistributionFeedHelper
 		$dateTime = new DateTime('@'.$value);
 		$dateTime->setTimezone(new DateTimeZone(self::VIDEO_TIME_ZONE));
 		$date = $dateTime->format(self::VIDEO_TIME_FORMAT);
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/EXPIRATIONTIME', $date);
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/EXPIRATIONTIME/@TZ', self::VIDEO_TIME_ZONE_CODE);	
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/EXPIRATIONTIME', $date);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/EXPIRATIONTIME/@TZ', self::VIDEO_TIME_ZONE_CODE);	
 	}
 		
 	public function deleteVideoExpirtaionTimeTag()
@@ -279,7 +279,7 @@ class YahooDistributionFeedHelper
 	public function setVideoDuration($value)
 	{
 		$value = gmdate('H:i:s', $value/1000);
-		kXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/DURATION', $value);
+		vXml::setNodeValue($this->xpath,'/CMSFEED/FEEDITEM/DURATION', $value);
 	}
 
 	public function getXmlString()
@@ -290,7 +290,7 @@ class YahooDistributionFeedHelper
 	/**
 	 * 
 	 * set streams in XML
-	 * @param KalturaFlavorAsset $flavorAssets
+	 * @param VidiunFlavorAsset $flavorAssets
 	 */
 	public function setStreams($flavorAssets, $currentTime)
 	{		
@@ -307,12 +307,12 @@ class YahooDistributionFeedHelper
 				$streamContentNode = $node->cloneNode(true);					
 				$fileExt = $flavorAsset->fileExt;			
 				$videoBitrate = $flavorAsset->bitrate;
-				kXml::setNodeValue($this->xpath,'@FORMAT', strtoupper($fileExt), $streamContentNode);
-				kXml::setNodeValue($this->xpath,'@BITRATE', $videoBitrate, $streamContentNode);				
+				vXml::setNodeValue($this->xpath,'@FORMAT', strtoupper($fileExt), $streamContentNode);
+				vXml::setNodeValue($this->xpath,'@BITRATE', $videoBitrate, $streamContentNode);				
 								
 				$uniqueName = $this->flavorAssetUniqueName($flavorAsset, $currentTime);
-				kXml::setNodeValue($this->xpath,'.', $uniqueName, $streamContentNode);
-				//kXml::setNodeValue($this->xpath,'.', providerData->flavorAsset[id]);						
+				vXml::setNodeValue($this->xpath,'.', $uniqueName, $streamContentNode);
+				//vXml::setNodeValue($this->xpath,'.', providerData->flavorAsset[id]);						
 				$streamParentNode->insertBefore($streamContentNode,$beforeNode);
 			}		
 		}
@@ -320,7 +320,7 @@ class YahooDistributionFeedHelper
 	
 	/**
 	 * creates unique name for flavor asset
-	 * @param KalturaFlavorAsset $flavorAsset
+	 * @param VidiunFlavorAsset $flavorAsset
 	 */
 	public function flavorAssetUniqueName($flavorAsset, $currentTime)
 	{
@@ -331,8 +331,8 @@ class YahooDistributionFeedHelper
 	
 	public function setThumbnailsPath($smallThumbPath, $largeThumbPath)
 	{
-		kXml::setNodeValue($this->xpath,"/CMSFEED/FEEDITEM/IMAGE[@USE='SMALLTHUMB']", $smallThumbPath);
-		kXml::setNodeValue($this->xpath,"/CMSFEED/FEEDITEM/IMAGE[@USE='LARGETHUMB']", $largeThumbPath);		
+		vXml::setNodeValue($this->xpath,"/CMSFEED/FEEDITEM/IMAGE[@USE='SMALLTHUMB']", $smallThumbPath);
+		vXml::setNodeValue($this->xpath,"/CMSFEED/FEEDITEM/IMAGE[@USE='LARGETHUMB']", $largeThumbPath);		
 	}
 	
 	

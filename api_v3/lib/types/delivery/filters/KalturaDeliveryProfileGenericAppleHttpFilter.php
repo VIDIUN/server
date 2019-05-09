@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaDeliveryProfileGenericAppleHttpFilter extends KalturaDeliveryProfileGenericAppleHttpBaseFilter
+class VidiunDeliveryProfileGenericAppleHttpFilter extends VidiunDeliveryProfileGenericAppleHttpBaseFilter
 {
 }

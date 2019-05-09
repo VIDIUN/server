@@ -1,13 +1,13 @@
 <?php
 /**
- * Subclass for representing a row from the 'kvote' table.
+ * Subclass for representing a row from the 'vvote' table.
  *
  *
  *
  * @package Core
  * @subpackage model
  */
-class kvote extends Basekvote implements IBaseObject
+class vvote extends Basevvote implements IBaseObject
 {
 	private $statistics_results = null;
 	
@@ -15,24 +15,24 @@ class kvote extends Basekvote implements IBaseObject
 	{
 		if ( $this->isNew() )
 		{
-			$this->statistics_results = myStatisticsMgr::addKvote($this);
+			$this->statistics_results = myStatisticsMgr::addVvote($this);
 		}
-		else if (in_array(kvotePeer::STATUS, $this->modifiedColumns))
+		else if (in_array(vvotePeer::STATUS, $this->modifiedColumns))
 		{
-		   $this->statistics_results = myStatisticsMgr::modifyEntryVotesBykVote($this); 
+		   $this->statistics_results = myStatisticsMgr::modifyEntryVotesByvVote($this); 
 		}
 		
 		return parent::save( $con );
 	}
 	
-	public function getFormattedCreatedAt( $format = dateUtils::KALTURA_FORMAT )
+	public function getFormattedCreatedAt( $format = dateUtils::VIDIUN_FORMAT )
 	{
-		return dateUtils::formatKalturaDate( $this , 'getCreatedAt' , $format );
+		return dateUtils::formatVidiunDate( $this , 'getCreatedAt' , $format );
 	}
 
-	public function getFormattedUpdatedAt( $format = dateUtils::KALTURA_FORMAT )
+	public function getFormattedUpdatedAt( $format = dateUtils::VIDIUN_FORMAT )
 	{
-		return dateUtils::formatKalturaDate( $this , 'getUpdatedAt' , $format );
+		return dateUtils::formatVidiunDate( $this , 'getUpdatedAt' , $format );
 	}
 	
 	

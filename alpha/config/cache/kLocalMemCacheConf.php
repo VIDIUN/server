@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/kBaseMemcacheConf.php';
+require_once __DIR__ . '/vBaseMemcacheConf.php';
 
-class kLocalMemCacheConf extends kBaseMemcacheConf
+class vLocalMemCacheConf extends vBaseMemcacheConf
 {
 	public function isKeyRequired(){ return true;}
 

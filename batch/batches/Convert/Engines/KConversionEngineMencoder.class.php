@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-class KConversionEngineMencoder  extends KJobConversionEngine
+class VConversionEngineMencoder  extends VJobConversionEngine
 {
 	const MENCODER = "mencoder";
 		
@@ -14,11 +14,11 @@ class KConversionEngineMencoder  extends KJobConversionEngine
 	
 	public function getType()
 	{
-		return KalturaConversionEngineType::MENCODER;
+		return VidiunConversionEngineType::MENCODER;
 	}
 	
 	public function getCmd ()
 	{
-		return KBatchBase::$taskConfig->params->mencderCmd;
+		return VBatchBase::$taskConfig->params->mencderCmd;
 	}
 }

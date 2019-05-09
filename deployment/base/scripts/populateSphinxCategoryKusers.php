@@ -7,44 +7,44 @@ require_once(__DIR__ . '/../../bootstrap.php');
 $c = new Criteria();
 
 if($argc > 1 && is_numeric($argv[1]))
-	$c->add(categoryKuserPeer::UPDATED_AT, $argv[1], Criteria::GREATER_EQUAL);
+	$c->add(categoryVuserPeer::UPDATED_AT, $argv[1], Criteria::GREATER_EQUAL);
 if($argc > 2 && is_numeric($argv[2]))
-	$c->add(categoryKuserPeer::PARTNER_ID, $argv[2], Criteria::EQUAL);
+	$c->add(categoryVuserPeer::PARTNER_ID, $argv[2], Criteria::EQUAL);
 if($argc > 3 && is_numeric($argv[3]))
-	$c->add(categoryKuserPeer::ID, $argv[3], Criteria::GREATER_EQUAL);
+	$c->add(categoryVuserPeer::ID, $argv[3], Criteria::GREATER_EQUAL);
 if($argc > 4)
-	categoryKuserPeer::setUseCriteriaFilter((bool)$argv[4]);
+	categoryVuserPeer::setUseCriteriaFilter((bool)$argv[4]);
 
-$c->addAscendingOrderByColumn(categoryKuserPeer::UPDATED_AT);
-$c->addAscendingOrderByColumn(categoryKuserPeer::ID);
+$c->addAscendingOrderByColumn(categoryVuserPeer::UPDATED_AT);
+$c->addAscendingOrderByColumn(categoryVuserPeer::ID);
 $c->setLimit(10000);
 
 $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 //$sphinxCon = DbManager::getSphinxConnection();
-categoryKuserPeer::setUseCriteriaFilter(false);
-$categoryKusers = categoryKuserPeer::doSelect($c, $con);
-categoryKuserPeer::setUseCriteriaFilter(true);
-$sphinx = new kSphinxSearchManager();
-while(count($categoryKusers))
+categoryVuserPeer::setUseCriteriaFilter(false);
+$categoryVusers = categoryVuserPeer::doSelect($c, $con);
+categoryVuserPeer::setUseCriteriaFilter(true);
+$sphinx = new vSphinxSearchManager();
+while(count($categoryVusers))
 {
-	foreach($categoryKusers as $categoryKuser)
+	foreach($categoryVusers as $categoryVuser)
 	{
-	    /* @var $categoryKuser categoryKuser */
-		KalturaLog::log('$categoryKuser id ' . $categoryKuser->getId() . ' updated at '. $categoryKuser->getUpdatedAt(null));
+	    /* @var $categoryVuser categoryVuser */
+		VidiunLog::log('$categoryVuser id ' . $categoryVuser->getId() . ' updated at '. $categoryVuser->getUpdatedAt(null));
 		
 		try {
-			$ret = $sphinx->saveToSphinx($categoryKuser, true);
+			$ret = $sphinx->saveToSphinx($categoryVuser, true);
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			exit -1;
 		}
 	}
 	
-	$c->setOffset($c->getOffset() + count($categoryKusers));
-	kMemoryManager::clearMemory();
-	$categoryKusers = categoryKuserPeer::doSelect($c, $con);
+	$c->setOffset($c->getOffset() + count($categoryVusers));
+	vMemoryManager::clearMemory();
+	$categoryVusers = categoryVuserPeer::doSelect($c, $con);
 }
 
-KalturaLog::log('Done. Current time: ' . time());
+VidiunLog::log('Done. Current time: ' . time());
 exit(0);

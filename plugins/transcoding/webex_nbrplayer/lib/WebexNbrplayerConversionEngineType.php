@@ -3,7 +3,7 @@
  * @package plugins.webexNbrplayer
  * @subpackage lib
  */
-class WebexNbrplayerConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class WebexNbrplayerConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const WEBEX_NBRPLAYER = 'WebexNbrplayer';
 	

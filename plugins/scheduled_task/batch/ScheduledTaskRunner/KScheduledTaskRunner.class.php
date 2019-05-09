@@ -3,7 +3,7 @@
  * @package plugins.scheduledTask
  * @subpackage Scheduler
  */
-class KScheduledTaskRunner extends KPeriodicWorker
+class VScheduledTaskRunner extends VPeriodicWorker
 {
 	/**
 	 * @var array
@@ -11,15 +11,15 @@ class KScheduledTaskRunner extends KPeriodicWorker
 	public $_objectEngineTasksCache;
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::SCHEDULED_TASK;
+		return VidiunBatchJobType::SCHEDULED_TASK;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getJobType()
+	 * @see VBatchBase::getJobType()
 	 */
 	public function getJobType()
 	{
@@ -27,7 +27,7 @@ class KScheduledTaskRunner extends KPeriodicWorker
 	}
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
@@ -44,7 +44,7 @@ class KScheduledTaskRunner extends KPeriodicWorker
 			}
 			catch(Exception $ex)
 			{
-				KalturaLog::err($ex);
+				VidiunLog::err($ex);
 			}
 		}
 	}
@@ -52,19 +52,19 @@ class KScheduledTaskRunner extends KPeriodicWorker
 	protected function getProcessor($profile)
 	{
 		if ($this->isReachProfile($profile))
-			return new KReachProcessor($this);
+			return new VReachProcessor($this);
 		if ($this->isMediaRepurposingProfile($profile))
-			return new KMediaRepurposingProcessor($this);
+			return new VMediaRepurposingProcessor($this);
 		else
-			return new KGenericProcessor($this);
+			return new VGenericProcessor($this);
 	}
 
-	private function isMediaRepurposingProfile(KalturaScheduledTaskProfile $profile)
+	private function isMediaRepurposingProfile(VidiunScheduledTaskProfile $profile)
 	{
-		return ($profile->systemName == "MRP") || (kString::beginsWith($profile->name, 'MR_'));
+		return ($profile->systemName == "MRP") || (vString::beginsWith($profile->name, 'MR_'));
 	}
 
-	private function isReachProfile(KalturaScheduledTaskProfile $profile)
+	private function isReachProfile(VidiunScheduledTaskProfile $profile)
 	{
 		return $profile->objectFilterEngineType == ObjectFilterEngineType::ENTRY_VENDOR_TASK;
 	}
@@ -77,11 +77,11 @@ class KScheduledTaskRunner extends KPeriodicWorker
 	{
 		$scheduledTaskClient = $this->getScheduledTaskClient();
 
-		$filter = new KalturaScheduledTaskProfileFilter();
-		$filter->orderBy = KalturaScheduledTaskProfileOrderBy::LAST_EXECUTION_STARTED_AT_ASC;
-		$filter->statusEqual = KalturaScheduledTaskProfileStatus::ACTIVE;
+		$filter = new VidiunScheduledTaskProfileFilter();
+		$filter->orderBy = VidiunScheduledTaskProfileOrderBy::LAST_EXECUTION_STARTED_AT_ASC;
+		$filter->statusEqual = VidiunScheduledTaskProfileStatus::ACTIVE;
 		$filter->lastExecutionStartedAtLessThanOrEqualOrNull = strtotime('today');
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = $maxProfiles;
 
 		$result = $scheduledTaskClient->scheduledTaskProfile->listAction($filter, $pager);
@@ -89,20 +89,20 @@ class KScheduledTaskRunner extends KPeriodicWorker
 	}
 
 	/**
-	 * @return KalturaScheduledTaskClientPlugin
+	 * @return VidiunScheduledTaskClientPlugin
 	 */
 	public function getScheduledTaskClient()
 	{
 		$client = $this->getClient();
-		return KalturaScheduledTaskClientPlugin::get($client);
+		return VidiunScheduledTaskClientPlugin::get($client);
 	}
 
 	/**
-	 * @return KalturaClient
+	 * @return VidiunClient
 	 */
 	public function getClient()
 	{
-		return self::$kClient;
+		return self::$vClient;
 	}
 
 	public function getParams($name)

@@ -57,28 +57,28 @@ abstract class ESearchBaseOperator extends ESearchItem
 	{
 		if (!$eSearchItemsArr || !count($eSearchItemsArr))
 		{
-			throw new kESearchException('empty search items are not allowed', kESearchException::EMPTY_SEARCH_ITEMS_NOT_ALLOWED);
+			throw new vESearchException('empty search items are not allowed', vESearchException::EMPTY_SEARCH_ITEMS_NOT_ALLOWED);
 		}
 		switch ($eSearchOperatorType)
 		{
 			case ESearchOperatorType::AND_OP:
-				$boolOperator = kESearchBoolQuery::MUST_KEY;
+				$boolOperator = vESearchBoolQuery::MUST_KEY;
 				break;
 			case ESearchOperatorType::OR_OP:
-				$boolOperator = kESearchBoolQuery::SHOULD_KEY;
+				$boolOperator = vESearchBoolQuery::SHOULD_KEY;
 				break;
 			case ESearchOperatorType::NOT_OP:
-				$boolOperator = kESearchBoolQuery::MUST_NOT_KEY;
+				$boolOperator = vESearchBoolQuery::MUST_NOT_KEY;
 				$queryAttributes->setSearchHistoryMustNotContext(true);
 				break;
 			default:
-				throw new kESearchException('Missing operator type', kESearchException::MISSING_OPERATOR_TYPE);
+				throw new vESearchException('Missing operator type', vESearchException::MISSING_OPERATOR_TYPE);
 		}
 
 		$categorizedSearchItems = self::getCategorizedSearchItems($eSearchItemsArr);
 		$outQuery = static::createSearchQueryForItems($categorizedSearchItems, $boolOperator, $queryAttributes);
 
-		if ($boolOperator == kESearchBoolQuery::MUST_NOT_KEY)
+		if ($boolOperator == vESearchBoolQuery::MUST_NOT_KEY)
 			$queryAttributes->setSearchHistoryMustNotContext(false);
 
 		return $outQuery;
@@ -147,7 +147,7 @@ abstract class ESearchBaseOperator extends ESearchItem
 		{
 			foreach ($subQuery as $key => $value)
 			{
-				if($boolOperator == kESearchBoolQuery::MUST_KEY && $value->getShouldMoveToFilterContext())
+				if($boolOperator == vESearchBoolQuery::MUST_KEY && $value->getShouldMoveToFilterContext())
 				{
 					$outQuery->addToFilter($value);
 					continue;

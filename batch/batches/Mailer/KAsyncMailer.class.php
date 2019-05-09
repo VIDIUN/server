@@ -11,10 +11,10 @@
  * @package Scheduler
  * @subpackage Mailer
  */
-class KAsyncMailer extends KJobHandlerWorker
+class VAsyncMailer extends VJobHandlerWorker
 {
-	const MAILER_DEFAULT_SENDER_EMAIL = 'notifications@kaltura.com';
-	const MAILER_DEFAULT_SENDER_NAME = 'Kaltura Notification Service';
+	const MAILER_DEFAULT_SENDER_EMAIL = 'notifications@vidiun.com';
+	const MAILER_DEFAULT_SENDER_NAME = 'Vidiun Notification Service';
 	const DEFAULT_LANGUAGE = 'en';
 	
 	protected $texts_array; // will hold the configuration of the ini file
@@ -26,74 +26,74 @@ class KAsyncMailer extends KJobHandlerWorker
 	
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::MAIL;
+		return VidiunBatchJobType::MAIL;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $job;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::run()
+	 * @see VJobHandlerWorker::run()
 	 */
 	public function run($jobs = null)
 	{
-		if(KBatchBase::$taskConfig->isInitOnly())
+		if(VBatchBase::$taskConfig->isInitOnly())
 			return $this->init();
 		
-		$jobs = KBatchBase::$kClient->batch->getExclusiveJobs( 
+		$jobs = VBatchBase::$vClient->batch->getExclusiveJobs( 
 			$this->getExclusiveLockKey() , 
-			KBatchBase::$taskConfig->maximumExecutionTime , 
+			VBatchBase::$taskConfig->maximumExecutionTime , 
 			$this->getMaxJobsEachRun() , 
 			$this->getFilter(),
 			static::getType()
 		);
 			
-		KalturaLog::info(count($jobs) . " mail jobs to perform");
+		VidiunLog::info(count($jobs) . " mail jobs to perform");
 								
 		if(!count($jobs) > 0)
 		{
-			KalturaLog::info("Queue size: 0 sent to scheduler");
+			VidiunLog::info("Queue size: 0 sent to scheduler");
 			$this->saveSchedulerQueue(self::getType(), 0);
 			return;
 		}
 				
 		$this->initConfig();
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($jobs as $job)
 			$this->send($job, $job->data);
-		KBatchBase::$kClient->doMultiRequest();		
+		VBatchBase::$vClient->doMultiRequest();		
 			
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($jobs as $job)
 		{
-			KalturaLog::info("Free job[$job->id]");
+			VidiunLog::info("Free job[$job->id]");
 			$this->onFree($job);
-	 		KBatchBase::$kClient->batch->freeExclusiveJob($job->id, $this->getExclusiveLockKey(), static::getType());
+	 		VBatchBase::$vClient->batch->freeExclusiveJob($job->id, $this->getExclusiveLockKey(), static::getType());
 		}
-		$responses = KBatchBase::$kClient->doMultiRequest();
+		$responses = VBatchBase::$vClient->doMultiRequest();
 		$response = end($responses);
 		
-		KalturaLog::info("Queue size: $response->queueSize sent to scheduler");
+		VidiunLog::info("Queue size: $response->queueSize sent to scheduler");
 		$this->saveSchedulerQueue(self::getType(), $response->queueSize);
 	}
 	
 	/*
-	 * Will take a single KalturaMailJob and send the mail using PHPMailer  
+	 * Will take a single VidiunMailJob and send the mail using PHPMailer  
 	 * 
-	 * @param KalturaBatchJob $job
-	 * @param KalturaMailJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunMailJobData $data
 	 */
-	protected function send(KalturaBatchJob $job, KalturaMailJobData $data)
+	protected function send(VidiunBatchJob $job, VidiunMailJobData $data)
 	{
 		if (!isset($this->texts_array[$data->language]))
 		{
@@ -116,23 +116,23 @@ class KAsyncMailer extends KJobHandlerWorker
 			
 	 		if ( $result )
 	 		{
-	 			$job->status = KalturaBatchJobStatus::FINISHED;
+	 			$job->status = VidiunBatchJobStatus::FINISHED;
 	 		}
 	 		else
 	 		{
-	 			$job->status = KalturaBatchJobStatus::FAILED;
+	 			$job->status = VidiunBatchJobStatus::FAILED;
 	 		}
 	 			
-			KalturaLog::info("job[$job->id] status: $job->status");
+			VidiunLog::info("job[$job->id] status: $job->status");
 			$this->onUpdate($job);
 			
-			$updateJob = new KalturaBatchJob();
+			$updateJob = new VidiunBatchJob();
 			$updateJob->status = $job->status;
-	 		KBatchBase::$kClient->batch->updateExclusiveJob($job->id, $this->getExclusiveLockKey(), $updateJob);			
+	 		VBatchBase::$vClient->batch->updateExclusiveJob($job->id, $this->getExclusiveLockKey(), $updateJob);			
 		}
 		catch ( Exception $ex )
 		{
-			KalturaLog::crit( $ex );
+			VidiunLog::crit( $ex );
 		}
 	}
 	
@@ -179,7 +179,7 @@ class KAsyncMailer extends KJobHandlerWorker
 		{
 			$body_to_log  = " body: " . $body;
 		}
-		KalturaLog::info( 'sending email to: '. $recipientemail . " subject: " . $this->mail->Subject .  $body_to_log );
+		VidiunLog::info( 'sending email to: '. $recipientemail . " subject: " . $this->mail->Subject .  $body_to_log );
 			
 		try
 		{
@@ -187,7 +187,7 @@ class KAsyncMailer extends KJobHandlerWorker
 		} 
 		catch ( Exception $e )
 		{
-			KalturaLog::err( $e );
+			VidiunLog::err( $e );
 			return false;
 		}
 	}
@@ -230,10 +230,10 @@ class KAsyncMailer extends KJobHandlerWorker
 		$footer = vsprintf($footer, array($forumsLink, $unsubscribeLink) );
 
 		$body .= "\n" . $footer;
-		KalturaLog::debug("type [$type]");
-		KalturaLog::debug("params [" . print_r($bodyParamsArray, true) . "]");
-		KalturaLog::debug("body [$body]");
-		KalturaLog::debug("footer [$footer]");
+		VidiunLog::debug("type [$type]");
+		VidiunLog::debug("params [" . print_r($bodyParamsArray, true) . "]");
+		VidiunLog::debug("body [$body]");
+		VidiunLog::debug("footer [$footer]");
 		$body = vsprintf( $body, $bodyParamsArray );
 		if ($isHtml)
 		{
@@ -247,7 +247,7 @@ class KAsyncMailer extends KJobHandlerWorker
 		$body = str_replace( "<EQ>", "=", $body );
 		$body = str_replace( "<EM>", "!", $body ); // exclamation mark
 		
-		KalturaLog::debug("final body [$body]");
+		VidiunLog::debug("final body [$body]");
 		return $body;
 	}
 		
@@ -264,10 +264,10 @@ class KAsyncMailer extends KJobHandlerWorker
 			if (!isset($this->texts_array[$language]))
 			{
 				$filename = $rootdir."/emails_".$language.".ini";
-				KalturaLog::debug( 'ini filename = '.$filename );
+				VidiunLog::debug( 'ini filename = '.$filename );
 				if ( ! file_exists ( $filename )) 
 				{
-					KalturaLog::crit( 'Fatal:::: Cannot find file: '.$filename );
+					VidiunLog::crit( 'Fatal:::: Cannot find file: '.$filename );
 					continue;
 				}
 				$ini_array = parse_ini_file( $filename, true );
@@ -286,6 +286,6 @@ class KAsyncMailer extends KJobHandlerWorker
 	
 	protected static function createBlockEmailStr ( $email )
 	{
-		return  $email . self::SEPARATOR . kString::expiryHash( $email , self::$key , self::EXPIRY_INTERVAL );
+		return  $email . self::SEPARATOR . vString::expiryHash( $email , self::$key , self::EXPIRY_INTERVAL );
 	}
 }

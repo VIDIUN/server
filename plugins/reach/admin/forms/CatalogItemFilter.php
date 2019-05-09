@@ -16,8 +16,8 @@ class Form_CatalogItemFilter extends Form_PartnerIdFilter
 //			'idEqual' => 'Catalog Item ID',
 		));
 
-		$filterServiceFeature = new Kaltura_Form_Element_EnumSelect('filterServiceFeature', array(
-			'enum' => 'Kaltura_Client_Reach_Enum_VendorServiceFeature',
+		$filterServiceFeature = new Vidiun_Form_Element_EnumSelect('filterServiceFeature', array(
+			'enum' => 'Vidiun_Client_Reach_Enum_VendorServiceFeature',
 			'label'			=> 'Service Feature:',
 			'onchange'		=> "updateFiltersView()",
 			'filters'		=> array('StringTrim'),
@@ -25,24 +25,24 @@ class Form_CatalogItemFilter extends Form_PartnerIdFilter
 		), array(null => "Service Feature"));
 		$this->addElements(array($filterServiceFeature));
 
-		$filterServiceType = new Kaltura_Form_Element_EnumSelect('filterServiceType', array(
-			'enum' => 'Kaltura_Client_Reach_Enum_VendorServiceType',
+		$filterServiceType = new Vidiun_Form_Element_EnumSelect('filterServiceType', array(
+			'enum' => 'Vidiun_Client_Reach_Enum_VendorServiceType',
 			'label'			=> 'Service Type:',
 			'filters'		=> array('StringTrim'),
 			'decorators'	=> array('ViewHelper', array('HtmlTag',  array('tag' => 'span'))),
 		), array(null => "Service Type"));
 		$this->addElements(array($filterServiceType));
 
-		$filterTurnAroundTime = new Kaltura_Form_Element_EnumSelect('filterTurnAroundTime', array(
-			'enum' => 'Kaltura_Client_Reach_Enum_VendorServiceTurnAroundTime',
+		$filterTurnAroundTime = new Vidiun_Form_Element_EnumSelect('filterTurnAroundTime', array(
+			'enum' => 'Vidiun_Client_Reach_Enum_VendorServiceTurnAroundTime',
 			'label'			=> 'Service Turn Around Time:',
 			'filters'		=> array('StringTrim'),
 			'decorators'	=> array('ViewHelper', array('HtmlTag',  array('tag' => 'span'))),
 		), array(null => "Turn Around Time"));
 		$this->addElements(array($filterTurnAroundTime));
 		
-		$filterSourceLanguage = new Kaltura_Form_Element_EnumSelect('filterSourceLanguage', array(
-			'enum' => 'Kaltura_Client_Reach_Enum_CatalogItemLanguage',
+		$filterSourceLanguage = new Vidiun_Form_Element_EnumSelect('filterSourceLanguage', array(
+			'enum' => 'Vidiun_Client_Reach_Enum_CatalogItemLanguage',
 			'label'			=> 'Source Language:',
 			'filters'		=> array('StringTrim'),
 			'hidden'		=> true,
@@ -50,8 +50,8 @@ class Form_CatalogItemFilter extends Form_PartnerIdFilter
 		), array(null => "Source Language"));
 		$this->addElements(array($filterSourceLanguage));
 		
-		$filterTargetLanguage = new Kaltura_Form_Element_EnumSelect('filterTargetLanguage', array(
-			'enum' => 'Kaltura_Client_Reach_Enum_CatalogItemLanguage',
+		$filterTargetLanguage = new Vidiun_Form_Element_EnumSelect('filterTargetLanguage', array(
+			'enum' => 'Vidiun_Client_Reach_Enum_CatalogItemLanguage',
 			'label'			=> 'Target Language:',
 			'hidden'		=> true,
 			'filters'		=> array('StringTrim'),

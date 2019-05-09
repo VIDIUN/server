@@ -3,6 +3,6 @@
  * @package plugins.unicornDistribution
  * @subpackage api.filters
  */
-class KalturaUnicornDistributionProfileFilter extends KalturaUnicornDistributionProfileBaseFilter
+class VidiunUnicornDistributionProfileFilter extends VidiunUnicornDistributionProfileBaseFilter
 {
 }

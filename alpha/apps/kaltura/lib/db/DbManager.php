@@ -19,7 +19,7 @@ class DbManager
 	/**
 	 * @var array
 	 */
-	protected static $kalturaConfig = array();
+	protected static $vidiunConfig = array();
 	
 	/**
 	 * @var array
@@ -27,7 +27,7 @@ class DbManager
 	protected static $sphinxConnection = null;
 	
 	/**
-	 * @var kBaseCacheWrapper 
+	 * @var vBaseCacheWrapper 
 	 */
 	protected static $sphinxCache = null; 
 	
@@ -48,7 +48,7 @@ class DbManager
 
 	public static function setConfig(array $config)
 	{
-		$reflect = new ReflectionClass('KalturaPDO');
+		$reflect = new ReflectionClass('VidiunPDO');
 		$optionAttributes = $reflect->getConstants();
 		
 		foreach ($config['datasources'] as $connectionName => & $connectionConfig) 
@@ -59,22 +59,22 @@ class DbManager
 			if(!isset($connectionConfig['connection']['options']))
 				$connectionConfig['connection']['options'] = array();
 			$connectionOptions = & $connectionConfig['connection']['options'];
-			$connectionOptions['KalturaPDO::KALTURA_ATTR_NAME'] = array('value' => $connectionName);
+			$connectionOptions['VidiunPDO::VIDIUN_ATTR_NAME'] = array('value' => $connectionName);
 		
-			if(isset($connectionOptions['kaltura']))
+			if(isset($connectionOptions['vidiun']))
 			{
-				self::$kalturaConfig[$connectionName] = $connectionOptions['kaltura'];
-				unset($connectionOptions['kaltura']);
+				self::$vidiunConfig[$connectionName] = $connectionOptions['vidiun'];
+				unset($connectionOptions['vidiun']);
 			}
 		}
 		
 		self::$config = $config;
 	}
 	
-	public static function getKalturaConfig($connectionName)
+	public static function getVidiunConfig($connectionName)
 	{
-		if(isset(self::$kalturaConfig[$connectionName]))
-			return self::$kalturaConfig[$connectionName];
+		if(isset(self::$vidiunConfig[$connectionName]))
+			return self::$vidiunConfig[$connectionName];
 			
 		return array();
 	}
@@ -102,10 +102,10 @@ class DbManager
 		}
 			
 		$dbConfigs = array();
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaDatabaseConfig');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunDatabaseConfig');
 		foreach($pluginInstances as $pluginInstance)
 		{
-			/* @var $pluginInstance IKalturaDatabaseConfig */
+			/* @var $pluginInstance IVidiunDatabaseConfig */
 			$dbConfigs[] = $pluginInstance->getDatabaseConfig();
 		}
 
@@ -124,7 +124,7 @@ class DbManager
 			self::addExtraConfiguration($dbConfig);
 		
 		Propel::setConfiguration(self::$config);
-		Propel::setLogger(KalturaLog::getInstance());
+		Propel::setLogger(VidiunLog::getInstance());
 		
 		try
 		{
@@ -132,7 +132,7 @@ class DbManager
 		}
 		catch(PropelException $pex)
 		{
-			KalturaLog::alert($pex->getMessage());
+			VidiunLog::alert($pex->getMessage());
 			throw new PropelException("Database error");
 		}
 	}
@@ -143,7 +143,7 @@ class DbManager
 	}
 	
 	/**
-	 * @return KalturaPDO
+	 * @return VidiunPDO
 	 */
 	public static function createSphinxConnection($sphinxServer, $port = 9312)
 	{
@@ -151,13 +151,13 @@ class DbManager
 		
 		try
 		{
-			$con = new KalturaPDO($dsn);
+			$con = new VidiunPDO($dsn);
 			$con->setCommentsEnabled(false);
 			return $con;
 		}
 		catch(PropelException $pex)
 		{
-			KalturaLog::alert($pex->getMessage());
+			VidiunLog::alert($pex->getMessage());
 			throw new PropelException("Database error");
 		}
 	}
@@ -168,20 +168,20 @@ class DbManager
 			return;
 
 		$stickySessionExpiry = isset(self::$config['sphinx_datasources']['sticky_session_timeout']) ? self::$config['sphinx_datasources']['sticky_session_timeout'] : 600;
-		KalturaLog::debug("Setting sphinx sticky session for key [" . self::$stickySessionKey . "] to sphinx index [" . self::$connIndex . "]");
+		VidiunLog::debug("Setting sphinx sticky session for key [" . self::$stickySessionKey . "] to sphinx index [" . self::$connIndex . "]");
 		self::$sphinxCache->set(self::$stickySessionKey, self::$connIndex, $stickySessionExpiry);
 		self::$cachedConnIndex = self::$connIndex;
 	}
 
 	protected static function getSphinxConnIndexFromCache()
 	{
-		self::$sphinxCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_SPHINX_STICKY_SESSIONS);
+		self::$sphinxCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_SPHINX_STICKY_SESSIONS);
 		if (!self::$sphinxCache)
 			return false;
 		
 		self::$stickySessionKey = self::getStickySessionKey();
 		$preferredIndex = self::$sphinxCache->get(self::$stickySessionKey);
-		KalturaLog::debug("Got sphinx sticky session for key [" . self::$stickySessionKey . "] to sphinx index [" . $preferredIndex . "]");
+		VidiunLog::debug("Got sphinx sticky session for key [" . self::$stickySessionKey . "] to sphinx index [" . $preferredIndex . "]");
 		if ($preferredIndex === false)
 			return false;
 		self::$cachedConnIndex = (int) $preferredIndex; //$preferredIndex returns from self::$sphinxCache->get(..) in type string
@@ -195,24 +195,24 @@ class DbManager
 	 */
 	protected static function getSphinxConnIndexByLastUpdatedAt($dataSources)
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
 		if (!$cache)
 		{
-			KalturaLog::debug("could not retrieve query cache keys form cache, no sphinx index will be chosen by updatedAt");
+			VidiunLog::debug("could not retrieve query cache keys form cache, no sphinx index will be chosen by updatedAt");
 			return false;
 		}
 
-		$cacheResult = $cache->get(kQueryCache::SPHINX_LAG_KEY);
+		$cacheResult = $cache->get(vQueryCache::SPHINX_LAG_KEY);
 		if (!$cacheResult)
 		{
-			KalturaLog::debug("failed to get sphinx_lag_key from memcache, no sphinx index will be chosen by updatedAt");
+			VidiunLog::debug("failed to get sphinx_lag_key from memcache, no sphinx index will be chosen by updatedAt");
 			return false;
 		}
 
 		$lastUpdatedAtPerSphinx = json_decode($cacheResult, true);
 		if (empty($lastUpdatedAtPerSphinx))
 		{
-			KalturaLog::debug("failed decoding sphinx last updated ids, no sphinx index will be chosen by updatedAt");
+			VidiunLog::debug("failed decoding sphinx last updated ids, no sphinx index will be chosen by updatedAt");
 			return false;
 		}
 
@@ -222,16 +222,16 @@ class DbManager
 
 	protected static function getStickySessionKey()
 	{
-		$ksObject = kCurrentContext::$ks_object;
+		$vsObject = vCurrentContext::$vs_object;
 
-		if($ksObject && $ksObject->hasPrivilege(kSessionBase::PRIVILEGE_SESSION_KEY)) 
-			return self::STICKY_SESSION_PREFIX . kCurrentContext::getCurrentPartnerId() . "_" . $ksObject->getPrivilegeValue(kSessionBase::PRIVILEGE_SESSION_KEY);
+		if($vsObject && $vsObject->hasPrivilege(vSessionBase::PRIVILEGE_SESSION_KEY)) 
+			return self::STICKY_SESSION_PREFIX . vCurrentContext::getCurrentPartnerId() . "_" . $vsObject->getPrivilegeValue(vSessionBase::PRIVILEGE_SESSION_KEY);
 		
 		return self::STICKY_SESSION_PREFIX . infraRequestUtils::getRemoteAddress();
 	}
 	
 	/**
-	 * @return KalturaPDO
+	 * @return VidiunPDO
 	 */
 	public static function getSphinxConnection($read = true)
 	{
@@ -256,7 +256,7 @@ class DbManager
 			{
 				throw new Exception('Failed to connect to any Sphinx config');
 			}
-			KalturaLog::debug("Actual sphinx index [". self::$connIndex. "] sphinx index by best lag [" . $preferredIndex. "]");
+			VidiunLog::debug("Actual sphinx index [". self::$connIndex. "] sphinx index by best lag [" . $preferredIndex. "]");
 		}
 	
 		if (!$read)
@@ -319,12 +319,12 @@ class DbManager
 			$preferredWeight -= $weight;
 			if ($preferredWeight <= 0)
 			{
-				KalturaLog::log("Chosen Sphinx [$currentHost]. Sphinx weights " . print_r($weights, true));
+				VidiunLog::log("Chosen Sphinx [$currentHost]. Sphinx weights " . print_r($weights, true));
 				return $hostToIndex[$currentHost];
 			}
 		}
 
-		KalturaLog::debug("no sphinx was chosen by best last updated id");
+		VidiunLog::debug("no sphinx was chosen by best last updated id");
 		return false;
 	}
 
@@ -334,7 +334,7 @@ class DbManager
 			throw new Exception("DB Config [$key] not found");
 
 		$dataSource = self::$config['datasources'][$key]['connection']['dsn'];
-		self::$sphinxConnection = new KalturaPDO($dataSource, null, null, array(PDO::ATTR_TIMEOUT => $connectTimeout, KalturaPDO::KALTURA_ATTR_NAME => $key), $key);					
+		self::$sphinxConnection = new VidiunPDO($dataSource, null, null, array(PDO::ATTR_TIMEOUT => $connectTimeout, VidiunPDO::VIDIUN_ATTR_NAME => $key), $key);					
 		self::$sphinxConnection->setCommentsEnabled(false);
 		
 		return self::$sphinxConnection;
@@ -373,12 +373,12 @@ class DbManager
 				try 
 				{
 					$connection = call_user_func_array($connectCallback, $params);
-					KalturaLog::debug("connected to $key");
+					VidiunLog::debug("connected to $key");
 					return array($connection, $curIndex);
 				}
 				catch(Exception $ex)
 				{
-					KalturaLog::err("failed to connect to $key");
+					VidiunLog::err("failed to connect to $key");
 				}
 
 				if (function_exists('apc_store'))

@@ -4,10 +4,10 @@
  * @subpackage api.objects
  */
 
-class KalturaConfMapsListResponse extends KalturaListResponse
+class VidiunConfMapsListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaConfMapsArray
+	 * @var VidiunConfMapsArray
 	 * @readonly
 	 */
 	public $objects;

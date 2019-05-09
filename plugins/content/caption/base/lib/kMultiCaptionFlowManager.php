@@ -1,9 +1,9 @@
 <?php
-class kMultiCaptionFlowManager implements kBatchJobStatusEventConsumer
+class vMultiCaptionFlowManager implements vBatchJobStatusEventConsumer
 {
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -18,7 +18,7 @@ class kMultiCaptionFlowManager implements kBatchJobStatusEventConsumer
 
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{	
@@ -28,7 +28,7 @@ class kMultiCaptionFlowManager implements kBatchJobStatusEventConsumer
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process updatedJob - '.$e->getMessage());
+			VidiunLog::err('Failed to process updatedJob - '.$e->getMessage());
 		}
 		return true;					
 	}

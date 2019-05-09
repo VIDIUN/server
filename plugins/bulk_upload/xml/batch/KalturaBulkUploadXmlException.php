@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadXml
  * @subpackage Scheduler.BulkUpload
  */
-class KalturaBulkUploadXmlException extends KalturaException
+class VidiunBulkUploadXmlException extends VidiunException
 {
 	public function __construct($message, $code, $arguments = null)
 	{

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportExportItem extends KalturaObject
+class VidiunReportExportItem extends VidiunObject
 {
 
 	/**
@@ -12,17 +12,17 @@ class KalturaReportExportItem extends KalturaObject
 	public $reportTitle;
 
 	/**
-	 * @var KalturaReportExportItemType
+	 * @var VidiunReportExportItemType
 	 */
 	public $action;
 
 	/**
-	 * @var KalturaReportType
+	 * @var VidiunReportType
 	 */
 	public $reportType;
 
 	/**
-	 * @var KalturaReportInputFilter
+	 * @var VidiunReportInputFilter
 	 */
 	public $filter;
 
@@ -37,7 +37,7 @@ class KalturaReportExportItem extends KalturaObject
 	public $objectIds;
 
 	/**
-	 * @var KalturaReportResponseOptions
+	 * @var VidiunReportResponseOptions
 	 */
 	public $responseOptions;
 
@@ -60,14 +60,14 @@ class KalturaReportExportItem extends KalturaObject
 	{
 		if (!$object_to_fill)
 		{
-			$object_to_fill = new kReportExportItem();
+			$object_to_fill = new vReportExportItem();
 		}
 		$object_to_fill->setFilter($this->filter);
 
 		return parent::toObject($object_to_fill, array('filter'));
 	}
 
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
 		$this->filter = $srcObj->getFilter();

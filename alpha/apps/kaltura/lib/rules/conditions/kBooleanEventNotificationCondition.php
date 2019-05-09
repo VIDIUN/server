@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kBooleanEventNotificationCondition extends kCondition
+class vBooleanEventNotificationCondition extends vCondition
 {
 	/**
 	 * @var string
@@ -17,9 +17,9 @@ class kBooleanEventNotificationCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
- 	* @see kCondition::internalFulfilled()
+ 	* @see vCondition::internalFulfilled()
  	*/
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		return true;
 	}

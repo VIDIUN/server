@@ -3,15 +3,15 @@
  * @package plugins.beacon
  * @subpackage api.objects
  */
-class KalturaBeaconScheduledResourceOperator extends KalturaBeaconScheduledResourceBaseItem
+class VidiunBeaconScheduledResourceOperator extends VidiunBeaconScheduledResourceBaseItem
 {
 	/**
-	 * @var KalturaESearchOperatorType
+	 * @var VidiunESearchOperatorType
 	 */
 	public $operator;
 
 	/**
-	 *  @var KalturaBeaconScheduledResourceBaseItemArray
+	 *  @var VidiunBeaconScheduledResourceBaseItemArray
 	 */
 	public $searchItems;
 

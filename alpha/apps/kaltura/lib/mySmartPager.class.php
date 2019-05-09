@@ -62,7 +62,7 @@ class mySmartPager
 		//if ( $this->m_page > $this->m_page_size ) $this->m_page = $this->m_page_size;
 
 		// the sfPropelPager get a first parameter - the clas it pages
-		$this->m_pager = new kPropelPager( $criteria_class , $this->m_page_size );
+		$this->m_pager = new vPropelPager( $criteria_class , $this->m_page_size );
 		//var_dump ( $this );
 	}
 	
@@ -195,7 +195,7 @@ just under the require_once:
 			$this->m_count_came_from_cache = false;
 		}
 		
-		KalturaLog::log( "mySmartPager get [" . $this->m_criteria_class . "] [$cache_key] [" . $this->m_count_came_from_cache . "] [$cached_count]" );
+		VidiunLog::log( "mySmartPager get [" . $this->m_criteria_class . "] [$cache_key] [" . $this->m_count_came_from_cache . "] [$cached_count]" );
 		
 		if ( $cached_count == self::NONE )
 			$cached_count = 0;  // so we don't mix up with null
@@ -213,7 +213,7 @@ just under the require_once:
 		
 		$cache_key =  $this->getCacheKey();
 		
-		KalturaLog::log( "mySmartPager set [" . $this->m_criteria_class . "] [$cache_key] [" . $this->m_count_came_from_cache . "] [$count_to_cache]" );
+		VidiunLog::log( "mySmartPager set [" . $this->m_criteria_class . "] [$cache_key] [" . $this->m_count_came_from_cache . "] [$count_to_cache]" );
 		self::$s_pager_count_cache->put ( $cache_key , $count_to_cache , self::COUNT_CACHE_EXPIRY_IN_SECONDS  );
 	}
 	

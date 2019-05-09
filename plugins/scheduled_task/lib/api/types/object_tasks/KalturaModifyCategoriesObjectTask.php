@@ -4,19 +4,19 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects.objectTasks
  */
-class KalturaModifyCategoriesObjectTask extends KalturaObjectTask
+class VidiunModifyCategoriesObjectTask extends VidiunObjectTask
 {
 	/**
 	 * Should the object task add or remove categories?
 	 *
-	 * @var KalturaScheduledTaskAddOrRemoveType
+	 * @var VidiunScheduledTaskAddOrRemoveType
 	 */
 	public $addRemoveType;
 
 	/**
 	 * The list of category ids to add or remove
 	 *
-	 * @var KalturaIntegerValueArray
+	 * @var VidiunIntegerValueArray
 	 */
 	public $categoryIds;
 
@@ -27,18 +27,18 @@ class KalturaModifyCategoriesObjectTask extends KalturaObjectTask
 
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/** @var kObjectTask $dbObject */
+		/** @var vObjectTask $dbObject */
 		$dbObject = parent::toObject($dbObject, $skip);
 		$dbObject->setDataValue('addRemoveType', $this->addRemoveType);
 		$dbObject->setDataValue('categoryIds', $this->categoryIds);
 		return $dbObject;
 	}
 
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
 
-		/** @var kObjectTask $srcObj */
+		/** @var vObjectTask $srcObj */
 		$this->addRemoveType = $srcObj->getDataValue('addRemoveType');
 		$this->categoryIds = $srcObj->getDataValue('categoryIds');
 	}

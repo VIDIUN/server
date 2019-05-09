@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/kBaseMemcacheConf.php';
+require_once __DIR__ . '/vBaseMemcacheConf.php';
 
-class kRemoteMemCacheConf extends kBaseMemcacheConf implements kKeyCacheInterface,kMapCacheInterface
+class vRemoteMemCacheConf extends vBaseMemcacheConf implements vKeyCacheInterface,vMapCacheInterface
 {
 	const MAP_LIST_KEY = 'MAP_LIST_KEY';
 	const MAP_DELIMITER = '|';
@@ -11,7 +11,7 @@ class kRemoteMemCacheConf extends kBaseMemcacheConf implements kKeyCacheInterfac
 		$key=null;
 		$cache = $this->getCache();
 		if($cache)
-			$key = $cache->get(kBaseConfCache::CONF_CACHE_VERSION_KEY);
+			$key = $cache->get(vBaseConfCache::CONF_CACHE_VERSION_KEY);
 
 		if (!$key)
 			$key = self::generateKey();
@@ -82,7 +82,7 @@ class kRemoteMemCacheConf extends kBaseMemcacheConf implements kKeyCacheInterfac
 				$map = json_decode($map,true);
 				if($mergedMaps)
 				{
-					$mergedMaps = kEnvironment::mergeConfigItem($mergedMaps, $map);
+					$mergedMaps = vEnvironment::mergeConfigItem($mergedMaps, $map);
 				}
 				else
 				{

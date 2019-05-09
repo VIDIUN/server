@@ -30,22 +30,22 @@ class updateentryAction extends defPartnerservices2Action
 			); 
 	}
 	
-	// ask to fetch the kuser from puser_kuser 
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_KUSER_ID_ONLY;	}
+	// ask to fetch the vuser from puser_vuser 
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_VUSER_ID_ONLY;	}
 	
-	public function requiredPrivileges () { return "edit:<kshow_id>" ; }
+	public function requiredPrivileges () { return "edit:<vshow_id>" ; }
 
 	public function verifyEntryPrivileges ( $entry ) 
 	{
-		if($entry->getKshowId())
+		if($entry->getVshowId())
 		{
-			$priv_id = $entry->getKshowId();
+			$priv_id = $entry->getVshowId();
 		}
 		else
 		{
 			$priv_id = $entry->getId();
 		}
-		return $this->verifyPrivileges ( "edit" , $priv_id ); // user was granted explicit permissions when initiatd the ks
+		return $this->verifyPrivileges ( "edit" , $priv_id ); // user was granted explicit permissions when initiatd the vs
 	}
 	
 	protected function getObjectPrefix () { return "entry"; } // TODO - fix to be entries
@@ -53,11 +53,11 @@ class updateentryAction extends defPartnerservices2Action
 	protected function validateInputEntry ( $entry ) {}
 	protected function validateEntry ( $entry ) {} 
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$prefix = $this->getObjectPrefix();
 		
-		if ( ! $puser_kuser )
+		if ( ! $puser_vuser )
 		{
 			$this->addError ( APIErrors::INVALID_USER_ID ,$puser_id );
 			return;
@@ -78,12 +78,12 @@ class updateentryAction extends defPartnerservices2Action
 		$this->validateInputEntry( $entry );
 		
 		// TODO - verify the user is allowed to modify the entry
-		if ( ! $this->isOwnedBy ( $entry , $puser_kuser->getKuserId() ) )
+		if ( ! $this->isOwnedBy ( $entry , $puser_vuser->getVuserId() ) )
 		{
-			$this->verifyEntryPrivileges ( $entry ); // user was granted explicit permissions when initiatd the ks
+			$this->verifyEntryPrivileges ( $entry ); // user was granted explicit permissions when initiatd the vs
 		}
 		
-		// get the new properties for the kuser from the request
+		// get the new properties for the vuser from the request
 		$entry_update_data = new entry();
 		
 		// assume the type and media_type of the entry from the DB are the same as those of the one from the user - if not -they will be overriden
@@ -111,7 +111,7 @@ class updateentryAction extends defPartnerservices2Action
 
 			$this->validateEntry ( $entry );
 			// TODO - chack to see that the permissions changed, not just any attributes
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_PERMISSIONS, $entry );
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_PERMISSIONS, $entry );
 				
 			$entry->save();
 		}

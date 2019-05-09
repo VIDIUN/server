@@ -2,7 +2,7 @@
 /**
  * @package plugins.smilManifest
  */
-class SmilManifestPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator, IKalturaBatchJobDataContributor
+class SmilManifestPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator, IVidiunBatchJobDataContributor
 {
 	const PLUGIN_NAME = 'smilManifest';
 
@@ -19,17 +19,17 @@ class SmilManifestPlugin extends KalturaPlugin implements IKalturaObjectLoader, 
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::SMIL_MANIFEST)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::SMIL_MANIFEST)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
-			return new KOperationEngineSmilManifest(null, $constructorArgs['outFilePath']);
+			return new VOperationEngineSmilManifest(null, $constructorArgs['outFilePath']);
 		}
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(SmilManifestConversionEngineType::SMIL_MANIFEST))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(SmilManifestConversionEngineType::SMIL_MANIFEST))
 		{
-			return new KDLOperatorSmilManifest($enumValue);
+			return new VDLOperatorSmilManifest($enumValue);
 		}
 		
 		return null;
@@ -42,11 +42,11 @@ class SmilManifestPlugin extends KalturaPlugin implements IKalturaObjectLoader, 
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(SmilManifestConversionEngineType::SMIL_MANIFEST))
-			return 'KOperationEngineSmilManifest';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(SmilManifestConversionEngineType::SMIL_MANIFEST))
+			return 'VOperationEngineSmilManifest';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(SmilManifestConversionEngineType::SMIL_MANIFEST))
-			return 'KDLOperatorSmilManifest';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(SmilManifestConversionEngineType::SMIL_MANIFEST))
+			return 'VDLOperatorSmilManifest';
 
 		return null;
 	}
@@ -70,8 +70,8 @@ class SmilManifestPlugin extends KalturaPlugin implements IKalturaObjectLoader, 
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -79,10 +79,10 @@ class SmilManifestPlugin extends KalturaPlugin implements IKalturaObjectLoader, 
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
-	public static function contributeToConvertJobData ($jobType, $jobSubType, kConvertJobData $jobData)
+	public static function contributeToConvertJobData ($jobType, $jobSubType, vConvertJobData $jobData)
 	{
 		if($jobType == BatchJobType::CONVERT && $jobSubType == self::getApiValue(SmilManifestConversionEngineType::SMIL_MANIFEST))
 			return self::addFlavorParamsOutputForSourceAssets($jobData);
@@ -90,12 +90,12 @@ class SmilManifestPlugin extends KalturaPlugin implements IKalturaObjectLoader, 
 			return $jobData;
 	}
 
-	public static function addFlavorParamsOutputForSourceAssets(kConvertJobData $jobData)
+	public static function addFlavorParamsOutputForSourceAssets(vConvertJobData $jobData)
 	{
 		$assetsData = array();
 		foreach($jobData->getSrcFileSyncs() as $srcFileSyncDesc)
 		{
-			/** @var $srcFileSyncDesc kSourceFileSyncDescriptor */
+			/** @var $srcFileSyncDesc vSourceFileSyncDescriptor */
 			$assetId = $srcFileSyncDesc->getAssetId();
 			$flavorAsset = assetPeer::retrieveById($assetId);
 			$assetsData['asset_'.$assetId.'_bitrate'] = $flavorAsset->getBitrate();

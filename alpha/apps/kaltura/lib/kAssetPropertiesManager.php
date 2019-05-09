@@ -1,9 +1,9 @@
 <?php
-class kAssetPropertiesManager implements kObjectChangedEventConsumer
+class vAssetPropertiesManager implements vObjectChangedEventConsumer
 {
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -24,7 +24,7 @@ class kAssetPropertiesManager implements kObjectChangedEventConsumer
 
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{

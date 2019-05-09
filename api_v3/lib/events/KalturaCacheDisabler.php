@@ -5,15 +5,15 @@
  * @package api
  * @subpackage cache
  */
-class KalturaCacheDisabler implements kObjectSavedEventConsumer
+class VidiunCacheDisabler implements vObjectSavedEventConsumer
 {
 	public function objectSaved(BaseObject $object)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 	}
 	
 	public function shouldConsumeSavedEvent(BaseObject $object)
 	{
-		return KalturaResponseCacher::isCacheEnabled();
+		return VidiunResponseCacher::isCacheEnabled();
 	}
 }

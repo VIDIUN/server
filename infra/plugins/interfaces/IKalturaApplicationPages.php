@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaApplicationPages extends IKalturaBase
+interface IVidiunApplicationPages extends IVidiunBase
 {
 	/**
 	 * @return array

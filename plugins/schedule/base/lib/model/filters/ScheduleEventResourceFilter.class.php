@@ -7,7 +7,7 @@ class ScheduleEventResourceFilter extends baseObjectFilter
 {
 	public function init ()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 				"_eq_event_id",
 				"_in_event_id",
 				"_eq_resource_id",

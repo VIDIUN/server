@@ -11,7 +11,7 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 	{
 		$object = parent::getObject($objectType, $properties, $add_underscore, $include_empty_fields);
 	
-		if($object instanceof KalturaGenericDistributionProfile)
+		if($object instanceof VidiunGenericDistributionProfile)
 		{
 			$this->getActionObject($object, 'submit', $properties);
 			$this->getActionObject($object, 'update', $properties);
@@ -56,7 +56,7 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 	{
 		parent::populateFromObject($object, $add_underscore);
 		
-		if($object instanceof KalturaGenericDistributionProfile)
+		if($object instanceof VidiunGenericDistributionProfile)
 		{
 			$this->populateFromActionObject($object, 'submit', $add_underscore);
 			$this->populateFromActionObject($object, 'update', $add_underscore);
@@ -91,7 +91,7 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 			
 		self::$metadataProfileFields = array();
 		$client = Infra_ClientHelper::getClient();
-		$metadataPlugin = Kaltura_Client_Metadata_Plugin::get($client);
+		$metadataPlugin = Vidiun_Client_Metadata_Plugin::get($client);
 		
 		Infra_ClientHelper::impersonate($this->partnerId);
 		
@@ -111,7 +111,7 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 		catch (Exception $e)
 		{
 			Infra_ClientHelper::unimpersonate();
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return array();
 		}
 		
@@ -123,8 +123,8 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 	protected function getEntryFields()
 	{
 		return array(
-			'entry.KSHOW_ID' => 'Kaltura Show',
-			'entry.KUSER_ID' => 'Kaltura User',
+			'entry.VSHOW_ID' => 'Vidiun Show',
+			'entry.VUSER_ID' => 'Vidiun User',
 			'entry.NAME' => 'Name',
 			'entry.DATA' => 'Data',
 			'entry.THUMBNAIL' => 'Thumbnail',
@@ -148,7 +148,7 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 			'entry.START_DATE' => 'Start Date',
 			'entry.END_DATE' => 'End Date',
 			'moderate' => 'Moderate',
-			'current_kshow_version' => 'Current Show Version',
+			'current_vshow_version' => 'Current Show Version',
 			'hasDownload' => 'Has Download',
 			'encodingIP1' => 'Encoding IP 1',
 			'encodingIP2' => 'Encoding IP 2',
@@ -212,15 +212,15 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 		}
 	}
 	
-	public function getActionObject(KalturaGenericDistributionProfile $object, $action, array $properties, $attributeName = null)
+	public function getActionObject(VidiunGenericDistributionProfile $object, $action, array $properties, $attributeName = null)
 	{
 		if(is_null($attributeName))
 			$attributeName = "{$action}Action";
 			
 		if(!$object->$attributeName)
-			$object->$attributeName = new KalturaGenericDistributionProfileAction();
+			$object->$attributeName = new VidiunGenericDistributionProfileAction();
 		
-		if(!$properties || !isset($properties["{$action}_enabled"]) || $properties["{$action}_enabled"] == Kaltura_Client_ContentDistribution_Enum_DistributionProfileActionStatus::DISABLED)
+		if(!$properties || !isset($properties["{$action}_enabled"]) || $properties["{$action}_enabled"] == Vidiun_Client_ContentDistribution_Enum_DistributionProfileActionStatus::DISABLED)
 			return;
 			
 		foreach($properties as $property => $value)
@@ -269,15 +269,15 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 			if($element)
 				$element->setValue($value);
 			else
-				KalturaLog::err("element [{$action}_{$prop}] not found");
+				VidiunLog::err("element [{$action}_{$prop}] not found");
 		}
 	}
 	
-	public function resetUnUpdatebleAttributes(Kaltura_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
+	public function resetUnUpdatebleAttributes(Vidiun_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
 	{
 		parent::resetUnUpdatebleAttributes($distributionProfile);
 		
-		if($distributionProfile instanceof KalturaGenericDistributionProfile)
+		if($distributionProfile instanceof VidiunGenericDistributionProfile)
 		{
 			$distributionProfile->genericProviderId = null;
 		}
@@ -291,7 +291,7 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 		$this->addElements(array($element));
 		
 		$client = Infra_ClientHelper::getClient();
-		$contentDistributionPlugin = Kaltura_Client_ContentDistribution_Plugin::get($client);
+		$contentDistributionPlugin = Vidiun_Client_ContentDistribution_Plugin::get($client);
 		Infra_ClientHelper::impersonate($this->partnerId);
 		$genericDistributionProviderList = $contentDistributionPlugin->genericDistributionProvider->listAction();
 		Infra_ClientHelper::unimpersonate();
@@ -326,11 +326,11 @@ class Form_GenericProviderProfileConfiguration extends Form_ProviderProfileConfi
 			'decorators' => array('ViewHelper', array('Label', array('placement' => 'prepend')), array('HtmlTag',  array('tag' => 'dt', 'style' => 'display: none', 'class' => "action-fields-$action")))
 		));
 		
-		$element->addMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionProtocol::FTP, 'FTP');
-		$element->addMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionProtocol::SFTP, 'SFTP');
-		$element->addMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionProtocol::SCP, 'SCP');
-		$element->addMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionProtocol::HTTP, 'HTTP');
-		$element->addMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionProtocol::HTTPS, 'HTTPS');
+		$element->addMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionProtocol::FTP, 'FTP');
+		$element->addMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionProtocol::SFTP, 'SFTP');
+		$element->addMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionProtocol::SCP, 'SCP');
+		$element->addMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionProtocol::HTTP, 'HTTP');
+		$element->addMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionProtocol::HTTPS, 'HTTPS');
 		$displayGroup->addElement($element);
 			
 		$element = $this->createElement('text', "{$action}_server_url", array(

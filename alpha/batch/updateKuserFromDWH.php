@@ -4,10 +4,10 @@ set_time_limit(0);
 
 ini_set("memory_limit","700M");
 
-define("KALTURA_ROOT_PATH", realpath(__DIR__ . '/../../'));
+define("VIDIUN_ROOT_PATH", realpath(__DIR__ . '/../../'));
 
-require_once(KALTURA_ROOT_PATH . '/alpha/config/kConf.php');
-require_once(KALTURA_ROOT_PATH . '/infra/KAutoloader.php');
+require_once(VIDIUN_ROOT_PATH . '/alpha/config/vConf.php');
+require_once(VIDIUN_ROOT_PATH . '/infra/VAutoloader.php');
 
 $sf_symfony_lib_dir = realpath(dirname(__FILE__).'/../../vendor/symfony');
 $sf_symfony_data_dir = realpath(dirname(__FILE__).'/../../vendor/symfony-data');
@@ -18,41 +18,41 @@ set_include_path($include_path);
 require_once($sf_symfony_lib_dir.'/util/sfCore.class.php');
 sfCore::bootstrap($sf_symfony_lib_dir, $sf_symfony_data_dir);
 
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "propel", "*"));
-KAutoloader::setClassMapFilePath(kConf::get("cache_root_path") . '/scripts/' . basename(__FILE__) . '.cache');
-KAutoloader::register();
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "propel", "*"));
+VAutoloader::setClassMapFilePath(vConf::get("cache_root_path") . '/scripts/' . basename(__FILE__) . '.cache');
+VAutoloader::register();
 
-date_default_timezone_set(kConf::get("date_default_timezone"));
+date_default_timezone_set(vConf::get("date_default_timezone"));
 
-$loggerConfigPath = KALTURA_ROOT_PATH . '/scripts/logger.ini';
+$loggerConfigPath = VIDIUN_ROOT_PATH . '/scripts/logger.ini';
 $config = new Zend_Config_Ini($loggerConfigPath);
-KalturaLog::initLog($config);
-KalturaLog::setContext(basename(__FILE__));
-KalturaLog::info("Starting script");
+VidiunLog::initLog($config);
+VidiunLog::setContext(basename(__FILE__));
+VidiunLog::info("Starting script");
 
-KalturaLog::info("Initializing database...");
-DbManager::setConfig(kConf::getDB());
+VidiunLog::info("Initializing database...");
+DbManager::setConfig(vConf::getDB());
 DbManager::initialize();
-KalturaLog::info("Database initialized successfully");
+VidiunLog::info("Database initialized successfully");
 
-$syncType = 'kuser';
+$syncType = 'vuser';
 $dbh = myDbHelper::getConnection ( myDbHelper::DB_HELPER_CONN_DWH );
 $sql = "CALL get_data_for_operational('$syncType')";
 $count = 0;
 $rows = $dbh->query ( $sql )->fetchAll ();
 foreach ( $rows as $row ) {
-	$kuser = kuserPeer::retrieveByPK ( $row ['kuser_id'] );
-	if (is_null ( $kuser )) {
-		KalturaLog::err ( 'Couldn\'t find kuser [' . $row ['kuser_id'] . ']' );
+	$vuser = vuserPeer::retrieveByPK ( $row ['vuser_id'] );
+	if (is_null ( $vuser )) {
+		VidiunLog::err ( 'Couldn\'t find vuser [' . $row ['vuser_id'] . ']' );
 		continue;
 	}
-	$kuser->setStorageSize ( $row ['storage_size'] );
-	$kuser->save ();
+	$vuser->setStorageSize ( $row ['storage_size'] );
+	$vuser->save ();
 	$count ++;
-	KalturaLog::debug ( 'Successfully saved kuser [' . $row ['kuser_id'] . ']' );
+	VidiunLog::debug ( 'Successfully saved vuser [' . $row ['vuser_id'] . ']' );
 	if ($count % 500)
-		kuserPeer::clearInstancePool ();
+		vuserPeer::clearInstancePool ();
 }
 $sql = "CALL mark_operational_sync_as_done('$syncType')";
 $dbh->query ( $sql );
-KalturaLog::debug ( "Done updating $count kusers from DWH to operational DB" );
+VidiunLog::debug ( "Done updating $count vusers from DWH to operational DB" );

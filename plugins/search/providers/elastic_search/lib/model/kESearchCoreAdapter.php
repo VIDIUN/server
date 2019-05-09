@@ -10,7 +10,7 @@ function build_sorter($objectsOrder) {
 	};
 }
 
-class kESearchCoreAdapter
+class vESearchCoreAdapter
 {
 
 	const HITS_KEY = 'hits';
@@ -97,7 +97,7 @@ class kESearchCoreAdapter
 			$itemData[$innerHitsKey][self::TOTAL_COUNT_KEY] = self::getInnerHitsTotalCountForObject($hits, $objectType);
 			foreach ($hits[self::HITS_KEY][self::HITS_KEY] as $itemResult)
 			{
-				$currItemData = KalturaPluginManager::loadObject('ESearchItemData', $objectType);
+				$currItemData = VidiunPluginManager::loadObject('ESearchItemData', $objectType);
 				if ($currItemData)
 				{
 					if(array_key_exists(self::HIGHLIGHT_KEY, $itemResult))
@@ -123,7 +123,7 @@ class kESearchCoreAdapter
 		if(isset(self::$innerHitsObjectType[$objectType]))
 			return array(self::$innerHitsObjectType[$objectType], $queryName, $queryIndex);
 
-		KalturaLog::err('Unsupported inner object key in elastic results['.$innerHitsKey.']');
+		VidiunLog::err('Unsupported inner object key in elastic results['.$innerHitsKey.']');
 		return array($objectType, $queryName, $queryIndex);
 	}
 
@@ -152,7 +152,7 @@ class kESearchCoreAdapter
 				return $objectResult[self::HITS_KEY][self::TOTAL_KEY];
 			default:
 			{
-				KalturaLog::err('Unsupported inner object type in elastic results['.$objectType.']');
+				VidiunLog::err('Unsupported inner object type in elastic results['.$objectType.']');
 				return 0;
 			}
 		}
@@ -188,7 +188,7 @@ class kESearchCoreAdapter
 
 	private static function shouldRemoveRedundantTags($fieldName)
 	{
-		$suffix = elasticSearchUtils::DOT_FIELD_DELIMITER . kESearchQueryManager::NGRAMS_FIELD_SUFFIX;
+		$suffix = elasticSearchUtils::DOT_FIELD_DELIMITER . vESearchQueryManager::NGRAMS_FIELD_SUFFIX;
 		return (strpos($fieldName ,$suffix) !== false);
 	}
 

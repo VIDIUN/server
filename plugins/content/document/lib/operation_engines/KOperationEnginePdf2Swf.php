@@ -3,12 +3,12 @@
  * @package plugins.document
  * @subpackage lib
  */
-class KOperationEnginePdf2Swf extends KSingleOutputOperationEngine
+class VOperationEnginePdf2Swf extends VSingleOutputOperationEngine
 {
 	const PDF_FORMAT = 'PDF document';
 	
 	/* (non-PHPdoc)
-	 * @see KOperationEngine::doOperation()
+	 * @see VOperationEngine::doOperation()
 	 */
 	protected function doOperation()
 	{

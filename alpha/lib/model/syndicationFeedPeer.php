@@ -16,8 +16,8 @@ class syndicationFeedPeer extends BasesyndicationFeedPeer
 		syndicationFeedType::ITUNES => parent::OM_CLASS,
 		syndicationFeedType::TUBE_MOGUL => parent::OM_CLASS,
 		syndicationFeedType::YAHOO => parent::OM_CLASS,
-		syndicationFeedType::KALTURA => 'genericSyndicationFeed',
-		syndicationFeedType::KALTURA_XSLT => 'genericSyndicationFeed',		
+		syndicationFeedType::VIDIUN => 'genericSyndicationFeed',
+		syndicationFeedType::VIDIUN_XSLT => 'genericSyndicationFeed',		
 		syndicationFeedType::ROKU_DIRECT_PUBLISHER => 'genericSyndicationFeed',
 		syndicationFeedType::OPERA_TV_SNAP  => 'genericSyndicationFeed'
 	);

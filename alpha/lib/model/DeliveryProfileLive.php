@@ -6,7 +6,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 	const DEFAULT_MAINTENANCE_DC = -1;
 
 	/**
-	 * @var kLiveStreamConfiguration
+	 * @var vLiveStreamConfiguration
 	 */
 	protected $liveStreamConfig;
 	
@@ -17,10 +17,10 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kRedirectManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vRedirectManifestRenderer';
 	}
 	
-	public function setLiveStreamConfig(kLiveStreamConfiguration $liveStreamConfig)
+	public function setLiveStreamConfig(vLiveStreamConfiguration $liveStreamConfig)
 	{
 		$this->liveStreamConfig = $liveStreamConfig;
 	}
@@ -36,10 +36,10 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 			return false;
 		if (!function_exists('curl_init'))
 		{
-			KalturaLog::err('Unable to use util when php curl is not enabled');
+			VidiunLog::err('Unable to use util when php curl is not enabled');
 			return false;
 		}
-		KalturaLog::log("Checking URL [$url] with range [$range]");
+		VidiunLog::log("Checking URL [$url] with range [$range]");
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
@@ -101,7 +101,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 	protected function initLiveStreamConfig()
 	{
 		if(!$this->liveStreamConfig)
-			$this->liveStreamConfig = new kLiveStreamConfiguration();
+			$this->liveStreamConfig = new vLiveStreamConfiguration();
 		
 		$entry = $this->getDynamicAttributes()->getEntry();
 		if(in_array($entry->getSource(), array(EntrySourceType::MANUAL_LIVE_STREAM, EntrySourceType::AKAMAI_UNIVERSAL_LIVE)))
@@ -120,10 +120,10 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 
 		$requestedServerType = $this->getDynamicAttributes()->getStreamType();
 		$dcInMaintenance = $this->getIsMaintenanceFromCache($entryId);
-		KalturaLog::debug("Having requested-Server-Type of [$requestedServerType] and DC in maintenance of [$dcInMaintenance]");
+		VidiunLog::debug("Having requested-Server-Type of [$requestedServerType] and DC in maintenance of [$dcInMaintenance]");
 		$liveEntryServerNodes = $this->filterAndSet($liveEntryServerNodes, $requestedServerType, $dcInMaintenance);
 		if (empty($liveEntryServerNodes))
-			KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_LIVE, "Entry [$entryId] is not broadcasting on stream type [$requestedServerType]");
+			VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_LIVE, "Entry [$entryId] is not broadcasting on stream type [$requestedServerType]");
 
 		//sort the entryServerNode array by weight from the heaviest to lowest
 		usort($liveEntryServerNodes, function ($a, $b) {return $b->weight - $a->weight;});
@@ -167,7 +167,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 
 	private function getIsMaintenanceFromCache($entryId)
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_LOCK_KEYS);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_LOCK_KEYS);
 		if (!$cache)
 			return self::DEFAULT_MAINTENANCE_DC;
 		$val = $cache->get("Live-MaintenanceDataCacheKey");
@@ -176,10 +176,10 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 		$result = json_decode($val, true);
 		if (!is_array($result))
 		{
-			KalturaLog::notice("Got maintenance data from cache but could not parse it. Raw data: " . print_r($val, true));
+			VidiunLog::notice("Got maintenance data from cache but could not parse it. Raw data: " . print_r($val, true));
 			return self::DEFAULT_MAINTENANCE_DC;
 		}
-		KalturaLog::debug("Got maintenance data from cache: " . print_r($result, true));
+		VidiunLog::debug("Got maintenance data from cache: " . print_r($result, true));
 		if (key_exists("maintenanceDC", $result))
 			return $result["maintenanceDC"];
 		if (key_exists($entryId, $result))
@@ -193,7 +193,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 		
 		if($entry->getHlsStreamUrl())
 		{
-			$hlsLiveStreamConfig = new kLiveStreamConfiguration();
+			$hlsLiveStreamConfig = new vLiveStreamConfiguration();
 			$hlsLiveStreamConfig->setUrl($entry->getHlsStreamUrl());
 			$hlsLiveStreamConfig->setProtocol(PlaybackProtocol::APPLE_HTTP);
 			$customLiveStreamConfigurations[] = $hlsLiveStreamConfig;
@@ -202,7 +202,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 		$customLiveStreamConfigurations = array_merge($entry->getCustomLiveStreamConfigurations(), $customLiveStreamConfigurations);
 		foreach($customLiveStreamConfigurations as $customLiveStreamConfiguration)
 		{
-			/* @var $customLiveStreamConfiguration kLiveStreamConfiguration */
+			/* @var $customLiveStreamConfiguration vLiveStreamConfiguration */
 			if($this->getDynamicAttributes()->getFormat() == $customLiveStreamConfiguration->getProtocol())
 			{
 				$this->liveStreamConfig = $customLiveStreamConfiguration;
@@ -210,7 +210,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 			}
 		}
 		
-		KalturaLog::debug("Could not locate custom live stream configuration from manual liveStream entry [{$entry->getId()}]");
+		VidiunLog::debug("Could not locate custom live stream configuration from manual liveStream entry [{$entry->getId()}]");
 	}
 	
 	public function isLive ($url) {
@@ -314,7 +314,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 		
 		$baseUrl = $playbackHost.$appNameAndPrefix;
 		
-		KalturaLog::debug("Live Stream base url [$baseUrl]");
+		VidiunLog::debug("Live Stream base url [$baseUrl]");
 		return $baseUrl;
 	}
 	
@@ -366,13 +366,13 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 		$secureToken = $this->generateLiveSecuredPackagerToken($livePackagerUrl);
 		$livePackagerUrl .= "t/$secureToken/";
 
-		KalturaLog::debug("Live Packager base stream Url [$livePackagerUrl]");
+		VidiunLog::debug("Live Packager base stream Url [$livePackagerUrl]");
 		return $livePackagerUrl;
 	}
 	
 	private function generateLiveSecuredPackagerToken($url)
 	{
-		$livePackagerToken = kConf::get("live_packager_secure_token");
+		$livePackagerToken = vConf::get("live_packager_secure_token");
 		
 		$signingDomain = $this->getLivePackagerSigningDomain(); 
 		if($signingDomain && $signingDomain != '')
@@ -384,7 +384,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 			}
 			else
 			{ 
-				KalturaLog::debug("Failed to parse domain from original url, signed domain will not be modified");
+				VidiunLog::debug("Failed to parse domain from original url, signed domain will not be modified");
 			}
 		}
 
@@ -401,7 +401,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 	{
 		if($this->shouldRedirect) 
 		{
-			$this->DEFAULT_RENDERER_CLASS = 'kRedirectManifestRenderer';
+			$this->DEFAULT_RENDERER_CLASS = 'vRedirectManifestRenderer';
 		}
 		
 		$renderer = parent::getRenderer($flavors);
@@ -419,7 +419,7 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 		$allStreamIds = array();
 		foreach ($streams as $stream)
 		{
-			/* @var $stream kLiveStreamParams */
+			/* @var $stream vLiveStreamParams */
                         $allStreamIds[] = $stream->getFlavorId();
 
                         if ($this->getDynamicAttributes()->getMinBitrate() && $stream->getBitrate()/1024 > $this->getDynamicAttributes()->getMinBitrate())
@@ -442,12 +442,12 @@ abstract class DeliveryProfileLive extends DeliveryProfile {
 		if (!count($streamIds))
 		{
 			// If the stream info is available to us, min and/or max bitrate params were passed, and no streams comply with them - issue warning and cancel restrictions
-			KalturaLog::warning('Entry ['. $this->getDynamicAttributes()->getEntryId() .'] has no streams which comply with the min/max bitrate limitations.');
+			VidiunLog::warning('Entry ['. $this->getDynamicAttributes()->getEntryId() .'] has no streams which comply with the min/max bitrate limitations.');
 			$streamIds = $playableStreamIds;
 			
 			if (!count ($playableStreamIds))
 			{
-				KalturaLog::warning('None of the explicitly requested flavor params IDs are found in the stream list.');
+				VidiunLog::warning('None of the explicitly requested flavor params IDs are found in the stream list.');
 			}
 		}
 		

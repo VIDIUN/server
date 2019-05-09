@@ -9,13 +9,13 @@ class myThumbUtils
 			return true;
 		}
 
-		$fileType = kFileUtils::getMimeType($thumbPath);
+		$fileType = vFileUtils::getMimeType($thumbPath);
 		if($fileType == 'image/svg+xml')
 		{
 			$xmlContent = file_get_contents($thumbPath);
 			if($xmlContent)
 			{
-				$dom = new KDOMDocument();
+				$dom = new VDOMDocument();
 				$dom->loadXML($xmlContent);
 				$element = $dom->getElementsByTagName('script')->item(0);
 				if($element)

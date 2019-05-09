@@ -3,7 +3,7 @@
  * @package plugins.attachment
  * @subpackage api.errors
  */
-class KalturaAttachmentErrors extends KalturaErrors
+class VidiunAttachmentErrors extends VidiunErrors
 {
 	const ATTACHMENT_ASSET_ID_NOT_FOUND = "ATTACHMENT_ASSET_ID_NOT_FOUND;ASSET_ID;Attachment asset id \"@ASSET_ID@\" not found";
 	const ATTACHMENT_ASSET_IS_NOT_READY = "ATTACHMENT_ASSET_IS_NOT_READY;ASSET_ID;Attachment asset \"@ASSET_ID@\" is not ready";

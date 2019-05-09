@@ -6,7 +6,7 @@
  * @subpackage objects
  *
  */
-class KalturaBulkUploadUserData extends KalturaBulkUploadObjectData
+class VidiunBulkUploadUserData extends VidiunBulkUploadObjectData
 {
     private static $map_between_objects = array
 	(
@@ -22,7 +22,7 @@ class KalturaBulkUploadUserData extends KalturaBulkUploadObjectData
 	{
 	    if (!$object_to_fill)
 	    {
-	        $object_to_fill = new kBulkUploadUserData();
+	        $object_to_fill = new vBulkUploadUserData();
 	    }
 	    
 	    return parent::toObject($object_to_fill, $props_to_skip);

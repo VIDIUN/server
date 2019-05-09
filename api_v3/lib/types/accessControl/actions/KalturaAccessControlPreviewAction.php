@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlPreviewAction extends KalturaRuleAction
+class VidiunAccessControlPreviewAction extends VidiunRuleAction
 {
 	/**
 	 * @var int
@@ -29,12 +29,12 @@ class KalturaAccessControlPreviewAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAccessControlPreviewAction();
+			$dbObject = new vAccessControlPreviewAction();
 			
 		return parent::toObject($dbObject, $skip);
 	}

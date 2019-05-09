@@ -19,57 +19,57 @@ class BulkUploadCategoryEntryEngineCsv extends BulkUploadEngineCsv
 	protected function createObjects()
 	{
 		// start a multi request for activating category entries
-		KBatchBase::impersonate($this->currentPartnerId);;
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		VBatchBase::$vClient->startMultiRequest();
 
-		KalturaLog::info("job[{$this->job->id}] start activating category entries");
+		VidiunLog::info("job[{$this->job->id}] start activating category entries");
 		$bulkUploadResultChunk = array(); // store the results of the activated category entries
 
 		foreach($this->bulkUploadResults as $bulkUploadResult)
 		{
-			/* @var $bulkUploadResult KalturaBulkUploadResultCategoryEntry */
+			/* @var $bulkUploadResult VidiunBulkUploadResultCategoryEntry */
 			switch ($bulkUploadResult->action)
 			{
-				case KalturaBulkUploadAction::ACTIVATE:
+				case VidiunBulkUploadAction::ACTIVATE:
 					$bulkUploadResultChunk[] = $bulkUploadResult;
-					KBatchBase::$kClient->categoryEntry->activate($bulkUploadResult->entryId, $bulkUploadResult->categoryId );
+					VBatchBase::$vClient->categoryEntry->activate($bulkUploadResult->entryId, $bulkUploadResult->categoryId );
 					break;
 
-				case KalturaBulkUploadAction::REJECT:
+				case VidiunBulkUploadAction::REJECT:
 					$bulkUploadResultChunk[] = $bulkUploadResult;
-					KBatchBase::$kClient->categoryEntry->reject($bulkUploadResult->entryId, $bulkUploadResult->categoryId );
+					VBatchBase::$vClient->categoryEntry->reject($bulkUploadResult->entryId, $bulkUploadResult->categoryId );
 					break;
 
 				default:
-					$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
+					$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
 					$bulkUploadResult->errorDescription = "Unknown action passed: [".$bulkUploadResult->action ."]";
 					break;
 			}
 
-			if(KBatchBase::$kClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
+			if(VBatchBase::$vClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
 			{
 				// handle all categoryEntry objects as the partner
-				$requestResults = KBatchBase::$kClient->doMultiRequest();
-				KBatchBase::unimpersonate();
+				$requestResults = VBatchBase::$vClient->doMultiRequest();
+				VBatchBase::unimpersonate();
 				$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
 				$this->checkAborted();
-				KBatchBase::impersonate($this->currentPartnerId);;
-				KBatchBase::$kClient->startMultiRequest();
+				VBatchBase::impersonate($this->currentPartnerId);;
+				VBatchBase::$vClient->startMultiRequest();
 				$bulkUploadResultChunk = array();
 			}
 		}
 
 		// make all the category entry actions as the partner
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 
 		if(count($requestResults))
 		{
 			$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
 		}
 
-		KalturaLog::info("job[{$this->job->id}] finish updating category entries");
+		VidiunLog::info("job[{$this->job->id}] finish updating category entries");
 	}
 
 	protected function getColumns()
@@ -83,7 +83,7 @@ class BulkUploadCategoryEntryEngineCsv extends BulkUploadEngineCsv
 
 	protected function getUploadResultInstance()
 	{
-		return new KalturaBulkUploadResultCategoryEntry();
+		return new VidiunBulkUploadResultCategoryEntry();
 	}
 
 	public function getObjectTypeTitle()
@@ -99,16 +99,16 @@ class BulkUploadCategoryEntryEngineCsv extends BulkUploadEngineCsv
 			return;
 		}
 
-		$bulkUploadResult->bulkUploadResultObjectType = KalturaBulkUploadObjectType::CATEGORY_ENTRY;
+		$bulkUploadResult->bulkUploadResultObjectType = VidiunBulkUploadObjectType::CATEGORY_ENTRY;
 
 		array_walk($values, array('BulkUploadCategoryEntryEngineCsv', 'trimArray'));
 		$this->setResultValues($columns, $values, $bulkUploadResult);
 
-		$bulkUploadResult->status = KalturaBulkUploadResultStatus::IN_PROGRESS;
+		$bulkUploadResult->status = VidiunBulkUploadResultStatus::IN_PROGRESS;
 
 		if (!$bulkUploadResult->action)
 		{
-			$bulkUploadResult->action = KalturaBulkUploadAction::ACTIVATE;
+			$bulkUploadResult->action = VidiunBulkUploadAction::ACTIVATE;
 		}
 
 		$bulkUploadResult = $this->validateBulkUploadResult($bulkUploadResult);
@@ -118,19 +118,19 @@ class BulkUploadCategoryEntryEngineCsv extends BulkUploadEngineCsv
 		}
 	}
 
-	protected function validateBulkUploadResult (KalturaBulkUploadResult $bulkUploadResult)
+	protected function validateBulkUploadResult (VidiunBulkUploadResult $bulkUploadResult)
 	{
-		/* @var $bulkUploadResult KalturaBulkUploadResultUser */
+		/* @var $bulkUploadResult VidiunBulkUploadResultUser */
 		if (!$bulkUploadResult->entryId || !$bulkUploadResult->categoryId)
 		{
-			$this->handleResultError($bulkUploadResult, KalturaBatchJobErrorTypes::APP, self::MISSING_COLUMN);
+			$this->handleResultError($bulkUploadResult, VidiunBatchJobErrorTypes::APP, self::MISSING_COLUMN);
 
 			if($this->maxRecords && $this->lineNumber > $this->maxRecords) // check max records
 			{
-				$this->handleResultError($bulkUploadResult, KalturaBatchJobErrorTypes::APP, self::EXCEEDED_MAX_RESULTS);
+				$this->handleResultError($bulkUploadResult, VidiunBatchJobErrorTypes::APP, self::EXCEEDED_MAX_RESULTS);
 			}
 
-			if($bulkUploadResult->status == KalturaBulkUploadResultStatus::ERROR)
+			if($bulkUploadResult->status == VidiunBulkUploadResultStatus::ERROR)
 			{
 				$this->addBulkUploadResult($bulkUploadResult);
 				return null;
@@ -141,7 +141,7 @@ class BulkUploadCategoryEntryEngineCsv extends BulkUploadEngineCsv
 
 	protected function updateObjectsResults(array $requestResults, array $bulkUploadResults)
 	{
-		KalturaLog::info("Updating " . count($requestResults) . " results");
+		VidiunLog::info("Updating " . count($requestResults) . " results");
 		$multiRequestResults = array();
 		// checking the status of the category entries
 		foreach($requestResults as $index => $requestResult)
@@ -150,12 +150,12 @@ class BulkUploadCategoryEntryEngineCsv extends BulkUploadEngineCsv
 			$this->handleMultiRequest($multiRequestResults);
 			if(is_array($requestResult) && isset($requestResult['code']))
 			{
-				$this->handleResultError($bulkUploadResult, KalturaBatchJobErrorTypes::KALTURA_API, $requestResult['message']);
+				$this->handleResultError($bulkUploadResult, VidiunBatchJobErrorTypes::VIDIUN_API, $requestResult['message']);
 				$bulkUploadResult->objectStatus = $requestResult['code'];
 			}
 			else if($requestResult instanceof Exception)
 			{
-				$this->handleResultError($bulkUploadResult, KalturaBatchJobErrorTypes::KALTURA_API, $requestResult->getMessage());
+				$this->handleResultError($bulkUploadResult, VidiunBatchJobErrorTypes::VIDIUN_API, $requestResult->getMessage());
 			}
 
 			$this->addBulkUploadResult($bulkUploadResult);
@@ -165,26 +165,26 @@ class BulkUploadCategoryEntryEngineCsv extends BulkUploadEngineCsv
 
 	protected function handleMultiRequest(&$ret, $finish = false)
 	{
-		$count = KBatchBase::$kClient->getMultiRequestQueueSize();
+		$count = VBatchBase::$vClient->getMultiRequestQueueSize();
 		//Start of new multi request session
 		if($count)
 		{
 			if (($count % $this->multiRequestSize) == 0 || $finish)
 			{
-				$result = KBatchBase::$kClient->doMultiRequest();
+				$result = VBatchBase::$vClient->doMultiRequest();
 				if (count($result))
 				{
 					$ret = array_merge($ret, $result);
 				}
 				if (!$finish)
 				{
-					KBatchBase::$kClient->startMultiRequest();
+					VBatchBase::$vClient->startMultiRequest();
 				}
 			}
 		}
 		elseif (!$finish)
 		{
-			KBatchBase::$kClient->startMultiRequest();
+			VBatchBase::$vClient->startMultiRequest();
 		}
 	}
 

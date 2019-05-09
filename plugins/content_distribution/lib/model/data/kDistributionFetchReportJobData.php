@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kDistributionFetchReportJobData extends kDistributionJobData
+class vDistributionFetchReportJobData extends vDistributionJobData
 {
 	/**
 	 * @var int

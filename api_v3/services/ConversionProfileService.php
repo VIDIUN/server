@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class ConversionProfileService extends KalturaBaseService
+class ConversionProfileService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -19,7 +19,7 @@ class ConversionProfileService extends KalturaBaseService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerGroup()
+	 * @see VidiunBaseService::partnerGroup()
 	 */
 	protected function partnerGroup($peer = null)
 	{
@@ -40,15 +40,15 @@ class ConversionProfileService extends KalturaBaseService
 	 * 
 	 * @action setAsDefault
 	 * @param int $id
-	 * @return KalturaConversionProfile
+	 * @return VidiunConversionProfile
 	 * 
-	 * @throws KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND
 	 */
 	public function setAsDefaultAction($id)
 	{
 		$conversionProfileDb = conversionProfile2Peer::retrieveByPK($id);
 		if (!$conversionProfileDb || $conversionProfileDb->getPartnerId() != $this->getPartnerId())
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $id);
 			
 		$partner = $this->getPartner();
 		
@@ -61,7 +61,7 @@ class ConversionProfileService extends KalturaBaseService
 		$partner->save();
 		PartnerPeer::removePartnerFromCache($partner->getId());
 		
-		$conversionProfile = new KalturaConversionProfile();
+		$conversionProfile = new VidiunConversionProfile();
 		$conversionProfile->fromObject($conversionProfileDb, $this->getResponseProfile());
 		$conversionProfile->loadFlavorParamsIds($conversionProfileDb);
 		
@@ -71,15 +71,15 @@ class ConversionProfileService extends KalturaBaseService
 	/**
 	 * Get the partner's default conversion profile
 	 * 
-	 * @param KalturaConversionProfileType $type
+	 * @param VidiunConversionProfileType $type
 	 * @action getDefault
-	 * @return KalturaConversionProfile
+	 * @return VidiunConversionProfile
 	 */
 	public function getDefaultAction($type = null)
 	{
-		if(is_null($type) || $type == KalturaConversionProfileType::MEDIA)
+		if(is_null($type) || $type == VidiunConversionProfileType::MEDIA)
 			$defaultProfileId = $this->getPartner()->getDefaultConversionProfileId();
-		elseif($type == KalturaConversionProfileType::LIVE_STREAM)
+		elseif($type == VidiunConversionProfileType::LIVE_STREAM)
 			$defaultProfileId = $this->getPartner()->getDefaultLiveConversionProfileId();
 			
 		return $this->getAction($defaultProfileId);
@@ -89,12 +89,12 @@ class ConversionProfileService extends KalturaBaseService
 	 * Add new Conversion Profile
 	 * 
 	 * @action add
-	 * @param KalturaConversionProfile $conversionProfile
-	 * @return KalturaConversionProfile
+	 * @param VidiunConversionProfile $conversionProfile
+	 * @return VidiunConversionProfile
 	 * 
-	 * @throws KalturaErrors::ASSET_PARAMS_INVALID_TYPE
+	 * @throws VidiunErrors::ASSET_PARAMS_INVALID_TYPE
 	 */
-	public function addAction(KalturaConversionProfile $conversionProfile)
+	public function addAction(VidiunConversionProfile $conversionProfile)
 	{
 		$conversionProfileDb = $conversionProfile->toInsertableObject(new conversionProfile2());
 
@@ -119,14 +119,14 @@ class ConversionProfileService extends KalturaBaseService
 		{
 			$xsl = html_entity_decode($conversionProfile->xslTransformation);
 			$key = $conversionProfileDb->getSyncKey(conversionProfile2::FILE_SYNC_MRSS_XSL);
-			kFileSyncUtils::file_put_contents($key, $xsl);
+			vFileSyncUtils::file_put_contents($key, $xsl);
 		}
 		
 		if($conversionProfile->mediaInfoXslTransformation)
 		{
 			$xsl = html_entity_decode($conversionProfile->mediaInfoXslTransformation);
 			$key = $conversionProfileDb->getSyncKey(conversionProfile2::FILE_SYNC_MEDIAINFO_XSL);
-			kFileSyncUtils::file_put_contents($key, $xsl);
+			vFileSyncUtils::file_put_contents($key, $xsl);
 		}
 		
 		$conversionProfile->fromObject($conversionProfileDb, $this->getResponseProfile());
@@ -142,17 +142,17 @@ class ConversionProfileService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaConversionProfile
+	 * @return VidiunConversionProfile
 	 * 
-	 * @throws KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND
 	 */
 	public function getAction($id)
 	{
 		$conversionProfileDb = conversionProfile2Peer::retrieveByPK($id);
 		if (!$conversionProfileDb)
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $id);
 			
-		$conversionProfile = new KalturaConversionProfile();
+		$conversionProfile = new VidiunConversionProfile();
 		$conversionProfile->fromObject($conversionProfileDb, $this->getResponseProfile());
 		$conversionProfile->loadFlavorParamsIds($conversionProfileDb);
 		
@@ -164,20 +164,20 @@ class ConversionProfileService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaConversionProfile $conversionProfile
-	 * @return KalturaConversionProfile
+	 * @param VidiunConversionProfile $conversionProfile
+	 * @return VidiunConversionProfile
 	 * 
-	 * @throws KalturaErrors::ASSET_PARAMS_INVALID_TYPE
-	 * @throws KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::ASSET_PARAMS_INVALID_TYPE
+	 * @throws VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND
 	 */
-	public function updateAction($id, KalturaConversionProfile $conversionProfile)
+	public function updateAction($id, VidiunConversionProfile $conversionProfile)
 	{
 		$conversionProfileDb = conversionProfile2Peer::retrieveByPK($id);
 		if (!$conversionProfileDb)
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $id);
 			
 		$conversionProfile->toUpdatableObject($conversionProfileDb);
-		$conversionProfileDb->setCreationMode(conversionProfile2::CONVERSION_PROFILE_2_CREATION_MODE_KMC);
+		$conversionProfileDb->setCreationMode(conversionProfile2::CONVERSION_PROFILE_2_CREATION_MODE_VMC);
 		
 		if($conversionProfile->xslTransformation)
 			$conversionProfileDb->incrementXslVersion();
@@ -201,14 +201,14 @@ class ConversionProfileService extends KalturaBaseService
 		{
 			$xsl = html_entity_decode($conversionProfile->xslTransformation);
 			$key = $conversionProfileDb->getSyncKey(conversionProfile2::FILE_SYNC_MRSS_XSL);
-			kFileSyncUtils::file_put_contents($key, $xsl);
+			vFileSyncUtils::file_put_contents($key, $xsl);
 		}
 		
 		if($conversionProfile->mediaInfoXslTransformation)
 		{
 			$xsl = html_entity_decode($conversionProfile->mediaInfoXslTransformation);
 			$key = $conversionProfileDb->getSyncKey(conversionProfile2::FILE_SYNC_MEDIAINFO_XSL);
-			kFileSyncUtils::file_put_contents($key, $xsl);
+			vFileSyncUtils::file_put_contents($key, $xsl);
 		}
 		
 		$conversionProfile->fromObject($conversionProfileDb, $this->getResponseProfile());
@@ -225,17 +225,17 @@ class ConversionProfileService extends KalturaBaseService
 	 * @action delete
 	 * @param int $id
 	 * 
-	 * @throws KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::CANNOT_DELETE_DEFAULT_CONVERSION_PROFILE
+	 * @throws VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::CANNOT_DELETE_DEFAULT_CONVERSION_PROFILE
 	 */
 	public function deleteAction($id)
 	{
 		$conversionProfileDb = conversionProfile2Peer::retrieveByPK($id);
 		if (!$conversionProfileDb)
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $id);
 			
 		if ($conversionProfileDb->getIsDefault() === true)
-			throw new KalturaAPIException(KalturaErrors::CANNOT_DELETE_DEFAULT_CONVERSION_PROFILE);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_DELETE_DEFAULT_CONVERSION_PROFILE);
 			
 		$this->deleteFlavorParamsRelation($conversionProfileDb);
 		
@@ -247,17 +247,17 @@ class ConversionProfileService extends KalturaBaseService
 	 * List Conversion Profiles by filter with paging support
 	 * 
 	 * @action list
-	 * @param KalturaConversionProfileFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaConversionProfileListResponse
+	 * @param VidiunConversionProfileFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunConversionProfileListResponse
 	 */
-	public function listAction(KalturaConversionProfileFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunConversionProfileFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaConversionProfileFilter();
+			$filter = new VidiunConversionProfileFilter();
 			
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());  
 	}
@@ -268,7 +268,7 @@ class ConversionProfileService extends KalturaBaseService
 	 * @param conversionProfile2 $conversionProfileDb
 	 * @param $flavorParamsIds
 	 * 
-	 * @throws KalturaErrors::ASSET_PARAMS_INVALID_TYPE
+	 * @throws VidiunErrors::ASSET_PARAMS_INVALID_TYPE
 	 */
 	protected function addFlavorParamsRelation(conversionProfile2 $conversionProfileDb, $flavorParamsIds)
 	{

@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaThumbParamsOutputFilter extends KalturaThumbParamsOutputBaseFilter
+class VidiunThumbParamsOutputFilter extends VidiunThumbParamsOutputBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -14,14 +14,14 @@ class KalturaThumbParamsOutputFilter extends KalturaThumbParamsOutputBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaAssetParamsFilter::getTypeListResponse()
+	 * @see VidiunAssetParamsFilter::getTypeListResponse()
 	 */
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, array $types = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, array $types = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager, $types);
 		
-		$response = new KalturaThumbParamsOutputListResponse();
-		$response->objects = KalturaThumbParamsOutputArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunThumbParamsOutputListResponse();
+		$response->objects = VidiunThumbParamsOutputArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;  
 	}

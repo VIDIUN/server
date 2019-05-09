@@ -27,15 +27,15 @@ class updateentrythumbnailjpegAction extends defPartnerservices2Action
 			); 
 	}
 	
-	// ask to fetch the kuser from puser_kuser 
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser 
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_KUSER_DATA;
+		return self::VUSER_DATA_VUSER_DATA;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		if ( ! $puser_kuser )
+		if ( ! $puser_vuser )
 		{
 			$this->addError ( APIErrors::INVALID_USER_ID ,$puser_id );
 			return;
@@ -46,7 +46,7 @@ class updateentrythumbnailjpegAction extends defPartnerservices2Action
 		
 		// TODO - verify the user is allowed to modify the entry
 		
-		if ($entry->getKshowId() === kshow::SANDBOX_ID)
+		if ($entry->getVshowId() === vshow::SANDBOX_ID)
 		{
 			$this->addError ( APIErrors::SANDBOX_ALERT );
 			return ;
@@ -65,20 +65,20 @@ class updateentrythumbnailjpegAction extends defPartnerservices2Action
 
 		$fileSyncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
 		$fileSync = FileSync::createForFileSyncKey($fileSyncKey);
-		kFileSyncUtils::file_put_contents($fileSyncKey, $thumb_data );
+		vFileSyncUtils::file_put_contents($fileSyncKey, $thumb_data );
 		
 		// update the metadata in case of a roughcut
 		if ($entry->getType() == entryType::MIX)
 		{
 			$sync_key = $entry->getSyncKey ( entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA );
 			$xml_doc = new DOMDocument();
-			$xml_doc->loadXML( kFileSyncUtils::file_get_contents( $sync_key ) );
+			$xml_doc->loadXML( vFileSyncUtils::file_get_contents( $sync_key ) );
 			if (myMetadataUtils::updateThumbUrl($xml_doc, $entry->getThumbnailUrl()))
 			{
 				$entry->setMetadata ( null , $xml_doc->saveXML( ) , true , null ,  null ) ;//$entry->getVersion() );
 			}
 
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL , $entry );
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL , $entry );
 		}
 			
 		$this->res = $entry->getBigThumbnailUrl();

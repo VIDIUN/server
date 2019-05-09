@@ -5,22 +5,22 @@
  * @package plugins.contentDistribution 
  * @subpackage Scheduler.Distribute
  */
-class KAsyncSynchronizeDistribution extends KPeriodicWorker
+class VAsyncSynchronizeDistribution extends VPeriodicWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::DISTRIBUTION_SYNC;
+		return VidiunBatchJobType::DISTRIBUTION_SYNC;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
-		self::$kClient->contentDistributionBatch->updateSunStatus();
-		self::$kClient->contentDistributionBatch->createRequiredJobs();
+		self::$vClient->contentDistributionBatch->updateSunStatus();
+		self::$vClient->contentDistributionBatch->createRequiredJobs();
 	}
 }

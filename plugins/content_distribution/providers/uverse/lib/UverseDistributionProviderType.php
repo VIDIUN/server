@@ -3,7 +3,7 @@
  * @package plugins.uverseDistribution
  * @subpackage lib
  */
-class UverseDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class UverseDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const UVERSE = 'UVERSE';
 	

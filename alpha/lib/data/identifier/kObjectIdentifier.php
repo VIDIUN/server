@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model
  */
-abstract class kObjectIdentifier
+abstract class vObjectIdentifier
 {
 	/**
 	 * @var string
@@ -47,7 +47,7 @@ abstract class kObjectIdentifier
 	 * Function returns the object according to the identifier
 	 * @param mixed <string|int> $value
 	 * @param string $partnerId
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 * @return BaseObject
 	 */
 	abstract public function retrieveByIdentifier ($value, $partnerId = null);

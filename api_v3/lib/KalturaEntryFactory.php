@@ -3,53 +3,53 @@
  * @package api
  * @subpackage objects.factory
  */
-class KalturaEntryFactory
+class VidiunEntryFactory
 {
 	/**
 	 * @param int $type
 	 * @param bool $isAdmin
-	 * @return KalturaBaseEntry
+	 * @return VidiunBaseEntry
 	 */
 	static function getInstanceByType ($type, $isAdmin = false)
 	{
 		switch ($type) 
 		{
-			case KalturaEntryType::MEDIA_CLIP:
-				$obj = new KalturaMediaEntry();
+			case VidiunEntryType::MEDIA_CLIP:
+				$obj = new VidiunMediaEntry();
 				break;
 				
-			case KalturaEntryType::MIX:
-				$obj = new KalturaMixEntry();
+			case VidiunEntryType::MIX:
+				$obj = new VidiunMixEntry();
 				break;
 				
-			case KalturaEntryType::PLAYLIST:
-				$obj = new KalturaPlaylist();
+			case VidiunEntryType::PLAYLIST:
+				$obj = new VidiunPlaylist();
 				break;
 				
-			case KalturaEntryType::DATA:
-				$obj = new KalturaDataEntry();
+			case VidiunEntryType::DATA:
+				$obj = new VidiunDataEntry();
 				break;
 				
-			case KalturaEntryType::LIVE_STREAM:
+			case VidiunEntryType::LIVE_STREAM:
 				if($isAdmin)
 				{
-					$obj = new KalturaLiveStreamAdminEntry();
+					$obj = new VidiunLiveStreamAdminEntry();
 				}
 				else
 				{
-					$obj = new KalturaLiveStreamEntry();
+					$obj = new VidiunLiveStreamEntry();
 				}
 				break;
 				
-			case KalturaEntryType::LIVE_CHANNEL:
-				$obj = new KalturaLiveChannel();
+			case VidiunEntryType::LIVE_CHANNEL:
+				$obj = new VidiunLiveChannel();
 				break;
 				
 			default:
-				$obj = KalturaPluginManager::loadObject('KalturaBaseEntry', $type);
+				$obj = VidiunPluginManager::loadObject('VidiunBaseEntry', $type);
 				
 				if(!$obj)
-					$obj = new KalturaBaseEntry();
+					$obj = new VidiunBaseEntry();
 					
 				break;
 		}

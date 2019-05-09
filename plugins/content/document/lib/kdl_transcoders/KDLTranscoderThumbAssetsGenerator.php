@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage lib
  */
-class KDLTranscoderThumbAssetsGenerator extends KDLOperatorBase{
+class VDLTranscoderThumbAssetsGenerator extends VDLOperatorBase{
 	
 	public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	
@@ -11,9 +11,9 @@ class KDLTranscoderThumbAssetsGenerator extends KDLOperatorBase{
     }
 	
 	/* (non-PHPdoc)
-	 * @see KDLOperatorBase::GenerateCommandLine()
+	 * @see VDLOperatorBase::GenerateCommandLine()
 	 */
-	public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra = null) {
+	public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra = null) {
 		return null;
 	}
 }

@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kSshImportJobData extends kImportJobData
+class vSshImportJobData extends vImportJobData
 {	
 	/**
 	 * @var string

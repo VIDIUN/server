@@ -3,24 +3,24 @@
  * @package api
  * @subpackage objects
  */
-class KalturaResponseProfileMappingArray extends KalturaTypedArray
+class VidiunResponseProfileMappingArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaResponseProfileMappingArray();
+		$newArr = new VidiunResponseProfileMappingArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
 			$dbClass = get_class($obj);
-			if ($dbClass == 'kResponseProfileMapping')
-				$nObj = new KalturaResponseProfileMapping();
+			if ($dbClass == 'vResponseProfileMapping')
+				$nObj = new VidiunResponseProfileMapping();
 			else
-				$nObj = KalturaPluginManager::loadObject('KalturaResponseProfileMapping', $dbClass);
+				$nObj = VidiunPluginManager::loadObject('VidiunResponseProfileMapping', $dbClass);
 
 			if (is_null($nObj))
-				KalturaLog::err('Failed to load api object for '.$dbClass);
+				VidiunLog::err('Failed to load api object for '.$dbClass);
 
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
@@ -31,6 +31,6 @@ class KalturaResponseProfileMappingArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaResponseProfileMapping");	
+		parent::__construct("VidiunResponseProfileMapping");	
 	}
 }

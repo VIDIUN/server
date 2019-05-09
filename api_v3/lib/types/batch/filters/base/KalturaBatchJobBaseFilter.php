@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaBatchJobBaseFilter extends KalturaFilter
+abstract class VidiunBatchJobBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -158,18 +158,18 @@ abstract class KalturaBatchJobBaseFilter extends KalturaFilter
 	public $entryIdEqual;
 
 	/**
-	 * @var KalturaBatchJobType
+	 * @var VidiunBatchJobType
 	 */
 	public $jobTypeEqual;
 
 	/**
-	 * @dynamicType KalturaBatchJobType
+	 * @dynamicType VidiunBatchJobType
 	 * @var string
 	 */
 	public $jobTypeIn;
 
 	/**
-	 * @dynamicType KalturaBatchJobType
+	 * @dynamicType VidiunBatchJobType
 	 * @var string
 	 */
 	public $jobTypeNotIn;
@@ -190,7 +190,7 @@ abstract class KalturaBatchJobBaseFilter extends KalturaFilter
 	public $jobSubTypeNotIn;
 
 	/**
-	 * @var KalturaBatchJobStatus
+	 * @var VidiunBatchJobStatus
 	 */
 	public $statusEqual;
 
@@ -265,7 +265,7 @@ abstract class KalturaBatchJobBaseFilter extends KalturaFilter
 	public $finishTimeLessThanOrEqual;
 
 	/**
-	 * @var KalturaBatchJobErrorTypes
+	 * @var VidiunBatchJobErrorTypes
 	 */
 	public $errTypeEqual;
 

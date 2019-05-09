@@ -32,7 +32,7 @@ class getpartnerusageAction extends defPartnerservices2Action
 	}
 
 		
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// make sure the secret fits the one in the partner's table
 		$partner = PartnerPeer::retrieveByPK( $partner_id );

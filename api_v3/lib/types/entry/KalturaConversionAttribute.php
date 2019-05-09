@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConversionAttribute extends KalturaObject
+class VidiunConversionAttribute extends VidiunObject
 {
 	/**
 	 * The id of the flavor params, set to null for source flavor

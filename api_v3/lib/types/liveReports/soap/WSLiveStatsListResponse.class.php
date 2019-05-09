@@ -3,8 +3,8 @@
 
 class WSLiveStatsListResponse extends WSBaseObject
 {				
-	function getKalturaObject() {
-		return new KalturaLiveStatsListResponse();
+	function getVidiunObject() {
+		return new VidiunLiveStatsListResponse();
 	}
 	
 	protected function getAttributeType($attributeName)

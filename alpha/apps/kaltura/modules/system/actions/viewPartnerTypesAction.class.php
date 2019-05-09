@@ -4,7 +4,7 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 require_once ( __DIR__ . "/viewPartnersAAction.class.php" );
 
 /**
@@ -12,7 +12,7 @@ require_once ( __DIR__ . "/viewPartnersAAction.class.php" );
  * @subpackage system
  * @deprecated
  */
-class viewPartnerTypesAction extends kalturaSystemAction
+class viewPartnerTypesAction extends vidiunSystemAction
 {
 
 	public function execute()
@@ -45,7 +45,7 @@ class viewPartnerTypesAction extends kalturaSystemAction
 		$input_filter->from_date = strtotime( $this->from_date );
 		$input_filter->to_date = strtotime( $this->to_date );
 
-		list ( $header , $data , $totalCount ) = kKavaReportsMgr::getTable( 
+		list ( $header , $data , $totalCount ) = vKavaReportsMgr::getTable( 
 			null , 
 			myReportsMgr::REPORT_TYPE_SYSTEM_GENERIC_PARTNER_TYPE , 
 			$input_filter ,

@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage api.objects
  */
-class KalturaAccessControlDrmPolicyAction extends KalturaRuleAction
+class VidiunAccessControlDrmPolicyAction extends VidiunRuleAction
 {
 	/**
 	 * Drm policy id
@@ -31,12 +31,12 @@ class KalturaAccessControlDrmPolicyAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAccessControlDrmPolicyAction();
+			$dbObject = new vAccessControlDrmPolicyAction();
 			
 		return parent::toObject($dbObject, $skip);
 	}

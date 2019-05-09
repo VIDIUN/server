@@ -1,54 +1,54 @@
 <?php
 $config = array();
 $client = null;
-/* @var $client KalturaClient */
+/* @var $client VidiunClient */
 require_once __DIR__  . '/common.php';
 
 $options = getopt('', array(
 	'service-url:',
 	'debug',
-	'ks-type:',
+	'vs-type:',
 ));
 
 $secretField = 'secret';
-if(isset($options['ks-type']) && $options['ks-type'] == 'admin')
+if(isset($options['vs-type']) && $options['vs-type'] == 'admin')
 	$secretField = 'adminSecret';
 
 $start = microtime(true);
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 $apiCall = null;
 try
 {
 	$apiCall = 'session.start';
-	$ks = $client->session->start($config['monitor-partner'][$secretField], 'monitor-user', KalturaSessionType::USER, $config['monitor-partner']['id']);
+	$vs = $client->session->start($config['monitor-partner'][$secretField], 'monitor-user', VidiunSessionType::USER, $config['monitor-partner']['id']);
 	$end = microtime(true);
 	
 	$monitorResult->executionTime = $end - $start;
 	$monitorResult->value = $monitorResult->executionTime;
 	$monitorResult->description = "Start session execution time: $monitorResult->value seconds";
 }
-catch(KalturaException $e)
+catch(VidiunException $e)
 {
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = "Exception: " . get_class($e) . ", API: $apiCall, Code: " . $e->getCode() . ", Message: " . $e->getMessage();
 }
-catch(KalturaClientException $ce)
+catch(VidiunClientException $ce)
 {
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $ce->getCode();
 	$error->description = $ce->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = "Exception: " . get_class($ce) . ", API: $apiCall, Code: " . $ce->getCode() . ", Message: " . $ce->getMessage();

@@ -9,7 +9,7 @@ include(__DIR__ . "/../../../../../vendor/IP2Location/IP2Location.inc.php");
  * @package server-infra
  * @subpackage request
  */
-class kIP2Location
+class vIP2Location
 {
 	public static function ipToRecord($ip)
 	{

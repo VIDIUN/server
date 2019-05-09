@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaMailJobData extends KalturaJobData
+class VidiunMailJobData extends VidiunJobData
 {
 	/**
-	 * @var KalturaMailType
+	 * @var VidiunMailType
 	 */
 	public $mailType;
 
@@ -16,7 +16,7 @@ class KalturaMailJobData extends KalturaJobData
     public $mailPriority;
 
     /**
-	 * @var KalturaMailJobStatus
+	 * @var VidiunMailJobStatus
 	 */
     public $status ;
     
@@ -31,7 +31,7 @@ class KalturaMailJobData extends KalturaJobData
    	public $recipientEmail;
    	
 	/**
-	 * kuserId  
+	 * vuserId  
 	 * @var int
 	 */   	
     public $recipientId;
@@ -62,7 +62,7 @@ class KalturaMailJobData extends KalturaJobData
     public $templatePath;
 
 	/**
- 	* @var KalturaLanguageCode
+ 	* @var VidiunLanguageCode
  	*/
     public $language;
 
@@ -115,7 +115,7 @@ class KalturaMailJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kMailJobData();
+			$dbData = new vMailJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

@@ -34,7 +34,7 @@ FROM
 		dim_partner.partner_package partner_package,
 		SUM(aggr_partner.count_bandwidth) count_bandwith_for_month_kb
 	FROM 
-		kalturadw.dwh_aggr_partner aggr_partner,kalturadw.dwh_dim_partners dim_partner
+		vidiundw.dwh_aggr_partner aggr_partner,vidiundw.dwh_dim_partners dim_partner
 	WHERE 
 		aggr_partner.date_id BETWEEN 20090101 AND 20091231
 		AND aggr_partner.partner_id=dim_partner.partner_id
@@ -54,7 +54,7 @@ FROM
 			FLOOR(aggr_partner.date_id /100) yearmonth,
 			aggr_partner.partner_id
 		FROM 
-			kalturadw.dwh_aggr_partner aggr_partner,kalturadw.dwh_dim_partners dim_partner
+			vidiundw.dwh_aggr_partner aggr_partner,vidiundw.dwh_dim_partners dim_partner
 		WHERE 
 			aggr_partner.date_id <= 20091231
 			AND aggr_partner.partner_id=dim_partner.partner_id
@@ -69,7 +69,7 @@ FROM
 			aggr_partner.partner_id,
 			SUM(aggr_partner.count_storage) count_storage_monthly_time_mb
 		FROM 
-			kalturadw.dwh_aggr_partner aggr_partner,kalturadw.dwh_dim_partners dim_partner
+			vidiundw.dwh_aggr_partner aggr_partner,vidiundw.dwh_dim_partners dim_partner
 		WHERE 
 			aggr_partner.date_id <= 20091231
 			AND aggr_partner.partner_id=dim_partner.partner_id
@@ -82,7 +82,7 @@ FROM
 	GROUP BY 
 		a.partner_id,a.yearmonth
 	
-) aggr_single_partner_to_date ,kalturadw.dwh_dim_partner_type pt
+) aggr_single_partner_to_date ,vidiundw.dwh_dim_partner_type pt
 WHERE
 	aggr_single_partner_monthly.yearmonth = aggr_single_partner_to_date.yearmonth
 	AND aggr_single_partner_monthly.partner_id = aggr_single_partner_to_date.partner_id

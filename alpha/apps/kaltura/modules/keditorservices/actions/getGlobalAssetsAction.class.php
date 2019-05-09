@@ -1,19 +1,19 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-require_once ( __DIR__ . "/defKeditorservicesAction.class.php");
+require_once ( __DIR__ . "/defVeditorservicesAction.class.php");
 
 /**
  * fetch global assets - ones that
  * 
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class getGlobalAssetsAction extends defKeditorservicesAction
+class getGlobalAssetsAction extends defVeditorservicesAction
 {
-	protected function executeImpl( kshow $kshow, entry &$entry)
+	protected function executeImpl( vshow $vshow, entry &$entry)
 	{
 		$asset_type = $this->getRequestParameter( "type" , entry::ENTRY_MEDIA_TYPE_VIDEO );
 
@@ -30,20 +30,20 @@ class getGlobalAssetsAction extends defKeditorservicesAction
 			// trying to fetch invalid media type	
 		}
 		
-		$show_entry_id = $kshow->getShowEntryId();
-		$intro_id = $kshow->getIntroId();
+		$show_entry_id = $vshow->getShowEntryId();
+		$intro_id = $vshow->getIntroId();
 		
 		
 		$c = new Criteria();
-		$c->add ( entryPeer::KUSER_ID , kuser::KUSER_KALTURA );
-		$c->add ( entryPeer::TYPE , kuser::KUSER_KALTURA );
+		$c->add ( entryPeer::VUSER_ID , vuser::VUSER_VIDIUN );
+		$c->add ( entryPeer::TYPE , vuser::VUSER_VIDIUN );
 				
 		$this->entry_list = entryPeer::doSelect( $c );
 		if ( $this->entry_list == NULL )
 			$this->entry_list = array ();
 	}
 	
-	protected function noSuchKshow ( $kshow_id )
+	protected function noSuchVshow ( $vshow_id )
 	{
 		$this->entry_list = array ();
 	}

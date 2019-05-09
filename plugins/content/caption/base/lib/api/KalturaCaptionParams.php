@@ -3,12 +3,12 @@
  * @package plugins.caption
  * @subpackage api.objects
  */
-class KalturaCaptionParams extends KalturaAssetParams 
+class VidiunCaptionParams extends VidiunAssetParams 
 {
 	/**
 	 * The language of the caption content
 	 * 
-	 * @var KalturaLanguage
+	 * @var VidiunLanguage
 	 * @insertonly
 	 */
 	public $language;
@@ -16,7 +16,7 @@ class KalturaCaptionParams extends KalturaAssetParams
 	/**
 	 * Is default caption asset of the entry
 	 * 
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isDefault;
 	
@@ -30,7 +30,7 @@ class KalturaCaptionParams extends KalturaAssetParams
 	/**
 	 * The caption format
 	 * 
-	 * @var KalturaCaptionType
+	 * @var VidiunCaptionType
 	 * @filter eq,in
 	 * @insertonly
 	 */
@@ -57,7 +57,7 @@ class KalturaCaptionParams extends KalturaAssetParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($object = null, $skip = array())
 	{

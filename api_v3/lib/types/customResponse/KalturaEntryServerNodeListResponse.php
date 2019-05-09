@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryServerNodeListResponse extends KalturaListResponse {
+class VidiunEntryServerNodeListResponse extends VidiunListResponse {
 
 	/**
-	 * @var KalturaEntryServerNodeArray
+	 * @var VidiunEntryServerNodeArray
 	 * @readonly
 	 */
 	public $objects;

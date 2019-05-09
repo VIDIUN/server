@@ -1,29 +1,29 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'kuser' table.
+ * Base static class for performing query and update operations on the 'vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BasekuserPeer {
+abstract class BasevuserPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'kuser';
+	const TABLE_NAME = 'vuser';
 
 	/** the related Propel class for this table */
-	const OM_CLASS = 'kuser';
+	const OM_CLASS = 'vuser';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'Core.kuser';
+	const CLASS_DEFAULT = 'Core.vuser';
 
 	/** the related TableMap class for this table */
-	const TM_CLASS = 'kuserTableMap';
+	const TM_CLASS = 'vuserTableMap';
 	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 47;
@@ -32,151 +32,151 @@ abstract class BasekuserPeer {
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** the column name for the ID field */
-	const ID = 'kuser.ID';
+	const ID = 'vuser.ID';
 
 	/** the column name for the LOGIN_DATA_ID field */
-	const LOGIN_DATA_ID = 'kuser.LOGIN_DATA_ID';
+	const LOGIN_DATA_ID = 'vuser.LOGIN_DATA_ID';
 
 	/** the column name for the IS_ADMIN field */
-	const IS_ADMIN = 'kuser.IS_ADMIN';
+	const IS_ADMIN = 'vuser.IS_ADMIN';
 
 	/** the column name for the SCREEN_NAME field */
-	const SCREEN_NAME = 'kuser.SCREEN_NAME';
+	const SCREEN_NAME = 'vuser.SCREEN_NAME';
 
 	/** the column name for the FULL_NAME field */
-	const FULL_NAME = 'kuser.FULL_NAME';
+	const FULL_NAME = 'vuser.FULL_NAME';
 
 	/** the column name for the FIRST_NAME field */
-	const FIRST_NAME = 'kuser.FIRST_NAME';
+	const FIRST_NAME = 'vuser.FIRST_NAME';
 
 	/** the column name for the LAST_NAME field */
-	const LAST_NAME = 'kuser.LAST_NAME';
+	const LAST_NAME = 'vuser.LAST_NAME';
 
 	/** the column name for the EMAIL field */
-	const EMAIL = 'kuser.EMAIL';
+	const EMAIL = 'vuser.EMAIL';
 
 	/** the column name for the SHA1_PASSWORD field */
-	const SHA1_PASSWORD = 'kuser.SHA1_PASSWORD';
+	const SHA1_PASSWORD = 'vuser.SHA1_PASSWORD';
 
 	/** the column name for the SALT field */
-	const SALT = 'kuser.SALT';
+	const SALT = 'vuser.SALT';
 
 	/** the column name for the DATE_OF_BIRTH field */
-	const DATE_OF_BIRTH = 'kuser.DATE_OF_BIRTH';
+	const DATE_OF_BIRTH = 'vuser.DATE_OF_BIRTH';
 
 	/** the column name for the COUNTRY field */
-	const COUNTRY = 'kuser.COUNTRY';
+	const COUNTRY = 'vuser.COUNTRY';
 
 	/** the column name for the STATE field */
-	const STATE = 'kuser.STATE';
+	const STATE = 'vuser.STATE';
 
 	/** the column name for the CITY field */
-	const CITY = 'kuser.CITY';
+	const CITY = 'vuser.CITY';
 
 	/** the column name for the ZIP field */
-	const ZIP = 'kuser.ZIP';
+	const ZIP = 'vuser.ZIP';
 
 	/** the column name for the URL_LIST field */
-	const URL_LIST = 'kuser.URL_LIST';
+	const URL_LIST = 'vuser.URL_LIST';
 
 	/** the column name for the PICTURE field */
-	const PICTURE = 'kuser.PICTURE';
+	const PICTURE = 'vuser.PICTURE';
 
 	/** the column name for the ICON field */
-	const ICON = 'kuser.ICON';
+	const ICON = 'vuser.ICON';
 
 	/** the column name for the ABOUT_ME field */
-	const ABOUT_ME = 'kuser.ABOUT_ME';
+	const ABOUT_ME = 'vuser.ABOUT_ME';
 
 	/** the column name for the TAGS field */
-	const TAGS = 'kuser.TAGS';
+	const TAGS = 'vuser.TAGS';
 
 	/** the column name for the TAGLINE field */
-	const TAGLINE = 'kuser.TAGLINE';
+	const TAGLINE = 'vuser.TAGLINE';
 
 	/** the column name for the NETWORK_HIGHSCHOOL field */
-	const NETWORK_HIGHSCHOOL = 'kuser.NETWORK_HIGHSCHOOL';
+	const NETWORK_HIGHSCHOOL = 'vuser.NETWORK_HIGHSCHOOL';
 
 	/** the column name for the NETWORK_COLLEGE field */
-	const NETWORK_COLLEGE = 'kuser.NETWORK_COLLEGE';
+	const NETWORK_COLLEGE = 'vuser.NETWORK_COLLEGE';
 
 	/** the column name for the NETWORK_OTHER field */
-	const NETWORK_OTHER = 'kuser.NETWORK_OTHER';
+	const NETWORK_OTHER = 'vuser.NETWORK_OTHER';
 
 	/** the column name for the MOBILE_NUM field */
-	const MOBILE_NUM = 'kuser.MOBILE_NUM';
+	const MOBILE_NUM = 'vuser.MOBILE_NUM';
 
 	/** the column name for the MATURE_CONTENT field */
-	const MATURE_CONTENT = 'kuser.MATURE_CONTENT';
+	const MATURE_CONTENT = 'vuser.MATURE_CONTENT';
 
 	/** the column name for the GENDER field */
-	const GENDER = 'kuser.GENDER';
+	const GENDER = 'vuser.GENDER';
 
 	/** the column name for the REGISTRATION_IP field */
-	const REGISTRATION_IP = 'kuser.REGISTRATION_IP';
+	const REGISTRATION_IP = 'vuser.REGISTRATION_IP';
 
 	/** the column name for the REGISTRATION_COOKIE field */
-	const REGISTRATION_COOKIE = 'kuser.REGISTRATION_COOKIE';
+	const REGISTRATION_COOKIE = 'vuser.REGISTRATION_COOKIE';
 
 	/** the column name for the IM_LIST field */
-	const IM_LIST = 'kuser.IM_LIST';
+	const IM_LIST = 'vuser.IM_LIST';
 
 	/** the column name for the VIEWS field */
-	const VIEWS = 'kuser.VIEWS';
+	const VIEWS = 'vuser.VIEWS';
 
 	/** the column name for the FANS field */
-	const FANS = 'kuser.FANS';
+	const FANS = 'vuser.FANS';
 
 	/** the column name for the ENTRIES field */
-	const ENTRIES = 'kuser.ENTRIES';
+	const ENTRIES = 'vuser.ENTRIES';
 
 	/** the column name for the STORAGE_SIZE field */
-	const STORAGE_SIZE = 'kuser.STORAGE_SIZE';
+	const STORAGE_SIZE = 'vuser.STORAGE_SIZE';
 
-	/** the column name for the PRODUCED_KSHOWS field */
-	const PRODUCED_KSHOWS = 'kuser.PRODUCED_KSHOWS';
+	/** the column name for the PRODUCED_VSHOWS field */
+	const PRODUCED_VSHOWS = 'vuser.PRODUCED_VSHOWS';
 
 	/** the column name for the STATUS field */
-	const STATUS = 'kuser.STATUS';
+	const STATUS = 'vuser.STATUS';
 
 	/** the column name for the CREATED_AT field */
-	const CREATED_AT = 'kuser.CREATED_AT';
+	const CREATED_AT = 'vuser.CREATED_AT';
 
 	/** the column name for the UPDATED_AT field */
-	const UPDATED_AT = 'kuser.UPDATED_AT';
+	const UPDATED_AT = 'vuser.UPDATED_AT';
 
 	/** the column name for the PARTNER_ID field */
-	const PARTNER_ID = 'kuser.PARTNER_ID';
+	const PARTNER_ID = 'vuser.PARTNER_ID';
 
 	/** the column name for the DISPLAY_IN_SEARCH field */
-	const DISPLAY_IN_SEARCH = 'kuser.DISPLAY_IN_SEARCH';
+	const DISPLAY_IN_SEARCH = 'vuser.DISPLAY_IN_SEARCH';
 
 	/** the column name for the PARTNER_DATA field */
-	const PARTNER_DATA = 'kuser.PARTNER_DATA';
+	const PARTNER_DATA = 'vuser.PARTNER_DATA';
 
 	/** the column name for the PUSER_ID field */
-	const PUSER_ID = 'kuser.PUSER_ID';
+	const PUSER_ID = 'vuser.PUSER_ID';
 
 	/** the column name for the ADMIN_TAGS field */
-	const ADMIN_TAGS = 'kuser.ADMIN_TAGS';
+	const ADMIN_TAGS = 'vuser.ADMIN_TAGS';
 
 	/** the column name for the INDEXED_PARTNER_DATA_INT field */
-	const INDEXED_PARTNER_DATA_INT = 'kuser.INDEXED_PARTNER_DATA_INT';
+	const INDEXED_PARTNER_DATA_INT = 'vuser.INDEXED_PARTNER_DATA_INT';
 
 	/** the column name for the INDEXED_PARTNER_DATA_STRING field */
-	const INDEXED_PARTNER_DATA_STRING = 'kuser.INDEXED_PARTNER_DATA_STRING';
+	const INDEXED_PARTNER_DATA_STRING = 'vuser.INDEXED_PARTNER_DATA_STRING';
 
 	/** the column name for the CUSTOM_DATA field */
-	const CUSTOM_DATA = 'kuser.CUSTOM_DATA';
+	const CUSTOM_DATA = 'vuser.CUSTOM_DATA';
 
 	/** the column name for the TYPE field */
-	const TYPE = 'kuser.TYPE';
+	const TYPE = 'vuser.TYPE';
 
 	/**
-	 * An identiy map to hold any loaded instances of kuser objects.
+	 * An identiy map to hold any loaded instances of vuser objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array kuser[]
+	 * @var        array vuser[]
 	 */
 	public static $instances = array();
 
@@ -188,10 +188,10 @@ abstract class BasekuserPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'LoginDataId', 'IsAdmin', 'ScreenName', 'FullName', 'FirstName', 'LastName', 'Email', 'Sha1Password', 'Salt', 'DateOfBirth', 'Country', 'State', 'City', 'Zip', 'UrlList', 'Picture', 'Icon', 'AboutMe', 'Tags', 'Tagline', 'NetworkHighschool', 'NetworkCollege', 'NetworkOther', 'MobileNum', 'MatureContent', 'Gender', 'RegistrationIp', 'RegistrationCookie', 'ImList', 'Views', 'Fans', 'Entries', 'StorageSize', 'ProducedKshows', 'Status', 'CreatedAt', 'UpdatedAt', 'PartnerId', 'DisplayInSearch', 'PartnerData', 'PuserId', 'AdminTags', 'IndexedPartnerDataInt', 'IndexedPartnerDataString', 'CustomData', 'Type', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'loginDataId', 'isAdmin', 'screenName', 'fullName', 'firstName', 'lastName', 'email', 'sha1Password', 'salt', 'dateOfBirth', 'country', 'state', 'city', 'zip', 'urlList', 'picture', 'icon', 'aboutMe', 'tags', 'tagline', 'networkHighschool', 'networkCollege', 'networkOther', 'mobileNum', 'matureContent', 'gender', 'registrationIp', 'registrationCookie', 'imList', 'views', 'fans', 'entries', 'storageSize', 'producedKshows', 'status', 'createdAt', 'updatedAt', 'partnerId', 'displayInSearch', 'partnerData', 'puserId', 'adminTags', 'indexedPartnerDataInt', 'indexedPartnerDataString', 'customData', 'type', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::LOGIN_DATA_ID, self::IS_ADMIN, self::SCREEN_NAME, self::FULL_NAME, self::FIRST_NAME, self::LAST_NAME, self::EMAIL, self::SHA1_PASSWORD, self::SALT, self::DATE_OF_BIRTH, self::COUNTRY, self::STATE, self::CITY, self::ZIP, self::URL_LIST, self::PICTURE, self::ICON, self::ABOUT_ME, self::TAGS, self::TAGLINE, self::NETWORK_HIGHSCHOOL, self::NETWORK_COLLEGE, self::NETWORK_OTHER, self::MOBILE_NUM, self::MATURE_CONTENT, self::GENDER, self::REGISTRATION_IP, self::REGISTRATION_COOKIE, self::IM_LIST, self::VIEWS, self::FANS, self::ENTRIES, self::STORAGE_SIZE, self::PRODUCED_KSHOWS, self::STATUS, self::CREATED_AT, self::UPDATED_AT, self::PARTNER_ID, self::DISPLAY_IN_SEARCH, self::PARTNER_DATA, self::PUSER_ID, self::ADMIN_TAGS, self::INDEXED_PARTNER_DATA_INT, self::INDEXED_PARTNER_DATA_STRING, self::CUSTOM_DATA, self::TYPE, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'login_data_id', 'is_admin', 'screen_name', 'full_name', 'first_name', 'last_name', 'email', 'sha1_password', 'salt', 'date_of_birth', 'country', 'state', 'city', 'zip', 'url_list', 'picture', 'icon', 'about_me', 'tags', 'tagline', 'network_highschool', 'network_college', 'network_other', 'mobile_num', 'mature_content', 'gender', 'registration_ip', 'registration_cookie', 'im_list', 'views', 'fans', 'entries', 'storage_size', 'produced_kshows', 'status', 'created_at', 'updated_at', 'partner_id', 'display_in_search', 'partner_data', 'puser_id', 'admin_tags', 'indexed_partner_data_int', 'indexed_partner_data_string', 'custom_data', 'type', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'LoginDataId', 'IsAdmin', 'ScreenName', 'FullName', 'FirstName', 'LastName', 'Email', 'Sha1Password', 'Salt', 'DateOfBirth', 'Country', 'State', 'City', 'Zip', 'UrlList', 'Picture', 'Icon', 'AboutMe', 'Tags', 'Tagline', 'NetworkHighschool', 'NetworkCollege', 'NetworkOther', 'MobileNum', 'MatureContent', 'Gender', 'RegistrationIp', 'RegistrationCookie', 'ImList', 'Views', 'Fans', 'Entries', 'StorageSize', 'ProducedVshows', 'Status', 'CreatedAt', 'UpdatedAt', 'PartnerId', 'DisplayInSearch', 'PartnerData', 'PuserId', 'AdminTags', 'IndexedPartnerDataInt', 'IndexedPartnerDataString', 'CustomData', 'Type', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'loginDataId', 'isAdmin', 'screenName', 'fullName', 'firstName', 'lastName', 'email', 'sha1Password', 'salt', 'dateOfBirth', 'country', 'state', 'city', 'zip', 'urlList', 'picture', 'icon', 'aboutMe', 'tags', 'tagline', 'networkHighschool', 'networkCollege', 'networkOther', 'mobileNum', 'matureContent', 'gender', 'registrationIp', 'registrationCookie', 'imList', 'views', 'fans', 'entries', 'storageSize', 'producedVshows', 'status', 'createdAt', 'updatedAt', 'partnerId', 'displayInSearch', 'partnerData', 'puserId', 'adminTags', 'indexedPartnerDataInt', 'indexedPartnerDataString', 'customData', 'type', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::LOGIN_DATA_ID, self::IS_ADMIN, self::SCREEN_NAME, self::FULL_NAME, self::FIRST_NAME, self::LAST_NAME, self::EMAIL, self::SHA1_PASSWORD, self::SALT, self::DATE_OF_BIRTH, self::COUNTRY, self::STATE, self::CITY, self::ZIP, self::URL_LIST, self::PICTURE, self::ICON, self::ABOUT_ME, self::TAGS, self::TAGLINE, self::NETWORK_HIGHSCHOOL, self::NETWORK_COLLEGE, self::NETWORK_OTHER, self::MOBILE_NUM, self::MATURE_CONTENT, self::GENDER, self::REGISTRATION_IP, self::REGISTRATION_COOKIE, self::IM_LIST, self::VIEWS, self::FANS, self::ENTRIES, self::STORAGE_SIZE, self::PRODUCED_VSHOWS, self::STATUS, self::CREATED_AT, self::UPDATED_AT, self::PARTNER_ID, self::DISPLAY_IN_SEARCH, self::PARTNER_DATA, self::PUSER_ID, self::ADMIN_TAGS, self::INDEXED_PARTNER_DATA_INT, self::INDEXED_PARTNER_DATA_STRING, self::CUSTOM_DATA, self::TYPE, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'login_data_id', 'is_admin', 'screen_name', 'full_name', 'first_name', 'last_name', 'email', 'sha1_password', 'salt', 'date_of_birth', 'country', 'state', 'city', 'zip', 'url_list', 'picture', 'icon', 'about_me', 'tags', 'tagline', 'network_highschool', 'network_college', 'network_other', 'mobile_num', 'mature_content', 'gender', 'registration_ip', 'registration_cookie', 'im_list', 'views', 'fans', 'entries', 'storage_size', 'produced_vshows', 'status', 'created_at', 'updated_at', 'partner_id', 'display_in_search', 'partner_data', 'puser_id', 'admin_tags', 'indexed_partner_data_int', 'indexed_partner_data_string', 'custom_data', 'type', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, )
 	);
 
@@ -202,10 +202,10 @@ abstract class BasekuserPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'LoginDataId' => 1, 'IsAdmin' => 2, 'ScreenName' => 3, 'FullName' => 4, 'FirstName' => 5, 'LastName' => 6, 'Email' => 7, 'Sha1Password' => 8, 'Salt' => 9, 'DateOfBirth' => 10, 'Country' => 11, 'State' => 12, 'City' => 13, 'Zip' => 14, 'UrlList' => 15, 'Picture' => 16, 'Icon' => 17, 'AboutMe' => 18, 'Tags' => 19, 'Tagline' => 20, 'NetworkHighschool' => 21, 'NetworkCollege' => 22, 'NetworkOther' => 23, 'MobileNum' => 24, 'MatureContent' => 25, 'Gender' => 26, 'RegistrationIp' => 27, 'RegistrationCookie' => 28, 'ImList' => 29, 'Views' => 30, 'Fans' => 31, 'Entries' => 32, 'StorageSize' => 33, 'ProducedKshows' => 34, 'Status' => 35, 'CreatedAt' => 36, 'UpdatedAt' => 37, 'PartnerId' => 38, 'DisplayInSearch' => 39, 'PartnerData' => 40, 'PuserId' => 41, 'AdminTags' => 42, 'IndexedPartnerDataInt' => 43, 'IndexedPartnerDataString' => 44, 'CustomData' => 45, 'Type' => 46, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'loginDataId' => 1, 'isAdmin' => 2, 'screenName' => 3, 'fullName' => 4, 'firstName' => 5, 'lastName' => 6, 'email' => 7, 'sha1Password' => 8, 'salt' => 9, 'dateOfBirth' => 10, 'country' => 11, 'state' => 12, 'city' => 13, 'zip' => 14, 'urlList' => 15, 'picture' => 16, 'icon' => 17, 'aboutMe' => 18, 'tags' => 19, 'tagline' => 20, 'networkHighschool' => 21, 'networkCollege' => 22, 'networkOther' => 23, 'mobileNum' => 24, 'matureContent' => 25, 'gender' => 26, 'registrationIp' => 27, 'registrationCookie' => 28, 'imList' => 29, 'views' => 30, 'fans' => 31, 'entries' => 32, 'storageSize' => 33, 'producedKshows' => 34, 'status' => 35, 'createdAt' => 36, 'updatedAt' => 37, 'partnerId' => 38, 'displayInSearch' => 39, 'partnerData' => 40, 'puserId' => 41, 'adminTags' => 42, 'indexedPartnerDataInt' => 43, 'indexedPartnerDataString' => 44, 'customData' => 45, 'type' => 46, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::LOGIN_DATA_ID => 1, self::IS_ADMIN => 2, self::SCREEN_NAME => 3, self::FULL_NAME => 4, self::FIRST_NAME => 5, self::LAST_NAME => 6, self::EMAIL => 7, self::SHA1_PASSWORD => 8, self::SALT => 9, self::DATE_OF_BIRTH => 10, self::COUNTRY => 11, self::STATE => 12, self::CITY => 13, self::ZIP => 14, self::URL_LIST => 15, self::PICTURE => 16, self::ICON => 17, self::ABOUT_ME => 18, self::TAGS => 19, self::TAGLINE => 20, self::NETWORK_HIGHSCHOOL => 21, self::NETWORK_COLLEGE => 22, self::NETWORK_OTHER => 23, self::MOBILE_NUM => 24, self::MATURE_CONTENT => 25, self::GENDER => 26, self::REGISTRATION_IP => 27, self::REGISTRATION_COOKIE => 28, self::IM_LIST => 29, self::VIEWS => 30, self::FANS => 31, self::ENTRIES => 32, self::STORAGE_SIZE => 33, self::PRODUCED_KSHOWS => 34, self::STATUS => 35, self::CREATED_AT => 36, self::UPDATED_AT => 37, self::PARTNER_ID => 38, self::DISPLAY_IN_SEARCH => 39, self::PARTNER_DATA => 40, self::PUSER_ID => 41, self::ADMIN_TAGS => 42, self::INDEXED_PARTNER_DATA_INT => 43, self::INDEXED_PARTNER_DATA_STRING => 44, self::CUSTOM_DATA => 45, self::TYPE => 46, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'login_data_id' => 1, 'is_admin' => 2, 'screen_name' => 3, 'full_name' => 4, 'first_name' => 5, 'last_name' => 6, 'email' => 7, 'sha1_password' => 8, 'salt' => 9, 'date_of_birth' => 10, 'country' => 11, 'state' => 12, 'city' => 13, 'zip' => 14, 'url_list' => 15, 'picture' => 16, 'icon' => 17, 'about_me' => 18, 'tags' => 19, 'tagline' => 20, 'network_highschool' => 21, 'network_college' => 22, 'network_other' => 23, 'mobile_num' => 24, 'mature_content' => 25, 'gender' => 26, 'registration_ip' => 27, 'registration_cookie' => 28, 'im_list' => 29, 'views' => 30, 'fans' => 31, 'entries' => 32, 'storage_size' => 33, 'produced_kshows' => 34, 'status' => 35, 'created_at' => 36, 'updated_at' => 37, 'partner_id' => 38, 'display_in_search' => 39, 'partner_data' => 40, 'puser_id' => 41, 'admin_tags' => 42, 'indexed_partner_data_int' => 43, 'indexed_partner_data_string' => 44, 'custom_data' => 45, 'type' => 46, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'LoginDataId' => 1, 'IsAdmin' => 2, 'ScreenName' => 3, 'FullName' => 4, 'FirstName' => 5, 'LastName' => 6, 'Email' => 7, 'Sha1Password' => 8, 'Salt' => 9, 'DateOfBirth' => 10, 'Country' => 11, 'State' => 12, 'City' => 13, 'Zip' => 14, 'UrlList' => 15, 'Picture' => 16, 'Icon' => 17, 'AboutMe' => 18, 'Tags' => 19, 'Tagline' => 20, 'NetworkHighschool' => 21, 'NetworkCollege' => 22, 'NetworkOther' => 23, 'MobileNum' => 24, 'MatureContent' => 25, 'Gender' => 26, 'RegistrationIp' => 27, 'RegistrationCookie' => 28, 'ImList' => 29, 'Views' => 30, 'Fans' => 31, 'Entries' => 32, 'StorageSize' => 33, 'ProducedVshows' => 34, 'Status' => 35, 'CreatedAt' => 36, 'UpdatedAt' => 37, 'PartnerId' => 38, 'DisplayInSearch' => 39, 'PartnerData' => 40, 'PuserId' => 41, 'AdminTags' => 42, 'IndexedPartnerDataInt' => 43, 'IndexedPartnerDataString' => 44, 'CustomData' => 45, 'Type' => 46, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'loginDataId' => 1, 'isAdmin' => 2, 'screenName' => 3, 'fullName' => 4, 'firstName' => 5, 'lastName' => 6, 'email' => 7, 'sha1Password' => 8, 'salt' => 9, 'dateOfBirth' => 10, 'country' => 11, 'state' => 12, 'city' => 13, 'zip' => 14, 'urlList' => 15, 'picture' => 16, 'icon' => 17, 'aboutMe' => 18, 'tags' => 19, 'tagline' => 20, 'networkHighschool' => 21, 'networkCollege' => 22, 'networkOther' => 23, 'mobileNum' => 24, 'matureContent' => 25, 'gender' => 26, 'registrationIp' => 27, 'registrationCookie' => 28, 'imList' => 29, 'views' => 30, 'fans' => 31, 'entries' => 32, 'storageSize' => 33, 'producedVshows' => 34, 'status' => 35, 'createdAt' => 36, 'updatedAt' => 37, 'partnerId' => 38, 'displayInSearch' => 39, 'partnerData' => 40, 'puserId' => 41, 'adminTags' => 42, 'indexedPartnerDataInt' => 43, 'indexedPartnerDataString' => 44, 'customData' => 45, 'type' => 46, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::LOGIN_DATA_ID => 1, self::IS_ADMIN => 2, self::SCREEN_NAME => 3, self::FULL_NAME => 4, self::FIRST_NAME => 5, self::LAST_NAME => 6, self::EMAIL => 7, self::SHA1_PASSWORD => 8, self::SALT => 9, self::DATE_OF_BIRTH => 10, self::COUNTRY => 11, self::STATE => 12, self::CITY => 13, self::ZIP => 14, self::URL_LIST => 15, self::PICTURE => 16, self::ICON => 17, self::ABOUT_ME => 18, self::TAGS => 19, self::TAGLINE => 20, self::NETWORK_HIGHSCHOOL => 21, self::NETWORK_COLLEGE => 22, self::NETWORK_OTHER => 23, self::MOBILE_NUM => 24, self::MATURE_CONTENT => 25, self::GENDER => 26, self::REGISTRATION_IP => 27, self::REGISTRATION_COOKIE => 28, self::IM_LIST => 29, self::VIEWS => 30, self::FANS => 31, self::ENTRIES => 32, self::STORAGE_SIZE => 33, self::PRODUCED_VSHOWS => 34, self::STATUS => 35, self::CREATED_AT => 36, self::UPDATED_AT => 37, self::PARTNER_ID => 38, self::DISPLAY_IN_SEARCH => 39, self::PARTNER_DATA => 40, self::PUSER_ID => 41, self::ADMIN_TAGS => 42, self::INDEXED_PARTNER_DATA_INT => 43, self::INDEXED_PARTNER_DATA_STRING => 44, self::CUSTOM_DATA => 45, self::TYPE => 46, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'login_data_id' => 1, 'is_admin' => 2, 'screen_name' => 3, 'full_name' => 4, 'first_name' => 5, 'last_name' => 6, 'email' => 7, 'sha1_password' => 8, 'salt' => 9, 'date_of_birth' => 10, 'country' => 11, 'state' => 12, 'city' => 13, 'zip' => 14, 'url_list' => 15, 'picture' => 16, 'icon' => 17, 'about_me' => 18, 'tags' => 19, 'tagline' => 20, 'network_highschool' => 21, 'network_college' => 22, 'network_other' => 23, 'mobile_num' => 24, 'mature_content' => 25, 'gender' => 26, 'registration_ip' => 27, 'registration_cookie' => 28, 'im_list' => 29, 'views' => 30, 'fans' => 31, 'entries' => 32, 'storage_size' => 33, 'produced_vshows' => 34, 'status' => 35, 'created_at' => 36, 'updated_at' => 37, 'partner_id' => 38, 'display_in_search' => 39, 'partner_data' => 40, 'puser_id' => 41, 'admin_tags' => 42, 'indexed_partner_data_int' => 43, 'indexed_partner_data_string' => 44, 'custom_data' => 45, 'type' => 46, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, )
 	);
 
@@ -255,12 +255,12 @@ abstract class BasekuserPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. kuserPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. vuserPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(kuserPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(vuserPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -276,53 +276,53 @@ abstract class BasekuserPeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(kuserPeer::ID);
-		$criteria->addSelectColumn(kuserPeer::LOGIN_DATA_ID);
-		$criteria->addSelectColumn(kuserPeer::IS_ADMIN);
-		$criteria->addSelectColumn(kuserPeer::SCREEN_NAME);
-		$criteria->addSelectColumn(kuserPeer::FULL_NAME);
-		$criteria->addSelectColumn(kuserPeer::FIRST_NAME);
-		$criteria->addSelectColumn(kuserPeer::LAST_NAME);
-		$criteria->addSelectColumn(kuserPeer::EMAIL);
-		$criteria->addSelectColumn(kuserPeer::SHA1_PASSWORD);
-		$criteria->addSelectColumn(kuserPeer::SALT);
-		$criteria->addSelectColumn(kuserPeer::DATE_OF_BIRTH);
-		$criteria->addSelectColumn(kuserPeer::COUNTRY);
-		$criteria->addSelectColumn(kuserPeer::STATE);
-		$criteria->addSelectColumn(kuserPeer::CITY);
-		$criteria->addSelectColumn(kuserPeer::ZIP);
-		$criteria->addSelectColumn(kuserPeer::URL_LIST);
-		$criteria->addSelectColumn(kuserPeer::PICTURE);
-		$criteria->addSelectColumn(kuserPeer::ICON);
-		$criteria->addSelectColumn(kuserPeer::ABOUT_ME);
-		$criteria->addSelectColumn(kuserPeer::TAGS);
-		$criteria->addSelectColumn(kuserPeer::TAGLINE);
-		$criteria->addSelectColumn(kuserPeer::NETWORK_HIGHSCHOOL);
-		$criteria->addSelectColumn(kuserPeer::NETWORK_COLLEGE);
-		$criteria->addSelectColumn(kuserPeer::NETWORK_OTHER);
-		$criteria->addSelectColumn(kuserPeer::MOBILE_NUM);
-		$criteria->addSelectColumn(kuserPeer::MATURE_CONTENT);
-		$criteria->addSelectColumn(kuserPeer::GENDER);
-		$criteria->addSelectColumn(kuserPeer::REGISTRATION_IP);
-		$criteria->addSelectColumn(kuserPeer::REGISTRATION_COOKIE);
-		$criteria->addSelectColumn(kuserPeer::IM_LIST);
-		$criteria->addSelectColumn(kuserPeer::VIEWS);
-		$criteria->addSelectColumn(kuserPeer::FANS);
-		$criteria->addSelectColumn(kuserPeer::ENTRIES);
-		$criteria->addSelectColumn(kuserPeer::STORAGE_SIZE);
-		$criteria->addSelectColumn(kuserPeer::PRODUCED_KSHOWS);
-		$criteria->addSelectColumn(kuserPeer::STATUS);
-		$criteria->addSelectColumn(kuserPeer::CREATED_AT);
-		$criteria->addSelectColumn(kuserPeer::UPDATED_AT);
-		$criteria->addSelectColumn(kuserPeer::PARTNER_ID);
-		$criteria->addSelectColumn(kuserPeer::DISPLAY_IN_SEARCH);
-		$criteria->addSelectColumn(kuserPeer::PARTNER_DATA);
-		$criteria->addSelectColumn(kuserPeer::PUSER_ID);
-		$criteria->addSelectColumn(kuserPeer::ADMIN_TAGS);
-		$criteria->addSelectColumn(kuserPeer::INDEXED_PARTNER_DATA_INT);
-		$criteria->addSelectColumn(kuserPeer::INDEXED_PARTNER_DATA_STRING);
-		$criteria->addSelectColumn(kuserPeer::CUSTOM_DATA);
-		$criteria->addSelectColumn(kuserPeer::TYPE);
+		$criteria->addSelectColumn(vuserPeer::ID);
+		$criteria->addSelectColumn(vuserPeer::LOGIN_DATA_ID);
+		$criteria->addSelectColumn(vuserPeer::IS_ADMIN);
+		$criteria->addSelectColumn(vuserPeer::SCREEN_NAME);
+		$criteria->addSelectColumn(vuserPeer::FULL_NAME);
+		$criteria->addSelectColumn(vuserPeer::FIRST_NAME);
+		$criteria->addSelectColumn(vuserPeer::LAST_NAME);
+		$criteria->addSelectColumn(vuserPeer::EMAIL);
+		$criteria->addSelectColumn(vuserPeer::SHA1_PASSWORD);
+		$criteria->addSelectColumn(vuserPeer::SALT);
+		$criteria->addSelectColumn(vuserPeer::DATE_OF_BIRTH);
+		$criteria->addSelectColumn(vuserPeer::COUNTRY);
+		$criteria->addSelectColumn(vuserPeer::STATE);
+		$criteria->addSelectColumn(vuserPeer::CITY);
+		$criteria->addSelectColumn(vuserPeer::ZIP);
+		$criteria->addSelectColumn(vuserPeer::URL_LIST);
+		$criteria->addSelectColumn(vuserPeer::PICTURE);
+		$criteria->addSelectColumn(vuserPeer::ICON);
+		$criteria->addSelectColumn(vuserPeer::ABOUT_ME);
+		$criteria->addSelectColumn(vuserPeer::TAGS);
+		$criteria->addSelectColumn(vuserPeer::TAGLINE);
+		$criteria->addSelectColumn(vuserPeer::NETWORK_HIGHSCHOOL);
+		$criteria->addSelectColumn(vuserPeer::NETWORK_COLLEGE);
+		$criteria->addSelectColumn(vuserPeer::NETWORK_OTHER);
+		$criteria->addSelectColumn(vuserPeer::MOBILE_NUM);
+		$criteria->addSelectColumn(vuserPeer::MATURE_CONTENT);
+		$criteria->addSelectColumn(vuserPeer::GENDER);
+		$criteria->addSelectColumn(vuserPeer::REGISTRATION_IP);
+		$criteria->addSelectColumn(vuserPeer::REGISTRATION_COOKIE);
+		$criteria->addSelectColumn(vuserPeer::IM_LIST);
+		$criteria->addSelectColumn(vuserPeer::VIEWS);
+		$criteria->addSelectColumn(vuserPeer::FANS);
+		$criteria->addSelectColumn(vuserPeer::ENTRIES);
+		$criteria->addSelectColumn(vuserPeer::STORAGE_SIZE);
+		$criteria->addSelectColumn(vuserPeer::PRODUCED_VSHOWS);
+		$criteria->addSelectColumn(vuserPeer::STATUS);
+		$criteria->addSelectColumn(vuserPeer::CREATED_AT);
+		$criteria->addSelectColumn(vuserPeer::UPDATED_AT);
+		$criteria->addSelectColumn(vuserPeer::PARTNER_ID);
+		$criteria->addSelectColumn(vuserPeer::DISPLAY_IN_SEARCH);
+		$criteria->addSelectColumn(vuserPeer::PARTNER_DATA);
+		$criteria->addSelectColumn(vuserPeer::PUSER_ID);
+		$criteria->addSelectColumn(vuserPeer::ADMIN_TAGS);
+		$criteria->addSelectColumn(vuserPeer::INDEXED_PARTNER_DATA_INT);
+		$criteria->addSelectColumn(vuserPeer::INDEXED_PARTNER_DATA_STRING);
+		$criteria->addSelectColumn(vuserPeer::CUSTOM_DATA);
+		$criteria->addSelectColumn(vuserPeer::TYPE);
 	}
 
 	/**
@@ -341,27 +341,27 @@ abstract class BasekuserPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(kuserPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(vuserPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			kuserPeer::addSelectColumns($criteria);
+			vuserPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 		
-		kuserPeer::attachCriteriaFilter($criteria);
+		vuserPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
-			'kuserPeer', 
+			vQueryCache::QUERY_TYPE_COUNT,
+			'vuserPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
@@ -370,7 +370,7 @@ abstract class BasekuserPeer {
 		}
 		
 		// select the connection for the query
-		$con = kuserPeer::alternativeCon ($con, $queryDB);
+		$con = vuserPeer::alternativeCon ($con, $queryDB);
 		
 		// BasePeer returns a PDOStatement
 		$stmt = BasePeer::doCount($criteria, $con);
@@ -384,7 +384,7 @@ abstract class BasekuserPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -394,7 +394,7 @@ abstract class BasekuserPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     kuser
+	 * @return     vuser
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -402,7 +402,7 @@ abstract class BasekuserPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = kuserPeer::doSelect($critcopy, $con);
+		$objects = vuserPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -444,10 +444,10 @@ abstract class BasekuserPeer {
 	{
 		foreach ($queryResult as $curIndex => $curObject)
 		{
-			$objFromPool = kuserPeer::getInstanceFromPool($curObject->getPrimaryKey());
+			$objFromPool = vuserPeer::getInstanceFromPool($curObject->getPrimaryKey());
 			if ($objFromPool === null)
 			{
-				kuserPeer::addInstanceToPool($curObject);
+				vuserPeer::addInstanceToPool($curObject);
 			}
 			else
 			{
@@ -465,11 +465,11 @@ abstract class BasekuserPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
-					kuserPeer::addInstanceToPool($curResult);
+					vuserPeer::addInstanceToPool($curResult);
 				}
 			}
 		}
@@ -486,54 +486,54 @@ abstract class BasekuserPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{		
-		$criteriaForSelect = kuserPeer::prepareCriteriaForSelect($criteria);
+		$criteriaForSelect = vuserPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
-			'kuserPeer', 
+			vQueryCache::QUERY_TYPE_SELECT,
+			'vuserPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
 		{
 			$cacheKey = null;
-			kuserPeer::filterSelectResults($cachedResult, $criteriaForSelect);
-			kuserPeer::updateInstancePool($cachedResult);
+			vuserPeer::filterSelectResults($cachedResult, $criteriaForSelect);
+			vuserPeer::updateInstancePool($cachedResult);
 			return $cachedResult;
 		}
 		
-		$con = kuserPeer::alternativeCon($con, $queryDB);
+		$con = vuserPeer::alternativeCon($con, $queryDB);
 		
-		$queryResult = kuserPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
+		$queryResult = vuserPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
-		kuserPeer::filterSelectResults($queryResult, $criteria);
+		vuserPeer::filterSelectResults($queryResult, $criteria);
 		
-		kuserPeer::addInstancesToPool($queryResult);
+		vuserPeer::addInstancesToPool($queryResult);
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -543,7 +543,7 @@ abstract class BasekuserPeer {
 			$con = myDbHelper::alternativeCon($con);
 			
 		if($con === null)
-			$con = Propel::getConnection(kuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(vuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		
 		return $con;
 	}
@@ -555,7 +555,7 @@ abstract class BasekuserPeer {
 	
 	public static function  setUseCriteriaFilter ( $use )
 	{
-		$criteria_filter = kuserPeer::getCriteriaFilter();
+		$criteria_filter = vuserPeer::getCriteriaFilter();
 		
 		if ( $use )  $criteria_filter->enable(); 
 		else $criteria_filter->disable();
@@ -569,12 +569,12 @@ abstract class BasekuserPeer {
 	public static function &getCriteriaFilter()
 	{
 		if(self::$s_criteria_filter == null)
-			kuserPeer::setDefaultCriteriaFilter();
+			vuserPeer::setDefaultCriteriaFilter();
 		
-		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('kuser');
+		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('vuser');
 		if ($partnerCriteria)
 		{
-			call_user_func_array(array('kuserPeer','addPartnerToCriteria'), $partnerCriteria);
+			call_user_func_array(array('vuserPeer','addPartnerToCriteria'), $partnerCriteria);
 		}
 		
 		return self::$s_criteria_filter;
@@ -601,10 +601,10 @@ abstract class BasekuserPeer {
 	 */
 	protected static function attachCriteriaFilter(Criteria $criteria)
 	{
-		kuserPeer::getCriteriaFilter()->applyFilter($criteria);
+		vuserPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -612,21 +612,21 @@ abstract class BasekuserPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
-				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+				// allow only the vidiun netword stuff
+				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 				
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -645,7 +645,7 @@ abstract class BasekuserPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -661,9 +661,9 @@ abstract class BasekuserPeer {
 				else 
 				{
 					$criterion = $criteria->getNewCriterion(self::PARTNER_ID, $partners, Criteria::IN);
-					if($kalturaNetwork)
+					if($vidiunNetwork)
 					{
-						$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+						$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 						$criterion->addOr($criterionNetwork);
 					}
 					$criteria->addAnd($criterion);
@@ -690,10 +690,10 @@ abstract class BasekuserPeer {
 	public static function doCountStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 		// attach default criteria
-		kuserPeer::attachCriteriaFilter($criteria);
+		vuserPeer::attachCriteriaFilter($criteria);
 		
 		// select the connection for the query
-		$con = kuserPeer::alternativeCon ( $con );
+		$con = vuserPeer::alternativeCon ( $con );
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doCount($criteria, $con);
@@ -707,20 +707,20 @@ abstract class BasekuserPeer {
 			if(count($asColumns) == 1 && isset($asColumns['_score']))
 			{
 				$criteria = clone $criteria;
-				kuserPeer::addSelectColumns($criteria);
+				vuserPeer::addSelectColumns($criteria);
 			}
 		}
 		else
 		{
 			$criteria = clone $criteria;
-			kuserPeer::addSelectColumns($criteria);
+			vuserPeer::addSelectColumns($criteria);
 		}
 		
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		// attach default criteria
-		kuserPeer::attachCriteriaFilter($criteria);
+		vuserPeer::attachCriteriaFilter($criteria);
 
 		return $criteria;
 	}
@@ -740,9 +740,9 @@ abstract class BasekuserPeer {
 	 */
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
-		$con = kuserPeer::alternativeCon($con);
+		$con = vuserPeer::alternativeCon($con);
 		
-		$criteria = kuserPeer::prepareCriteriaForSelect($criteria);
+		$criteria = vuserPeer::prepareCriteriaForSelect($criteria);
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doSelect($criteria, $con);
@@ -756,10 +756,10 @@ abstract class BasekuserPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      kuser $value A kuser object.
+	 * @param      vuser $value A vuser object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(kuser $obj, $key = null)
+	public static function addInstanceToPool(vuser $obj, $key = null)
 	{
 		if ( Propel::isInstancePoolingEnabled() )
 		{
@@ -769,11 +769,11 @@ abstract class BasekuserPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('kuserPeer');
+				vMemoryManager::registerPeer('vuserPeer');
 			}
 		}
 	}
@@ -786,18 +786,18 @@ abstract class BasekuserPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A kuser object or a primary key value.
+	 * @param      mixed $value A vuser object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof kuser) {
+			if (is_object($value) && $value instanceof vuser) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or kuser object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or vuser object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -812,7 +812,7 @@ abstract class BasekuserPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     kuser Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     vuser Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -840,7 +840,7 @@ abstract class BasekuserPeer {
 	}
 	
 	/**
-	 * Method to invalidate the instance pool of all tables related to kuser
+	 * Method to invalidate the instance pool of all tables related to vuser
 	 * by a foreign key with ON DELETE CASCADE
 	 */
 	public static function clearRelatedInstancePool()
@@ -878,11 +878,11 @@ abstract class BasekuserPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = kuserPeer::getOMClass(false);
+		$cls = vuserPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = kuserPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = kuserPeer::getInstanceFromPool($key))) {
+			$key = vuserPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = vuserPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -913,10 +913,10 @@ abstract class BasekuserPeer {
 	 */
 	public static function buildTableMap()
 	{
-	  $dbMap = Propel::getDatabaseMap(BasekuserPeer::DATABASE_NAME);
-	  if (!$dbMap->hasTable(BasekuserPeer::TABLE_NAME))
+	  $dbMap = Propel::getDatabaseMap(BasevuserPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BasevuserPeer::TABLE_NAME))
 	  {
-	    $dbMap->addTableObject(new kuserTableMap());
+	    $dbMap->addTableObject(new vuserTableMap());
 	  }
 	}
 
@@ -933,13 +933,13 @@ abstract class BasekuserPeer {
 	 */
 	public static function getOMClass($withPrefix = true)
 	{
-		return $withPrefix ? kuserPeer::CLASS_DEFAULT : kuserPeer::OM_CLASS;
+		return $withPrefix ? vuserPeer::CLASS_DEFAULT : vuserPeer::OM_CLASS;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a kuser or Criteria object.
+	 * Method perform an INSERT on the database, given a vuser or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or kuser object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or vuser object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -948,17 +948,17 @@ abstract class BasekuserPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(kuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from kuser object
+			$criteria = $values->buildCriteria(); // build Criteria from vuser object
 		}
 
-		if ($criteria->containsKey(kuserPeer::ID) && $criteria->keyContainsValue(kuserPeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.kuserPeer::ID.')');
+		if ($criteria->containsKey(vuserPeer::ID) && $criteria->keyContainsValue(vuserPeer::ID) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.vuserPeer::ID.')');
 		}
 
 
@@ -980,9 +980,9 @@ abstract class BasekuserPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a kuser or Criteria object.
+	 * Method perform an UPDATE on the database, given a vuser or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or kuser object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or vuser object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -991,7 +991,7 @@ abstract class BasekuserPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(kuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -999,10 +999,10 @@ abstract class BasekuserPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(kuserPeer::ID);
-			$selectCriteria->add(kuserPeer::ID, $criteria->remove(kuserPeer::ID), $comparison);
+			$comparison = $criteria->getComparison(vuserPeer::ID);
+			$selectCriteria->add(vuserPeer::ID, $criteria->remove(vuserPeer::ID), $comparison);
 
-		} else { // $values is kuser object
+		} else { // $values is vuser object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -1032,26 +1032,26 @@ abstract class BasekuserPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the kuser table.
+	 * Method to DELETE all rows from the vuser table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(kuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(kuserPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(vuserPeer::TABLE_NAME, $con);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
 			// instances get re-added by the select statement contained therein).
-			kuserPeer::clearInstancePool();
-			kuserPeer::clearRelatedInstancePool();
+			vuserPeer::clearInstancePool();
+			vuserPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1061,9 +1061,9 @@ abstract class BasekuserPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a kuser or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a vuser or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or kuser object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or vuser object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1074,27 +1074,27 @@ abstract class BasekuserPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(kuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			kuserPeer::clearInstancePool();
+			vuserPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof kuser) { // it's a model object
+		} elseif ($values instanceof vuser) { // it's a model object
 			// invalidate the cache for this single object
-			kuserPeer::removeInstanceFromPool($values);
+			vuserPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(kuserPeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(vuserPeer::ID, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				kuserPeer::removeInstanceFromPool($singleval);
+				vuserPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -1109,7 +1109,7 @@ abstract class BasekuserPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-			kuserPeer::clearRelatedInstancePool();
+			vuserPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1119,24 +1119,24 @@ abstract class BasekuserPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given kuser object.
+	 * Validates all modified columns of given vuser object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      kuser $obj The object to validate.
+	 * @param      vuser $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(kuser $obj, $cols = null)
+	public static function doValidate(vuser $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(kuserPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(kuserPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(vuserPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(vuserPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -1152,7 +1152,7 @@ abstract class BasekuserPeer {
 
 		}
 
-		return BasePeer::doValidate(kuserPeer::DATABASE_NAME, kuserPeer::TABLE_NAME, $columns);
+		return BasePeer::doValidate(vuserPeer::DATABASE_NAME, vuserPeer::TABLE_NAME, $columns);
 	}
 
 	/**
@@ -1160,19 +1160,19 @@ abstract class BasekuserPeer {
 	 *
 	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     kuser
+	 * @return     vuser
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = kuserPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = vuserPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
-		$criteria = new Criteria(kuserPeer::DATABASE_NAME);
-		$criteria->add(kuserPeer::ID, $pk);
+		$criteria = new Criteria(vuserPeer::DATABASE_NAME);
+		$criteria->add(vuserPeer::ID, $pk);
 
-		$v = kuserPeer::doSelect($criteria, $con);
+		$v = vuserPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -1191,16 +1191,16 @@ abstract class BasekuserPeer {
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(kuserPeer::DATABASE_NAME);
-			$criteria->add(kuserPeer::ID, $pks, Criteria::IN);
-			$objs = kuserPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(vuserPeer::DATABASE_NAME);
+			$criteria->add(vuserPeer::ID, $pks, Criteria::IN);
+			$objs = vuserPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
 
-} // BasekuserPeer
+} // BasevuserPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BasekuserPeer::buildTableMap();
+BasevuserPeer::buildTableMap();
 

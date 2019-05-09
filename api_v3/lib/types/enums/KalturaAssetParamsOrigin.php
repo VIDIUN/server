@@ -3,6 +3,6 @@
  * @package api
  * @subpackage enum
  */
-class KalturaAssetParamsOrigin extends KalturaEnum implements assetParamsOrigin
+class VidiunAssetParamsOrigin extends VidiunEnum implements assetParamsOrigin
 {
 }

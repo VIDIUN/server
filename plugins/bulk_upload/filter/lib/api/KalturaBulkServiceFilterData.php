@@ -5,16 +5,16 @@
  * @package plugins.bulkUploadFilter
  * @subpackage api.objects
  */
-class KalturaBulkServiceFilterData extends KalturaBulkServiceFilterDataBase
+class VidiunBulkServiceFilterData extends VidiunBulkServiceFilterDataBase
 {
 	/**
 	 * Template object for new object creation
-	 * @var KalturaObject
+	 * @var VidiunObject
 	 */
 	public $templateObject;
 
 	
-	public function toBulkUploadJobData(KalturaBulkUploadJobData $jobData)
+	public function toBulkUploadJobData(VidiunBulkUploadJobData $jobData)
 	{
 		$jobData->filter = $this->filter;
 		$jobData->templateObject = $this->templateObject;

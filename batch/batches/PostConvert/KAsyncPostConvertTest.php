@@ -10,9 +10,9 @@ require_once(__DIR__ . "/../../bootstrap.php");
  * @package Scheduler
  * @subpackage Debug
  */
-class KAsyncPostConvertTest extends PHPUnit_Framework_TestCase 
+class VAsyncPostConvertTest extends PHPUnit_Framework_TestCase 
 {
-	const JOB_NAME = 'KAsyncPostConvert';
+	const JOB_NAME = 'VAsyncPostConvert';
 	
 	public function setUp() 
 	{
@@ -26,24 +26,24 @@ class KAsyncPostConvertTest extends PHPUnit_Framework_TestCase
 	
 	public function testGoodFile()
 	{
-		$this->doTest(realpath(dirname( __FILE__ ) . '/../../../tests/files/example.avi'), true, KalturaBatchJobStatus::FINISHED);
+		$this->doTest(realpath(dirname( __FILE__ ) . '/../../../tests/files/example.avi'), true, VidiunBatchJobStatus::FINISHED);
 	}
 	
 	public function testSpacedFile()
 	{
 		$path = realpath(dirname( __FILE__ ) . '/../../../tests/files/example.avi');
-		$this->doTest(" $path", true, KalturaBatchJobStatus::FINISHED);
+		$this->doTest(" $path", true, VidiunBatchJobStatus::FINISHED);
 	}
 	
 	public function testMissingFile()
 	{
-		$this->doTest('aaa', true, KalturaBatchJobStatus::FAILED);
+		$this->doTest('aaa', true, VidiunBatchJobStatus::FAILED);
 	}
 	
 	public function doTest($filePath, $createThumb, $expectedStatus)
 	{
 		$iniFile = "batch_config.ini";
-		$schedulerConfig = new KSchedulerConfig($iniFile);
+		$schedulerConfig = new VSchedulerConfig($iniFile);
 	
 		$taskConfigs = $schedulerConfig->getTaskConfigList();
 		$config = null;
@@ -68,16 +68,16 @@ class KAsyncPostConvertTest extends PHPUnit_Framework_TestCase
 	
 	private function prepareJobs($filePath, $createThumb)
 	{
-		$data = new KalturaPostConvertJobData();
-		$srcFileSyncDescriptor = new KalturaSourceFileSyncDescriptor();
+		$data = new VidiunPostConvertJobData();
+		$srcFileSyncDescriptor = new VidiunSourceFileSyncDescriptor();
 		$srcFileSyncDescriptor->fileSyncLocalPath = $filePath;
-		$data->srcFileSyncs = new KalturaSourceFileSyncDescriptorArray();
+		$data->srcFileSyncs = new VidiunSourceFileSyncDescriptorArray();
 		$data->srcFileSyncs[] = $srcFileSyncDescriptor;		
 		$data->createThumb = $createThumb;
 		
-		$job = new KalturaBatchJob();
+		$job = new VidiunBatchJob();
 		$job->id = 1;
-		$job->status = KalturaBatchJobStatus::PENDING;
+		$job->status = VidiunBatchJobStatus::PENDING;
 		$job->data = $data;
 		
 		return array($job);

@@ -3,7 +3,7 @@
  * @package plugins.dropFolderEventNotifications
  * @subpackage lib
  */
-class DropFolderEventNotificationEventObjectType implements IKalturaPluginEnum, EventNotificationEventObjectType
+class DropFolderEventNotificationEventObjectType implements IVidiunPluginEnum, EventNotificationEventObjectType
 {
 	const DROP_FOLDER_FILE = 'DropFolderFile';
 	const DROP_FOLDER = 'DropFolder';

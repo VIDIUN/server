@@ -1,12 +1,12 @@
 <?php
 /**
- * Extends the 'kFileTransferMgr' class & implements a file transfer manager using the FTP protocol.
- * For additional comments please look at the 'kFileTransferMgr' class.
+ * Extends the 'vFileTransferMgr' class & implements a file transfer manager using the FTP protocol.
+ * For additional comments please look at the 'vFileTransferMgr' class.
  * 
  * @package infra
  * @subpackage Storage
  */
-class ftpMgr extends kFileTransferMgr
+class ftpMgr extends vFileTransferMgr
 {
 	// consts for function result values
 	const RAWLIST_MATCH_NONE = 1000;
@@ -16,11 +16,11 @@ class ftpMgr extends kFileTransferMgr
 	protected $passiveMode = true;
 	protected $mode = FTP_BINARY;
 
-	// instances of this class should be created usign the 'getInstance' of the 'kFileTransferMgr' class
+	// instances of this class should be created usign the 'getInstance' of the 'vFileTransferMgr' class
 	protected function __construct(array $options = null)
 	{
 		if(!function_exists('ftp_connect'))
-			throw new kFileTransferMgrException("FTP extension is not installed.", kFileTransferMgrException::extensionMissing);
+			throw new vFileTransferMgrException("FTP extension is not installed.", vFileTransferMgrException::extensionMissing);
 	
 		parent::__construct($options);
 	
@@ -39,7 +39,7 @@ class ftpMgr extends kFileTransferMgr
 
 
 	/**********************************************************************/
-	/* Implementation of abstract functions from class 'kFileTransferMgr' */
+	/* Implementation of abstract functions from class 'vFileTransferMgr' */
 	/**********************************************************************/
 
 	// ftp connect to server:port
@@ -181,7 +181,7 @@ class ftpMgr extends kFileTransferMgr
 	{
 	    $remote_file = ltrim($remote_file,'/');
 	    $rawListOutput = ftp_rawlist($this->getConnection(), $remote_file);
-	    KalturaLog::debug("ftp rawlist [" . print_r($rawListOutput, true) . "]");
+	    VidiunLog::debug("ftp rawlist [" . print_r($rawListOutput, true) . "]");
 	    $fileInfo = $rawListOutput[0];
 
 	    $matches = null;
@@ -195,10 +195,10 @@ class ftpMgr extends kFileTransferMgr
 	protected function doListFileObjects ($remoteDir)
 	{
 		$fileObjectsResult = array ();
-		KalturaLog::debug($remoteDir);
+		VidiunLog::debug($remoteDir);
 		$remoteDir = ltrim($remoteDir,'/');
 		$filesInfo = ftp_rawlist($this->getConnection(), $remoteDir);
-		KalturaLog::debug("ftp rawlist [" . print_r($filesInfo, true) . "]");
+		VidiunLog::debug("ftp rawlist [" . print_r($filesInfo, true) . "]");
 		foreach($filesInfo as $fileInfo)
 	    {
 	    	$matches = null;
@@ -213,7 +213,7 @@ class ftpMgr extends kFileTransferMgr
 				$matches['date'] = $date->format('Y-m-d H:i');
 	    	}
 			
-	    	KalturaLog::debug('info: ' . print_r($matches, true));
+	    	VidiunLog::debug('info: ' . print_r($matches, true));
 	    	$fileObject = new FileObject();
 			$fileObject->filename = $matches['file'];
 			$fileObject->fileSize = $matches['fileSize'];
@@ -226,7 +226,7 @@ class ftpMgr extends kFileTransferMgr
 	
 	protected function matchFtpRawListOutput($fileInfo, &$matches)
 	{		
-		// -rw-r--r-- 1 kaltura kaltura 1876084736 Oct 31 14:31 1615.mpeg
+		// -rw-r--r-- 1 vidiun vidiun 1876084736 Oct 31 14:31 1615.mpeg
 		$regexUnix = '^(?P<permissions>[-drwx]{10})\s+(?P<number>\d{1})\s+(?P<owner>[\d\w\-_.]+)\s+(?P<group>[\d\w\-_.]+)\s+(?P<fileSize>\d*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(\d{2}:\d{2}|\d{4}))\s+(?P<file>.+)\s*$';
 		// 08/08/2011  08:52 PM               174 .buildpath
 		$regexWindows = '^(?P<date>\d{2}-\d{2}-\d{2}\s+\d{2}:\d{2}(AM|PM))\s+(?P<fileSize>\d+|<DIR>)\s+(?P<file>.+)\s*$';
@@ -234,12 +234,12 @@ class ftpMgr extends kFileTransferMgr
 		if(preg_match("/$regexUnix/", $fileInfo, $matches))
 			return self::RAWLIST_MATCH_UNIX_REGEX;
 		else 
-			KalturaLog::err("Unix regex does not match ftp rawlist output [$fileInfo]");
+			VidiunLog::err("Unix regex does not match ftp rawlist output [$fileInfo]");
 		
 		if(preg_match("/$regexWindows/", $fileInfo, $matches))
 			return self::RAWLIST_MATCH_WINDOWS_REGEX;
 		else 
-			KalturaLog::err("Windows regex does not match ftp rawlist output [$fileInfo]");
+			VidiunLog::err("Windows regex does not match ftp rawlist output [$fileInfo]");
 			
 		return self::RAWLIST_MATCH_NONE;;
 	}

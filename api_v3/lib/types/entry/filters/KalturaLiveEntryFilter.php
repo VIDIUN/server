@@ -3,11 +3,11 @@
  * @package api
  * @subpackage filters
  */
-class KalturaLiveEntryFilter extends KalturaLiveEntryBaseFilter
+class VidiunLiveEntryFilter extends VidiunLiveEntryBaseFilter
 {
 	public function __construct()
 	{
-		$this->typeIn = KalturaEntryType::LIVE_CHANNEL . ',' . KalturaEntryType::LIVE_STREAM;
+		$this->typeIn = VidiunEntryType::LIVE_CHANNEL . ',' . VidiunEntryType::LIVE_STREAM;
 	}
 	
 	static private $map_between_objects = array
@@ -23,12 +23,12 @@ class KalturaLiveEntryFilter extends KalturaLiveEntryBaseFilter
 	}
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isLive;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isRecordedEntryIdEmpty;
 

@@ -3,6 +3,6 @@
  * @package plugins.kontiki
  * @subpackage api.filters
  */
-class KalturaKontikiStorageProfileFilter extends KalturaKontikiStorageProfileBaseFilter
+class VidiunKontikiStorageProfileFilter extends VidiunKontikiStorageProfileBaseFilter
 {
 }

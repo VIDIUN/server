@@ -3,17 +3,17 @@
  * @package plugins.freewheelDistribution
  * @subpackage api.objects
  */
-class KalturaFreewheelDistributionAssetPathArray extends KalturaTypedArray
+class VidiunFreewheelDistributionAssetPathArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaFreewheelDistributionAssetPathArray();
+		$newArr = new VidiunFreewheelDistributionAssetPathArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaFreewheelDistributionAssetPath();
+    		$nObj = new VidiunFreewheelDistributionAssetPath();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaFreewheelDistributionAssetPathArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaFreewheelDistributionAssetPath");	
+		parent::__construct("VidiunFreewheelDistributionAssetPath");	
 	}
 }

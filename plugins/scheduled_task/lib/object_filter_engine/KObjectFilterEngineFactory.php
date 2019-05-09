@@ -4,23 +4,23 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectFilterEngine
  */
-class KObjectFilterEngineFactory
+class VObjectFilterEngineFactory
 {
 	/**
 	 * @param $type
-	 * @param KalturaClient $client
-	 * @return KObjectFilterEngineBase
+	 * @param VidiunClient $client
+	 * @return VObjectFilterEngineBase
 	 */
-	public static function getInstanceByType($type, KalturaClient $client)
+	public static function getInstanceByType($type, VidiunClient $client)
 	{
 		switch($type)
 		{
-			case KalturaObjectFilterEngineType::ENTRY:
-				return new KObjectFilterBaseEntryEngine($client);
-			case KalturaObjectFilterEngineType::ENTRY_VENDOR_TASK:
-				return new KObjectFilterEntryVendorTaskEngine($client);
+			case VidiunObjectFilterEngineType::ENTRY:
+				return new VObjectFilterBaseEntryEngine($client);
+			case VidiunObjectFilterEngineType::ENTRY_VENDOR_TASK:
+				return new VObjectFilterEntryVendorTaskEngine($client);
 			default:
-				return KalturaPluginManager::loadObject('KObjectFilterEngineBase', $type, array($client));
+				return VidiunPluginManager::loadObject('VObjectFilterEngineBase', $type, array($client));
 		}
 	}
 } 

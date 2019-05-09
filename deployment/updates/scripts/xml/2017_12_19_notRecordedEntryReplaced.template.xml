@@ -14,7 +14,7 @@
     </session>
 <multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Not Recorded Entry Content Replaced</name>
 				<systemName>Not_Recorded_Entry_Content_Replaced</systemName>
 				<description>Email notification template to be sent when a entry content which is not recorded replaced successfully.</description>
@@ -22,50 +22,50 @@
 				<eventType>12</eventType> <!-- EventNotificationEventType::OBJECT_REPLACED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaFieldMatchCondition">
+					<item objectType="VidiunFieldMatchCondition">
 						<description>source_type_not_recorded_live</description>
 						<not>1</not>
-						<field objectType="KalturaEvalStringField">
+						<field objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getSourceType()</code>
 						</field>
 						<values objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>36</value>
 							</item>
 						</values>
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 						<code>$scope->getObject()->getId()</code>
 					</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
 						<description>Entry name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_status</key>
 						<description>Entry status</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getStatus()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_reference_id</key>
 						<description>Entry reference ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getReferenceID()</code>
 						</value>
 					</item>
 				</contentParameters>
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">

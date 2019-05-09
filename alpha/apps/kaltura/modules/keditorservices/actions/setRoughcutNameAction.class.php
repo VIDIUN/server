@@ -1,26 +1,26 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-require_once ( __DIR__ . "/defKeditorservicesAction.class.php");
+require_once ( __DIR__ . "/defVeditorservicesAction.class.php");
 
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class setRoughcutNameAction extends defKeditorservicesAction
+class setRoughcutNameAction extends defVeditorservicesAction
 {
-	protected function executeImpl( kshow $kshow, entry &$entry )
+	protected function executeImpl( vshow $vshow, entry &$entry )
 	{
 		$this->res = "";
 		
-		$likuser_id = $this->getLoggedInUserId();
+		$livuser_id = $this->getLoggedInUserId();
 		
-		if ( $likuser_id != $entry->getKuserId())
+		if ( $livuser_id != $entry->getVuserId())
 		{
 			// ERROR - attempting to update an entry which doesnt belong to the user
-			return "<xml>!</xml>";//$this->securityViolation( $kshow->getId() );
+			return "<xml>!</xml>";//$this->securityViolation( $vshow->getId() );
 		}
 		
 		$name = @$_GET["RoughcutName"];

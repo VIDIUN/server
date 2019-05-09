@@ -3,7 +3,7 @@
  * @package plugins.metroPcsDistribution
  * @subpackage lib
  */
-class MetroPcsDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class MetroPcsDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const METRO_PCS = 'METRO_PCS';
 	

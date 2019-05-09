@@ -1,5 +1,5 @@
 <?php
-class kPlayReadyAESContentKeyGenerator
+class vPlayReadyAESContentKeyGenerator
 {
 	const DRM_AES_KEYSIZE_128 = 16;    
 	
@@ -66,6 +66,6 @@ class kPlayReadyAESContentKeyGenerator
 	
 	public static function generatePlayReadyKeyId()
 	{
-		return self::generateGuid(kCurrentContext::$host);
+		return self::generateGuid(vCurrentContext::$host);
 	}
 }

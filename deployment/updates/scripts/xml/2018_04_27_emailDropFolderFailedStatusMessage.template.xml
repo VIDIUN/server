@@ -14,7 +14,7 @@
     </session>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Drop Folder Processing Failure</name>
                 <systemName>Drop_Folder_Processing_Failed</systemName>
                 <description>Email notification template for drop folder processing failure.</description>
@@ -23,15 +23,15 @@
                 <!-- EventNotificationEventType::OBJECT_CHANGED --> 
                 <eventObjectType>dropFolderEventNotifications.DropFolder</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Status field modified</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>in_array(DropFolderPeer::ERROR_DESCRIPTION, $scope->getEvent()->getModifiedColumns())</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Status field modified</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>!is_null($scope->getObject()->getErrorDescription())</code>
                         </field>
                     </item>
@@ -44,38 +44,38 @@
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>drop_folder_id</key>
                         <description>Drop Folder ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>drop_folder_name</key>
                         <description>Drop folder name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getName()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>drop_folder_err_description</key>
                         <description>Drop folder error description</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getErrorDescription()</code>
                         </value>
                     </item>

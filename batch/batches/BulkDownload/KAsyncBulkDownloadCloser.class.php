@@ -14,29 +14,29 @@
  * @package Scheduler
  * @subpackage Bulk-Download
  */
-class KAsyncBulkDownloadCloser extends KJobCloserWorker
+class VAsyncBulkDownloadCloser extends VJobCloserWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::BULKDOWNLOAD;
+		return VidiunBatchJobType::BULKDOWNLOAD;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->fetchStatus($job);
 	}
 
-	private function fetchStatus(KalturaBatchJob $job)
+	private function fetchStatus(VidiunBatchJob $job)
 	{
-		if(($job->queueTime + KBatchBase::$taskConfig->params->maxTimeBeforeFail) < time())
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', KalturaBatchJobStatus::FAILED);
+		if(($job->queueTime + VBatchBase::$taskConfig->params->maxTimeBeforeFail) < time())
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', VidiunBatchJobStatus::FAILED);
 		
-		return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::ALMOST_DONE);
+		return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::ALMOST_DONE);
 	}
 }

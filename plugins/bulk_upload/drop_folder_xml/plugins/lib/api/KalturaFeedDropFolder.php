@@ -3,7 +3,7 @@
  * @package plugins.FeedDropFolder
  * @subpackage api.objects
  */
-class KalturaFeedDropFolder extends KalturaDropFolder
+class VidiunFeedDropFolder extends VidiunDropFolder
 {
 	/**
 	 * @var int
@@ -11,7 +11,7 @@ class KalturaFeedDropFolder extends KalturaDropFolder
 	public $itemHandlingLimit;
 	
 	/**
-	 * @var KalturaFeedItemInfo
+	 * @var VidiunFeedItemInfo
 	 */
 	public $feedItemInfo;
 	/*
@@ -37,11 +37,11 @@ class KalturaFeedDropFolder extends KalturaDropFolder
 		return parent::toObject($dbObject, $skip);
 	}
 	
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/* @var $srcObj FeedDropFolder */
 		parent::doFromObject($srcObj);
-		$this->feedItemInfo = new KalturaFeedItemInfo ();
+		$this->feedItemInfo = new VidiunFeedItemInfo ();
 		$this->feedItemInfo->fromObject($srcObj->getFeedItemInfo());
 		
 		return $this;

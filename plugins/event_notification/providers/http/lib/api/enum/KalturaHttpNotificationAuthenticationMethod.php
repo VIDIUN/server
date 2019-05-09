@@ -3,7 +3,7 @@
  * @package plugins.httpNotification
  * @subpackage api.enum
  */
-class KalturaHttpNotificationAuthenticationMethod extends KalturaEnum
+class VidiunHttpNotificationAuthenticationMethod extends VidiunEnum
 {
 	const BASIC = CURLAUTH_BASIC;
 	const DIGEST = CURLAUTH_DIGEST;

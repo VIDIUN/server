@@ -3,7 +3,7 @@
  * @package plugins.venodr
  * @subpackage model.zoomOauth
  */
-class kZoomOauth implements kVendorOauth
+class vZoomOauth implements vVendorOauth
 {
 	const OAUTH_TOKEN_PATH = '/oauth/token';
 	const ACCESS_TOKEN = 'access_token';
@@ -21,7 +21,7 @@ class kZoomOauth implements kVendorOauth
 	 */
 	public function refreshTokens($oldRefreshToken, $vendorIntegration)
 	{
-		KalturaLog::info('Refreshing Tokens');
+		VidiunLog::info('Refreshing Tokens');
 		list($zoomBaseURL, , $header, $userPwd) = $this->getZoomHeaderData();
 		$postFields = "grant_type=refresh_token&refresh_token=$oldRefreshToken";
 		$response = $this->curlRetrieveTokensData($zoomBaseURL, $userPwd, $header, $postFields);
@@ -37,7 +37,7 @@ class kZoomOauth implements kVendorOauth
 	 */
 	public function retrieveTokensData($forceNewToken = false, $accountId = null)
 	{
-		KalturaLog::info('Retrieving Tokens');
+		VidiunLog::info('Retrieving Tokens');
 		$zoomIntegration = null;
 		if (!$forceNewToken && $accountId)
 		{
@@ -70,7 +70,7 @@ class kZoomOauth implements kVendorOauth
 	 */
 	private function curlRetrieveTokensData($url, $userPwd, $header, $postFields)
 	{
-		$curlWrapper = new KCurlWrapper();
+		$curlWrapper = new VCurlWrapper();
 		$curlWrapper->setOpt(CURLOPT_POST, 1);
 		$curlWrapper->setOpt(CURLOPT_HEADER, true);
 		$curlWrapper->setOpt(CURLOPT_HTTPHEADER, $header);
@@ -107,11 +107,11 @@ class kZoomOauth implements kVendorOauth
 	private function parseTokens($response)
 	{
 		$dataAsArray = json_decode($response, true);
-		KalturaLog::debug(print_r($dataAsArray, true));
+		VidiunLog::debug(print_r($dataAsArray, true));
 		if (!$dataAsArray)
 		{
-			KalturaLog::err('Parse Tokens failed, response received from zoom is: ' . $response);
-			throw new KalturaAPIException("Unable To parse Tokens please check zoom configuration");
+			VidiunLog::err('Parse Tokens failed, response received from zoom is: ' . $response);
+			throw new VidiunAPIException("Unable To parse Tokens please check zoom configuration");
 		}
 		$expiresIn = $dataAsArray[self::EXPIRES_IN];
 		$dataAsArray[self::EXPIRES_IN] = $this->setValidUntil($expiresIn);
@@ -124,7 +124,7 @@ class kZoomOauth implements kVendorOauth
 	 */
 	private function getZoomHeaderData()
 	{
-		$zoomConfiguration = kConf::get('ZoomAccount', 'vendor');
+		$zoomConfiguration = vConf::get('ZoomAccount', 'vendor');
 		$clientId = $zoomConfiguration['clientId'];
 		$zoomBaseURL = $zoomConfiguration['ZoomBaseUrl'];
 		$redirectUrl = $zoomConfiguration['redirectUrl'];

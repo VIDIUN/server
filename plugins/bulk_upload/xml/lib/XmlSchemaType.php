@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadXml
  * @subpackage lib
  */
-class XmlSchemaType implements IKalturaPluginEnum, SchemaType
+class XmlSchemaType implements IVidiunPluginEnum, SchemaType
 {
 	const BULK_UPLOAD_XML = 'bulkUploadXML';
 	const BULK_UPLOAD_RESULT_XML = 'bulkUploadResultXML';

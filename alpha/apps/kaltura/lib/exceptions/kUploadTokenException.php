@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage errors
  */
-class kUploadTokenException extends kCoreException
+class vUploadTokenException extends vCoreException
 {
 	const UPLOAD_TOKEN_FILE_NAME_IS_MISSING_FOR_UPLOADED_FILE = "UPLOAD_TOKEN_FILE_NAME_IS_MISSING_FOR_UPLOADED_FILE";
 	

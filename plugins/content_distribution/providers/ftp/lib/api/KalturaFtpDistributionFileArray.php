@@ -3,17 +3,17 @@
  * @package plugins.ftpDistribution
  * @subpackage api.objects
  */
-class KalturaFtpDistributionFileArray extends KalturaTypedArray
+class VidiunFtpDistributionFileArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaFtpDistributionFileArray();
+		$newArr = new VidiunFtpDistributionFileArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaFtpDistributionFile();
+    		$nObj = new VidiunFtpDistributionFile();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaFtpDistributionFileArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaFtpDistributionFile");	
+		parent::__construct("VidiunFtpDistributionFile");	
 	}
 }

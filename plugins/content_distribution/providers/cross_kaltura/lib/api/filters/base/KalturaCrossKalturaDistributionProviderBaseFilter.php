@@ -1,10 +1,10 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaCrossKalturaDistributionProviderBaseFilter extends KalturaDistributionProviderFilter
+abstract class VidiunCrossVidiunDistributionProviderBaseFilter extends VidiunDistributionProviderFilter
 {
 	static private $map_between_objects = array
 	(

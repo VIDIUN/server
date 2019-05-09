@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage Admin
  */
-class DropFolderListAction extends KalturaApplicationPlugin implements IKalturaAdminConsolePublisherAction
+class DropFolderListAction extends VidiunApplicationPlugin implements IVidiunAdminConsolePublisherAction
 {
 	public function __construct()
 	{
@@ -22,7 +22,7 @@ class DropFolderListAction extends KalturaApplicationPlugin implements IKalturaA
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_DROP_FOLDER_BASE);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_DROP_FOLDER_BASE);
 	}
 	
 	public function doAction(Zend_Controller_Action $action)
@@ -37,7 +37,7 @@ class DropFolderListAction extends KalturaApplicationPlugin implements IKalturaA
 		$dropFolderFilter->orderBy = "-createdAt";
 		
 		$client = Infra_ClientHelper::getClient();
-		$dropFolderPluginClient = Kaltura_Client_DropFolder_Plugin::get($client);
+		$dropFolderPluginClient = Vidiun_Client_DropFolder_Plugin::get($client);
 		
 		// get results and paginate
 		$paginatorAdapter = new Infra_FilterPaginator($dropFolderPluginClient->dropFolder, "listAction", null, $dropFolderFilter);
@@ -67,7 +67,7 @@ class DropFolderListAction extends KalturaApplicationPlugin implements IKalturaA
 	
 	private function getDropFolderFilterFromRequest(Zend_Controller_Request_Abstract $request)
 	{
-		$filter = new Kaltura_Client_DropFolder_Type_DropFolderFilter();
+		$filter = new Vidiun_Client_DropFolder_Type_DropFolderFilter();
 		$filterInput = $request->getParam('filter_input');
 		if(!strlen($filterInput))
 			return $filter;

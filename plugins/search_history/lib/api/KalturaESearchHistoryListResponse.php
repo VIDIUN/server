@@ -3,10 +3,10 @@
  * @package plugins.searchHistory
  * @subpackage api.objects
  */
-class KalturaESearchHistoryListResponse extends KalturaListResponse
+class VidiunESearchHistoryListResponse extends VidiunListResponse
 {
     /**
-     * @var KalturaESearchHistoryArray
+     * @var VidiunESearchHistoryArray
      * @readonly
      */
     public $objects;

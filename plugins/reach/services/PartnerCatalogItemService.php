@@ -5,10 +5,10 @@
  * @service PartnerCatalogItem
  * @package plugins.reach
  * @subpackage api.services
- * @throws KalturaErrors::SERVICE_FORBIDDEN
+ * @throws VidiunErrors::SERVICE_FORBIDDEN
  */
 
-class PartnerCatalogItemService extends KalturaBaseService
+class PartnerCatalogItemService extends VidiunBaseService
 {
 
 	public function initService($serviceId, $serviceName, $actionName)
@@ -16,7 +16,7 @@ class PartnerCatalogItemService extends KalturaBaseService
 		parent::initService($serviceId, $serviceName, $actionName);
 
 		if (!ReachPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, ReachPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, ReachPlugin::PLUGIN_NAME);
 
 		$this->applyPartnerFilterForClass('PartnerCatalogItem');
 	}
@@ -26,25 +26,25 @@ class PartnerCatalogItemService extends KalturaBaseService
 	 *
 	 * @action add
 	 * @param int $id source catalog item to assign to partner
-	 * @throws KalturaReachErrors::CATALOG_ITEM_NOT_FOUND
-	 * @throws KalturaReachErrors::VENDOR_CATALOG_ITEM_ALREADY_ENABLED_ON_PARTNER
+	 * @throws VidiunReachErrors::CATALOG_ITEM_NOT_FOUND
+	 * @throws VidiunReachErrors::VENDOR_CATALOG_ITEM_ALREADY_ENABLED_ON_PARTNER
 	 *
-	 * @return KalturaVendorCatalogItem
+	 * @return VidiunVendorCatalogItem
 	 */
 	public function addAction($id)
 	{
 		// get the object
 		$dbVendorCatalogItem = VendorCatalogItemPeer::retrieveByPK($id);
 		if (!$dbVendorCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
 
 		//Check if catalog item already enabled on partner
-		$dbPartnerCatalogItem = PartnerCatalogItemPeer::retrieveByCatalogItemId($id, kCurrentContext::getCurrentPartnerId());
+		$dbPartnerCatalogItem = PartnerCatalogItemPeer::retrieveByCatalogItemId($id, vCurrentContext::getCurrentPartnerId());
 		if ($dbPartnerCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::VENDOR_CATALOG_ITEM_ALREADY_ENABLED_ON_PARTNER, $id, kCurrentContext::getCurrentPartnerId());
+			throw new VidiunAPIException(VidiunReachErrors::VENDOR_CATALOG_ITEM_ALREADY_ENABLED_ON_PARTNER, $id, vCurrentContext::getCurrentPartnerId());
 
 		//Check if catalog item exists but deleted to re-use it
-		$partnerCatalogItem = PartnerCatalogItemPeer::retrieveByCatalogItemIdNoFilter($id, kCurrentContext::getCurrentPartnerId());
+		$partnerCatalogItem = PartnerCatalogItemPeer::retrieveByCatalogItemIdNoFilter($id, vCurrentContext::getCurrentPartnerId());
 		if (!$partnerCatalogItem)
 		{
 			$partnerCatalogItem = new PartnerCatalogItem();
@@ -52,11 +52,11 @@ class PartnerCatalogItemService extends KalturaBaseService
 			$partnerCatalogItem->setCatalogItemId($id);
 		}
 
-		$partnerCatalogItem->setStatus(KalturaVendorCatalogItemStatus::ACTIVE);
+		$partnerCatalogItem->setStatus(VidiunVendorCatalogItemStatus::ACTIVE);
 		$partnerCatalogItem->save();
 
 		// return the catalog item
-		$vendorCatalogItem = KalturaVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
+		$vendorCatalogItem = VidiunVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
 		$vendorCatalogItem->fromObject($dbVendorCatalogItem, $this->getResponseProfile());
 		return $vendorCatalogItem;
 	}
@@ -66,19 +66,19 @@ class PartnerCatalogItemService extends KalturaBaseService
 	 *
 	 * @action delete
 	 * @param int $id source catalog item to remove
-	 * @throws KalturaReachErrors::CATALOG_ITEM_NOT_FOUND
-	 * @throws KalturaReachErrors::VENDOR_CATALOG_ITEM_ALREADY_ENABLED_ON_PARTNER
+	 * @throws VidiunReachErrors::CATALOG_ITEM_NOT_FOUND
+	 * @throws VidiunReachErrors::VENDOR_CATALOG_ITEM_ALREADY_ENABLED_ON_PARTNER
 	 */
 	public function deleteAction($id)
 	{
 		$dbVendorCatalogItem = VendorCatalogItemPeer::retrieveByPK($id);
 		if (!$dbVendorCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
 
 		//Check if catalog item already enabled
-		$dbPartnerCatalogItem = PartnerCatalogItemPeer::retrieveByCatalogItemId($id, kCurrentContext::getCurrentPartnerId());
+		$dbPartnerCatalogItem = PartnerCatalogItemPeer::retrieveByCatalogItemId($id, vCurrentContext::getCurrentPartnerId());
 		if (!$dbPartnerCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::PARTNER_CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::PARTNER_CATALOG_ITEM_NOT_FOUND, $id);
 
 		$dbPartnerCatalogItem->setStatus(VendorCatalogItemStatus::DELETED);
 		$dbPartnerCatalogItem->save();

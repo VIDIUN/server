@@ -7,7 +7,7 @@
  * @package Core
  * @subpackage model
  */
-class kEntryReplacementOptions
+class vEntryReplacementOptions
 {
 	private $keepManualThumbnails;
 	

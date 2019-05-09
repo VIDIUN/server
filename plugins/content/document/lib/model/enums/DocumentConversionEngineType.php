@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage lib.model.enums
  */
-class DocumentConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class DocumentConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {	
 	const IMAGEMAGICK_ENGINE = 'ImageMagick';
 	const PPT2IMG_ENGINE = 'ppt2Img';

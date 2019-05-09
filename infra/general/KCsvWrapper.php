@@ -4,7 +4,7 @@
  * A wrapper for fputcsv command - will make sure that the values inserted to the csv file are not formulas.
  *
  */
-class KCsvWrapper
+class VCsvWrapper
 {
 	const CHAR_PLUS 	= '+';
 	const CHAR_EQUALS 	= '=';
@@ -45,7 +45,7 @@ class KCsvWrapper
 		{
 			$csvField = self::CHAR_APOSTROPHE . $cleanCsvField;
 			$trimmedValue = substr($csvField, 0, self::FIELD_MAX_PRINT_LENGTH);
-			//KalturaLog::debug("CSV field starts with invalid char. Field value: " . $trimmedValue);
+			//VidiunLog::debug("CSV field starts with invalid char. Field value: " . $trimmedValue);
 		}
 
 		return $csvField;

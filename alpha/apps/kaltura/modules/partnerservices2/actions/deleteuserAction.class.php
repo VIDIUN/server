@@ -19,7 +19,7 @@ class deleteuserAction extends defPartnerservices2Action
 						)
 					),
 				"out" => array (
-					"deleted_user" => array ("type" => "PuserKuser", "desc" => "")
+					"deleted_user" => array ("type" => "PuserVuser", "desc" => "")
 					),
 				"errors" => array (
 				)
@@ -31,43 +31,43 @@ class deleteuserAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_ADMIN;
 	}
 
-	// ask to fetch the kuser from puser_kuser - so we can tel the difference between a
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser - so we can tel the difference between a
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_KUSER_ID_ONLY;
+		return self::VUSER_DATA_VUSER_ID_ONLY;
 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$puser_id_to_delete = $this->getPM ( "user_id" );
 
-		$puser_kuser_to_delete = PuserKuserPeer::retrieveByPartnerAndUid ( $partner_id , null /*$subp_id*/,  $puser_id_to_delete , true );
-		if ( !$puser_kuser_to_delete )
+		$puser_vuser_to_delete = PuserVuserPeer::retrieveByPartnerAndUid ( $partner_id , null /*$subp_id*/,  $puser_id_to_delete , true );
+		if ( !$puser_vuser_to_delete )
 		{
 			$this->addError( APIErrors::INVALID_USER_ID , $puser_id_to_delete );
 			return;
 		}
 
-		$kuser = $puser_kuser_to_delete->getKuser();
-		if ( $kuser )
+		$vuser = $puser_vuser_to_delete->getVuser();
+		if ( $vuser )
 		{
-//			$this->addMsg ( "deleted_kuser" , objectWrapperBase::getWrapperClass( $kuser , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
+//			$this->addMsg ( "deleted_vuser" , objectWrapperBase::getWrapperClass( $vuser , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
 
 			try {
-				$kuser->setStatus(KuserStatus::DELETED);
+				$vuser->setStatus(VuserStatus::DELETED);
 			}
-			catch (kUserException $e) {
+			catch (vUserException $e) {
 				$code = $e->getCode();
-				if ($code == kUserException::CANNOT_DELETE_OR_BLOCK_ROOT_ADMIN_USER) {
+				if ($code == vUserException::CANNOT_DELETE_OR_BLOCK_ROOT_ADMIN_USER) {
 					$this->addException( APIErrors::CANNOT_DELETE_OR_BLOCK_ROOT_ADMIN_USER);
 					return null;
 				}
 				throw $e;			
 			}	
 		}
-		$puser_kuser_to_delete->delete();
+		$puser_vuser_to_delete->delete();
 
-		$this->addMsg ( "deleted_user" , objectWrapperBase::getWrapperClass( $puser_kuser_to_delete , objectWrapperBase::DETAIL_LEVEL_DETAILED) );
+		$this->addMsg ( "deleted_user" , objectWrapperBase::getWrapperClass( $puser_vuser_to_delete , objectWrapperBase::DETAIL_LEVEL_DETAILED) );
 
 	}
 }

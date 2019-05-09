@@ -6,35 +6,35 @@
 class KIndexingMetadataEngine extends KIndexingEngine
 {
 	/**
-	 * @param KalturaFilter $filter
+	 * @param VidiunFilter $filter
 	 * @param bool $shouldUpdate
 	 * @return int
 	 */
-	protected function index(KalturaFilter $filter, $shouldUpdate)
+	protected function index(VidiunFilter $filter, $shouldUpdate)
 	{
 		return $this->indexMetadataObjects($filter, $shouldUpdate);
 	}
 
 	/**
-	 * @param KalturaMetadataFilter $filter
+	 * @param VidiunMetadataFilter $filter
 	 * @param $shouldUpdate
 	 * @return int
 	 */
-	protected function indexMetadataObjects(KalturaMetadataFilter $filter, $shouldUpdate)
+	protected function indexMetadataObjects(VidiunMetadataFilter $filter, $shouldUpdate)
 	{
-		$filter->orderBy = KalturaMetadataOrderBy::CREATED_AT_ASC;
-		$metadataPlugin = KalturaMetadataClientPlugin::get(KBatchBase::$kClient);
+		$filter->orderBy = VidiunMetadataOrderBy::CREATED_AT_ASC;
+		$metadataPlugin = VidiunMetadataClientPlugin::get(VBatchBase::$vClient);
 		$metadataList = $metadataPlugin->metadata->listAction($filter, $this->pager);
 		if(!count($metadataList->objects))
 			return 0;
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($metadataList->objects as $metadata)
 		{
 			$metadataPlugin->metadata->index($metadata->id, $shouldUpdate);
 		}
 		
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(!is_int($result))
 				unset($results[$index]);

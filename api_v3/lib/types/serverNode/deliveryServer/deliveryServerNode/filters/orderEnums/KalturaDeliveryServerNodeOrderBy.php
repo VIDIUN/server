@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaDeliveryServerNodeOrderBy extends KalturaServerNodeOrderBy
+class VidiunDeliveryServerNodeOrderBy extends VidiunServerNodeOrderBy
 {
 }

@@ -4,7 +4,7 @@
  * @subpackage objects
  */
 
-class KalturaClipConcatJobData extends KalturaJobData
+class VidiunClipConcatJobData extends VidiunJobData
 {
 
 	/**$destEntryId
@@ -38,7 +38,7 @@ class KalturaClipConcatJobData extends KalturaJobData
 	public $priority;
 
 	/** clip operations
-	 * @var KalturaOperationAttributesArray $operationAttributes
+	 * @var VidiunOperationAttributesArray $operationAttributes
 	 */
 	public $operationAttributes;
 
@@ -55,7 +55,7 @@ class KalturaClipConcatJobData extends KalturaJobData
 	);
 
 	/* (non-PHPdoc)
- * @see KalturaObject::getMapBetweenObjects()
+ * @see VidiunObject::getMapBetweenObjects()
  */
 	public function getMapBetweenObjects ( )
 	{
@@ -63,12 +63,12 @@ class KalturaClipConcatJobData extends KalturaJobData
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array())
 	{
 		if(is_null($dbData))
-			$dbData = new kClipConcatJobData();
+			$dbData = new vClipConcatJobData();
 
 		return parent::toObject($dbData, $props_to_skip);
 	}

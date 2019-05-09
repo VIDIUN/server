@@ -7,7 +7,7 @@ SELECT
 	IFNULL(SUM(sum_time_viewed)/SUM(count_plays),0) avg_time_viewed,
 	IFNULL(SUM(count_loads),0) count_loads
 FROM 
-	dwh_hourly_events_context_app_devices ev, kalturadw.dwh_dim_os os, kalturadw.dwh_dim_applications ap
+	dwh_hourly_events_context_app_devices ev, vidiundw.dwh_dim_os os, vidiundw.dwh_dim_applications ap
 WHERE 
 	ev.os_id = os.id
 	AND ap.name = {APPLICATION_NAME}

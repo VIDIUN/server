@@ -1,14 +1,14 @@
 <?php
 require_once(__DIR__ . '/../bootstrap.php');
-require_once('/opt/kaltura/web/content/clientlibs/batchClient/KalturaClient.php');
-require_once('/opt/kaltura/web/content/clientlibs/batchClient/KalturaPlugins/KalturaDropFolderClientPlugin.php');
-require_once('/opt/kaltura/app/batch/batches/KBatchBase.class.php');
+require_once('/opt/vidiun/web/content/clientlibs/batchClient/VidiunClient.php');
+require_once('/opt/vidiun/web/content/clientlibs/batchClient/VidiunPlugins/VidiunDropFolderClientPlugin.php');
+require_once('/opt/vidiun/app/batch/batches/VBatchBase.class.php');
 
 const WEEK_IN_SECONDS = 604800;
 if($argc < 7)
 {
 	echo "Missing arguments.\n";
-	echo "php $argv[0] {dropFolderId} {admin ks} {serviceUrl} {start date} {end date} {log filename}.\n";
+	echo "php $argv[0] {dropFolderId} {admin vs} {serviceUrl} {start date} {end date} {log filename}.\n";
 	echo "{start date} and {end date} are in seconds.\n";
 	die;
 }
@@ -32,11 +32,11 @@ function getRecordingsFile($startDate, $endDate, $webexWrapper, $serviceTypes, $
 		$numOfFiles = count($result);
 		$text = "Found {$numOfFiles} of files for {$startTime}-{$endTime}.";
 		file_put_contents($logFileName, $text, FILE_APPEND );
-		KalturaLog::debug($text);
+		VidiunLog::debug($text);
 	}
 	else
 	{
-		KalturaLog::debug("No files found for {$startTime}-{$endTime}.");
+		VidiunLog::debug("No files found for {$startTime}-{$endTime}.");
 	}
 
 	return $result;
@@ -45,7 +45,7 @@ function getRecordingsFile($startDate, $endDate, $webexWrapper, $serviceTypes, $
 /**
  * @param $files
  * @param $logFileName
- * @param KWebexDropFolderEngine $webexEngine
+ * @param VWebexDropFolderEngine $webexEngine
  */
 function handleFiles($files, $logFileName, $webexEngine)
 {
@@ -54,27 +54,27 @@ function handleFiles($files, $logFileName, $webexEngine)
 }
 
 $dropFolderId = $argv[1];
-$ks =  $argv[2];
+$vs =  $argv[2];
 $url = $argv[3];
 $startDate = $argv[4];
 $endDate = $argv[5];
 $logFileName = $argv[6];
-$config = new KalturaConfiguration(-2);
+$config = new VidiunConfiguration(-2);
 $config->serviceUrl = $url;
-$client = new KalturaClient($config);
-$client->setKs($ks);
-$dropFolderPlugin = KalturaDropFolderClientPlugin::get($client);
-KBatchBase::$kClient = $client;
+$client = new VidiunClient($config);
+$client->setVs($vs);
+$dropFolderPlugin = VidiunDropFolderClientPlugin::get($client);
+VBatchBase::$vClient = $client;
 $dropFolder = $dropFolderPlugin->dropFolder->get($dropFolderId);
-KBatchBase::impersonate($dropFolder->partnerId);
-$webexEngine = new KWebexDropFolderEngine();
+VBatchBase::impersonate($dropFolder->partnerId);
+$webexEngine = new VWebexDropFolderEngine();
 $webexEngine->setDropFolder($dropFolder);
 $securityContext = $webexEngine->getWebexClientSecurityContext($dropFolder);
 $dropFolderServiceTypes = $dropFolder->webexServiceType ? explode(',', $dropFolder->webexServiceType) :
 	array(WebexXmlComServiceTypeType::_MEETINGCENTER);
 $serviceTypes = webexWrapper::stringServicesTypesToWebexXmlArray($dropFolderServiceTypes);
-$webexWrapper = new webexWrapper($dropFolder->webexServiceUrl . '/' . $dropFolder->path, $securityContext, array('KalturaLog', 'err'),
-	array('KalturaLog', 'debug'), false);
+$webexWrapper = new webexWrapper($dropFolder->webexServiceUrl . '/' . $dropFolder->path, $securityContext, array('VidiunLog', 'err'),
+	array('VidiunLog', 'debug'), false);
 for ($i = $startDate; $i < $endDate; $i = $i + WEEK_IN_SECONDS)
 {
 	$files = getRecordingsFile($i, $endDate, $webexWrapper, $serviceTypes, $logFileName);

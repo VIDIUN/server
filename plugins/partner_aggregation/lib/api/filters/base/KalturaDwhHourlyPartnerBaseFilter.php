@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaDwhHourlyPartnerBaseFilter extends KalturaFilter
+abstract class VidiunDwhHourlyPartnerBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -241,12 +241,12 @@ abstract class KalturaDwhHourlyPartnerBaseFilter extends KalturaFilter
 
 	public function getMapBetweenObjects()
 	{
-		return array_merge(parent::getMapBetweenObjects(), KalturaDwhHourlyPartnerBaseFilter::$map_between_objects);
+		return array_merge(parent::getMapBetweenObjects(), VidiunDwhHourlyPartnerBaseFilter::$map_between_objects);
 	}
 
 	public function getOrderByMap()
 	{
-		return array_merge(parent::getOrderByMap(), KalturaDwhHourlyPartnerBaseFilter::$order_by_map);
+		return array_merge(parent::getOrderByMap(), VidiunDwhHourlyPartnerBaseFilter::$order_by_map);
 	}
 
 	/**

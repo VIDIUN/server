@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryContext extends KalturaContext
+class VidiunEntryContext extends VidiunContext
 {
     /**
      * The entry ID in the context of which the playlist should be built
@@ -13,7 +13,7 @@ class KalturaEntryContext extends KalturaContext
     
     /**
      * Is this a redirected entry followup?
-     * @var KalturaNullableBoolean
+     * @var VidiunNullableBoolean
      */
     public $followEntryRedirect;
     
@@ -28,7 +28,7 @@ class KalturaEntryContext extends KalturaContext
     }
     
     /* (non-PHPdoc)
-     * @see KalturaPlaylistContext::validate()
+     * @see VidiunPlaylistContext::validate()
      */
     protected function validate ()
     {
@@ -38,20 +38,20 @@ class KalturaEntryContext extends KalturaContext
 	        $entry = entryPeer::retrieveByPK($this->entryId);
 	        if (!$entry)
 	        {
-	            throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
+	            throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
 	        }
         }        
     }
     
     /* (non-PHPdoc)
-     * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+     * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
      */
     public function toObject($dbObject = null, $skip = array())
     {
         $this->validate();
         if (!$dbObject)
         {
-            $dbObject = new kEntryContext();
+            $dbObject = new vEntryContext();
         }
         
         parent::toObject($dbObject);

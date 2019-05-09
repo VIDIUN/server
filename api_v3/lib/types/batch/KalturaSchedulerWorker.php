@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSchedulerWorker extends KalturaObject 
+class VidiunSchedulerWorker extends VidiunObject 
 {
 	/**
 	 * The id of the Worker
@@ -42,7 +42,7 @@ class KalturaSchedulerWorker extends KalturaObject
 	/**
 	 * The worker type
 	 * 
-	 * @var KalturaBatchJobType
+	 * @var VidiunBatchJobType
 	 */
 	public $type;
 	
@@ -66,7 +66,7 @@ class KalturaSchedulerWorker extends KalturaObject
 	/**
 	 * Array of the last statuses
 	 *  
-	 * @var KalturaSchedulerStatusArray
+	 * @var VidiunSchedulerStatusArray
 	 */
 	public $statuses;
 
@@ -75,7 +75,7 @@ class KalturaSchedulerWorker extends KalturaObject
 	/**
 	 * Array of the last configs
 	 *  
-	 * @var KalturaSchedulerConfigArray
+	 * @var VidiunSchedulerConfigArray
 	 */
 	public $configs;
 
@@ -84,7 +84,7 @@ class KalturaSchedulerWorker extends KalturaObject
 	/**
 	 * Array of jobs that locked to this worker
 	 *  
-	 * @var KalturaBatchJobArray
+	 * @var VidiunBatchJobArray
 	 */
 	public $lockedJobs;
 
@@ -154,9 +154,9 @@ class KalturaSchedulerWorker extends KalturaObject
 	    
 	/**
 	 * @param SchedulerWorker $dbData
-	 * @return KalturaScheduler
+	 * @return VidiunScheduler
 	 */
-	public function doFromObject($dbData, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbData, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbData, $responseProfile);
 		
@@ -164,7 +164,7 @@ class KalturaSchedulerWorker extends KalturaObject
 		
 		$statusesArray = $dbData->getStatuses();
 		if(is_array($statusesArray))
-			$this->statuses = KalturaSchedulerStatusArray::fromValuesArray($statusesArray, $this->schedulerId, $this->schedulerConfiguredId, $this->id, $this->configuredId, $this->type);
+			$this->statuses = VidiunSchedulerStatusArray::fromValuesArray($statusesArray, $this->schedulerId, $this->schedulerConfiguredId, $this->id, $this->configuredId, $this->type);
 		
 		$this->lastStatusStr = date('d-m-Y H:i:s', $this->lastStatus);
 		
@@ -173,13 +173,13 @@ class KalturaSchedulerWorker extends KalturaObject
 	    
 	/**
 	 * @param SchedulerWorker $dbData
-	 * @return KalturaScheduler
+	 * @return VidiunScheduler
 	 */
 	public function statusFromObject($dbData)
 	{
 		$this->fromObject($dbData);
 		
-		$this->lockedJobs = KalturaBatchJobArray::fromBatchJobArray($dbData->getLockedJobs());
+		$this->lockedJobs = VidiunBatchJobArray::fromBatchJobArray($dbData->getLockedJobs());
 		
 		$this->avgWait = BatchJobPeer::doAvgTimeDiff($this->type, BatchJobPeer::CREATED_AT, BatchJobPeer::QUEUE_TIME, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2));
 		$this->avgWork = BatchJobPeer::doAvgTimeDiff($this->type, BatchJobPeer::QUEUE_TIME, BatchJobPeer::FINISH_TIME, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2));
@@ -192,7 +192,7 @@ class KalturaSchedulerWorker extends KalturaObject
 		if(is_null($dbData))
 			$dbData = new SchedulerWorker();
 			
-		if(!is_null($this->statuses) && $this->statuses instanceof KalturaSchedulerStatusArray)
+		if(!is_null($this->statuses) && $this->statuses instanceof VidiunSchedulerStatusArray)
 			$dbData->setStatuses($this->statuses->toValuesArray());
 			
 		return parent::toObject($dbData, $props_to_skip);

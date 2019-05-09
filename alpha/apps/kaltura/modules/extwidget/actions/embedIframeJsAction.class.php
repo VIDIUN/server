@@ -12,15 +12,15 @@ class embedIframeJsAction extends sfAction
 	{
 		$uiconf_id = $this->getRequestParameter('uiconf_id');
 		if(!$uiconf_id)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, 'uiconf_id');
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, 'uiconf_id');
 			
 		$uiConf = uiConfPeer::retrieveByPK($uiconf_id);
 		if(!$uiConf)
-			KExternalErrors::dieError(KExternalErrors::UI_CONF_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::UI_CONF_NOT_FOUND);
 			
 		$partner_id = $this->getRequestParameter('partner_id', $uiConf->getPartnerId());
 		if(!$partner_id)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, 'partner_id');
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, 'partner_id');
 
 		$widget_id = $this->getRequestParameter("widget_id", '_' . $partner_id);
 		
@@ -29,12 +29,12 @@ class embedIframeJsAction extends sfAction
 
 		$ui_conf_html5_url = $uiConf->getHtml5Url();
 
-		if (kConf::hasMap("optimized_playback"))
+		if (vConf::hasMap("optimized_playback"))
 		{
-			$optimizedPlayback = kConf::getMap("optimized_playback");
+			$optimizedPlayback = vConf::getMap("optimized_playback");
 			if (array_key_exists($partner_id, $optimizedPlayback))
 			{
-				// force a specific kdp for the partner
+				// force a specific vdp for the partner
 				$params = $optimizedPlayback[$partner_id];
 				if (array_key_exists('html5_url', $params))
 				{
@@ -53,7 +53,7 @@ class embedIframeJsAction extends sfAction
 
 		$relativeUrl = true; // true if ui_conf html5_url is relative (doesnt start with an http prefix)
 
-		if( kString::beginsWith( $ui_conf_html5_url , "http") )
+		if( vString::beginsWith( $ui_conf_html5_url , "http") )
 		{
 			$relativeUrl = false;
 			$url = $ui_conf_html5_url; // absolute URL
@@ -61,9 +61,9 @@ class embedIframeJsAction extends sfAction
 		else
 		{
 			if (!$iframeEmbed)
-				$host = "$protocol://". kConf::get('html5lib_host') ."/";
+				$host = "$protocol://". vConf::get('html5lib_host') ."/";
 			
-			$html5_version = kConf::get('html5_version');
+			$html5_version = vConf::get('html5_version');
 			if ($ui_conf_html5_url)
 			{
 				$url =  $host . $ui_conf_html5_url;
@@ -76,7 +76,7 @@ class embedIframeJsAction extends sfAction
 		}
 
 		// append uiconf_id and partner id for optimizing loading of html5 library. append them only for "standard" urls by looking for the mwEmbedLoader.php/mwEmbedFrame.php suffix
-		if (kString::endsWith($url, $scriptName))
+		if (vString::endsWith($url, $scriptName))
 		{
 			$url .= "/p/$partner_id/uiconf_id/$uiconf_id";
 
@@ -114,14 +114,14 @@ class embedIframeJsAction extends sfAction
 					}
 				}
 
-				kFileUtils::dumpUrl($url, true, false, $headers);
+				vFileUtils::dumpUrl($url, true, false, $headers);
 			}
 		}
 
 		requestUtils::sendCachingHeaders(60, true, time());
 		
-		kFile::cacheRedirect($url);
+		vFile::cacheRedirect($url);
 		header("Location:$url");
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 }

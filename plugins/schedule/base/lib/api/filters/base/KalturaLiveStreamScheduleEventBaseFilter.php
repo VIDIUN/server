@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaLiveStreamScheduleEventBaseFilter extends KalturaEntryScheduleEventFilter
+abstract class VidiunLiveStreamScheduleEventBaseFilter extends VidiunEntryScheduleEventFilter
 {
 	static private $map_between_objects = array
 	(

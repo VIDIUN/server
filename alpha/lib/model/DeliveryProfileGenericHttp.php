@@ -14,7 +14,7 @@ class DeliveryProfileGenericHttp extends DeliveryProfileHttp {
 	protected function doGetFlavorAssetUrl(asset $flavorAsset) 
 	{
 		$url = parent::doGetFlavorAssetUrl($flavorAsset);
-		return kDeliveryUtils::formatGenericUrl($url, $this->getPattern(), $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $this->getPattern(), $this->params);
 	}
 	
 	protected function doGetFileSyncUrl(FileSync $fileSync)
@@ -23,7 +23,7 @@ class DeliveryProfileGenericHttp extends DeliveryProfileHttp {
 		$pattern = $this->getPattern();
 		if(is_null($pattern))
 			$pattern = '{url}';
-		return kDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
 	}
 
 	/**

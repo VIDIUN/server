@@ -3,12 +3,12 @@
  * @package plugins.tagSearch
  * @subpackage api.filters
  */
-class KalturaTagFilter extends KalturaFilter
+class VidiunTagFilter extends VidiunFilter
 {
     /**
 	 * 
 	 * 
-	 * @var KalturaTaggedObjectType
+	 * @var VidiunTaggedObjectType
 	 */
 	public $objectTypeEqual;
 
@@ -68,7 +68,7 @@ class KalturaTagFilter extends KalturaFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -76,13 +76,13 @@ class KalturaTagFilter extends KalturaFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::toObject()
+	 * @see VidiunFilter::toObject()
 	 */
 	public function toObject ($object = null, $props_to_skip = array())
 	{
 		/* @var $object TagFilter */
-		$object->set ('_eq_tag', str_replace(kTagFlowManager::$specialCharacters, kTagFlowManager::$specialCharactersReplacement, $this->tagEqual));
-		$object->set ('_likex_tag', str_replace(kTagFlowManager::$specialCharacters, kTagFlowManager::$specialCharactersReplacement, $this->tagStartsWith));
+		$object->set ('_eq_tag', str_replace(vTagFlowManager::$specialCharacters, vTagFlowManager::$specialCharactersReplacement, $this->tagEqual));
+		$object->set ('_likex_tag', str_replace(vTagFlowManager::$specialCharacters, vTagFlowManager::$specialCharactersReplacement, $this->tagStartsWith));
 		
 		return parent::toObject($object, $props_to_skip);
 	}

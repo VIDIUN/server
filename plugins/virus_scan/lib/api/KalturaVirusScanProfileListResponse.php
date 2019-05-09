@@ -3,10 +3,10 @@
  * @package plugins.virusScan
  * @subpackage api.objects
  */
-class KalturaVirusScanProfileListResponse extends KalturaListResponse
+class VidiunVirusScanProfileListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaVirusScanProfileArray
+	 * @var VidiunVirusScanProfileArray
 	 * @readonly
 	 */
 	public $objects;

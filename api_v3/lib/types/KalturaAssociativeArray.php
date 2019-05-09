@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-abstract class KalturaAssociativeArray extends KalturaTypedArray
+abstract class VidiunAssociativeArray extends VidiunTypedArray
 {
 	/* (non-PHPdoc)
-	 * @see KalturaTypedArray::offsetSet()
+	 * @see VidiunTypedArray::offsetSet()
 	 */
 	public function offsetSet($offset, $value) 
 	{

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUploadToken extends KalturaObject implements IFilterable 
+class VidiunUploadToken extends VidiunObject implements IFilterable 
 {
 	/**
 	 * Upload token unique ID
@@ -30,7 +30,7 @@ class KalturaUploadToken extends KalturaObject implements IFilterable
 	
 	/**
 	 * Status of the upload token
-	 * @var KalturaUploadTokenStatus
+	 * @var VidiunUploadTokenStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -84,7 +84,7 @@ class KalturaUploadToken extends KalturaObject implements IFilterable
 	
 	/**
 	 * autoFinalize - Should the upload be finalized once the file size on disk matches the file size reproted when adding the upload token.
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 * @insertonly
 	 */
 	public $autoFinalize;
@@ -104,12 +104,12 @@ class KalturaUploadToken extends KalturaObject implements IFilterable
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($uploadTokenDb, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($uploadTokenDb, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($uploadTokenDb, $responseProfile);
-		$dc = kDataCenterMgr::getDcById($uploadTokenDb->getDc());
+		$dc = vDataCenterMgr::getDcById($uploadTokenDb->getDc());
 		if (isset($dc['uploadUrl']))
 			$this->uploadUrl = infraRequestUtils::getProtocol() . "://" . $dc['uploadUrl'];
 	}
@@ -130,17 +130,17 @@ class KalturaUploadToken extends KalturaObject implements IFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
 		parent::validateForInsert($propertiesToSkip);
 		
 		//If autoFinalize flag was set check file size also provided
-		if(isset($this->autoFinalize) && $this->autoFinalize == KalturaNullableBoolean::TRUE_VALUE)
+		if(isset($this->autoFinalize) && $this->autoFinalize == VidiunNullableBoolean::TRUE_VALUE)
 		{
 			if(!isset($this->fileSize))
-				throw new KalturaAPIException(KalturaErrors::UPLOAD_TOKEN_MISSING_FILE_SIZE);
+				throw new VidiunAPIException(VidiunErrors::UPLOAD_TOKEN_MISSING_FILE_SIZE);
 		}
 	}
 }

@@ -54,7 +54,7 @@ class ResponseProfile extends BaseResponseProfile implements IResponseProfile, I
 	public function setMappings(array $v)				{$this->putInCustomData(self::CUSTOM_DATA_FIELD_MAPPINGS, $v);}
 	public function setFilterApiClassName($v)			{$this->putInCustomData(self::CUSTOM_DATA_FIELD_FILTER_API_CLASS_NAME, $v);}
 	public function setFilter(baseObjectFilter $v)		{$this->putInCustomData(self::CUSTOM_DATA_FIELD_FILTER, $v);}
-	public function setPager(kFilterPager $v)			{$this->putInCustomData(self::CUSTOM_DATA_FIELD_PAGER, $v);}
+	public function setPager(vFilterPager $v)			{$this->putInCustomData(self::CUSTOM_DATA_FIELD_PAGER, $v);}
 	public function setVersion($v)						{$this->putInCustomData(self::CUSTOM_DATA_FIELD_VERSION, $v);}
 	
 	protected function incrementVersion()				{$this->incInCustomData(self::CUSTOM_DATA_FIELD_VERSION);}

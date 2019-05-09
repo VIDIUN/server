@@ -3,6 +3,6 @@
  * @package plugins.schedule
  * @subpackage api.filters.enum
  */
-class KalturaLiveEntryScheduleResourceOrderBy extends KalturaScheduleResourceOrderBy
+class VidiunLiveEntryScheduleResourceOrderBy extends VidiunScheduleResourceOrderBy
 {
 }

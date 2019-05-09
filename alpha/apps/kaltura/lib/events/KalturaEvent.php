@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage events
  */
-abstract class KalturaEvent
+abstract class VidiunEvent
 {
 	/**
 	 * @return string - name of consumer interface
@@ -12,37 +12,37 @@ abstract class KalturaEvent
 	
 	/**
 	 * Executes the consumer
-	 * @param KalturaEventConsumer $consumer
+	 * @param VidiunEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected abstract function doConsume(KalturaEventConsumer $consumer);
+	protected abstract function doConsume(VidiunEventConsumer $consumer);
 
 	/**
-	 * @param kGenericEventConsumer $consumer
+	 * @param vGenericEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function consumeGeneric(kGenericEventConsumer $consumer)
+	protected function consumeGeneric(vGenericEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeEvent($this))
 			return true;
 
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . ']');
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . ']');
 		$result = $consumer->consumeEvent($this);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . ']');
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . ']');
 		return $result;
 	}
 	
 	/**
 	 * Validate the consumer type and executes it
-	 * @param KalturaEventConsumer $consumer
+	 * @param VidiunEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	public final function consume(KalturaEventConsumer $consumer)
+	public final function consume(VidiunEventConsumer $consumer)
 	{
 		$consumerType = $this->getConsumerInterface();	
 		if($consumer instanceof $consumerType)
 			return $this->doConsume($consumer);	
-		elseif($consumer instanceof kGenericEventConsumer)
+		elseif($consumer instanceof vGenericEventConsumer)
 			return $this->consumeGeneric($consumer);
 			
 		return true;
@@ -57,11 +57,11 @@ abstract class KalturaEvent
 	}
 	
 	/**
-	 * @return kEventScope
+	 * @return vEventScope
 	 */
 	public function getScope()
 	{
-		return new kEventScope($this);
+		return new vEventScope($this);
 	}
 	
 	/**

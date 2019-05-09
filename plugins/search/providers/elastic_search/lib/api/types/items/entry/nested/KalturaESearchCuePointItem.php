@@ -3,11 +3,11 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchCuePointItem extends KalturaESearchEntryAbstractNestedItem
+class VidiunESearchCuePointItem extends VidiunESearchEntryAbstractNestedItem
 {
 
 	/**
-	 * @var KalturaESearchCuePointFieldName
+	 * @var VidiunESearchCuePointFieldName
 	 */
 	public $fieldName;
 
@@ -16,22 +16,22 @@ class KalturaESearchCuePointItem extends KalturaESearchEntryAbstractNestedItem
 	);
 
 	private static $map_dynamic_enum = array(
-		KalturaESearchCuePointFieldName::TYPE => 'KalturaCuePointType',
+		VidiunESearchCuePointFieldName::TYPE => 'VidiunCuePointType',
 	);
 
 	private static $map_field_enum = array(
-		KalturaESearchCuePointFieldName::ANSWERS => ESearchCuePointFieldName::ANSWERS,
-		KalturaESearchCuePointFieldName::END_TIME => ESearchCuePointFieldName::END_TIME,
-		KalturaESearchCuePointFieldName::EXPLANATION => ESearchCuePointFieldName::EXPLANATION,
-		KalturaESearchCuePointFieldName::HINT => ESearchCuePointFieldName::HINT,
-		KalturaESearchCuePointFieldName::ID => ESearchCuePointFieldName::ID,
-		KalturaESearchCuePointFieldName::NAME => ESearchCuePointFieldName::NAME,
-		KalturaESearchCuePointFieldName::QUESTION => ESearchCuePointFieldName::QUESTION,
-		KalturaESearchCuePointFieldName::START_TIME => ESearchCuePointFieldName::START_TIME,
-		KalturaESearchCuePointFieldName::TAGS => ESearchCuePointFieldName::TAGS,
-		KalturaESearchCuePointFieldName::TEXT => ESearchCuePointFieldName::TEXT,
-		KalturaESearchCuePointFieldName::SUB_TYPE => ESearchCuePointFieldName::SUB_TYPE,
-		KalturaESearchCuePointFieldName::TYPE => ESearchCuePointFieldName::TYPE,
+		VidiunESearchCuePointFieldName::ANSWERS => ESearchCuePointFieldName::ANSWERS,
+		VidiunESearchCuePointFieldName::END_TIME => ESearchCuePointFieldName::END_TIME,
+		VidiunESearchCuePointFieldName::EXPLANATION => ESearchCuePointFieldName::EXPLANATION,
+		VidiunESearchCuePointFieldName::HINT => ESearchCuePointFieldName::HINT,
+		VidiunESearchCuePointFieldName::ID => ESearchCuePointFieldName::ID,
+		VidiunESearchCuePointFieldName::NAME => ESearchCuePointFieldName::NAME,
+		VidiunESearchCuePointFieldName::QUESTION => ESearchCuePointFieldName::QUESTION,
+		VidiunESearchCuePointFieldName::START_TIME => ESearchCuePointFieldName::START_TIME,
+		VidiunESearchCuePointFieldName::TAGS => ESearchCuePointFieldName::TAGS,
+		VidiunESearchCuePointFieldName::TEXT => ESearchCuePointFieldName::TEXT,
+		VidiunESearchCuePointFieldName::SUB_TYPE => ESearchCuePointFieldName::SUB_TYPE,
+		VidiunESearchCuePointFieldName::TYPE => ESearchCuePointFieldName::TYPE,
 	);
 
 	protected function getMapBetweenObjects()
@@ -47,7 +47,7 @@ class KalturaESearchCuePointItem extends KalturaESearchEntryAbstractNestedItem
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}
 	
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$this->fieldName = self::getApiFieldName($srcObj->getFieldName());
 		return parent::doFromObject($srcObj, $responseProfile);

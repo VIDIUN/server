@@ -3,6 +3,6 @@
  * @package plugins.document
  * @subpackage api.filters
  */
-class KalturaSwfFlavorParamsFilter extends KalturaSwfFlavorParamsBaseFilter
+class VidiunSwfFlavorParamsFilter extends VidiunSwfFlavorParamsBaseFilter
 {
 }

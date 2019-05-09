@@ -252,11 +252,11 @@ function graphics_avail() {
 }
 
 function bsize($s) {
-	foreach (array('','K','M','G') as $i => $k) {
+	foreach (array('','K','M','G') as $i => $v) {
 		if ($s < 1024) break;
 		$s/=1024;
 	}
-	return sprintf("%5.1f %sBytes",$s,$k);
+	return sprintf("%5.1f %sBytes",$s,$v);
 }
 
 // create menu entry

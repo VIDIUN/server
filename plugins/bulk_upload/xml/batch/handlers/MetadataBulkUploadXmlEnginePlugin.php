@@ -2,7 +2,7 @@
 /**
  * @package plugins.metadataBulkUploadXml
  */
-class MetadataBulkUploadXmlEnginePlugin extends KalturaPlugin implements IKalturaPending, IKalturaConfigurator
+class MetadataBulkUploadXmlEnginePlugin extends VidiunPlugin implements IVidiunPending, IVidiunConfigurator
 {
 	const PLUGIN_NAME = 'metadataBulkUploadXmlEngine';
 	
@@ -11,15 +11,15 @@ class MetadataBulkUploadXmlEnginePlugin extends KalturaPlugin implements IKaltur
 	const BULK_UPLOAD_XML_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaPlugin::getInstance()
+	 * @see VidiunPlugin::getInstance()
 	 */
 	public function getInstance($interface)
 	{
 		if($this instanceof $interface)
 			return $this;
 			
-		if($interface == 'IKalturaBulkUploadXmlHandler')
-			return new MetadataBulkUploadXmlEngineHandler(KalturaMetadataObjectType::ENTRY, 'KalturaBaseEntry', 'customData', 'customDataItems');
+		if($interface == 'IVidiunBulkUploadXmlHandler')
+			return new MetadataBulkUploadXmlEngineHandler(VidiunMetadataObjectType::ENTRY, 'VidiunBaseEntry', 'customData', 'customDataItems');
 			
 		return null;
 	}
@@ -33,23 +33,23 @@ class MetadataBulkUploadXmlEnginePlugin extends KalturaPlugin implements IKaltur
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadXmlVersion = new KalturaVersion(
+		$bulkUploadXmlVersion = new VidiunVersion(
 			self::BULK_UPLOAD_XML_VERSION_MAJOR,
 			self::BULK_UPLOAD_XML_VERSION_MINOR,
 			self::BULK_UPLOAD_XML_VERSION_BUILD);
 			
-		$bulkUploadXmlDependency = new KalturaDependency(BulkUploadXmlPlugin::getPluginName(), $bulkUploadXmlVersion);
-		$metadataDependency = new KalturaDependency(MetadataPlugin::getPluginName());
+		$bulkUploadXmlDependency = new VidiunDependency(BulkUploadXmlPlugin::getPluginName(), $bulkUploadXmlVersion);
+		$metadataDependency = new VidiunDependency(MetadataPlugin::getPluginName());
 		
 		return array($bulkUploadXmlDependency, $metadataDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaConfigurator::getConfig()
+	 * @see IVidiunConfigurator::getConfig()
 	 */
 	public static function getConfig($configName)
 	{

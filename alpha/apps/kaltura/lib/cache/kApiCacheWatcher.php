@@ -4,7 +4,7 @@
  * @package server-infra
  * @subpackage cache
  */
-class kApiCacheWatcher extends kApiCacheBase
+class vApiCacheWatcher extends vApiCacheBase
 {
 	public function __construct()
 	{
@@ -20,32 +20,32 @@ class kApiCacheWatcher extends kApiCacheBase
 	{
 		if ($this->_cacheStatus == self::CACHE_STATUS_DISABLED)
 		{
-			kApiCache::disableCache();
+			vApiCache::disableCache();
 			return;
 		}
 
 		// common cache fields
 		foreach ($this->_extraFields as $extraField)
 		{
-			call_user_func_array(array('kApiCache', 'addExtraField'), $extraField);
+			call_user_func_array(array('vApiCache', 'addExtraField'), $extraField);
 		}
 		
 		// anonymous cache fields
 		if ($this->_expiry)
-			kApiCache::setExpiry($this->_expiry);
+			vApiCache::setExpiry($this->_expiry);
 		
 		if ($this->_cacheStatus == self::CACHE_STATUS_ANONYMOUS_ONLY)
 		{
-			kApiCache::disableConditionalCache();
+			vApiCache::disableConditionalCache();
 			return;
 		}
 		
 		// conditional cache fields
 		if ($this->_conditionalCacheExpiry)
-			kApiCache::setConditionalCacheExpiry($this->_conditionalCacheExpiry);
+			vApiCache::setConditionalCacheExpiry($this->_conditionalCacheExpiry);
 		
-		kApiCache::addInvalidationKeys(array_keys($this->_invalidationKeys), $this->_invalidationTime);
+		vApiCache::addInvalidationKeys(array_keys($this->_invalidationKeys), $this->_invalidationTime);
 
-		kApiCache::addSqlQueryConditions($this->_sqlConditions);
+		vApiCache::addSqlQueryConditions($this->_sqlConditions);
 	}
 }

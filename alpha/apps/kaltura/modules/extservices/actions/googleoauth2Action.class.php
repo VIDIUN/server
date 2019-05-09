@@ -17,11 +17,11 @@ class googleoauth2Action extends oauth2Action
 	public function execute()
 	{
 		// add google client library to include path
-		set_include_path(get_include_path().PATH_SEPARATOR.KALTURA_ROOT_PATH.'/vendor/google-api-php-client-1.1.2/src/Google');
+		set_include_path(get_include_path().PATH_SEPARATOR.VIDIUN_ROOT_PATH.'/vendor/google-api-php-client-1.1.2/src/Google');
 		require_once 'autoload.php';
 		require_once 'Client.php';
 
-		$ks    = $this->getRequestParameter('ks');
+		$vs    = $this->getRequestParameter('vs');
 		$state = $this->getRequestParameter('state');
 		$status = $this->getRequestParameter('status');
 
@@ -31,7 +31,7 @@ class googleoauth2Action extends oauth2Action
 			$this->subAction = self::SUB_ACTION_STATUS;
 			$this->executeStatus();
 		}
-		elseif ($ks)
+		elseif ($vs)
 		{
 			$this->subAction = self::SUB_ACTION_REDIRECT_SCREEN;
 			$this->executeRedirectScreen();
@@ -74,7 +74,7 @@ class googleoauth2Action extends oauth2Action
 			'ytid' => $appId,
 			'subid' => $subId,
 		);
-		$this->nextUrl = $this->getController()->genUrl('extservices/googleoauth2?'.http_build_query($params, null, '&')).'?ks=';
+		$this->nextUrl = $this->getController()->genUrl('extservices/googleoauth2?'.http_build_query($params, null, '&')).'?vs=';
 		if ($appConfig === null)
 		{
 			$this->invalidConfig = true;
@@ -88,31 +88,31 @@ class googleoauth2Action extends oauth2Action
 	{
 		$appId = $this->getRequestParameter('ytid');
 		$subId = $this->getRequestParameter('subid');
-		$ksStr = $this->getRequestParameter('ks');
+		$vsStr = $this->getRequestParameter('vs');
 
 		$appConfig = $this->getFromGoogleAuthConfig($appId);
 		$client = $this->getGoogleClient();
-		$this->ksError = null;
-		$ksValid = $this->processKs($ksStr);
-		if (!$ksValid)
+		$this->vsError = null;
+		$vsValid = $this->processVs($vsStr);
+		if (!$vsValid)
 		{
-			$this->ksError = true;
+			$this->vsError = true;
 			return;
 		}
 
-		/** @var ks $ks */
-		$ks = kCurrentContext::$ks_object;
-		$partnerId = $ks->partner_id;
+		/** @var vs $vs */
+		$vs = vCurrentContext::$vs_object;
+		$partnerId = $vs->partner_id;
 
 		$state = array(
 			'ytid' => $appId,
 			'subid' => $subId,
 		);
 
- 		// let's create a limited ks and pass it as a state parameter to google
-		$limitedKs = $this->generateTimeLimitedKsWithData($partnerId, $state);
+ 		// let's create a limited vs and pass it as a state parameter to google
+		$limitedVs = $this->generateTimeLimitedVsWithData($partnerId, $state);
 
-		$state = $limitedKs;
+		$state = $limitedVs;
 		$redirect = $this->getController()->genUrl('extservices/googleoauth2', true);
 		$client->setRedirectUri($redirect);
 
@@ -128,28 +128,28 @@ class googleoauth2Action extends oauth2Action
 	 */
 	protected function executeProcessOAuth2Response()
 	{
-		$this->ksError = null;
+		$this->vsError = null;
 		$this->tokenError = null;
 
-		$limitedKsStr = $this->getRequestParameter('state');
-		$ksValid = $this->processKs($limitedKsStr);
-		if (!$ksValid)
+		$limitedVsStr = $this->getRequestParameter('state');
+		$vsValid = $this->processVs($limitedVsStr);
+		if (!$vsValid)
 		{
-			$this->ksError = true;
+			$this->vsError = true;
 			return;
 		}
-		$limitedKs = kCurrentContext::$ks_object;
-		$additionalData = $limitedKs->additional_data;
+		$limitedVs = vCurrentContext::$vs_object;
+		$additionalData = $limitedVs->additional_data;
 		$stateObject = json_decode($additionalData);
 		if (!$stateObject)
 		{
-			$this->ksError = true;
+			$this->vsError = true;
 			return;
 		}
 
 		$appId = isset($stateObject->ytid) ? $stateObject->ytid : null;
 		$subId = isset($stateObject->subid) ? $stateObject->subid : null;
-		$partner = $this->getPartner($limitedKs->partner_id);
+		$partner = $this->getPartner($limitedVs->partner_id);
 		$client = $this->getGoogleClient($appId);
 		$redirect = $this->getController()->genUrl('extservices/googleoauth2', true);
 		$client->setRedirectUri($redirect);
@@ -160,7 +160,7 @@ class googleoauth2Action extends oauth2Action
 		}
 		catch(Google_AuthException $ex)
 		{
-			KalturaLog::err($ex);
+			VidiunLog::err($ex);
 			$this->tokenError = true;
 			return;
 		}
@@ -168,7 +168,7 @@ class googleoauth2Action extends oauth2Action
 		$tokenJsonStr = $client->getAccessToken();
 		
 		$origTimeZone = date_default_timezone_get();
-		date_default_timezone_set(kConf::get( "date_default_timezone"));
+		date_default_timezone_set(vConf::get( "date_default_timezone"));
 		
 		$partner->setGoogleOAuth2($appId, $tokenJsonStr, $subId);
 		$partner->save();
@@ -178,7 +178,7 @@ class googleoauth2Action extends oauth2Action
 		$params = array(
 			'ytid' => $appId,
 			'status' => 1,
-			'ks' => $limitedKsStr
+			'vs' => $limitedVsStr
 		);
 		if ($subId)
 			$params['subid'] = $subId;
@@ -190,26 +190,26 @@ class googleoauth2Action extends oauth2Action
 	{
 		$this->paramsError = null;
 		$this->tokenError = null;
-		$this->ksError = null;
-		$ksStr = $this->getRequestParameter('ks');
+		$this->vsError = null;
+		$vsStr = $this->getRequestParameter('vs');
 		$appId = $this->getRequestParameter('ytid');
 		$subId = $this->getRequestParameter('subid');
 		$appConfig = $this->getFromGoogleAuthConfig($appId);
-		$ksValid = $this->processKs($ksStr);
-		if (!$ksValid)
+		$vsValid = $this->processVs($vsStr);
+		if (!$vsValid)
 		{
-			$this->ksError = true;
+			$this->vsError = true;
 			return;
 		}
 
-		$ks = kCurrentContext::$ks_object;
-		if ($ks == null || $appConfig == null)
+		$vs = vCurrentContext::$vs_object;
+		if ($vs == null || $appConfig == null)
 		{
 			$this->paramsError = true;
 			return;
 		}
 
-		$partnerId = $ks->partner_id;
+		$partnerId = $vs->partner_id;
 		$partner = $this->getPartner($partnerId);
 		$tokenData = $partner->getGoogleOAuth2($appId, $subId);
 		$client = $this->getGoogleClient($appId);
@@ -222,20 +222,20 @@ class googleoauth2Action extends oauth2Action
 			$body = $request->getResponseBody();
 			if ($code != 200)
 			{
-				KalturaLog::err('Google API returned: ' . $body);
+				VidiunLog::err('Google API returned: ' . $body);
 				$this->tokenError = true;
 			}
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::err($ex);
+			VidiunLog::err($ex);
 			$this->tokenError = true;
 		}
 	}
 
 	protected function getFromGoogleAuthConfig($paramName, $default = null)
 	{
-		return kConf::get($paramName, 'google_auth', $default);
+		return vConf::get($paramName, 'google_auth', $default);
 	}
 
 	/**

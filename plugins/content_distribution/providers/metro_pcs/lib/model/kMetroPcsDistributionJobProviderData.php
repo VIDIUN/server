@@ -3,7 +3,7 @@
  * @package plugins.metroPcsDistribution
  * @subpackage model.data
  */
-class kMetroPcsDistributionJobProviderData extends kDistributionJobProviderData
+class vMetroPcsDistributionJobProviderData extends vDistributionJobProviderData
 {
 		
 	/**
@@ -17,7 +17,7 @@ class kMetroPcsDistributionJobProviderData extends kDistributionJobProviderData
 	public $thumbUrls;
 	
 	
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

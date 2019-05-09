@@ -4,16 +4,16 @@
  * @subpackage api.objects
  * @abstract
  */
-abstract class KalturaConfigurableDistributionProfile extends KalturaDistributionProfile
+abstract class VidiunConfigurableDistributionProfile extends VidiunDistributionProfile
 {
 
 	/**
-	 * @var KalturaDistributionFieldConfigArray
+	 * @var VidiunDistributionFieldConfigArray
 	 */
 	public $fieldConfigArray;
 	
 	/**
-	 * @var KalturaExtendingItemMrssParameterArray
+	 * @var VidiunExtendingItemMrssParameterArray
 	 */
 	public $itemXpathsToExtend;
 	
@@ -52,7 +52,7 @@ abstract class KalturaConfigurableDistributionProfile extends KalturaDistributio
 		return $dbObject;
 	}
 	
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj);
 		

@@ -1,1 +1,1 @@
-ALTER TABLE kvote ADD puser_id varchar(100) AFTER kuser_id;
+ALTER TABLE vvote ADD puser_id varchar(100) AFTER vuser_id;

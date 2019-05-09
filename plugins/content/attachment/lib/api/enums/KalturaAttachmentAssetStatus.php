@@ -3,6 +3,6 @@
  * @package plugins.attachment
  * @subpackage api.enum
  */
-class KalturaAttachmentAssetStatus extends KalturaAssetStatus
+class VidiunAttachmentAssetStatus extends VidiunAssetStatus
 {
 }

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class kcwAction extends sfAction
+class vcwAction extends sfAction
 {
 	/**
 	 * Will forward to the regular swf player according to the widget_id 
@@ -31,7 +31,7 @@ class kcwAction extends sfAction
 		if (!$ui_conf_swf_url)
 			$ui_conf_swf_url = "/swf/ContributionWizard.swf";
 		
-		if( kString::beginsWith( $ui_conf_swf_url , "http") )
+		if( vString::beginsWith( $ui_conf_swf_url , "http") )
 		{
 			$swf_url = 	$ui_conf_swf_url; // absolute URL 
 		}
@@ -52,7 +52,7 @@ class kcwAction extends sfAction
 			"&uiConfId=" . $ui_conf_id . 
 			$conf_vars;
 			
-		$wrapper_swf = myContentStorage::getFSFlashRootPath ()."/flexwrapper/".kConf::get('kcw_flex_wrapper_version')."/FlexWrapper.swf";
+		$wrapper_swf = myContentStorage::getFSFlashRootPath ()."/flexwrapper/".vConf::get('vcw_flex_wrapper_version')."/FlexWrapper.swf";
 		$this->redirect(  $host . myPartnerUtils::getUrlForPartner( $partner_id , $subp_id ) . "$wrapper_swf?$params");
 	}
 }

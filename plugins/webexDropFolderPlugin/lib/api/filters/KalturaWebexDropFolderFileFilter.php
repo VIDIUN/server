@@ -3,6 +3,6 @@
  * @package plugins.WebexDropFolder
  * @subpackage api.filters
  */
-class KalturaWebexDropFolderFileFilter extends KalturaWebexDropFolderFileBaseFilter
+class VidiunWebexDropFolderFileFilter extends VidiunWebexDropFolderFileBaseFilter
 {
 }

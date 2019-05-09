@@ -3,7 +3,7 @@
  * @package plugins.beacon
  * @subpackage model.order
  */
-class kBeaconScheduledResourceOrderByItem extends ESearchOrderByItem
+class vBeaconScheduledResourceOrderByItem extends ESearchOrderByItem
 {
 	/**
 	 * @var BeaconScheduledResourceOrderByFieldName

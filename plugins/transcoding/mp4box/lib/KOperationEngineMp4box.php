@@ -3,12 +3,12 @@
  * @package plugins.mp4box
  * @subpackage lib
  */
-class KOperationEngineMp4box  extends KSingleOutputOperationEngine
+class VOperationEngineMp4box  extends VSingleOutputOperationEngine
 {
 	public function __construct($cmd, $outFilePath)
 	{
 		parent::__construct($cmd,$outFilePath);
-		KalturaLog::info(": cmd($cmd), outFilePath($outFilePath)");
+		VidiunLog::info(": cmd($cmd), outFilePath($outFilePath)");
 	}
 
 	/***************************
@@ -19,29 +19,29 @@ class KOperationEngineMp4box  extends KSingleOutputOperationEngine
 	{
 		$exeCmd =  parent::getCmdLine();
 
-		if(strstr($exeCmd, KDLOperatorMp4box::ACTION_EMBED_SUBTITLES)!==FALSE) {
+		if(strstr($exeCmd, VDLOperatorMp4box::ACTION_EMBED_SUBTITLES)!==FALSE) {
 			$captionsStr = null;
 			{
 					// impersonite
-				KBatchBase::impersonate($this->job->partnerId);
+				VBatchBase::impersonate($this->job->partnerId);
 				
 				$captionsStr = $this->buildSubTitleCommandParam($this->data);
 					// un-impersonite
-				KBatchBase::unimpersonate();
+				VBatchBase::unimpersonate();
 			}
 			if(isset($captionsStr)){
 				$exeCmd = str_replace(
-						array(KDLOperatorMp4box::ACTION_EMBED_SUBTITLES, KDLOperatorMp4box::SUBTITLE_PLACEHOLDER), 
+						array(VDLOperatorMp4box::ACTION_EMBED_SUBTITLES, VDLOperatorMp4box::SUBTITLE_PLACEHOLDER), 
 						array("", $captionsStr), 
 						$exeCmd);
 			}
 			else if(!(isset($this->operator) && isset($this->operator->isOptional) && $this->operator->isOptional>0)){
 				$this->message.=".".print_r($this->operator,1);
-				throw new KOperationEngineException($this->message);
+				throw new VOperationEngineException($this->message);
 			}
 		}
-		else if(strstr($exeCmd, KDLOperatorMp4box::ACTION_HINT)!==FALSE) {
-			$exeCmd = str_replace (KDLOperatorMp4box::ACTION_HINT,"", $exeCmd);
+		else if(strstr($exeCmd, VDLOperatorMp4box::ACTION_HINT)!==FALSE) {
+			$exeCmd = str_replace (VDLOperatorMp4box::ACTION_HINT,"", $exeCmd);
 		}
 		return $exeCmd; 
 	}
@@ -49,15 +49,15 @@ class KOperationEngineMp4box  extends KSingleOutputOperationEngine
 	/***************************
 	 * buildSubTitleCommandParam
 	 *
-	 * @param KalturaConvartableJobData $data
+	 * @param VidiunConvartableJobData $data
 	 * @return 
 	 */
-	private function buildSubTitleCommandParam(KalturaConvartableJobData $data)
-	{//		$cmdStr.= " -add ".KDLCmdlinePlaceholders::OutFileName.".temp.srt:hdlr=sbtl:lang=$lang:group=0:layer=-1";
+	private function buildSubTitleCommandParam(VidiunConvartableJobData $data)
+	{//		$cmdStr.= " -add ".VDLCmdlinePlaceholders::OutFileName.".temp.srt:hdlr=sbtl:lang=$lang:group=0:layer=-1";
 		$jobMsg = null;
-		$captionsArr = KConversionEngineFfmpeg::fetchEntryCaptionList($data, $jobMsg);
+		$captionsArr = VConversionEngineFfmpeg::fetchEntryCaptionList($data, $jobMsg);
 		if(!isset($captionsArr) || count($captionsArr)==0){
-			KalturaLog::log($jobMsg);
+			VidiunLog::log($jobMsg);
 			$this->message = $jobMsg;
 			return null;
 		}
@@ -65,7 +65,7 @@ class KOperationEngineMp4box  extends KSingleOutputOperationEngine
 		$captionsStr = null;
 		$addedSubs=0;
 		foreach($captionsArr as $lang=>$captionFileUrl){
-			$captionFilePath = KConversionEngineFfmpeg::fetchCaptionFile($captionFileUrl, $data->destFileSyncLocalPath.".temp.$lang.srt");
+			$captionFilePath = VConversionEngineFfmpeg::fetchCaptionFile($captionFileUrl, $data->destFileSyncLocalPath.".temp.$lang.srt");
 
 			if(!isset($captionFilePath)){
 				continue;

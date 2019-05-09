@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage utils
  */
-class kTime
+class vTime
 {
 	const REMOVE_DATE = -1;
 
@@ -15,7 +15,7 @@ class kTime
 		$value = (int)$value;
 		if ($value == self::REMOVE_DATE)
 			return $value;
-		$maxRelativeTime = kConf::get('max_relative_time');
+		$maxRelativeTime = vConf::get('max_relative_time');
 		if (-$maxRelativeTime <= $value && $value <= $maxRelativeTime && self::isRelativeTimeEnabled())
 		{
 			$time = self::getTime();
@@ -26,7 +26,7 @@ class kTime
 	}
 
 	/**
-	 * Looks for the time that is stored under ks privilege as reference time.
+	 * Looks for the time that is stored under vs privilege as reference time.
 	 * If not found, returns time().
 	 *
 	 * @param bool $notifyApiCache
@@ -34,23 +34,23 @@ class kTime
 	 */
 	public static function getTime($notifyApiCache = true)
 	{
-		if (kCurrentContext::$ks_object)
+		if (vCurrentContext::$vs_object)
 		{
-			$referenceTime = kCurrentContext::$ks_object->getPrivilegeValue(ks::PRIVILEGE_REFERENCE_TIME);
+			$referenceTime = vCurrentContext::$vs_object->getPrivilegeValue(vs::PRIVILEGE_REFERENCE_TIME);
 			if ($referenceTime)
 				return (int)$referenceTime;
 		}
 		if ($notifyApiCache)
-			return kApiCache::getTime();
+			return vApiCache::getTime();
 		else
 			return time();
 	}
 
 	public static function isRelativeTimeEnabled()
 	{
-		if (!kConf::hasParam('disable_relative_time_partners'))
+		if (!vConf::hasParam('disable_relative_time_partners'))
 			return true;
 
-		return !in_array(kCurrentContext::getCurrentPartnerId(), kConf::get('disable_relative_time_partners'));
+		return !in_array(vCurrentContext::getCurrentPartnerId(), vConf::get('disable_relative_time_partners'));
 	}
 }

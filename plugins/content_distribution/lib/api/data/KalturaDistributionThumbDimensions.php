@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionThumbDimensions extends KalturaObject
+class VidiunDistributionThumbDimensions extends VidiunObject
 {
 	/**
 	 * @var int
@@ -32,7 +32,7 @@ class KalturaDistributionThumbDimensions extends KalturaObject
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(is_null($dbObject))
-			$dbObject = new kDistributionThumbDimensions();
+			$dbObject = new vDistributionThumbDimensions();
 			
 		return parent::toObject($dbObject, $skip);
 	}

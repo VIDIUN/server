@@ -1,10 +1,10 @@
 <?php
-require_once(dirname(__file__).'/../config/kConf.php');
-date_default_timezone_set(kConf::get("date_default_timezone"));
+require_once(dirname(__file__).'/../config/vConf.php');
+date_default_timezone_set(vConf::get("date_default_timezone"));
 
 define ( "EVENT_LOG_SEPARATOR" , "," );
 
-class kEvent 
+class vEvent 
 {
 	private $arr;
 	private $prefix;
@@ -57,12 +57,12 @@ else
 	$f = fopen("php://stdin", "w");
 
 
-if ( ! $desired_mode ) $desired_mode = 3 ; // KDP events from ps2 & ps3	
+if ( ! $desired_mode ) $desired_mode = 3 ; // VDP events from ps2 & ps3	
 
 $total_lines = 0;
 $ps2_lines = 0;
 $ps3_lines = 0;
-$ps3_kmc_lines = 0;
+$ps3_vmc_lines = 0;
 $ignored_lines = 0;
 
 while(!feof($f))
@@ -76,10 +76,10 @@ while(!feof($f))
 	$total_lines++;
 		
 	$s = fgets($f);
-	// collect statistics for old and new KDP
+	// collect statistics for old and new VDP
 	if ( strstr($s, "collectstats") ) $mode = 1;		// ps2 collectstats
 	elseif ( strstr($s, "action=collect") && strstr($s, "service=stats") )  $mode = 2;	// ps3 collect stats	
-	elseif ( strstr($s, "action=kmcCollect") && strstr($s, "service=stats") )  $mode = 4;	// ps3 kmcCollect stats
+	elseif ( strstr($s, "action=vmcCollect") && strstr($s, "service=stats") )  $mode = 4;	// ps3 vmcCollect stats
 	else $mode = 0;	// not a relevant line 
 
 	if ( $mode == 0 ) 
@@ -169,7 +169,7 @@ while(!feof($f))
 	{
 		$ps3_lines ++;
 		// create event lines for ps3
-		$event = new kEvent ( $vars , "event" );
+		$event = new vEvent ( $vars , "event" );
 		
 		$eventLine = 
 			$event->clientVer . EVENT_LOG_SEPARATOR 
@@ -197,28 +197,28 @@ while(!feof($f))
 	}
 	elseif  ( $mode == 4 && ($desired_mode&4)  )
 	{
-		$ps3_kmc_lines ++;
+		$ps3_vmc_lines ++;
 		// create event lines for ps3
-		$event = new kEvent ( $vars , "kmcEvent" );
+		$event = new vEvent ( $vars , "vmcEvent" );
 		
-		$ks = @$vars["ks"];
+		$vs = @$vars["vs"];
 		
 		$eventLine = 
 			$event->clientVer . EVENT_LOG_SEPARATOR 
-			. $event->kmcEventType  . EVENT_LOG_SEPARATOR
+			. $event->vmcEventType  . EVENT_LOG_SEPARATOR
 			. $formatted_date . EVENT_LOG_SEPARATOR   // use server time
-			. $event->kmcEventActionPath  . EVENT_LOG_SEPARATOR
+			. $event->vmcEventActionPath  . EVENT_LOG_SEPARATOR
 			. $event->eventTimestamp  . EVENT_LOG_SEPARATOR
 			. $event->partnerId  . EVENT_LOG_SEPARATOR
 			. $event->userId  . EVENT_LOG_SEPARATOR
 			. $event->entryId  . EVENT_LOG_SEPARATOR
 			. $event->widgetId  . EVENT_LOG_SEPARATOR
 			. $event->uiconfId  . EVENT_LOG_SEPARATOR
-			. $ks . EVENT_LOG_SEPARATOR
+			. $vs . EVENT_LOG_SEPARATOR
 			. $ip  . EVENT_LOG_SEPARATOR
 			. PHP_EOL ;
 		
-		// write to the the kmcEvents log NOT the kdpEvents log
+		// write to the the vmcEvents log NOT the vdpEvents log
 	}
 	else
 	{
@@ -229,7 +229,7 @@ while(!feof($f))
 	print $eventLine;
 }
 
-fprintf($stderr, PHP_EOL . "total_lines [$total_lines] ps2_lines [$ps2_lines] ps3_lines [$ps3_lines] ps3_kmc_lines [$ps3_kmc_lines] ignored_lines [$ignored_lines]" . PHP_EOL );
+fprintf($stderr, PHP_EOL . "total_lines [$total_lines] ps2_lines [$ps2_lines] ps3_lines [$ps3_lines] ps3_vmc_lines [$ps3_vmc_lines] ignored_lines [$ignored_lines]" . PHP_EOL );
 
 fclose($stderr);
 fclose($f);

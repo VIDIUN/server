@@ -33,7 +33,7 @@ class updateplaylistAction extends updateentryAction
 			);
 	}
 	
-	public function requiredPrivileges () { return "" ; } //"edit:<kshow_id>" ; }
+	public function requiredPrivileges () { return "" ; } //"edit:<vshow_id>" ; }
 	
 	protected function getObjectPrefix () { return "playlist"; } // TODO - fix to be entries
 

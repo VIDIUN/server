@@ -3,28 +3,28 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaInvestigateThumbAssetData extends KalturaObject
+class VidiunInvestigateThumbAssetData extends VidiunObject
 {
 	/**
-	 * @var KalturaThumbAsset
+	 * @var VidiunThumbAsset
 	 * @readonly
 	 */
 	public $thumbAsset;
 
 	/**
-	 * @var KalturaFileSyncListResponse
+	 * @var VidiunFileSyncListResponse
 	 * @readonly
 	 */
 	public $fileSyncs;
 
 	/**
-	 * @var KalturaThumbParams
+	 * @var VidiunThumbParams
 	 * @readonly
 	 */
 	public $thumbParams;
 
 	/**
-	 * @var KalturaThumbParamsOutputListResponse
+	 * @var VidiunThumbParamsOutputListResponse
 	 * @readonly
 	 */
 	public $thumbParamsOutputs;

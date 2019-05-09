@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage errors
  */
-class MetadataErrors extends KalturaErrors
+class MetadataErrors extends VidiunErrors
 {
 	const METADATA_PROFILE_NOT_FOUND = "METADATA_PROFILE_NOT_FOUND;ID;metadata profile not found, id [@ID@]";
 	

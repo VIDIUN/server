@@ -6,7 +6,7 @@
  * @package plugins.adminConsole
  * @subpackage api.services
  */
-class UiConfAdminService extends KalturaBaseService
+class UiConfAdminService extends VidiunBaseService
 {
 	const PERMISSION_GLOBAL_PARTNER_UI_CONF_UPDTAE = 'GLOBAL_PARTNER_UI_CONF_UPDTAE';
 	
@@ -15,29 +15,29 @@ class UiConfAdminService extends KalturaBaseService
 		parent::initService($serviceId, $serviceName, $actionName);
 
 		if(!AdminConsolePlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, AdminConsolePlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, AdminConsolePlugin::PLUGIN_NAME);
 	}
 	
 	/**
 	 * Adds new UIConf with no partner limitation
 	 * 
 	 * @action add
-	 * @param KalturaUiConfAdmin $uiConf
-	 * @return KalturaUiConfAdmin
+	 * @param VidiunUiConfAdmin $uiConf
+	 * @return VidiunUiConfAdmin
 	 */
-	function addAction(KalturaUiConfAdmin $uiConf)
+	function addAction(VidiunUiConfAdmin $uiConf)
 	{
 		// if not specified set to true (default)
 		if(is_null($uiConf->useCdn))
 			$uiConf->useCdn = true;
 			
 		$dbUiConf = $uiConf->toObject(new uiConf());	
-		if ($dbUiConf->getPartnerId() == PartnerPeer::GLOBAL_PARTNER && !kPermissionManager::isPermitted(self::PERMISSION_GLOBAL_PARTNER_UI_CONF_UPDTAE))
-			throw new KalturaAPIException ( KalturaErrors::INVALID_PARTNER_ID, PartnerPeer::GLOBAL_PARTNER );
+		if ($dbUiConf->getPartnerId() == PartnerPeer::GLOBAL_PARTNER && !vPermissionManager::isPermitted(self::PERMISSION_GLOBAL_PARTNER_UI_CONF_UPDTAE))
+			throw new VidiunAPIException ( VidiunErrors::INVALID_PARTNER_ID, PartnerPeer::GLOBAL_PARTNER );
 		
 		$dbUiConf->save();
 		
-		$uiConf = new KalturaUiConfAdmin();
+		$uiConf = new VidiunUiConfAdmin();
 		$uiConf->fromObject($dbUiConf, $this->getResponseProfile());
 		
 		return $uiConf;
@@ -48,24 +48,24 @@ class UiConfAdminService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id 
-	 * @param KalturaUiConfAdmin $uiConf
-	 * @return KalturaUiConfAdmin
+	 * @param VidiunUiConfAdmin $uiConf
+	 * @return VidiunUiConfAdmin
 	 *
 	 * @throws APIErrors::INVALID_UI_CONF_ID
 	 */	
-	function updateAction($id, KalturaUiConfAdmin $uiConf)
+	function updateAction($id, VidiunUiConfAdmin $uiConf)
 	{
 		$dbUiConf = uiConfPeer::retrieveByPK( $id );
 		if (!$dbUiConf)
-			throw new KalturaAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
+			throw new VidiunAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
 		
-		if ($dbUiConf->getPartnerId() == PartnerPeer::GLOBAL_PARTNER && !kPermissionManager::isPermitted(self::PERMISSION_GLOBAL_PARTNER_UI_CONF_UPDTAE))
-			throw new KalturaAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
+		if ($dbUiConf->getPartnerId() == PartnerPeer::GLOBAL_PARTNER && !vPermissionManager::isPermitted(self::PERMISSION_GLOBAL_PARTNER_UI_CONF_UPDTAE))
+			throw new VidiunAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
 		
 		$dbUiConf = $uiConf->toObject($dbUiConf);
 		$dbUiConf->save();
 		
-		$uiConf = new KalturaUiConfAdmin();
+		$uiConf = new VidiunUiConfAdmin();
 		$uiConf->fromObject($dbUiConf, $this->getResponseProfile());
 		
 		return $uiConf;
@@ -76,7 +76,7 @@ class UiConfAdminService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id 
-	 * @return KalturaUiConfAdmin
+	 * @return VidiunUiConfAdmin
 	 *
 	 * @throws APIErrors::INVALID_UI_CONF_ID
 	 */		
@@ -85,9 +85,9 @@ class UiConfAdminService extends KalturaBaseService
 		$dbUiConf = uiConfPeer::retrieveByPK($id);
 		
 		if (!$dbUiConf)
-			throw new KalturaAPIException(APIErrors::INVALID_UI_CONF_ID, $id);
+			throw new VidiunAPIException(APIErrors::INVALID_UI_CONF_ID, $id);
 			
-		$uiConf = new KalturaUiConfAdmin();
+		$uiConf = new VidiunUiConfAdmin();
 		$uiConf->fromObject($dbUiConf, $this->getResponseProfile());
 		
 		return $uiConf;
@@ -106,10 +106,10 @@ class UiConfAdminService extends KalturaBaseService
 		$dbUiConf = uiConfPeer::retrieveByPK($id);
 		
 		if (!$dbUiConf)
-			throw new KalturaAPIException(APIErrors::INVALID_UI_CONF_ID, $id);
+			throw new VidiunAPIException(APIErrors::INVALID_UI_CONF_ID, $id);
 			
-		if ($dbUiConf->getPartnerId() == PartnerPeer::GLOBAL_PARTNER && !kPermissionManager::isPermitted(self::PERMISSION_GLOBAL_PARTNER_UI_CONF_UPDTAE))
-			throw new KalturaAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
+		if ($dbUiConf->getPartnerId() == PartnerPeer::GLOBAL_PARTNER && !vPermissionManager::isPermitted(self::PERMISSION_GLOBAL_PARTNER_UI_CONF_UPDTAE))
+			throw new VidiunAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
 			
 		$dbUiConf->setStatus(uiConf::UI_CONF_STATUS_DELETED);
 		$dbUiConf->save();
@@ -119,16 +119,16 @@ class UiConfAdminService extends KalturaBaseService
 	 * Retrieve a list of available UIConfs  with no partner limitation
 	 * 
 	 * @action list
-	 * @param KalturaUiConfFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaUiConfAdminListResponse
+	 * @param VidiunUiConfFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunUiConfAdminListResponse
 	 */		
-	function listAction( KalturaUiConfFilter $filter = null , KalturaFilterPager $pager = null)
+	function listAction( VidiunUiConfFilter $filter = null , VidiunFilterPager $pager = null)
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL2;
 		
 		if (!$filter)
-			$filter = new KalturaUiConfFilter();
+			$filter = new VidiunUiConfFilter();
 			
 		$uiConfFilter = new uiConfFilter();
 		$filter->toObject($uiConfFilter);
@@ -137,13 +137,13 @@ class UiConfAdminService extends KalturaBaseService
 		$uiConfFilter->attachToCriteria($c);
 		$count = uiConfPeer::doCount($c);
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 		$pager->attachToCriteria($c);
 		$list = uiConfPeer::doSelect($c);
 		
-		$newList = KalturaUiConfAdminArray::fromDbArray($list, $this->getResponseProfile());
+		$newList = VidiunUiConfAdminArray::fromDbArray($list, $this->getResponseProfile());
 		
-		$response = new KalturaUiConfAdminListResponse();
+		$response = new VidiunUiConfAdminListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $count;
 		

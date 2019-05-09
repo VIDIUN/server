@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api
  */
-class ContentDistributionErrors extends KalturaErrors
+class ContentDistributionErrors extends VidiunErrors
 {
 	const DISTRIBUTION_PROVIDER_NOT_FOUND = "DISTRIBUTION_PROVIDER_NOT_FOUND;TYPE;Distrbution provider type not found [@TYPE@]";
 	

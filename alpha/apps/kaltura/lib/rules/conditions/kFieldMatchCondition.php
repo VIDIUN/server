@@ -3,16 +3,16 @@
  * @package Core
  * @subpackage model.data
  */
-class kFieldMatchCondition extends kMatchCondition
+class vFieldMatchCondition extends vMatchCondition
 {
 	/**
 	 * The field to evaluate against the values
-	 * @var kStringField
+	 * @var vStringField
 	 */
 	private $field;
 
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -21,16 +21,16 @@ class kFieldMatchCondition extends kMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::getFieldValue()
+	 * @see vMatchCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
 		$this->field->setScope($scope);
 		return $this->field->getValue();
 	}
 	
 	/**
-	 * @return kStringField
+	 * @return vStringField
 	 */
 	public function getField() 
 	{
@@ -38,15 +38,15 @@ class kFieldMatchCondition extends kMatchCondition
 	}
 
 	/**
-	 * @param kStringField $field
+	 * @param vStringField $field
 	 */
-	public function setField(kStringField $field) 
+	public function setField(vStringField $field) 
 	{
 		$this->field = $field;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::shouldFieldDisableCache()
+	 * @see vMatchCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

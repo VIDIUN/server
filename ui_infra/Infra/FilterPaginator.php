@@ -6,7 +6,7 @@
 class Infra_FilterPaginator implements Zend_Paginator_Adapter_Interface
 {
 	/**
-	 * @var Kaltura_Client_ServiceBase
+	 * @var Vidiun_Client_ServiceBase
 	 */
 	protected $service;
 	
@@ -40,7 +40,7 @@ class Infra_FilterPaginator implements Zend_Paginator_Adapter_Interface
 	 *
 	 * @param Zend_Db_Select $select The select query
 	 */
-	public function __construct(Kaltura_Client_ServiceBase $service, $action, $impersonatedPartnerId/* $args*/)
+	public function __construct(Vidiun_Client_ServiceBase $service, $action, $impersonatedPartnerId/* $args*/)
 	{
 		$this->service = $service;
 		$this->action = $action;
@@ -83,7 +83,7 @@ class Infra_FilterPaginator implements Zend_Paginator_Adapter_Interface
 		if ($this->impersonatedPartnerId) {
 			Infra_ClientHelper::impersonate($this->impersonatedPartnerId);
 		}
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$pager->pageIndex = (int)($offset / $itemCountPerPage) + 1;
 		$pager->pageSize = $itemCountPerPage;
 		$action = $this->action;

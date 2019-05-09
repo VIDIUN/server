@@ -115,7 +115,7 @@ class EntryDistributionPeer extends BaseEntryDistributionPeer implements IRelate
 	{
 		$c = clone $criteria;
 		
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());

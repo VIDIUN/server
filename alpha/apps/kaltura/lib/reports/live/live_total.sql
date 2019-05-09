@@ -1,7 +1,7 @@
 SELECT
 	SUM(count_plays) count_plays
 FROM 
-	dwh_hourly_events_live_entry ev, kalturadw.dwh_dim_entries en
+	dwh_hourly_events_live_entry ev, vidiundw.dwh_dim_entries en
 WHERE 	
 	en.entry_id=ev.entry_id
 	AND {OBJ_ID_CLAUSE}

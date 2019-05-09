@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Base class that represents a row from the 'puser_kuser' table.
+ * Base class that represents a row from the 'puser_vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BasePuserKuser extends BaseObject  implements Persistent {
+abstract class BasePuserVuser extends BaseObject  implements Persistent {
 
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        PuserKuserPeer
+	 * @var        PuserVuserPeer
 	 */
 	protected static $peer;
 
@@ -38,10 +38,10 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	protected $puser_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the puser_name field.
@@ -81,9 +81,9 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	protected $subp_id;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * @var        array PuserRole[] Collection to store aggregation of PuserRole objects.
@@ -162,7 +162,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes internal state of BasePuserKuser object.
+	 * Initializes internal state of BasePuserVuser object.
 	 * @see        applyDefaults()
 	 */
 	public function __construct()
@@ -202,13 +202,13 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -335,12 +335,12 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
-		if(!isset($this->oldColumnsValues[PuserKuserPeer::ID]))
-			$this->oldColumnsValues[PuserKuserPeer::ID] = $this->id;
+		if(!isset($this->oldColumnsValues[PuserVuserPeer::ID]))
+			$this->oldColumnsValues[PuserVuserPeer::ID] = $this->id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -348,7 +348,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = PuserKuserPeer::ID;
+			$this->modifiedColumns[] = PuserVuserPeer::ID;
 		}
 
 		return $this;
@@ -358,12 +358,12 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * Set the value of [partner_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setPartnerId($v)
 	{
-		if(!isset($this->oldColumnsValues[PuserKuserPeer::PARTNER_ID]))
-			$this->oldColumnsValues[PuserKuserPeer::PARTNER_ID] = $this->partner_id;
+		if(!isset($this->oldColumnsValues[PuserVuserPeer::PARTNER_ID]))
+			$this->oldColumnsValues[PuserVuserPeer::PARTNER_ID] = $this->partner_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -371,7 +371,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		if ($this->partner_id !== $v) {
 			$this->partner_id = $v;
-			$this->modifiedColumns[] = PuserKuserPeer::PARTNER_ID;
+			$this->modifiedColumns[] = PuserVuserPeer::PARTNER_ID;
 		}
 
 		return $this;
@@ -381,12 +381,12 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * Set the value of [puser_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setPuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[PuserKuserPeer::PUSER_ID]))
-			$this->oldColumnsValues[PuserKuserPeer::PUSER_ID] = $this->puser_id;
+		if(!isset($this->oldColumnsValues[PuserVuserPeer::PUSER_ID]))
+			$this->oldColumnsValues[PuserVuserPeer::PUSER_ID] = $this->puser_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -394,49 +394,49 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		if ($this->puser_id !== $v) {
 			$this->puser_id = $v;
-			$this->modifiedColumns[] = PuserKuserPeer::PUSER_ID;
+			$this->modifiedColumns[] = PuserVuserPeer::PUSER_ID;
 		}
 
 		return $this;
 	} // setPuserId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[PuserKuserPeer::KUSER_ID]))
-			$this->oldColumnsValues[PuserKuserPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[PuserVuserPeer::VUSER_ID]))
+			$this->oldColumnsValues[PuserVuserPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = PuserKuserPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = PuserVuserPeer::VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [puser_name] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setPuserName($v)
 	{
-		if(!isset($this->oldColumnsValues[PuserKuserPeer::PUSER_NAME]))
-			$this->oldColumnsValues[PuserKuserPeer::PUSER_NAME] = $this->puser_name;
+		if(!isset($this->oldColumnsValues[PuserVuserPeer::PUSER_NAME]))
+			$this->oldColumnsValues[PuserVuserPeer::PUSER_NAME] = $this->puser_name;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -444,7 +444,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		if ($this->puser_name !== $v) {
 			$this->puser_name = $v;
-			$this->modifiedColumns[] = PuserKuserPeer::PUSER_NAME;
+			$this->modifiedColumns[] = PuserVuserPeer::PUSER_NAME;
 		}
 
 		return $this;
@@ -454,7 +454,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * Set the value of [custom_data] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setCustomData($v)
 	{
@@ -464,7 +464,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		if ($this->custom_data !== $v) {
 			$this->custom_data = $v;
-			$this->modifiedColumns[] = PuserKuserPeer::CUSTOM_DATA;
+			$this->modifiedColumns[] = PuserVuserPeer::CUSTOM_DATA;
 		}
 
 		return $this;
@@ -475,7 +475,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
@@ -512,7 +512,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = PuserKuserPeer::CREATED_AT;
+				$this->modifiedColumns[] = PuserVuserPeer::CREATED_AT;
 			}
 		} // if either are not null
 
@@ -524,7 +524,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
@@ -561,7 +561,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = PuserKuserPeer::UPDATED_AT;
+				$this->modifiedColumns[] = PuserVuserPeer::UPDATED_AT;
 			}
 		} // if either are not null
 
@@ -572,12 +572,12 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * Set the value of [context] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setContext($v)
 	{
-		if(!isset($this->oldColumnsValues[PuserKuserPeer::CONTEXT]))
-			$this->oldColumnsValues[PuserKuserPeer::CONTEXT] = $this->context;
+		if(!isset($this->oldColumnsValues[PuserVuserPeer::CONTEXT]))
+			$this->oldColumnsValues[PuserVuserPeer::CONTEXT] = $this->context;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -585,7 +585,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		if ($this->context !== $v) {
 			$this->context = $v;
-			$this->modifiedColumns[] = PuserKuserPeer::CONTEXT;
+			$this->modifiedColumns[] = PuserVuserPeer::CONTEXT;
 		}
 
 		return $this;
@@ -595,12 +595,12 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * Set the value of [subp_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @return     PuserVuser The current object (for fluent API support)
 	 */
 	public function setSubpId($v)
 	{
-		if(!isset($this->oldColumnsValues[PuserKuserPeer::SUBP_ID]))
-			$this->oldColumnsValues[PuserKuserPeer::SUBP_ID] = $this->subp_id;
+		if(!isset($this->oldColumnsValues[PuserVuserPeer::SUBP_ID]))
+			$this->oldColumnsValues[PuserVuserPeer::SUBP_ID] = $this->subp_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -608,7 +608,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		if ($this->subp_id !== $v || $this->isNew()) {
 			$this->subp_id = $v;
-			$this->modifiedColumns[] = PuserKuserPeer::SUBP_ID;
+			$this->modifiedColumns[] = PuserVuserPeer::SUBP_ID;
 		}
 
 		return $this;
@@ -653,7 +653,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->partner_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->puser_id = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->kuser_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+			$this->vuser_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->puser_name = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->custom_data = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
 			$this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
@@ -669,10 +669,10 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 10; // 10 = PuserKuserPeer::NUM_COLUMNS - PuserKuserPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 10; // 10 = PuserVuserPeer::NUM_COLUMNS - PuserVuserPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating PuserKuser object", $e);
+			throw new PropelException("Error populating PuserVuser object", $e);
 		}
 	}
 
@@ -692,8 +692,8 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuser !== null && $this->kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -718,15 +718,15 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(PuserKuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(PuserVuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		PuserKuserPeer::setUseCriteriaFilter(false);
-		$stmt = PuserKuserPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
-		PuserKuserPeer::setUseCriteriaFilter(true);
+		PuserVuserPeer::setUseCriteriaFilter(false);
+		$stmt = PuserVuserPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+		PuserVuserPeer::setUseCriteriaFilter(true);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -736,7 +736,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuser = null;
+			$this->avuser = null;
 			$this->collPuserRolesRelatedByPartnerId = null;
 			$this->lastPuserRoleRelatedByPartnerIdCriteria = null;
 
@@ -762,14 +762,14 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(PuserKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(PuserVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				PuserKuserPeer::doDelete($this, $con);
+				PuserVuserPeer::doDelete($this, $con);
 				$this->postDelete($con);
 				$this->setDeleted(true);
 				$con->commit();
@@ -802,7 +802,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(PuserKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(PuserVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
@@ -822,7 +822,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 					$this->postUpdate($con);
 				}
 				$this->postSave($con);
-				PuserKuserPeer::addInstanceToPool($this);
+				PuserVuserPeer::addInstanceToPool($this);
 			} else {
 				$affectedRows = 0;
 			}
@@ -861,22 +861,22 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = PuserKuserPeer::ID;
+				$this->modifiedColumns[] = PuserVuserPeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			$this->objectSaved = false;
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = PuserKuserPeer::doInsert($this, $con);
+					$pk = PuserVuserPeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -886,7 +886,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 					$this->setNew(false);
 					$this->objectSaved = true;
 				} else {
-					$affectedObjects = PuserKuserPeer::doUpdate($this, $con);
+					$affectedObjects = PuserVuserPeer::doUpdate($this, $con);
 					if($affectedObjects)
 						$this->objectSaved = true;
 						
@@ -950,7 +950,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -976,12 +976,12 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -999,8 +999,8 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1125,14 +1125,14 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
 
-			if (($retval = PuserKuserPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = PuserVuserPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -1171,7 +1171,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = PuserKuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = PuserVuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -1196,7 +1196,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 				return $this->getPuserId();
 				break;
 			case 3:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 4:
 				return $this->getPuserName();
@@ -1235,12 +1235,12 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = PuserKuserPeer::getFieldNames($keyType);
+		$keys = PuserVuserPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getPartnerId(),
 			$keys[2] => $this->getPuserId(),
-			$keys[3] => $this->getKuserId(),
+			$keys[3] => $this->getVuserId(),
 			$keys[4] => $this->getPuserName(),
 			$keys[5] => $this->getCustomData(),
 			$keys[6] => $this->getCreatedAt(),
@@ -1263,7 +1263,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = PuserKuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = PuserVuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -1288,7 +1288,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 				$this->setPuserId($value);
 				break;
 			case 3:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 4:
 				$this->setPuserName($value);
@@ -1330,12 +1330,12 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = PuserKuserPeer::getFieldNames($keyType);
+		$keys = PuserVuserPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setPartnerId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setPuserId($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setKuserId($arr[$keys[3]]);
+		if (array_key_exists($keys[3], $arr)) $this->setVuserId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setPuserName($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setCustomData($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
@@ -1351,18 +1351,18 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(PuserKuserPeer::DATABASE_NAME);
+		$criteria = new Criteria(PuserVuserPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(PuserKuserPeer::ID)) $criteria->add(PuserKuserPeer::ID, $this->id);
-		if ($this->isColumnModified(PuserKuserPeer::PARTNER_ID)) $criteria->add(PuserKuserPeer::PARTNER_ID, $this->partner_id);
-		if ($this->isColumnModified(PuserKuserPeer::PUSER_ID)) $criteria->add(PuserKuserPeer::PUSER_ID, $this->puser_id);
-		if ($this->isColumnModified(PuserKuserPeer::KUSER_ID)) $criteria->add(PuserKuserPeer::KUSER_ID, $this->kuser_id);
-		if ($this->isColumnModified(PuserKuserPeer::PUSER_NAME)) $criteria->add(PuserKuserPeer::PUSER_NAME, $this->puser_name);
-		if ($this->isColumnModified(PuserKuserPeer::CUSTOM_DATA)) $criteria->add(PuserKuserPeer::CUSTOM_DATA, $this->custom_data);
-		if ($this->isColumnModified(PuserKuserPeer::CREATED_AT)) $criteria->add(PuserKuserPeer::CREATED_AT, $this->created_at);
-		if ($this->isColumnModified(PuserKuserPeer::UPDATED_AT)) $criteria->add(PuserKuserPeer::UPDATED_AT, $this->updated_at);
-		if ($this->isColumnModified(PuserKuserPeer::CONTEXT)) $criteria->add(PuserKuserPeer::CONTEXT, $this->context);
-		if ($this->isColumnModified(PuserKuserPeer::SUBP_ID)) $criteria->add(PuserKuserPeer::SUBP_ID, $this->subp_id);
+		if ($this->isColumnModified(PuserVuserPeer::ID)) $criteria->add(PuserVuserPeer::ID, $this->id);
+		if ($this->isColumnModified(PuserVuserPeer::PARTNER_ID)) $criteria->add(PuserVuserPeer::PARTNER_ID, $this->partner_id);
+		if ($this->isColumnModified(PuserVuserPeer::PUSER_ID)) $criteria->add(PuserVuserPeer::PUSER_ID, $this->puser_id);
+		if ($this->isColumnModified(PuserVuserPeer::VUSER_ID)) $criteria->add(PuserVuserPeer::VUSER_ID, $this->vuser_id);
+		if ($this->isColumnModified(PuserVuserPeer::PUSER_NAME)) $criteria->add(PuserVuserPeer::PUSER_NAME, $this->puser_name);
+		if ($this->isColumnModified(PuserVuserPeer::CUSTOM_DATA)) $criteria->add(PuserVuserPeer::CUSTOM_DATA, $this->custom_data);
+		if ($this->isColumnModified(PuserVuserPeer::CREATED_AT)) $criteria->add(PuserVuserPeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(PuserVuserPeer::UPDATED_AT)) $criteria->add(PuserVuserPeer::UPDATED_AT, $this->updated_at);
+		if ($this->isColumnModified(PuserVuserPeer::CONTEXT)) $criteria->add(PuserVuserPeer::CONTEXT, $this->context);
+		if ($this->isColumnModified(PuserVuserPeer::SUBP_ID)) $criteria->add(PuserVuserPeer::SUBP_ID, $this->subp_id);
 
 		return $criteria;
 	}
@@ -1377,18 +1377,18 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(PuserKuserPeer::DATABASE_NAME);
+		$criteria = new Criteria(PuserVuserPeer::DATABASE_NAME);
 
-		$criteria->add(PuserKuserPeer::ID, $this->id);
+		$criteria->add(PuserVuserPeer::ID, $this->id);
 		
-		if($this->alreadyInSave && count($this->modifiedColumns) == 2 && $this->isColumnModified(PuserKuserPeer::UPDATED_AT))
+		if($this->alreadyInSave && count($this->modifiedColumns) == 2 && $this->isColumnModified(PuserVuserPeer::UPDATED_AT))
 		{
 			$theModifiedColumn = null;
 			foreach($this->modifiedColumns as $modifiedColumn)
-				if($modifiedColumn != PuserKuserPeer::UPDATED_AT)
+				if($modifiedColumn != PuserVuserPeer::UPDATED_AT)
 					$theModifiedColumn = $modifiedColumn;
 					
-			$atomicColumns = PuserKuserPeer::getAtomicColumns();
+			$atomicColumns = PuserVuserPeer::getAtomicColumns();
 			if(in_array($theModifiedColumn, $atomicColumns))
 				$criteria->add($theModifiedColumn, $this->getByName($theModifiedColumn, BasePeer::TYPE_COLNAME), Criteria::NOT_EQUAL);
 		}
@@ -1422,7 +1422,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of PuserKuser (or compatible) type.
+	 * @param      object $copyObj An object of PuserVuser (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
@@ -1433,7 +1433,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		$copyObj->setPuserId($this->puser_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setPuserName($this->puser_name);
 
@@ -1483,7 +1483,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     PuserKuser Clone of current object.
+	 * @return     PuserVuser Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -1499,16 +1499,16 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @var     PuserKuser Clone of current object.
+	 * @var     PuserVuser Clone of current object.
 	 */
 	protected $copiedFrom = null;
 	
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @param      PuserKuser $copiedFrom Clone of current object.
+	 * @param      PuserVuser $copiedFrom Clone of current object.
 	 */
-	public function setCopiedFrom(PuserKuser $copiedFrom)
+	public function setCopiedFrom(PuserVuser $copiedFrom)
 	{
 		$this->copiedFrom = $copiedFrom;
 	}
@@ -1520,37 +1520,37 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     PuserKuserPeer
+	 * @return     PuserVuserPeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new PuserKuserPeer();
+			self::$peer = new PuserVuserPeer();
 		}
 		return self::$peer;
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
-	 * @return     PuserKuser The current object (for fluent API support)
+	 * @param      vuser $v
+	 * @return     PuserVuser The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addPuserKuser($this);
+			$v->addPuserVuser($this);
 		}
 
 		return $this;
@@ -1558,25 +1558,25 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuser === null && ($this->vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addPuserKusers($this);
+			   $this->avuser->addPuserVusers($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
@@ -1611,8 +1611,8 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * Gets an array of PuserRole objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this PuserKuser has previously been saved, it will retrieve
-	 * related PuserRolesRelatedByPartnerId from storage. If this PuserKuser is new, it will return
+	 * Otherwise if this PuserVuser has previously been saved, it will retrieve
+	 * related PuserRolesRelatedByPartnerId from storage. If this PuserVuser is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
@@ -1623,7 +1623,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	public function getPuserRolesRelatedByPartnerId($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(PuserKuserPeer::DATABASE_NAME);
+			$criteria = new Criteria(PuserVuserPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -1672,7 +1672,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	public function countPuserRolesRelatedByPartnerId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(PuserKuserPeer::DATABASE_NAME);
+			$criteria = new Criteria(PuserVuserPeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -1729,7 +1729,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 		}
 		if (!in_array($l, $this->collPuserRolesRelatedByPartnerId, true)) { // only add it if the **same** object is not already associated
 			array_push($this->collPuserRolesRelatedByPartnerId, $l);
-			$l->setPuserKuserRelatedByPartnerId($this);
+			$l->setPuserVuserRelatedByPartnerId($this);
 		}
 	}
 
@@ -1737,18 +1737,18 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this PuserKuser is new, it will return
-	 * an empty collection; or if this PuserKuser has previously
+	 * Otherwise if this PuserVuser is new, it will return
+	 * an empty collection; or if this PuserVuser has previously
 	 * been saved, it will retrieve related PuserRolesRelatedByPartnerId from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in PuserKuser.
+	 * actually need in PuserVuser.
 	 */
-	public function getPuserRolesRelatedByPartnerIdJoinkshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getPuserRolesRelatedByPartnerIdJoinvshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(PuserKuserPeer::DATABASE_NAME);
+			$criteria = new Criteria(PuserVuserPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -1762,7 +1762,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 				$criteria->add(PuserRolePeer::PARTNER_ID, $this->partner_id);
 
-				$this->collPuserRolesRelatedByPartnerId = PuserRolePeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collPuserRolesRelatedByPartnerId = PuserRolePeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
@@ -1772,7 +1772,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 			$criteria->add(PuserRolePeer::PARTNER_ID, $this->partner_id);
 
 			if (!isset($this->lastPuserRoleRelatedByPartnerIdCriteria) || !$this->lastPuserRoleRelatedByPartnerIdCriteria->equals($criteria)) {
-				$this->collPuserRolesRelatedByPartnerId = PuserRolePeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collPuserRolesRelatedByPartnerId = PuserRolePeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastPuserRoleRelatedByPartnerIdCriteria = $criteria;
@@ -1812,8 +1812,8 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	 * Gets an array of PuserRole objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this PuserKuser has previously been saved, it will retrieve
-	 * related PuserRolesRelatedByPuserId from storage. If this PuserKuser is new, it will return
+	 * Otherwise if this PuserVuser has previously been saved, it will retrieve
+	 * related PuserRolesRelatedByPuserId from storage. If this PuserVuser is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
@@ -1824,7 +1824,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	public function getPuserRolesRelatedByPuserId($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(PuserKuserPeer::DATABASE_NAME);
+			$criteria = new Criteria(PuserVuserPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -1873,7 +1873,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	public function countPuserRolesRelatedByPuserId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(PuserKuserPeer::DATABASE_NAME);
+			$criteria = new Criteria(PuserVuserPeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -1930,7 +1930,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 		}
 		if (!in_array($l, $this->collPuserRolesRelatedByPuserId, true)) { // only add it if the **same** object is not already associated
 			array_push($this->collPuserRolesRelatedByPuserId, $l);
-			$l->setPuserKuserRelatedByPuserId($this);
+			$l->setPuserVuserRelatedByPuserId($this);
 		}
 	}
 
@@ -1938,18 +1938,18 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this PuserKuser is new, it will return
-	 * an empty collection; or if this PuserKuser has previously
+	 * Otherwise if this PuserVuser is new, it will return
+	 * an empty collection; or if this PuserVuser has previously
 	 * been saved, it will retrieve related PuserRolesRelatedByPuserId from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in PuserKuser.
+	 * actually need in PuserVuser.
 	 */
-	public function getPuserRolesRelatedByPuserIdJoinkshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getPuserRolesRelatedByPuserIdJoinvshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(PuserKuserPeer::DATABASE_NAME);
+			$criteria = new Criteria(PuserVuserPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -1963,7 +1963,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 				$criteria->add(PuserRolePeer::PUSER_ID, $this->puser_id);
 
-				$this->collPuserRolesRelatedByPuserId = PuserRolePeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collPuserRolesRelatedByPuserId = PuserRolePeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
@@ -1973,7 +1973,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 			$criteria->add(PuserRolePeer::PUSER_ID, $this->puser_id);
 
 			if (!isset($this->lastPuserRoleRelatedByPuserIdCriteria) || !$this->lastPuserRoleRelatedByPuserIdCriteria->equals($criteria)) {
-				$this->collPuserRolesRelatedByPuserId = PuserRolePeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collPuserRolesRelatedByPuserId = PuserRolePeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastPuserRoleRelatedByPuserIdCriteria = $criteria;
@@ -2007,7 +2007,7 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 
 		$this->collPuserRolesRelatedByPartnerId = null;
 		$this->collPuserRolesRelatedByPuserId = null;
-			$this->akuser = null;
+			$this->avuser = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */
@@ -2127,4 +2127,4 @@ abstract class BasePuserKuser extends BaseObject  implements Persistent {
 	
 	/* ---------------------- CustomData functions ------------------------- */
 	
-} // BasePuserKuser
+} // BasePuserVuser

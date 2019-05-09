@@ -32,10 +32,10 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	protected $partner_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the object_type field.
@@ -50,10 +50,10 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	protected $flagged_entry_id;
 
 	/**
-	 * The value for the flagged_kuser_id field.
+	 * The value for the flagged_vuser_id field.
 	 * @var        int
 	 */
-	protected $flagged_kuser_id;
+	protected $flagged_vuser_id;
 
 	/**
 	 * The value for the status field.
@@ -86,9 +86,9 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	protected $flag_type;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuserRelatedByKuserId;
+	protected $avuserRelatedByVuserId;
 
 	/**
 	 * @var        entry
@@ -96,9 +96,9 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	protected $aentry;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuserRelatedByFlaggedKuserId;
+	protected $avuserRelatedByFlaggedVuserId;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -166,13 +166,13 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -196,13 +196,13 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [flagged_kuser_id] column value.
+	 * Get the [flagged_vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getFlaggedKuserId()
+	public function getFlaggedVuserId()
 	{
-		return $this->flagged_kuser_id;
+		return $this->flagged_vuser_id;
 	}
 
 	/**
@@ -362,31 +362,31 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	} // setPartnerId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     moderationFlag The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[moderationFlagPeer::KUSER_ID]))
-			$this->oldColumnsValues[moderationFlagPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[moderationFlagPeer::VUSER_ID]))
+			$this->oldColumnsValues[moderationFlagPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = moderationFlagPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = moderationFlagPeer::VUSER_ID;
 		}
 
-		if ($this->akuserRelatedByKuserId !== null && $this->akuserRelatedByKuserId->getId() !== $v) {
-			$this->akuserRelatedByKuserId = null;
+		if ($this->avuserRelatedByVuserId !== null && $this->avuserRelatedByVuserId->getId() !== $v) {
+			$this->avuserRelatedByVuserId = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [object_type] column.
@@ -439,31 +439,31 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	} // setFlaggedEntryId()
 
 	/**
-	 * Set the value of [flagged_kuser_id] column.
+	 * Set the value of [flagged_vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     moderationFlag The current object (for fluent API support)
 	 */
-	public function setFlaggedKuserId($v)
+	public function setFlaggedVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[moderationFlagPeer::FLAGGED_KUSER_ID]))
-			$this->oldColumnsValues[moderationFlagPeer::FLAGGED_KUSER_ID] = $this->flagged_kuser_id;
+		if(!isset($this->oldColumnsValues[moderationFlagPeer::FLAGGED_VUSER_ID]))
+			$this->oldColumnsValues[moderationFlagPeer::FLAGGED_VUSER_ID] = $this->flagged_vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->flagged_kuser_id !== $v) {
-			$this->flagged_kuser_id = $v;
-			$this->modifiedColumns[] = moderationFlagPeer::FLAGGED_KUSER_ID;
+		if ($this->flagged_vuser_id !== $v) {
+			$this->flagged_vuser_id = $v;
+			$this->modifiedColumns[] = moderationFlagPeer::FLAGGED_VUSER_ID;
 		}
 
-		if ($this->akuserRelatedByFlaggedKuserId !== null && $this->akuserRelatedByFlaggedKuserId->getId() !== $v) {
-			$this->akuserRelatedByFlaggedKuserId = null;
+		if ($this->avuserRelatedByFlaggedVuserId !== null && $this->avuserRelatedByFlaggedVuserId->getId() !== $v) {
+			$this->avuserRelatedByFlaggedVuserId = null;
 		}
 
 		return $this;
-	} // setFlaggedKuserId()
+	} // setFlaggedVuserId()
 
 	/**
 	 * Set the value of [status] column.
@@ -666,10 +666,10 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->partner_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-			$this->kuser_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+			$this->vuser_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->object_type = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->flagged_entry_id = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->flagged_kuser_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+			$this->flagged_vuser_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->status = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
 			$this->created_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
 			$this->updated_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
@@ -707,14 +707,14 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuserRelatedByKuserId !== null && $this->kuser_id !== $this->akuserRelatedByKuserId->getId()) {
-			$this->akuserRelatedByKuserId = null;
+		if ($this->avuserRelatedByVuserId !== null && $this->vuser_id !== $this->avuserRelatedByVuserId->getId()) {
+			$this->avuserRelatedByVuserId = null;
 		}
 		if ($this->aentry !== null && $this->flagged_entry_id !== $this->aentry->getId()) {
 			$this->aentry = null;
 		}
-		if ($this->akuserRelatedByFlaggedKuserId !== null && $this->flagged_kuser_id !== $this->akuserRelatedByFlaggedKuserId->getId()) {
-			$this->akuserRelatedByFlaggedKuserId = null;
+		if ($this->avuserRelatedByFlaggedVuserId !== null && $this->flagged_vuser_id !== $this->avuserRelatedByFlaggedVuserId->getId()) {
+			$this->avuserRelatedByFlaggedVuserId = null;
 		}
 	} // ensureConsistency
 
@@ -757,9 +757,9 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuserRelatedByKuserId = null;
+			$this->avuserRelatedByVuserId = null;
 			$this->aentry = null;
-			$this->akuserRelatedByFlaggedKuserId = null;
+			$this->avuserRelatedByFlaggedVuserId = null;
 		} // if (deep)
 	}
 
@@ -878,11 +878,11 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuserRelatedByKuserId !== null) {
-				if ($this->akuserRelatedByKuserId->isModified() || $this->akuserRelatedByKuserId->isNew()) {
-					$affectedRows += $this->akuserRelatedByKuserId->save($con);
+			if ($this->avuserRelatedByVuserId !== null) {
+				if ($this->avuserRelatedByVuserId->isModified() || $this->avuserRelatedByVuserId->isNew()) {
+					$affectedRows += $this->avuserRelatedByVuserId->save($con);
 				}
-				$this->setkuserRelatedByKuserId($this->akuserRelatedByKuserId);
+				$this->setvuserRelatedByVuserId($this->avuserRelatedByVuserId);
 			}
 
 			if ($this->aentry !== null) {
@@ -892,11 +892,11 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 				$this->setentry($this->aentry);
 			}
 
-			if ($this->akuserRelatedByFlaggedKuserId !== null) {
-				if ($this->akuserRelatedByFlaggedKuserId->isModified() || $this->akuserRelatedByFlaggedKuserId->isNew()) {
-					$affectedRows += $this->akuserRelatedByFlaggedKuserId->save($con);
+			if ($this->avuserRelatedByFlaggedVuserId !== null) {
+				if ($this->avuserRelatedByFlaggedVuserId->isModified() || $this->avuserRelatedByFlaggedVuserId->isNew()) {
+					$affectedRows += $this->avuserRelatedByFlaggedVuserId->save($con);
 				}
-				$this->setkuserRelatedByFlaggedKuserId($this->akuserRelatedByFlaggedKuserId);
+				$this->setvuserRelatedByFlaggedVuserId($this->avuserRelatedByFlaggedVuserId);
 			}
 
 			if ($this->isNew() ) {
@@ -963,7 +963,7 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -987,12 +987,12 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1010,8 +1010,8 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1136,9 +1136,9 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuserRelatedByKuserId !== null) {
-				if (!$this->akuserRelatedByKuserId->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuserRelatedByKuserId->getValidationFailures());
+			if ($this->avuserRelatedByVuserId !== null) {
+				if (!$this->avuserRelatedByVuserId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuserRelatedByVuserId->getValidationFailures());
 				}
 			}
 
@@ -1148,9 +1148,9 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 				}
 			}
 
-			if ($this->akuserRelatedByFlaggedKuserId !== null) {
-				if (!$this->akuserRelatedByFlaggedKuserId->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuserRelatedByFlaggedKuserId->getValidationFailures());
+			if ($this->avuserRelatedByFlaggedVuserId !== null) {
+				if (!$this->avuserRelatedByFlaggedVuserId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuserRelatedByFlaggedVuserId->getValidationFailures());
 				}
 			}
 
@@ -1200,7 +1200,7 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 				return $this->getPartnerId();
 				break;
 			case 2:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 3:
 				return $this->getObjectType();
@@ -1209,7 +1209,7 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 				return $this->getFlaggedEntryId();
 				break;
 			case 5:
-				return $this->getFlaggedKuserId();
+				return $this->getFlaggedVuserId();
 				break;
 			case 6:
 				return $this->getStatus();
@@ -1249,10 +1249,10 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getPartnerId(),
-			$keys[2] => $this->getKuserId(),
+			$keys[2] => $this->getVuserId(),
 			$keys[3] => $this->getObjectType(),
 			$keys[4] => $this->getFlaggedEntryId(),
-			$keys[5] => $this->getFlaggedKuserId(),
+			$keys[5] => $this->getFlaggedVuserId(),
 			$keys[6] => $this->getStatus(),
 			$keys[7] => $this->getCreatedAt(),
 			$keys[8] => $this->getUpdatedAt(),
@@ -1296,7 +1296,7 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 				$this->setPartnerId($value);
 				break;
 			case 2:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 3:
 				$this->setObjectType($value);
@@ -1305,7 +1305,7 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 				$this->setFlaggedEntryId($value);
 				break;
 			case 5:
-				$this->setFlaggedKuserId($value);
+				$this->setFlaggedVuserId($value);
 				break;
 			case 6:
 				$this->setStatus($value);
@@ -1348,10 +1348,10 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setPartnerId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setKuserId($arr[$keys[2]]);
+		if (array_key_exists($keys[2], $arr)) $this->setVuserId($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setObjectType($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setFlaggedEntryId($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setFlaggedKuserId($arr[$keys[5]]);
+		if (array_key_exists($keys[5], $arr)) $this->setFlaggedVuserId($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setStatus($arr[$keys[6]]);
 		if (array_key_exists($keys[7], $arr)) $this->setCreatedAt($arr[$keys[7]]);
 		if (array_key_exists($keys[8], $arr)) $this->setUpdatedAt($arr[$keys[8]]);
@@ -1370,10 +1370,10 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 
 		if ($this->isColumnModified(moderationFlagPeer::ID)) $criteria->add(moderationFlagPeer::ID, $this->id);
 		if ($this->isColumnModified(moderationFlagPeer::PARTNER_ID)) $criteria->add(moderationFlagPeer::PARTNER_ID, $this->partner_id);
-		if ($this->isColumnModified(moderationFlagPeer::KUSER_ID)) $criteria->add(moderationFlagPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(moderationFlagPeer::VUSER_ID)) $criteria->add(moderationFlagPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(moderationFlagPeer::OBJECT_TYPE)) $criteria->add(moderationFlagPeer::OBJECT_TYPE, $this->object_type);
 		if ($this->isColumnModified(moderationFlagPeer::FLAGGED_ENTRY_ID)) $criteria->add(moderationFlagPeer::FLAGGED_ENTRY_ID, $this->flagged_entry_id);
-		if ($this->isColumnModified(moderationFlagPeer::FLAGGED_KUSER_ID)) $criteria->add(moderationFlagPeer::FLAGGED_KUSER_ID, $this->flagged_kuser_id);
+		if ($this->isColumnModified(moderationFlagPeer::FLAGGED_VUSER_ID)) $criteria->add(moderationFlagPeer::FLAGGED_VUSER_ID, $this->flagged_vuser_id);
 		if ($this->isColumnModified(moderationFlagPeer::STATUS)) $criteria->add(moderationFlagPeer::STATUS, $this->status);
 		if ($this->isColumnModified(moderationFlagPeer::CREATED_AT)) $criteria->add(moderationFlagPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(moderationFlagPeer::UPDATED_AT)) $criteria->add(moderationFlagPeer::UPDATED_AT, $this->updated_at);
@@ -1447,13 +1447,13 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 
 		$copyObj->setPartnerId($this->partner_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setObjectType($this->object_type);
 
 		$copyObj->setFlaggedEntryId($this->flagged_entry_id);
 
-		$copyObj->setFlaggedKuserId($this->flagged_kuser_id);
+		$copyObj->setFlaggedVuserId($this->flagged_vuser_id);
 
 		$copyObj->setStatus($this->status);
 
@@ -1529,26 +1529,26 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
+	 * @param      vuser $v
 	 * @return     moderationFlag The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuserRelatedByKuserId(kuser $v = null)
+	public function setvuserRelatedByVuserId(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuserRelatedByKuserId = $v;
+		$this->avuserRelatedByVuserId = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addmoderationFlagRelatedByKuserId($this);
+			$v->addmoderationFlagRelatedByVuserId($this);
 		}
 
 		return $this;
@@ -1556,25 +1556,25 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuserRelatedByKuserId(PropelPDO $con = null)
+	public function getvuserRelatedByVuserId(PropelPDO $con = null)
 	{
-		if ($this->akuserRelatedByKuserId === null && ($this->kuser_id !== null)) {
-			$this->akuserRelatedByKuserId = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuserRelatedByVuserId === null && ($this->vuser_id !== null)) {
+			$this->avuserRelatedByVuserId = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuserRelatedByKuserId->addmoderationFlagsRelatedByKuserId($this);
+			   $this->avuserRelatedByVuserId->addmoderationFlagsRelatedByVuserId($this);
 			 */
 		}
-		return $this->akuserRelatedByKuserId;
+		return $this->avuserRelatedByVuserId;
 	}
 
 	/**
@@ -1627,26 +1627,26 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
+	 * @param      vuser $v
 	 * @return     moderationFlag The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuserRelatedByFlaggedKuserId(kuser $v = null)
+	public function setvuserRelatedByFlaggedVuserId(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setFlaggedKuserId(NULL);
+			$this->setFlaggedVuserId(NULL);
 		} else {
-			$this->setFlaggedKuserId($v->getId());
+			$this->setFlaggedVuserId($v->getId());
 		}
 
-		$this->akuserRelatedByFlaggedKuserId = $v;
+		$this->avuserRelatedByFlaggedVuserId = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addmoderationFlagRelatedByFlaggedKuserId($this);
+			$v->addmoderationFlagRelatedByFlaggedVuserId($this);
 		}
 
 		return $this;
@@ -1654,25 +1654,25 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuserRelatedByFlaggedKuserId(PropelPDO $con = null)
+	public function getvuserRelatedByFlaggedVuserId(PropelPDO $con = null)
 	{
-		if ($this->akuserRelatedByFlaggedKuserId === null && ($this->flagged_kuser_id !== null)) {
-			$this->akuserRelatedByFlaggedKuserId = kuserPeer::retrieveByPk($this->flagged_kuser_id);
+		if ($this->avuserRelatedByFlaggedVuserId === null && ($this->flagged_vuser_id !== null)) {
+			$this->avuserRelatedByFlaggedVuserId = vuserPeer::retrieveByPk($this->flagged_vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuserRelatedByFlaggedKuserId->addmoderationFlagsRelatedByFlaggedKuserId($this);
+			   $this->avuserRelatedByFlaggedVuserId->addmoderationFlagsRelatedByFlaggedVuserId($this);
 			 */
 		}
-		return $this->akuserRelatedByFlaggedKuserId;
+		return $this->avuserRelatedByFlaggedVuserId;
 	}
 
 	/**
@@ -1689,9 +1689,9 @@ abstract class BasemoderationFlag extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akuserRelatedByKuserId = null;
+			$this->avuserRelatedByVuserId = null;
 			$this->aentry = null;
-			$this->akuserRelatedByFlaggedKuserId = null;
+			$this->avuserRelatedByFlaggedVuserId = null;
 	}
 
 } // BasemoderationFlag

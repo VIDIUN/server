@@ -20,10 +20,10 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	protected static $peer;
 
 	/**
-	 * The value for the kalt_token field.
+	 * The value for the vidi_token field.
 	 * @var        string
 	 */
-	protected $kalt_token;
+	protected $vidi_token;
 
 	/**
 	 * The value for the frob field.
@@ -135,13 +135,13 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kalt_token] column value.
+	 * Get the [vidi_token] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKaltToken()
+	public function getVidiToken()
 	{
-		return $this->kalt_token;
+		return $this->vidi_token;
 	}
 
 	/**
@@ -275,27 +275,27 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Set the value of [kalt_token] column.
+	 * Set the value of [vidi_token] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     flickrToken The current object (for fluent API support)
 	 */
-	public function setKaltToken($v)
+	public function setVidiToken($v)
 	{
-		if(!isset($this->oldColumnsValues[flickrTokenPeer::KALT_TOKEN]))
-			$this->oldColumnsValues[flickrTokenPeer::KALT_TOKEN] = $this->kalt_token;
+		if(!isset($this->oldColumnsValues[flickrTokenPeer::VIDI_TOKEN]))
+			$this->oldColumnsValues[flickrTokenPeer::VIDI_TOKEN] = $this->vidi_token;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->kalt_token !== $v) {
-			$this->kalt_token = $v;
-			$this->modifiedColumns[] = flickrTokenPeer::KALT_TOKEN;
+		if ($this->vidi_token !== $v) {
+			$this->vidi_token = $v;
+			$this->modifiedColumns[] = flickrTokenPeer::VIDI_TOKEN;
 		}
 
 		return $this;
-	} // setKaltToken()
+	} // setVidiToken()
 
 	/**
 	 * Set the value of [frob] column.
@@ -546,7 +546,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	{
 		try {
 
-			$this->kalt_token = ($row[$startcol + 0] !== null) ? (string) $row[$startcol + 0] : null;
+			$this->vidi_token = ($row[$startcol + 0] !== null) ? (string) $row[$startcol + 0] : null;
 			$this->frob = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->token = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->nsid = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
@@ -799,7 +799,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -823,12 +823,12 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -846,8 +846,8 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1006,7 +1006,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	{
 		switch($pos) {
 			case 0:
-				return $this->getKaltToken();
+				return $this->getVidiToken();
 				break;
 			case 1:
 				return $this->getFrob();
@@ -1050,7 +1050,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	{
 		$keys = flickrTokenPeer::getFieldNames($keyType);
 		$result = array(
-			$keys[0] => $this->getKaltToken(),
+			$keys[0] => $this->getVidiToken(),
 			$keys[1] => $this->getFrob(),
 			$keys[2] => $this->getToken(),
 			$keys[3] => $this->getNsid(),
@@ -1090,7 +1090,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	{
 		switch($pos) {
 			case 0:
-				$this->setKaltToken($value);
+				$this->setVidiToken($value);
 				break;
 			case 1:
 				$this->setFrob($value);
@@ -1137,7 +1137,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	{
 		$keys = flickrTokenPeer::getFieldNames($keyType);
 
-		if (array_key_exists($keys[0], $arr)) $this->setKaltToken($arr[$keys[0]]);
+		if (array_key_exists($keys[0], $arr)) $this->setVidiToken($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setFrob($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setToken($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setNsid($arr[$keys[3]]);
@@ -1156,7 +1156,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	{
 		$criteria = new Criteria(flickrTokenPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(flickrTokenPeer::KALT_TOKEN)) $criteria->add(flickrTokenPeer::KALT_TOKEN, $this->kalt_token);
+		if ($this->isColumnModified(flickrTokenPeer::VIDI_TOKEN)) $criteria->add(flickrTokenPeer::VIDI_TOKEN, $this->vidi_token);
 		if ($this->isColumnModified(flickrTokenPeer::FROB)) $criteria->add(flickrTokenPeer::FROB, $this->frob);
 		if ($this->isColumnModified(flickrTokenPeer::TOKEN)) $criteria->add(flickrTokenPeer::TOKEN, $this->token);
 		if ($this->isColumnModified(flickrTokenPeer::NSID)) $criteria->add(flickrTokenPeer::NSID, $this->nsid);
@@ -1180,7 +1180,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	{
 		$criteria = new Criteria(flickrTokenPeer::DATABASE_NAME);
 
-		$criteria->add(flickrTokenPeer::KALT_TOKEN, $this->kalt_token);
+		$criteria->add(flickrTokenPeer::VIDI_TOKEN, $this->vidi_token);
 		
 		if($this->alreadyInSave && count($this->modifiedColumns) == 2 && $this->isColumnModified(flickrTokenPeer::UPDATED_AT))
 		{
@@ -1203,18 +1203,18 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	 */
 	public function getPrimaryKey()
 	{
-		return $this->getKaltToken();
+		return $this->getVidiToken();
 	}
 
 	/**
-	 * Generic method to set the primary key (kalt_token column).
+	 * Generic method to set the primary key (vidi_token column).
 	 *
 	 * @param      string $key Primary key.
 	 * @return     void
 	 */
 	public function setPrimaryKey($key)
 	{
-		$this->setKaltToken($key);
+		$this->setVidiToken($key);
 	}
 
 	/**
@@ -1230,7 +1230,7 @@ abstract class BaseflickrToken extends BaseObject  implements Persistent {
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setKaltToken($this->kalt_token);
+		$copyObj->setVidiToken($this->vidi_token);
 
 		$copyObj->setFrob($this->frob);
 

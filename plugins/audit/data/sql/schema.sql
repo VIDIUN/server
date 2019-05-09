@@ -24,10 +24,10 @@ CREATE TABLE `audit_trail`
 	`master_partner_id` INTEGER,
 	`partner_id` INTEGER,
 	`request_id` VARCHAR(31),
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`action` VARCHAR(31),
 	`data` TEXT,
-	`ks` VARCHAR(511),
+	`vs` VARCHAR(511),
 	`context` TINYINT,
 	`entry_point` VARCHAR(127),
 	`server_name` VARCHAR(63),
@@ -39,7 +39,7 @@ CREATE TABLE `audit_trail`
 	PRIMARY KEY (`id`),
 	KEY `object_index`(`object_type`, `object_id`),
 	KEY `partner_entry_index`(`partner_id`, `entry_id`),
-	KEY `kuser_index`(`kuser_id`),
+	KEY `vuser_index`(`vuser_id`),
 	KEY `status_index`(`status`)
 )Type=InnoDB;
 

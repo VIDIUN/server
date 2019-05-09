@@ -2,10 +2,10 @@
 /**
  * Event consumer which finishes up the export process to Kontiki
  */
-class kKontikiManager implements kBatchJobStatusEventConsumer
+class vKontikiManager implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob) 
 	{
@@ -13,7 +13,7 @@ class kKontikiManager implements kBatchJobStatusEventConsumer
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
 				$data = $dbBatchJob->getData();
 				$kontikiFileSync = FileSyncPeer::retrieveByPK($data->getSrcFileSyncId());
-                /* @var $data kStorageExportJobData */
+                /* @var $data vStorageExportJobData */
                 $asset = assetPeer::retrieveByFileSync($kontikiFileSync);
                 $asset->setTags(KontikiPlugin::KONTIKI_ASSET_TAG);
                 $asset->save();
@@ -29,7 +29,7 @@ class kKontikiManager implements kBatchJobStatusEventConsumer
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob) {
 		if ($dbBatchJob->getJobType() == BatchJobType::STORAGE_EXPORT

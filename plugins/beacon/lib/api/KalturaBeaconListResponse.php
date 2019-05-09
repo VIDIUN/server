@@ -4,10 +4,10 @@
  * @package plugins.beacon
  * @subpackage api.objects
  */
-class KalturaBeaconListResponse extends KalturaListResponse
+class VidiunBeaconListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaBeaconArray
+	 * @var VidiunBeaconArray
 	 * @readonly
 	 */
 	public $objects;

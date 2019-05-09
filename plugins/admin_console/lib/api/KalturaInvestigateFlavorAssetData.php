@@ -3,34 +3,34 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaInvestigateFlavorAssetData extends KalturaObject
+class VidiunInvestigateFlavorAssetData extends VidiunObject
 {
 	/**
-	 * @var KalturaFlavorAsset
+	 * @var VidiunFlavorAsset
 	 * @readonly
 	 */
 	public $flavorAsset;
 
 	/**
-	 * @var KalturaFileSyncListResponse
+	 * @var VidiunFileSyncListResponse
 	 * @readonly
 	 */
 	public $fileSyncs;
 
 	/**
-	 * @var KalturaMediaInfoListResponse
+	 * @var VidiunMediaInfoListResponse
 	 * @readonly
 	 */
 	public $mediaInfos;
 
 	/**
-	 * @var KalturaFlavorParams
+	 * @var VidiunFlavorParams
 	 * @readonly
 	 */
 	public $flavorParams;
 
 	/**
-	 * @var KalturaFlavorParamsOutputListResponse
+	 * @var VidiunFlavorParamsOutputListResponse
 	 * @readonly
 	 */
 	public $flavorParamsOutputs;

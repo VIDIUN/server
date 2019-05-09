@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaCategoryOrderBy extends KalturaStringEnum
+class VidiunCategoryOrderBy extends VidiunStringEnum
 {
 	const DEPTH_ASC = "+depth";
 	const DEPTH_DESC = "-depth";

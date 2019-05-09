@@ -3,7 +3,7 @@
  * @package plugins.youTubeDistribution
  * @subpackage lib
  */
-class YouTubeDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class YouTubeDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const YOUTUBE = 'YOUTUBE';
 	

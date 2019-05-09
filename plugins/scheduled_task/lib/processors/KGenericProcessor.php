@@ -4,22 +4,22 @@
  * @package plugins.scheduledTask
  * @subpackage lib.processors
  */
-class KGenericProcessor
+class VGenericProcessor
 {
 	/**
-	 * @var KScheduledTaskRunner
+	 * @var VScheduledTaskRunner
 	 */
 	protected $taskRunner;
 
-	public function __construct(KScheduledTaskRunner $taskRunner)
+	public function __construct(VScheduledTaskRunner $taskRunner)
 	{
 		$this->taskRunner = $taskRunner;
 	}
 
 	/**
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 */
-	public function processProfile(KalturaScheduledTaskProfile $profile)
+	public function processProfile(VidiunScheduledTaskProfile $profile)
 	{
 		$this->taskRunner->impersonate($profile->partnerId);
 		try
@@ -47,10 +47,10 @@ class KGenericProcessor
 	}
 
 	/**
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 * @return int
 	 */
-	protected function preProcess(KalturaScheduledTaskProfile $profile)
+	protected function preProcess(VidiunScheduledTaskProfile $profile)
 	{
 		$this->updateProfileBeforeExecution($profile);
 		if ($profile->maxTotalCountAllowed)
@@ -75,15 +75,15 @@ class KGenericProcessor
 	/**
 	 * Moves the profile to suspended status
 	 *
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 */
-	protected function suspendProfile(KalturaScheduledTaskProfile $profile)
+	protected function suspendProfile(VidiunScheduledTaskProfile $profile)
 	{
 		$scheduledTaskClient = $this->taskRunner->getScheduledTaskClient();
-		$profileForUpdate = new KalturaScheduledTaskProfile();
-		$profileForUpdate->status = KalturaScheduledTaskProfileStatus::SUSPENDED;
+		$profileForUpdate = new VidiunScheduledTaskProfile();
+		$profileForUpdate->status = VidiunScheduledTaskProfileStatus::SUSPENDED;
 		$scheduledTaskClient->scheduledTaskProfile->update($profile->id, $profileForUpdate);
-		KalturaLog::alert("Media Repurposing profile [$profile->id] has been suspended");
+		VidiunLog::alert("Media Repurposing profile [$profile->id] has been suspended");
 	}
 
 	/**
@@ -101,7 +101,7 @@ class KGenericProcessor
 		}
 		catch ( Exception $e )
 		{
-			KalturaLog::err( $e );
+			VidiunLog::err( $e );
 			return null;
 		}
 
@@ -114,10 +114,10 @@ class KGenericProcessor
 	}
 
 	/**
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 * @param $object
 	 */
-	protected function processObject(KalturaScheduledTaskProfile $profile, $object)
+	protected function processObject(VidiunScheduledTaskProfile $profile, $object)
 	{
 		$tasksCompleted = array();
 		$error = false;
@@ -125,7 +125,7 @@ class KGenericProcessor
 		{
 			if ($objectTask->type == ObjectTaskType::MAIL_NOTIFICATION)
 				continue; //no execute on object
-			/** @var KalturaObjectTask $objectTask */
+			/** @var VidiunObjectTask $objectTask */
 			$objectTaskEngine = $this->getObjectTaskEngineByType($objectTask->type);
 			$objectTaskEngine->setObjectTask($objectTask);
 			try
@@ -139,13 +139,13 @@ class KGenericProcessor
 				if (property_exists($object, 'id'))
 					$id = $object->id;
 
-				KalturaLog::err(sprintf('An error occurred while executing %s on object %s (id %s)', get_class($objectTaskEngine), get_class($object), $id));
-				KalturaLog::err($ex);
+				VidiunLog::err(sprintf('An error occurred while executing %s on object %s (id %s)', get_class($objectTaskEngine), get_class($object), $id));
+				VidiunLog::err($ex);
 				$error = true;
 
 				if ($objectTask->stopProcessingOnError)
 				{
-					KalturaLog::log('Object task is configured to stop processing on error');
+					VidiunLog::log('Object task is configured to stop processing on error');
 					break;
 				}
 			}
@@ -156,13 +156,13 @@ class KGenericProcessor
 
 	/**
 	 * @param $type
-	 * @return KObjectTaskEngineBase
+	 * @return VObjectTaskEngineBase
 	 */
 	protected function getObjectTaskEngineByType($type)
 	{
 		if (!isset($this->taskRunner->_objectEngineTasksCache[$type]))
 		{
-			$objectTaskEngine = KObjectTaskEngineFactory::getInstanceByType($type);
+			$objectTaskEngine = VObjectTaskEngineFactory::getInstanceByType($type);
 			$objectTaskEngine->setClient($this->taskRunner->getClient());
 			$this->taskRunner->_objectEngineTasksCache[$type] = $objectTaskEngine;
 		}
@@ -173,12 +173,12 @@ class KGenericProcessor
 	/**
 	 * Update the profile last execution time so we would have profiles rotation in case one execution dies
 	 *
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 */
-	protected function updateProfileBeforeExecution(KalturaScheduledTaskProfile $profile)
+	protected function updateProfileBeforeExecution(VidiunScheduledTaskProfile $profile)
 	{
 		$scheduledTaskClient = $this->taskRunner->getScheduledTaskClient();
-		$profileForUpdate = new KalturaScheduledTaskProfile();
+		$profileForUpdate = new VidiunScheduledTaskProfile();
 		$profileForUpdate->lastExecutionStartedAt = time();
 		$scheduledTaskClient->scheduledTaskProfile->update($profile->id, $profileForUpdate);
 	}
@@ -191,18 +191,18 @@ class KGenericProcessor
 	}
 
 	/**
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 * @param $maxTotalCountAllowed
 	 * @param $errorObjectsIds
 	 * @param $objectsData
 	 * @return mixed
 	 */
-	protected function handleProcess(KalturaScheduledTaskProfile $profile, $maxTotalCountAllowed)
+	protected function handleProcess(VidiunScheduledTaskProfile $profile, $maxTotalCountAllowed)
 	{
 		$objectsData = array();
 		$errorObjectsIds = array();
 
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageIndex = 1;
 		$pager->pageSize = 500;
 		while (true)
@@ -210,7 +210,7 @@ class KGenericProcessor
 			$result = ScheduledTaskBatchHelper::query($this->taskRunner->getClient(), $profile, $pager);
 			if ($result->totalCount > $maxTotalCountAllowed)
 			{
-				KalturaLog::crit("List query for profile $profile->id returned too many results ($result->totalCount when the allowed total count is $maxTotalCountAllowed), suspending the profile");
+				VidiunLog::crit("List query for profile $profile->id returned too many results ($result->totalCount when the allowed total count is $maxTotalCountAllowed), suspending the profile");
 				$this->suspendProfile($profile);
 				break;
 			}
@@ -235,27 +235,27 @@ class KGenericProcessor
 	}
 
 	/**
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 * @param $object
 	 * @param $errorObjectsIds
 	 * @param $objectsData
 	 * @return array
 	 */
-	protected function handleObject(KalturaScheduledTaskProfile $profile, $object, $errorObjectsIds, $objectsData)
+	protected function handleObject(VidiunScheduledTaskProfile $profile, $object, $errorObjectsIds, $objectsData)
 	{
 		list($error, $tasksCompleted) = $this->processObject($profile, $object);
 		if ($error)
 			$errorObjectsIds[] = $object->id;
-		else if ($object instanceof KalturaBaseEntry)
+		else if ($object instanceof VidiunBaseEntry)
 		{
 			if (!array_key_exists($object->userId, $objectsData))
 			{
 				$email = $this->getMailFromUserId($object->userId);
-				$objectsData[$object->userId] = array(KObjectTaskMailNotificationEngine::EMAIL => $email);
+				$objectsData[$object->userId] = array(VObjectTaskMailNotificationEngine::EMAIL => $email);
 			}
 
-			$idAndName = array(KObjectTaskMailNotificationEngine::ENTRY_ID => $object->id, KObjectTaskMailNotificationEngine::ENTRY_NAME => $object->name);
-			$objectsData[$object->userId][KObjectTaskMailNotificationEngine::ENTRIES_ID_AND_NAME][] = $idAndName;
+			$idAndName = array(VObjectTaskMailNotificationEngine::ENTRY_ID => $object->id, VObjectTaskMailNotificationEngine::ENTRY_NAME => $object->name);
+			$objectsData[$object->userId][VObjectTaskMailNotificationEngine::ENTRIES_ID_AND_NAME][] = $idAndName;
 		}
 		return array($error, $objectsData, $tasksCompleted);
 

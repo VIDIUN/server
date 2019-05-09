@@ -3,7 +3,7 @@
  * @package plugins.transcript
  * @subpackage api.objects
  */
-class KalturaTranscriptAsset extends KalturaAttachmentAsset
+class VidiunTranscriptAsset extends VidiunAttachmentAsset
 {
 	/**
 	 * The accuracy of the transcript - values between 0 and 1
@@ -13,19 +13,19 @@ class KalturaTranscriptAsset extends KalturaAttachmentAsset
 	
 	/**
 	 * Was verified by human or machine
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $humanVerified;
 	
 	/**
 	 * The language of the transcript
-	 * @var KalturaLanguage
+	 * @var VidiunLanguage
 	 */
 	public $language;
 	
 	/**
 	 * The provider of the transcript
-	 * @var KalturaTranscriptProviderType
+	 * @var VidiunTranscriptProviderType
 	 */
 	public $providerType;
 	

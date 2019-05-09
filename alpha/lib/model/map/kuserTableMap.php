@@ -2,7 +2,7 @@
 
 
 /**
- * This class defines the structure of the 'kuser' table.
+ * This class defines the structure of the 'vuser' table.
  *
  *
  *
@@ -14,12 +14,12 @@
  * @package Core
  * @subpackage model.map
  */
-class kuserTableMap extends TableMap {
+class vuserTableMap extends TableMap {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'Core.kuserTableMap';
+	const CLASS_NAME = 'Core.vuserTableMap';
 
 	/**
 	 * Initialize the table attributes, columns and validators
@@ -31,9 +31,9 @@ class kuserTableMap extends TableMap {
 	public function initialize()
 	{
 	  // attributes
-		$this->setName('kuser');
-		$this->setPhpName('kuser');
-		$this->setClassname('kuser');
+		$this->setName('vuser');
+		$this->setPhpName('vuser');
+		$this->setClassname('vuser');
 		$this->setPackage('Core');
 		$this->setUseIdGenerator(true);
 		// columns
@@ -71,7 +71,7 @@ class kuserTableMap extends TableMap {
 		$this->addColumn('FANS', 'Fans', 'INTEGER', false, null, 0);
 		$this->addColumn('ENTRIES', 'Entries', 'INTEGER', false, null, 0);
 		$this->addColumn('STORAGE_SIZE', 'StorageSize', 'INTEGER', false, null, 0);
-		$this->addColumn('PRODUCED_KSHOWS', 'ProducedKshows', 'INTEGER', false, null, 0);
+		$this->addColumn('PRODUCED_VSHOWS', 'ProducedVshows', 'INTEGER', false, null, 0);
 		$this->addColumn('STATUS', 'Status', 'INTEGER', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -92,23 +92,23 @@ class kuserTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kshow', 'kshow', RelationMap::ONE_TO_MANY, array('id' => 'producer_id', ), null, null);
-    $this->addRelation('entry', 'entry', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('comment', 'comment', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('flag', 'flag', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('favorite', 'favorite', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('KshowKuser', 'KshowKuser', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('PuserKuser', 'PuserKuser', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('Partner', 'Partner', RelationMap::ONE_TO_MANY, array('id' => 'anonymous_kuser_id', ), null, null);
-    $this->addRelation('moderation', 'moderation', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('moderationFlagRelatedByKuserId', 'moderationFlag', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('moderationFlagRelatedByFlaggedKuserId', 'moderationFlag', RelationMap::ONE_TO_MANY, array('id' => 'flagged_kuser_id', ), null, null);
-    $this->addRelation('categoryKuser', 'categoryKuser', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('UploadToken', 'UploadToken', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('KuserToUserRole', 'KuserToUserRole', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('KuserKgroupRelatedByKgroupId', 'KuserKgroup', RelationMap::ONE_TO_MANY, array('id' => 'kgroup_id', ), null, null);
-    $this->addRelation('KuserKgroupRelatedByKuserId', 'KuserKgroup', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
-    $this->addRelation('UserEntry', 'UserEntry', RelationMap::ONE_TO_MANY, array('id' => 'kuser_id', ), null, null);
+    $this->addRelation('vshow', 'vshow', RelationMap::ONE_TO_MANY, array('id' => 'producer_id', ), null, null);
+    $this->addRelation('entry', 'entry', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('comment', 'comment', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('flag', 'flag', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('favorite', 'favorite', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('VshowVuser', 'VshowVuser', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('PuserVuser', 'PuserVuser', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('Partner', 'Partner', RelationMap::ONE_TO_MANY, array('id' => 'anonymous_vuser_id', ), null, null);
+    $this->addRelation('moderation', 'moderation', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('moderationFlagRelatedByVuserId', 'moderationFlag', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('moderationFlagRelatedByFlaggedVuserId', 'moderationFlag', RelationMap::ONE_TO_MANY, array('id' => 'flagged_vuser_id', ), null, null);
+    $this->addRelation('categoryVuser', 'categoryVuser', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('UploadToken', 'UploadToken', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('VuserToUserRole', 'VuserToUserRole', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('VuserVgroupRelatedByVgroupId', 'VuserVgroup', RelationMap::ONE_TO_MANY, array('id' => 'vgroup_id', ), null, null);
+    $this->addRelation('VuserVgroupRelatedByVuserId', 'VuserVgroup', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
+    $this->addRelation('UserEntry', 'UserEntry', RelationMap::ONE_TO_MANY, array('id' => 'vuser_id', ), null, null);
 	} // buildRelations()
 
-} // kuserTableMap
+} // vuserTableMap

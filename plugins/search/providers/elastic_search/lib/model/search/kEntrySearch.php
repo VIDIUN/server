@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kEntrySearch extends kBaseESearch
+class vEntrySearch extends vBaseESearch
 {
 
     protected $isInitialized;
@@ -26,9 +26,9 @@ class kEntrySearch extends kBaseESearch
         $this->mainBoolQuery->addToFilter($displayInSearchQuery);
     }
 
-    public function doSearch(ESearchOperator $eSearchOperator, kPager $pager = null, $entriesStatus = array(), $objectId = null, ESearchOrderBy $order = null)
+    public function doSearch(ESearchOperator $eSearchOperator, vPager $pager = null, $entriesStatus = array(), $objectId = null, ESearchOrderBy $order = null)
     {
-        kEntryElasticEntitlement::init();
+        vEntryElasticEntitlement::init();
         if (!count($entriesStatus))
             $entriesStatus = array(entryStatus::READY);
         $this->initQuery($entriesStatus, $objectId, $pager, $order);
@@ -37,7 +37,7 @@ class kEntrySearch extends kBaseESearch
         return $result;
     }
 
-    protected function initQuery(array $statuses, $objectId, kPager $pager = null, ESearchOrderBy $order = null)
+    protected function initQuery(array $statuses, $objectId, vPager $pager = null, ESearchOrderBy $order = null)
     {
         $this->query = array(
             'index' => ElasticIndexMap::ELASTIC_ENTRY_INDEX,
@@ -48,8 +48,8 @@ class kEntrySearch extends kBaseESearch
 
     protected function initEntitlement(ESearchOperator $eSearchOperator, $objectId)
     {
-        kEntryElasticEntitlement::setFilteredCategoryIds($eSearchOperator, $objectId);
-        $contributors = kEntryElasticEntitlement::getEntitlementContributors();
+        vEntryElasticEntitlement::setFilteredCategoryIds($eSearchOperator, $objectId);
+        $contributors = vEntryElasticEntitlement::getEntitlementContributors();
         foreach ($contributors as $contributor)
         {
             if($contributor::shouldContribute())
@@ -65,21 +65,21 @@ class kEntrySearch extends kBaseESearch
     {
         $this->parentEntryEntitlementQuery = null;
 
-        if(kEntryElasticEntitlement::$parentEntitlement)
+        if(vEntryElasticEntitlement::$parentEntitlement)
         {
-            $EntitlementQueryBool = new kESearchBoolQuery();
+            $EntitlementQueryBool = new vESearchBoolQuery();
 
             //Validate that parent entry property exist
-            $parentQueryBool = new kESearchBoolQuery();
-            $parentExistQuery = new kESearchExistsQuery('parent_id');
+            $parentQueryBool = new vESearchBoolQuery();
+            $parentExistQuery = new vESearchExistsQuery('parent_id');
             $parentQueryBool->addToFilter($parentExistQuery);
             //assign by reference to create alias
             $this->parentEntryEntitlementQuery = &$parentQueryBool;
             $EntitlementQueryBool->addToShould($parentQueryBool);
 
             //Validate that parent entry property does not exist
-            $entryQueryBool = new kESearchBoolQuery();
-            $parentNotExistQuery = new kESearchExistsQuery('parent_id');
+            $entryQueryBool = new vESearchBoolQuery();
+            $parentNotExistQuery = new vESearchExistsQuery('parent_id');
             $entryQueryBool->addToMustNot($parentNotExistQuery);
             //assign by reference to create alias
             $this->entryEntitlementQuery = &$entryQueryBool;
@@ -90,7 +90,7 @@ class kEntrySearch extends kBaseESearch
         }
         else
         {
-            $EntitlementQueryBool = new kESearchBoolQuery();
+            $EntitlementQueryBool = new vESearchBoolQuery();
             //assign by reference to create alias
             $this->entryEntitlementQuery = &$EntitlementQueryBool;
             //add to main query filter

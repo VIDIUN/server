@@ -1,8 +1,8 @@
 <?php
-class kPlaybackContextDataHelper
+class vPlaybackContextDataHelper
 {
 	/**
-	 * @var kPlaybackContext
+	 * @var vPlaybackContext
 	 */
 	private $playbackContext;
 
@@ -39,13 +39,13 @@ class kPlaybackContextDataHelper
 	}
 
 	/**
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @param entry $dbEntry
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
-	public function constructPlaybackContextResult(kContextDataHelper $contextDataHelper, entry $dbEntry)
+	public function constructPlaybackContextResult(vContextDataHelper $contextDataHelper, entry $dbEntry)
 	{
-		$this->playbackContext = new kPlaybackContext();
+		$this->playbackContext = new vPlaybackContext();
 		$this->generateRestrictedMessages($contextDataHelper);
 
 		if ($this->hasBlockAction($contextDataHelper))
@@ -58,7 +58,7 @@ class kPlaybackContextDataHelper
 			$rootEntryId = $dbEntry->getRootEntryId();
 			$rootEntry = entryPeer::retrieveByPK($rootEntryId);
 			if (!$rootEntry)
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $rootEntryId);
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $rootEntryId);
 
 			$this->constructLivePlaybackSources($rootEntry, $contextDataHelper, $dbEntry);
 		} elseif ($dbEntry->getType() == entryType::LIVE_STREAM)
@@ -79,16 +79,16 @@ class kPlaybackContextDataHelper
 	}
 
 	/**
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @return boolean
 	 */
-	private function hasBlockAction(kContextDataHelper $contextDataHelper)
+	private function hasBlockAction(vContextDataHelper $contextDataHelper)
 	{
 		$actions = $contextDataHelper->getContextDataResult()->getActions();
 
 		foreach ($actions as $action)
 		{
-			/* @var $action kAccessControlAction */
+			/* @var $action vAccessControlAction */
 			if ($action->getType() == RuleActionType::BLOCK)
 			{
 				return true;
@@ -98,7 +98,7 @@ class kPlaybackContextDataHelper
 	}
 
 	/**
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @return boolean
 	 */
 	private function generateRestrictedMessages($contextDataHelper)
@@ -108,31 +108,31 @@ class kPlaybackContextDataHelper
 		foreach ($contextDataHelper->getContextDataResult()->getRulesCodesMap() as $code => $messages)
 		{
 			foreach ($messages as $message)
-				$playbackAccessContorlMessages[] = new kAccessControlMessage($code, $message);
+				$playbackAccessContorlMessages[] = new vAccessControlMessage($code, $message);
 		}
 
 		if ($contextDataHelper->getContextDataResult()->getIsCountryRestricted())
-			$playbackAccessContorlMessages[] = new kAccessControlMessage(RuleRestrictions::COUNTRY_RESTRICTED_CODE, RuleRestrictions::COUNTRY_RESTRICTED);
+			$playbackAccessContorlMessages[] = new vAccessControlMessage(RuleRestrictions::COUNTRY_RESTRICTED_CODE, RuleRestrictions::COUNTRY_RESTRICTED);
 		if ($contextDataHelper->getContextDataResult()->getIsIpAddressRestricted())
-			$playbackAccessContorlMessages[] = new kAccessControlMessage(RuleRestrictions::IP_RESTRICTED_CODE, RuleRestrictions::IP_RESTRICTED);
+			$playbackAccessContorlMessages[] = new vAccessControlMessage(RuleRestrictions::IP_RESTRICTED_CODE, RuleRestrictions::IP_RESTRICTED);
 		if ($contextDataHelper->getContextDataResult()->getIsSessionRestricted()
 			&& ($contextDataHelper->getContextDataResult()->getPreviewLength() == -1 || is_null($contextDataHelper->getContextDataResult()->getPreviewLength())))
-			$playbackAccessContorlMessages[] = new kAccessControlMessage(RuleRestrictions::SESSION_RESTRICTED_CODE, RuleRestrictions::SESSION_RESTRICTED);
+			$playbackAccessContorlMessages[] = new vAccessControlMessage(RuleRestrictions::SESSION_RESTRICTED_CODE, RuleRestrictions::SESSION_RESTRICTED);
 		if ($contextDataHelper->getContextDataResult()->getIsUserAgentRestricted())
-			$playbackAccessContorlMessages[] = new kAccessControlMessage(RuleRestrictions::USER_AGENT_RESTRICTED_CODE, RuleRestrictions::USER_AGENT_RESTRICTED);
+			$playbackAccessContorlMessages[] = new vAccessControlMessage(RuleRestrictions::USER_AGENT_RESTRICTED_CODE, RuleRestrictions::USER_AGENT_RESTRICTED);
 		if ($contextDataHelper->getContextDataResult()->getIsSiteRestricted())
-			$playbackAccessContorlMessages[] = new kAccessControlMessage(RuleRestrictions::SITE_RESTRICTED_CODE, RuleRestrictions::SITE_RESTRICTED);
+			$playbackAccessContorlMessages[] = new vAccessControlMessage(RuleRestrictions::SITE_RESTRICTED_CODE, RuleRestrictions::SITE_RESTRICTED);
 		if (!$this->isScheduledNow)
-			$playbackAccessContorlMessages[] = new kAccessControlMessage(RuleRestrictions::SCHEDULED_RESTRICTED_CODE, RuleRestrictions::SCHEDULED_RESTRICTED);
+			$playbackAccessContorlMessages[] = new vAccessControlMessage(RuleRestrictions::SCHEDULED_RESTRICTED_CODE, RuleRestrictions::SCHEDULED_RESTRICTED);
 
 		$this->playbackContext->setMessages($playbackAccessContorlMessages);
 	}
 
 	/**
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @return array
 	 */
-	private function getProfileIdsToFilter(kContextDataHelper $contextDataHelper)
+	private function getProfileIdsToFilter(vContextDataHelper $contextDataHelper)
 	{
 		$actions = $contextDataHelper->getContextDataResult()->getActions();
 		$deliveryProfileIds = null;
@@ -140,10 +140,10 @@ class kPlaybackContextDataHelper
 
 		foreach ($actions as $action)
 		{
-			/* @var $action kAccessControlAction */
+			/* @var $action vAccessControlAction */
 			if ($action->getType() == RuleActionType::LIMIT_DELIVERY_PROFILES)
 			{
-				/* @var $action kAccessControlLimitDeliveryProfilesAction */
+				/* @var $action vAccessControlLimitDeliveryProfilesAction */
 				$deliveryProfileIds = explode(',', $action->getDeliveryProfileIds());
 				$deliveryProfilesParamsNotIn = $action->getIsBlockedList();
 			}
@@ -152,18 +152,18 @@ class kPlaybackContextDataHelper
 	}
 
 	/**
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @return array
 	 */
-	private function getWhiteListedDeliveryProfileIds(kContextDataHelper $contextDataHelper)
+	private function getWhiteListedDeliveryProfileIds(vContextDataHelper $contextDataHelper)
 	{
 		$actions = $contextDataHelper->getContextDataResult()->getActions();
 		foreach ($actions as $action)
 		{
-			/* @var $action kAccessControlAction */
+			/* @var $action vAccessControlAction */
 			if ($action->getType() == RuleActionType::LIMIT_DELIVERY_PROFILES && !$action->getIsBlockedList() && $action->getDeliveryProfileIds())
 			{
-				/* @var $action kAccessControlLimitDeliveryProfilesAction */
+				/* @var $action vAccessControlLimitDeliveryProfilesAction */
 				return explode(',', $action->getDeliveryProfileIds());
 			}
 		}
@@ -171,10 +171,10 @@ class kPlaybackContextDataHelper
 	}
 
 	/**
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @return array
 	 */
-	private function getFlavorParamsIdsToFilter(kContextDataHelper $contextDataHelper)
+	private function getFlavorParamsIdsToFilter(vContextDataHelper $contextDataHelper)
 	{
 		$actions = $contextDataHelper->getContextDataResult()->getActions();
 		$flavorParamsIds = null;
@@ -182,10 +182,10 @@ class kPlaybackContextDataHelper
 
 		foreach ($actions as $action)
 		{
-			/* @var $action kAccessControlAction */
+			/* @var $action vAccessControlAction */
 			if ($action->getType() == RuleActionType::LIMIT_FLAVORS)
 			{
-				/* @var $action kAccessControlLimitFlavorsAction */
+				/* @var $action vAccessControlLimitFlavorsAction */
 				$flavorsIds = explode(',', $action->getFlavorParamsIds());
 				$flavorsParamsNotIn = $action->getIsBlockedList();
 			}
@@ -196,9 +196,9 @@ class kPlaybackContextDataHelper
 
 	/**
 	 * @param entry $dbEntry
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 */
-	private function getRelevantFlavorAssets(kContextDataHelper $contextDataHelper)
+	private function getRelevantFlavorAssets(vContextDataHelper $contextDataHelper)
 	{
 		$flavorAssets = $contextDataHelper->getAllowedFlavorAssets();
 
@@ -235,7 +235,7 @@ class kPlaybackContextDataHelper
 
 			switch($servePriority)
 			{
-				case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY:
+				case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY:
 					$c->addAnd(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_URL, Criteria::NOT_EQUAL);
 					break;
 
@@ -299,10 +299,10 @@ class kPlaybackContextDataHelper
 
 	/**
 	 * @param entry $dbEntry
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @return array
 	 */
-	private function constructLivePlaybackSources(entry $dbEntry, kContextDataHelper $contextDataHelper, $replacementEntry = null)
+	private function constructLivePlaybackSources(entry $dbEntry, vContextDataHelper $contextDataHelper, $replacementEntry = null)
 	{
 		$deliveryAttributes = DeliveryProfileDynamicAttributes::init(null, $dbEntry->getId(), null);
 
@@ -343,17 +343,17 @@ class kPlaybackContextDataHelper
 					$manifestUrl = myEntryUtils::buildManifestUrl($replacementEntry, $protocols, $deliveryProfile->getStreamerType(), $playbackFlavors, $deliveryProfile->getId());
 				else
 					$manifestUrl = myEntryUtils::buildManifestUrl($dbEntry, $protocols, $deliveryProfile->getStreamerType(), $playbackFlavors, $deliveryProfile->getId());
-				$this->localPlaybackSources[] = new kPlaybackSource($deliveryProfile->getId(), $deliveryProfile->getStreamerType(), implode(",", $protocols), implode(",", $playbackFlavorParamsIds), $manifestUrl, $drmData);
+				$this->localPlaybackSources[] = new vPlaybackSource($deliveryProfile->getId(), $deliveryProfile->getStreamerType(), implode(",", $protocols), implode(",", $playbackFlavorParamsIds), $manifestUrl, $drmData);
 			}
 		}
 	}
 
 	/**
 	 * @param entry $dbEntry
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @return array
 	 */
-	private function constructLocalPlaybackSources(entry $dbEntry, kContextDataHelper $contextDataHelper)
+	private function constructLocalPlaybackSources(entry $dbEntry, vContextDataHelper $contextDataHelper)
 	{
 		if (!count($this->localFlavors))
 			return;
@@ -393,7 +393,7 @@ class kPlaybackContextDataHelper
 				if (!empty($protocols))
 				{
 					$manifestUrl = myEntryUtils::buildManifestUrl($dbEntry, $protocols, $deliveryProfile->getStreamerType(), $playbackFlavors, $deliveryProfile->getId());
-					$this->localPlaybackSources[] = new kPlaybackSource($deliveryProfile->getId(), $deliveryProfile->getStreamerType(), implode(",", $protocols), implode(",", array_keys($playbackFlavors)), $manifestUrl, $drmData);
+					$this->localPlaybackSources[] = new vPlaybackSource($deliveryProfile->getId(), $deliveryProfile->getStreamerType(), implode(",", $protocols), implode(",", array_keys($playbackFlavors)), $manifestUrl, $drmData);
 				}
 			}
 		}
@@ -401,10 +401,10 @@ class kPlaybackContextDataHelper
 
 	/**
 	 * @param entry $dbEntry
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @return array
 	 */
-	private function constructRemotePlaybackSources(entry $dbEntry, kContextDataHelper $contextDataHelper)
+	private function constructRemotePlaybackSources(entry $dbEntry, vContextDataHelper $contextDataHelper)
 	{
 		if (!count($this->remoteFlavorsByDc))
 			return;
@@ -442,7 +442,7 @@ class kPlaybackContextDataHelper
 					if (!empty($protocols))
 					{
 						$manifestUrl = myEntryUtils::buildManifestUrl($dbEntry, $protocols, $deliveryProfile->getStreamerType(), $filteredDeliveryProfileFlavorsForDc, $deliveryProfile->getId());
-						$this->remotePlaybackSources[] = new kPlaybackSource($deliveryProfile->getId(), $deliveryProfile->getStreamerType(), implode(",", $protocols), implode(",", array_values($dcFlavorIds)), $manifestUrl, $flavorToDrmData);
+						$this->remotePlaybackSources[] = new vPlaybackSource($deliveryProfile->getId(), $deliveryProfile->getStreamerType(), implode(",", $protocols), implode(",", array_values($dcFlavorIds)), $manifestUrl, $flavorToDrmData);
 					}
 				}
 			}
@@ -596,7 +596,7 @@ class kPlaybackContextDataHelper
 	 * @param $deliveryProfiles
 	 * @param $contextDataHelper
 	 */
-	private function filterDeliveryProfilesByStreamerType(&$deliveryProfiles, kContextDataHelper $contextDataHelper)
+	private function filterDeliveryProfilesByStreamerType(&$deliveryProfiles, vContextDataHelper $contextDataHelper)
 	{
 		$streamerTypes = $contextDataHelper->getStreamerType();
 		if (!is_null($streamerTypes))
@@ -626,13 +626,13 @@ class kPlaybackContextDataHelper
 	 */
 	private static function getDrmData(entry $dbEntry, $flavorAssets, $deliveryProfile, $contextDataHelper)
 	{
-		$playbackContextDataParams = new kPlaybackContextDataParams();
+		$playbackContextDataParams = new vPlaybackContextDataParams();
 		$playbackContextDataParams->setDeliveryProfile($deliveryProfile);
 		$playbackContextDataParams->setFlavors(array_values($flavorAssets));
 		$playbackContextDataParams->setType('drm');
 
-		$result = new kPlaybackContextDataResult();
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaPlaybackContextDataContributor');
+		$result = new vPlaybackContextDataResult();
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunPlaybackContextDataContributor');
 		foreach ($pluginInstances as $pluginInstance)
 			$pluginInstance->contributeToPlaybackContextDataResult($dbEntry, $playbackContextDataParams, $result, $contextDataHelper);
 
@@ -647,10 +647,10 @@ class kPlaybackContextDataHelper
 	 */
 	protected static function getPlaybackCaptionsData(entry $dbEntry, $contextDataHelper)
 	{
-		$playbackContextDataParams = new kPlaybackContextDataParams();
+		$playbackContextDataParams = new vPlaybackContextDataParams();
 		$playbackContextDataParams->setType('caption');
-		$result = new kPlaybackContextDataResult();
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaPlaybackContextDataContributor');
+		$result = new vPlaybackContextDataResult();
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunPlaybackContextDataContributor');
 		foreach ($pluginInstances as $pluginInstance)
 		{
 			$pluginInstance->contributeToPlaybackContextDataResult($dbEntry, $playbackContextDataParams, $result, $contextDataHelper);
@@ -663,10 +663,10 @@ class kPlaybackContextDataHelper
 	{
 		switch ($servePriority)
 		{
-			case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY:
+			case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY:
 				$this->playbackContext->setSources($this->localPlaybackSources);
 				break;
-			case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_FIRST:
+			case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_FIRST:
 				$this->playbackContext->setSources(array_merge($this->localPlaybackSources, $this->remotePlaybackSources));
 				break;
 			case StorageProfile::STORAGE_SERVE_PRIORITY_EXTERNAL_ONLY:
@@ -686,7 +686,7 @@ class kPlaybackContextDataHelper
 		$flavorAssetsIds = array();
 		foreach ($this->playbackContext->getSources() as $source)
 		{
-			/* @var $source kPlaybackSource */
+			/* @var $source vPlaybackSource */
 			$flavorAssetsIds = array_merge($flavorAssetsIds, explode(",", $source->getFlavorIds()));
 		}
 
@@ -698,7 +698,7 @@ class kPlaybackContextDataHelper
 	 * @param $contextDataHelper
 	 * @return string
 	 * */
-	private function constructProtocols($deliveryProfile, kContextDataHelper $contextDataHelper)
+	private function constructProtocols($deliveryProfile, vContextDataHelper $contextDataHelper)
 	{
 		$protocols = array();
 		if (is_null($deliveryProfile->getMediaProtocols()))
@@ -730,11 +730,11 @@ class kPlaybackContextDataHelper
 
 	/**
 	 * @param entry $dbEntry
-	 * @param kContextDataHelper $contextDataHelper
+	 * @param vContextDataHelper $contextDataHelper
 	 * @param $deliveryProfiles
 	 * @return array
 	 */
-	private function getAllowedDeliveryProfiles(entry $dbEntry, kContextDataHelper $contextDataHelper, $deliveryProfiles)
+	private function getAllowedDeliveryProfiles(entry $dbEntry, vContextDataHelper $contextDataHelper, $deliveryProfiles)
 	{
 		$streamsTypesToExclude = $this->getStreamsTypeToExclude($deliveryProfiles);
 		$whiteListedDeliveryProfileIds = $this->getWhiteListedDeliveryProfileIds($contextDataHelper);

@@ -104,7 +104,7 @@ class ConfigureSubForm extends Zend_Form_SubForm
 	}
 
 	protected function addEnumElement($name, $prefix, $enumClass) {
-		$elem = new Kaltura_Form_Element_EnumSelect("$prefix$name", array(
+		$elem = new Vidiun_Form_Element_EnumSelect("$prefix$name", array(
 			'enum' => $enumClass,
 			'excludes' => array()
 		));

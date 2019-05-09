@@ -3,15 +3,15 @@
  * @package infra
  * @subpackage Conversion
  */
-class kOperatorSets
+class vOperatorSets
 {
 	/**
-	 * @var array<array<kOperator>>
+	 * @var array<array<vOperator>>
 	 */
 	public $sets = array();
 	
 	/**
-	 * @param array<kOperator> $set
+	 * @param array<vOperator> $set
 	 */
 	public function addSet(array $set)
 	{
@@ -19,7 +19,7 @@ class kOperatorSets
 	}
 	
 	/**
-	 * @return array<array<kOperator>>
+	 * @return array<array<vOperator>>
 	 */
 	public function getSets()
 	{
@@ -29,7 +29,7 @@ class kOperatorSets
 	/**
 	 * @param int $set
 	 * @param int $index
-	 * @return kOperator
+	 * @return vOperator
 	 */
 	public function getOperator($set = 0, $index = 0)
 	{
@@ -66,7 +66,7 @@ class kOperatorSets
 			$set = array();
 			foreach($decodedSet as $decodedOperator)
 			{
-				$operator = new kOperator($decodedOperator);
+				$operator = new vOperator($decodedOperator);
 /*				$operator->id = $decodedOperator->id;
 				$operator->extra = isset($decodedOperator->extra) ? $decodedOperator->extra : null;
 				$operator->command = isset($decodedOperator->command) ? $decodedOperator->command : null;

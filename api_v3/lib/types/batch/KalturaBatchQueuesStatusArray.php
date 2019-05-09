@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchQueuesStatusArray extends KalturaTypedArray 
+class VidiunBatchQueuesStatusArray extends VidiunTypedArray 
 {
 	public static function fromBatchQueuesStatusArray($arr)
 	{
-		$newArr = new KalturaBatchQueuesStatusArray();
+		$newArr = new VidiunBatchQueuesStatusArray();
 		foreach ( $arr as $obj )
 		{
-			$nObj = new KalturaBatchQueuesStatus();
+			$nObj = new VidiunBatchQueuesStatus();
 			
 			$nObj->jobType = $obj['JOB_TYPE'];
 			$nObj->typeName = BatchJob::getTypeName($nObj->jobType);
@@ -27,6 +27,6 @@ class KalturaBatchQueuesStatusArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaBatchQueuesStatus" );
+		return parent::__construct ( "VidiunBatchQueuesStatus" );
 	}
 }

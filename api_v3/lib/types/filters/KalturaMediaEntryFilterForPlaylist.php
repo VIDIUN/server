@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaMediaEntryFilterForPlaylist extends KalturaMediaEntryFilter
+class VidiunMediaEntryFilterForPlaylist extends VidiunMediaEntryFilter
 {
 	static private $map_between_objects = array
 	(

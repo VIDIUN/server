@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEmailIngestionProfile extends KalturaObject
+class VidiunEmailIngestionProfile extends VidiunObject
 {
 	/**
 	 * @var int
@@ -43,12 +43,12 @@ class KalturaEmailIngestionProfile extends KalturaObject
 	public $conversionProfile2Id;
 	
 	/**
-	 * @var KalturaEntryModerationStatus
+	 * @var VidiunEntryModerationStatus
 	 */
 	public $moderationStatus;
 	
 	/**
-	 * @var KalturaEmailIngestionProfileStatus
+	 * @var VidiunEmailIngestionProfileStatus
 	 * @readonly
 	 */
 	public $status;

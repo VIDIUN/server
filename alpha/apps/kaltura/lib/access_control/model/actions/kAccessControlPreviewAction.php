@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAccessControlPreviewAction extends kRuleAction 
+class vAccessControlPreviewAction extends vRuleAction 
 {
 	/**
 	 * @var int

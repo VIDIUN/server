@@ -3,7 +3,7 @@
  * @package plugins.searchHistory
  * @subpackage lib
  */
-class kESearchHistoryManager implements kESearchSearchHistoryInfoEventConsumer
+class vESearchHistoryManager implements vESearchSearchHistoryInfoEventConsumer
 {
 
 	const HISTORY_EXCHANGE_NAME = 'history_exchange';
@@ -42,12 +42,12 @@ class kESearchHistoryManager implements kESearchSearchHistoryInfoEventConsumer
 
 	protected function shouldIndexSearchHistoryObject(ESearchSearchHistoryInfo $object)
 	{
-		$collectObjects = kConf::get('search_history_collect_objects', 'elastic', array());
+		$collectObjects = vConf::get('search_history_collect_objects', 'elastic', array());
 		if (!in_array($object->getSearchedObject(), $collectObjects))
 		{
 			return false;
 		}
-		if (!$object->getPartnerId() || !$object->getKUserId())
+		if (!$object->getPartnerId() || !$object->getVUserId())
 		{
 			return false;
 		}
@@ -68,7 +68,7 @@ class kESearchHistoryManager implements kESearchSearchHistoryInfoEventConsumer
 			ESearchHistoryFieldName::SEARCHED_OBJECT => $eSearchSearchHistoryInfo->getSearchedObject(),
 			//ESearchHistoryFieldName::SEARCH_TERM is created using split filter in logstash
 			ESearchHistoryFieldName::SEARCH_TERM => $eSearchSearchHistoryInfo->getSearchTerms(),
-			ESearchHistoryFieldName::KUSER_ID => $eSearchSearchHistoryInfo->getKUserId(),
+			ESearchHistoryFieldName::VUSER_ID => $eSearchSearchHistoryInfo->getVUserId(),
 			ESearchHistoryFieldName::PID_UID_CONTEXT => $eSearchSearchHistoryInfo->getPidUidContext(),
 			ESearchHistoryFieldName::TIMESTAMP => $eSearchSearchHistoryInfo->getTimestamp(),
 			ESearchHistoryFieldName::SEARCH_CONTEXT => $eSearchSearchHistoryInfo->getSearchContextArray()
@@ -90,14 +90,14 @@ class kESearchHistoryManager implements kESearchSearchHistoryInfoEventConsumer
 
 	protected function shouldIndexSearchHistoryDocument($object)
 	{
-		$searchHistoryConfig = kConf::get('search_history', 'elastic', array());
+		$searchHistoryConfig = vConf::get('search_history', 'elastic', array());
 		$disableHistoryIndexing = isset($searchHistoryConfig['disableHistoryIndexing']) ? $searchHistoryConfig['disableHistoryIndexing'] : false;
 		if ($disableHistoryIndexing)
 		{
 			return false;
 		}
 		//validate essential params
-		if (!$object->getKUserId() || !$object->getPartnerId())
+		if (!$object->getVUserId() || !$object->getPartnerId())
 		{
 			return false;
 		}
@@ -115,7 +115,7 @@ class kESearchHistoryManager implements kESearchSearchHistoryInfoEventConsumer
 		catch (Exception $e)
 		{
 			//don't fail the search request, just log
-			KalturaLog::err("cannot connect to rabbit");
+			VidiunLog::err("cannot connect to rabbit");
 		}
 	}
 

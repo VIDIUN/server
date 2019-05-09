@@ -22,9 +22,9 @@ class Form_Partner_LocalStorageConfiguration extends Form_Partner_BaseStorageCon
 		$this->addElement('select', 'pathManagerClass', array(
 			'label'			=> 'Path Manager:',
 			'filters'		=> array('StringTrim'),
-			'multiOptions'  => array('kPathManager' => 'Kaltura Path',
-									'kExternalPathManager' => 'External Path',
-		    						'kXslPathManager' => 'XSL Path',
+			'multiOptions'  => array('vPathManager' => 'Vidiun Path',
+									'vExternalPathManager' => 'External Path',
+		    						'vXslPathManager' => 'XSL Path',
 									),
 		));
 		$this->getElement('pathManagerClass')->setRegisterInArrayValidator(false);

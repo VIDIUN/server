@@ -7,7 +7,7 @@
  * @package plugins.metadata
  * @subpackage model
  */
-class kMetadataReplacementOptionsItem
+class vMetadataReplacementOptionsItem
 {
 	private $shouldCopyMetadata;
 	

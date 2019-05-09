@@ -13,8 +13,8 @@ class BulkUploadResultPeer extends BaseBulkUploadResultPeer
     protected static $class_types_cache = array(
         BulkUploadObjectType::ENTRY => 'BulkUploadResultEntry',
         BulkUploadObjectType::CATEGORY => 'BulkUploadResultCategory',
-        BulkUploadObjectType::USER => 'BulkUploadResultKuser',
-        BulkUploadObjectType::CATEGORY_USER => 'BulkUploadResultCategoryKuser',
+        BulkUploadObjectType::USER => 'BulkUploadResultVuser',
+        BulkUploadObjectType::CATEGORY_USER => 'BulkUploadResultCategoryVuser',
     );
     
 	/**
@@ -54,7 +54,7 @@ class BulkUploadResultPeer extends BaseBulkUploadResultPeer
 	/**
 	 * @return BulkUploadResult
 	 */
-	public static function retrieveLastByBulkUploadId($bulkUploadId)
+	public static function retrieveLastByBulvUploadId($bulkUploadId)
 	{
 		$criteria = new Criteria();
 		$criteria->add(BulkUploadResultPeer::BULK_UPLOAD_JOB_ID, $bulkUploadId);
@@ -158,7 +158,7 @@ class BulkUploadResultPeer extends BaseBulkUploadResultPeer
 			if(isset(self::$class_types_cache[$bulkUploadReultObjectType]))
 				return self::$class_types_cache[$bulkUploadReultObjectType];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $bulkUploadReultObjectType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $bulkUploadReultObjectType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$bulkUploadReultObjectType] = $extendedCls;

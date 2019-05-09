@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.enum
  */
-class KalturaMetadataProfileFieldMatchType extends KalturaEnum implements MetadataProfileFieldMatchType
+class VidiunMetadataProfileFieldMatchType extends VidiunEnum implements MetadataProfileFieldMatchType
 {
 	
 }

@@ -2,17 +2,17 @@
 /**
  * @package plugins.clamAvScanEngine
  */
-class ClamAVScanEnginePlugin extends KalturaPlugin implements IKalturaPending, IKalturaEnumerator, IKalturaObjectLoader
+class ClamAVScanEnginePlugin extends VidiunPlugin implements IVidiunPending, IVidiunEnumerator, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'clamAVScanEngine';
 	const VIRUS_SCAN_PLUGIN_NAME = 'virusScan';
 	
 	/**
-	 * @return array<KalturaDependency>
+	 * @return array<VidiunDependency>
 	 */
 	public static function dependsOn()
 	{
-		return array(new KalturaDependency(self::VIRUS_SCAN_PLUGIN_NAME));
+		return array(new VidiunDependency(self::VIRUS_SCAN_PLUGIN_NAME));
 	}
 
 	/**
@@ -71,7 +71,7 @@ class ClamAVScanEnginePlugin extends KalturaPlugin implements IKalturaPending, I
 	{
 		if($baseClass == 'VirusScanEngine')
 		{
-			if($enumValue == KalturaVirusScanEngineType::CLAMAV_SCAN_ENGINE)
+			if($enumValue == VidiunVirusScanEngineType::CLAMAV_SCAN_ENGINE)
 				return 'ClamAVScanEngine';
 		}
 

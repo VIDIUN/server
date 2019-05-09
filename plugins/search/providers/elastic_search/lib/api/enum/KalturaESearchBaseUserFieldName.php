@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.enum
  */
-class KalturaESearchBaseUserFieldName extends KalturaStringEnum
+class VidiunESearchBaseUserFieldName extends VidiunStringEnum
 {
 	const SCREEN_NAME = 'screen_name';
 	const EMAIL = 'email';

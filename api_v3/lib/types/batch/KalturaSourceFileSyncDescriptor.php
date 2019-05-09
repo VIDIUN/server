@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSourceFileSyncDescriptor extends KalturaFileSyncDescriptor
+class VidiunSourceFileSyncDescriptor extends VidiunFileSyncDescriptor
 {
 	/**
 	 * The translated path as used by the scheduler
@@ -39,7 +39,7 @@ class KalturaSourceFileSyncDescriptor extends KalturaFileSyncDescriptor
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kSourceFileSyncDescriptor();
+			$dbObject = new vSourceFileSyncDescriptor();
 			
 		return parent::toObject($dbObject, $skip);
 	}

@@ -5,10 +5,10 @@
  * @service vendorCatalogItem
  * @package plugins.reach
  * @subpackage api.services
- * @throws KalturaErrors::SERVICE_FORBIDDEN
+ * @throws VidiunErrors::SERVICE_FORBIDDEN
  */
 
-class VendorCatalogItemService extends KalturaBaseService
+class VendorCatalogItemService extends VidiunBaseService
 {
 	
 	public function initService($serviceId, $serviceName, $actionName)
@@ -16,7 +16,7 @@ class VendorCatalogItemService extends KalturaBaseService
 		parent::initService($serviceId, $serviceName, $actionName);
 		
 		if(!ReachPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, ReachPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, ReachPlugin::PLUGIN_NAME);
 		
 		$this->applyPartnerFilterForClass('PartnerCatalogItem');
 	}
@@ -25,19 +25,19 @@ class VendorCatalogItemService extends KalturaBaseService
 	 * Allows you to add an service catalog item
 	 *
 	 * @action add
-	 * @param KalturaVendorCatalogItem $vendorCatalogItem
-	 * @return KalturaVendorCatalogItem
+	 * @param VidiunVendorCatalogItem $vendorCatalogItem
+	 * @return VidiunVendorCatalogItem
 	 */
-	public function addAction(KalturaVendorCatalogItem $vendorCatalogItem)
+	public function addAction(VidiunVendorCatalogItem $vendorCatalogItem)
 	{
 		$dbVendorCatalogItem = $vendorCatalogItem->toInsertableObject();
 		
 		/* @var $dbVendorCatalogItem VendorCatalogItem */
-		$dbVendorCatalogItem->setStatus(KalturaVendorCatalogItemStatus::ACTIVE);
+		$dbVendorCatalogItem->setStatus(VidiunVendorCatalogItemStatus::ACTIVE);
 		$dbVendorCatalogItem->save();
 		
 		// return the saved object
-		$vendorCatalogItem = KalturaVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
+		$vendorCatalogItem = VidiunVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
 		$vendorCatalogItem->fromObject($dbVendorCatalogItem, $this->getResponseProfile());
 		return $vendorCatalogItem;
 	}
@@ -47,35 +47,35 @@ class VendorCatalogItemService extends KalturaBaseService
 	 *
 	 * @action get
 	 * @param int $id
-	 * @return KalturaVendorCatalogItem
-	 * @throws KalturaReachErrors::CATALOG_ITEM_NOT_FOUND
+	 * @return VidiunVendorCatalogItem
+	 * @throws VidiunReachErrors::CATALOG_ITEM_NOT_FOUND
 	 */
 	public function getAction($id)
 	{
 		$dbVendorCatalogItem = VendorCatalogItemPeer::retrieveByPK($id);
 		if(!$dbVendorCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
 		
-		$vendorCatalogItem = KalturaVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
+		$vendorCatalogItem = VidiunVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
 		$vendorCatalogItem->fromObject($dbVendorCatalogItem, $this->getResponseProfile());
 		return $vendorCatalogItem;
 	}
 	
 	/**
-	 * List KalturaVendorCatalogItem objects
+	 * List VidiunVendorCatalogItem objects
 	 *
 	 * @action list
-	 * @param KalturaVendorCatalogItemFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaVendorCatalogItemListResponse
+	 * @param VidiunVendorCatalogItemFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunVendorCatalogItemListResponse
 	 */
-	public function listAction(KalturaVendorCatalogItemFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunVendorCatalogItemFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaVendorCatalogItemFilter();
+			$filter = new VidiunVendorCatalogItemFilter();
 		
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		
 		return $filter->getTypeListResponse($pager, $this->getResponseProfile());
 	}
@@ -85,24 +85,24 @@ class VendorCatalogItemService extends KalturaBaseService
 	 *
 	 * @action update
 	 * @param int $id
-	 * @param KalturaVendorCatalogItem $vendorCatalogItem
-	 * @return KalturaVendorCatalogItem
+	 * @param VidiunVendorCatalogItem $vendorCatalogItem
+	 * @return VidiunVendorCatalogItem
 	 *
-	 * @throws KalturaReachErrors::CATALOG_ITEM_NOT_FOUND
+	 * @throws VidiunReachErrors::CATALOG_ITEM_NOT_FOUND
 	 */
-	public function updateAction($id, KalturaVendorCatalogItem $vendorCatalogItem)
+	public function updateAction($id, VidiunVendorCatalogItem $vendorCatalogItem)
 	{
 		// get the object
 		$dbVendorCatalogItem = VendorCatalogItemPeer::retrieveByPK($id);
 		if(!$dbVendorCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
 		
 		// save the object
 		$dbVendorCatalogItem = $vendorCatalogItem->toUpdatableObject($dbVendorCatalogItem);
 		$dbVendorCatalogItem->save();
 		
 		// return the saved object
-		$vendorCatalogItem = KalturaVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
+		$vendorCatalogItem = VidiunVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
 		$vendorCatalogItem->fromObject($dbVendorCatalogItem, $this->getResponseProfile());
 		return $vendorCatalogItem;
 	}
@@ -112,25 +112,25 @@ class VendorCatalogItemService extends KalturaBaseService
 	 *
 	 * @action updateStatus
 	 * @param int $id
-	 * @param KalturaVendorCatalogItemStatus $status
-	 * @return KalturaVendorCatalogItem
+	 * @param VidiunVendorCatalogItemStatus $status
+	 * @return VidiunVendorCatalogItem
 	 *
-	 * @throws KalturaReachErrors::CATALOG_ITEM_NOT_FOUND
-	 * @throws KalturaReachErrors::VENDOR_CATALOG_ITEM_DUPLICATE_SYSTEM_NAME
+	 * @throws VidiunReachErrors::CATALOG_ITEM_NOT_FOUND
+	 * @throws VidiunReachErrors::VENDOR_CATALOG_ITEM_DUPLICATE_SYSTEM_NAME
 	 */
 	public function updateStatusAction($id, $status)
 	{
 		// get the object
 		$dbVendorCatalogItem = VendorCatalogItemPeer::retrieveByPK($id);
 		if (!$dbVendorCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
 		
-		if($status == KalturaVendorCatalogItemStatus::ACTIVE)
+		if($status == VidiunVendorCatalogItemStatus::ACTIVE)
 		{
 			//Check uniqueness of new object's system name
 			$systemNameTemplates = VendorCatalogItemPeer::retrieveBySystemName($dbVendorCatalogItem->getSystemName(), $id);
 			if (count($systemNameTemplates))
-				throw new KalturaAPIException(KalturaReachErrors::VENDOR_CATALOG_ITEM_DUPLICATE_SYSTEM_NAME, $dbVendorCatalogItem->getSystemName());
+				throw new VidiunAPIException(VidiunReachErrors::VENDOR_CATALOG_ITEM_DUPLICATE_SYSTEM_NAME, $dbVendorCatalogItem->getSystemName());
 		}
 		
 		// save the object
@@ -138,7 +138,7 @@ class VendorCatalogItemService extends KalturaBaseService
 		$dbVendorCatalogItem->save();
 		
 		// return the saved object
-		$vendorCatalogItem = KalturaVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
+		$vendorCatalogItem = VidiunVendorCatalogItem::getInstance($dbVendorCatalogItem, $this->getResponseProfile());
 		$vendorCatalogItem->fromObject($dbVendorCatalogItem, $this->getResponseProfile());
 		return $vendorCatalogItem;
 	}
@@ -149,22 +149,22 @@ class VendorCatalogItemService extends KalturaBaseService
 	 * @action delete
 	 * @param int $id
 	 *
-	 * @throws KalturaReachErrors::CATALOG_ITEM_NOT_FOUND
+	 * @throws VidiunReachErrors::CATALOG_ITEM_NOT_FOUND
 	 */
 	public function deleteAction($id)
 	{
 		// get the object
 		$dbVendorCatalogItem = VendorCatalogItemPeer::retrieveByPK($id);
 		if (!$dbVendorCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
 		
 		// Check if partnerCatalogItem exists, in this case you should not be able to delete the vendorCatalogItem prior to deleting the partner assignment first 
 		$partnerCatalogItem = PartnerCatalogItemPeer::retrieveByCatalogItemId($id);
 		if($partnerCatalogItem)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_CANNOT_BE_DELETED, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_CANNOT_BE_DELETED, $id);
 		
 		// set the object status to deleted
-		$dbVendorCatalogItem->setStatus(KalturaVendorCatalogItemStatus::DELETED);
+		$dbVendorCatalogItem->setStatus(VidiunVendorCatalogItemStatus::DELETED);
 		$dbVendorCatalogItem->save();
 	}
 }

@@ -4,7 +4,7 @@
  * @package plugins.scheduledTaskMetadata
  * @subpackage model.enum
  */
-class ExecuteMetadataXsltObjectTaskType implements IKalturaPluginEnum, ObjectTaskType
+class ExecuteMetadataXsltObjectTaskType implements IVidiunPluginEnum, ObjectTaskType
 {
 	const EXECUTE_METADATA_XSLT = 'ExecuteMetadataXslt';
 	

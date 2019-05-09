@@ -4,9 +4,9 @@
  * @package Core
  * @subpackage events
  */
-class kObjectCreatedEvent extends KalturaEvent implements IKalturaDatabaseEvent, IKalturaObjectRelatedEvent
+class vObjectCreatedEvent extends VidiunEvent implements IVidiunDatabaseEvent, IVidiunObjectRelatedEvent
 {
-	const EVENT_CONSUMER = 'kObjectCreatedEventConsumer';
+	const EVENT_CONSUMER = 'vObjectCreatedEventConsumer';
 	
 	/**
 	 * @var BaseObject
@@ -24,7 +24,7 @@ class kObjectCreatedEvent extends KalturaEvent implements IKalturaDatabaseEvent,
 		if(method_exists($object, 'getId'))
 			$additionalLog .= ' id [' . $object->getId() . ']';
 			
-		KalturaLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
+		VidiunLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
 	}
 	
 	public function getConsumerInterface()
@@ -33,10 +33,10 @@ class kObjectCreatedEvent extends KalturaEvent implements IKalturaDatabaseEvent,
 	}
 	
 	/**
-	 * @param kObjectCreatedEventConsumer $consumer
+	 * @param vObjectCreatedEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeCreatedEvent($this->object))
 			return true;
@@ -45,9 +45,9 @@ class kObjectCreatedEvent extends KalturaEvent implements IKalturaDatabaseEvent,
 		if(method_exists($this->object, 'getId'))
 			$additionalLog .= 'id [' . $this->object->getId() . ']';
 			
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		$result = $consumer->objectCreated($this->object);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		return $result;
 	}
 	
@@ -68,7 +68,7 @@ class kObjectCreatedEvent extends KalturaEvent implements IKalturaDatabaseEvent,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::getScope()
+	 * @see VidiunEvent::getScope()
 	 */
 	public function getScope()
 	{

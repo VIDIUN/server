@@ -3,9 +3,9 @@
  * @package Admin
  * @subpackage Errors
  */
-class Kaltura_AdminException extends Infra_Exception
+class Vidiun_AdminException extends Infra_Exception
 {
-	const KALTURA_HEADER_ERROR_CODE = 'X-Kaltura-ErrorCode';
+	const VIDIUN_HEADER_ERROR_CODE = 'X-Vidiun-ErrorCode';
 
 
 	const ERROR_CODE_NO_IDENTITY = 'NO_IDENTITY';
@@ -18,13 +18,13 @@ class Kaltura_AdminException extends Infra_Exception
 
 	public static function getErrorCode(Exception $e)
 	{
-		if($e instanceof Kaltura_AdminException)
+		if($e instanceof Vidiun_AdminException)
 			return $e->getPrefix() . ':' . $e->getCode();
 
-		if($e instanceof Kaltura_Client_Exception)
+		if($e instanceof Vidiun_Client_Exception)
 			return 'Server:' . $e->getCode();
 
-		if($e instanceof Kaltura_Client_ClientException)
+		if($e instanceof Vidiun_Client_ClientException)
 			return 'API:' . $e->getCode();
 
 		if($e instanceof Infra_Exception)

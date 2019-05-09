@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kAmazonS3StorageExportJobData extends kStorageExportJobData  
+class vAmazonS3StorageExportJobData extends vStorageExportJobData  
 {
 	 /**
-	 * @var KalturaAmazonS3StorageProfileFilesPermissionLevel
+	 * @var VidiunAmazonS3StorageProfileFilesPermissionLevel
 	 */   	
     private $filesPermissionInS3;
     
@@ -23,7 +23,7 @@ class kAmazonS3StorageExportJobData extends kStorageExportJobData
 	/**
 	* $var string
 	*/
-	private $sseKmsKeyId;
+	private $sseVmsKeyId;
     
 	/**
 	* $var string
@@ -41,7 +41,7 @@ class kAmazonS3StorageExportJobData extends kStorageExportJobData
 		$this->setFilesPermissionInS3($externalStorage->getFilesPermissionInS3());
 		$this->setS3Region($externalStorage->getS3Region());
 		$this->setSseType($externalStorage->getSseType());
-		$this->setSseKmsKeyId($externalStorage->getSseKmsKeyId());
+		$this->setSseVmsKeyId($externalStorage->getSseVmsKeyId());
 		$this->setSignatureType($externalStorage->getSignatureType());
 		$this->setEndPoint($externalStorage->getEndPoint());
 	}
@@ -95,19 +95,19 @@ class kAmazonS3StorageExportJobData extends kStorageExportJobData
 	}	
 	
 	/**
-	 * @return the $sseKmsKeyId
+	 * @return the $sseVmsKeyId
 	 */
-	public function getSseKmsKeyId()
+	public function getSseVmsKeyId()
 	{
-		return $this->sseKmsKeyId;
+		return $this->sseVmsKeyId;
 	}
 	
 	/**
-	 * @param $sseKmsKeyId the $sseKmsKeyId to set
+	 * @param $sseVmsKeyId the $sseVmsKeyId to set
 	 */
-	public function setSseKmsKeyId($sseKmsKeyId)
+	public function setSseVmsKeyId($sseVmsKeyId)
 	{
-		$this->sseKmsKeyId = $sseKmsKeyId;	
+		$this->sseVmsKeyId = $sseVmsKeyId;	
 	}
 		
 	/**

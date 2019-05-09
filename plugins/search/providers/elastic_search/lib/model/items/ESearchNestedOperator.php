@@ -12,7 +12,7 @@ class ESearchNestedOperator extends ESearchBaseOperator
 	{
 		$shouldCreateNested = self::initNestedOperatorQuery($queryAttributes);
 
-		$outQuery = new kESearchBoolQuery();
+		$outQuery = new vESearchBoolQuery();
 		foreach ($categorizedSearchItems as $categorizedSearchItem)
 		{
 			list($itemClassName, $itemSearchItems, $operatorType) = self::getParamsFromCategorizedSearchItem($categorizedSearchItem);
@@ -45,9 +45,9 @@ class ESearchNestedOperator extends ESearchBaseOperator
 	private static function createNestedQueryForOperator(&$boolQuery, &$queryAttributes)
 	{
 		if(!$queryAttributes->validateNestedOperatorObjectTypes())
-			throw new kESearchException('mixed search items in nested operator not allowed', kESearchException::MIXED_SEARCH_ITEMS_IN_NESTED_OPERATOR_NOT_ALLOWED);
+			throw new vESearchException('mixed search items in nested operator not allowed', vESearchException::MIXED_SEARCH_ITEMS_IN_NESTED_OPERATOR_NOT_ALLOWED);
 
-		$outQuery = kESearchQueryManager::getNestedQuery($boolQuery, $queryAttributes);
+		$outQuery = vESearchQueryManager::getNestedQuery($boolQuery, $queryAttributes);
 		$queryAttributes->setNestedQueryName(null);
 		$queryAttributes->setNestedOperatorContext(false);
 		return $outQuery;

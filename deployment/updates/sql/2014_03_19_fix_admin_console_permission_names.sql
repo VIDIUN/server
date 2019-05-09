@@ -1,6 +1,6 @@
 UPDATE permission SET friendly_name = 'Base system admin permission' WHERE partner_id = -2 AND name = 'SYSTEM_ADMIN_BASE' limit 1;
 UPDATE permission SET friendly_name = 'Base publisher permission' WHERE partner_id = -2 AND name = 'SYSTEM_ADMIN_PUBLISHER_BASE' limit 1;
-UPDATE permission SET friendly_name = 'Publisher KMC access' WHERE partner_id = -2 AND name = 'SYSTEM_ADMIN_PUBLISHER_KMC_ACCESS' limit 1;
+UPDATE permission SET friendly_name = 'Publisher VMC access' WHERE partner_id = -2 AND name = 'SYSTEM_ADMIN_PUBLISHER_VMC_ACCESS' limit 1;
 UPDATE permission SET friendly_name = 'Publisher configure' WHERE partner_id = -2 AND name = 'SYSTEM_ADMIN_PUBLISHER_CONFIG' limit 1;
 UPDATE permission SET friendly_name = 'Publisher block and unblock' WHERE partner_id = -2 AND name = 'SYSTEM_ADMIN_PUBLISHER_BLOCK' limit 1;
 UPDATE permission SET friendly_name = 'Publisher remove' WHERE partner_id = -2 AND name = 'SYSTEM_ADMIN_PUBLISHER_REMOVE' limit 1;
@@ -26,5 +26,5 @@ UPDATE permission SET friendly_name = 'Content ingest' WHERE partner_id = 0 AND 
 UPDATE permission SET friendly_name = 'Drop Folder Base' WHERE partner_id = 0 AND name = 'dropFolder.CONTENT_INGEST_DROP_FOLDER_BASE' limit 1;
 UPDATE permission SET friendly_name = 'Event Notification Template Service delete permission' WHERE partner_id = 0 AND name = 'eventNotification.EVENT_NOTIFICATIONS_TEMPLATE_DELETE' limit 1;
 UPDATE permission SET friendly_name = 'Event Notification Template Service manage permission' WHERE partner_id = 0 AND name = 'eventNotification.EVENT_NOTIFICATIONS_TEMPLATE_MANAGE' limit 1;
-UPDATE permission SET friendly_name = 'KMC read only access' WHERE partner_id = 0 AND name = 'KMC_READ_ONLY' limit 1;
+UPDATE permission SET friendly_name = 'VMC read only access' WHERE partner_id = 0 AND name = 'VMC_READ_ONLY' limit 1;
 UPDATE permission SET friendly_name = 'Manage custom data profile' WHERE partner_id = 0 AND name = 'CUSTOM_DATA_PROFILE_UPDATE' limit 1;

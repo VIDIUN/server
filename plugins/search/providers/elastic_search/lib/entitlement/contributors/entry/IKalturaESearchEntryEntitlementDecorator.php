@@ -5,7 +5,7 @@
  * @subpackage lib.entitlement
  */
 
-interface IKalturaESearchEntryEntitlementDecorator extends IKalturaESearchEntitlementDecorator
+interface IVidiunESearchEntryEntitlementDecorator extends IVidiunESearchEntitlementDecorator
 {
 	public static function applyCondition(&$entryQuery, &$parentEntryQuery);
 }

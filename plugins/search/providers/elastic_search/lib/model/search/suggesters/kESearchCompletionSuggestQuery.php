@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchCompletionSuggestQuery extends kESearchBaseSuggestQuery
+class vESearchCompletionSuggestQuery extends vESearchBaseSuggestQuery
 {
 
 	const COMPLETION_KEY = 'completion';

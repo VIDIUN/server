@@ -3,7 +3,7 @@
  * @package Admin
  * @subpackage views
  */
-class Kaltura_View_Helper_PackageNameById extends Zend_View_Helper_Abstract
+class Vidiun_View_Helper_PackageNameById extends Zend_View_Helper_Abstract
 {
 	private static $packages = null;
 	
@@ -25,7 +25,7 @@ class Kaltura_View_Helper_PackageNameById extends Zend_View_Helper_Abstract
 		if (is_null(self::$packages))
 		{
 			$client = Infra_ClientHelper::getClient();
-			$systemPartnerPlugin = Kaltura_Client_SystemPartner_Plugin::get($client);
+			$systemPartnerPlugin = Vidiun_Client_SystemPartner_Plugin::get($client);
 			self::$packages = $systemPartnerPlugin->systemPartner->getPackages();
 		}
 	}

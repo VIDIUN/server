@@ -3,12 +3,12 @@
 /**
  * Auto-generated class.
  * 
- * Used to search KalturaBaseEntry attributes. Use KalturaBaseEntryCompareAttribute enum to provide attribute name.
+ * Used to search VidiunBaseEntry attributes. Use VidiunBaseEntryCompareAttribute enum to provide attribute name.
 */
-class KalturaBaseEntryCompareAttributeCondition extends KalturaSearchComparableAttributeCondition
+class VidiunBaseEntryCompareAttributeCondition extends VidiunSearchComparableAttributeCondition
 {
 	/**
-	 * @var KalturaBaseEntryCompareAttribute
+	 * @var VidiunBaseEntryCompareAttribute
 	 */
 	public $attribute;
 

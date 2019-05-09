@@ -1,12 +1,12 @@
 <?php
 
-class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedEventConsumer, kObjectInvalidateCacheEventConsumer
+class vPermissionManager implements vObjectCreatedEventConsumer, vObjectChangedEventConsumer, vObjectInvalidateCacheEventConsumer
 {
 	// -------------------
 	// -- Class members --
 	// -------------------
 		
-	const GLOBAL_CACHE_KEY_PREFIX = 'kPermissionManager_'; // Prefix added for all key names stored in the cache
+	const GLOBAL_CACHE_KEY_PREFIX = 'vPermissionManager_'; // Prefix added for all key names stored in the cache
 	
 	private static $map = array(); // Local map of permission items allowed for the current role
 	
@@ -15,15 +15,15 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	const PARTNER_GROUP_ARRAY_NAME  = 'partner_group';    // name of $map's partner group array
 	const PERMISSION_NAMES_ARRAY    = 'permission_names'; // name of $map's permission names array
 			
-	private static $lastInitializedContext = null; // last initialized security context (ks + partner id)
+	private static $lastInitializedContext = null; // last initialized security context (vs + partner id)
 	private static $cacheWatcher = null;
 	private static $useCache = true;     // use cache or not
 	
-	private static $ksUserId = null;
+	private static $vsUserId = null;
 	private static $adminSession = false; // is admin session
-	private static $ksPartnerId = null;
+	private static $vsPartnerId = null;
 	private static $requestedPartnerId = null;
-	private static $ksString = null;
+	private static $vsString = null;
 	private static $roleIds = null;
 	private static $operatingPartnerId = null;
 	
@@ -35,9 +35,9 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	private static $operatingPartner = null;
 	
 	/**
-	 * @var kuser
+	 * @var vuser
 	 */
-	private static $kuser = null;
+	private static $vuser = null;
 		
 	
 	// ----------------------------
@@ -66,15 +66,15 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		if (is_null($partnerId)) {
 			$partnerId = 'null';
 		}
-		$key = 'role_'.$roleId.'_partner_'.$partnerId.'_internal_'.intval(kIpAddressUtils::isInternalIp());
+		$key = 'role_'.$roleId.'_partner_'.$partnerId.'_internal_'.intval(vIpAddressUtils::isInternalIp());
 		return $key;
 	}
 	
 	private static function getCacheKeyPrefix()
 	{
 		$result = self::GLOBAL_CACHE_KEY_PREFIX;
-		if (kConf::hasParam('permission_cache_version'))
-			$result .= kConf::get('permission_cache_version');
+		if (vConf::hasParam('permission_cache_version'))
+			$result .= vConf::get('permission_cache_version');
 		return $result;
 	}
 	
@@ -91,11 +91,11 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		
 		self::$cacheStores = array();
 		
-		$cacheLayers = kCacheManager::getCacheSectionNames(kCacheManager::CACHE_TYPE_PERMISSION_MANAGER);
+		$cacheLayers = vCacheManager::getCacheSectionNames(vCacheManager::CACHE_TYPE_PERMISSION_MANAGER);
 		
 		foreach ($cacheLayers as $cacheLayer)
 		{
-			$cacheStore = kCacheManager::getCache($cacheLayer);
+			$cacheStore = vCacheManager::getCache($cacheLayer);
 			if (!$cacheStore)
 				continue;
 				
@@ -113,14 +113,14 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 				continue;
 			}
 				
-			KalturaLog::debug("Found a cache value for key [$key] map hash [".$cacheRole['mapHash']."] in layer [$cacheLayer]");
+			VidiunLog::debug("Found a cache value for key [$key] map hash [".$cacheRole['mapHash']."] in layer [$cacheLayer]");
 			self::storeInCache($key, $cacheRole, $map);		// store in lower cache layers
 			self::$cacheStores[] = $cacheStore;
 
 			return $map;
 		}
 
-		KalturaLog::debug("No cache value found for key [$key]");
+		VidiunLog::debug("No cache value found for key [$key]");
 		return null;
 	}
 	
@@ -142,21 +142,21 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 			if (!$cacheStore->set(
 				self::getCacheKeyPrefix() . $key,
 				$cacheRole,
-				kConf::get('apc_cache_ttl')))
+				vConf::get('apc_cache_ttl')))
 				continue;
 
 			$success = $cacheStore->set(
 				self::getCacheKeyPrefix() . $cacheRole['mapHash'],
 				$map,
-				kConf::get('apc_cache_ttl')); // try to store in cache
+				vConf::get('apc_cache_ttl')); // try to store in cache
 					
 			if ($success)
 			{
-				KalturaLog::debug("New value stored in cache for key [$key] map hash [".$cacheRole['mapHash']."]");
+				VidiunLog::debug("New value stored in cache for key [$key] map hash [".$cacheRole['mapHash']."]");
 			}
 			else
 			{
-				KalturaLog::debug("No cache value stored for key [$key] map hash [".$cacheRole['mapHash']."]");
+				VidiunLog::debug("No cache value stored for key [$key] map hash [".$cacheRole['mapHash']."]");
 			}
 		}
 	}
@@ -229,8 +229,8 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 			
 			if (!$dbRole)
 			{
-				KalturaLog::alert('User role ID ['.$roleId.'] set for user ID ['.self::$ksUserId.'] of partner ['.self::$operatingPartnerId.'] was not found in the DB');
-				throw new kPermissionException('User role ID ['.$roleId.'] set for user ID ['.self::$ksUserId.'] of partner ['.self::$operatingPartnerId.'] was not found in the DB', kPermissionException::ROLE_NOT_FOUND);
+				VidiunLog::alert('User role ID ['.$roleId.'] set for user ID ['.self::$vsUserId.'] of partner ['.self::$operatingPartnerId.'] was not found in the DB');
+				throw new vPermissionException('User role ID ['.$roleId.'] set for user ID ['.self::$vsUserId.'] of partner ['.self::$operatingPartnerId.'] was not found in the DB', vPermissionException::ROLE_NOT_FOUND);
 			}
 		}
 		
@@ -274,11 +274,11 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		}
 		$tmpPermissionNames = array_merge($tmpPermissionNames, $alwaysAllowed);
 		
-		// if the request sent from the internal server set additional permission allowing access without KS
+		// if the request sent from the internal server set additional permission allowing access without VS
 		// from internal servers
-		if (kIpAddressUtils::isInternalIp())
+		if (vIpAddressUtils::isInternalIp())
 		{
-			KalturaLog::debug('IP in range, adding ALWAYS_ALLOWED_FROM_INTERNAL_IP_ACTIONS permission');
+			VidiunLog::debug('IP in range, adding ALWAYS_ALLOWED_FROM_INTERNAL_IP_ACTIONS permission');
 			$alwaysAllowedInternal = array(PermissionName::ALWAYS_ALLOWED_FROM_INTERNAL_IP_ACTIONS);
 			$tmpPermissionNames = array_merge($tmpPermissionNames, $alwaysAllowedInternal);
 		}
@@ -302,12 +302,12 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 			$permission = $lookup->getPermission();
 			
 			if (!$item)	{
-				KalturaLog::err('PermissionToPermissionItem id ['.$lookup->getId().'] is defined with PermissionItem id ['.$lookup->getPermissionItemId().'] which does not exists!');
+				VidiunLog::err('PermissionToPermissionItem id ['.$lookup->getId().'] is defined with PermissionItem id ['.$lookup->getPermissionItemId().'] which does not exists!');
 				continue;
 			}
 			
 			if (!$permission) {
-				KalturaLog::err('PermissionToPermissionItem id ['.$lookup->getId().'] is defined with Permission name ['.$lookup->getPermissionName().'] which does not exists!');
+				VidiunLog::err('PermissionToPermissionItem id ['.$lookup->getId().'] is defined with Permission name ['.$lookup->getPermissionName().'] which does not exists!');
 				continue;
 			}
 				
@@ -345,9 +345,9 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	/**
 	 * Add an api action permission to the local map
 	 * @param array $map map to fill
-	 * @param kApiActionPermissionItem $item
+	 * @param vApiActionPermissionItem $item
 	 */
-	private static function addApiAction(array &$map, kApiActionPermissionItem $item)
+	private static function addApiAction(array &$map, vApiActionPermissionItem $item)
 	{
 		$service = strtolower($item->getService());
 		$action = strtolower($item->getAction());
@@ -364,9 +364,9 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	/**
 	 * Add an api parameter permission to the local map
 	 * @param array $map map to fill
-	 * @param kApiParameterPermissionItem $item
+	 * @param vApiParameterPermissionItem $item
 	 */
-	private static function addApiParameter(array &$map, kApiParameterPermissionItem $item)
+	private static function addApiParameter(array &$map, vApiParameterPermissionItem $item)
 	{
 		$itemAction = strtolower($item->getAction());
 		$itemObject = strtolower($item->getObject());
@@ -386,7 +386,7 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		$partnerGroup = $permission->getPartnerGroup();
 		if (!$permission->getPartnerGroup())
 		{
-			KalturaLog::notice('No partner group defined for permission id ['.$permission->getId().'] with type partner group ['.$permission->getType().']');
+			VidiunLog::notice('No partner group defined for permission id ['.$permission->getId().'] with type partner group ['.$permission->getType().']');
 			return;
 		}
 		$partnerGroup = explode(',', trim($partnerGroup, ','));
@@ -397,7 +397,7 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		{
 			if ($item->getType() != PermissionItemType::API_ACTION_ITEM)
 			{
-				KalturaLog::notice('Permission item id ['.$item->getId().'] is not of type PermissionItemType::API_ACTION_ITEM but still defined in partner group permission id ['.$permission->getId().']');
+				VidiunLog::notice('Permission item id ['.$item->getId().'] is not of type PermissionItemType::API_ACTION_ITEM but still defined in partner group permission id ['.$permission->getId().']');
 				continue;
 			}
 			$service = strtolower($item->getService());
@@ -431,66 +431,66 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	// --------------------
 	
 	/**
-	 * Init with allowed permissions for the user in the given KS or kCurrentContext if not KS given
-	 * kCurrentContext::init should have been executed before!
-	 * @param string $ks KS to extract user and partner IDs from instead of kCurrentContext
+	 * Init with allowed permissions for the user in the given VS or vCurrentContext if not VS given
+	 * vCurrentContext::init should have been executed before!
+	 * @param string $vs VS to extract user and partner IDs from instead of vCurrentContext
 	 * @param boolean $useCache use cache or not
 	 * @throws TODO: add all exceptions
 	 */
 	public static function init($useCache = null)
 	{
-		$securityContext = array(kCurrentContext::$partner_id, kCurrentContext::$ks);
+		$securityContext = array(vCurrentContext::$partner_id, vCurrentContext::$vs);
 		if ($securityContext === self::$lastInitializedContext) {
 			self::$cacheWatcher->apply();
 			return;
 		}
 		
-		// verify that kCurrentContext::init has been executed since it must be used to init current context permissions
-		if (!kCurrentContext::$ksPartnerUserInitialized) {
-			KalturaLog::crit('kCurrentContext::initKsPartnerUser must be executed before initializing kPermissionManager');
-			throw new Exception('kCurrentContext has not been initialized!', null);
+		// verify that vCurrentContext::init has been executed since it must be used to init current context permissions
+		if (!vCurrentContext::$vsPartnerUserInitialized) {
+			VidiunLog::crit('vCurrentContext::initVsPartnerUser must be executed before initializing vPermissionManager');
+			throw new Exception('vCurrentContext has not been initialized!', null);
 		}
 		
-		// can be initialized more than once to support multirequest with different kCurrentContext parameters
+		// can be initialized more than once to support multirequest with different vCurrentContext parameters
 		self::$lastInitializedContext = null;
-		self::$cacheWatcher = new kApiCacheWatcher();
+		self::$cacheWatcher = new vApiCacheWatcher();
 		self::$useCache = $useCache ? true : false;
 
-		// copy kCurrentContext parameters (kCurrentContext::init should have been executed before)
-		self::$requestedPartnerId = !self::isEmpty(kCurrentContext::$partner_id) ? kCurrentContext::$partner_id : null;
-		self::$ksPartnerId = !self::isEmpty(kCurrentContext::$ks_partner_id) ? kCurrentContext::$ks_partner_id : null;
-		if (self::$ksPartnerId == Partner::ADMIN_CONSOLE_PARTNER_ID && 
-			kConf::hasParam('admin_console_partner_allowed_ips'))
+		// copy vCurrentContext parameters (vCurrentContext::init should have been executed before)
+		self::$requestedPartnerId = !self::isEmpty(vCurrentContext::$partner_id) ? vCurrentContext::$partner_id : null;
+		self::$vsPartnerId = !self::isEmpty(vCurrentContext::$vs_partner_id) ? vCurrentContext::$vs_partner_id : null;
+		if (self::$vsPartnerId == Partner::ADMIN_CONSOLE_PARTNER_ID && 
+			vConf::hasParam('admin_console_partner_allowed_ips'))
 		{
 			$ipAllowed = false;
-			$ipRanges = explode(',', kConf::get('admin_console_partner_allowed_ips'));
+			$ipRanges = explode(',', vConf::get('admin_console_partner_allowed_ips'));
 			foreach ($ipRanges as $curRange)
 			{
-				if (kIpAddressUtils::isIpInRange($_SERVER['REMOTE_ADDR'], $curRange))
+				if (vIpAddressUtils::isIpInRange($_SERVER['REMOTE_ADDR'], $curRange))
 				{
 					$ipAllowed = true;
 					break;
 				}
 			} 
 			if (!$ipAllowed)
-				throw new kCoreException("Admin console partner used from an unallowed address", kCoreException::PARTNER_BLOCKED);
+				throw new vCoreException("Admin console partner used from an unallowed address", vCoreException::PARTNER_BLOCKED);
 		}
-		self::$ksUserId = !self::isEmpty(kCurrentContext::$ks_uid) ? kCurrentContext::$ks_uid : null;
-		if (self::$ksPartnerId != Partner::BATCH_PARTNER_ID)
-			self::$kuser = !self::isEmpty(kCurrentContext::getCurrentKsKuser()) ? kCurrentContext::getCurrentKsKuser() : null;
-		self::$ksString = kCurrentContext::$ks ? kCurrentContext::$ks : null;
-		self::$adminSession = !self::isEmpty(kCurrentContext::$is_admin_session) ? kCurrentContext::$is_admin_session : false;
+		self::$vsUserId = !self::isEmpty(vCurrentContext::$vs_uid) ? vCurrentContext::$vs_uid : null;
+		if (self::$vsPartnerId != Partner::BATCH_PARTNER_ID)
+			self::$vuser = !self::isEmpty(vCurrentContext::getCurrentVsVuser()) ? vCurrentContext::getCurrentVsVuser() : null;
+		self::$vsString = vCurrentContext::$vs ? vCurrentContext::$vs : null;
+		self::$adminSession = !self::isEmpty(vCurrentContext::$is_admin_session) ? vCurrentContext::$is_admin_session : false;
 		
-		// if ks defined - check that it is valid
-		self::errorIfKsNotValid();
+		// if vs defined - check that it is valid
+		self::errorIfVsNotValid();
 		
 		// init partner, user, and role objects
 		self::initPartnerUserObjects();
 
-		// throw an error if KS partner (operating partner) is blocked
+		// throw an error if VS partner (operating partner) is blocked
 		self::errorIfPartnerBlocked();
 		
-		//throw an error if KS user is blocked
+		//throw an error if VS user is blocked
 		self::errorIfUserBlocked();
 
 		// init role ids
@@ -506,14 +506,14 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		return true;
 	}
 	
-	public static function getRoleIds(Partner $operatingPartner = null, kuser $kuser = null)
+	public static function getRoleIds(Partner $operatingPartner = null, vuser $vuser = null)
 	{
 		$roleIds = null;
-		$ksString = kCurrentContext::$ks;
-		$isAdminSession = !self::isEmpty(kCurrentContext::$is_admin_session) ? kCurrentContext::$is_admin_session : false;
+		$vsString = vCurrentContext::$vs;
+		$isAdminSession = !self::isEmpty(vCurrentContext::$is_admin_session) ? vCurrentContext::$is_admin_session : false;
 
-		if (!$ksString ||
-			(!$operatingPartner && kCurrentContext::$ks_partner_id != Partner::BATCH_PARTNER_ID))
+		if (!$vsString ||
+			(!$operatingPartner && vCurrentContext::$vs_partner_id != Partner::BATCH_PARTNER_ID))
 		{
 			$roleId = UserRolePeer::getIdByStrId (UserRoleId::NO_SESSION_ROLE);
 			if($roleId)
@@ -522,35 +522,35 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 			return null;
 		}
 
-		$ks = ks::fromSecureString($ksString);
-		$ksSetRoleId = $ks->getRole();
+		$vs = vs::fromSecureString($vsString);
+		$vsSetRoleId = $vs->getRole();
 
-		if ($ksSetRoleId)
+		if ($vsSetRoleId)
 		{
-			if ($ksSetRoleId == 'null')
+			if ($vsSetRoleId == 'null')
 			{
 				return null;
 			}
-			$ksPartnerId = !self::isEmpty(kCurrentContext::$ks_partner_id) ? kCurrentContext::$ks_partner_id : null;
+			$vsPartnerId = !self::isEmpty(vCurrentContext::$vs_partner_id) ? vCurrentContext::$vs_partner_id : null;
 			//check if role exists
 			$c = new Criteria();
-			$c->addAnd(is_numeric($ksSetRoleId) ? UserRolePeer::ID : UserRolePeer::SYSTEM_NAME
-				, $ksSetRoleId, Criteria::EQUAL);
-			$partnerIds = array_map('strval', array($ksPartnerId, PartnerPeer::GLOBAL_PARTNER));
+			$c->addAnd(is_numeric($vsSetRoleId) ? UserRolePeer::ID : UserRolePeer::SYSTEM_NAME
+				, $vsSetRoleId, Criteria::EQUAL);
+			$partnerIds = array_map('strval', array($vsPartnerId, PartnerPeer::GLOBAL_PARTNER));
 			$c->addAnd(UserRolePeer::PARTNER_ID, $partnerIds, Criteria::IN);
 			$roleId = UserRolePeer::doSelectOne($c);
 
 			if ($roleId){
 				$roleIds = $roleId->getId();
 			}else{
-				KalturaLog::debug("Role id [$ksSetRoleId] does not exists");
-				throw new kCoreException("Unknown role Id [$ksSetRoleId]", kCoreException::ID_NOT_FOUND);
+				VidiunLog::debug("Role id [$vsSetRoleId] does not exists");
+				throw new vCoreException("Unknown role Id [$vsSetRoleId]", vCoreException::ID_NOT_FOUND);
 			}
 		}
 
 		// if user is defined -> get his role IDs
-		if (!$roleIds && $kuser) {
-			$roleIds = $kuser->getRoleIds();
+		if (!$roleIds && $vuser) {
+			$roleIds = $vuser->getRoleIds();
 		}
 
 		// if user has no defined roles or no user is defined -> get default role IDs according to session type (admin/not)
@@ -559,7 +559,7 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 			if (!$operatingPartner)
 			{
 				// use system default roles
-				if ($ks->isWidgetSession()) {
+				if ($vs->isWidgetSession()) {
 					$strId = UserRoleId::WIDGET_SESSION_ROLE;
 				}
 				elseif ($isAdminSession) {
@@ -573,7 +573,7 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 			}
 			else
 			{
-				if ($ks->isWidgetSession()){
+				if ($vs->isWidgetSession()){
 					//there is only one partner widget role defined in the system
 					$roleIds = $operatingPartner->getWidgetSessionRoleId();
 				}
@@ -597,28 +597,28 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	
 	private static function initRoleIds()
 	{
-		self::$roleIds = self::getRoleIds(self::$operatingPartner, self::$kuser);
+		self::$roleIds = self::getRoleIds(self::$operatingPartner, self::$vuser);
 	}
 	
 	
 	private static function initPartnerUserObjects()
 	{
-		if (self::$ksPartnerId == Partner::BATCH_PARTNER_ID) {
+		if (self::$vsPartnerId == Partner::BATCH_PARTNER_ID) {
 			self::$operatingPartner = null;
-			self::$operatingPartnerId = self::$ksPartnerId;
+			self::$operatingPartnerId = self::$vsPartnerId;
 			return;
 		}
 		
-		$ksPartner = null;
+		$vsPartner = null;
 		$requestedPartner = null;
 		
-		// init ks partner = operating partner
-		if (!is_null(self::$ksPartnerId)) {
-			$ksPartner = PartnerPeer::retrieveByPK(self::$ksPartnerId);
-			if (!$ksPartner)
+		// init vs partner = operating partner
+		if (!is_null(self::$vsPartnerId)) {
+			$vsPartner = PartnerPeer::retrieveByPK(self::$vsPartnerId);
+			if (!$vsPartner)
 			{
-				KalturaLog::crit('Unknown partner id ['.self::$ksPartnerId.']');
-				throw new kCoreException("Unknown partner Id [" . self::$ksPartnerId ."]", kCoreException::ID_NOT_FOUND);
+				VidiunLog::crit('Unknown partner id ['.self::$vsPartnerId.']');
+				throw new vCoreException("Unknown partner Id [" . self::$vsPartnerId ."]", vCoreException::ID_NOT_FOUND);
 			}
 		}
 		
@@ -627,33 +627,33 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 			$requestedPartner = PartnerPeer::retrieveActiveByPK(self::$requestedPartnerId);
 			if (!$requestedPartner)
 			{
-				KalturaLog::crit('Unknown partner id ['.self::$requestedPartnerId.']');
-				throw new kCoreException("Unknown partner Id [" . self::$requestedPartnerId ."]", kCoreException::PARTNER_BLOCKED);
+				VidiunLog::crit('Unknown partner id ['.self::$requestedPartnerId.']');
+				throw new vCoreException("Unknown partner Id [" . self::$requestedPartnerId ."]", vCoreException::PARTNER_BLOCKED);
 			}
 		}
 		
-		// init current kuser
-		if (self::$ksUserId && !self::$kuser) { // will never be null because ks::uid is never null
-			kuserPeer::setUseCriteriaFilter(false);
-			self::$kuser = kuserPeer::getActiveKuserByPartnerAndUid(self::$ksPartnerId, self::$ksUserId);
-			kuserPeer::setUseCriteriaFilter(true);
-			if (!self::$kuser)
+		// init current vuser
+		if (self::$vsUserId && !self::$vuser) { // will never be null because vs::uid is never null
+			vuserPeer::setUseCriteriaFilter(false);
+			self::$vuser = vuserPeer::getActiveVuserByPartnerAndUid(self::$vsPartnerId, self::$vsUserId);
+			vuserPeer::setUseCriteriaFilter(true);
+			if (!self::$vuser)
 			{
-				self::$kuser = null;
+				self::$vuser = null;
 				// error not thrown to support adding users 'on-demand'
 				// current session will get default role according to session type (user/admin)
 			}
 		}
 		
 		// choose operating partner!
-		if ($ksPartner) {
-			self::$operatingPartner = $ksPartner;
-			self::$operatingPartnerId = $ksPartner->getId();
+		if ($vsPartner) {
+			self::$operatingPartner = $vsPartner;
+			self::$operatingPartnerId = $vsPartner->getId();
 		}
-		else if (!self::$ksString && $requestedPartner) {
+		else if (!self::$vsString && $requestedPartner) {
 			self::$operatingPartner = $requestedPartner;
 			self::$operatingPartnerId = $requestedPartner->getId();
-			self::$kuser = null;
+			self::$vuser = null;
 		}
 	}
 	
@@ -685,50 +685,50 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	
 	
 	
-	private static function errorIfKsNotValid()
+	private static function errorIfVsNotValid()
 	{
-		// if no ks in current context - no need to check anything
-		if (!self::$ksString) {
+		// if no vs in current context - no need to check anything
+		if (!self::$vsString) {
 			return;
 		}
 		
-		$ksObj = null;
-		$res = kSessionUtils::validateKSessionNoTicket(self::$ksPartnerId, self::$ksUserId, self::$ksString, $ksObj);
+		$vsObj = null;
+		$res = vSessionUtils::validateVSessionNoTicket(self::$vsPartnerId, self::$vsUserId, self::$vsString, $vsObj);
 
 		if ( 0 >= $res )
 		{
 			switch($res)
 			{
-				case ks::INVALID_STR:
-					KalturaLog::err('Invalid KS ['.self::$ksString.']');
+				case vs::INVALID_STR:
+					VidiunLog::err('Invalid VS ['.self::$vsString.']');
 					break;
 									
-				case ks::INVALID_PARTNER:
-					KalturaLog::err('Wrong partner ['.self::$ksPartnerId.'] actual partner ['.$ksObj->partner_id.']');
+				case vs::INVALID_PARTNER:
+					VidiunLog::err('Wrong partner ['.self::$vsPartnerId.'] actual partner ['.$vsObj->partner_id.']');
 					break;
 									
-				case ks::INVALID_USER:
-					KalturaLog::err('Wrong user ['.self::$ksUserId.'] actual user ['.$ksObj->user.']');
+				case vs::INVALID_USER:
+					VidiunLog::err('Wrong user ['.self::$vsUserId.'] actual user ['.$vsObj->user.']');
 					break;
 																		
-				case ks::EXPIRED:
-					KalturaLog::err('KS Expired [' . date('Y-m-d H:i:s', $ksObj->valid_until) . ']');
+				case vs::EXPIRED:
+					VidiunLog::err('VS Expired [' . date('Y-m-d H:i:s', $vsObj->valid_until) . ']');
 					break;
 									
-				case ks::LOGOUT:
-					KalturaLog::err('KS already logged out');
+				case vs::LOGOUT:
+					VidiunLog::err('VS already logged out');
 					break;
 				
-				case ks::EXCEEDED_ACTIONS_LIMIT:
-					KalturaLog::err('KS exceeded number of actions limit');
+				case vs::EXCEEDED_ACTIONS_LIMIT:
+					VidiunLog::err('VS exceeded number of actions limit');
 					break;
 					
-				case ks::EXCEEDED_RESTRICTED_IP:
-					KalturaLog::err('IP does not match KS restriction');
+				case vs::EXCEEDED_RESTRICTED_IP:
+					VidiunLog::err('IP does not match VS restriction');
 					break;
 			}
 			
-			throw new kCoreException("Invalid KS", kCoreException::INVALID_KS, ks::getErrorStr($res));
+			throw new vCoreException("Invalid VS", vCoreException::INVALID_VS, vs::getErrorStr($res));
 		}
 	}
 	
@@ -742,18 +742,18 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		$partnerGroup = self::getPartnerGroup($service, $action);
 		$accessAllowed = myPartnerUtils::allowPartnerAccessPartner ( self::$operatingPartnerId , $partnerGroup , self::$requestedPartnerId );
 		if(!$accessAllowed)
-			KalturaLog::debug("Operating partner [" . self::$operatingPartnerId . "] not allowed using requested partner [" . self::$requestedPartnerId . "] with partner group [$partnerGroup]");
+			VidiunLog::debug("Operating partner [" . self::$operatingPartnerId . "] not allowed using requested partner [" . self::$requestedPartnerId . "] with partner group [$partnerGroup]");
 			
 		return $accessAllowed;
 	}
 
 	private static function errorIfUserBlocked()
 	{
-		if (!kCurrentContext::$ks_kuser)
+		if (!vCurrentContext::$vs_vuser)
 			return;
-		$status = kCurrentContext::$ks_kuser->getStatus();
-		if ($status == KuserStatus::BLOCKED)
-			throw new kCoreException("User blocked", kCoreException::USER_BLOCKED);
+		$status = vCurrentContext::$vs_vuser->getStatus();
+		if ($status == VuserStatus::BLOCKED)
+			throw new vCoreException("User blocked", vCoreException::USER_BLOCKED);
 	}
 
 	private static function errorIfPartnerBlocked()
@@ -766,11 +766,11 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		
 		if($partnerStatus == Partner::PARTNER_STATUS_CONTENT_BLOCK)
 		{
-		    throw new kCoreException("Partner blocked", kCoreException::PARTNER_BLOCKED);
+		    throw new vCoreException("Partner blocked", vCoreException::PARTNER_BLOCKED);
 		}
 		if($partnerStatus != Partner::PARTNER_STATUS_ACTIVE)
 		{
-		    throw new kCoreException("Partner fully blocked", kCoreException::PARTNER_BLOCKED);
+		    throw new vCoreException("Partner fully blocked", vCoreException::PARTNER_BLOCKED);
 		}
 	}
 	
@@ -790,20 +790,20 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		$partnerAccessPermitted = self::isPartnerAccessAllowed($service, $action);
 		if(!$partnerAccessPermitted)
 		{
-			KalturaLog::err("Partner is not allowed");
+			VidiunLog::err("Partner is not allowed");
 			return false;
 		}
 		
 		$servicePermitted  = isset(self::$map[self::API_ACTIONS_ARRAY_NAME][$service]);
 		if(!$servicePermitted)
 		{
-			KalturaLog::err("Service is not permitted");
+			VidiunLog::err("Service is not permitted");
 			return false;
 		}
 		
 		$actionPermitted   = isset(self::$map[self::API_ACTIONS_ARRAY_NAME][$service][$action]);
 		if(!$actionPermitted)
-			KalturaLog::err("Action is not permitted");
+			VidiunLog::err("Action is not permitted");
 		
 		return $actionPermitted;
 	}
@@ -819,10 +819,10 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 		{
 			return false;
 		}
-		if ($paramName === kApiParameterPermissionItem::ALL_VALUES_IDENTIFIER) {
+		if ($paramName === vApiParameterPermissionItem::ALL_VALUES_IDENTIFIER) {
 			return true;
 		}
-		if (isset(self::$map[self::API_PARAMETERS_ARRAY_NAME][$array_name][$objectName][kApiParameterPermissionItem::ALL_VALUES_IDENTIFIER])) {
+		if (isset(self::$map[self::API_PARAMETERS_ARRAY_NAME][$array_name][$objectName][vApiParameterPermissionItem::ALL_VALUES_IDENTIFIER])) {
 			return true;
 		}
 		return isset(self::$map[self::API_PARAMETERS_ARRAY_NAME][$array_name][$objectName][$paramName]) || isset(self::$map[self::API_PARAMETERS_ARRAY_NAME][ApiParameterPermissionItemAction::USAGE][$objectName][$paramName]);
@@ -932,7 +932,7 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	}
 		
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -950,7 +950,7 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -981,7 +981,7 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object)
 	{
@@ -995,7 +995,7 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object)
 	{
@@ -1026,11 +1026,11 @@ class kPermissionManager implements kObjectCreatedEventConsumer, kObjectChangedE
 	{
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		if (!$partner) {
-			KalturaLog::err("Cannot find partner with id [$partnerId]");
+			VidiunLog::err("Cannot find partner with id [$partnerId]");
 			return;
 		}
 
-		kEventsManager::raiseEventDeferred(new kObjectInvalidateCacheEvent($partner));
+		vEventsManager::raiseEventDeferred(new vObjectInvalidateCacheEvent($partner));
 	}
 
 	public function shouldConsumeInvalidateCache($object, $params = null)

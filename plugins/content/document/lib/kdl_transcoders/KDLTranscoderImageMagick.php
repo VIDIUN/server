@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage lib
  */
-class KDLTranscoderImageMagick extends KDLOperatorBase{
+class VDLTranscoderImageMagick extends VDLOperatorBase{
 	
 	public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	
@@ -11,9 +11,9 @@ class KDLTranscoderImageMagick extends KDLOperatorBase{
     }
 	
 	/* (non-PHPdoc)
-	 * @see KDLOperatorBase::GenerateCommandLine()
+	 * @see VDLOperatorBase::GenerateCommandLine()
 	 */
-	public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra = null) {
+	public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra = null) {
 		$cmdStr = '';
 		if($target->_image) {
 			$cmdStr.= $this->getTwoDimensionsParams('density', $target->_image->_densityWidth, $target->_image->_densityHeight);
@@ -21,7 +21,7 @@ class KDLTranscoderImageMagick extends KDLOperatorBase{
 			$cmdStr.= $this->getSimpleParam('depth', $target->_image->_depth);
 			$cmdStr.= '-colorspace RGB -limit memory 1000MB -limit map 200 ';
 		}
-		$cmdStr .= $extra . KDLCmdlinePlaceholders::InFileName.' '.KDLCmdlinePlaceholders::OutFileName;
+		$cmdStr .= $extra . VDLCmdlinePlaceholders::InFileName.' '.VDLCmdlinePlaceholders::OutFileName;
 		return $cmdStr;
 		
 	}

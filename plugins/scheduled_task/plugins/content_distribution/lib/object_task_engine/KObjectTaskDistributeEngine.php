@@ -4,15 +4,15 @@
  * @package plugins.scheduledTaskContentDistribution
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskDistributeEngine extends KObjectTaskEntryEngineBase
+class VObjectTaskDistributeEngine extends VObjectTaskEntryEngineBase
 {
 
 	/**
-	 * @param KalturaBaseEntry $object
+	 * @param VidiunBaseEntry $object
 	 */
 	function processObject($object)
 	{
-		/** @var KalturaDistributeObjectTask $objectTask */
+		/** @var VidiunDistributeObjectTask $objectTask */
 		$objectTask = $this->getObjectTask();
 		if (is_null($objectTask))
 			return;
@@ -22,30 +22,30 @@ class KObjectTaskDistributeEngine extends KObjectTaskEntryEngineBase
 		if (!$distributionProfileId)
 			throw new Exception('Distribution profile id was not configured');
 
-		KalturaLog::info("Trying to distribute entry $entryId with profile $distributionProfileId");
+		VidiunLog::info("Trying to distribute entry $entryId with profile $distributionProfileId");
 
 		$client = $this->getClient();
-		$contentDistributionPlugin = KalturaContentDistributionClientPlugin::get($client);
+		$contentDistributionPlugin = VidiunContentDistributionClientPlugin::get($client);
 		$distributionProfile = $contentDistributionPlugin->distributionProfile->get($distributionProfileId);
 
-		if ($distributionProfile->submitEnabled == KalturaDistributionProfileActionStatus::DISABLED)
+		if ($distributionProfile->submitEnabled == VidiunDistributionProfileActionStatus::DISABLED)
 			throw new Exception("Submit action for distribution profile $distributionProfileId id disabled");
 
 		$entryDistribution = $this->getEntryDistribution($entryId, $distributionProfileId);
-		if ($entryDistribution && $entryDistribution->status == KalturaEntryDistributionStatus::REMOVED)
+		if ($entryDistribution && $entryDistribution->status == VidiunEntryDistributionStatus::REMOVED)
 		{
-			KalturaLog::info("Entry distribution is in status REMOVED, deleting it completely");
+			VidiunLog::info("Entry distribution is in status REMOVED, deleting it completely");
 			$contentDistributionPlugin->entryDistribution->delete($entryDistribution->id);
 			$entryDistribution = null;
 		}
 
 		if ($entryDistribution)
 		{
-			KalturaLog::info("Entry distribution already exists with id $entryDistribution->id");
+			VidiunLog::info("Entry distribution already exists with id $entryDistribution->id");
 		}
 		else
 		{
-			$entryDistribution = new KalturaEntryDistribution();
+			$entryDistribution = new VidiunEntryDistribution();
 			$entryDistribution->distributionProfileId = $distributionProfileId;
 			$entryDistribution->entryId = $entryId;
 			$entryDistribution = $contentDistributionPlugin->entryDistribution->add($entryDistribution);
@@ -54,34 +54,34 @@ class KObjectTaskDistributeEngine extends KObjectTaskEntryEngineBase
 		$shouldSubmit = false;
 		switch($entryDistribution->status)
 		{
-			case KalturaEntryDistributionStatus::PENDING:
+			case VidiunEntryDistributionStatus::PENDING:
 				$shouldSubmit = true;
 				break;
-			case KalturaEntryDistributionStatus::QUEUED:
-				KalturaLog::info('Entry distribution is already queued');
+			case VidiunEntryDistributionStatus::QUEUED:
+				VidiunLog::info('Entry distribution is already queued');
 				break;
-			case KalturaEntryDistributionStatus::READY:
-				KalturaLog::info('Entry distribution was already submitted');
+			case VidiunEntryDistributionStatus::READY:
+				VidiunLog::info('Entry distribution was already submitted');
 				break;
-			case KalturaEntryDistributionStatus::SUBMITTING:
-				KalturaLog::info('Entry distribution is currently being submitted');
+			case VidiunEntryDistributionStatus::SUBMITTING:
+				VidiunLog::info('Entry distribution is currently being submitted');
 				break;
-			case KalturaEntryDistributionStatus::UPDATING:
-				KalturaLog::info('Entry distribution is currently being updated, so it was submitted already');
+			case VidiunEntryDistributionStatus::UPDATING:
+				VidiunLog::info('Entry distribution is currently being updated, so it was submitted already');
 				break;
-			case KalturaEntryDistributionStatus::DELETING:
+			case VidiunEntryDistributionStatus::DELETING:
 				// throwing exception, the task will retry on next execution
 				throw new Exception('Entry distribution is currently being deleted and cannot be handled at this stage');
 				break;
-			case KalturaEntryDistributionStatus::ERROR_SUBMITTING:
-			case KalturaEntryDistributionStatus::ERROR_UPDATING:
-			case KalturaEntryDistributionStatus::ERROR_DELETING:
-				KalturaLog::info('Entry distribution is in error state, trying to resubmit');
+			case VidiunEntryDistributionStatus::ERROR_SUBMITTING:
+			case VidiunEntryDistributionStatus::ERROR_UPDATING:
+			case VidiunEntryDistributionStatus::ERROR_DELETING:
+				VidiunLog::info('Entry distribution is in error state, trying to resubmit');
 				$shouldSubmit = true;
 				break;
-			case KalturaEntryDistributionStatus::IMPORT_SUBMITTING:
-			case KalturaEntryDistributionStatus::IMPORT_UPDATING:
-				KalturaLog::info('Entry distribution is waiting for an import job to be finished, do nothing, it will be submitted/updated automatically');
+			case VidiunEntryDistributionStatus::IMPORT_SUBMITTING:
+			case VidiunEntryDistributionStatus::IMPORT_UPDATING:
+				VidiunLog::info('Entry distribution is waiting for an import job to be finished, do nothing, it will be submitted/updated automatically');
 				break;
 			default:
 				throw new Exception("Entry distribution status $entryDistribution->status is invalid");
@@ -95,8 +95,8 @@ class KObjectTaskDistributeEngine extends KObjectTaskEntryEngineBase
 
 	protected function getEntryDistribution($entryId, $distributionProfileId)
 	{
-		$distributionPlugin = KalturaContentDistributionClientPlugin::get($this->getClient());
-		$entryDistributionFilter = new KalturaEntryDistributionFilter();
+		$distributionPlugin = VidiunContentDistributionClientPlugin::get($this->getClient());
+		$entryDistributionFilter = new VidiunEntryDistributionFilter();
 		$entryDistributionFilter->entryIdEqual = $entryId;
 		$entryDistributionFilter->distributionProfileIdEqual = $distributionProfileId;
 		$result = $distributionPlugin->entryDistribution->listAction($entryDistributionFilter);

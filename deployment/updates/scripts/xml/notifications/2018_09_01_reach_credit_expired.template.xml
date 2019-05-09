@@ -15,7 +15,7 @@
     <multirequest>
         <!-- Reach profile credit expired -->
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Reach - credit expired</name>
                 <systemName>Reach_Credit_Expired</systemName>
                 <description>Email notification template to be sent when reach credit expired</description>
@@ -23,44 +23,44 @@
                 <eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
                 <eventObjectType>41</eventObjectType> <!-- EventNotificationEventObjectType::REACH_PROFILE -->
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
-                        <field objectType="KalturaEvalBooleanField">
+                    <item objectType="VidiunEventFieldCondition">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->isCustomDataModified('last_credit_expiry_notification')</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
-                        <field objectType="KalturaEvalBooleanField">
+                    <item objectType="VidiunEventFieldCondition">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getObject()->getLastCreditExpiryNotification() != 0</code>
                         </field>
                     </item>
                 </eventConditions>
                 <format>1</format>
                 <subject>[AppTitle] - Reach Credit Expired</subject>
-                <body>Your reach credit has expired, please contact your Kaltura contact if you wish to extend your credit time range</body>
+                <body>Your reach credit has expired, please contact your Vidiun contact if you wish to extend your credit time range</body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationGroupRecipientProvider">
+                <to objectType="VidiunEmailNotificationGroupRecipientProvider">
                     <groupId>{group_id_equal}</groupId>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_name")</code>
                         </value>
                     </item>
                 </contentParameters>
                 <userParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>group_id_equal</key>
                         <description>The group id to send to</description>
-                        <value objectType="KalturaStringValue">
+                        <value objectType="VidiunStringValue">
                             <value></value>
                         </value>
                     </item>

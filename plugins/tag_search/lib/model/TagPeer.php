@@ -24,11 +24,11 @@ class TagPeer extends BaseTagPeer
 		if(self::$s_criteria_filter == null)
 			self::$s_criteria_filter = new criteriaFilter();
 		
-		$c = KalturaCriteria::create(self::OM_CLASS);
+		$c = VidiunCriteria::create(self::OM_CLASS);
 		
-		if (kEntitlementUtils::getEntitlementEnforcement())
+		if (vEntitlementUtils::getEntitlementEnforcement())
 		{
-			$privacyContexts = kEntitlementUtils::getKsPrivacyContextArray();
+			$privacyContexts = vEntitlementUtils::getVsPrivacyContextArray();
 			$c->addAnd(self::PRIVACY_CONTEXT, $privacyContexts, Criteria::IN);
 		}
 		$c->addAnd(self::INSTANCE_COUNT, 0, Criteria::GREATER_THAN);
@@ -44,7 +44,7 @@ class TagPeer extends BaseTagPeer
 	{
 		$c = clone $criteria;
 		
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());

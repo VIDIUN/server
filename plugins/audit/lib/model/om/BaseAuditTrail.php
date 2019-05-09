@@ -92,10 +92,10 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 	protected $request_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the action field.
@@ -110,10 +110,10 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 	protected $data;
 
 	/**
-	 * The value for the ks field.
+	 * The value for the vs field.
 	 * @var        string
 	 */
-	protected $ks;
+	protected $vs;
 
 	/**
 	 * The value for the context field.
@@ -389,13 +389,13 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -419,13 +419,13 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [ks] column value.
+	 * Get the [vs] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKs()
+	public function getVs()
 	{
-		return $this->ks;
+		return $this->vs;
 	}
 
 	/**
@@ -840,27 +840,27 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 	} // setRequestId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     AuditTrail The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[AuditTrailPeer::KUSER_ID]))
-			$this->oldColumnsValues[AuditTrailPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[AuditTrailPeer::VUSER_ID]))
+			$this->oldColumnsValues[AuditTrailPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = AuditTrailPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = AuditTrailPeer::VUSER_ID;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [action] column.
@@ -909,27 +909,27 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 	} // setData()
 
 	/**
-	 * Set the value of [ks] column.
+	 * Set the value of [vs] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     AuditTrail The current object (for fluent API support)
 	 */
-	public function setKs($v)
+	public function setVs($v)
 	{
-		if(!isset($this->oldColumnsValues[AuditTrailPeer::KS]))
-			$this->oldColumnsValues[AuditTrailPeer::KS] = $this->ks;
+		if(!isset($this->oldColumnsValues[AuditTrailPeer::VS]))
+			$this->oldColumnsValues[AuditTrailPeer::VS] = $this->vs;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->ks !== $v) {
-			$this->ks = $v;
-			$this->modifiedColumns[] = AuditTrailPeer::KS;
+		if ($this->vs !== $v) {
+			$this->vs = $v;
+			$this->modifiedColumns[] = AuditTrailPeer::VS;
 		}
 
 		return $this;
-	} // setKs()
+	} // setVs()
 
 	/**
 	 * Set the value of [context] column.
@@ -1159,10 +1159,10 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 			$this->master_partner_id = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
 			$this->partner_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
 			$this->request_id = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-			$this->kuser_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+			$this->vuser_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
 			$this->action = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->data = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-			$this->ks = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+			$this->vs = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
 			$this->context = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
 			$this->entry_point = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
 			$this->server_name = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
@@ -1421,7 +1421,7 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -1444,7 +1444,7 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
 		parent::postInsert($con);
 	}
@@ -1460,7 +1460,7 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 			return;
 		}
 	
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
 		parent::postUpdate($con);
 	}
@@ -1599,7 +1599,7 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 				return $this->getRequestId();
 				break;
 			case 12:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 13:
 				return $this->getAction();
@@ -1608,7 +1608,7 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 				return $this->getData();
 				break;
 			case 15:
-				return $this->getKs();
+				return $this->getVs();
 				break;
 			case 16:
 				return $this->getContext();
@@ -1667,10 +1667,10 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 			$keys[9] => $this->getMasterPartnerId(),
 			$keys[10] => $this->getPartnerId(),
 			$keys[11] => $this->getRequestId(),
-			$keys[12] => $this->getKuserId(),
+			$keys[12] => $this->getVuserId(),
 			$keys[13] => $this->getAction(),
 			$keys[14] => $this->getData(),
-			$keys[15] => $this->getKs(),
+			$keys[15] => $this->getVs(),
 			$keys[16] => $this->getContext(),
 			$keys[17] => $this->getEntryPoint(),
 			$keys[18] => $this->getServerName(),
@@ -1704,10 +1704,10 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(AuditTrailPeer::MASTER_PARTNER_ID)) $criteria->add(AuditTrailPeer::MASTER_PARTNER_ID, $this->master_partner_id);
 		if ($this->isColumnModified(AuditTrailPeer::PARTNER_ID)) $criteria->add(AuditTrailPeer::PARTNER_ID, $this->partner_id);
 		if ($this->isColumnModified(AuditTrailPeer::REQUEST_ID)) $criteria->add(AuditTrailPeer::REQUEST_ID, $this->request_id);
-		if ($this->isColumnModified(AuditTrailPeer::KUSER_ID)) $criteria->add(AuditTrailPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(AuditTrailPeer::VUSER_ID)) $criteria->add(AuditTrailPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(AuditTrailPeer::ACTION)) $criteria->add(AuditTrailPeer::ACTION, $this->action);
 		if ($this->isColumnModified(AuditTrailPeer::DATA)) $criteria->add(AuditTrailPeer::DATA, $this->data);
-		if ($this->isColumnModified(AuditTrailPeer::KS)) $criteria->add(AuditTrailPeer::KS, $this->ks);
+		if ($this->isColumnModified(AuditTrailPeer::VS)) $criteria->add(AuditTrailPeer::VS, $this->vs);
 		if ($this->isColumnModified(AuditTrailPeer::CONTEXT)) $criteria->add(AuditTrailPeer::CONTEXT, $this->context);
 		if ($this->isColumnModified(AuditTrailPeer::ENTRY_POINT)) $criteria->add(AuditTrailPeer::ENTRY_POINT, $this->entry_point);
 		if ($this->isColumnModified(AuditTrailPeer::SERVER_NAME)) $criteria->add(AuditTrailPeer::SERVER_NAME, $this->server_name);
@@ -1792,13 +1792,13 @@ abstract class BaseAuditTrail extends BaseObject  implements Persistent {
 
 		$copyObj->setRequestId($this->request_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setAction($this->action);
 
 		$copyObj->setData($this->data);
 
-		$copyObj->setKs($this->ks);
+		$copyObj->setVs($this->vs);
 
 		$copyObj->setContext($this->context);
 

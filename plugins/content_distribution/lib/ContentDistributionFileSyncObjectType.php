@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage lib.enum
  */
-class ContentDistributionFileSyncObjectType implements IKalturaPluginEnum, FileSyncObjectType
+class ContentDistributionFileSyncObjectType implements IVidiunPluginEnum, FileSyncObjectType
 {
 	const GENERIC_DISTRIBUTION_ACTION = 'GenericDistributionAction';
 	const ENTRY_DISTRIBUTION = 'EntryDistribution';

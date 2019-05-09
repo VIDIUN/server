@@ -19,23 +19,23 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 	{
 		parent::configure();
 		
-		if(KBatchBase::$taskConfig->params->tempFilePath)
+		if(VBatchBase::$taskConfig->params->tempFilePath)
 		{
-			$this->tempFilePath = KBatchBase::$taskConfig->params->tempFilePath;
+			$this->tempFilePath = VBatchBase::$taskConfig->params->tempFilePath;
 			if(!is_dir($this->tempFilePath))
-				kFile::fullMkfileDir($this->tempFilePath, 0777, true);
+				vFile::fullMkfileDir($this->tempFilePath, 0777, true);
 		}
 		else
 		{
 			$this->tempFilePath = sys_get_temp_dir();
-			KalturaLog::info('params.tempFilePath configuration not supplied, using default system directory ['.$this->tempFilePath.']');
+			VidiunLog::info('params.tempFilePath configuration not supplied, using default system directory ['.$this->tempFilePath.']');
 		}
 	}
 	
 	/**
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		return $this->submitOrUpdate($data);
 	}
@@ -43,7 +43,7 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 	/**
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
 		return $this->submitOrUpdate($data);
 	}
@@ -51,42 +51,42 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 	/**
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		$this->validateObjects($data);
 		
 		$fileManager = $this->getFileTransferManager($data->distributionProfile);
-		KalturaLog::info('Using '.get_class($fileManager).' file transfer manager');
+		VidiunLog::info('Using '.get_class($fileManager).' file transfer manager');
 		
 		foreach($data->mediaFiles as $remoteFile)
 		{
-			/* @var $remoteFile KalturaDistributionRemoteMediaFile */
-			KalturaLog::info('Trying to delete file ['.$remoteFile->remoteId.'], version ['.$remoteFile->version.'] for asset id ['.$remoteFile->assetId.']');
+			/* @var $remoteFile VidiunDistributionRemoteMediaFile */
+			VidiunLog::info('Trying to delete file ['.$remoteFile->remoteId.'], version ['.$remoteFile->version.'] for asset id ['.$remoteFile->assetId.']');
 			try
 			{
 				$fileManager->delFile($remoteFile->remoteId);
 			}
 			catch(Exception $ex)
 			{
-				KalturaLog::err($ex);
-				KalturaLog::err('Failed to delete file ['.$remoteFile->remoteId.']');
+				VidiunLog::err($ex);
+				VidiunLog::err('Failed to delete file ['.$remoteFile->remoteId.']');
 			}
 		}
 		
 		return true;
 	}
 	
-	public function submitOrUpdate(KalturaDistributionJobData $data)
+	public function submitOrUpdate(VidiunDistributionJobData $data)
 	{
 		$this->validateObjects($data);
 		
 		$fileManager = $this->getFileTransferManager($data->distributionProfile);
-		KalturaLog::info('Using '.get_class($fileManager).' file transfer manager');
+		VidiunLog::info('Using '.get_class($fileManager).' file transfer manager');
 		
-		/* @var $providerData KalturaFtpDistributionJobProviderData */
+		/* @var $providerData VidiunFtpDistributionJobProviderData */
 		$providerData = $data->providerData;
 		
-		/* @var $distributionProfile KalturaFtpDistributionProfile */
+		/* @var $distributionProfile VidiunFtpDistributionProfile */
 		$distributionProfile = $data->distributionProfile;
 		
 		if (!is_array($providerData->filesForDistribution) || count($providerData->filesForDistribution) == 0)
@@ -101,11 +101,11 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 		return true;
 	}
 	
-	public function syncFiles(kFileTransferMgr $fileManager, &$remoteFiles, $filesForDistribution, KalturaFtpDistributionProfile $distributionProfile)
+	public function syncFiles(vFileTransferMgr $fileManager, &$remoteFiles, $filesForDistribution, VidiunFtpDistributionProfile $distributionProfile)
 	{
 		foreach($filesForDistribution as $file)
 		{
-			/* @var $file KalturaFtpDistributionFile */
+			/* @var $file VidiunFtpDistributionFile */
 			if ($file->assetId == 'metadata')
 			{
 				$newestRemoteFile = $this->getNewestRemoteFileById($remoteFiles, 'metadata');
@@ -159,12 +159,12 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 	
 	
 	/**
-	 * @param kFileTransferMgr $fileManager
-	 * @param KalturaFtpDistributionFile $file
-	 * @param KalturaFtpDistributionProfile $distributionProfile
-	 * @return KalturaDistributionRemoteMediaFile
+	 * @param vFileTransferMgr $fileManager
+	 * @param VidiunFtpDistributionFile $file
+	 * @param VidiunFtpDistributionProfile $distributionProfile
+	 * @return VidiunDistributionRemoteMediaFile
 	 */
-	protected function distributeFile(kFileTransferMgr $fileManager, KalturaFtpDistributionFile $file, KalturaFtpDistributionProfile $distributionProfile)
+	protected function distributeFile(vFileTransferMgr $fileManager, VidiunFtpDistributionFile $file, VidiunFtpDistributionProfile $distributionProfile)
 	{
 		$remoteFilePath = $this->cleanPath($distributionProfile->basePath . '/' . $file->filename);
 
@@ -173,20 +173,20 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 			$filename = uniqid(null, true) . '.' . pathinfo($file->filename, PATHINFO_EXTENSION);
 			$tempFilePath = $this->tempFilePath . '/' . $filename;
 			file_put_contents($tempFilePath, $file->contents);
-			KalturaLog::info('Sending contents, using temp path [' . $tempFilePath . ']');
+			VidiunLog::info('Sending contents, using temp path [' . $tempFilePath . ']');
 		}
 		else
 		{
 			$tempFilePath = $this->getAssetFile($file->assetId, $this->tempDirectory);
 			if (!$tempFilePath)
 				return null;
-			KalturaLog::info('Sending local file [' . $tempFilePath . ']');
+			VidiunLog::info('Sending local file [' . $tempFilePath . ']');
 		}
 
 		$fileManager->putFile($remoteFilePath, $tempFilePath);
 		unlink($tempFilePath);
 
-		$remoteFile = new KalturaDistributionRemoteMediaFile();
+		$remoteFile = new VidiunDistributionRemoteMediaFile();
 		if ($file->hash)
 			$remoteFile->version = $file->version . '_' . $file->hash;
 		else
@@ -209,7 +209,7 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 		$newestRemoteFile = null;
 		foreach($remoteFiles as $remoteFile)
 		{
-			/* @var $remoteFile KalturaDistributionRemoteMediaFile */
+			/* @var $remoteFile VidiunDistributionRemoteMediaFile */
 			if ($remoteFile->assetId === $id)
 			{
 				if (is_null($newestRemoteFile)) {
@@ -229,7 +229,7 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 		$remoteFiles = array();
 		foreach($remoteFiles as $remoteFile)
 		{
-			/* @var $remoteFile KalturaDistributionRemoteMediaFile */
+			/* @var $remoteFile VidiunDistributionRemoteMediaFile */
 			if ($remoteFile->assetId === 'metadata')
 				$remoteFiles[] = $remoteFile;
 		}
@@ -237,31 +237,31 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
+	 * @param VidiunDistributionJobData $data
 	 * @throws Exception
 	 */
-	protected function validateObjects(KalturaDistributionJobData $data)
+	protected function validateObjects(VidiunDistributionJobData $data)
 	{
-		if(!$data->distributionProfile instanceof KalturaFtpDistributionProfile)
-			throw new Exception('Distribution profile must be of type KalturaFtpDistributionProfile');
+		if(!$data->distributionProfile instanceof VidiunFtpDistributionProfile)
+			throw new Exception('Distribution profile must be of type VidiunFtpDistributionProfile');
 	
-		if (!$data->providerData instanceof KalturaFtpDistributionJobProviderData)
-			throw new Exception('Provider data must be of type KalturaFtpDistributionJobProviderData');
+		if (!$data->providerData instanceof VidiunFtpDistributionJobProviderData)
+			throw new Exception('Provider data must be of type VidiunFtpDistributionJobProviderData');
 	}
 	
 	/**
 	 * 
-	 * @param KalturaFtpDistributionProfile $distributionProfile
-	 * @return kFileTransferMgr
+	 * @param VidiunFtpDistributionProfile $distributionProfile
+	 * @return vFileTransferMgr
 	 */
-	protected function getFileTransferManager(KalturaFtpDistributionProfile $distributionProfile)
+	protected function getFileTransferManager(VidiunFtpDistributionProfile $distributionProfile)
 	{
 		$host = $distributionProfile->host;
 		$port = $distributionProfile->port;
 		$protocol = $distributionProfile->protocol;
 		$username = $distributionProfile->username;
 		$password = $distributionProfile->password;
-		if ($protocol == KalturaDistributionProtocol::ASPERA)
+		if ($protocol == VidiunDistributionProtocol::ASPERA)
 		{
 			$publicKey = $distributionProfile->asperaPublicKey;
         	$privateKey = $distributionProfile->asperaPrivateKey;
@@ -273,8 +273,8 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 		}
         
         $passphrase = $distributionProfile->passphrase ? $distributionProfile->passphrase : null;
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$fileTransferManager = kFileTransferMgr::getInstance($protocol, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$fileTransferManager = vFileTransferMgr::getInstance($protocol, $engineOptions);
         if (trim($privateKey))
         {
             try
@@ -299,13 +299,13 @@ class FtpDistributionEngine extends PublicPrivateKeysDistributionEngine implemen
 		return $fileTransferManager;
 	}
 
-    private function storeMetadataFileAsSentData(KalturaDistributionJobData $data, $filesForDistribution)
+    private function storeMetadataFileAsSentData(VidiunDistributionJobData $data, $filesForDistribution)
     {
         if (is_array($filesForDistribution))
         {
             foreach($filesForDistribution as $file)
             {
-                /* @var $file KalturaFtpDistributionFile */
+                /* @var $file VidiunFtpDistributionFile */
                 if ($file->assetId == 'metadata')
                 {
                     $data->sentData = $file->contents;

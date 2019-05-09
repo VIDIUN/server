@@ -6,7 +6,7 @@ define("DC_INDEX", "dc");
 
 function mysqlConnect()
 {
-	$dbConfig = kConf::getDB();
+	$dbConfig = vConf::getDB();
 	
 	if(!isset($dbConfig['datasources']) || !isset($dbConfig['datasources']['propel']) || !isset($dbConfig['datasources']['propel']['connection']))
 	{
@@ -90,7 +90,7 @@ function getInsertCommand($wowzaHostName, $wowzaDc, $wowzaServerNodeType)
 	$insertCommand = "insert into server_node set created_at = \"$date\", updated_at = \"$date\", dc = $wowzaDc, name = \"$wowzaHostName\", host_name = \"$wowzaHostName\", type = $wowzaServerNodeType, partner_id = -5, status = 1";
 	
 	$custom_data = array();
-	$custom_data["application_name"] = "kLive";
+	$custom_data["application_name"] = "vLive";
 	
 	$serializedCustomData = serialize($custom_data);
 	

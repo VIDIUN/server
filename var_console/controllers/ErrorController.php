@@ -12,8 +12,8 @@ class ErrorController extends Zend_Controller_Action
 		$this->_helper->layout->disableLayout();
 		$errors = $this->_getParam('error_handler');
 		
-		// handle kaltura session expired
-		if (get_class($errors->exception) == 'Kaltura_Client_Exception')
+		// handle vidiun session expired
+		if (get_class($errors->exception) == 'Vidiun_Client_Exception')
 		{
 			if (strpos($errors->exception->getMessage(), 'EXPIRED'))
 			{
@@ -55,7 +55,7 @@ class ErrorController extends Zend_Controller_Action
 
 	public function handleApplicationException(Exception $ex)
 	{
-		KalturaLog::ERR($ex);
+		VidiunLog::ERR($ex);
 		$this->getResponse()->setHttpResponseCode(500);
 		$this->view->message = 'Application error';
 	}

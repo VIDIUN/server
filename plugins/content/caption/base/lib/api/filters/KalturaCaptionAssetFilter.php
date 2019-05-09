@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage api.filters
  */
-class KalturaCaptionAssetFilter extends KalturaCaptionAssetBaseFilter
+class VidiunCaptionAssetFilter extends VidiunCaptionAssetBaseFilter
 {
 
 	static private $map_between_objects = array
@@ -18,24 +18,24 @@ class KalturaCaptionAssetFilter extends KalturaCaptionAssetBaseFilter
 	}	
 
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getTypeListResponse()
+	 * @see VidiunAssetFilter::getTypeListResponse()
 	 */
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, array $types = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, array $types = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager, $types);
 		
-		$response = new KalturaCaptionAssetListResponse();
-		$response->objects = KalturaCaptionAssetArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunCaptionAssetListResponse();
+		$response->objects = VidiunCaptionAssetArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;  
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getListResponse()
+	 * @see VidiunAssetFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$types = KalturaPluginManager::getExtendedTypes(assetPeer::OM_CLASS, CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));
+		$types = VidiunPluginManager::getExtendedTypes(assetPeer::OM_CLASS, CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));
 		return $this->getTypeListResponse($pager, $responseProfile, $types);
 	}
 }

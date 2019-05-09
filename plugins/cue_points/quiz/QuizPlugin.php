@@ -3,7 +3,7 @@
  * Enable question cue point objects and answer cue point objects management on entry objects
  * @package plugins.quiz
  */
-class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKalturaServices, IKalturaDynamicAttributesContributer, IKalturaEventConsumers, IKalturaReportProvider, IKalturaSearchDataContributor, IKalturaElasticSearchDataContributor
+class QuizPlugin extends BaseCuePointPlugin implements IVidiunCuePoint, IVidiunServices, IVidiunDynamicAttributesContributer, IVidiunEventConsumers, IVidiunReportProvider, IVidiunSearchDataContributor, IVidiunElasticSearchDataContributor
 {
 	const PLUGIN_NAME = 'quiz';
 
@@ -13,7 +13,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	const CUE_POINT_NAME = 'cuePoint';
 
 	const ANSWERS_OPTIONS = "answersOptions";
-	const QUIZ_MANAGER = "kQuizManager";
+	const QUIZ_MANAGER = "vQuizManager";
 	const IS_QUIZ = "isQuiz";
 	const QUIZ_DATA = "quizData";
 	
@@ -28,8 +28,8 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if ($dbEntry)
 		{
-			$kQuiz = self::getQuizData($dbEntry);
-			if (!is_null($kQuiz))
+			$vQuiz = self::getQuizData($dbEntry);
+			if (!is_null($vQuiz))
 				return true;
 		}
 
@@ -37,7 +37,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -45,7 +45,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -53,7 +53,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap ()
 	{
@@ -66,7 +66,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -100,34 +100,34 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$cuePointVersion = new KalturaVersion(
+		$cuePointVersion = new VidiunVersion(
 			self::CUE_POINT_VERSION_MAJOR,
 			self::CUE_POINT_VERSION_MINOR,
 			self::CUE_POINT_VERSION_BUILD);
 
-		$dependency = new KalturaDependency(self::CUE_POINT_NAME, $cuePointVersion);
+		$dependency = new VidiunDependency(self::CUE_POINT_NAME, $cuePointVersion);
 		return array($dependency);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaCuePoint') {
+		if($baseClass == 'VidiunCuePoint') {
 			if ( $enumValue == self::getCuePointTypeCoreValue(QuizCuePointType::QUIZ_QUESTION))
-				return new KalturaQuestionCuePoint();
+				return new VidiunQuestionCuePoint();
 
 			if ( $enumValue == self::getCuePointTypeCoreValue(QuizCuePointType::QUIZ_ANSWER))
-				return new KalturaAnswerCuePoint();
+				return new VidiunAnswerCuePoint();
 		}
-		if ( ($baseClass=="KalturaUserEntry") && ($enumValue ==  self::getCoreValue('UserEntryType' , QuizUserEntryType::QUIZ)))
+		if ( ($baseClass=="VidiunUserEntry") && ($enumValue ==  self::getCoreValue('UserEntryType' , QuizUserEntryType::QUIZ)))
 		{
-			return new KalturaQuizUserEntry();
+			return new VidiunQuizUserEntry();
 		}
 		if ( ($baseClass=="UserEntry") && ($enumValue == self::getCoreValue('UserEntryType' , QuizUserEntryType::QUIZ)))
 		{
@@ -136,7 +136,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -154,7 +154,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -164,11 +164,11 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != SchemaType::SYNDICATION
 			&&
@@ -189,8 +189,8 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 					<xs:element name="question" minOccurs="1" maxOccurs="1" type="xs:string"> </xs:element>
 					<xs:element name="hint" minOccurs="0" maxOccurs="1" type="xs:string"> </xs:element>
 					<xs:element name="explanation" minOccurs="0" maxOccurs="1" type="xs:string"> </xs:element>
-					<xs:element name="optionalAnswers" minOccurs="0" maxOccurs="1" type="KalturaOptionalAnswersArray"></xs:element>
-					<xs:element name="correctAnswerKeys" minOccurs="0" maxOccurs="1" type="KalturaStringArray"></xs:element>
+					<xs:element name="optionalAnswers" minOccurs="0" maxOccurs="1" type="VidiunOptionalAnswersArray"></xs:element>
+					<xs:element name="correctAnswerKeys" minOccurs="0" maxOccurs="1" type="VidiunStringArray"></xs:element>
 				</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
@@ -249,17 +249,17 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
- 	* @see IKalturaCuePoint::getCuePointTypeCoreValue()
+ 	* @see IVidiunCuePoint::getCuePointTypeCoreValue()
  	*/
 	public static function getCuePointTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('CuePointType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('CuePointType', $value);
 	}
 
 	public static  function getCapatabilityCoreValue()
 	{
-		return kPluginableEnumsManager::apiToCore('EntryCapability', self::PLUGIN_NAME . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . self::PLUGIN_NAME);
+		return vPluginableEnumsManager::apiToCore('EntryCapability', self::PLUGIN_NAME . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . self::PLUGIN_NAME);
 	}
 
 	/**
@@ -267,20 +267,20 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	 */
 	public static function getCoreValue($type, $valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore($type, $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore($type, $value);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getApiValue()
+	 * @see IVidiunCuePoint::getApiValue()
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getTypesToIndexOnEntry()
+	 * @see IVidiunCuePoint::getTypesToIndexOnEntry()
 	*/
 	public static function getTypesToIndexOnEntry()
 	{
@@ -288,7 +288,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaDynamicAttributesContributer::getDynamicAttribute()
+	 * @see IVidiunDynamicAttributesContributer::getDynamicAttribute()
 	 */
 	public static function getDynamicAttributes(IIndexable $object)
 	{
@@ -309,7 +309,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 
 	/**
 	 * @param entry $entry
-	 * @return kQuiz
+	 * @return vQuiz
 	 */
 	public static function getQuizData( entry $entry )
 	{
@@ -319,11 +319,11 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 
 	/**
 	 * @param entry $entry
-	 * @param kQuiz $kQuiz
+	 * @param vQuiz $vQuiz
 	 */
-	public static function setQuizData( entry $entry, kQuiz $kQuiz )
+	public static function setQuizData( entry $entry, vQuiz $vQuiz )
 	{
-		$entry->putInCustomData( self::QUIZ_DATA, $kQuiz);
+		$entry->putInCustomData( self::QUIZ_DATA, $vQuiz);
 		$entry->addCapability(self::getCapatabilityCoreValue());
 	}
 
@@ -333,11 +333,11 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	 * @throws Exception
 	 */
 	public static function validateAndGetQuiz( entry $dbEntry ) {
-		$kQuiz = self::getQuizData($dbEntry);
-		if ( !$kQuiz )
-			throw new kCoreException("Entry is not a quiz",kCoreException::INVALID_ENTRY_ID, $dbEntry->getId());
+		$vQuiz = self::getQuizData($dbEntry);
+		if ( !$vQuiz )
+			throw new vCoreException("Entry is not a quiz",vCoreException::INVALID_ENTRY_ID, $dbEntry->getId());
 
-		return $kQuiz;
+		return $vQuiz;
 	}
 
 
@@ -351,7 +351,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	 * @param $page_index
 	 * @param null $orderBy
 	 * @return array|null
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	public function getReportResult($partner_id, $report_type, $report_flavor, $objectIds, $inputFilter,
 									$page_size , $page_index, $orderBy = null)
@@ -418,7 +418,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	 */
 	protected function pagerResults(array $ans, $page_size , $page_index)
 	{
-		KalturaLog::debug("QUIZ Report::: page_size [$page_size] page_index [$page_index] array size [" .count($ans)."]");
+		VidiunLog::debug("QUIZ Report::: page_size [$page_size] page_index [$page_index] array size [" .count($ans)."]");
 		$res = array();
 		if ($page_index ==0)
 			$page_index = 1;
@@ -430,27 +430,27 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 
 		$indexInArray = ($page_index -1) * $page_size;
 		$res = array_slice($ans, $indexInArray, $page_size, false );
-		KalturaLog::debug("QUIZ Report::: The number of arguments in the response is [" .count($res)."]");
+		VidiunLog::debug("QUIZ Report::: The number of arguments in the response is [" .count($res)."]");
 		return $res;
 	}
 
 	/**
 	 * @param $objectIds
 	 * @return array
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	protected function getTotalReport($objectIds)
 	{
 		if (!$objectIds)
 		{
-			throw new kCoreException("",kCoreException::INVALID_ENTRY_ID, $objectIds);
+			throw new vCoreException("",vCoreException::INVALID_ENTRY_ID, $objectIds);
 		}
 		$avg = 0;
 		$dbEntry = entryPeer::retrieveByPK($objectIds);
 		if (!$dbEntry)
-			throw new kCoreException("",kCoreException::INVALID_ENTRY_ID, $objectIds);
-		$kQuiz = self::getQuizData($dbEntry);
-		if ( !$kQuiz )
+			throw new vCoreException("",vCoreException::INVALID_ENTRY_ID, $objectIds);
+		$vQuiz = self::getQuizData($dbEntry);
+		if ( !$vQuiz )
 			return array(array('average' => null));
 		$c = new Criteria();
 		$c->add(UserEntryPeer::ENTRY_ID, $objectIds);
@@ -459,7 +459,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 
 		$quizzes = UserEntryPeer::doSelect($c);
 		$numOfQuizzesFound = count($quizzes);
-		KalturaLog::debug("Found $numOfQuizzesFound quizzes that were submitted");
+		VidiunLog::debug("Found $numOfQuizzesFound quizzes that were submitted");
 		if ($numOfQuizzesFound)
 		{
 			$sumOfScores = 0;
@@ -478,14 +478,14 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	/**
 	 * @param $objectIds
 	 * @return array
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	protected function getQuestionPercentageTableReport($objectIds, $orderBy)
 	{
 		$dbEntry = entryPeer::retrieveByPK($objectIds);
 		if (!$dbEntry)
-			throw new kCoreException("",kCoreException::INVALID_ENTRY_ID, $objectIds);
-		$kQuiz = QuizPlugin::validateAndGetQuiz( $dbEntry );
+			throw new vCoreException("",vCoreException::INVALID_ENTRY_ID, $objectIds);
+		$vQuiz = QuizPlugin::validateAndGetQuiz( $dbEntry );
 		$c = new Criteria();
 		$c->add(CuePointPeer::ENTRY_ID, $objectIds);
 		$c->add(CuePointPeer::TYPE, QuizPlugin::getCoreValue('CuePointType',QuizCuePointType::QUIZ_QUESTION));
@@ -509,27 +509,27 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	/**
 	 * @param $objectIds
 	 * @return array
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	protected function getReportCount($objectIds)
 	{
 		$dbEntry = entryPeer::retrieveByPK($objectIds);
 		if (!$dbEntry)
 		{
-			throw new kCoreException("", kCoreException::INVALID_ENTRY_ID, $objectIds);
+			throw new vCoreException("", vCoreException::INVALID_ENTRY_ID, $objectIds);
 		}
 		/**
-		 * @var kQuiz $kQuiz
+		 * @var vQuiz $vQuiz
 		 */
-		$kQuiz = QuizPlugin::validateAndGetQuiz($dbEntry);
+		$vQuiz = QuizPlugin::validateAndGetQuiz($dbEntry);
 		$ans = array();
 		$c = new Criteria();
 		$c->add(CuePointPeer::ENTRY_ID, $objectIds);
 		$c->add(CuePointPeer::TYPE, QuizPlugin::getCoreValue('CuePointType', QuizCuePointType::QUIZ_QUESTION));
-		$anonKuserIds = $this->getAnonymousKuserIds($dbEntry->getPartnerId());
-		if (!empty($anonKuserIds))
+		$anonVuserIds = $this->getAnonymousVuserIds($dbEntry->getPartnerId());
+		if (!empty($anonVuserIds))
 		{
-			$c->add(CuePointPeer::KUSER_ID, $anonKuserIds, Criteria::NOT_IN);
+			$c->add(CuePointPeer::VUSER_ID, $anonVuserIds, Criteria::NOT_IN);
 		}
 
 		$numOfquestions = CuePointPeer::doCount($c);
@@ -542,7 +542,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	{
 		$c = new Criteria();
 		$c->setDistinct();
-		$c->addSelectColumn(UserEntryPeer::KUSER_ID);
+		$c->addSelectColumn(UserEntryPeer::VUSER_ID);
 		$c->add(UserEntryPeer::ENTRY_ID, $objectIds);
 		$c->add(UserEntryPeer::STATUS, QuizPlugin::getCoreValue('UserEntryStatus',QuizUserEntryStatus::QUIZ_SUBMITTED));
 
@@ -602,18 +602,18 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	/**
 	 * @param $objectIds
 	 * @return array
-	 * @throws kCoreException
-	 * @throws KalturaAPIException
+	 * @throws vCoreException
+	 * @throws VidiunAPIException
 	 */
 	protected function getUserPercentageTable($objectIds, $orderBy)
 	{
 		$dbEntry = entryPeer::retrieveByPK($objectIds);
 		if (!$dbEntry)
-			throw new kCoreException("",kCoreException::INVALID_ENTRY_ID, $objectIds);
+			throw new vCoreException("",vCoreException::INVALID_ENTRY_ID, $objectIds);
 		/**
-		 * @var kQuiz $kQuiz
+		 * @var vQuiz $vQuiz
 		 */
-		$kQuiz = QuizPlugin::validateAndGetQuiz( $dbEntry );
+		$vQuiz = QuizPlugin::validateAndGetQuiz( $dbEntry );
 		$c = new Criteria();
 		$c->add(UserEntryPeer::ENTRY_ID, $objectIds);
 		$userEntries = UserEntryPeer::doSelect($c);
@@ -628,46 +628,46 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 		foreach ($userEntries as $userEntry)
 		{
 			if ($userEntry->getStatus() == self::getCoreValue('UserEntryStatus', QuizUserEntryStatus::QUIZ_SUBMITTED)) {
-				if (isset($usersCorrectAnswers[$userEntry->getKuserId()]))
+				if (isset($usersCorrectAnswers[$userEntry->getVuserId()]))
 				{
-					$usersCorrectAnswers[$userEntry->getKuserId()]+=$userEntry->getNumOfCorrectAnswers();
+					$usersCorrectAnswers[$userEntry->getVuserId()]+=$userEntry->getNumOfCorrectAnswers();
 				} else
 				{
-					$usersCorrectAnswers[$userEntry->getKuserId()] = $userEntry->getNumOfCorrectAnswers();
+					$usersCorrectAnswers[$userEntry->getVuserId()] = $userEntry->getNumOfCorrectAnswers();
 				}
-				if (isset($usersTotalQuestions[$userEntry->getKuserId()]))
+				if (isset($usersTotalQuestions[$userEntry->getVuserId()]))
 				{
 					$numOfQuestions = $userEntry->getNumOfRelevnatQuestions() ? $userEntry->getNumOfRelevnatQuestions() : $userEntry->getNumOfQuestions();
-					$usersTotalQuestions[$userEntry->getKuserId()]+= $numOfQuestions;
+					$usersTotalQuestions[$userEntry->getVuserId()]+= $numOfQuestions;
 				} else
 				{
 					$numOfQuestions = $userEntry->getNumOfRelevnatQuestions() ? $userEntry->getNumOfRelevnatQuestions() : $userEntry->getNumOfQuestions();
-					$usersTotalQuestions[$userEntry->getKuserId()] = $numOfQuestions;
+					$usersTotalQuestions[$userEntry->getVuserId()] = $numOfQuestions;
 				}
 			}
 		}
 
-		foreach (array_keys($usersTotalQuestions) as $kuserId)
+		foreach (array_keys($usersTotalQuestions) as $vuserId)
 		{
 			$totalCorrect = 0;
-			$totalAnswers = $usersTotalQuestions[$kuserId];
+			$totalAnswers = $usersTotalQuestions[$vuserId];
 			if ($totalAnswers == 0)
 			{
 				continue;
 			}
 
-			if (isset($usersCorrectAnswers[$kuserId]))
+			if (isset($usersCorrectAnswers[$vuserId]))
 			{
-				$totalCorrect = $usersCorrectAnswers[$kuserId];
+				$totalCorrect = $usersCorrectAnswers[$vuserId];
 			}
 
 			$userId = "Unknown";
-			$dbKuser = kuserPeer::retrieveByPK($kuserId);
-			if ($dbKuser)
+			$dbVuser = vuserPeer::retrieveByPK($vuserId);
+			if ($dbVuser)
 			{
-				if($dbKuser->getPuserId())
+				if($dbVuser->getPuserId())
 				{
-					$userId = $dbKuser->getPuserId();
+					$userId = $dbVuser->getPuserId();
 				}
 			}
 			$ans[$userId] = array('user_id' => $userId,
@@ -692,25 +692,25 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 
 		$c = new Criteria();
 		if (!$noUserIds){
-			$c->add(UserEntryPeer::KUSER_ID, $this->getKuserIds($userIds), Criteria::IN);
+			$c->add(UserEntryPeer::VUSER_ID, $this->getVuserIds($userIds), Criteria::IN);
 		}
 		if (!$noEntryIds){
 			$entryIdsArray = explode(",", $entryIds);
 			$dbEntries = entryPeer::retrieveByPKs($entryIdsArray);
 			if (empty($dbEntries)) {
-				throw new kCoreException("", kCoreException::INVALID_ENTRY_ID, $entryIds);
+				throw new vCoreException("", vCoreException::INVALID_ENTRY_ID, $entryIds);
 			}
 			$c->add(UserEntryPeer::ENTRY_ID, $entryIdsArray, Criteria::IN);
 			$hasAnonymous = false;
 			foreach ($dbEntries as $dbEntry) {
-				$anonKuserIds = $this->getAnonymousKuserIds($dbEntry->getPartnerId());
-				if (!empty($anonKuserIds)) {
+				$anonVuserIds = $this->getAnonymousVuserIds($dbEntry->getPartnerId());
+				if (!empty($anonVuserIds)) {
 					$hasAnonymous = true;
 					break;
 				}
 			}
 			if ($hasAnonymous) {
-				$c->addAnd(UserEntryPeer::KUSER_ID, $anonKuserIds, Criteria::NOT_IN);
+				$c->addAnd(UserEntryPeer::VUSER_ID, $anonVuserIds, Criteria::NOT_IN);
 			}
 		}
 		$userEntries = UserEntryPeer::doSelect($c);
@@ -757,9 +757,9 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 			$c->add(CuePointPeer::PARENT_ID, $question->getId());
 			if($avoidAnonymous)
 			{
-				$anonKuserIds = $this->getAnonymousKuserIds($question->getPartnerId());
-				if (!empty($anonKuserIds)) {
-					$c->add(CuePointPeer::KUSER_ID, $anonKuserIds, Criteria::NOT_IN);
+				$anonVuserIds = $this->getAnonymousVuserIds($question->getPartnerId());
+				if (!empty($anonVuserIds)) {
+					$c->add(CuePointPeer::VUSER_ID, $anonVuserIds, Criteria::NOT_IN);
 				}
 			}
 			$answers = CuePointPeer::doSelect($c);
@@ -778,7 +778,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 				foreach ($optionalAnswers as $optionalAnswer)
 				{
 					/**
-					 * @var kOptionalAnswer $optionalAnswer
+					 * @var vOptionalAnswer $optionalAnswer
 					 */
 					if ($optionalAnswer->getKey() === $answer->getAnswerKey())
 					{
@@ -815,24 +815,24 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	 */
 	protected function createGetCuePointByUserIdsCriteria($objectIds, $c)
 	{
-		$kuserIds = $this->getKuserIds($objectIds);
-		$c->add(CuePointPeer::KUSER_ID, $kuserIds, Criteria::IN);
+		$vuserIds = $this->getVuserIds($objectIds);
+		$c->add(CuePointPeer::VUSER_ID, $vuserIds, Criteria::IN);
 		return $c;
 	}
 
-	protected function getKuserIds($objectIds)
+	protected function getVuserIds($objectIds)
 	{
 		$userIds = baseObjectUtils::getObjectIdsAsArray($objectIds);
-		$kuserIds = array();
+		$vuserIds = array();
 		foreach ($userIds as $userId)
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, $userId);
-			if ($kuser)
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, $userId);
+			if ($vuser)
 			{
-				$kuserIds[] = $kuser->getKuserId();
+				$vuserIds[] = $vuser->getVuserId();
 			}
 		}
-		return $kuserIds;
+		return $vuserIds;
 	}
 	
 	protected function filterSubmittedAnswers($answers)
@@ -862,18 +862,18 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	/**
 	 * @param $partnerID
 	 */
-	protected function getAnonymousKuserIds($partnerID)
+	protected function getAnonymousVuserIds($partnerID)
 	{
-	    $anonKuserIds = array();
-		$anonKusers = kuserPeer::getKuserByPartnerAndUids($partnerID, array('', 0));
-		foreach ($anonKusers as $anonKuser) {
-		    $anonKuserIds[] = $anonKuser->getKuserId();
+	    $anonVuserIds = array();
+		$anonVusers = vuserPeer::getVuserByPartnerAndUids($partnerID, array('', 0));
+		foreach ($anonVusers as $anonVuser) {
+		    $anonVuserIds[] = $anonVuser->getVuserId();
 		}
-		return $anonKuserIds;
+		return $anonVuserIds;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaSearchDataContributor::getSearchData()
+	 * @see IVidiunSearchDataContributor::getSearchData()
 	 */
 	public static function getSearchData(BaseObject $object)
 	{

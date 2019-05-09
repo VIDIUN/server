@@ -3,17 +3,17 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaMetadataProfileFieldArray extends KalturaTypedArray
+class VidiunMetadataProfileFieldArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaMetadataProfileFieldArray();
+		$newArr = new VidiunMetadataProfileFieldArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaMetadataProfileField();
+    		$nObj = new VidiunMetadataProfileField();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaMetadataProfileFieldArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaMetadataProfileField");	
+		parent::__construct("VidiunMetadataProfileField");	
 	}
 }

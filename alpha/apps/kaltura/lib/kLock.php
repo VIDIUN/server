@@ -3,19 +3,19 @@
  * @package Core
  * @subpackage utils
  */
-class kLock extends kLockBase
+class vLock extends vLockBase
 {
 	/**
 	 * @param string $key
-	 * @return NULL|kLock
+	 * @return NULL|vLock
 	 */
 	static public function create($key)
 	{
-		$store = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_LOCK_KEYS);
+		$store = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_LOCK_KEYS);
 		if (!$store)
 			return null;
 		
-		return new kLock($store, $key);
+		return new vLock($store, $key);
 	}
 		
 	/**
@@ -28,7 +28,7 @@ class kLock extends kLockBase
 	public function runLockedImpl($callback, array $params = array(), $lockGrabTimeout = 2, $lockHoldTimeout = 5)
 	{
 		if (!$this->lock($lockGrabTimeout, $lockHoldTimeout))
-			throw new kCoreException("Timed out grabbing [{$this->key}]", kCoreException::LOCK_TIMED_OUT);
+			throw new vCoreException("Timed out grabbing [{$this->key}]", vCoreException::LOCK_TIMED_OUT);
 		
 		try
 		{

@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage api.enum
  */
-class KalturaDrmProviderType extends KalturaDynamicEnum implements DrmProviderType
+class VidiunDrmProviderType extends VidiunDynamicEnum implements DrmProviderType
 {
 	public static function getEnumClass()
 	{

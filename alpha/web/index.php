@@ -9,7 +9,7 @@ if($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 }
 
 $start = microtime(true);
-require_once(dirname(__FILE__).'/../config/kConf.php');
+require_once(dirname(__FILE__).'/../config/vConf.php');
 
 function sendCachingHeaders($max_age = 864000, $private = false, $last_modified = null)
 {
@@ -52,7 +52,7 @@ function checkCache()
 		{
 			sendCachingHeaders(60, true, time());
 
-			header("X-Kaltura:cached-dispatcher-redirect");
+			header("X-Vidiun:cached-dispatcher-redirect");
 			header("Location:$url");
 			die;
 		}
@@ -72,15 +72,15 @@ function checkCache()
 
 	if (strpos($uri, "/playManifest") !== false)
 	{
-		require_once(dirname(__FILE__)."/../apps/kaltura/lib/cache/kPlayManifestCacher.php");
-		$cache = kPlayManifestCacher::getInstance();
+		require_once(dirname(__FILE__)."/../apps/vidiun/lib/cache/vPlayManifestCacher.php");
+		$cache = vPlayManifestCacher::getInstance();
 		$cache->checkOrStart();
 	}	
 	else if(strpos($uri, "/partnerservices2") !== false)
 	{
 		$params = $_GET + $_POST;
-		unset($params['ks']);
-		unset($params['kalsig']);
+		unset($params['vs']);
+		unset($params['vidsig']);
 		$params['uri'] = $_SERVER['PATH_INFO'];
 		$params['__protocol'] = $protocol;
 		ksort($params);
@@ -119,27 +119,27 @@ function checkCache()
 					}
 
 					$processing_time = microtime(true) - $start_time;
-					header("X-Kaltura:cached-dispatcher,$key,$processing_time");
+					header("X-Vidiun:cached-dispatcher,$key,$processing_time");
 					echo $response;
 					die;
 				}
 			}
 		}
 	}
-	else if (strpos($uri, "/kwidget") !== false)	
+	else if (strpos($uri, "/vwidget") !== false)	
 	{
-		require_once(dirname(__FILE__)."/../apps/kaltura/lib/cache/kCacheManager.php");
+		require_once(dirname(__FILE__)."/../apps/vidiun/lib/cache/vCacheManager.php");
 
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PS2);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PS2);
 		if ($cache)
 		{
 			// check if we cached the patched swf with flashvars
 			$uri = $protocol.$uri;
-			$cachedResponse = $cache->get("kwidgetswf$uri");
+			$cachedResponse = $cache->get("vwidgetswf$uri");
 			if ($cachedResponse) // dont use cache if we want to force no caching
 			{
 				$max_age = 60 * 10;
-				header("X-Kaltura:cached-dispatcher");
+				header("X-Vidiun:cached-dispatcher");
 				header("Content-Type: application/x-shockwave-flash");
 				sendCachingHeaders($max_age, true, time());
 				header("Content-Length: ".strlen($cachedResponse));
@@ -147,10 +147,10 @@ function checkCache()
 				die;
 			}
 			
-			$cachedResponse = $cache->get("kwidget$uri");
+			$cachedResponse = $cache->get("vwidget$uri");
 			if ($cachedResponse)
 			{
-				header("X-Kaltura:cached-dispatcher");
+				header("X-Vidiun:cached-dispatcher");
 				header("Expires: Sun, 19 Nov 2000 08:52:00 GMT");
 				header("Cache-Control" , "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
 				header("Pragma" , "no-cache" );
@@ -185,19 +185,19 @@ function checkCache()
 	}
 	else if (strpos($uri, "/thumbnail") !== false)	
 	{
-		require_once(dirname(__FILE__)."/../apps/kaltura/lib/cache/kCacheManager.php");
+		require_once(dirname(__FILE__)."/../apps/vidiun/lib/cache/vCacheManager.php");
 		
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PS2);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PS2);
 		if ($cache)
 		{
-			require_once(dirname(__FILE__) . '/../apps/kaltura/lib/renderers/kRendererDumpFile.php');
+			require_once(dirname(__FILE__) . '/../apps/vidiun/lib/renderers/vRendererDumpFile.php');
 			
 			$cachedResponse = $cache->get("thumb$uri");
 			if ($cachedResponse && is_array($cachedResponse))
 			{
 				list($renderer, $invalidationKey, $cacheTime) = $cachedResponse;
 				
-				$keysStore = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
+				$keysStore = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
 				if ($keysStore)
 				{
 					$modifiedTime = $keysStore->get($invalidationKey);
@@ -207,9 +207,9 @@ function checkCache()
 					}
 				}
 				
-				require_once(dirname(__FILE__) . '/../apps/kaltura/lib/monitor/KalturaMonitorClient.php');
-				KalturaMonitorClient::initApiMonitor(true, 'extwidget.thumbnail', $renderer->partnerId);
-				header("X-Kaltura:cached-dispatcher-thumb");
+				require_once(dirname(__FILE__) . '/../apps/vidiun/lib/monitor/VidiunMonitorClient.php');
+				VidiunMonitorClient::initApiMonitor(true, 'extwidget.thumbnail', $renderer->partnerId);
+				header("X-Vidiun:cached-dispatcher-thumb");
 				$renderer->output();
 				die;
 			}
@@ -217,16 +217,16 @@ function checkCache()
 	}	
 	else if (strpos($uri, "/embedIframe/") !== false)
 	{
-		require_once(dirname(__FILE__)."/../apps/kaltura/lib/cache/kCacheManager.php");
+		require_once(dirname(__FILE__)."/../apps/vidiun/lib/cache/vCacheManager.php");
 		
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PS2);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PS2);
 		if ($cache)
 		{
 			// check if we cached the patched swf with flashvars
 			$cachedResponse = $cache->get("embedIframe$uri");
 			if ($cachedResponse) // dont use cache if we want to force no caching
 			{
-				header("X-Kaltura:cached-dispatcher");
+				header("X-Vidiun:cached-dispatcher");
 				sendCachingHeaders(0);
 				header("Location:$cachedResponse");
 				
@@ -236,19 +236,19 @@ function checkCache()
 	}
 	else if (strpos($uri, "/serveFlavor/") !== false && function_exists('apc_fetch') && $_SERVER["REQUEST_METHOD"] == "GET")
 	{
-		require_once(dirname(__FILE__) . '/../apps/kaltura/lib/renderers/kRendererDumpFile.php');
-		require_once(dirname(__FILE__) . '/../apps/kaltura/lib/renderers/kRendererString.php');
-		require_once(dirname(__FILE__) . '/../apps/kaltura/lib/monitor/KalturaMonitorClient.php');
-		require_once(dirname(__FILE__) . '/../apps/kaltura/lib/request/kIpAddressUtils.php');
+		require_once(dirname(__FILE__) . '/../apps/vidiun/lib/renderers/vRendererDumpFile.php');
+		require_once(dirname(__FILE__) . '/../apps/vidiun/lib/renderers/vRendererString.php');
+		require_once(dirname(__FILE__) . '/../apps/vidiun/lib/monitor/VidiunMonitorClient.php');
+		require_once(dirname(__FILE__) . '/../apps/vidiun/lib/request/vIpAddressUtils.php');
 		
 		$host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST'];
-		$cacheKey = 'dumpFile-'.kIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']).'-'.$host.$uri;
+		$cacheKey = 'dumpFile-'.vIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']).'-'.$host.$uri;
 		
 		$renderer = apc_fetch($cacheKey);
 		if ($renderer)
 		{
-			KalturaMonitorClient::initApiMonitor(true, 'extwidget.serveFlavor', $renderer->partnerId);
-			header("X-Kaltura:cached-dispatcher");
+			VidiunMonitorClient::initApiMonitor(true, 'extwidget.serveFlavor', $renderer->partnerId);
+			header("X-Vidiun:cached-dispatcher");
 			$renderer->output();
 			die;
 		}
@@ -257,7 +257,7 @@ function checkCache()
 
 checkCache();
 
-define('KALTURA_LOG', 		'ps2');
+define('VIDIUN_LOG', 		'ps2');
 define('SF_ENVIRONMENT',	'prod');
 define('SF_DEBUG',			false);
 

@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPlaylistListResponse extends KalturaListResponse
+class VidiunPlaylistListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaPlaylistArray
+	 * @var VidiunPlaylistArray
 	 * @readonly
 	 */
 	public $objects;

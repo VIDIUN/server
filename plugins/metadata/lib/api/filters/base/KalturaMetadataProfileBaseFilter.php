@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaMetadataProfileBaseFilter extends KalturaFilter
+abstract class VidiunMetadataProfileBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -57,12 +57,12 @@ abstract class KalturaMetadataProfileBaseFilter extends KalturaFilter
 	public $partnerIdEqual;
 
 	/**
-	 * @var KalturaMetadataObjectType
+	 * @var VidiunMetadataObjectType
 	 */
 	public $metadataObjectTypeEqual;
 
 	/**
-	 * @dynamicType KalturaMetadataObjectType
+	 * @dynamicType VidiunMetadataObjectType
 	 * @var string
 	 */
 	public $metadataObjectTypeIn;
@@ -108,7 +108,7 @@ abstract class KalturaMetadataProfileBaseFilter extends KalturaFilter
 	public $updatedAtLessThanOrEqual;
 
 	/**
-	 * @var KalturaMetadataProfileStatus
+	 * @var VidiunMetadataProfileStatus
 	 */
 	public $statusEqual;
 
@@ -118,12 +118,12 @@ abstract class KalturaMetadataProfileBaseFilter extends KalturaFilter
 	public $statusIn;
 
 	/**
-	 * @var KalturaMetadataProfileCreateMode
+	 * @var VidiunMetadataProfileCreateMode
 	 */
 	public $createModeEqual;
 
 	/**
-	 * @var KalturaMetadataProfileCreateMode
+	 * @var VidiunMetadataProfileCreateMode
 	 */
 	public $createModeNotEqual;
 

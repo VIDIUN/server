@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Manages Kaltura environment relative configurations
+ * Manages Vidiun environment relative configurations
  * @package infra
  * @subpackage Configuration
  */
-class kEnvironment
+class vEnvironment
 {
-	const APC_CACHE_MAP = 'kConf';
+	const APC_CACHE_MAP = 'vConf';
 	
 	protected static $envMap = null;
 

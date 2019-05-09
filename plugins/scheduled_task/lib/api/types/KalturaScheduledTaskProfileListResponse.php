@@ -3,10 +3,10 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects
  */
-class KalturaScheduledTaskProfileListResponse extends KalturaListResponse
+class VidiunScheduledTaskProfileListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaScheduledTaskProfileArray
+	 * @var VidiunScheduledTaskProfileArray
 	 * @readonly
 	 */
 	public $objects;

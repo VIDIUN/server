@@ -1,44 +1,44 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class logoutAction extends kalturaAction
+class logoutAction extends vidiunAction
 {
 	public function execute ( ) 
 	{
-		$ksStr = $this->getP("ks");
-		if($ksStr) {
-			$ksObj = null;
+		$vsStr = $this->getP("vs");
+		if($vsStr) {
+			$vsObj = null;
 			try
 			{
-				$ksObj = ks::fromSecureString($ksStr);
+				$vsObj = vs::fromSecureString($vsStr);
 			}
 			catch(Exception $e)
 			{				
 			}
 				
-			if ($ksObj)
+			if ($vsObj)
 			{
-				$partner = PartnerPeer::retrieveByPK($ksObj->partner_id);
+				$partner = PartnerPeer::retrieveByPK($vsObj->partner_id);
 				if (!$partner)
-					KExternalErrors::dieError(KExternalErrors::PARTNER_NOT_FOUND);
+					VExternalErrors::dieError(VExternalErrors::PARTNER_NOT_FOUND);
 						
 				if (!$partner->validateApiAccessControl())
-					KExternalErrors::dieError(KExternalErrors::SERVICE_ACCESS_CONTROL_RESTRICTED);
+					VExternalErrors::dieError(VExternalErrors::SERVICE_ACCESS_CONTROL_RESTRICTED);
 				
-				$ksObj->kill();
+				$vsObj->kill();
 			}
-			KalturaLog::info("Killing session with ks - [$ksStr], decoded - [".base64_decode($ksStr)."]");
+			VidiunLog::info("Killing session with vs - [$vsStr], decoded - [".base64_decode($vsStr)."]");
 		}
 		else {
-			KalturaLog::err('logoutAction called with no KS');
+			VidiunLog::err('logoutAction called with no VS');
 		}
 		
 		setcookie('pid', "", 0, "/");
 		setcookie('subpid', "", 0, "/");
-		setcookie('kmcks', "", 0, "/");
+		setcookie('vmcvs', "", 0, "/");
 
-		return sfView::NONE; //redirection to kmc/kmc is done from java script
+		return sfView::NONE; //redirection to vmc/vmc is done from java script
 	}
 }

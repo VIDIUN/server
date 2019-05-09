@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerWowzaSecureToken extends KalturaUrlTokenizer
+class VidiunUrlTokenizerWowzaSecureToken extends VidiunUrlTokenizer
 {	
 	/**
 	 * @var string
@@ -29,7 +29,7 @@ class KalturaUrlTokenizerWowzaSecureToken extends KalturaUrlTokenizer
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kWowzaSecureTokenUrlTokenizer();
+			$dbObject = new vWowzaSecureTokenUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaStorageProfileFilter extends KalturaStorageProfileBaseFilter
+class VidiunStorageProfileFilter extends VidiunStorageProfileBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

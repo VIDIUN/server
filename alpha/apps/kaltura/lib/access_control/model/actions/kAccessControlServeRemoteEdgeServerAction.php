@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAccessControlServeRemoteEdgeServerAction extends kRuleAction 
+class vAccessControlServeRemoteEdgeServerAction extends vRuleAction 
 {
 	/**
 	 * @var string

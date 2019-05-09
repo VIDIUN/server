@@ -2,7 +2,7 @@ SELECT
 	COUNT(DISTINCT a.device) count_all
 FROM (
 	SELECT os.device
-		FROM	kalturadw.dwh_hourly_events_context_app_devices ev, kalturadw.dwh_dim_os os
+		FROM	vidiundw.dwh_hourly_events_context_app_devices ev, vidiundw.dwh_dim_os os
 	WHERE
 	os.id=ev.os_id
 	AND {OBJ_ID_CLAUSE}

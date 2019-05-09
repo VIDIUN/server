@@ -40,7 +40,7 @@ class myJamendoServices extends myBaseMediaSource implements IMediaSource
 		return null;		
 	}
 
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return array('status' => 'ok', 'message' => '', 'authData' => $userName);
 //		return ""; // empty value

@@ -1,8 +1,8 @@
-<kcw>
+<vcw>
   <UIConfigList>
     <UIConfig>
       <target>ContributionWizard.swf</target>
-      <cssUrl id="blue" name="Default Light Blue">/content/uiconf/kaltura/wordpress/styles_ContributionWizard.swf?R=13935.49674383179</cssUrl>
+      <cssUrl id="blue" name="Default Light Blue">/content/uiconf/vidiun/wordpress/styles_ContributionWizard.swf?R=13935.49674383179</cssUrl>
     </UIConfig>
   </UIConfigList>
   <ImportTypesConfig>
@@ -118,4 +118,4 @@
       <mediaProviderName>webcam</mediaProviderName>
     </gotoScreen>
   </StartupDefaults>
-</kcw>
+</vcw>

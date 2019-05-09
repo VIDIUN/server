@@ -21,15 +21,15 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 	 * 
 	 * Demonstrate asynchronous external API usage
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		// validates received object types
 				
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaFreewheelDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaFreewheelDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunFreewheelDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunFreewheelDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaFreewheelDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaFreewheelDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunFreewheelDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunFreewheelDistributionJobProviderData");
 		
 		// call the actual submit action
 		$this->handleSubmit($data, $data->distributionProfile, $data->providerData);
@@ -38,12 +38,12 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 		return false;
 	}
 
-	protected function getSFTPManager(KalturaFreewheelDistributionProfile $distributionProfile)
+	protected function getSFTPManager(VidiunFreewheelDistributionProfile $distributionProfile)
 	{
 		$loginName = $distributionProfile->sftpLogin;
 		$loginPass = $distributionProfile->sftpPass;
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$sftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$sftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP, $engineOptions);
 		$sftpManager->login(self::FREEWHEEL_SFTP_SERVER, $loginName, $loginPass);
 		return $sftpManager;
 	}
@@ -51,7 +51,7 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		$entryId = $data->entryDistribution->entryId;
 		$loginName = $data->distributionProfile->sftpLogin;
@@ -95,7 +95,7 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		return true;
 	}
@@ -103,7 +103,7 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		/*not implemented*/
 	}
@@ -113,13 +113,13 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 	 * 
 	 * demonstrate asynchronous XML delivery usage from template and uploading the media
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaFreewheelDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaFreewheelDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunFreewheelDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunFreewheelDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaFreewheelDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaFreewheelDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunFreewheelDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunFreewheelDistributionJobProviderData");
 		
 		$this->handleSubmit($data, $data->distributionProfile, $data->providerData);
 		
@@ -131,7 +131,7 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 	 * 
 	 * Demonstrate asynchronous http url parsing
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data)
+	public function fetchReport(VidiunDistributionFetchReportJobData $data)
 	{
 		// TODO
 		return false;
@@ -180,17 +180,17 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaFreewheelDistributionProfile $distributionProfile
-	 * @param KalturaFreewheelDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunFreewheelDistributionProfile $distributionProfile
+	 * @param VidiunFreewheelDistributionJobProviderData $providerData
 	 */
-	protected function handleSubmit(KalturaDistributionJobData $data, KalturaFreewheelDistributionProfile $distributionProfile, KalturaFreewheelDistributionJobProviderData $providerData)
+	protected function handleSubmit(VidiunDistributionJobData $data, VidiunFreewheelDistributionProfile $distributionProfile, VidiunFreewheelDistributionJobProviderData $providerData)
 	{
 		$entryId = $data->entryDistribution->entryId;
 		$partnerId = $distributionProfile->partnerId;
 		$entry = $this->getEntry($partnerId, $entryId);
 
-		// populate the external API object with the Kaltura entry data
+		// populate the external API object with the Vidiun entry data
 		$mydata = array();
 		$mydata["id"] = $entry->id;
 		if(!empty($entry->name)) { $mydata["name"] = "<fwTitles><titleItem><title>".$entry->name."</title><titleType>Episode Title1</titleType></titleItem></fwTitles>"; }
@@ -233,7 +233,7 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 			$mydata["dateavailable"] = "";
 		}
 		
-		$metadataObjects = $this->getMetadataObjects($data->entryDistribution->partnerId, $data->entryDistribution->entryId, KalturaMetadataObjectType::ENTRY, $distributionProfile->metadataProfileId);
+		$metadataObjects = $this->getMetadataObjects($data->entryDistribution->partnerId, $data->entryDistribution->entryId, VidiunMetadataObjectType::ENTRY, $distributionProfile->metadataProfileId);
 
 		$mediakey = $this->findMetadataValue($metadataObjects, 'MediaKey');
 		$youtube = $this->findMetadataValue($metadataObjects, 'YouTube');
@@ -287,11 +287,11 @@ class FreewheelDistributionEngine extends DistributionEngine implements
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaFreewheelDistributionProfile $distributionProfile
-	 * @param KalturaFreewheelDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunFreewheelDistributionProfile $distributionProfile
+	 * @param VidiunFreewheelDistributionJobProviderData $providerData
 	 */
-	protected function handleDelete(KalturaDistributionJobData $data, KalturaFreewheelDistributionProfile $distributionProfile, KalturaFreewheelDistributionJobProviderData $providerData)
+	protected function handleDelete(VidiunDistributionJobData $data, VidiunFreewheelDistributionProfile $distributionProfile, VidiunFreewheelDistributionJobProviderData $providerData)
 	{
 		// TODO
 	}

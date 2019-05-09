@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaEventNotificationDispatchJobData extends KalturaJobData
+class VidiunEventNotificationDispatchJobData extends VidiunJobData
 {
 	/**
 	 * @var int
@@ -12,7 +12,7 @@ class KalturaEventNotificationDispatchJobData extends KalturaJobData
 
 	/**
 	 * Define the content dynamic parameters
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $contentParameters;
 	
@@ -33,7 +33,7 @@ class KalturaEventNotificationDispatchJobData extends KalturaJobData
 	 */
 	public function toSubType($subType)
 	{
-		return kPluginableEnumsManager::apiToCore('EventNotificationTemplateType', $subType);
+		return vPluginableEnumsManager::apiToCore('EventNotificationTemplateType', $subType);
 	}
 	
 	/**
@@ -42,17 +42,17 @@ class KalturaEventNotificationDispatchJobData extends KalturaJobData
 	 */
 	public function fromSubType($subType)
 	{
-		return kPluginableEnumsManager::coreToApi('EventNotificationTemplateType', $subType);
+		return vPluginableEnumsManager::coreToApi('EventNotificationTemplateType', $subType);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	protected function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kEventNotificationDispatchJobData */
+		/* @var $dbObject vEventNotificationDispatchJobData */
 		parent::doFromObject($dbObject, $responseProfile);
 		
-		$this->contentParameters = KalturaKeyValueArray::fromKeyValueArray($dbObject->getContentParameters());
+		$this->contentParameters = VidiunKeyValueArray::fromKeyValueArray($dbObject->getContentParameters());
 	}
 }

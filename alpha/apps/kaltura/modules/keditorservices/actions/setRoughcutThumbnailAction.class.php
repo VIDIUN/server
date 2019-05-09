@@ -1,61 +1,61 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-require_once ( __DIR__ . "/defKeditorservicesAction.class.php");
+require_once ( __DIR__ . "/defVeditorservicesAction.class.php");
 
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class setRoughcutThumbnailAction extends defKeditorservicesAction
+class setRoughcutThumbnailAction extends defVeditorservicesAction
 {
-	protected function executeImpl( kshow $kshow, entry &$entry )
+	protected function executeImpl( vshow $vshow, entry &$entry )
 	{
 		$this->res = "";
 		
-		$likuser_id = $this->getLoggedInUserId();
+		$livuser_id = $this->getLoggedInUserId();
 
 		// if we allow multiple rouchcuts - there is no reason for one suer to override someone else's thumbnail
 		if ( $this->allowMultipleRoughcuts()  )
 		{
-			if ( $likuser_id != $entry->getKuserId())
+			if ( $livuser_id != $entry->getVuserId())
 			{
 				// ERROR - attempting to update an entry which doesnt belong to the user
-				return "<xml>!!</xml>";//$this->securityViolation( $kshow->getId() );
+				return "<xml>!!</xml>";//$this->securityViolation( $vshow->getId() );
 			}
 		}
 
 		$debug = @$_GET["debug"];
 		/*
-		$kshow_id = @$_GET["kshow_id"];
+		$vshow_id = @$_GET["vshow_id"];
 		$debug = @$_GET["debug"];
 		
-		$this->kshow_id = $kshow_id;
+		$this->vshow_id = $vshow_id;
 
-		if ( $kshow_id == NULL || $kshow_id == 0 ) return;
+		if ( $vshow_id == NULL || $vshow_id == 0 ) return;
 
-		$kshow = kshowPeer::retrieveByPK( $kshow_id );
+		$vshow = vshowPeer::retrieveByPK( $vshow_id );
 		
-		if ( ! $kshow ) 
+		if ( ! $vshow ) 
 		{
-			$this->res = "No kshow " . $kshow_id ;
+			$this->res = "No vshow " . $vshow_id ;
 			return;	
 		}
 
 		// is the logged-in-user is not an admin or the producer - check if show can be published	
-		$likuser_id = $this->getLoggedInUserId();
-		$viewer_type = myKshowUtils::getViewerType($kshow, $likuser_id);
-		if ( $viewer_type != KshowKuser::KSHOWKUSER_VIEWER_PRODUCER && ( ! $kshow->getCanPublish() ) ) 
+		$livuser_id = $this->getLoggedInUserId();
+		$viewer_type = myVshowUtils::getViewerType($vshow, $livuser_id);
+		if ( $viewer_type != VshowVuser::VSHOWVUSER_VIEWER_PRODUCER && ( ! $vshow->getCanPublish() ) ) 
 		{
 			// ERROR - attempting to publish a non-publishable show
-			return "<xml>!</xml>";//$this->securityViolation( $kshow->getId() );
+			return "<xml>!</xml>";//$this->securityViolation( $vshow->getId() );
 		}
 		
 		
-		// ASSUME - the kshow & roughcut already exist
-		$show_entry_id = $kshow->getShowEntryId();
+		// ASSUME - the vshow & roughcut already exist
+		$show_entry_id = $vshow->getShowEntryId();
 		$roughcut = entryPeer::retrieveByPK( $show_entry_id );
 
 		$roughcut = entryPeer::retrieveByPK( $entry_id );
@@ -63,7 +63,7 @@ class setRoughcutThumbnailAction extends defKeditorservicesAction
  
 		if ( ! $roughcut)
 		{
-			$this->res = "No roughcut for kshow " . $kshow->getId() ;
+			$this->res = "No roughcut for vshow " . $vshow->getId() ;
 			return;	
 		}
 		*/		
@@ -85,16 +85,16 @@ class setRoughcutThumbnailAction extends defKeditorservicesAction
 		
 		$bigThumbPath = myContentStorage::getFSContentRootPath() .  $entry->getBigThumbnailPath();
 		
-		kFile::fullMkdir ( $bigThumbPath );
-		kFile::setFileContent( $bigThumbPath , $thumb_data );
+		vFile::fullMkdir ( $bigThumbPath );
+		vFile::setFileContent( $bigThumbPath , $thumb_data );
 		
 		$path = myContentStorage::getFSContentRootPath() .  $entry->getThumbnailPath();
 		
-		kFile::fullMkdir ( $path );
+		vFile::fullMkdir ( $path );
 		myFileConverter::createImageThumbnail( $bigThumbPath , $path );
 		
 		$roughcutPath = $entry->getFullDataPath();
-		$xml_doc = new KDOMDocument();
+		$xml_doc = new VDOMDocument();
 		$xml_doc->load( $roughcutPath );
 		
 		if (myMetadataUtils::updateThumbUrl($xml_doc, $entry->getBigThumbnailUrl()))

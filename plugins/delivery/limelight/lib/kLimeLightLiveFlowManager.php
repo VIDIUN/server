@@ -3,10 +3,10 @@
  * @package plugins.limeLight
  * @subpackage lib
  */
-class kLimeLightLiveFlowManager implements kObjectCreatedEventConsumer
+class vLimeLightLiveFlowManager implements vObjectCreatedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object)
 	{
@@ -34,7 +34,7 @@ class kLimeLightLiveFlowManager implements kObjectCreatedEventConsumer
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object) 
 	{

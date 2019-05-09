@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Subclass for representing a row from the 'kuser' table.
+ * Subclass for representing a row from the 'vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model
  */ 
-class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticIndexable
+class vuser extends Basevuser implements IIndexable, IRelatedObject, IElasticIndexable
 {
 	public function __construct()
 	{
@@ -24,21 +24,21 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	
 	const MINIMUM_ID_TO_DISPLAY = 8999;
 		
-	const KUSER_KALTURA = 0;
+	const VUSER_VIDIUN = 0;
 	
-	const KUSER_ID_THAT_DOES_NOT_EXIST = 0;
+	const VUSER_ID_THAT_DOES_NOT_EXIST = 0;
 	
 	// different sort orders for browsing kswhos
-	const KUSER_SORT_MOST_VIEWED = 1;  
-	const KUSER_SORT_MOST_RECENT = 2;  
-	const KUSER_SORT_NAME = 3;
-	const KUSER_SORT_AGE = 4;
-	const KUSER_SORT_COUNTRY = 5;
-	const KUSER_SORT_CITY = 6;
-	const KUSER_SORT_GENDER = 7;
-	const KUSER_SORT_MOST_FANS = 8;
-	const KUSER_SORT_MOST_ENTRIES = 9;
-	const KUSER_SORT_PRODUCED_KSHOWS = 10;
+	const VUSER_SORT_MOST_VIEWED = 1;  
+	const VUSER_SORT_MOST_RECENT = 2;  
+	const VUSER_SORT_NAME = 3;
+	const VUSER_SORT_AGE = 4;
+	const VUSER_SORT_COUNTRY = 5;
+	const VUSER_SORT_CITY = 6;
+	const VUSER_SORT_GENDER = 7;
+	const VUSER_SORT_MOST_FANS = 8;
+	const VUSER_SORT_MOST_ENTRIES = 9;
+	const VUSER_SORT_PRODUCED_VSHOWS = 10;
 	
 	const PUSER_ID_REGEXP = '/^[A-Za-z0-9,!#\$%&\'\*\+\?\^_`\{\|}~.@-]{1,320}$/';
 	const URL_PATTERN = '://';
@@ -85,7 +85,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 					$userRole = UserRolePeer::retrieveByPK($id);
 					if (!$userRole || !in_array($userRole->getPartnerId(),array($this->getPartnerId(),PartnerPeer::GLOBAL_PARTNER) ) )
 					{
-						throw new kPermissionException("A user role with ID [$id] does not exist", kPermissionException::USER_ROLE_NOT_FOUND);
+						throw new vPermissionException("A user role with ID [$id] does not exist", vPermissionException::USER_ROLE_NOT_FOUND);
 					}
 				}
 			}
@@ -95,7 +95,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 				$adminRoleId = $this->getPartner()->getAdminSessionRoleId();
 				if (!(in_array($adminRoleId, $idsArray)))
 				{
-				 	throw new kPermissionException('Account owner must be set with a partner administrator role', kPermissionException::ACCOUNT_OWNER_NEEDS_PARTNER_ADMIN_ROLE);	
+				 	throw new vPermissionException('Account owner must be set with a partner administrator role', vPermissionException::ACCOUNT_OWNER_NEEDS_PARTNER_ADMIN_ROLE);	
 				}
 			}
 		$this->setUpdatedAt(time());
@@ -110,8 +110,8 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		{
 			// delete old roles
 			$c = new Criteria();
-			$c->addAnd(KuserToUserRolePeer::KUSER_ID, $this->getId(), Criteria::EQUAL);
-			KuserToUserRolePeer::doDelete($c);
+			$c->addAnd(VuserToUserRolePeer::VUSER_ID, $this->getId(), Criteria::EQUAL);
+			VuserToUserRolePeer::doDelete($c);
 			
 			// add new roles
 			$idsArray = explode(',',$this->roleIds);
@@ -119,26 +119,26 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 			{				
 				if (!is_null($id) && $id != '')
 				{
-					$kuserToRole = new KuserToUserRole();
-					$kuserToRole->setUserRoleId($id);
-					$kuserToRole->setKuserId($this->getId());
-					$kuserToRole->save();
+					$vuserToRole = new VuserToUserRole();
+					$vuserToRole->setUserRoleId($id);
+					$vuserToRole->setVuserId($this->getId());
+					$vuserToRole->save();
 				}
 			}
 		}
 		
 		$this->roleIdsChanged = false;
 		
-		//update all categoryKuser object with kuser
+		//update all categoryVuser object with vuser
 		
-		//TODO - need to check if kuser needs to add job
+		//TODO - need to check if vuser needs to add job
 			
 		return parent::postSave();	
 	}
 	
 
 	/* (non-PHPdoc)
-	 * @see lib/model/om/Basekuser#postUpdate()
+	 * @see lib/model/om/Basevuser#postUpdate()
 	 */
 	public function postUpdate(PropelPDO $con = null)
 	{
@@ -147,61 +147,61 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		
 		$objectUpdated = $this->isModified();
 		$objectDeleted = false;
-		if($this->isColumnModified(kuserPeer::STATUS) && $this->getStatus() == KuserStatus::DELETED) {
+		if($this->isColumnModified(vuserPeer::STATUS) && $this->getStatus() == VuserStatus::DELETED) {
 			$objectDeleted = true;
 		}
 			
 		$oldLoginDataId = null;
-		if ($this->isColumnModified(kuserPeer::LOGIN_DATA_ID)) {
-			$oldLoginDataId = $this->oldColumnsValues[kuserPeer::LOGIN_DATA_ID];
+		if ($this->isColumnModified(vuserPeer::LOGIN_DATA_ID)) {
+			$oldLoginDataId = $this->oldColumnsValues[vuserPeer::LOGIN_DATA_ID];
 		}
 
-		if($this->isColumnModified(kuserPeer::PUSER_ID) &&
-			categoryKuserPeer::isCategroyKuserExistsForKuser($this->getId()))
+		if($this->isColumnModified(vuserPeer::PUSER_ID) &&
+			categoryVuserPeer::isCategroyVuserExistsForVuser($this->getId()))
 		{
 			$userId = $this->getId();
 			$puserId = $this->getPuserId();
-			$this->updateCategoryKuser($userId, $puserId);
+			$this->updateCategoryVuser($userId, $puserId);
 		}
 		
-		if ($this->isColumnModified(kuserPeer::EMAIL) && $this->getIsAccountOwner() && isset($this->oldColumnsValues[kuserPeer::EMAIL]) && !is_null($this->oldColumnsValues[kuserPeer::EMAIL])) {
-			myPartnerUtils::emailChangedEmail($this->getPartnerId(), $this->oldColumnsValues[kuserPeer::EMAIL], $this->getEmail(), $this->getPartner()->getName() , PartnerPeer::KALTURAS_PARTNER_EMAIL_CHANGE );
+		if ($this->isColumnModified(vuserPeer::EMAIL) && $this->getIsAccountOwner() && isset($this->oldColumnsValues[vuserPeer::EMAIL]) && !is_null($this->oldColumnsValues[vuserPeer::EMAIL])) {
+			myPartnerUtils::emailChangedEmail($this->getPartnerId(), $this->oldColumnsValues[vuserPeer::EMAIL], $this->getEmail(), $this->getPartner()->getName() , PartnerPeer::VIDIUNS_PARTNER_EMAIL_CHANGE );
 		}
 
-		if ($this->getIsAccountOwner() && ( $this->isColumnModified(kuserPeer::EMAIL) || $this->isColumnModified(kuserPeer::FIRST_NAME) || $this->isColumnModified(kuserPeer::LAST_NAME) ))
+		if ($this->getIsAccountOwner() && ( $this->isColumnModified(vuserPeer::EMAIL) || $this->isColumnModified(vuserPeer::FIRST_NAME) || $this->isColumnModified(vuserPeer::LAST_NAME) ))
 		{
 			$partner = $this->getPartner();
-			$partner->setAccountOwnerKuserId($this->getId(), false);
+			$partner->setAccountOwnerVuserId($this->getId(), false);
 			$partner->save();
 		}
 
-		if (($this->isColumnModified(kuserPeer::SCREEN_NAME) || $this->isColumnModified(kuserPeer::PUSER_ID))
-			&& categoryKuserPeer::isCategroyKuserExistsForKuser($this->getId()))
+		if (($this->isColumnModified(vuserPeer::SCREEN_NAME) || $this->isColumnModified(vuserPeer::PUSER_ID))
+			&& categoryVuserPeer::isCategroyVuserExistsForVuser($this->getId()))
 		{
-			$featureStatusToRemoveIndex = new kFeatureStatus();
+			$featureStatusToRemoveIndex = new vFeatureStatus();
 			$featureStatusToRemoveIndex->setType(IndexObjectType::CATEGORY_USER);
 			
 			$featureStatusesToRemove = array();
 			$featureStatusesToRemove[] = $featureStatusToRemoveIndex;
 			
-			$filter = new categoryKuserFilter();
+			$filter = new categoryVuserFilter();
 			$filter->setUserIdEqual($this->getPuserId());
 	
-			kJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::CATEGORY_USER, $filter, true, $featureStatusesToRemove);
+			vJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::CATEGORY_USER, $filter, true, $featureStatusesToRemove);
 		}
 				
 		$ret = parent::postUpdate($con);
 		
 		if ($objectDeleted)
 		{
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			// if user is deleted - check if shoult also delete login data
 			UserLoginDataPeer::notifyOneLessUser($this->getLoginDataId());
 		}
 
 		if($objectUpdated)
 		{
-		    kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+		    vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 		    if (!$objectDeleted && !is_null($oldLoginDataId) && is_null($this->getLoginDataId()))
 		    {
 			    // if login was disabled - check if should also delete login data
@@ -217,32 +217,32 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		$this->roughcut_count = $count ;
 	}
 	
-	// TODO - move implementation to kuserPeer - i'm not doing so now because there are changes i don't want to commit 
+	// TODO - move implementation to vuserPeer - i'm not doing so now because there are changes i don't want to commit 
 	public function getRoughcutCount ()
 	{
 		if ( $this->roughcut_count == -1  )
 		{
 			$c = new Criteria();
 			$c->add ( entryPeer::TYPE , entryType::MIX );
-			$c->add ( entryPeer::KUSER_ID , $this->getId() );
+			$c->add ( entryPeer::VUSER_ID , $this->getId() );
 			$this->roughcut_count = entryPeer::doCount( $c );
 		}
 		return $this->roughcut_count;
 	}
 
 	
-	static public function getKuserById ( $id )
+	static public function getVuserById ( $id )
 	{
 		$c = new Criteria();
-		$c->add(kuserPeer::ID, $id );
-		return kuserPeer::doSelectOne($c);
+		$c->add(vuserPeer::ID, $id );
+		return vuserPeer::doSelectOne($c);
 	}
 
 	// TODO - PERFORMANCE DB - move to use cache !!
 	// will increment the views by 1
 	public function incViews ( $should_save = true  )
 	{
-		myStatisticsMgr::incKuserViews( $this );
+		myStatisticsMgr::incVuserViews( $this );
 /*		
 		$v = $this->getViews ( );
 		if ( ! is_numeric( $v ) ) $v=0;
@@ -253,7 +253,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	}
 
 	// TODO - PERFORMANCE DB - move to use cache !!
-	// will update the number of fans of kuser according the fans table
+	// will update the number of fans of vuser according the fans table
 	// this should not be called ! - it is handled via myStatisticsMgr
 	private  function updateFans ( $should_save = true )
 	{
@@ -273,8 +273,8 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 
 /*	
 	// TODO - PERFORMANCE DB - move to use cache !!
-	// will update the number of entries of kuser 
-	// should be called every time this kuser contributes
+	// will update the number of entries of vuser 
+	// should be called every time this vuser contributes
 	public function incEntries ( $should_save = true )
 	{
 		$v = $this->getEntries();
@@ -285,13 +285,13 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	}
 
 	// TODO - PERFORMANCE DB - move to use cache !!
-	// will update the number of produced_kshows of kuser 
-	// should be called every time this kuser publishes a kshow
-	public function incProducedKshows ( $should_save = true )
+	// will update the number of produced_vshows of vuser 
+	// should be called every time this vuser publishes a vshow
+	public function incProducedVshows ( $should_save = true )
 	{
-		$v = $this->getProducedKshows();
+		$v = $this->getProducedVshows();
 		if ( ! is_numeric( $v ) ) $v=0;
-		$this->setProducedKshows( $v + 1 );
+		$this->setProducedVshows( $v + 1 );
 		
 		if ( $should_save) $this->save();
 	}
@@ -312,12 +312,12 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	{ 
 		$picfile = $this->getPicture();
 		$picfile = substr( $picfile, strpos( $picfile, '^'));		
-		return myContentStorage::getGeneralEntityPath("kuser/pic", $this->getId(), $this->getId(), $picfile);
+		return myContentStorage::getGeneralEntityPath("vuser/pic", $this->getId(), $this->getId(), $picfile);
 	}
 
 	public function setPicture($filename )
 	{
-		if (kCurrentContext::isApiV3Context())
+		if (vCurrentContext::isApiV3Context())
 		{
 			parent::setPicture($filename);
 			return;
@@ -337,7 +337,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	public function setTags($tags , $update_db = true )
 	{
 		if ($this->tags !== $tags) {
-			$tags = ktagword::updateTags($this->tags, $tags , $update_db );
+			$tags = vtagword::updateTags($this->tags, $tags , $update_db );
 			parent::setTags($tags);
 		}
 	} 
@@ -353,14 +353,14 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		return $this->getUpdatedAt( null );
 	}
 	
-	public function getFormattedCreatedAt( $format = dateUtils::KALTURA_FORMAT )
+	public function getFormattedCreatedAt( $format = dateUtils::VIDIUN_FORMAT )
 	{
-		return dateUtils::formatKalturaDate( $this , 'getCreatedAt' , $format );
+		return dateUtils::formatVidiunDate( $this , 'getCreatedAt' , $format );
 	}
 
-	public function getFormattedUpdatedAt( $format = dateUtils::KALTURA_FORMAT )
+	public function getFormattedUpdatedAt( $format = dateUtils::VIDIUN_FORMAT )
 	{
-		return dateUtils::formatKalturaDate( $this , 'getUpdatedAt' , $format );
+		return dateUtils::formatVidiunDate( $this , 'getUpdatedAt' , $format );
 	}
 	
 	public function getHomepageURL()
@@ -385,7 +385,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	
 	public function setHomepageMyspace( $homepage, $myspace )
 	{
-		$this->setUrlList( kString::add_http( $homepage ).'|'. kString::add_http( $myspace) );
+		$this->setUrlList( vString::add_http( $homepage ).'|'. vString::add_http( $myspace) );
 	}
 	
 	public function getIMArray()
@@ -428,7 +428,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	
 	public function getTagsArray()
 	{
-		return ktagword::getTagsArray ( $this->getTags() );
+		return vtagword::getTagsArray ( $this->getTags() );
 	}
 	
 	public function getDateOfBirth($format = '%x')
@@ -451,7 +451,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	}
 	
 	/**
-	 * caluculates the age of the kuser according to his date_of_birth
+	 * caluculates the age of the vuser according to his date_of_birth
 	 */
 	public function getAge ()
 	{
@@ -500,17 +500,17 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		return $this->getCountry();
 	}
 	
-	public function getLastKshowId( )
+	public function getLastVshowId( )
 	{
-		// return the last kshow_id created by this kuser
+		// return the last vshow_id created by this vuser
 		$c = new Criteria();
-		$c->add ( kshowPeer::PRODUCER_ID , $this->getId() );
-		$c->addDescendingOrderByColumn( kshowPeer::ID );
-		$kshow = kshowPeer::doSelectOne();
+		$c->add ( vshowPeer::PRODUCER_ID , $this->getId() );
+		$c->addDescendingOrderByColumn( vshowPeer::ID );
+		$vshow = vshowPeer::doSelectOne();
 
-		if ( $kshow )
+		if ( $vshow )
 		{
-			return $kshow->getId();
+			return $vshow->getId();
 		}
 		else
 		{
@@ -518,31 +518,31 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		}
 	}
 
-	public function getLastKshowUrl( )
+	public function getLastVshowUrl( )
 	{
-		// return the last kshow_id created by this kuser
+		// return the last vshow_id created by this vuser
 		$c = new Criteria();
-		$c->add ( kshowPeer::PRODUCER_ID , $this->getId() );
-		$c->addDescendingOrderByColumn( kshowPeer::ID );
-		$kshow = kshowPeer::doSelectOne( $c );
+		$c->add ( vshowPeer::PRODUCER_ID , $this->getId() );
+		$c->addDescendingOrderByColumn( vshowPeer::ID );
+		$vshow = vshowPeer::doSelectOne( $c );
 				
 		$host = requestUtils::getHost() . "/";
 		
-		if ( $kshow )
+		if ( $vshow )
 		{
-			return "<a href='" . $host . "/id/" . $kshow->getId() . "'>" . $kshow->getName() . "</a>";
+			return "<a href='" . $host . "/id/" . $vshow->getId() . "'>" . $vshow->getName() . "</a>";
 		}
 		else
 		{
 			// This should never happen
-			return "<a href='" . $host . "'>Kaltura</a>";
+			return "<a href='" . $host . "'>Vidiun</a>";
 		}
 	}
 	
 	
 	public function disable ( $disable_all_content = false )
 	{
-		$this->setStatus ( KuserStatus::BLOCKED );
+		$this->setStatus ( VuserStatus::BLOCKED );
 	}
 
 	public function moderate ($new_moderation_status) 
@@ -554,7 +554,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 				throw new Exception($error_msg);
 				break;			
 			case moderation::MODERATION_STATUS_BLOCK:
-				myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_USER_BANNED , $this );		
+				myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_USER_BANNED , $this );		
 				break;
 			case moderation::MODERATION_STATUS_DELETE:
 				throw new Exception($error_msg);
@@ -563,7 +563,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 				throw new Exception($error_msg);
 				break;
 			case moderation::MODERATION_STATUS_REVIEW:
-				myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_USER_BANNED , $this );
+				myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_USER_BANNED , $this );
 //				throw new Exception($error_msg);
 				break;
 			default:
@@ -577,7 +577,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	// TODO - fix when we enable the blocking of users
 	public function getModerationStatus()
 	{
-//		if ( $this->getStatus() == KuserStatus::BLOCKED )
+//		if ( $this->getStatus() == VuserStatus::BLOCKED )
 //			return moderation::MODERATION_STATUS_BLOCK;
 		return moderation::MODERATION_STATUS_APPROVED;
 	}
@@ -586,8 +586,8 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	public function getPuserId()
 	{
 		$puserId = parent::getPuserId();
-		if (is_null($puserId) && !kCurrentContext::isApiV3Context())
-			$puserId = PuserKuserPeer::getPuserIdFromKuserId ( $this->getPartnerId(), $this->getId() );
+		if (is_null($puserId) && !vCurrentContext::isApiV3Context())
+			$puserId = PuserVuserPeer::getPuserIdFromVuserId ( $this->getPartnerId(), $this->getId() );
 		
 		return $puserId;
 	}
@@ -595,7 +595,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	// this will make sure that the extra data set in the search_text won't leak out 
 	public function getSearchText()	{	return '';	}
 	
-	public function getKuserId()
+	public function getVuserId()
 	{
 		return $this->getId();
 	}
@@ -676,14 +676,14 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	
 	
 	/**
-	 * @return Kuser's full name = first_name + last_name
+	 * @return Vuser's full name = first_name + last_name
 	 */
 	public function getFullName()
 	{
 		if (!$this->getFirstName() && parent::getFullName())
 		{
 			// full_name is deprecated - this is for backward compatibiliy and for migration
-			KalturaLog::alert('Field [full_name] on object [kuser] is deprecated but still being read');
+			VidiunLog::alert('Field [full_name] on object [vuser] is deprecated but still being read');
 			return parent::getFullName();
 		}
 		return trim($this->getFirstName().' '.$this->getLastName());
@@ -839,18 +839,18 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	
 	/**
 	 * Set status and statusUpdatedAt fields
-	 * @see Basekuser::setStatus()
-	 * @throws kUserException::CANNOT_DELETE_OR_BLOCK_ROOT_ADMIN_USER
+	 * @see Basevuser::setStatus()
+	 * @throws vUserException::CANNOT_DELETE_OR_BLOCK_ROOT_ADMIN_USER
 	 */
 	public function setStatus($status)
 	{
-		if (($status == KuserStatus::DELETED || $status == KuserStatus::BLOCKED) && $this->getIsAccountOwner()) {
-			throw new kUserException('', kUserException::CANNOT_DELETE_OR_BLOCK_ROOT_ADMIN_USER);
+		if (($status == VuserStatus::DELETED || $status == VuserStatus::BLOCKED) && $this->getIsAccountOwner()) {
+			throw new vUserException('', vUserException::CANNOT_DELETE_OR_BLOCK_ROOT_ADMIN_USER);
 		}
 				
 		parent::setStatus($status);
 		$this->setStatusUpdatedAt(time());
-		if ($status == KuserStatus::DELETED) {
+		if ($status == VuserStatus::DELETED) {
 			$this->setDeletedAt(time());
 		}
 	}
@@ -874,14 +874,14 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 			return array($this->getPartnerId());
 		}
 		$c = new Criteria();
-		$c->addSelectColumn(kuserPeer::PARTNER_ID);
-		$c->addAnd(kuserPeer::LOGIN_DATA_ID, $currentLoginDataId, Criteria::EQUAL);
-		$c->addAnd(kuserPeer::STATUS, KuserStatus::ACTIVE, Criteria::EQUAL);
-		$c->addAnd(kuserPeer::IS_ADMIN, true, Criteria::EQUAL);
-		kuserPeer::setUseCriteriaFilter(false);
-		$stmt = kuserPeer::doSelectStmt($c);
+		$c->addSelectColumn(vuserPeer::PARTNER_ID);
+		$c->addAnd(vuserPeer::LOGIN_DATA_ID, $currentLoginDataId, Criteria::EQUAL);
+		$c->addAnd(vuserPeer::STATUS, VuserStatus::ACTIVE, Criteria::EQUAL);
+		$c->addAnd(vuserPeer::IS_ADMIN, true, Criteria::EQUAL);
+		vuserPeer::setUseCriteriaFilter(false);
+		$stmt = vuserPeer::doSelectStmt($c);
 		$ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
-		kuserPeer::setUseCriteriaFilter(true);
+		vuserPeer::setUseCriteriaFilter(true);
 		
 		// apply filter on partner ids
 		if ($partnerFilter)
@@ -904,36 +904,36 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	public function setSalt($v)
 	{
 		// salt column is deprecated
-		KalturaLog::alert('Field [salt] on object [kuser] is deprecated');
-		throw new Exception('Field [salt] on object [kuser] is deprecated');
+		VidiunLog::alert('Field [salt] on object [vuser] is deprecated');
+		throw new Exception('Field [salt] on object [vuser] is deprecated');
 	}
 	
 	public function setSha1Password($v)
 	{
 		// sha1_password column is deprecated
-		KalturaLog::alert('Field [sha1_password] on object [kuser] is deprecated - trace: ');
-		throw new Exception('Field [sha1_password] on object [kuser] is deprecated');
+		VidiunLog::alert('Field [sha1_password] on object [vuser] is deprecated - trace: ');
+		throw new Exception('Field [sha1_password] on object [vuser] is deprecated');
 	}
 	
 	public function getSalt()
 	{
 		// salt column is deprecated
-		KalturaLog::alert('Field [salt] on object [kuser] is deprecated - getSalt should be removed from schema after migration');
+		VidiunLog::alert('Field [salt] on object [vuser] is deprecated - getSalt should be removed from schema after migration');
 		return parent::getSalt();
 	}
 	
 	public function getSha1Password()
 	{
 		// sha1_password column is deprecated
-		KalturaLog::alert('Field [sha1_password] on object [kuser] is deprecated - getSha1Password should be removed from schema after migration');
+		VidiunLog::alert('Field [sha1_password] on object [vuser] is deprecated - getSha1Password should be removed from schema after migration');
 		return parent::getSha1Password();
 	}
 	
 	public function setFullName($v)
 	{
 		// full_name column is deprecated
-		KalturaLog::alert('Field [full_name] on object [kuser] is deprecated');
-		list($firstName, $lastName) = kString::nameSplit($v);
+		VidiunLog::alert('Field [full_name] on object [vuser] is deprecated');
+		list($firstName, $lastName) = vString::nameSplit($v);
 		$this->setFirstName($firstName);
 		$this->setLastName($lastName);
 	}
@@ -943,19 +943,19 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	
 	/**
 	 * Disable user login
-	 * @throws kUserException::USER_LOGIN_ALREADY_DISABLED
-	 * @throws kUserException::CANNOT_DISABLE_LOGIN_FOR_ADMIN_USER
+	 * @throws vUserException::USER_LOGIN_ALREADY_DISABLED
+	 * @throws vUserException::CANNOT_DISABLE_LOGIN_FOR_ADMIN_USER
 	 */
 	public function disableLogin()
 	{
 		if ($this->getIsAdmin())
 		{
-			throw new kUserException('', kUserException::CANNOT_DISABLE_LOGIN_FOR_ADMIN_USER);
+			throw new vUserException('', vUserException::CANNOT_DISABLE_LOGIN_FOR_ADMIN_USER);
 		}
 		
 		if (!$this->getLoginDataId())
 		{
-			throw new kUserException('', kUserException::USER_LOGIN_ALREADY_DISABLED);
+			throw new vUserException('', vUserException::USER_LOGIN_ALREADY_DISABLED);
 		}
 		
 		$loginDataId = $this->getLoginDataId();
@@ -970,12 +970,12 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 * @param string $loginId
 	 * @param string $password
 	 * @param bool $checkPasswordStructure
-	 * @throws kUserException::USER_LOGIN_ALREADY_ENABLED
-	 * @throws kUserException::INVALID_EMAIL
-	 * @throws kUserException::INVALID_PARTNER
-	 * @throws kUserException::ADMIN_LOGIN_USERS_QUOTA_EXCEEDED
-	 * @throws kUserException::PASSWORD_STRUCTURE_INVALID
-	 * @throws kUserException::LOGIN_ID_ALREADY_USED
+	 * @throws vUserException::USER_LOGIN_ALREADY_ENABLED
+	 * @throws vUserException::INVALID_EMAIL
+	 * @throws vUserException::INVALID_PARTNER
+	 * @throws vUserException::ADMIN_LOGIN_USERS_QUOTA_EXCEEDED
+	 * @throws vUserException::PASSWORD_STRUCTURE_INVALID
+	 * @throws vUserException::LOGIN_ID_ALREADY_USED
 	 */
 	public function enableLogin($loginId, $password = null, $checkPasswordStructure = true, $sendEmail = null)
 	{
@@ -989,19 +989,19 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 				
 		if ($this->getLoginDataId())
 		{
-			throw new kUserException('', kUserException::USER_LOGIN_ALREADY_ENABLED);
+			throw new vUserException('', vUserException::USER_LOGIN_ALREADY_ENABLED);
 		}
 		
 		$loginDataExisted = null;
 		$loginData = UserLoginDataPeer::addLoginData($loginId, $password, $this->getPartnerId(), $this->getFirstName(), $this->getLastName(), $this->getIsAdmin(), $checkPasswordStructure, $loginDataExisted);	
 		if (!$loginData)
 		{
-			throw new kUserException('', kUserException::LOGIN_DATA_NOT_FOUND);
+			throw new vUserException('', vUserException::LOGIN_DATA_NOT_FOUND);
 		}
 		
 		$this->setLoginDataId($loginData->getId());
 
-		//Email notification on user creation is sent while using kuser email so make sure this field is set before enabling login
+		//Email notification on user creation is sent while using vuser email so make sure this field is set before enabling login
 		//if not than set the email to be the $loginId provided to this action (we now know this is a valid email since "addLoginData" verifies this)
 		if(!$this->getEmail()) {
 			$this->setEmail($loginId);
@@ -1010,13 +1010,13 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		if ($sendEmail)
 		{
 			if ($loginDataExisted) {
-				kuserPeer::sendNewUserMail($this, true);
+				vuserPeer::sendNewUserMail($this, true);
 			}
 			else {
-				kuserPeer::sendNewUserMail($this, false);
+				vuserPeer::sendNewUserMail($this, false);
 			}
 			if(!PermissionPeer::isValidForPartner(PermissionName::FEATURE_DISABLE_NEW_USER_EMAIL, $this->getPartnerId()))
-				kuserPeer::sendNewUserMailToAdmins($this);
+				vuserPeer::sendNewUserMailToAdmins($this);
 		}	
 		return $this;
 	}
@@ -1037,7 +1037,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 			return false;
 		}
 		else {
-			return $this->getId() == $partner->getAccountOwnerKuserId();
+			return $this->getId() == $partner->getAccountOwnerVuserId();
 		}
 	}
 	
@@ -1086,8 +1086,8 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		{
 			$this->roleIds = '';
 			$c = new Criteria();
-			$c->addAnd(KuserToUserRolePeer::KUSER_ID, $this->getId(), Criteria::EQUAL);
-			$selectResults = KuserToUserRolePeer::doSelect($c);
+			$c->addAnd(VuserToUserRolePeer::VUSER_ID, $this->getId(), Criteria::EQUAL);
+			$selectResults = VuserToUserRolePeer::doSelect($c);
 			foreach ($selectResults as $selectResult)
 			{
 				if ($this->roleIds != '')
@@ -1101,7 +1101,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	}
 
 	/**
-	 * Set the roles of the current kuser
+	 * Set the roles of the current vuser
 	 * @param string $idsString A comma seperated string of user role IDs
 	 */
 	public function setRoleIds($idsString)
@@ -1137,7 +1137,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 
 	public function getCacheInvalidationKeys()
 	{
-		return array("kuser:id=".strtolower($this->getId()), "kuser:partnerId=".strtolower($this->getPartnerId()).",puserid=".strtolower($this->getPuserId()), "kuser:loginDataId=".strtolower($this->getLoginDataId()));
+		return array("vuser:id=".strtolower($this->getId()), "vuser:partnerId=".strtolower($this->getPartnerId()).",puserid=".strtolower($this->getPuserId()), "vuser:loginDataId=".strtolower($this->getLoginDataId()));
 	}
 	
 	/* (non-PHPdoc)
@@ -1159,7 +1159,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
     }
 
     public function getIndexObjectName() {
-    	return "kuserIndex";
+    	return "vuserIndex";
     }
 	
 	/* (non-PHPdoc)
@@ -1167,7 +1167,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
     
 	/* (non-PHPdoc)
@@ -1178,7 +1178,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 		parent::postInsert($con);
 	
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 	}
 	
 	// --------------------------------------
@@ -1191,7 +1191,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	public function getBulkUploadId (){return $this->getFromCustomData(self::BULK_UPLOAD_ID);}
 
 	public function setUserMode ($v){$this->putInCustomData (self::USER_MODE, $v);}
-	public function getUserMode (){return $this->getFromCustomData(self::USER_MODE, null, KuserMode::NONE);}
+	public function getUserMode (){return $this->getFromCustomData(self::USER_MODE, null, VuserMode::NONE);}
 
 	public function setMembersCount ($v){$this->putInCustomData (self::MEMBERS_COUNT, $v);}
 	public function getMembersCount (){return $this->getFromCustomData(self::MEMBERS_COUNT, null, 0);}
@@ -1199,19 +1199,19 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	/**
 	 * Force modifiedColumns to be affected even if the value not changed
 	 * 
-	 * @see Basekuser::setUpdatedAt()
+	 * @see Basevuser::setUpdatedAt()
 	 */
 	public function setUpdatedAt($v)
 	{
 		parent::setUpdatedAt($v);
-		if(!in_array(kuserPeer::UPDATED_AT, $this->modifiedColumns, false))
-			$this->modifiedColumns[] = kuserPeer::UPDATED_AT;
+		if(!in_array(vuserPeer::UPDATED_AT, $this->modifiedColumns, false))
+			$this->modifiedColumns[] = vuserPeer::UPDATED_AT;
 			
 		return $this;
 	}
 	
 	/**
-	 * Getter returns the indexed version of the permission names on the role of the kuser separated by commas
+	 * Getter returns the indexed version of the permission names on the role of the vuser separated by commas
 	 * @return string
 	 */
 	public function getIndexedPermissionNames ()
@@ -1229,7 +1229,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 			}			
 		}		
 		
-		return self::getIndexedFieldValue('kuserPeer::PERMISSION_NAMES', implode(',', $permissionNamesArray), $this->getPartnerId());
+		return self::getIndexedFieldValue('vuserPeer::PERMISSION_NAMES', implode(',', $permissionNamesArray), $this->getPartnerId());
 	}	
 	
 	/**
@@ -1239,7 +1239,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 */
 	public function getIndexedRoleIds ()
 	{
-		return self::getIndexedFieldValue('kuserPeer::ROLE_IDS', $this->getRoleIds(), $this->getPartnerId());
+		return self::getIndexedFieldValue('vuserPeer::ROLE_IDS', $this->getRoleIds(), $this->getPartnerId());
 	}
 	
 	/**
@@ -1251,11 +1251,11 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 */
 	public static function getIndexedFieldValue ($fieldName, $fieldValue, $partnerId)
 	{
-		if ($fieldName == "kuserPeer::ROLE_IDS")
+		if ($fieldName == "vuserPeer::ROLE_IDS")
 		{
 			$prefix = self::ROLE_IDS_INDEX_PREFIX;
 		}
-		else if($fieldName == 'kuserPeer::PERMISSION_NAMES')
+		else if($fieldName == 'vuserPeer::PERMISSION_NAMES')
 		{
 			$prefix = self::PERMISSION_NAMES_INDEX_PREFIX;
 		}
@@ -1269,18 +1269,18 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	}
 
 	/**
-	 * check if CategoryKuser need also to be update and if so does it
+	 * check if CategoryVuser need also to be update and if so does it
 	 *
 	 * @param int $userId The user's unique identifier in the partner's system
 	 * @param string $puserId The user parameters to update
 	 *
 	 */
-	private function updateCategoryKuser($userId,  $puserId)
+	private function updateCategoryVuser($userId,  $puserId)
 	{
-		$dbCategoryKuserArray = categoryKuserPeer::retrieveByKuserId($userId);
-		foreach ($dbCategoryKuserArray as $dbCategoryKuser) {
-			$dbCategoryKuser->updateKuser($puserId);
-			$dbCategoryKuser->save();
+		$dbCategoryVuserArray = categoryVuserPeer::retrieveByVuserId($userId);
+		foreach ($dbCategoryVuserArray as $dbCategoryVuser) {
+			$dbCategoryVuser->updateVuser($puserId);
+			$dbCategoryVuser->save();
 		}
 	}
 
@@ -1289,7 +1289,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 */
 	public function getElasticIndexName()
 	{
-		return ElasticIndexMap::ELASTIC_KUSER_INDEX;
+		return ElasticIndexMap::ELASTIC_VUSER_INDEX;
 	}
 
 	/**
@@ -1297,7 +1297,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 */
 	public function getElasticObjectType()
 	{
-		return ElasticIndexMap::ELASTIC_KUSER_TYPE;
+		return ElasticIndexMap::ELASTIC_VUSER_TYPE;
 	}
 
 	/**
@@ -1326,7 +1326,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 			'status' => $this->getStatus(),
 			'partner_status' => elasticSearchUtils::formatPartnerStatus($this->getPartnerId(), $this->getStatus()),
 			'screen_name' => $this->getScreenName(),
-			'kuser_type' => $this->getType(),
+			'vuser_type' => $this->getType(),
 			'email' => $this->getEmail(),
 			'tags' => $this->getTagsArray(), //todo - check
 			'created_at' => $this->getCreatedAtAsInt(),
@@ -1347,23 +1347,23 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 
 	protected function addGroupUserDataToObjectParams(&$body)
 	{
-		$kgroupIds = array();
+		$vgroupIds = array();
 		$groupUserData = array();
 
-		$kuserKgroups =  KuserKgroupPeer::retrieveKgroupByKuserIdAndPartnerId($this->getKuserId(), $this->getPartnerId());
-		if (!$kuserKgroups)
+		$vuserVgroups =  VuserVgroupPeer::retrieveVgroupByVuserIdAndPartnerId($this->getVuserId(), $this->getPartnerId());
+		if (!$vuserVgroups)
 		{
 			return;
 		}
-		foreach ($kuserKgroups as $kuserKgroup)
+		foreach ($vuserVgroups as $vuserVgroup)
 		{
-			/* @var $kuserKgroup KuserKgroup */
-			$kgroupIds[] = $kuserKgroup->getKgroupId();
-			$groupUserData[] = elasticSearchUtils::formatGroupIdCreationMode($kuserKgroup->getKgroupId(), $kuserKgroup->getCreationMode());
+			/* @var $vuserVgroup VuserVgroup */
+			$vgroupIds[] = $vuserVgroup->getVgroupId();
+			$groupUserData[] = elasticSearchUtils::formatGroupIdCreationMode($vuserVgroup->getVgroupId(), $vuserVgroup->getCreationMode());
 		}
 
 
-		$body['group_ids'] = $kgroupIds;
+		$body['group_ids'] = $vgroupIds;
 		$body['group_user_data'] = $groupUserData;
 	}
 
@@ -1380,7 +1380,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 */
 	public function indexToElastic($params = null)
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForElasticIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForElasticIndexEvent($this));
 	}
 
 	/**
@@ -1388,7 +1388,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 */
 	public function shouldDeleteFromElastic()
 	{
-		if($this->getStatus() == KuserStatus::DELETED)
+		if($this->getStatus() == VuserStatus::DELETED)
 			return true;
 		return false;
 	}
@@ -1398,7 +1398,7 @@ class kuser extends Basekuser implements IIndexable, IRelatedObject, IElasticInd
 	 */
 	public function getElasticObjectName()
 	{
-		return 'kuser';
+		return 'vuser';
 	}
 
 	public function getElasticEntryId()

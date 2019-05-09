@@ -2,10 +2,10 @@
 /**
  * @package plugins.vendor
  */
-class VendorPlugin extends KalturaPlugin implements  IKalturaServices
+class VendorPlugin extends VidiunPlugin implements  IVidiunServices
 {
 	const PLUGIN_NAME = 'vendor';
-	const VENDOR_MANAGER = 'kVendorManager';
+	const VENDOR_MANAGER = 'vVendorManager';
 
 	public static function getPluginName()
 	{

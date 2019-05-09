@@ -1,6 +1,6 @@
-SELECT COUNT(DISTINCT kuser_id) count_all
+SELECT COUNT(DISTINCT vuser_id) count_all
 FROM
-	kalturadw.dwh_hourly_user_usage u
+	vidiundw.dwh_hourly_user_usage u
 WHERE
 	{OBJ_ID_CLAUSE} 
 	AND partner_id = {PARTNER_ID}

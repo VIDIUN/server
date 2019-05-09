@@ -16,7 +16,7 @@ class PartnerPeer extends BasePartnerPeer
 	
 	const GLOBAL_PARTNER = 0;
 	
-	const KALTURAS_PARTNER_EMAIL_CHANGE = 52;
+	const VIDIUNS_PARTNER_EMAIL_CHANGE = 52;
 	/*
 		Will retrieve the partner object in one of 2 ways:
 		1. if pk in a number - will use the original  retrieveByPK
@@ -43,7 +43,7 @@ class PartnerPeer extends BasePartnerPeer
 	 */
 	public static function getDefaultCriteria ()
 	{
-	    $partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+	    $partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 	    
 	    $c = new Criteria();
 	    $subCriterion1 = $c->getNewCriterion(PartnerPeer::PARTNER_PARENT_ID, $partnerId);
@@ -63,7 +63,7 @@ class PartnerPeer extends BasePartnerPeer
 	public static function getPartnerPriorityFactorByPartner($partner)
 	{
 		$priority = self::getPriority($partner);
-		$priority2Factor = kConf::get('priority_factor');
+		$priority2Factor = vConf::get('priority_factor');
 		$priorityFactor = $priority2Factor[$priority];
 		return $priorityFactor;
 	}

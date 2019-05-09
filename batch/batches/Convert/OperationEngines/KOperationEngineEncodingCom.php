@@ -6,7 +6,7 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KOperationEngineEncodingCom  extends KOperationEngine
+class VOperationEngineEncodingCom  extends VOperationEngine
 {
 	/**
 	 * @var string
@@ -33,45 +33,45 @@ class KOperationEngineEncodingCom  extends KOperationEngine
 	}
 	
 	/* (non-PHPdoc)
-	 * @see batches/Convert/OperationEngines/KOperationEngine#doOperation()
+	 * @see batches/Convert/OperationEngines/VOperationEngine#doOperation()
 	 */
 	protected function doOperation()
 	{
-		$sendData = new KEncodingComData();
+		$sendData = new VEncodingComData();
 		
 		$sendData->setFormatTurbo('yes');
 		
 		$sendData->setUserId($this->userId);
 		$sendData->setUserKey($this->userKey);
 		
-		$sendData->setAction(KEncodingComData::ACTION_ADD_MEDIA);
+		$sendData->setAction(VEncodingComData::ACTION_ADD_MEDIA);
 		$sendData->setSource($this->getSrcRemoteUrlFromData());
 		
 		switch($data->flavorParamsOutput->videoCodec)
 		{
-			case KalturaVideoCodec::NONE:
+			case VidiunVideoCodec::NONE:
 				$sendData->setFormatOutput('mp3');
 				//$sendData->setFormatVideoCodec('none');
 				break;
 				
-			case KalturaVideoCodec::VP6:
+			case VidiunVideoCodec::VP6:
 				$sendData->setFormatOutput('flv');
 				$sendData->setFormatVideoCodec('vp6');
 				break;
 				
-			case KalturaVideoCodec::FLV:
+			case VidiunVideoCodec::FLV:
 				$sendData->setFormatOutput('flv');
 				$sendData->setFormatVideoCodec('vp6');
 				break;
 				
-			case KalturaVideoCodec::H263:
+			case VidiunVideoCodec::H263:
 				return array(false, "Do not support H263");
 				
 				$sendData->setFormatOutput('3gp');
 				$sendData->setFormatVideoCodec('h263');
 				break;
 				
-			case KalturaVideoCodec::H264:
+			case VidiunVideoCodec::H264:
 				$sendData->setFormatOutput('mp4');
 				$sendData->setFormatVideoCodec('libx264');
 				break;
@@ -105,20 +105,20 @@ class KOperationEngineEncodingCom  extends KOperationEngine
 		$responseXml = $this->sendRequest($requestXml, $err);
 		
 		if(!$responseXml)
-			throw new KOperationEngineException($err);
+			throw new VOperationEngineException($err);
 			
 		if(preg_match('/\<errors\>(.+)\<\/errors\>/i', $responseXml, $arr))
 		{
 			$err = isset($arr[1]) ? $arr[1] : $responseXml;
-			throw new KOperationEngineException($err);
+			throw new VOperationEngineException($err);
 		}
 		
 		if(!preg_match('/\<mediaid\>(\w*)\<\/mediaid\>/i', $responseXml, $arr))
-			throw new KOperationEngineException($responseXml);
+			throw new VOperationEngineException($responseXml);
 			
 		$media_id = isset($arr[1]) ? $arr[1] : null;
 		if (!$media_id)
-			throw new KOperationEngineException("media id was not returned");
+			throw new VOperationEngineException("media id was not returned");
 			
 		$data->remoteMediaId = $media_id;
 		$this->message = "Remote Media Id: $media_id";

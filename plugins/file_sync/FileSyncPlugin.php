@@ -2,7 +2,7 @@
 /**
  * @package plugins.fileSync
  */
-class FileSyncPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaServices
+class FileSyncPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunServices
 {
 	const PLUGIN_NAME = 'fileSync';
 	

@@ -1,12 +1,12 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage lib
  */
-class kCrossKalturaDistributionEventsConsumer implements kBatchJobStatusEventConsumer
+class kCrossVidiunDistributionEventsConsumer implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{		
@@ -22,14 +22,14 @@ class kCrossKalturaDistributionEventsConsumer implements kBatchJobStatusEventCon
 		}
 	    
 	    $data = $dbBatchJob->getData();
-		if (!$data instanceof kDistributionJobData)
+		if (!$data instanceof vDistributionJobData)
 		{	
-		    KalturaLog::err('Wrong job data type');
+		    VidiunLog::err('Wrong job data type');
 			return false;
 		}	
 		
-		$crossKalturaCoreValueType = kPluginableEnumsManager::apiToCore('DistributionProviderType', CrossKalturaDistributionPlugin::getApiValue(CrossKalturaDistributionProviderType::CROSS_KALTURA));
-		if ($data->getProviderType() == $crossKalturaCoreValueType)
+		$crossVidiunCoreValueType = vPluginableEnumsManager::apiToCore('DistributionProviderType', CrossVidiunDistributionPlugin::getApiValue(CrossVidiunDistributionProviderType::CROSS_VIDIUN));
+		if ($data->getProviderType() == $crossVidiunCoreValueType)
 		{		
 			return true;
 		}		
@@ -39,7 +39,7 @@ class kCrossKalturaDistributionEventsConsumer implements kBatchJobStatusEventCon
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob, BatchJob $twinJob = null)
 	{		
@@ -62,24 +62,24 @@ class kCrossKalturaDistributionEventsConsumer implements kBatchJobStatusEventCon
 		$entryDistribution = EntryDistributionPeer::retrieveByPK($data->getEntryDistributionId());
 		if(!$entryDistribution)
 		{
-			KalturaLog::err('Entry distribution ['.$data->getEntryDistributionId().'] not found');
+			VidiunLog::err('Entry distribution ['.$data->getEntryDistributionId().'] not found');
 			return $dbBatchJob;
 		}
 		
 		$providerData = $data->getProviderData();
-		if(!($providerData instanceof kCrossKalturaDistributionJobProviderData))
+		if(!($providerData instanceof kCrossVidiunDistributionJobProviderData))
 		{
-		    KalturaLog::err('Wrong provider data class ['.get_class($providerData).']');
+		    VidiunLog::err('Wrong provider data class ['.get_class($providerData).']');
 			return $dbBatchJob;
 		}
 		
-		$entryDistribution->putInCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_FLAVOR_ASSETS, $providerData->getDistributedFlavorAssets());
-		$entryDistribution->putInCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_THUMB_ASSETS, $providerData->getDistributedThumbAssets());
-		$entryDistribution->putInCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_METADATA, $providerData->getDistributedMetadata());
-		$entryDistribution->putInCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_CAPTION_ASSETS, $providerData->getDistributedCaptionAssets());
-		$entryDistribution->putInCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_CUE_POINTS, $providerData->getDistributedCuePoints());
-		$entryDistribution->putInCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_THUMB_CUE_POINTS, $providerData->getDistributedThumbCuePoints());
-		$entryDistribution->putInCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_TIMED_THUMB_ASSETS, $providerData->getDistributedTimedThumbAssets());
+		$entryDistribution->putInCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_FLAVOR_ASSETS, $providerData->getDistributedFlavorAssets());
+		$entryDistribution->putInCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_THUMB_ASSETS, $providerData->getDistributedThumbAssets());
+		$entryDistribution->putInCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_METADATA, $providerData->getDistributedMetadata());
+		$entryDistribution->putInCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_CAPTION_ASSETS, $providerData->getDistributedCaptionAssets());
+		$entryDistribution->putInCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_CUE_POINTS, $providerData->getDistributedCuePoints());
+		$entryDistribution->putInCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_THUMB_CUE_POINTS, $providerData->getDistributedThumbCuePoints());
+		$entryDistribution->putInCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_TIMED_THUMB_ASSETS, $providerData->getDistributedTimedThumbAssets());
 		$entryDistribution->save();
 		
 		return $dbBatchJob;

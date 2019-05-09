@@ -1,5 +1,5 @@
 SELECT COUNT(DISTINCT ev.location_id) count_all
-	FROM	kalturadw.dwh_hourly_events_country  ev
+	FROM	vidiundw.dwh_hourly_events_country  ev
 WHERE
 	{OBJ_ID_CLAUSE} /* ev.country_id in ( XXX ) */
 	AND ev.partner_id = {PARTNER_ID} /* PARTNER_ID*/

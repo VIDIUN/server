@@ -6,7 +6,7 @@
  * @property int fromPartnerId
  * @property int toPartnerId
  */
-class KalturaCopyPartnerJobData extends KalturaJobData
+class VidiunCopyPartnerJobData extends VidiunJobData
 {
 	/**
 	 * Id of the partner to copy from
@@ -27,7 +27,7 @@ class KalturaCopyPartnerJobData extends KalturaJobData
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	*/
 	public function getMapBetweenObjects()
 	{
@@ -36,12 +36,12 @@ class KalturaCopyPartnerJobData extends KalturaJobData
 	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kCopyPartnerJobData();
+			$dbData = new vCopyPartnerJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

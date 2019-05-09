@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaReportType extends KalturaDynamicEnum implements ReportType
+class VidiunReportType extends VidiunDynamicEnum implements ReportType
 {
 	/**
 	 * @return string

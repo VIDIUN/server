@@ -3,18 +3,18 @@
  * Enable caption assets management for entry objects
  * @package plugins.caption
  */
-class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPermissions, IKalturaEnumerator, IKalturaObjectLoader, IKalturaApplicationPartialView, IKalturaSchemaContributor, IKalturaMrssContributor, IKalturaPlayManifestContributor, IKalturaEventConsumers, IKalturaPlaybackContextDataContributor
+class CaptionPlugin extends VidiunPlugin implements IVidiunServices, IVidiunPermissions, IVidiunEnumerator, IVidiunObjectLoader, IVidiunApplicationPartialView, IVidiunSchemaContributor, IVidiunMrssContributor, IVidiunPlayManifestContributor, IVidiunEventConsumers, IVidiunPlaybackContextDataContributor
 {
 	const PLUGIN_NAME = 'caption';
-	const KS_PRIVILEGE_CAPTION = 'caption';
+	const VS_PRIVILEGE_CAPTION = 'caption';
 
-	const MULTI_CAPTION_FLOW_MANAGER_CLASS = 'kMultiCaptionFlowManager';
-	const COPY_CAPTIONS_FLOW_MANAGER_CLASS = 'kCopyCaptionsFlowManager';
+	const MULTI_CAPTION_FLOW_MANAGER_CLASS = 'vMultiCaptionFlowManager';
+	const COPY_CAPTIONS_FLOW_MANAGER_CLASS = 'vCopyCaptionsFlowManager';
 
 	const SERVE_WEBVTT_URL_PREFIX = '/api_v3/index.php/service/caption_captionasset/action/serveWebVTT';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -167,7 +167,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 		);
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -176,7 +176,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{
@@ -188,7 +188,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -199,7 +199,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -219,27 +219,27 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaAsset' && $enumValue == self::getAssetTypeCoreValue(CaptionAssetType::CAPTION))
-			return new KalturaCaptionAsset();
+		if($baseClass == 'VidiunAsset' && $enumValue == self::getAssetTypeCoreValue(CaptionAssetType::CAPTION))
+			return new VidiunCaptionAsset();
 	
-		if($baseClass == 'KalturaAssetParams' && $enumValue == self::getAssetTypeCoreValue(CaptionAssetType::CAPTION))
-			return new KalturaCaptionParams();
+		if($baseClass == 'VidiunAssetParams' && $enumValue == self::getAssetTypeCoreValue(CaptionAssetType::CAPTION))
+			return new VidiunCaptionParams();
 
-		if($baseClass == 'kJobData' && $enumValue == self::getBatchJobTypeCoreValue(ParseMultiLanguageCaptionAssetBatchType::PARSE_MULTI_LANGUAGE_CAPTION_ASSET))
-			return new kParseMultiLanguageCaptionAssetJobData();
+		if($baseClass == 'vJobData' && $enumValue == self::getBatchJobTypeCoreValue(ParseMultiLanguageCaptionAssetBatchType::PARSE_MULTI_LANGUAGE_CAPTION_ASSET))
+			return new vParseMultiLanguageCaptionAssetJobData();
 
-		if($baseClass == 'KalturaJobData' && $enumValue == self::getApiValue(ParseMultiLanguageCaptionAssetBatchType::PARSE_MULTI_LANGUAGE_CAPTION_ASSET))
-			return new KalturaParseMultiLanguageCaptionAssetJobData();
+		if($baseClass == 'VidiunJobData' && $enumValue == self::getApiValue(ParseMultiLanguageCaptionAssetBatchType::PARSE_MULTI_LANGUAGE_CAPTION_ASSET))
+			return new VidiunParseMultiLanguageCaptionAssetJobData();
 
 		return null;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -253,14 +253,14 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaApplicationPartialView::getApplicationPartialViews()
+	 * @see IVidiunApplicationPartialView::getApplicationPartialViews()
 	 */
 	public static function getApplicationPartialViews($controller, $action)
 	{
 		if($controller == 'batch' && $action == 'entryInvestigation')
 		{
 			return array(
-				new Kaltura_View_Helper_EntryInvestigateCaptionAssets(),
+				new Vidiun_View_Helper_EntryInvestigateCaptionAssets(),
 			);
 		}
 		
@@ -268,11 +268,11 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if($coreType != SchemaType::SYNDICATION)
 			return null;
 			
@@ -310,12 +310,12 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 				<xs:documentation>Indicates if the caption asset is the entry default caption asset</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="format" type="KalturaCaptionType" use="optional">
+		<xs:attribute name="format" type="VidiunCaptionType" use="optional">
 			<xs:annotation>
 				<xs:documentation>Caption asset file format</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lang" type="KalturaLanguage" use="optional">
+		<xs:attribute name="lang" type="VidiunLanguage" use="optional">
 			<xs:annotation>
 				<xs:documentation>Caption asset file language</xs:documentation>
 			</xs:annotation>
@@ -334,7 +334,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 			<xs:documentation>Caption asset element</xs:documentation>
 			<xs:appinfo>
 				<example>
-					<subTitle href="http://kaltura.domain/path/caption_file.srt" captionAssetId="{caption_asset_id}" isDefault="true" format="2" lang="Hebrew">
+					<subTitle href="http://vidiun.domain/path/caption_file.srt" captionAssetId="{caption_asset_id}" isDefault="true" format="2" lang="Hebrew">
 						<tags>
 							<tag>example</tag>
 							<tag>my_tag</tag>
@@ -350,14 +350,14 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaMrssContributor::contribute()
+	 * @see IVidiunMrssContributor::contribute()
 	 */
-	public function contribute(BaseObject $object, SimpleXMLElement $mrss, kMrssParameters $mrssParams = null)
+	public function contribute(BaseObject $object, SimpleXMLElement $mrss, vMrssParameters $mrssParams = null)
 	{
 		if(!($object instanceof entry))
 			return;
 			
-		$types = KalturaPluginManager::getExtendedTypes(assetPeer::OM_CLASS, CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));
+		$types = VidiunPluginManager::getExtendedTypes(assetPeer::OM_CLASS, CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));
 		$captionAssets = assetPeer::retrieveByEntryId($object->getId(), $types);
 		
 		foreach($captionAssets as $captionAsset)
@@ -382,7 +382,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 			
 		$tags = $subTitle->addChild('tags');
 		foreach(explode(',', $captionAsset->getTags()) as $tag)
-			$tags->addChild('tag', kMrssManager::stringToSafeXml($tag));
+			$tags->addChild('tag', vMrssManager::stringToSafeXml($tag));
 	}
 	
 	/**
@@ -390,8 +390,8 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	 */
 	public static function getAssetTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('assetType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('assetType', $value);
 	}
 	
 	/**
@@ -399,8 +399,8 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	 */
 	public static function getObjectFeatureTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('ObjectFeatureType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('ObjectFeatureType', $value);
 	}
 	
 	/**
@@ -408,8 +408,8 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	*/
 	public static function getBatchJobTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BatchJobType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BatchJobType', $value);
 	}
 	
 	/**
@@ -417,11 +417,11 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaMrssContributor::getObjectFeatureType()
+	 * @see IVidiunMrssContributor::getObjectFeatureType()
 	 */
 	public function getObjectFeatureType()
 	{
@@ -433,19 +433,19 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	 * @param int $expiry
 	 * @return string
 	 */
-	static protected function generateKsForCaptionServe($captionAsset, $expiry = 86400)
+	static protected function generateVsForCaptionServe($captionAsset, $expiry = 86400)
 	{
 		$partnerId = $captionAsset->getPartnerId();
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		$secret = $partner->getSecret();
-		$privileges = self::KS_PRIVILEGE_CAPTION.":".$captionAsset->getEntryId();
-       	$privileges .= "," . kSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY . ":" . $captionAsset->getEntryId();
-        	$privileges .= ',' . kSessionBase::PRIVILEGE_URI_RESTRICTION . ':' . self::SERVE_WEBVTT_URL_PREFIX . '*';
-		$ksStr = '';
+		$privileges = self::VS_PRIVILEGE_CAPTION.":".$captionAsset->getEntryId();
+       	$privileges .= "," . vSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY . ":" . $captionAsset->getEntryId();
+        	$privileges .= ',' . vSessionBase::PRIVILEGE_URI_RESTRICTION . ':' . self::SERVE_WEBVTT_URL_PREFIX . '*';
+		$vsStr = '';
 		
-		kSessionUtils::startKSession($partnerId, $secret, null, $ksStr, $expiry, false, "", $privileges);
+		vSessionUtils::startVSession($partnerId, $secret, null, $vsStr, $expiry, false, "", $privileges);
 		
-		return $ksStr;
+		return $vsStr;
 	}
 
 	static protected function getLocalCaptionUrl($config, asset $captionAsset)
@@ -473,7 +473,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlayManifestContributor::getManifestEditors()
+	 * @see IVidiunPlayManifestContributor::getManifestEditors()
 	 */
 	public static function getManifestEditors ($config)
 	{
@@ -486,7 +486,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 		{
 			case PlaybackProtocol::APPLE_HTTP:
 
-				if ($config->rendererClass != 'kM3U8ManifestRenderer')
+				if ($config->rendererClass != 'vM3U8ManifestRenderer')
 				{
 					return array();
 				}
@@ -516,8 +516,8 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 				$captionLanguages = array();
 
 				$useThreeCodeLang = false;
-				if (kConf::hasParam('three_code_language_partners') &&
-					in_array($entry->getPartnerId(), kConf::get('three_code_language_partners')))
+				if (vConf::hasParam('three_code_language_partners') &&
+					in_array($entry->getPartnerId(), vConf::get('three_code_language_partners')))
 					$useThreeCodeLang = true;
 
 				foreach ($captionAssets as $captionAsset)
@@ -553,7 +553,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 							continue;
 						
 						$syncKey = $captionAsset->getSyncKey(asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-						$fs = kFileSyncUtils::getReadyFileSyncForKey($syncKey, false, false);
+						$fs = vFileSyncUtils::getReadyFileSyncForKey($syncKey, false, false);
 						if (reset($fs) === null)
 							continue;
 
@@ -570,21 +570,21 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 						if ($captionAsset->getVersion() > 1)
 							$versionStr = '/version/' . $captionAsset->getVersion();
 
-						$ksStr = '';
-						if ($captionAsset->isKsNeededForDownload())
+						$vsStr = '';
+						if ($captionAsset->isVsNeededForDownload())
 						{
-							$ksStr = '/ks/' . self::generateKsForCaptionServe($captionAsset);
+							$vsStr = '/vs/' . self::generateVsForCaptionServe($captionAsset);
 						}
 
 						$segmentDurationStr = '';
-						if(kConf::hasParam('webvtt_segment_duration'))
+						if(vConf::hasParam('webvtt_segment_duration'))
 						{
-							$duration = kConf::get('webvtt_segment_duration');
+							$duration = vConf::get('webvtt_segment_duration');
 							$segmentDurationStr = '/segmentDuration/' . $duration;
 						}
 
 						$captionAssetObj['url'] = $host . self::SERVE_WEBVTT_URL_PREFIX .
-							'/captionAssetId/' . $captionAsset->getId() . $segmentDurationStr. $ksStr . $versionStr . '/a.m3u8';
+							'/captionAssetId/' . $captionAsset->getId() . $segmentDurationStr. $vsStr . $versionStr . '/a.m3u8';
 
 					}
 					$label = $captionAsset->getLabel();
@@ -598,7 +598,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 					if($languageCode)
 						$captionAssetObj['language'] = $languageCode;
 
-					KalturaLog::info("Object passed into editor: " . print_r($captionAssetObj, true));
+					VidiunLog::info("Object passed into editor: " . print_r($captionAssetObj, true));
 					$contributor->captions[] = $captionAssetObj;
 				}
 
@@ -613,7 +613,7 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 	private static function getLanguageCode($captionAssetLanguage,$useThreeCodeLang)
 	{
 		$languageCode = null;
-		$languageObject = languageCodeManager::getObjectFromKalturaName($captionAssetLanguage);
+		$languageObject = languageCodeManager::getObjectFromVidiunName($captionAssetLanguage);
 		if($useThreeCodeLang)
 			$languageCode = $languageObject[languageCodeManager::ISO639_B];
 		else
@@ -627,15 +627,15 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 		return $languageCode;
 	}
 
-	public function contributeToPlaybackContextDataResult(entry $entry, kPlaybackContextDataParams $entryPlayingDataParams, kPlaybackContextDataResult $result, kContextDataHelper $contextDataHelper)
+	public function contributeToPlaybackContextDataResult(entry $entry, vPlaybackContextDataParams $entryPlayingDataParams, vPlaybackContextDataResult $result, vContextDataHelper $contextDataHelper)
 	{
 		if ($entryPlayingDataParams->getType() == self::getPluginName())
 		{
 			$captionAssets = assetPeer::retrieveByEntryId($entry->getId(), array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION)), array(asset::ASSET_STATUS_READY));
 			$playbackCaptions = array();
 			$useThreeCodeLang = false;
-			if (kConf::hasParam('three_code_language_partners') &&
-				in_array($entry->getPartnerId(), kConf::get('three_code_language_partners')))
+			if (vConf::hasParam('three_code_language_partners') &&
+				in_array($entry->getPartnerId(), vConf::get('three_code_language_partners')))
 			{
 				$useThreeCodeLang = true;
 			}
@@ -654,12 +654,12 @@ class CaptionPlugin extends KalturaPlugin implements IKalturaServices, IKalturaP
 					{
 						$webVttUrl = myPartnerUtils::getCdnHost($assetDb->getPartnerId()) . self::SERVE_WEBVTT_URL_PREFIX . '/captionAssetId/' . $assetDb->getId() . '/segmentIndex/-1/version/' . $assetDb->getVersion() . '/captions.vtt';
 						$languageCode = self::getLanguageCode($assetDb->getLanguage(),$useThreeCodeLang);
-						$playbackCaptions [] = new kCaptionPlaybackPluginData($assetDb->getLabel(), $assetDb->getContainerFormat(), $assetDb->getLanguage(), $assetDb->getDefault(), $webVttUrl, $url, $languageCode);
+						$playbackCaptions [] = new vCaptionPlaybackPluginData($assetDb->getLabel(), $assetDb->getContainerFormat(), $assetDb->getLanguage(), $assetDb->getDefault(), $webVttUrl, $url, $languageCode);
 					}
 				}
 				catch (Exception $e)
 				{
-					KalturaLog::debug("Could not get Download url for caption asset " . $assetDb->getId() . $e->getMessage());
+					VidiunLog::debug("Could not get Download url for caption asset " . $assetDb->getId() . $e->getMessage());
 				}
 
 			}

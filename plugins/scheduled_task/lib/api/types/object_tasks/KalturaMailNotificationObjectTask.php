@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects.objectTasks
  */
-class KalturaMailNotificationObjectTask extends KalturaObjectTask
+class VidiunMailNotificationObjectTask extends VidiunObjectTask
 {
 	/**
 	 * The mail to send the notification to
@@ -37,7 +37,7 @@ class KalturaMailNotificationObjectTask extends KalturaObjectTask
 	 */
 	public $footer;
 	/**
-	 * The basic link for the KMC site
+	 * The basic link for the VMC site
 	 *
 	 * @var string
 	 */
@@ -56,7 +56,7 @@ class KalturaMailNotificationObjectTask extends KalturaObjectTask
 
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/** @var kObjectTask $dbObject */
+		/** @var vObjectTask $dbObject */
 		$dbObject = parent::toObject($dbObject, $skip);
 		$dbObject->setDataValue('mailTo', $this->mailTo);
 		$dbObject->setDataValue('message', $this->message);
@@ -67,10 +67,10 @@ class KalturaMailNotificationObjectTask extends KalturaObjectTask
 		$dbObject->setDataValue('footer', $this->footer);
 		return $dbObject;
 	}
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
-		/** @var kObjectTask $srcObj */
+		/** @var vObjectTask $srcObj */
 		$this->mailTo = $srcObj->getDataValue('mailTo');
 		$this->message = $srcObj->getDataValue('message');
 		$this->footer = $srcObj->getDataValue('footer');

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaUserType extends KalturaEnum implements KuserType
+class VidiunUserType extends VidiunEnum implements VuserType
 {
-	// see KuserType interface
+	// see VuserType interface
 }

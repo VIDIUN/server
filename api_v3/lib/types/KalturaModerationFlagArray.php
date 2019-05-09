@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaModerationFlagArray extends KalturaTypedArray
+class VidiunModerationFlagArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr = null, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr = null, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaModerationFlagArray();
+		$newArr = new VidiunModerationFlagArray();
 		foreach($arr as $obj)
 		{
-			$nObj = new KalturaModerationFlag();
+			$nObj = new VidiunModerationFlag();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -20,6 +20,6 @@ class KalturaModerationFlagArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaModerationFlag");
+		return parent::__construct("VidiunModerationFlag");
 	}
 }

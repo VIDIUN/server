@@ -7,5 +7,5 @@ interface SphinxObjectType extends BaseEnum
 {
     const ENTRY = 1;
     const CATEGORY = 2;
-    const KUSER = 3;
+    const VUSER = 3;
 }

@@ -1,5 +1,5 @@
 <?php
-class kAssetUtils
+class vAssetUtils
 {
 	public static function createAssets ( $list , $list_name )
 	{
@@ -31,11 +31,11 @@ class kAssetUtils
 				if ($source_link == null)
 					$source_link = '';
 			}
-			echo "\t" .  baseObjectUtils::objToXml ( $entry , array ( 'id' , 'name' , 'media_type' , 'kshow_id' ) ,
+			echo "\t" .  baseObjectUtils::objToXml ( $entry , array ( 'id' , 'name' , 'media_type' , 'vshow_id' ) ,
 			'asset' , true ,
 			array ( 'url' => $data , 'ready' => $is_ready , 'thumbnail_path' => $entry->getThumbnailPath() ,
 			'credit' => $credit, 'source_link' => $source_link,
-			'duration' => $duration  , 'list_type'=>$list_name , 'contributor_screen_name' => $entry->getKuser()->getScreenName() ));
+			'duration' => $duration  , 'list_type'=>$list_name , 'contributor_screen_name' => $entry->getVuser()->getScreenName() ));
 		}
 	}
 
@@ -59,7 +59,7 @@ class kAssetUtils
 		else
 		{
 			$syncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-			list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+			list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 			if ($fileSync)
 				$fileExt = $fileSync->getFileExt();
 		}
@@ -114,14 +114,14 @@ class kAssetUtils
 
 	private static function getExternalStorageUrl(Partner $partner, asset $asset, FileSyncKey $key, $servePlayManifest = false , $playManifestClientTag = null , $storageId = null)
 	{
-		if(!$partner->getStorageServePriority() || $partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY)
+		if(!$partner->getStorageServePriority() || $partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY)
 			return null;
 			
-		if(is_null($storageId) && $partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_FIRST)
-			if(kFileSyncUtils::getReadyInternalFileSyncForKey($key)) // check if having file sync on kaltura dcs
+		if(is_null($storageId) && $partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_FIRST)
+			if(vFileSyncUtils::getReadyInternalFileSyncForKey($key)) // check if having file sync on vidiun dcs
 				return null;
 				
-		$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($key, $storageId);
+		$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($key, $storageId);
 		if(!$fileSync)
 			return null;
 			
@@ -136,7 +136,7 @@ class kAssetUtils
 				DeliveryProfilePeer::getRemoteDeliveryByStorageId(DeliveryProfileDynamicAttributes::init($fileSync->getDc(), $asset->getEntryId(), PlaybackProtocol::HTTP, "https")))
 				$url = requestUtils::getApiCdnHost();
 			else
-				$url = infraRequestUtils::PROTOCOL_HTTP . "://" . kConf::get("cdn_api_host");
+				$url = infraRequestUtils::PROTOCOL_HTTP . "://" . vConf::get("cdn_api_host");
 
 			$url .= $asset->getPlayManifestUrl($playManifestClientTag ,$storageId); 
 		}
@@ -154,7 +154,7 @@ class kAssetUtils
 					$url = rtrim($urlManager->getUrl(), "/") . "/".$url ;
 				}
 			} else {
-				KalturaLog::warning("Couldn't determine delivery profile for storage id");
+				VidiunLog::warning("Couldn't determine delivery profile for storage id");
 				$url = null;
 			}
 		}
@@ -165,13 +165,13 @@ class kAssetUtils
 	public static function getLocalImagePath($syncKey)
 	{
 		$filePath = null;
-		if(!kFileSyncUtils::fileSync_exists($syncKey))
+		if(!vFileSyncUtils::fileSync_exists($syncKey))
 		{
-			KalturaLog::warning("file doesn't exist");
+			VidiunLog::warning("file doesn't exist");
 			return $filePath;
 		}
 
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 		/* @var $fileSync FileSync */
 		if($local)
 		{

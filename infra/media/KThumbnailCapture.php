@@ -1,7 +1,7 @@
 <?php
 
 
-class KThumbnailCapture
+class VThumbnailCapture
 {
 
 	const PLAYLIST_TYPE = 5;

@@ -11,11 +11,11 @@ class BulkUploadCategoryEntryEngineFilter extends BulkUploadEngineFilter
     
 	/**
 	 * Function to create a new category from bulk upload result.
-	 * @param KalturaBulkUploadResult $bulkUploadResult
+	 * @param VidiunBulkUploadResult $bulkUploadResult
 	 */
-	protected function createObjectFromResultAndJobData (KalturaBulkUploadResult $bulkUploadResult)
+	protected function createObjectFromResultAndJobData (VidiunBulkUploadResult $bulkUploadResult)
 	{
-	    $categoryEntry = new KalturaCategoryEntry();
+	    $categoryEntry = new VidiunCategoryEntry();
 	    
 	    if ($bulkUploadResult->entryId)
 	        $categoryEntry->entryId = $bulkUploadResult->entryId;
@@ -29,28 +29,28 @@ class BulkUploadCategoryEntryEngineFilter extends BulkUploadEngineFilter
 	    if ($this->getData()->templateObject->categoryId)
 	        $categoryEntry->categoryId = $this->getData()->templateObject->categoryId;
         
-	    return KBatchBase::$kClient->categoryEntry->add($categoryEntry);
+	    return VBatchBase::$vClient->categoryEntry->add($categoryEntry);
 	}
 
-	protected function deleteObjectFromResult (KalturaBulkUploadResult $bulkUploadResult)
+	protected function deleteObjectFromResult (VidiunBulkUploadResult $bulkUploadResult)
 	{
-		return KBatchBase::$kClient->categoryEntry->delete($bulkUploadResult->entryId, $bulkUploadResult->categoryId);
+		return VBatchBase::$vClient->categoryEntry->delete($bulkUploadResult->entryId, $bulkUploadResult->categoryId);
 	}
 	
 	/**
 	 * create specific instance ob BulkUploadResult and set it's properties
-	 * @param $object - Result can be created either from KalturaBaseEntry or from KalturaCategoryEntry depending on the 
+	 * @param $object - Result can be created either from VidiunBaseEntry or from VidiunCategoryEntry depending on the 
 	 * filter passed to the job
 	 * 
 	 * @see BulkUploadEngineFilter::fillUploadResultInstance()
 	 */
 	protected function fillUploadResultInstance ($object)
 	{
-	    $bulkUploadResult = new KalturaBulkUploadResultCategoryEntry();
-	    if($object instanceof KalturaBaseEntry)
+	    $bulkUploadResult = new VidiunBulkUploadResultCategoryEntry();
+	    if($object instanceof VidiunBaseEntry)
 	    {
 	    	//get category entry object based on the entry details
-	    	$filter = new KalturaCategoryEntryFilter();
+	    	$filter = new VidiunCategoryEntryFilter();
 	    	$filter->entryIdEqual = $object->id;
 	    	$filter->categoryIdEqual = $object->categoryId;
 	    	$list = $this->listObjects($filter);
@@ -59,7 +59,7 @@ class BulkUploadCategoryEntryEngineFilter extends BulkUploadEngineFilter
 	    		$categoryEntry = reset($list->objects);
 	    	}	    	
 	    }
-	    else if($object instanceof KalturaCategoryEntry)
+	    else if($object instanceof VidiunCategoryEntry)
 	    {
 	    	$categoryEntry = $object;
 	    }
@@ -84,25 +84,25 @@ class BulkUploadCategoryEntryEngineFilter extends BulkUploadEngineFilter
 	 * 
 	 * @see BulkUploadEngineFilter::listObjects()
 	 */
-	protected function listObjects(KalturaFilter $filter, KalturaFilterPager $pager = null) 
+	protected function listObjects(VidiunFilter $filter, VidiunFilterPager $pager = null) 
 	{
 		$filter->orderBy = "+createdAt";
 		
-		if($filter instanceof KalturaBaseEntryFilter)
-			return KBatchBase::$kClient->baseEntry->listAction($filter, $pager);
-		else if($filter instanceof KalturaCategoryEntryFilter)
+		if($filter instanceof VidiunBaseEntryFilter)
+			return VBatchBase::$vClient->baseEntry->listAction($filter, $pager);
+		else if($filter instanceof VidiunCategoryEntryFilter)
 		{
-			$filter->statusEqual = KalturaCategoryEntryStatus::ACTIVE;
-			return KBatchBase::$kClient->categoryEntry->listAction($filter, $pager);	
+			$filter->statusEqual = VidiunCategoryEntryStatus::ACTIVE;
+			return VBatchBase::$vClient->categoryEntry->listAction($filter, $pager);	
 		}
 		else	
-			throw new KalturaBatchException("Unsupported filter: {get_class($filter)}", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED); 			
+			throw new VidiunBatchException("Unsupported filter: {get_class($filter)}", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED); 			
 			
 	}
 
 	protected function getBulkUploadResultObjectType()
 	{
-		return KalturaBulkUploadObjectType::CATEGORY_ENTRY;
+		return VidiunBulkUploadObjectType::CATEGORY_ENTRY;
 	}
 	
 	protected function isErrorResult($requestResult){

@@ -3,14 +3,14 @@
  * @package api
  * @subpackage filters
  */
-class KalturaLiveAssetFilter extends KalturaLiveAssetBaseFilter
+class VidiunLiveAssetFilter extends VidiunLiveAssetBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getListResponse()
+	 * @see VidiunAssetFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$types = KalturaPluginManager::getExtendedTypes(assetPeer::OM_CLASS, assetType::LIVE);
+		$types = VidiunPluginManager::getExtendedTypes(assetPeer::OM_CLASS, assetType::LIVE);
 		return $this->getTypeListResponse($pager, $responseProfile, $types);
 	}
 }

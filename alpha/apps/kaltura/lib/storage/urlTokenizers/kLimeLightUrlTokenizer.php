@@ -1,5 +1,5 @@
 <?php
-class kLimeLightUrlTokenizer extends kUrlTokenizer
+class vLimeLightUrlTokenizer extends vUrlTokenizer
 {
 	/**
 	 * @var string

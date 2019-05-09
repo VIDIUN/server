@@ -2,12 +2,12 @@
 
 /**
  * Will schedual execution of external commands
- * Copied base functionality from KScheduler
+ * Copied base functionality from VScheduler
  *
  * @package Scheduler
  * @subpackage Debug
  */
-class KGenericDebuger
+class VGenericDebuger
 {
 	/**
 	 * @var bool
@@ -15,7 +15,7 @@ class KGenericDebuger
 	private $enableDebug = true;
 	
 	/**
-	 * @var KSchedulerConfig
+	 * @var VSchedulerConfig
 	 */
 	private $schedulerConfig = null;
 	
@@ -24,7 +24,7 @@ class KGenericDebuger
 	 */
 	private $configFileName = null;
 	
-	private $logDir = "/web/kaltura/log";
+	private $logDir = "/web/vidiun/log";
 	private $initOnly = false;
 	
 	/**
@@ -44,7 +44,7 @@ class KGenericDebuger
 		if(!is_null($this->schedulerConfig) && !$this->schedulerConfig->reloadRequired())
 			return;
 		
-		$this->schedulerConfig = new KSchedulerConfig($this->configFileName);
+		$this->schedulerConfig = new VSchedulerConfig($this->configFileName);
 		$this->logDir = $this->schedulerConfig->getLogDir();
 	}
 	
@@ -74,9 +74,9 @@ class KGenericDebuger
 	}
 	
 	/**
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VSchedularTaskConfig $taskConfig
 	 */
-	private function exeJob(KSchedularTaskConfig $taskConfig)
+	private function exeJob(VSchedularTaskConfig $taskConfig)
 	{
 		$this->debug(__LINE__, "exeJob($taskConfig->name)");
 		

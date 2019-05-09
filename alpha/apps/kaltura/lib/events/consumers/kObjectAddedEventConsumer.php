@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage events
  */
-interface kObjectAddedEventConsumer extends KalturaEventConsumer
+interface vObjectAddedEventConsumer extends VidiunEventConsumer
 {
 	/**
 	 * @param BaseObject $object

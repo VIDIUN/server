@@ -4,10 +4,10 @@
  * @package plugins.beacon
  * @subpackage api.filters
  */
-class KalturaBeaconFilter extends KalturaBeaconBaseFilter
+class VidiunBeaconFilter extends VidiunBeaconBaseFilter
 {
 	/**
-	 * @var KalturaBeaconIndexType
+	 * @var VidiunBeaconIndexType
 	 */
 	public $indexTypeEqual;
 	
@@ -16,10 +16,10 @@ class KalturaBeaconFilter extends KalturaBeaconBaseFilter
 		return null;
 	}
 	
-	public function getListResponse(KalturaFilterPager $pager)
+	public function getListResponse(VidiunFilterPager $pager)
 	{
 		$searchObject = $this->createSearchObject();
-		$searchMgr = new kBeaconSearchQueryManger();
+		$searchMgr = new vBeaconSearchQueryManger();
 		
 		$relatedObjectType = $this->relatedObjectTypeEqual;
 		if(!$relatedObjectType)
@@ -28,12 +28,12 @@ class KalturaBeaconFilter extends KalturaBeaconBaseFilter
 			$relatedObjectType = $relatedObjectTypes[0];
 		}
 		
-		$indexName = kBeacon::ELASTIC_BEACONS_INDEX_NAME;
+		$indexName = vBeacon::ELASTIC_BEACONS_INDEX_NAME;
 		$indexType = null;
 		if($relatedObjectType && $relatedObjectType != "") 
 		{
-			$indexName = kBeacon::$searchIndexNameByBeaconObjectType[$relatedObjectType];
-			$indexType = kBeacon::$indexTypeByBeaconObjectType[$relatedObjectType];
+			$indexName = vBeacon::$searchIndexNameByBeaconObjectType[$relatedObjectType];
+			$indexType = vBeacon::$indexTypeByBeaconObjectType[$relatedObjectType];
 		}
 		
 		$searchQuery = $searchMgr->buildSearchQuery($indexName, $indexType, $searchObject, $pager->pageSize, $pager->calcOffset());
@@ -41,8 +41,8 @@ class KalturaBeaconFilter extends KalturaBeaconBaseFilter
 		$responseArray = $searchMgr->getHitsFromElasticResponse($elasticQueryResponse);
 		$totalCount = $searchMgr->getTotalCount($elasticQueryResponse);
 		
-		$response = new KalturaBeaconListResponse();
-		$response->objects = KalturaBeaconArray::fromDbArray($responseArray);
+		$response = new VidiunBeaconListResponse();
+		$response->objects = VidiunBeaconArray::fromDbArray($responseArray);
 		$response->totalCount = $totalCount;
 		return $response;
 	}
@@ -51,9 +51,9 @@ class KalturaBeaconFilter extends KalturaBeaconBaseFilter
 	{
 		$searchObject = array();
 		
-		$searchObject[kESearchQueryManager::TERMS_KEY] = $this->getSearchTerms();
-		$searchObject[kESearchQueryManager::RANGE_KEY] = $this->getSearchRangeTerms();
-		$searchObject[kESearchQueryManager::ORDER_KEY] = $this->getOrderByObject();
+		$searchObject[vESearchQueryManager::TERMS_KEY] = $this->getSearchTerms();
+		$searchObject[vESearchQueryManager::RANGE_KEY] = $this->getSearchRangeTerms();
+		$searchObject[vESearchQueryManager::ORDER_KEY] = $this->getOrderByObject();
 		
 		return $searchObject;
 	}
@@ -62,12 +62,12 @@ class KalturaBeaconFilter extends KalturaBeaconBaseFilter
 	{
 		$terms = array();
 		
-		$terms[kBeacon::FIELD_OBJECT_ID] = elasticSearchUtils::formatSearchTerm($this->objectIdIn);
-		$terms[kBeacon::FIELD_EVENT_TYPE] = elasticSearchUtils::formatSearchTerm($this->eventTypeIn);
-		$terms[kBeacon::FIELD_PARTNER_ID] = kCurrentContext::getCurrentPartnerId();
+		$terms[vBeacon::FIELD_OBJECT_ID] = elasticSearchUtils::formatSearchTerm($this->objectIdIn);
+		$terms[vBeacon::FIELD_EVENT_TYPE] = elasticSearchUtils::formatSearchTerm($this->eventTypeIn);
+		$terms[vBeacon::FIELD_PARTNER_ID] = vCurrentContext::getCurrentPartnerId();
 		
 		if(isset($this->indexTypeEqual))
-			$terms[kBeacon::FIELD_IS_LOG] = ($this->indexTypeEqual == KalturaBeaconIndexType::LOG) ? true : false; 
+			$terms[vBeacon::FIELD_IS_LOG] = ($this->indexTypeEqual == VidiunBeaconIndexType::LOG) ? true : false; 
 		
 		return $terms;
 	}
@@ -76,8 +76,8 @@ class KalturaBeaconFilter extends KalturaBeaconBaseFilter
 	{
 		$range = array();
 		
-		$range[kBeacon::FIELD_UPDATED_AT][kESearchQueryManager::GTE_KEY] = $this->updatedAtGreaterThanOrEqual;
-		$range[kBeacon::FIELD_UPDATED_AT][kESearchQueryManager::LTE_KEY] = $this->updatedAtLessThanOrEqual;
+		$range[vBeacon::FIELD_UPDATED_AT][vESearchQueryManager::GTE_KEY] = $this->updatedAtGreaterThanOrEqual;
+		$range[vBeacon::FIELD_UPDATED_AT][vESearchQueryManager::LTE_KEY] = $this->updatedAtLessThanOrEqual;
 		
 		return $range;
 	}

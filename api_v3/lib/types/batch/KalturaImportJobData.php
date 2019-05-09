@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaImportJobData extends KalturaJobData
+class VidiunImportJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -42,7 +42,7 @@ class KalturaImportJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kImportJobData();
+			$dbData = new vImportJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

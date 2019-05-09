@@ -4,14 +4,14 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaEventNotificationContentEditor extends IKalturaBase
+interface IVidiunEventNotificationContentEditor extends IVidiunBase
 {
 	/**
 	 * Function sweeps the given fields of the emailNotificationTemplate, and parses expressions of the type
 	 * {metadata:[metadataProfileSystemName]:[metadataProfileFieldSystemName]}
 	 * 
 	 * @param array $sweepFieldValues
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @param int $objecType
 	 * @return array
 	 */

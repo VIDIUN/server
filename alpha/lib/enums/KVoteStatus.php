@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.enum
  */
-interface KVoteStatus extends BaseEnum
+interface VVoteStatus extends BaseEnum
 {
     const REVOKED = 1;
     

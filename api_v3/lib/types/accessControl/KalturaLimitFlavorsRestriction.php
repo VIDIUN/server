@@ -2,14 +2,14 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaLimitFlavorsRestriction extends KalturaBaseRestriction 
+class VidiunLimitFlavorsRestriction extends VidiunBaseRestriction 
 {
 	/**
 	 * Limit flavors restriction type (Allow or deny)
 	 * 
-	 * @var KalturaLimitFlavorsRestrictionType
+	 * @var VidiunLimitFlavorsRestrictionType
 	 */
 	public $limitFlavorsRestrictionType; 
 	
@@ -32,10 +32,10 @@ class KalturaLimitFlavorsRestriction extends KalturaBaseRestriction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseRestriction::toRule()
+	 * @see VidiunBaseRestriction::toRule()
 	 */
-	public function toRule(KalturaRestrictionArray $restrictions)
+	public function toRule(VidiunRestrictionArray $restrictions)
 	{
-		return $this->toObject(new kAccessControlLimitFlavorsRestriction());
+		return $this->toObject(new vAccessControlLimitFlavorsRestriction());
 	}
 }

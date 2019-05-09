@@ -3,6 +3,6 @@
  * @package plugins.contentDistribution
  * @subpackage api.filters
  */
-class KalturaGenericDistributionProfileFilter extends KalturaGenericDistributionProfileBaseFilter
+class VidiunGenericDistributionProfileFilter extends VidiunGenericDistributionProfileBaseFilter
 {
 }

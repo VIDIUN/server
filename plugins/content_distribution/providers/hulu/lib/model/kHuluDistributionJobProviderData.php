@@ -3,7 +3,7 @@
  * @package plugins.huluDistribution
  * @subpackage model.data
  */
-class kHuluDistributionJobProviderData extends kDistributionJobProviderData
+class vHuluDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -20,7 +20,7 @@ class kHuluDistributionJobProviderData extends kDistributionJobProviderData
 	 */
 	public $fileBaseName;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

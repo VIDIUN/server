@@ -4,7 +4,7 @@
  * @package api
  * @subpackage model.enum
  */
-class KalturaLiveReportExportType extends KalturaEnum implements BaseEnum
+class VidiunLiveReportExportType extends VidiunEnum implements BaseEnum
 {
 	const PARTNER_TOTAL_ALL = 1;
 	const PARTNER_TOTAL_LIVE = 2;

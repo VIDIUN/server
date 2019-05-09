@@ -16,42 +16,42 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KAsyncConvertProfileCloser extends KJobCloserWorker
+class VAsyncConvertProfileCloser extends VJobCloserWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::CONVERT_PROFILE;
+		return VidiunBatchJobType::CONVERT_PROFILE;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->checkTimeout($job);
 	}
 
-	private function checkTimeout(KalturaBatchJob $job)
+	private function checkTimeout(VidiunBatchJob $job)
 	{
 		
 		if($job->queueTime && ($job->queueTime + self::$taskConfig->params->maxTimeBeforeFail) < time())
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', VidiunBatchJobStatus::FAILED);
 		else if ($this->checkConvertDone($job))
 		{
-			return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED);
+			return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED);
 		}
 			
-		return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::ALMOST_DONE);
+		return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::ALMOST_DONE);
 	}
 	
-	private function checkConvertDone(KalturaBatchJob $job)
+	private function checkConvertDone(VidiunBatchJob $job)
 	{
 		/**
-		 * @var KalturaConvertProfileJobData $data
+		 * @var VidiunConvertProfileJobData $data
 		 */
-		return self::$kClient->batch->checkEntryIsDone($job->id);
+		return self::$vClient->batch->checkEntryIsDone($job->id);
 	}
 }

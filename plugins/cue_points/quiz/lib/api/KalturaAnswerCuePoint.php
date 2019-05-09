@@ -3,7 +3,7 @@
  * @package plugins.quiz
  * @subpackage api.objects
  */
-class KalturaAnswerCuePoint extends KalturaCuePoint
+class VidiunAnswerCuePoint extends VidiunCuePoint
 {
 	/**
 	 * @var string
@@ -31,14 +31,14 @@ class KalturaAnswerCuePoint extends KalturaCuePoint
 	public $openAnswer;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 * @readonly
 	 */
 	public $isCorrect;
 
 	/**
 	 * Array of string
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 * @readonly
 	 */
 	public $correctAnswerKeys;
@@ -74,7 +74,7 @@ class KalturaAnswerCuePoint extends KalturaCuePoint
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -82,7 +82,7 @@ class KalturaAnswerCuePoint extends KalturaCuePoint
 	}
 
 	/* (non-PHPdoc)
-	* @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	* @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	*/
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
@@ -95,24 +95,24 @@ class KalturaAnswerCuePoint extends KalturaCuePoint
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbObject, $responseProfile);
 
 		$dbEntry = entryPeer::retrieveByPK($dbObject->getEntryId());
-		if ( !kEntitlementUtils::isEntitledForEditEntry($dbEntry))
+		if ( !vEntitlementUtils::isEntitledForEditEntry($dbEntry))
 		{
 			/**
-			 * @var kQuiz $kQuiz
+			 * @var vQuiz $vQuiz
 			 */
-			$kQuiz = QuizPlugin::validateAndGetQuiz( $dbEntry );
+			$vQuiz = QuizPlugin::validateAndGetQuiz( $dbEntry );
 
 			$dbUserEntry = UserEntryPeer::retrieveByPK($this->quizUserEntryId);
 			if ($dbUserEntry && $dbUserEntry->getStatus() == QuizPlugin::getCoreValue('UserEntryStatus', QuizUserEntryStatus::QUIZ_SUBMITTED))
 			{
-				if (!$kQuiz->getShowCorrectAfterSubmission())
+				if (!$vQuiz->getShowCorrectAfterSubmission())
 				{
 					$this->isCorrect = null;
 					$this->correctAnswerKeys = null;
@@ -121,10 +121,10 @@ class KalturaAnswerCuePoint extends KalturaCuePoint
 			}
 			else
 			{
-				if (!$kQuiz->getShowCorrect()) {
+				if (!$vQuiz->getShowCorrect()) {
 					$this->isCorrect = null;
 				}
-				if (!$kQuiz->getShowCorrectKey())
+				if (!$vQuiz->getShowCorrectKey())
 				{
 					$this->correctAnswerKeys = null;
 					$this->explanation = null;
@@ -135,22 +135,22 @@ class KalturaAnswerCuePoint extends KalturaCuePoint
 
 	/*
 	 * @param string $cuePointId
-	 * @throw KalturaAPIException - when parent cue points is missing or not a question cue point or doesn't belong to the same entry
+	 * @throw VidiunAPIException - when parent cue points is missing or not a question cue point or doesn't belong to the same entry
 	 */
 	public function validateParentId($cuePointId = null)
 	{
 		if ($this->isNull('parentId'))
-			throw new KalturaAPIException(KalturaQuizErrors::PARENT_ID_IS_MISSING);
+			throw new VidiunAPIException(VidiunQuizErrors::PARENT_ID_IS_MISSING);
 
 		$dbParentCuePoint = CuePointPeer::retrieveByPK($this->parentId);
 		if (!$dbParentCuePoint)
-			throw new KalturaAPIException(KalturaCuePointErrors::PARENT_CUE_POINT_NOT_FOUND, $this->parentId);
+			throw new VidiunAPIException(VidiunCuePointErrors::PARENT_CUE_POINT_NOT_FOUND, $this->parentId);
 
 		if (!($dbParentCuePoint instanceof QuestionCuePoint))
-			throw new KalturaAPIException(KalturaQuizErrors::WRONG_PARENT_TYPE, $this->parentId);
+			throw new VidiunAPIException(VidiunQuizErrors::WRONG_PARENT_TYPE, $this->parentId);
 
 		if ($dbParentCuePoint->getEntryId() != $this->entryId)
-			throw new KalturaAPIException(KalturaCuePointErrors::PARENT_CUE_POINT_DO_NOT_BELONG_TO_THE_SAME_ENTRY);
+			throw new VidiunAPIException(VidiunCuePointErrors::PARENT_CUE_POINT_DO_NOT_BELONG_TO_THE_SAME_ENTRY);
 
 	}
 
@@ -158,26 +158,26 @@ class KalturaAnswerCuePoint extends KalturaCuePoint
 	{
 		$dbUserEntry = UserEntryPeer::retrieveByPK($this->quizUserEntryId);
 		if (!$dbUserEntry)
-			throw new KalturaAPIException(KalturaErrors::USER_ENTRY_NOT_FOUND, $this->quizUserEntryId);
+			throw new VidiunAPIException(VidiunErrors::USER_ENTRY_NOT_FOUND, $this->quizUserEntryId);
 		if ($dbUserEntry->getEntryId() !== $this->entryId)
 		{
-			throw new KalturaAPIException(KalturaCuePointErrors::USER_ENTRY_DOES_NOT_MATCH_ENTRY_ID, $this->quizUserEntryId);
+			throw new VidiunAPIException(VidiunCuePointErrors::USER_ENTRY_DOES_NOT_MATCH_ENTRY_ID, $this->quizUserEntryId);
 		}
-		if (!kCurrentContext::$is_admin_session)
+		if (!vCurrentContext::$is_admin_session)
 		{
 			if ($dbUserEntry->getStatus() === QuizPlugin::getCoreValue('UserEntryStatus', QuizUserEntryStatus::QUIZ_SUBMITTED))
 			{
-				throw new KalturaAPIException(KalturaQuizErrors::USER_ENTRY_QUIZ_ALREADY_SUBMITTED);
+				throw new VidiunAPIException(VidiunQuizErrors::USER_ENTRY_QUIZ_ALREADY_SUBMITTED);
 			}
-			if ($dbUserEntry->getKuserId() != kCurrentContext::getCurrentKsKuserId()) 
+			if ($dbUserEntry->getVuserId() != vCurrentContext::getCurrentVsVuserId()) 
 			{
-			    throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID);
+			    throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID);
 			}
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForInsert()
+	 * @see VidiunCuePoint::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -186,34 +186,34 @@ class KalturaAnswerCuePoint extends KalturaCuePoint
 		QuizPlugin::validateAndGetQuiz($dbEntry);
 		$this->validateParentId();
 		$this->validateUserEntry();
-		if ($this->feedback != null && !kEntitlementUtils::isEntitledForEditEntry($dbEntry) )
+		if ($this->feedback != null && !vEntitlementUtils::isEntitledForEditEntry($dbEntry) )
 		{
-			KalturaLog::debug('Insert feedback on answer cue point is allowed only with admin KS or entry owner or co-editor');
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID);
+			VidiunLog::debug('Insert feedback on answer cue point is allowed only with admin VS or entry owner or co-editor');
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID);
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForUpdate()
+	 * @see VidiunCuePoint::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
 		parent::validateForUpdate($sourceObject, $propertiesToSkip);
 		if(!$this->entryId)
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'KalturaAnswerCuePoint:entryId');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'VidiunAnswerCuePoint:entryId');
 		}
 		$dbEntry = entryPeer::retrieveByPK($this->entryId);
-		$kQuiz = QuizPlugin::validateAndGetQuiz($dbEntry);
+		$vQuiz = QuizPlugin::validateAndGetQuiz($dbEntry);
 		$this->validateUserEntry();
-		if ( !$kQuiz->getAllowAnswerUpdate() && !kCurrentContext::$is_admin_session) 
+		if ( !$vQuiz->getAllowAnswerUpdate() && !vCurrentContext::$is_admin_session) 
 		{
-			throw new KalturaAPIException(KalturaQuizErrors::ANSWER_UPDATE_IS_NOT_ALLOWED, $sourceObject->getEntryId());
+			throw new VidiunAPIException(VidiunQuizErrors::ANSWER_UPDATE_IS_NOT_ALLOWED, $sourceObject->getEntryId());
 		}
-		if ($this->feedback != null && !kEntitlementUtils::isEntitledForEditEntry($dbEntry) )
+		if ($this->feedback != null && !vEntitlementUtils::isEntitledForEditEntry($dbEntry) )
 		{
-			KalturaLog::debug('Update feedback on answer cue point is allowed only with admin KS or entry owner or co-editor');
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID);
+			VidiunLog::debug('Update feedback on answer cue point is allowed only with admin VS or entry owner or co-editor');
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID);
 		}
 	}
 }

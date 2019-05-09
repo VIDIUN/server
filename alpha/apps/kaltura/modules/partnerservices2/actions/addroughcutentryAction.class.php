@@ -13,7 +13,7 @@ class addroughcutentryAction extends defPartnerservices2Action
 				"desc" => "Create a new roughcut entry" ,
 				"in" => array (
 					"mandatory" => array (
-						"kshow_id" => array ("type" => "integer"), 
+						"vshow_id" => array ("type" => "integer"), 
 						"entry" => array ("type" => "entry", "desc" => "Entry of type ENTRY_TYPE_SHOW"),
 						),
 					"optional" => array (
@@ -23,7 +23,7 @@ class addroughcutentryAction extends defPartnerservices2Action
 					"entry" => array ("type" => "entry", "desc" => "Entry of type ENTRY_TYPE_SHOW")
 					),
 				"errors" => array (
-					APIErrors::INVALID_KSHOW_ID
+					APIErrors::INVALID_VSHOW_ID
 				)
 			); 
 	}
@@ -34,42 +34,42 @@ class addroughcutentryAction extends defPartnerservices2Action
 
 	protected function getObjectPrefix () { return "entry"; }
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		$kshow_id = $this->getP ( "kshow_id" , kshow::KSHOW_ID_USE_DEFAULT );
+		$vshow_id = $this->getP ( "vshow_id" , vshow::VSHOW_ID_USE_DEFAULT );
 
 		$entry = null;
-       	if ( $kshow_id == kshow::KSHOW_ID_USE_DEFAULT )
+       	if ( $vshow_id == vshow::VSHOW_ID_USE_DEFAULT )
         {
-            // see if the partner has some default kshow to add to
-            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser  );
-            if ( $kshow ) $kshow_id = $kshow->getId();
+            // see if the partner has some default vshow to add to
+            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser  );
+            if ( $vshow ) $vshow_id = $vshow->getId();
         }
-		elseif ( $kshow_id == kshow::KSHOW_ID_CREATE_NEW )
+		elseif ( $vshow_id == vshow::VSHOW_ID_CREATE_NEW )
         {
-            // if the partner allows - create a new kshow 
-            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser , null , true );
-            if ( $kshow )
+            // if the partner allows - create a new vshow 
+            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser , null , true );
+            if ( $vshow )
             {
-            	$kshow_id = $kshow->getId();
-       	        $entry = $kshow->getShowEntry(); // use the newly created kshow's roughcut
+            	$vshow_id = $vshow->getId();
+       	        $entry = $vshow->getShowEntry(); // use the newly created vshow's roughcut
             }
         }   
 		else
         {
-            $kshow = kshowPeer::retrieveByPK( $kshow_id );
+            $vshow = vshowPeer::retrieveByPK( $vshow_id );
         }
 
-        if ( ! $kshow )
+        if ( ! $vshow )
         {
-            // the partner is attempting to add an entry to some invalid or non-existing kwho
-            $this->addError( APIErrors::INVALID_KSHOW_ID, $kshow_id );
+            // the partner is attempting to add an entry to some invalid or non-existing vwho
+            $this->addError( APIErrors::INVALID_VSHOW_ID, $vshow_id );
             return;
         }
         
 		if (!$entry)
 		{
-			$entry = $kshow->createEntry( entry::ENTRY_MEDIA_TYPE_SHOW , $kshow->getProducerId() , "&auto_edit.jpg" , "" ); 
+			$entry = $vshow->createEntry( entry::ENTRY_MEDIA_TYPE_SHOW , $vshow->getProducerId() , "&auto_edit.jpg" , "" ); 
 		}
            
         $obj_wrapper = objectWrapperBase::getWrapperClass( $entry , 0 );

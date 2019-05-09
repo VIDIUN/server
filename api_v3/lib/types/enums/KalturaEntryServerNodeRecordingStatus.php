@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaEntryServerNodeRecordingStatus extends KalturaEnum implements EntryServerNodeRecordingStatus
+class VidiunEntryServerNodeRecordingStatus extends VidiunEnum implements EntryServerNodeRecordingStatus
 {
 
 }

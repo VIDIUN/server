@@ -2,7 +2,7 @@
 
 require_once(dirname(__file__) . '/../../../../../../vendor/akamai/token/StreamTokenFactory.php');
 
-class kVnptUrlTokenizer extends kUrlTokenizer
+class vVnptUrlTokenizer extends vUrlTokenizer
 {
 	const VOD_TOKEN_FORMAT = 0;
 	const LIVE_TOKEN_FORMAT = 1;

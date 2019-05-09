@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class heartBeatAction extends kalturaSystemAction 
+class heartBeatAction extends vidiunSystemAction 
 {
 	private $_test_array = NULL;
 	private $_bottom_line = null;

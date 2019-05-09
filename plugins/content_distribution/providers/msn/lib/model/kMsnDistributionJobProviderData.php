@@ -3,7 +3,7 @@
  * @package plugins.msnDistribution
  * @subpackage model.data
  */
-class kMsnDistributionJobProviderData extends kDistributionJobProviderData
+class vMsnDistributionJobProviderData extends vDistributionJobProviderData
 {
 		/**
 	 * @var string

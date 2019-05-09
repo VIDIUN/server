@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAnalyticsFilter extends KalturaObject
+class VidiunAnalyticsFilter extends VidiunObject
 {
 	/**
 	 * Query start time (in local time) MM/dd/yyyy HH:mi
@@ -37,7 +37,7 @@ class KalturaAnalyticsFilter extends KalturaObject
 
 	/**
 	 * Array of filters
-	 * @var KalturaReportFilterArray
+	 * @var VidiunReportFilterArray
 	 */
 	public $filters;
 

@@ -84,25 +84,25 @@ class ESearchCaptionItem extends ESearchNestedObjectItem
 		switch ($this->getItemType())
 		{
 			case ESearchItemType::EXACT_MATCH:
-				$query = kESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+				$query = vESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 				break;
 			case ESearchItemType::PARTIAL:
-				$query = kESearchQueryManager::getPartialQuery($this, $this->getFieldName(), $queryAttributes);
+				$query = vESearchQueryManager::getPartialQuery($this, $this->getFieldName(), $queryAttributes);
 				break;
 			case ESearchItemType::STARTS_WITH:
-				$query = kESearchQueryManager::getPrefixQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+				$query = vESearchQueryManager::getPrefixQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 				break;
 			case ESearchItemType::EXISTS:
-				$query = kESearchQueryManager::getExistsQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+				$query = vESearchQueryManager::getExistsQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 				break;
 			case ESearchItemType::RANGE:
-				$query = kESearchQueryManager::getRangeQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+				$query = vESearchQueryManager::getRangeQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 				break;
 			default:
-				KalturaLog::log("Undefined item type[".$this->getItemType()."]");
+				VidiunLog::log("Undefined item type[".$this->getItemType()."]");
 		}
 
-		if($boolOperator == kESearchBoolQuery::MUST_KEY && !array_key_exists($this->getFieldName(), self::$field_boost_values))
+		if($boolOperator == vESearchBoolQuery::MUST_KEY && !array_key_exists($this->getFieldName(), self::$field_boost_values))
 			$captionBoolQuery->addToFilter($query);
 		else
 			$captionBoolQuery->addByOperatorType($boolOperator, $query);

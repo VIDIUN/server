@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class conversionProfileMgrAction extends kalturaSystemAction
+class conversionProfileMgrAction extends vidiunSystemAction
 {
 	public function execute()
 	{
@@ -34,7 +34,7 @@ class conversionProfileMgrAction extends kalturaSystemAction
 			
 			$filter->attachToCriteria( $c );
 			
-			//if ($order_by != -1) kshowPeer::setOrder( $c , $order_by );
+			//if ($order_by != -1) vshowPeer::setOrder( $c , $order_by );
 			$this->list = ConversionProfilePeer::doSelect( $c );
 		}
 

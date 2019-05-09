@@ -3,16 +3,16 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSessionInfo extends KalturaObject 
+class VidiunSessionInfo extends VidiunObject 
 {
 	/**
 	 * @var string
 	 * @readonly
 	 */
-	public $ks;
+	public $vs;
 
 	/**
-	 * @var KalturaSessionType
+	 * @var VidiunSessionType
 	 * @readonly
 	 */
 	public $sessionType;

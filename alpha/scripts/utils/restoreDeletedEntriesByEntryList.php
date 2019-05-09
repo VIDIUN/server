@@ -18,11 +18,11 @@ foreach ($entries as $deletedEntryId){
 	/* @var $deletedEntry entry */
 	
 	if (!$deletedEntry){
-		KalturaLog::debug ('ERROR: couldn\'t find entry id ['.$deletedEntryId.']'); 
+		VidiunLog::debug ('ERROR: couldn\'t find entry id ['.$deletedEntryId.']'); 
 		continue;
 	}
 	
-	KalturaLog::debug('undeleting entry id ['. $deletedEntry->getID().']');
+	VidiunLog::debug('undeleting entry id ['. $deletedEntry->getID().']');
 	if ($deletedEntry->getStatus() == entryStatus::DELETED){		
 		$deletedEntry->setStatus(entryStatus::READY);
 	}
@@ -85,12 +85,12 @@ foreach ($entries as $deletedEntryId){
 		$assetConvertLogSyncKey = $deletedAsset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_CONVERT_LOG);
 		restoreFileSyncByKey($assetConvertLogSyncKey);
 	}
-	kEventsManager::flushEvents();
-	kMemoryManager::clearMemory(); 
+	vEventsManager::flushEvents();
+	vMemoryManager::clearMemory(); 
 }
 
 function restoreFileSyncByKey(FileSyncKey $fileSyncKey){
-	KalturaLog::debug("file sync key: $fileSyncKey");
+	VidiunLog::debug("file sync key: $fileSyncKey");
 	/* @var $entryFileSyncKey FileSyncKey */
 	FileSyncPeer::setUseCriteriaFilter(false);
 	$fileSyncs = FileSyncPeer::retrieveAllByFileSyncKey($fileSyncKey);

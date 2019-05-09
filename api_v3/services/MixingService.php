@@ -1,22 +1,22 @@
 <?php
 
 /**
- * A Mix is an XML unique format invented by Kaltura, it allows the user to create a mix of videos and images, in and out points, transitions, text overlays, soundtrack, effects and much more...
+ * A Mix is an XML unique format invented by Vidiun, it allows the user to create a mix of videos and images, in and out points, transitions, text overlays, soundtrack, effects and much more...
  * Mixing service lets you create a new mix, manage its metadata and make basic manipulations.   
  *
  * @service mixing
  * @package api
  * @subpackage services
  */
-class MixingService extends KalturaEntryService
+class MixingService extends VidiunEntryService
 {
 	
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if ($actionName === 'get') {
 			return true;
 		}
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 	
 	/**
@@ -24,10 +24,10 @@ class MixingService extends KalturaEntryService
 	 * If the dataContent is null, a default timeline will be created.
 	 * 
 	 * @action add
-	 * @param KalturaMixEntry $mixEntry Mix entry metadata
-	 * @return KalturaMixEntry The new mix entry
+	 * @param VidiunMixEntry $mixEntry Mix entry metadata
+	 * @return VidiunMixEntry The new mix entry
 	 */
-	function addAction(KalturaMixEntry $mixEntry)
+	function addAction(VidiunMixEntry $mixEntry)
 	{
 		$mixEntry->validatePropertyMinLength("name", 1);
 		$mixEntry->validatePropertyNotNull("editorType");
@@ -39,12 +39,12 @@ class MixingService extends KalturaEntryService
 		$this->validateAccessControlId($mixEntry);
 		$this->validateEntryScheduleDates($mixEntry, $dbEntry);
 		
-		$kshow = $this->createDummyKShow();
+		$vshow = $this->createDummyVShow();
 
-		$dbEntry->setKshowId($kshow->getId());
+		$dbEntry->setVshowId($vshow->getId());
 		$dbEntry->setPartnerId($this->getPartnerId());
 		$dbEntry->setSubpId($this->getPartnerId() * 100);
-		$dbEntry->setStatus(KalturaEntryStatus::READY);
+		$dbEntry->setStatus(VidiunEntryStatus::READY);
 		$dbEntry->setMediaType(entry::ENTRY_MEDIA_TYPE_SHOW); // for backward compatibility
 
 		if (!$dbEntry->getThumbnail())
@@ -72,11 +72,11 @@ class MixingService extends KalturaEntryService
 		$trackEntry->setDescription(__METHOD__ . ":" . __LINE__ . "::ENTRY_MIX");
 		TrackEntry::addTrackEntry($trackEntry);
 		
-		$kshow->setShowEntry($dbEntry);
-		$kshow->save();
+		$vshow->setShowEntry($dbEntry);
+		$vshow->save();
 		$mixEntry->fromObject($dbEntry, $this->getResponseProfile());
 		
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
 		
 		return $mixEntry;
 	}
@@ -87,11 +87,11 @@ class MixingService extends KalturaEntryService
 	 * @action get
 	 * @param string $entryId Mix entry id
 	 * @param int $version Desired version of the data
-	 * @return KalturaMixEntry The requested mix entry
+	 * @return VidiunMixEntry The requested mix entry
 	 */
 	function getAction($entryId, $version = -1)
 	{
-		return $this->getEntry($entryId, $version, KalturaEntryType::MIX);
+		return $this->getEntry($entryId, $version, VidiunEntryType::MIX);
 	}
 	
 	/**
@@ -99,18 +99,18 @@ class MixingService extends KalturaEntryService
 	 * 
 	 * @action update
 	 * @param string $entryId Mix entry id to update
-	 * @param KalturaMixEntry $mixEntry Mix entry metadata to update
-	 * @return KalturaMixEntry The updated mix entry
+	 * @param VidiunMixEntry $mixEntry Mix entry metadata to update
+	 * @return VidiunMixEntry The updated mix entry
 	 * @validateUser entry entryId edit
 	 */
-	function updateAction($entryId, KalturaMixEntry $mixEntry)
+	function updateAction($entryId, VidiunMixEntry $mixEntry)
 	{
 		$mixEntry->type = null; // because it was set in the constructor, but cannot be updated
 		
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MIX)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MIX)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		
 		$this->checkAndSetValidUserUpdate($mixEntry, $dbEntry);
@@ -134,10 +134,10 @@ class MixingService extends KalturaEntryService
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 		
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $dbEntry);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $dbEntry);
 		
 		return $mixEntry;
 	}
@@ -151,7 +151,7 @@ class MixingService extends KalturaEntryService
 	 */
 	function deleteAction($entryId)
 	{
-		$this->deleteEntry($entryId, KalturaEntryType::MIX);
+		$this->deleteEntry($entryId, VidiunEntryType::MIX);
 	}
 	
 	/**
@@ -159,20 +159,20 @@ class MixingService extends KalturaEntryService
 	 * Return parameter is an array of mix entries.
 	 * 
 	 * @action list
-	 * @param KalturaMixEntryFilter $filter Mix entry filter
-	 * @param KalturaFilterPager $pager Pager
-	 * @return KalturaMixListResponse Wrapper for array of media entries and total count
+	 * @param VidiunMixEntryFilter $filter Mix entry filter
+	 * @param VidiunFilterPager $pager Pager
+	 * @return VidiunMixListResponse Wrapper for array of media entries and total count
 	 */
-	function listAction(KalturaMixEntryFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunMixEntryFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 	    if (!$filter)
-			$filter = new KalturaMixEntryFilter();
+			$filter = new VidiunMixEntryFilter();
 			
-		$filter->typeEqual = KalturaEntryType::MIX; 
+		$filter->typeEqual = VidiunEntryType::MIX; 
 	    list($list, $totalCount) = parent::listEntriesByFilter($filter, $pager);
 	    
-	    $newList = KalturaMixEntryArray::fromDbArray($list, $this->getResponseProfile());
-		$response = new KalturaMixListResponse();
+	    $newList = VidiunMixEntryArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunMixListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -182,15 +182,15 @@ class MixingService extends KalturaEntryService
 	* Count mix entries by filter.
 	* 
 	* @action count
-	* @param KalturaMediaEntryFilter $filter Media entry filter
+	* @param VidiunMediaEntryFilter $filter Media entry filter
 	* @return int
 	*/
-	function countAction(KalturaMediaEntryFilter $filter = null)
+	function countAction(VidiunMediaEntryFilter $filter = null)
 	{
 	    if (!$filter)
-			$filter = new KalturaMediaEntryFilter();
+			$filter = new VidiunMediaEntryFilter();
 			
-		$filter->typeEqual = KalturaEntryType::MIX;
+		$filter->typeEqual = VidiunEntryType::MIX;
 		
 		return parent::countEntriesByFilter($filter);
 	}
@@ -200,37 +200,37 @@ class MixingService extends KalturaEntryService
 	 *
 	 * @action clone
 	 * @param string $entryId Mix entry id to clone
-	 * @return KalturaMixEntry The new mix entry
+	 * @return VidiunMixEntry The new mix entry
 	 */
 	function cloneAction($entryId)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MIX)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MIX)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
-		$kshowId = $dbEntry->getKshowId();
-		$kshow = $dbEntry->getKshow();
+		$vshowId = $dbEntry->getVshowId();
+		$vshow = $dbEntry->getVshow();
 		
-		if (!$kshow)
+		if (!$vshow)
 		{
-			KalturaLog::CRIT("Kshow was not found for mix id [".$entryId."]");
-			throw new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+			VidiunLog::CRIT("Vshow was not found for mix id [".$entryId."]");
+			throw new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 		}
 		
-		$newKshow = myKshowUtils::shalowCloneById($kshowId, $this->getKuser()->getId());
+		$newVshow = myVshowUtils::shalowCloneById($vshowId, $this->getVuser()->getId());
 	
-		if (!$newKshow)
+		if (!$newVshow)
 		{
-			KalturaLog::ERR("Failed to clone kshow for mix id [".$entryId."]");
-			throw new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+			VidiunLog::ERR("Failed to clone vshow for mix id [".$entryId."]");
+			throw new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 		}
-		$newEntry = $newKshow->getShowEntry();
+		$newEntry = $newVshow->getShowEntry();
 		
-		$newMixEntry = new KalturaMixEntry();
+		$newMixEntry = new VidiunMixEntry();
 		$newMixEntry->fromObject($newEntry, $this->getResponseProfile());
 		
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $newEntry);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $newEntry);
 		
 		return $newMixEntry;
 	}
@@ -241,48 +241,48 @@ class MixingService extends KalturaEntryService
 	 * @action appendMediaEntry
 	 * @param string $mixEntryId Mix entry to append to its timeline
 	 * @param string $mediaEntryId Media entry to append to the timeline
-	 * @return KalturaMixEntry The mix entry
+	 * @return VidiunMixEntry The mix entry
 	 */
 	function appendMediaEntryAction($mixEntryId, $mediaEntryId)
 	{
 		$dbMixEntry = entryPeer::retrieveByPK($mixEntryId);
 
-		if (!$dbMixEntry || $dbMixEntry->getType() != KalturaEntryType::MIX)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $mixEntryId);
+		if (!$dbMixEntry || $dbMixEntry->getType() != VidiunEntryType::MIX)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $mixEntryId);
 			
 		$dbMediaEntry = entryPeer::retrieveByPK($mediaEntryId);
 
-		if (!$dbMediaEntry || $dbMediaEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $mediaEntryId);
+		if (!$dbMediaEntry || $dbMediaEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $mediaEntryId);
 			
-		$kshow = $dbMixEntry->getkshow();		
-		if (!$kshow)
+		$vshow = $dbMixEntry->getvshow();		
+		if (!$vshow)
 		{
-			KalturaLog::CRIT("Kshow was not found for mix id [".$mixEntryId."]");
-			throw new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+			VidiunLog::CRIT("Vshow was not found for mix id [".$mixEntryId."]");
+			throw new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 		}
 		
-		// FIXME: temp hack  - when kshow doesn't have a roughcut, and the media entry is not ready, it cannob be queued for append upon import/conversion completion 
+		// FIXME: temp hack  - when vshow doesn't have a roughcut, and the media entry is not ready, it cannob be queued for append upon import/conversion completion 
 		if ($dbMediaEntry->getStatus() != entryStatus::READY)
 		{
-			$kshow->setShowEntryId($mixEntryId);
-			$kshow->save();
-			$dbMediaEntry->setKshowId($kshow->getId());
+			$vshow->setShowEntryId($mixEntryId);
+			$vshow->save();
+			$dbMediaEntry->setVshowId($vshow->getId());
 			$dbMediaEntry->save();
 		}
 		
-		$metadata = $kshow->getMetadata();
+		$metadata = $vshow->getMetadata();
 		
-		$relevantKshowVersion = 1 + $kshow->getVersion(); // the next metadata will be the first relevant version for this new entry
+		$relevantVshowVersion = 1 + $vshow->getVersion(); // the next metadata will be the first relevant version for this new entry
 		
-		$newMetadata = myMetadataUtils::addEntryToMetadata($metadata, $dbMediaEntry, $relevantKshowVersion, array());
+		$newMetadata = myMetadataUtils::addEntryToMetadata($metadata, $dbMediaEntry, $relevantVshowVersion, array());
 		
 		$dbMediaEntry->save(); // FIXME: should be removed, needed for the prev hack
 		
 		if ($newMetadata)
 		{
 			// TODO - add thumbnail only for entries that are worthy - check they are not moderated !
-			$thumbModified = myKshowUtils::updateThumbnail($kshow, $dbMediaEntry, false);
+			$thumbModified = myVshowUtils::updateThumbnail($vshow, $dbMediaEntry, false);
 			
 			if ($thumbModified)
 			{
@@ -292,17 +292,17 @@ class MixingService extends KalturaEntryService
 			// it is very important to increment the version count because even if the entry is deferred
 			// it will be added on the next version
 			
-			if (!$kshow->getHasRoughcut())
+			if (!$vshow->getHasRoughcut())
 			{
-				// make sure the kshow now does have a roughcut
-				$kshow->setHasRoughcut(true);	
-				$kshow->save();
+				// make sure the vshow now does have a roughcut
+				$vshow->setHasRoughcut(true);	
+				$vshow->save();
 			}
 	
-			$kshow->setMetadata($newMetadata, true);
+			$vshow->setMetadata($newMetadata, true);
 		}
 		
-		$mixEntry = new KalturaMixEntry();
+		$mixEntry = new VidiunMixEntry();
 		$mixEntry->fromObject($dbMixEntry, $this->getResponseProfile());
 		
 		return $mixEntry;
@@ -313,17 +313,17 @@ class MixingService extends KalturaEntryService
 	 *
 	 * @action getMixesByMediaId
 	 * @param string $mediaEntryId
-	 * @return KalturaMixEntryArray
+	 * @return VidiunMixEntryArray
 	 */
 	public function getMixesByMediaIdAction($mediaEntryId)
 	{
 		$dbMediaEntry = entryPeer::retrieveByPK($mediaEntryId);
 
-		if (!$dbMediaEntry || $dbMediaEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $mediaEntryId);
+		if (!$dbMediaEntry || $dbMediaEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $mediaEntryId);
 			
 		 $list = roughcutEntry::getAllRoughcuts($mediaEntryId);
-		 $newList = KalturaMixEntryArray::fromDbArray($list, $this->getResponseProfile());
+		 $newList = VidiunMixEntryArray::fromDbArray($list, $this->getResponseProfile());
 		 return $newList;
 	}
 	
@@ -333,19 +333,19 @@ class MixingService extends KalturaEntryService
 	 * @action getReadyMediaEntries
 	 * @param string $mixId
 	 * @param int $version Desired version to get the data from
-	 * @return KalturaMediaEntryArray
+	 * @return VidiunMediaEntryArray
 	 */
 	public function getReadyMediaEntriesAction($mixId, $version = -1)
 	{
 		$dbEntry = entryPeer::retrieveByPK($mixId);
 
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MIX)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $mixId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MIX)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $mixId);
 		
 		$dataSyncKey = $dbEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-		$mixFileName = kFileSyncUtils::getReadyLocalFilePathForKey($dataSyncKey, false);
+		$mixFileName = vFileSyncUtils::getReadyLocalFilePathForKey($dataSyncKey, false);
 		if(!$mixFileName)
-			KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 
 		$entryDataFromMix = myFlvStreamer::getAllAssetsData($dataSyncKey);
 
@@ -353,13 +353,13 @@ class MixingService extends KalturaEntryService
 		foreach($entryDataFromMix as $data)
 			$ids[] = $data["id"];
 
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$c->addAnd(entryPeer::ID, $ids, Criteria::IN);
 		$c->addAnd(entryPeer::TYPE, entryType::MEDIA_CLIP);					
 		
 		$dbEntries = entryPeer::doSelect($c);
 
-		$mediaEntries = KalturaMediaEntryArray::fromDbArray($dbEntries, $this->getResponseProfile());
+		$mediaEntries = VidiunMediaEntryArray::fromDbArray($dbEntries, $this->getResponseProfile());
 		
 		return $mediaEntries;
 	}
@@ -373,6 +373,6 @@ class MixingService extends KalturaEntryService
 	 */
 	public function anonymousRankAction($entryId, $rank)
 	{
-		return parent::anonymousRankEntry($entryId, KalturaEntryType::MIX, $rank);
+		return parent::anonymousRankEntry($entryId, VidiunEntryType::MIX, $rank);
 	}
 }

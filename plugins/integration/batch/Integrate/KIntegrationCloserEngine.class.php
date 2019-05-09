@@ -3,11 +3,11 @@
  * @package plugins.integration
  * @subpackage Scheduler
  */
-interface KIntegrationCloserEngine extends KIntegrationEngine
+interface VIntegrationCloserEngine extends VIntegrationEngine
 {	
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaIntegrationJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunIntegrationJobData $data
 	 */
-	public function close(KalturaBatchJob $job, KalturaIntegrationJobData &$data);
+	public function close(VidiunBatchJob $job, VidiunIntegrationJobData &$data);
 }

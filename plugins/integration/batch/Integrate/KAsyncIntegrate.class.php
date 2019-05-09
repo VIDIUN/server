@@ -3,30 +3,30 @@
  * @package plugins.integration
  * @subpackage Scheduler
  */
-class KAsyncIntegrate extends KJobHandlerWorker
+class VAsyncIntegrate extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::INTEGRATION;
+		return VidiunBatchJobType::INTEGRATION;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->integrate($job, $job->data);
 	}
 	
-	protected function integrate(KalturaBatchJob $job, KalturaIntegrationJobData $data)
+	protected function integrate(VidiunBatchJob $job, VidiunIntegrationJobData $data)
 	{
 		$engine = $this->getEngine($job->jobSubType);
 		if(!$engine)
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::ENGINE_NOT_FOUND, "Engine not found", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::ENGINE_NOT_FOUND, "Engine not found", VidiunBatchJobStatus::FAILED);
 		}
 		
 		$this->impersonate($job->partnerId);
@@ -35,18 +35,18 @@ class KAsyncIntegrate extends KJobHandlerWorker
 		
 		if(!$finished)
 		{
-			return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::ALMOST_DONE, $data);
+			return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::ALMOST_DONE, $data);
 		}
 		
-		return $this->closeJob($job, null, null, "Integrated", KalturaBatchJobStatus::FINISHED, $data);
+		return $this->closeJob($job, null, null, "Integrated", VidiunBatchJobStatus::FINISHED, $data);
 	}
 
 	/**
-	 * @param KalturaIntegrationProviderType $type
-	 * @return KIntegrationEngine
+	 * @param VidiunIntegrationProviderType $type
+	 * @return VIntegrationEngine
 	 */
 	protected function getEngine($type)
 	{
-		return KalturaPluginManager::loadObject('KIntegrationEngine', $type);
+		return VidiunPluginManager::loadObject('VIntegrationEngine', $type);
 	}
 }

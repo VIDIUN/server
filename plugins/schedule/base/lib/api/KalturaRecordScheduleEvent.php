@@ -3,10 +3,10 @@
  * @package plugins.schedule
  * @subpackage api.objects
  */
-class KalturaRecordScheduleEvent extends KalturaEntryScheduleEvent
+class VidiunRecordScheduleEvent extends VidiunEntryScheduleEvent
 {
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{
@@ -20,7 +20,7 @@ class KalturaRecordScheduleEvent extends KalturaEntryScheduleEvent
 	
 	/**
 	 * {@inheritDoc}
-	 * @see KalturaScheduleEvent::getScheduleEventType()
+	 * @see VidiunScheduleEvent::getScheduleEventType()
 	 */
 	public function getScheduleEventType()
 	{

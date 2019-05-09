@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAmazonS3StorageExportJobData extends KalturaStorageExportJobData 
+class VidiunAmazonS3StorageExportJobData extends VidiunStorageExportJobData 
 {
 	/**
-	 * @var KalturaAmazonS3StorageProfileFilesPermissionLevel
+	 * @var VidiunAmazonS3StorageProfileFilesPermissionLevel
 	 */   	
     public $filesPermissionInS3;   
     
@@ -23,7 +23,7 @@ class KalturaAmazonS3StorageExportJobData extends KalturaStorageExportJobData
 	/**
 	 * @var string
 	 */   	
-    public $sseKmsKeyId;   
+    public $sseVmsKeyId;   
     
 	/**
 	 * @var string
@@ -40,7 +40,7 @@ class KalturaAmazonS3StorageExportJobData extends KalturaStorageExportJobData
 		"filesPermissionInS3",	
 		"s3Region",	
 		"sseType",
-		"sseKmsKeyId",
+		"sseVmsKeyId",
 		"signatureType",
 		"endPoint",
 	);
@@ -54,7 +54,7 @@ class KalturaAmazonS3StorageExportJobData extends KalturaStorageExportJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kAmazonS3StorageExportJobData();
+			$dbData = new vAmazonS3StorageExportJobData();
 			
 		return parent::toObject($dbData);
 	}

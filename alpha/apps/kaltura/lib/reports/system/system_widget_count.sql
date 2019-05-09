@@ -5,7 +5,7 @@ SELECT
 	SUM(count_loads) "Entry load count",
 	SUM(count_widget_loads) "Widget load count"
 FROM
-	kalturadw.dwh_aggr_events_widget
+	vidiundw.dwh_aggr_events_widget
 WHERE 
 	partner_id={PARTNER_ID} 
 	AND date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}

@@ -14,7 +14,7 @@ class notificationWrapper extends objectWrapperBase
 	
 	protected $detailed_objs_ext = array ( );
 	
-	protected $objs_cache = array ( ) ;//"kuser" => "kuser,kuserId" , ); 
+	protected $objs_cache = array ( ) ;//"vuser" => "vuser,vuserId" , ); 
 
 	protected $updateable_fields = array ( "id" , "status" , "notificationResult"  );
 	

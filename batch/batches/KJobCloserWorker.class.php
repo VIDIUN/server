@@ -4,21 +4,21 @@
  * 
  * @package Scheduler
  */
-abstract class KJobCloserWorker extends KJobHandlerWorker
+abstract class VJobCloserWorker extends VJobHandlerWorker
 {
 	public function run($jobs = null)
 	{
-		if(KBatchBase::$taskConfig->isInitOnly())
+		if(VBatchBase::$taskConfig->isInitOnly())
 			return $this->init();
 		
 		if(is_null($jobs))
-			$jobs = KBatchBase::$kClient->batch->getExclusiveAlmostDone($this->getExclusiveLockKey(), KBatchBase::$taskConfig->maximumExecutionTime, $this->getMaxJobsEachRun(), $this->getFilter(), static::getType());
+			$jobs = VBatchBase::$vClient->batch->getExclusiveAlmostDone($this->getExclusiveLockKey(), VBatchBase::$taskConfig->maximumExecutionTime, $this->getMaxJobsEachRun(), $this->getFilter(), static::getType());
 		
-		KalturaLog::info(count($jobs) . " jobs to close");
+		VidiunLog::info(count($jobs) . " jobs to close");
 		
 		if(! count($jobs) > 0)
 		{
-			KalturaLog::info("Queue size: 0 sent to scheduler");
+			VidiunLog::info("Queue size: 0 sent to scheduler");
 			$this->saveSchedulerQueue(static::getType(), 0);
 			return null;
 		}
@@ -30,20 +30,20 @@ abstract class KJobCloserWorker extends KJobHandlerWorker
 				self::setCurrentJob($job);
 				$job = $this->exec($job);
 			}
-			catch(KalturaException $kex)
+			catch(VidiunException $kex)
 			{
-				KBatchBase::unimpersonate();
-				$job = $this->closeJob($job, KalturaBatchJobErrorTypes::KALTURA_API, $kex->getCode(), "Error: " . $kex->getMessage(), KalturaBatchJobStatus::FAILED);
+				VBatchBase::unimpersonate();
+				$job = $this->closeJob($job, VidiunBatchJobErrorTypes::VIDIUN_API, $kex->getCode(), "Error: " . $kex->getMessage(), VidiunBatchJobStatus::FAILED);
 			}
-			catch(KalturaClientException $kcex)
+			catch(VidiunClientException $vcex)
 			{
-				KBatchBase::unimpersonate();
-				$job = $this->closeJob($job, KalturaBatchJobErrorTypes::KALTURA_CLIENT, $kcex->getCode(), "Error: " . $kcex->getMessage(), KalturaBatchJobStatus::RETRY);
+				VBatchBase::unimpersonate();
+				$job = $this->closeJob($job, VidiunBatchJobErrorTypes::VIDIUN_CLIENT, $vcex->getCode(), "Error: " . $vcex->getMessage(), VidiunBatchJobStatus::RETRY);
 			}
 			catch(Exception $ex)
 			{
-				KBatchBase::unimpersonate();
-				$job = $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED);
+				VBatchBase::unimpersonate();
+				$job = $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED);
 			}
 			self::unsetCurrentJob();
 		}
@@ -54,12 +54,12 @@ abstract class KJobCloserWorker extends KJobHandlerWorker
 	/**
 	* @param string $jobType
 	* @param boolean $isCloser
-	* @return KalturaWorkerQueueFilter
+	* @return VidiunWorkerQueueFilter
 	*/
 	protected function getQueueFilter($jobType)
 	{
 		$workerQueueFilter = $this->getBaseQueueFilter($jobType);
-		$workerQueueFilter->filter->statusEqual = KalturaBatchJobStatus::ALMOST_DONE;
+		$workerQueueFilter->filter->statusEqual = VidiunBatchJobStatus::ALMOST_DONE;
 		
 		return $workerQueueFilter;
 	}

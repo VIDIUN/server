@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaMediaEntryOrderBy extends KalturaPlayableEntryOrderBy
+class VidiunMediaEntryOrderBy extends VidiunPlayableEntryOrderBy
 {
 	const MEDIA_TYPE_ASC = "+mediaType";
 	const MEDIA_TYPE_DESC = "-mediaType";

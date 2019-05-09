@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage Admin
  */
-class VirusScanConfigureAction extends KalturaApplicationPlugin
+class VirusScanConfigureAction extends VidiunApplicationPlugin
 {
 	public function __construct()
 	{
@@ -22,7 +22,7 @@ class VirusScanConfigureAction extends KalturaApplicationPlugin
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_VIRUS_SCAN);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_VIRUS_SCAN);
 	}
 	
 		
@@ -35,7 +35,7 @@ class VirusScanConfigureAction extends KalturaApplicationPlugin
 			$editMode = true;
 		}
 		$client = Infra_ClientHelper::getClient();
-		$virusScanPlugin = Kaltura_Client_VirusScan_Plugin::get($client);	
+		$virusScanPlugin = Vidiun_Client_VirusScan_Plugin::get($client);	
 		
 		$form = new Form_Partner_VirusScanConfiguration();
 		$action->view->formValid = false;
@@ -46,8 +46,8 @@ class VirusScanConfigureAction extends KalturaApplicationPlugin
 			$formData = $request->getPost();
 			if ($form->isValid($formData))
 			{
-				$profile = $form->getObject("Kaltura_Client_VirusScan_Type_VirusScanProfile", $request->getPost(), false, true);
-				$entryFilter = new Kaltura_Client_Type_BaseEntryFilter();
+				$profile = $form->getObject("Vidiun_Client_VirusScan_Type_VirusScanProfile", $request->getPost(), false, true);
+				$entryFilter = new Vidiun_Client_Type_BaseEntryFilter();
 				$entryTypeArray = $request->getPost('entryTypeToFilter');
 				if (is_array($entryTypeArray)) {
 					$entryFilter->typeIn = implode(',', $entryTypeArray);

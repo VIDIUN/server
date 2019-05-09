@@ -3,7 +3,7 @@
  * @package plugins.youtubeApiDistribution
  * @subpackage lib
  */
-class YoutubeApiDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class YoutubeApiDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const YOUTUBE_API = 'YOUTUBE_API';
 	

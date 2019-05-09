@@ -3,7 +3,7 @@
  * @package plugins.facebookDistribution
  * @subpackage api.objects
  */
-class KalturaFacebookDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunFacebookDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
 	 * @var string

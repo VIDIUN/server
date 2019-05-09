@@ -32,8 +32,8 @@ class listconversionprofilesAction extends defPartnerservices2Action
 			); 
 	}
 	// TODO - this is very wrong for this service!
-	// because it is used only for the KMC - it is tailed and does not act like a regular "list" service
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	// because it is used only for the VMC - it is tailed and does not act like a regular "list" service
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 //		$this->applyPartnerFilterForClass('ConversionProfile', $partner_id );
 		// TODO -  verify permissions for viewing lists 
@@ -64,12 +64,12 @@ class listconversionprofilesAction extends defPartnerservices2Action
 		
 		// make sure the partner's profiles will appear first ordered by id desc - last will come first
 		$order_by = "(" . ConversionProfilePeer::PARTNER_ID . "<>{$partner_id})";  // first take the patner_id and then the rest
-		myCriteria::addComment( $c, "Only Kaltura Network" );
+		myCriteria::addComment( $c, "Only Vidiun Network" );
 		$c->addAscendingOrderByColumn ( $order_by );//, Criteria::CUSTOM );
 		$c->addDescendingOrderByColumn ( ConversionProfilePeer::UPDATED_AT );//, Criteria::CUSTOM );
 		$c->addDescendingOrderByColumn ( ConversionProfilePeer::ID );//, Criteria::CUSTOM );
 		
-		//if ($order_by != -1) kshowPeer::setOrder( $c , $order_by );
+		//if ($order_by != -1) vshowPeer::setOrder( $c , $order_by );
 		$count = ConversionProfilePeer::doCount( $c );
 
 		$offset = ($page-1)* $limit;

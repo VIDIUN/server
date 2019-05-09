@@ -3,7 +3,7 @@
  * @package plugins.smilManifest
  * @subpackage lib
  */
-class SmilManifestConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class SmilManifestConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const SMIL_MANIFEST = 'SmilManifest';
 	

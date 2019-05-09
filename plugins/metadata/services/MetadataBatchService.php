@@ -4,7 +4,7 @@
  * @package plugins.metadata
  * @subpackage api.services
  */
-class MetadataBatchService extends KalturaBatchService
+class MetadataBatchService extends VidiunBatchService
 {
 
 
@@ -14,16 +14,16 @@ class MetadataBatchService extends KalturaBatchService
 	 * batch getExclusiveTransformMetadataJob action allows to get a BatchJob of type METADATA_TRANSFORM
 	 *
 	 * @action getExclusiveTransformMetadataJobs
-	 * @param KalturaExclusiveLockKey $lockKey The unique lock key from the batch-process. Is used for the locking mechanism
+	 * @param VidiunExclusiveLockKey $lockKey The unique lock key from the batch-process. Is used for the locking mechanism
 	 * @param int $maxExecutionTime The maximum time in seconds the job regularly take. Is used for the locking mechanism when determining an unexpected termination of a batch-process.
 	 * @param int $numberOfJobs The maximum number of jobs to return.
-	 * @param KalturaBatchJobFilter $filter Set of rules to fetch only partial list of jobs
+	 * @param VidiunBatchJobFilter $filter Set of rules to fetch only partial list of jobs
 	 * @param int $maxJobToPull The maximum job we will pull from the DB into the cache
-	 * @return KalturaBatchJobArray
+	 * @return VidiunBatchJobArray
 	 *
 	 * TODO remove the destXsdPath from the job data and get it later using the API, then delete this method
 	 */
-	function getExclusiveTransformMetadataJobsAction(KalturaExclusiveLockKey $lockKey, $maxExecutionTime, $numberOfJobs, KalturaBatchJobFilter $filter = null, $maxJobToPull = null)
+	function getExclusiveTransformMetadataJobsAction(VidiunExclusiveLockKey $lockKey, $maxExecutionTime, $numberOfJobs, VidiunBatchJobFilter $filter = null, $maxJobToPull = null)
 	{
 		$jobs = $this->getExclusiveJobs($lockKey, $maxExecutionTime, $numberOfJobs, $filter, BatchJobType::METADATA_TRANSFORM, $maxJobToPull);
 
@@ -31,7 +31,7 @@ class MetadataBatchService extends KalturaBatchService
 		{
 			foreach ($jobs as &$job)
 			{
-				/**@var kTransformMetadataJobData $data*/
+				/**@var vTransformMetadataJobData $data*/
 				$data = $job->getData();
 				$metadataProfileId = $data->getMetadataProfileId();
 				$metadataProfile = MetadataProfilePeer::retrieveByPK($metadataProfileId);
@@ -39,12 +39,12 @@ class MetadataBatchService extends KalturaBatchService
 					continue;
 
 				$key = $metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION);
-				$data->setDestXsd(kJobsManager::getFileContainer($key));
+				$data->setDestXsd(vJobsManager::getFileContainer($key));
 				$job->setData($data);
 			}
 		}
 
-		return KalturaBatchJobArray::fromBatchJobArray($jobs);
+		return VidiunBatchJobArray::fromBatchJobArray($jobs);
 	}
 
 	/**
@@ -54,30 +54,30 @@ class MetadataBatchService extends KalturaBatchService
 	 * @param int $metadataProfileId The id of the metadata profile
 	 * @param int $srcVersion The old metadata profile version
 	 * @param int $destVersion The new metadata profile version
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaTransformMetadataResponse
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunTransformMetadataResponse
 	 */
-	function getTransformMetadataObjectsAction($metadataProfileId, $srcVersion, $destVersion, KalturaFilterPager $pager = null)
+	function getTransformMetadataObjectsAction($metadataProfileId, $srcVersion, $destVersion, VidiunFilterPager $pager = null)
 	{
-		$response = new KalturaTransformMetadataResponse();
+		$response = new VidiunTransformMetadataResponse();
 
 		$c = new Criteria();
 		$c->add(MetadataPeer::METADATA_PROFILE_ID, $metadataProfileId);
 		$c->add(MetadataPeer::METADATA_PROFILE_VERSION, $srcVersion, Criteria::LESS_THAN);
-		$c->add(MetadataPeer::STATUS, KalturaMetadataStatus::VALID);
+		$c->add(MetadataPeer::STATUS, VidiunMetadataStatus::VALID);
 		$response->lowerVersionCount = MetadataPeer::doCount($c);
 
 		$c = new Criteria();
 		$c->add(MetadataPeer::METADATA_PROFILE_ID, $metadataProfileId);
 		$c->add(MetadataPeer::METADATA_PROFILE_VERSION, $srcVersion);
-		$c->add(MetadataPeer::STATUS, KalturaMetadataStatus::VALID);
+		$c->add(MetadataPeer::STATUS, VidiunMetadataStatus::VALID);
 		$response->totalCount = MetadataPeer::doCount($c);
 
 		if ($pager)
 			$pager->attachToCriteria($c);
 
 		$list = MetadataPeer::doSelect($c);
-		$response->objects = KalturaMetadataArray::fromDbArray($list, $this->getResponseProfile());
+		$response->objects = VidiunMetadataArray::fromDbArray($list, $this->getResponseProfile());
 
 		return $response;
 	}

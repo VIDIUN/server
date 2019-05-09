@@ -3,8 +3,8 @@ class myInsertEntryHelper
 {
 	private $action = null;
 	private $paramsArray = null;
-	private $kuser_id = 0;
-	private $kshow_id = 0;
+	private $vuser_id = 0;
+	private $vshow_id = 0;
 	private $entry_id = 0;
 	private $error_msg = null;
 	private $entry = null;
@@ -12,12 +12,12 @@ class myInsertEntryHelper
 	
 	private $partner_id = null;
 	
-	public function __construct($action, $kuser_id, $kshow_id, $paramsArray = null)
+	public function __construct($action, $vuser_id, $vshow_id, $paramsArray = null)
 	{
 		$this->paramsArray = $paramsArray;
 		$this->action = $action;
-		$this->kuser_id = $kuser_id;
-		$this->kshow_id = $kshow_id;
+		$this->vuser_id = $vuser_id;
+		$this->vshow_id = $vshow_id;
 	}
 	
 	public function getEntry() { return $this->entry; }
@@ -58,8 +58,8 @@ class myInsertEntryHelper
 	private function handleEntry($onlyExtractThumb, $prefix, $type, $entry_id, $name = null, $tags = null, $entry=null)
 	{
 		$this->clear($prefix, $entry_id);
-		$kuser_id = $this->kuser_id;
-		$entry_data_prefix = $kuser_id.'_'. ($prefix == '' ? 'data' : rtrim($prefix, '_'));
+		$vuser_id = $this->vuser_id;
+		$entry_data_prefix = $vuser_id.'_'. ($prefix == '' ? 'data' : rtrim($prefix, '_'));
 		
 		$uploads = myContentStorage::getFSUploadsPath();
 		$content = myContentStorage::getFSContentRootPath();
@@ -109,7 +109,7 @@ class myInsertEntryHelper
 		$te->setTrackEventTypeId( TrackEntry::TRACK_ENTRY_EVENT_TYPE_ADD_ENTRY );
 	
 			
-		KalturaLog::debug("handleEntry: media_source: $media_source, prefix: $prefix");
+		VidiunLog::debug("handleEntry: media_source: $media_source, prefix: $prefix");
 		if ($media_source == entry::ENTRY_MEDIA_SOURCE_FILE || $prefix == 'bg_')
 		{
 			$full_path = $this->getParam('entry_full_path');
@@ -131,15 +131,15 @@ class myInsertEntryHelper
 		else if ($media_source == entry::ENTRY_MEDIA_SOURCE_WEBCAM)
 		{
 			// set $entry_fileName to webcam output file and flag that conversion is not needed
-			$webcam_basePath = $content.'/content/webcam/'.($webcam_suffix ? $webcam_suffix : 'my_recorded_stream_'.$kuser_id);
+			$webcam_basePath = $content.'/content/webcam/'.($webcam_suffix ? $webcam_suffix : 'my_recorded_stream_'.$vuser_id);
 			$entry_fullPath = $webcam_basePath.'.flv';
 			$entry_fullPathF4v = $webcam_basePath.'.f4v';
 			$entry_fullPathMp4 = $webcam_basePath.'.f4v.mp4';
 			if(file_exists($entry_fullPath))
 			{
 				// webcam should be preconvert until REALLY ready
-				if (kConf::hasParam('preconvert_webcam_flv_allowed_partners') &&
-					in_array($this->partner_id, kConf::get('preconvert_webcam_flv_allowed_partners')))
+				if (vConf::hasParam('preconvert_webcam_flv_allowed_partners') &&
+					in_array($this->partner_id, vConf::get('preconvert_webcam_flv_allowed_partners')))
 					$entry_status = entryStatus::PRECONVERT;
 				else
 					$entry_status = entryStatus::READY;
@@ -187,7 +187,7 @@ class myInsertEntryHelper
 			}
 			else
 			{
-				KalturaLog::err("File [$entry_fullPath] does not exist");
+				VidiunLog::err("File [$entry_fullPath] does not exist");
 				$entry_status = entryStatus::ERROR_IMPORTING;
 			}
 		}
@@ -196,12 +196,12 @@ class myInsertEntryHelper
 			// if the url ends with .ext, we'll extract it this way
 			$urlext = strrchr($entry_url, '.');
 			// TODO: fix this patch
-			if (!in_array($urlext, kConf::get("video_file_ext")) && !in_array($urlext, kConf::get("image_file_ext")) && !in_array($urlext, kConf::get("audio_file_ext"))){
+			if (!in_array($urlext, vConf::get("video_file_ext")) && !in_array($urlext, vConf::get("image_file_ext")) && !in_array($urlext, vConf::get("audio_file_ext"))){
 			    $urlext = '.jpg';
 			}
 			$entry_fileName = $entry_data_prefix.$urlext;
 			
-			KalturaLog::debug("handleEntry: media_type: $media_type");
+			VidiunLog::debug("handleEntry: media_type: $media_type");
 			if ($media_type == entry::ENTRY_MEDIA_TYPE_IMAGE)
 			{
 				$duration = 0;
@@ -211,13 +211,13 @@ class myInsertEntryHelper
 					$media_source == entry::ENTRY_MEDIA_SOURCE_NYPL ||
 					$media_source == entry::ENTRY_MEDIA_SOURCE_MEDIA_COMMONS ||
 					$media_source == entry::ENTRY_MEDIA_SOURCE_URL ||
-					$media_source == entry::ENTRY_MEDIA_SOURCE_KALTURA )
+					$media_source == entry::ENTRY_MEDIA_SOURCE_VIDIUN )
 */
 				{
 					$entry_fullPath = $uploads.$entry_fileName;
-					if (!KCurlWrapper::getDataFromFile($entry_url, $entry_fullPath))
+					if (!VCurlWrapper::getDataFromFile($entry_url, $entry_fullPath))
 					{
-						KalturaLog::debug("Failed downloading file[$entry_url]");
+						VidiunLog::debug("Failed downloading file[$entry_url]");
 						$entry_status = entryStatus::ERROR_IMPORTING;
 					}
 				}
@@ -257,7 +257,7 @@ class myInsertEntryHelper
 			// save the Trackentry
 		TrackEntry::addTrackEntry( $te );
 			
-		KalturaLog::debug("handleEntry: ext: $ext");
+		VidiunLog::debug("handleEntry: ext: $ext");
 			
 //		We don't want to reject entries based on file extentions anumore
 //		Remarked by Tan-Tan
@@ -266,7 +266,7 @@ class myInsertEntryHelper
 //		{
 //
 //			$this->errorMsg = "insertEntryAction Error - PRECONVERT file type not acceptable ($ext)";
-//			KalturaLog::debug("handleEntry: err: $this->errorMsg");
+//			VidiunLog::debug("handleEntry: err: $this->errorMsg");
 //			if(is_null($entry) && $this->entry_id)
 //			{
 //				$entry = entryPeer::retrieveByPK($this->entry_id);
@@ -289,7 +289,7 @@ class myInsertEntryHelper
 //			$media_source != entry::ENTRY_MEDIA_SOURCE_WEBCAM && !myContentStorage::fileExtAccepted($ext))
 //		{
 //			$this->errorMsg = "insertEntryAction Error - READY file type not acceptable ($ext)";
-//			KalturaLog::debug("handleEntry: err: $this->errorMsg");
+//			VidiunLog::debug("handleEntry: err: $this->errorMsg");
 //			if(is_null($entry) && $this->entry_id)
 //			{
 //				$entry = entryPeer::retrieveByPK($this->entry_id);
@@ -305,7 +305,7 @@ class myInsertEntryHelper
 		if ($entry_status == entryStatus::ERROR_IMPORTING)
 		{
 			$need_thumb = false; // we wont be needing a thumb for an errornous entry
-			KalturaLog::log("handleEntry: error importing, thumb not needed");
+			VidiunLog::log("handleEntry: error importing, thumb not needed");
 		}
 		else
 		{
@@ -320,7 +320,7 @@ class myInsertEntryHelper
 			$thumbBigFullPath = null;
 			
 			$need_thumb = ($type == entryType::MEDIA_CLIP);
-			KalturaLog::debug("handleEntry: handling media $media_type");
+			VidiunLog::debug("handleEntry: handling media $media_type");
 			if ($media_type == entry::ENTRY_MEDIA_TYPE_IMAGE)
 			{
 				// fetch media creation date
@@ -356,7 +356,7 @@ class myInsertEntryHelper
 					$entry_thumbNum = 1;
 					$importedThumbPath = $uploads.$entry_data_prefix.'_temp_thumb'.strrchr($entry_thumbUrl, '.');
 					
-					if (KCurlWrapper::getDataFromFile($entry_thumbUrl, $importedThumbPath))
+					if (VCurlWrapper::getDataFromFile($entry_thumbUrl, $importedThumbPath))
 					{
 						myFileConverter::createImageThumbnail($importedThumbPath, $thumbFullPath, "image2" );
 						// set thumb as big thumb so fileSync will be created.
@@ -394,9 +394,9 @@ class myInsertEntryHelper
 			}
 		}
 			
-		$entry->setkshowId($this->kshow_id);
-		$entry->setKuserId($kuser_id);
-		$entry->setCreatorKuserId($kuser_id);
+		$entry->setvshowId($this->vshow_id);
+		$entry->setVuserId($vuser_id);
+		$entry->setCreatorVuserId($vuser_id);
 		
 		if ( $this->partner_id != null )
 		{
@@ -433,7 +433,7 @@ class myInsertEntryHelper
 		// move thumb to final destination and set db entry
 		if ($media_type != entry::ENTRY_MEDIA_TYPE_AUDIO && $entry_thumbNum && $need_thumb )
 		{
-			KalturaLog::debug("handleEntry: saving none audio thumb [$thumbBigFullPath]");
+			VidiunLog::debug("handleEntry: saving none audio thumb [$thumbBigFullPath]");
 			
 			$entry->setThumbnail('.jpg');
 			
@@ -450,11 +450,11 @@ class myInsertEntryHelper
 				{
 					if(!$should_copy)
 					{
-						kFileSyncUtils::moveFromFile($thumbBigFullPath, $entryThumbKey);
+						vFileSyncUtils::moveFromFile($thumbBigFullPath, $entryThumbKey);
 					}
 					else
 					{
-						kFileSyncUtils::copyFromFile($thumbBigFullPath, $entryThumbKey);
+						vFileSyncUtils::copyFromFile($thumbBigFullPath, $entryThumbKey);
 					}
 				}
 				catch (Exception $e) {
@@ -467,12 +467,12 @@ class myInsertEntryHelper
 		
 		// after extracting the thumb we can move the entry to its next destination
 		
-		KalturaLog::debug("handleEntry: current status [" . $entry->getStatus() . "]");
+		VidiunLog::debug("handleEntry: current status [" . $entry->getStatus() . "]");
 		// if needed a job will be submitted for importing external media sources
 		if ($entry->getStatus() == entryStatus::IMPORT)
  		{
  			// changed by Tan-Tan, Nov 09 to support the new batch mechanism
- 			kJobsManager::addImportJob(null, $this->entry_id, $this->partner_id, $entry_url);
+ 			vJobsManager::addImportJob(null, $this->entry_id, $this->partner_id, $entry_url);
  			
  			
  			// remarked by Tan-Tan
@@ -488,7 +488,7 @@ class myInsertEntryHelper
 			{
 	 			// changed by Tan-Tan, Dec 09 to support the new batch mechanism
 	 			
-				$flavorAsset = kFlowHelper::createOriginalFlavorAsset($this->partner_id, $this->entry_id);
+				$flavorAsset = vFlowHelper::createOriginalFlavorAsset($this->partner_id, $this->entry_id);
 				if($flavorAsset)
 				{
 					$flavorAsset->setFileExt($ext);
@@ -497,7 +497,7 @@ class myInsertEntryHelper
 					$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 					
 					try {
-						kFileSyncUtils::moveFromFile($entry_fullPath, $syncKey);
+						vFileSyncUtils::moveFromFile($entry_fullPath, $syncKey);
 					}
 					catch (Exception $e) {
 						$entry->setStatus(entryStatus::ERROR_CONVERTING);
@@ -507,7 +507,7 @@ class myInsertEntryHelper
 						throw $e;
 					}
 					
-					kEventsManager::raiseEvent(new kObjectAddedEvent($flavorAsset));
+					vEventsManager::raiseEvent(new vObjectAddedEvent($flavorAsset));
 				}
 				else
 				{
@@ -543,7 +543,7 @@ class myInsertEntryHelper
 						
 			if ($media_type == entry::ENTRY_MEDIA_TYPE_VIDEO || $media_type == entry::ENTRY_MEDIA_TYPE_AUDIO)
 			{
-				$flavorAsset = kFlowHelper::createOriginalFlavorAsset($this->partner_id, $this->entry_id);
+				$flavorAsset = vFlowHelper::createOriginalFlavorAsset($this->partner_id, $this->entry_id);
 				if($flavorAsset)
 				{
 					$ext = pathinfo($entry_fullPath, PATHINFO_EXTENSION);
@@ -554,12 +554,12 @@ class myInsertEntryHelper
 					try {
 						if(!$should_copy)
 						{
-							kFileSyncUtils::moveFromFile($entry_fullPath, $syncKey);
+							vFileSyncUtils::moveFromFile($entry_fullPath, $syncKey);
 						}
 						else
 						{
 							// copy & create file sync from $entry_fullPath
-							kFileSyncUtils::copyFromFile($entry_fullPath, $syncKey);
+							vFileSyncUtils::copyFromFile($entry_fullPath, $syncKey);
 						}
 					}
 					catch (Exception $e) {
@@ -571,7 +571,7 @@ class myInsertEntryHelper
 					}
 					
 //					// bypass to conversion
-//					kBusinessPreConvertDL::bypassConversion($flavorAsset, $entry);
+//					vBusinessPreConvertDL::bypassConversion($flavorAsset, $entry);
 					
 					/**
 					 * if this is webcam entry, create mediaInfo for the source flavor asset synchronously
@@ -582,38 +582,38 @@ class myInsertEntryHelper
 						require_once(SF_ROOT_DIR . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "api_v3" . DIRECTORY_SEPARATOR . "bootstrap.php");
 						// extract file path
 						$sourceFileKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-						$sourceFilePath = kFileSyncUtils::getLocalFilePathForKey($sourceFileKey);
+						$sourceFilePath = vFileSyncUtils::getLocalFilePathForKey($sourceFileKey);
 						
 						// call mediaInfo for file
 						$mediaInfo = null;
 						try
 						{
-							$mediaInfoParser = new KMediaInfoMediaParser($sourceFilePath, kConf::get('bin_path_mediainfo'));
-							$KalturaMediaInfo = $mediaInfoParser->getMediaInfo();
-							if ($KalturaMediaInfo)
+							$mediaInfoParser = new VMediaInfoMediaParser($sourceFilePath, vConf::get('bin_path_mediainfo'));
+							$VidiunMediaInfo = $mediaInfoParser->getMediaInfo();
+							if ($VidiunMediaInfo)
 							{
-								$mediaInfo = $KalturaMediaInfo->toInsertableObject($mediaInfo);
+								$mediaInfo = $VidiunMediaInfo->toInsertableObject($mediaInfo);
 								$mediaInfo->setFlavorAssetId($flavorAsset->getId());
 								$mediaInfo->save();
 							}
 						}
 						catch(Exception $e)
 						{
-							KalturaLog::err("Getting media info: " . $e->getMessage());
+							VidiunLog::err("Getting media info: " . $e->getMessage());
 							$mediaInfo = null;
 						}
 						
 						// fix flavor asset according to mediainfo
 						if($mediaInfo)
 						{
-							KDLWrap::ConvertMediainfoCdl2FlavorAsset($mediaInfo, $flavorAsset);
-							$flavorTags = KDLWrap::CDLMediaInfo2Tags($mediaInfo, array(flavorParams::TAG_WEB));
+							VDLWrap::ConvertMediainfoCdl2FlavorAsset($mediaInfo, $flavorAsset);
+							$flavorTags = VDLWrap::CDLMediaInfo2Tags($mediaInfo, array(flavorParams::TAG_WEB));
 							$flavorAsset->addTags($flavorTags);
 						}
 						$flavorAsset->save();
 					}
 					
-					kEventsManager::raiseEvent(new kObjectAddedEvent($flavorAsset));
+					vEventsManager::raiseEvent(new vObjectAddedEvent($flavorAsset));
 
 					$flavorAsset->setStatusLocalReady();
 					$flavorAsset->save();
@@ -626,7 +626,7 @@ class myInsertEntryHelper
 			else if ($entry->getType() == entryType::DOCUMENT)
 			{
 				 //TODO: document should be handled by the plugin manager)
-				$flavorAsset = kFlowHelper::createOriginalFlavorAsset($this->partner_id, $this->entry_id);
+				$flavorAsset = vFlowHelper::createOriginalFlavorAsset($this->partner_id, $this->entry_id);
 				if($flavorAsset)
 				{
 					$ext = pathinfo($entry_fullPath, PATHINFO_EXTENSION);
@@ -637,12 +637,12 @@ class myInsertEntryHelper
 					try {
 						if(!$should_copy)
 						{
-							kFileSyncUtils::moveFromFile($entry_fullPath, $syncKey);
+							vFileSyncUtils::moveFromFile($entry_fullPath, $syncKey);
 						}
 						else
 						{
 							// copy & create file sync from $entry_fullPath
-							kFileSyncUtils::copyFromFile($entry_fullPath, $syncKey);
+							vFileSyncUtils::copyFromFile($entry_fullPath, $syncKey);
 						}
 					}
 					catch (Exception $e) {
@@ -653,24 +653,24 @@ class myInsertEntryHelper
 						throw $e;
 					}
 					
-					kEventsManager::raiseEvent(new kObjectAddedEvent($flavorAsset));
+					vEventsManager::raiseEvent(new vObjectAddedEvent($flavorAsset));
 				}
 			}
 			else
 			{
-				KalturaLog::debug("handleEntry: creating data file sync for file [$entry_fullPath]");
+				VidiunLog::debug("handleEntry: creating data file sync for file [$entry_fullPath]");
 				$entryDataKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-				if(!kFileSyncUtils::file_exists($entryDataKey))
+				if(!vFileSyncUtils::file_exists($entryDataKey))
 				{
 					try {
 						if(!$should_copy)
 						{
-							kFileSyncUtils::moveFromFile($entry_fullPath, $entryDataKey);
+							vFileSyncUtils::moveFromFile($entry_fullPath, $entryDataKey);
 						}
 						else
 						{
 							// copy & create file sync from $entry_fullPath
-							kFileSyncUtils::copyFromFile($entry_fullPath, $entryDataKey);
+							vFileSyncUtils::copyFromFile($entry_fullPath, $entryDataKey);
 						}
 					}
 					catch (Exception $e) {
@@ -688,12 +688,12 @@ class myInsertEntryHelper
 //			$entryDataKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 //			if(!$should_copy)
 //			{
-//				kFileSyncUtils::moveFromFile($entry_fullPath, $entryDataKey);
+//				vFileSyncUtils::moveFromFile($entry_fullPath, $entryDataKey);
 //			}
 //			else
 //			{
 //				// copy & create file sync from $entry_fullPath
-//				kFileSyncUtils::copyFromFile($entry_fullPath, $entryDataKey);
+//				vFileSyncUtils::copyFromFile($entry_fullPath, $entryDataKey);
 //			}
 		}
 		

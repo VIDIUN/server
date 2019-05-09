@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerBitGravity extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerBitGravity extends VidiunUrlTokenizer {
 
 	/**
 	 * hashPatternRegex
@@ -25,7 +25,7 @@ class KalturaUrlTokenizerBitGravity extends KalturaUrlTokenizer {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kBitGravityUrlTokenizer();
+			$dbObject = new vBitGravityUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

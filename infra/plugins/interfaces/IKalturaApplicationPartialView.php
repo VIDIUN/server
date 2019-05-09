@@ -4,10 +4,10 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaApplicationPartialView extends IKalturaBase
+interface IVidiunApplicationPartialView extends IVidiunBase
 {
 	/**
-	 * @return array<Kaltura_View_Helper_PartialViewPlugin>
+	 * @return array<Vidiun_View_Helper_PartialViewPlugin>
 	 */
 	public static function getApplicationPartialViews($controller, $action);
 }

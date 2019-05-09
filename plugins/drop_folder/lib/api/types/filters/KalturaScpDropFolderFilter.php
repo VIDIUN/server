@@ -3,6 +3,6 @@
  * @package plugins.dropFolder
  * @subpackage api.filters
  */
-class KalturaScpDropFolderFilter extends KalturaScpDropFolderBaseFilter
+class VidiunScpDropFolderFilter extends VidiunScpDropFolderBaseFilter
 {
 }

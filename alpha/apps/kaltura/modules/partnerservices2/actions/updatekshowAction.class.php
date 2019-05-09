@@ -3,18 +3,18 @@
  * @package api
  * @subpackage ps2
  */
-class updatekshowAction extends defPartnerservices2Action
+class updatevshowAction extends defPartnerservices2Action
 {
 	public function describe()
 	{
 		return 
 			array (
-				"display_name" => "updateKShow",
+				"display_name" => "updateVShow",
 				"desc" => "" ,
 				"in" => array (
 					"mandatory" => array ( 
-						"kshow_id"				=> array ("type" => "string", "desc" => ""),
-						"kshow" 				=> array ("type" => "kshow", "desc" => ""),
+						"vshow_id"				=> array ("type" => "string", "desc" => ""),
+						"vshow" 				=> array ("type" => "vshow", "desc" => ""),
 						),
 					"optional" => array (
 						"detailed" 				=> array ("type" => "boolean", "desc" => ""),
@@ -22,48 +22,48 @@ class updatekshowAction extends defPartnerservices2Action
 						)
 					),
 				"out" => array (
-					"kshow" => array ("type" => "kshow", "desc" => "")
+					"vshow" => array ("type" => "vshow", "desc" => "")
 					),
 				"errors" => array (
 					APIErrors::INVALID_USER_ID , 
-					APIErrors::INVALID_KSHOW_ID ,
-					APIErrors::DUPLICATE_KSHOW_BY_NAME ,
-					APIErrors::ERROR_KSHOW_ROLLBACK
+					APIErrors::INVALID_VSHOW_ID ,
+					APIErrors::DUPLICATE_VSHOW_BY_NAME ,
+					APIErrors::ERROR_VSHOW_ROLLBACK
 				)
 			); 
 	}
 	
-	// ask to fetch the kuser from puser_kuser
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_KUSER_ID_ONLY;	}
-	public function requiredPrivileges () { return "edit:<kshow_id>" ; }
+	// ask to fetch the vuser from puser_vuser
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_VUSER_ID_ONLY;	}
+	public function requiredPrivileges () { return "edit:<vshow_id>" ; }
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		if ( ! $puser_kuser )
+		if ( ! $puser_vuser )
 		{
 			$this->addError ( APIErrors::INVALID_USER_ID ,  $puser_id );
 			return;
 		}
 
-		// get the new properties for the kshow from the request
-		$kshow_update_data = new kshow();
+		// get the new properties for the vshow from the request
+		$vshow_update_data = new vshow();
 
 		$start_obj_creation = microtime( true );
-		$kshow = new kshow();
-		$obj_wrapper = objectWrapperBase::getWrapperClass( $kshow  , 0 );
+		$vshow = new vshow();
+		$obj_wrapper = objectWrapperBase::getWrapperClass( $vshow  , 0 );
 //		$this->addDebug ( "timer_getWrapperClass1" , ( microtime( true ) - $start_obj_creation ) );
 
 		$timer = microtime( true );
 		$fields_modified = baseObjectUtils::fillObjectFromMap ( $this->getInputParams() ,
-			$kshow ,
-			"kshow_" ,
+			$vshow ,
+			"vshow_" ,
 			$obj_wrapper->getUpdateableFields() );
 
 //		$this->addDebug ( "timer_fillObjectFromMap" , ( microtime( true ) - $timer ) );
 
-		$kshow->setName( trim ( $kshow->getName() ) );
+		$vshow->setName( trim ( $vshow->getName() ) );
 
-		$kshow_id = $this->getPM ( "kshow_id");
+		$vshow_id = $this->getPM ( "vshow_id");
 		$detailed = $this->getP ( "detailed" , false );
 		$allow_duplicate_names = $this->getP ( "allow_duplicate_names" , true , true );
 		if ( $allow_duplicate_names === "false" || $allow_duplicate_names === 0 ) $allow_duplicate_names = false;
@@ -71,76 +71,76 @@ class updatekshowAction extends defPartnerservices2Action
 		if ( count ( $fields_modified ) > 0 )
 		{
 			$timer = microtime( true );
-			$kshow_from_db = kshowPeer::retrieveByPK( $kshow_id );
-			if ( ! $kshow_from_db )
+			$vshow_from_db = vshowPeer::retrieveByPK( $vshow_id );
+			if ( ! $vshow_from_db )
 			{
-				// kshow with this id does not exists in the DB
-				$this->addError ( APIErrors::INVALID_KSHOW_ID ,  $kshow_id );
+				// vshow with this id does not exists in the DB
+				$this->addError ( APIErrors::INVALID_VSHOW_ID ,  $vshow_id );
 
 				return;
 			}
 
-			if ( ! $this->isOwnedBy ( $kshow_from_db , $puser_kuser->getKuserId() ) )
-				$this->verifyPrivileges ( "edit" , $kshow_id ); // user was granted explicit permissions when initiatd the ks
+			if ( ! $this->isOwnedBy ( $vshow_from_db , $puser_vuser->getVuserId() ) )
+				$this->verifyPrivileges ( "edit" , $vshow_id ); // user was granted explicit permissions when initiatd the vs
 
 							
-			if ( myPartnerUtils::shouldForceUniqueKshow( $partner_id , $allow_duplicate_names ) )
+			if ( myPartnerUtils::shouldForceUniqueVshow( $partner_id , $allow_duplicate_names ) )
 			{
-				$kshow_with_name_from_db = kshowPeer::getFirstKshowByName( $kshow->getName() );
-				if ( $kshow_with_name_from_db && $kshow_with_name_from_db->getId() != $kshow_id )
+				$vshow_with_name_from_db = vshowPeer::getFirstVshowByName( $vshow->getName() );
+				if ( $vshow_with_name_from_db && $vshow_with_name_from_db->getId() != $vshow_id )
 				{
-					$this->addError( APIErrors::DUPLICATE_KSHOW_BY_NAME ,   $kshow->getName() );
+					$this->addError( APIErrors::DUPLICATE_VSHOW_BY_NAME ,   $vshow->getName() );
 					$level = ( $detailed ? objectWrapperBase::DETAIL_LEVEL_DETAILED : objectWrapperBase::DETAIL_LEVEL_REGULAR );
-					if( myPartnerUtils::returnDuplicateKshow( $partner_id ))
+					if( myPartnerUtils::returnDuplicateVshow( $partner_id ))
 					{
-						$this->addMsg ( "kshow" , objectWrapperBase::getWrapperClass( $kshow_from_db , $level  ) );
+						$this->addMsg ( "vshow" , objectWrapperBase::getWrapperClass( $vshow_from_db , $level  ) );
 					}					
 					return;
 				}
 			}
 
-			$this->addMsg ( "old_kshow" , objectWrapperBase::getWrapperClass( $kshow_from_db->copy() , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
+			$this->addMsg ( "old_vshow" , objectWrapperBase::getWrapperClass( $vshow_from_db->copy() , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
 
 //			$this->addDebug ( "timer_db_retrieve" , ( microtime( true ) - $timer ) );
 
 			$timer = microtime( true );
-			// copy relevant fields from $kshow -> $kshow_update_data
+			// copy relevant fields from $vshow -> $vshow_update_data
 			baseObjectUtils::fillObjectFromObject( $obj_wrapper->getUpdateableFields() ,
-				$kshow ,
-				$kshow_from_db ,
+				$vshow ,
+				$vshow_from_db ,
 				baseObjectUtils::CLONE_POLICY_PREFER_NEW , null , BasePeer::TYPE_PHPNAME );
 
 //			$this->addDebug ( "timer_fillObjectFromObject" , ( microtime( true ) - $timer ) );
 
 			$timer = microtime( true );
 
-			// TODO - move to some generic place myKshowUtils / kshow.php
+			// TODO - move to some generic place myVshowUtils / vshow.php
 			// TODO - this should be called only for the first time or whenever the user wants to force overriding the sample_text
 			$force_sample_text = $this->getP ( "force_sample_text" , false );
 			$force_sample_text = false;
 
-			$kuser_id = $puser_kuser->getKuserId();
+			$vuser_id = $puser_vuser->getVuserId();
 /*
-			$sample_text = "This is a collaborative video for &#xD;'" . $kshow_from_db->getIndexedCustomData3() . "'.&#xD;Click 'Add to Video' to get started";
-			$kshow_from_db->initFromTemplate ( $kuser_id ,$sample_text );
+			$sample_text = "This is a collaborative video for &#xD;'" . $vshow_from_db->getIndexedCustomData3() . "'.&#xD;Click 'Add to Video' to get started";
+			$vshow_from_db->initFromTemplate ( $vuser_id ,$sample_text );
 */
-			// be sure to save the $kshow_from_db and NOT $kshow - this will create a new entry in the DB
-			$kshow_from_db->save();
+			// be sure to save the $vshow_from_db and NOT $vshow - this will create a new entry in the DB
+			$vshow_from_db->save();
 			
 			// update the name of the roughcut too
-			$show_entry_id = $kshow_from_db->getShowEntryId();
+			$show_entry_id = $vshow_from_db->getShowEntryId();
 			$showEntry = entryPeer::retrieveByPK($show_entry_id);
 			if ($showEntry)
 			{
-				$showEntry->setName($kshow_from_db->getName());
+				$showEntry->setName($vshow_from_db->getName());
 				$showEntry->save();
 			}
 
 
 			// TODO - decide which of the notifications should be called
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_KSHOW_UPDATE_INFO , $kshow_from_db );
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_VSHOW_UPDATE_INFO , $vshow_from_db );
 			// or
-			//myNotificationMgr::createNotification( notification::NOTIFICATION_TYPE_KSHOW_UPDATE_PERMISSIONS , $kshow_from_db );
+			//myNotificationMgr::createNotification( notification::NOTIFICATION_TYPE_VSHOW_UPDATE_PERMISSIONS , $vshow_from_db );
 
 //			$this->addDebug ( "timer_db_save" , ( microtime( true ) - $timer ) );
 
@@ -150,24 +150,24 @@ class updatekshowAction extends defPartnerservices2Action
 		}
 		else
 		{
-			$kshow_from_db = $kshow;
+			$vshow_from_db = $vshow;
 			// no fiends to update !
 		}
 
 
 		// see if trying to rollback
-		$desired_version = $this->getP ( "kshow_version");
+		$desired_version = $this->getP ( "vshow_version");
 		if ( $desired_version )
 		{
-			$result = $kshow_from_db->rollbackVersion ( $desired_version );
+			$result = $vshow_from_db->rollbackVersion ( $desired_version );
 
 			if ( ! $result )
 			{
-				$this->addError ( APIErrors::ERROR_KSHOW_ROLLBACK , $kshow_id , $desired_version);
+				$this->addError ( APIErrors::ERROR_VSHOW_ROLLBACK , $vshow_id , $desired_version);
 			}
 		}
 
-		$this->addMsg ( "kshow" , objectWrapperBase::getWrapperClass( $kshow_from_db , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
+		$this->addMsg ( "vshow" , objectWrapperBase::getWrapperClass( $vshow_from_db , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
 		$this->addDebug ( "modified_fields" , $fields_modified );
 
 	}

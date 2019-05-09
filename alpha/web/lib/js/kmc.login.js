@@ -1,19 +1,19 @@
-// Get the KMC base url based on current location
+// Get the VMC base url based on current location
 var baseUrl = (options.secureLogin) ? 'https:' : window.location.protocol;
 	baseUrl += '//' + window.location.hostname;
 	baseUrl += (window.location.port) ? ':' + window.location.port : '';
 
-function loginF( remMe, partner_id, subp_id, uid, ks , screen_name, email ) {
+function loginF( remMe, partner_id, subp_id, uid, vs , screen_name, email ) {
 
 	// Extlogin URL
 	var hash = window.location.hash || ''; 
-	var url = baseUrl + '/index.php/kmc/extlogin' + hash;
+	var url = baseUrl + '/index.php/vmc/extlogin' + hash;
 
 	// Setup input fields
-	var ks_input = $('<input />').attr({
+	var vs_input = $('<input />').attr({
 		'type': 'hidden',
-		'name': 'ks',
-		'value': ks
+		'name': 'vs',
+		'value': vs
 	});
 	var partner_id_input = $('<input />').attr({
 		'type': 'hidden',
@@ -27,7 +27,7 @@ function loginF( remMe, partner_id, subp_id, uid, ks , screen_name, email ) {
 					'method': 'post',
 					'style': 'display: none'
 				})
-				.append( ks_input, partner_id_input );
+				.append( vs_input, partner_id_input );
 
 	// Submit the form
 	$('body').append( $form );
@@ -35,7 +35,7 @@ function loginF( remMe, partner_id, subp_id, uid, ks , screen_name, email ) {
 }
 
 function gotoSignup() {
-	window.location = baseUrl + "/index.php/kmc/signup";
+	window.location = baseUrl + "/index.php/vmc/signup";
 }
 
 $(function() {

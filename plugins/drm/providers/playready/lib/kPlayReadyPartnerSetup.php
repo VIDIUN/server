@@ -1,6 +1,6 @@
 <?php
 
-class kPlayReadyPartnerSetup
+class vPlayReadyPartnerSetup
 {
 	
 	public static function setupPartner($partnerId)
@@ -12,7 +12,7 @@ class kPlayReadyPartnerSetup
 		$policies = DrmPolicyPeer::doSelectOne($c);
 		if(!count($policies))
 		{
-			KalturaLog::info("playready setup for partner ".$partnerId);
+			VidiunLog::info("playready setup for partner ".$partnerId);
 			list ($defaultPolicy) = self::createPartnerPolicies($partnerId);
 			self::createDefaultAccessControl($partnerId, $defaultPolicy);
 		}
@@ -26,7 +26,7 @@ class kPlayReadyPartnerSetup
 							PlayReadyPlugin::getCoreValue('DrmLicenseScenario', PlayReadyLicenseScenario::PROTECTION), 
 							DrmLicenseExpirationPolicy::FIXED_DURATION, 
 							1);
-		KalturaLog::info("Default policy id:".$defaultPolicy->getId());
+		VidiunLog::info("Default policy id:".$defaultPolicy->getId());
 		return array($defaultPolicy);
 	}
 	
@@ -44,7 +44,7 @@ class kPlayReadyPartnerSetup
 		
 		$accessControlProfile->save();
 		
-		KalturaLog::info("Access control profile id:".$accessControlProfile->getId());
+		VidiunLog::info("Access control profile id:".$accessControlProfile->getId());
 	}
 	
 	private static function createPolicy($partnerId, $policyName, $scenario, $expirationPolicy, $duration = null)
@@ -83,10 +83,10 @@ class kPlayReadyPartnerSetup
 	
 	private static function addAccessControlRule($priviledge, $policyId)
 	{
-		$rule = new kRule();
-		$condition = new kAuthenticatedCondition();
+		$rule = new vRule();
+		$condition = new vAuthenticatedCondition();
 		$condition->setPrivileges(array($priviledge));
-		$action = new kAccessControlDrmPolicyAction();
+		$action = new vAccessControlDrmPolicyAction();
 		$action->setPolicyId($policyId);
 		$rule->setConditions(array($condition));
 		$rule->setActions(array($action));

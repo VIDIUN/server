@@ -3,7 +3,7 @@
  * @package plugins.tvinciDistribution
  * @subpackage api.objects
  */
-class KalturaTvinciDistributionTag extends KalturaObject
+class VidiunTvinciDistributionTag extends VidiunObject
 {
 	/**
 	 * @var string

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlModifyRequestHostRegexAction extends KalturaRuleAction
+class VidiunAccessControlModifyRequestHostRegexAction extends VidiunRuleAction
 {
 	/**
 	 * Request host regex pattern
@@ -46,12 +46,12 @@ class KalturaAccessControlModifyRequestHostRegexAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAccessControlModifyRequestHostRegexAction();
+			$dbObject = new vAccessControlModifyRequestHostRegexAction();
 			
 		return parent::toObject($dbObject, $skip);
 	}

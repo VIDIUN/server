@@ -21,27 +21,27 @@ $c->setLimit(10000);
 $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 
 $entryVendorTasks = EntryVendorTaskPeer::doSelect($c, $con);
-$sphinx = new kSphinxSearchManager();
+$sphinx = new vSphinxSearchManager();
 while(count($entryVendorTasks))
 {
 	foreach($entryVendorTasks as $entryVendorTask)
 	{
 	    /* @var $entryVendorTask EntryVendorTask */
-		KalturaLog::log('entryVendorTask id ' . '[' . $entryVendorTask->getId() . '] crc id [' . $sphinx->getSphinxId($entryVendorTask) . ']');
+		VidiunLog::log('entryVendorTask id ' . '[' . $entryVendorTask->getId() . '] crc id [' . $sphinx->getSphinxId($entryVendorTask) . ']');
 		
 		try {
 			$ret = $sphinx->saveToSphinx($entryVendorTask, true);
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			exit -1;
 		}
 	}
 	
 	$c->setOffset($c->getOffset() + count($entryVendorTasks));
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	$entryVendorTasks = EntryVendorTaskPeer::doSelect($c, $con);
 }
 
-KalturaLog::log('Done');
+VidiunLog::log('Done');
 exit(0);

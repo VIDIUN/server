@@ -1,12 +1,12 @@
 <?php
 /**
- * Executes the KAsyncCopyCuePointFromLiveToVod
+ * Executes the VAsyncCopyCuePointFromLiveToVod
  * 
  * @package Scheduler
  * @subpackage Copy
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncLiveToVod();
+$instance = new VAsyncLiveToVod();
 $instance->run(); 
 $instance->done();

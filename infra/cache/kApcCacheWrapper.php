@@ -1,15 +1,15 @@
 <?php
 
-require_once(dirname(__FILE__) . '/kInfraBaseCacheWrapper.php');
+require_once(dirname(__FILE__) . '/vInfraBaseCacheWrapper.php');
 
 /**
  * @package infra
  * @subpackage cache
  */
-class kApcCacheWrapper extends kInfraBaseCacheWrapper
+class vApcCacheWrapper extends vInfraBaseCacheWrapper
 {
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::init()
+	 * @see vBaseCacheWrapper::init()
 	 */
 	protected function doInit($config)
 	{
@@ -19,7 +19,7 @@ class kApcCacheWrapper extends kInfraBaseCacheWrapper
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::get()
+	 * @see vBaseCacheWrapper::get()
 	 */
 	protected function doGet($key)
 	{
@@ -27,7 +27,7 @@ class kApcCacheWrapper extends kInfraBaseCacheWrapper
 	}
 		
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::set()
+	 * @see vBaseCacheWrapper::set()
 	 */
 	protected function doSet($key, $var, $expiry = 0)
 	{
@@ -35,7 +35,7 @@ class kApcCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::add()
+	 * @see vBaseCacheWrapper::add()
 	 */
 	protected function doAdd($key, $var, $expiry = 0)
 	{
@@ -43,7 +43,7 @@ class kApcCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::multiGet()
+	 * @see vBaseCacheWrapper::multiGet()
 	 */
 	protected function doMultiGet($keys)
 	{
@@ -52,7 +52,7 @@ class kApcCacheWrapper extends kInfraBaseCacheWrapper
 
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::delete()
+	 * @see vBaseCacheWrapper::delete()
 	 */
 	protected function doDelete($key)
 	{
@@ -60,7 +60,7 @@ class kApcCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::increment()
+	 * @see vBaseCacheWrapper::increment()
 	 */
 	public function doIncrement($key, $delta = 1)
 	{
@@ -68,7 +68,7 @@ class kApcCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::decrement()
+	 * @see vBaseCacheWrapper::decrement()
 	 */
 	public function doDecrement($key, $delta = 1)
 	{

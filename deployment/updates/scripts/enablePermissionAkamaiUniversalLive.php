@@ -1,6 +1,6 @@
 <?php
 /**
- * Enable FEATURE_KMC_AKAMAI_UNIVERSAL_LIVE_STREAM_PROVISION to partners that already have FEATURE_LIVE_STREAM
+ * Enable FEATURE_VMC_AKAMAI_UNIVERSAL_LIVE_STREAM_PROVISION to partners that already have FEATURE_LIVE_STREAM
  * Arguments:
  *  - p - start from Partner id
  *  - u - start from Updated at (linux timestamp in seconds)
@@ -21,7 +21,7 @@ if(in_array('realrun', $argv))
 
 $countLimitEachLoop = 500;
 $offset = $countLimitEachLoop;
-$permissionName = 'FEATURE_KMC_AKAMAI_UNIVERSAL_LIVE_STREAM_PROVISION';
+$permissionName = 'FEATURE_VMC_AKAMAI_UNIVERSAL_LIVE_STREAM_PROVISION';
 $startPartnerId = null;
 $startUpdatedAt = null;
 
@@ -53,7 +53,7 @@ if(isset($options['u']))
 require_once (__DIR__ . '/../../bootstrap.php');
 
 $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
-KalturaStatement::setDryRun($dryRun);
+VidiunStatement::setDryRun($dryRun);
 
 $criteria = new Criteria();
 $criteria->add(PermissionPeer::STATUS, PermissionStatus::ACTIVE);
@@ -78,7 +78,7 @@ while(count($partners))
 	{
 		/* @var $partner partner */
 		$partnerId = $partner->getId();
-		KalturaLog::debug("Set permission [$permissionName] for partner id [$partnerId]");
+		VidiunLog::debug("Set permission [$permissionName] for partner id [$partnerId]");
 		$dbPermission = PermissionPeer::getByNameAndPartner($permissionName, $partnerId);
 		if(! $dbPermission)
 		{
@@ -93,7 +93,7 @@ while(count($partners))
 		$dbPermission->save();
 	}
 	
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	$criteria->setOffset($offset);
 	$stmt = PermissionPeer::doSelectStmt($criteria, $con);
 	$partners = PartnerPeer::retrieveByPKs($stmt->fetchAll(PDO::FETCH_COLUMN));
@@ -101,4 +101,4 @@ while(count($partners))
 	$offset += $countLimitEachLoop;
 }
 
-KalturaLog::debug("Done");
+VidiunLog::debug("Done");

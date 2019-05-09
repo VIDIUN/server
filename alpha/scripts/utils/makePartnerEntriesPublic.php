@@ -25,7 +25,7 @@ if(!$partner)
 {
         die('no such partner.'.PHP_EOL);
 }
-$partner->setAppearInSearch(mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+$partner->setAppearInSearch(mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 $partner->save();
 
 $c = new Criteria();
@@ -43,7 +43,7 @@ while(count($entries))
         foreach($entries as $entry)
         {
                 echo "changed DISPLAY_IN_SEARCH for entry: ".$entry->getId()."\n";
-                $entry->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+                $entry->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
                 $entry->save();
         }
         entryPeer::clearInstancePool();

@@ -3,17 +3,17 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaVendorCatalogItemArray extends KalturaTypedArray
+class VidiunVendorCatalogItemArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaVendorCatalogItemArray();
+		$newArr = new VidiunVendorCatalogItemArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$newArr[] = KalturaVendorCatalogItem::getInstance($obj, $responseProfile);
+			$newArr[] = VidiunVendorCatalogItem::getInstance($obj, $responseProfile);
 		}
 		
 		return $newArr;
@@ -21,6 +21,6 @@ class KalturaVendorCatalogItemArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaVendorCatalogItem");	
+		parent::__construct("VidiunVendorCatalogItem");	
 	}
 }

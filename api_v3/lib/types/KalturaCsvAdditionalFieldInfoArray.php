@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaCsvAdditionalFieldInfoArray extends KalturaTypedArray
+class VidiunCsvAdditionalFieldInfoArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaCsvAdditionalFieldInfoArray();
+		$newArr = new VidiunCsvAdditionalFieldInfoArray();
 		foreach($arr as $obj)
 		{
-			$nObj = new KalturaCsvAdditionalFieldInfo();
+			$nObj = new VidiunCsvAdditionalFieldInfo();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -20,6 +20,6 @@ class KalturaCsvAdditionalFieldInfoArray extends KalturaTypedArray
 
 	public function __construct()
 	{
-		return parent::__construct("KalturaCsvAdditionalFieldInfo");
+		return parent::__construct("VidiunCsvAdditionalFieldInfo");
 	}
 }

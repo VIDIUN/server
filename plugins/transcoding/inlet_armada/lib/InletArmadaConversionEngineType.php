@@ -3,7 +3,7 @@
  * @package plugins.inletArmada
  * @subpackage lib
  */
-class InletArmadaConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class InletArmadaConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const INLET_ARMADA = 'InletArmada';
 	

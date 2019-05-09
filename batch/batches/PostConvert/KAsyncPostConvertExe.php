@@ -1,6 +1,6 @@
 <?php
 /**
- * Will run KAsyncPostConvert
+ * Will run VAsyncPostConvert
  *
  * 
  * @package Scheduler
@@ -8,6 +8,6 @@
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncPostConvert();
+$instance = new VAsyncPostConvert();
 $instance->run(); 
 $instance->done();

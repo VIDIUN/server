@@ -1,6 +1,6 @@
 <?php
-require_once realpath(__DIR__ . '/../../') . '/lib/KalturaClient.php';
-require_once realpath(__DIR__ . '/../') . '/KalturaMonitorResult.php';
+require_once realpath(__DIR__ . '/../../') . '/lib/VidiunClient.php';
+require_once realpath(__DIR__ . '/../') . '/VidiunMonitorResult.php';
 
 $options = getopt('', array(
 	'service-url:',
@@ -13,7 +13,7 @@ if(!isset($options['service-url']))
 	exit(-1);
 }
 
-class KalturaMonitorClientLogger implements IKalturaLogger
+class VidiunMonitorClientLogger implements IVidiunLogger
 {
 	function log($msg)
 	{
@@ -21,7 +21,7 @@ class KalturaMonitorClientLogger implements IKalturaLogger
 	}
 }
 
-class KalturaMonitorClient extends KalturaClient
+class VidiunMonitorClient extends VidiunClient
 {
 	protected function doHttpRequest($url, $params = array(), $files = array())
 	{
@@ -122,19 +122,19 @@ class KalturaMonitorClient extends KalturaClient
 $config = parse_ini_file(__DIR__ . '/../config.ini', true);
 
 $serviceUrl = $config['config']['protocol'] . '://' . $options['service-url'] . ':' . $config['config']['port'];
-$clientConfig = new KalturaConfiguration();
+$clientConfig = new VidiunConfiguration();
 $clientConfig->serviceUrl = $serviceUrl;
 
 foreach($config['config'] as $attribute => $value)
 	$clientConfig->$attribute = $value;
 	
 if(isset($options['debug']))
-	$clientConfig->setLogger(new KalturaMonitorClientLogger());
+	$clientConfig->setLogger(new VidiunMonitorClientLogger());
 
-$client = new KalturaMonitorClient($clientConfig);
-$kcc = new KalturaClientConfiguration();
+$client = new VidiunMonitorClient($clientConfig);
+$vcc = new VidiunClientConfiguration();
 foreach($config['client-config'] as $attribute => $value){
-    $kcc->$attribute=$value;
+    $vcc->$attribute=$value;
 }
-$client->setClientConfiguration($kcc);
+$client->setClientConfiguration($vcc);
 

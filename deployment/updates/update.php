@@ -4,8 +4,8 @@ require_once (dirname(__FILE__) . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARAT
 ini_set("memory_limit", "512M");
 error_reporting(E_ALL);
 
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "ZendFramework", "*"));
-KAutoloader::register();
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "ZendFramework", "*"));
+VAutoloader::register();
 
 $code = array();
 
@@ -84,7 +84,7 @@ class ScriptsRunner
 	public function init($ignore, array $params)
 	{
 		$this->ignoreErrors = $ignore;
-		$dbConf = kConf::getDB();
+		$dbConf = vConf::getDB();
 		$dsn = $dbConf['datasources']['propel']['connection']['dsn'];
 		$dsn = explode(":", $dsn);
 		$dsnArray = explode(";", $dsn[1]);

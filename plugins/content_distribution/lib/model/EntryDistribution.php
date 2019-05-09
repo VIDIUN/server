@@ -272,7 +272,7 @@ class EntryDistribution extends BaseEntryDistribution implements IIndexable, ISy
 	}
 
 	/**
-	 * @return array<kDistributionValidationError>
+	 * @return array<vDistributionValidationError>
 	 * @see BaseEntryDistribution::getValidationErrors()
 	 */
 	public function getValidationErrors()
@@ -286,17 +286,17 @@ class EntryDistribution extends BaseEntryDistribution implements IIndexable, ISy
 			if(is_array($arr))
 				return $arr;
 				
-			KalturaLog::err("Unable to unserialize [$validationErrors]");
+			VidiunLog::err("Unable to unserialize [$validationErrors]");
 			return array();
 		}
 		catch(Exception $e){
-			KalturaLog::err("Unable to unserialize [$validationErrors]");
+			VidiunLog::err("Unable to unserialize [$validationErrors]");
 		}
 		return array();
 	}
 
 	/**
-	 * @param array<kDistributionValidationError> $v
+	 * @param array<vDistributionValidationError> $v
 	 * @return EntryDistribution
 	 */
 	public function setValidationErrorsArray(array $v)
@@ -329,7 +329,7 @@ class EntryDistribution extends BaseEntryDistribution implements IIndexable, ISy
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 	
 	/* (non-PHPdoc)
@@ -348,10 +348,10 @@ class EntryDistribution extends BaseEntryDistribution implements IIndexable, ISy
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		if($objectUpdated)
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 			
 		return $ret;
 	}
@@ -363,7 +363,7 @@ class EntryDistribution extends BaseEntryDistribution implements IIndexable, ISy
 	{
 		parent::postInsert($con);
 		
-		kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 	}
 
 	public function getSubmitResultsVersion()			{return $this->getFromCustomData(self::CUSTOM_DATA_FIELD_SUBMIT_RESULTS_VERSION);}
@@ -375,37 +375,37 @@ class EntryDistribution extends BaseEntryDistribution implements IIndexable, ISy
 	
 	public function incrementSubmitResultsVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getSubmitResultsVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getSubmitResultsVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_SUBMIT_RESULTS_VERSION, $version);
 	}
 	
 	public function incrementUpdateResultsVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getUpdateResultsVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getUpdateResultsVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_UPDATE_RESULTS_VERSION, $version);
 	}
 	
 	public function incrementDeleteResultsVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getDeleteResultsVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getDeleteResultsVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_DELETE_RESULTS_VERSION, $version);
 	}
 	
 	public function incrementSubmitDataVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getSubmitDataVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getSubmitDataVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_SUBMIT_DATA_VERSION, $version);
 	}
 	
 	public function incrementUpdateDataVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getUpdateDataVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getUpdateDataVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_UPDATE_DATA_VERSION, $version);
 	}
 	
 	public function incrementDeleteDataVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getDeleteDataVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getDeleteDataVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_DELETE_DATA_VERSION, $version);
 	}
 
@@ -423,7 +423,7 @@ class EntryDistribution extends BaseEntryDistribution implements IIndexable, ISy
 	}
 
 	/**
-	 * @param array<kDistributionRemoteMediaFile> $mediaFiles
+	 * @param array<vDistributionRemoteMediaFile> $mediaFiles
 	 */
 	public function setMediaFiles(array $mediaFiles)
 	{

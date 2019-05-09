@@ -3,33 +3,33 @@
  * @package Scheduler
  * @subpackage Copy
  */
-class KCopyingCategoryEntryEngine extends KCopyingEngine
+class VCopyingCategoryEntryEngine extends VCopyingEngine
 {
 	/* (non-PHPdoc)
-	 * @see KCopyingEngine::copy()
+	 * @see VCopyingEngine::copy()
 	 */
-	protected function copy(KalturaFilter $filter, KalturaObjectBase $templateObject) {
+	protected function copy(VidiunFilter $filter, VidiunObjectBase $templateObject) {
 		return $this->copyCategoryEntries ($filter, $templateObject);
 		
 	}
 
-	protected function copyCategoryEntries (KalturaFilter $filter, KalturaObjectBase $templateObject)
+	protected function copyCategoryEntries (VidiunFilter $filter, VidiunObjectBase $templateObject)
 	{
-		/* @var $filter KalturaCategoryEntryFilter */
-		$filter->orderBy = KalturaCategoryEntryOrderBy::CREATED_AT_ASC;
+		/* @var $filter VidiunCategoryEntryFilter */
+		$filter->orderBy = VidiunCategoryEntryOrderBy::CREATED_AT_ASC;
 		
-		$categoryEntryList = KBatchBase::$kClient->categoryEntry->listAction($filter, $this->pager);
+		$categoryEntryList = VBatchBase::$vClient->categoryEntry->listAction($filter, $this->pager);
 		if(!$categoryEntryList->objects || !count($categoryEntryList->objects))
 			return 0;
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($categoryEntryList->objects as $categoryEntry)
 		{
 			$newCategoryEntry = $this->getNewObject($categoryEntry, $templateObject);
-			KBatchBase::$kClient->categoryEntry->add($newCategoryEntry);
+			VBatchBase::$vClient->categoryEntry->add($newCategoryEntry);
 		}
 		
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(is_array($result) && isset($result['code']))
 				unset($results[$index]);
@@ -43,15 +43,15 @@ class KCopyingCategoryEntryEngine extends KCopyingEngine
 		return count($results);
 	}
 	/* (non-PHPdoc)
-	 * @see KCopyingEngine::getNewObject()
+	 * @see VCopyingEngine::getNewObject()
 	 */
-	protected function getNewObject(KalturaObjectBase $sourceObject, KalturaObjectBase $templateObject) {
+	protected function getNewObject(VidiunObjectBase $sourceObject, VidiunObjectBase $templateObject) {
 		$class = get_class($sourceObject);
 		$newObject = new $class();
 		
-		/* @var $newObject KalturaCategoryEntry */
-		/* @var $sourceObject KalturaCategoryEntry */
-		/* @var $templateObject KalturaCategoryEntry */
+		/* @var $newObject VidiunCategoryEntry */
+		/* @var $sourceObject VidiunCategoryEntry */
+		/* @var $templateObject VidiunCategoryEntry */
 		
 		$newObject->categoryId = $sourceObject->categoryId;
 		$newObject->entryId = $sourceObject->entryId;

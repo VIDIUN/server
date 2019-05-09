@@ -3,7 +3,7 @@
  * @package plugins.timeWarnerDistribution
  * @subpackage lib
  */
-class TimeWarnerDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class TimeWarnerDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const TIME_WARNER = 'TIME_WARNER';
 	

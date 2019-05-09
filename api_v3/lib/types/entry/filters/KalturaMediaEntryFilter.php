@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaMediaEntryFilter extends KalturaMediaEntryBaseFilter
+class VidiunMediaEntryFilter extends VidiunMediaEntryBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -19,14 +19,14 @@ class KalturaMediaEntryFilter extends KalturaMediaEntryBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntryFilter::getListResponse()
+	 * @see VidiunBaseEntryFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager);
 		
-	    $newList = KalturaMediaEntryArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaBaseEntryListResponse();
+	    $newList = VidiunMediaEntryArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunBaseEntryListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		
@@ -36,8 +36,8 @@ class KalturaMediaEntryFilter extends KalturaMediaEntryBaseFilter
 	public function __construct()
 	{
 		$typeArray = array (entryType::MEDIA_CLIP, entryType::LIVE_STREAM);
-		$typeArray = array_merge($typeArray, KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::MEDIA_CLIP));
-		$typeArray = array_merge($typeArray, KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::LIVE_STREAM));
+		$typeArray = array_merge($typeArray, VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::MEDIA_CLIP));
+		$typeArray = array_merge($typeArray, VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::LIVE_STREAM));
 		
 		$this->typeIn = implode(',', array_unique($typeArray));
 	}

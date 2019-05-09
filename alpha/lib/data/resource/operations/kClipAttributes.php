@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kClipAttributes extends kOperationAttributes 
+class vClipAttributes extends vOperationAttributes 
 {
 	const SYSTEM_DEFAULT_FLAVOR_PARAMS_ID = -1;
 	
@@ -29,13 +29,13 @@ class kClipAttributes extends kOperationAttributes
 
 	/**
 	 * effectsAttributes
-	 * @var array kEffect
+	 * @var array vEffect
 	 */
 	private $effectArray;
 
 
 	/* (non-PHPdoc)
-	 * @see kOperationAttributes::toArray()
+	 * @see vOperationAttributes::toArray()
 	 */
 	public function toArray()
 	{
@@ -48,15 +48,15 @@ class kClipAttributes extends kOperationAttributes
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kOperationAttributes::getApiType()
+	 * @see vOperationAttributes::getApiType()
 	 */
 	public function getApiType()
 	{
-		return 'KalturaClipAttributes';
+		return 'VidiunClipAttributes';
 	}
 
 	/* (non-PHPdoc)
-	 * @see kOperationAttributes::getAssetParamsId()
+	 * @see vOperationAttributes::getAssetParamsId()
 	 */
 	public function getAssetParamsId()
 	{
@@ -64,7 +64,7 @@ class kClipAttributes extends kOperationAttributes
 	}
 
 	/* (non-PHPdoc)
-	 * @see kOperationAttributes::getSourceType()
+	 * @see vOperationAttributes::getSourceType()
 	 */
 	public function getSourceType()
 	{
@@ -120,7 +120,7 @@ class kClipAttributes extends kOperationAttributes
 	}
 
 	/**
-	 * @return kEffect[]
+	 * @return vEffect[]
 	 */
 	public function getEffectArray()
 	{

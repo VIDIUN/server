@@ -1,8 +1,8 @@
 <?php
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'kGeoCoder.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'vGeoCoder.php');
 
-class kDigitalElementIPGeocoder extends kGeoCoder
+class vDigitalElementIPGeocoder extends vGeoCoder
 {
 	const RECORD_LEN = 10;
 	
@@ -13,7 +13,7 @@ class kDigitalElementIPGeocoder extends kGeoCoder
 	static $descLookup;
 	
 	/* (non-PHPdoc)
-	 * @see kGeoCoder::getCountry()
+	 * @see vGeoCoder::getCountry()
 	 */
 	public function getCountry($ip)
 	{
@@ -21,7 +21,7 @@ class kDigitalElementIPGeocoder extends kGeoCoder
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kGeoCoder::getCoordinates()
+	 * @see vGeoCoder::getCoordinates()
 	 */
 	public function getCoordinates($ip)
 	{
@@ -35,7 +35,7 @@ class kDigitalElementIPGeocoder extends kGeoCoder
 		try {
 			if (!self::$readerAnonymous)
 			{
-				$dbFilePath = __DIR__ . '/../../../../../data/DigitalElement/Anonymous/kanonymous.bin';
+				$dbFilePath = __DIR__ . '/../../../../../data/DigitalElement/Anonymous/vanonymous.bin';
 				self::$readerAnonymous = fopen($dbFilePath, "rb");
 				
 				// read proxy type and description lookup

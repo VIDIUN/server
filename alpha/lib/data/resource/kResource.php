@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-abstract class kResource 
+abstract class vResource 
 {
 	public function getType()
 	{

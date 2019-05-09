@@ -3,7 +3,7 @@
  * @package plugins.freewheelDistribution
  * @subpackage lib
  */
-class FreewheelDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class FreewheelDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const FREEWHEEL = 'FREEWHEEL';
 	

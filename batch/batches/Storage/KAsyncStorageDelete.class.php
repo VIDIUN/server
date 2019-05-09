@@ -5,55 +5,55 @@
  * @package Scheduler
  * @subpackage Storage
  */
-class KAsyncStorageDelete extends KJobHandlerWorker
+class VAsyncStorageDelete extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::STORAGE_DELETE;
+		return VidiunBatchJobType::STORAGE_DELETE;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->delete($job, $job->data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getFilter()
+	 * @see VJobHandlerWorker::getFilter()
 	 */
 	protected function getFilter()
 	{
 		$filter = parent::getFilter();
 		
-		if(KBatchBase::$taskConfig->params && KBatchBase::$taskConfig->params->minFileSize && is_numeric(KBatchBase::$taskConfig->params->minFileSize))
-			$filter->fileSizeGreaterThan = KBatchBase::$taskConfig->params->minFileSize;
+		if(VBatchBase::$taskConfig->params && VBatchBase::$taskConfig->params->minFileSize && is_numeric(VBatchBase::$taskConfig->params->minFileSize))
+			$filter->fileSizeGreaterThan = VBatchBase::$taskConfig->params->minFileSize;
 		
-		if(KBatchBase::$taskConfig->params && KBatchBase::$taskConfig->params->maxFileSize && is_numeric(KBatchBase::$taskConfig->params->maxFileSize))
-			$filter->fileSizeLessThan = KBatchBase::$taskConfig->params->maxFileSize;
+		if(VBatchBase::$taskConfig->params && VBatchBase::$taskConfig->params->maxFileSize && is_numeric(VBatchBase::$taskConfig->params->maxFileSize))
+			$filter->fileSizeLessThan = VBatchBase::$taskConfig->params->maxFileSize;
 			
 		return $filter;
 	}
 	
 	/**
-	 * Will take a single KalturaBatchJob and delete the given file 
+	 * Will take a single VidiunBatchJob and delete the given file 
 	 * 
-	 * @param KalturaBatchJob $job
-	 * @param KalturaStorageDeleteJobData $data
-	 * @return KalturaBatchJob
+	 * @param VidiunBatchJob $job
+	 * @param VidiunStorageDeleteJobData $data
+	 * @return VidiunBatchJob
 	 */
-	private function delete(KalturaBatchJob $job, KalturaStorageDeleteJobData $data)
+	private function delete(VidiunBatchJob $job, VidiunStorageDeleteJobData $data)
 	{
-        $exportEngine = KExportEngine::getInstance($job->jobSubType, $job->partnerId, $data);
-		$this->updateJob($job, "Deleting {$data->destFileSyncStoredPath} from remote storage", KalturaBatchJobStatus::QUEUED);
+        $exportEngine = VExportEngine::getInstance($job->jobSubType, $job->partnerId, $data);
+		$this->updateJob($job, "Deleting {$data->destFileSyncStoredPath} from remote storage", VidiunBatchJobStatus::QUEUED);
         
         $exportEngine->delete();
 		
-		return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED);
 	}
 	
 }

@@ -48,7 +48,7 @@ class thumbnailAction extends sfAction
 	 */
 	public function execute()
 	{
-		KExternalErrors::setResponseErrorCode(KExternalErrors::HTTP_STATUS_NOT_FOUND);
+		VExternalErrors::setResponseErrorCode(VExternalErrors::HTTP_STATUS_NOT_FOUND);
 		
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL2;
 		
@@ -61,7 +61,7 @@ class thumbnailAction extends sfAction
 		$upload_token_id = $this->getRequestParameter("upload_token_id");
 		$version = $this->getIntRequestParameter("version", null, 0, 10000000);
 		$type = $this->getIntRequestParameter("type", 1, 1, 5);
-		//Hack: if KMS sends thumbnail request containing "!" char, the type should be treated as 5.
+		//Hack: if VMS sends thumbnail request containing "!" char, the type should be treated as 5.
 		
 		$width = $this->getRequestParameter("width", self::DEFAULT_DIMENSION);
 		$height = $this->getRequestParameter("height", self::DEFAULT_DIMENSION);
@@ -126,55 +126,55 @@ class thumbnailAction extends sfAction
 		
 		// validating the inputs
 		if(!is_numeric($quality) || $quality < 0 || $quality > 100)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'quality must be between 20 and 100');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'quality must be between 20 and 100');
 		
 		if(!is_numeric($src_x) || $src_x < 0 || $src_x > 10000)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'src_x must be between 0 and 10000');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'src_x must be between 0 and 10000');
 		
 		if(!is_numeric($src_y) || $src_y < 0 || $src_y > 10000)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'src_y must be between 0 and 10000');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'src_y must be between 0 and 10000');
 			
 		if(!is_numeric($src_w) || $src_w < 0 || $src_w > 10000)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'src_w must be between 0 and 10000');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'src_w must be between 0 and 10000');
 			
 		if(!is_numeric($src_h) || $src_h < 0 || $src_h > 10000)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'src_h must be between 0 and 10000');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'src_h must be between 0 and 10000');
 			
 		if(!is_numeric($width) || $width < 0 || $width > 10000)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'width must be between 0 and 10000');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'width must be between 0 and 10000');
 			
 		if(!is_numeric($height) || $height < 0 || $height > 10000)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'height must be between 0 and 10000');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'height must be between 0 and 10000');
 			
 		if(!is_numeric($density) || $density < 0)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'density must be positive');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'density must be positive');
 			
 		if(!is_numeric($vid_sec) || $vid_sec < -1)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'vid_sec must be positive');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'vid_sec must be positive');
 			
 		if(!preg_match('/^[0-9a-fA-F]{1,6}$/', $bgcolor))
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'bgcolor must be six hexadecimal characters');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'bgcolor must be six hexadecimal characters');
 
 		if(($vid_slices != -1 && $vid_slices <= 0) || !is_numeric($vid_slices))
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'vid_slices must be positive');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'vid_slices must be positive');
 
 		if($vid_slices > 0 && ($vid_slices * $width) >= 65500)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, "width($width) * vid_slices($vid_slices) must be between 0 and 65500");
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, "width($width) * vid_slices($vid_slices) must be between 0 and 65500");
 		if($vid_slices > 0 && ($vid_slices * $height) >= 65500)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, "height($height) * vid_slices($vid_slices) must be between 0 and 65500");
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, "height($height) * vid_slices($vid_slices) must be between 0 and 65500");
 
 		if(!is_numeric($start_sec) || ($start_sec < 0 && $start_sec != -1))
 		{
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'start_sec must be positive');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'start_sec must be positive');
 		}
 
 		if(!is_numeric($end_sec) || ($end_sec < 0 && $end_sec != -1))
 		{
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'end_sec must be positive');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'end_sec must be positive');
 		}
 		if($start_sec != -1 && $end_sec != -1 && ($start_sec > $end_sec))
 		{
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'start_sec cant be greater then end_sec');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'start_sec cant be greater then end_sec');
 		}
 
 		if ($upload_token_id)
@@ -187,7 +187,7 @@ class thumbnailAction extends sfAction
 
 				if ($partner)
 				{
-					KalturaMonitorClient::initApiMonitor(false, 'extwidget.thumbnail', $partner->getId());
+					VidiunMonitorClient::initApiMonitor(false, 'extwidget.thumbnail', $partner->getId());
 					myPartnerUtils::blockInactivePartner($partner->getId());
 
 					if ($quality == 0)
@@ -202,7 +202,7 @@ class thumbnailAction extends sfAction
 				
 				
 				$thumb_full_path =  myContentStorage::getFSCacheRootPath() . myContentStorage::getGeneralEntityPath("uploadtokenthumb", $upload_token->getIntId(), $upload_token->getId(), $upload_token->getId() . ".jpg");
-				kFile::fullMkdir($thumb_full_path);
+				vFile::fullMkdir($thumb_full_path);
 				if (file_exists($upload_token->getUploadTempPath()))
 				{
 					$src_full_path = $upload_token->getUploadTempPath();
@@ -227,11 +227,11 @@ class thumbnailAction extends sfAction
 						
 					// and resize it
 					myFileConverter::convertImage($src_full_path, $thumb_full_path, $width, $height, $type, $bgcolor, true, $quality, $src_x, $src_y, $src_w, $src_h, $density, $stripProfiles, null, $format);
-					kFileUtils::dumpFile($thumb_full_path);
+					vFileUtils::dumpFile($thumb_full_path);
 				} else {
-					KalturaLog::info ( "token_id [$upload_token_id] not found in DC [". kDataCenterMgr::getCurrentDcId ()."]. dump url to romote DC");
-					$remoteUrl = kDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - kDataCenterMgr::getCurrentDcId () ) .$_SERVER['REQUEST_URI'];
-					kFileUtils::dumpUrl($remoteUrl);
+					VidiunLog::info ( "token_id [$upload_token_id] not found in DC [". vDataCenterMgr::getCurrentDcId ()."]. dump url to romote DC");
+					$remoteUrl = vDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - vDataCenterMgr::getCurrentDcId () ) .$_SERVER['REQUEST_URI'];
+					vFileUtils::dumpUrl($remoteUrl);
 				}
 			}
 		}
@@ -247,12 +247,12 @@ class thumbnailAction extends sfAction
 				{
 					$entryDc = substr($entry_id, 0, 1);
 					// problem could be due to replication lag
-					if ($entryDc != kDataCenterMgr::getCurrentDcId())
+					if ($entryDc != vDataCenterMgr::getCurrentDcId())
 					{
-						kFileUtils::dumpApiRequest(kDataCenterMgr::getRemoteDcExternalUrlByDcId($entryDc));
+						vFileUtils::dumpApiRequest(vDataCenterMgr::getRemoteDcExternalUrlByDcId($entryDc));
 					}
 				}
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 			}
 		}
 		else
@@ -261,15 +261,15 @@ class thumbnailAction extends sfAction
 			$widget = widgetPeer::retrieveByPK( $widget_id );
 			if ( !$widget )
 			{
-				KExternalErrors::dieError(KExternalErrors::ENTRY_AND_WIDGET_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_AND_WIDGET_NOT_FOUND);
 			}
 			
-			// get the kshow
-			$kshow_id= $widget->getKshowId();
-			$kshow = kshowPeer::retrieveByPK($kshow_id);
-			if ( $kshow )
+			// get the vshow
+			$vshow_id= $widget->getVshowId();
+			$vshow = vshowPeer::retrieveByPK($vshow_id);
+			if ( $vshow )
 			{
-				$entry_id = $kshow->getShowEntryId();
+				$entry_id = $vshow->getShowEntryId();
 			}
 			else
 			{
@@ -279,11 +279,11 @@ class thumbnailAction extends sfAction
 			$entry = entryPeer::retrieveByPKNoFilter( $entry_id );
 			if ( ! $entry )
 			{
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 			}
 		}
 
-		KalturaMonitorClient::initApiMonitor(false, 'extwidget.thumbnail', $entry->getPartnerId());
+		VidiunMonitorClient::initApiMonitor(false, 'extwidget.thumbnail', $entry->getPartnerId());
 		myPartnerUtils::blockInactivePartner($entry->getPartnerId());
 		
 		if ( $nearest_aspect_ratio )
@@ -292,7 +292,7 @@ class thumbnailAction extends sfAction
 			$defaultThumbnailPath = myEntryUtils::getLocalImageFilePathByEntry( $entry, $version );
 			
 			// Get the file path of the thumbnail with the nearest  
-			$selectedThumbnailDescriptor = kThumbnailUtils::getNearestAspectRatioThumbnailDescriptorByEntryId( $entry_id, $width, $height, $defaultThumbnailPath );
+			$selectedThumbnailDescriptor = vThumbnailUtils::getNearestAspectRatioThumbnailDescriptorByEntryId( $entry_id, $width, $height, $defaultThumbnailPath );
 
 			if ( $selectedThumbnailDescriptor ) // Note: In case nothing returned, then the entry doesn't have a thumbnail to work with, so we'll do nothing.
 			{
@@ -306,23 +306,23 @@ class thumbnailAction extends sfAction
 				$src_h = $height;
 
 				// Base on the thumbnail's dimensions
-				kThumbnailUtils::scaleDimensions( $thumbWidth, $thumbHeight, $width, $height, kThumbnailUtils::SCALE_UNIFORM_SMALLER_DIM, $width, $height );
+				vThumbnailUtils::scaleDimensions( $thumbWidth, $thumbHeight, $width, $height, vThumbnailUtils::SCALE_UNIFORM_SMALLER_DIM, $width, $height );
 
 				// Set crop type
-				$type = KImageMagickCropper::CROP_AFTER_RESIZE;
+				$type = VImageMagickCropper::CROP_AFTER_RESIZE;
 			}
 		}
 
 		$partner = $entry->getPartner();
 		
-		//checks whether the thumbnail display should be restricted by KS
+		//checks whether the thumbnail display should be restricted by VS
 		$base64Referrer = $this->getRequestParameter("referrer");
 		$referrer = base64_decode($base64Referrer);
 		if (!is_string($referrer))
 			$referrer = ""; // base64_decode can return binary data
 		if (!$referrer)
-			$referrer = kApiCache::getHttpReferrer();
-		$ksStr = $this->getRequestParameter("ks");
+			$referrer = vApiCache::getHttpReferrer();
+		$vsStr = $this->getRequestParameter("vs");
 
 		$enableCacheValidation = true;
 		$accessControl = $entry->getAccessControl();
@@ -335,7 +335,7 @@ class thumbnailAction extends sfAction
 
 		if ($enableCacheValidation)
 		{
-			$secureEntryHelper = new KSecureEntryHelper($entry, $ksStr, $referrer, ContextType::THUMBNAIL);
+			$secureEntryHelper = new VSecureEntryHelper($entry, $vsStr, $referrer, ContextType::THUMBNAIL);
 			$secureEntryHelper->validateForPlay();
 		}
 		
@@ -345,14 +345,14 @@ class thumbnailAction extends sfAction
 		{
 			if ($partner->getEnabledService(PermissionName::FEATURE_BLOCK_THUMBNAIL_CAPTURE))
 			{
-				KExternalErrors::dieError(KExternalErrors::NOT_ALLOWED_PARAMETER);
+				VExternalErrors::dieError(VExternalErrors::NOT_ALLOWED_PARAMETER);
 			}
 
 			if ($enableCacheValidation)
 			{
 				$actionList = $secureEntryHelper->getActionList(RuleActionType::LIMIT_THUMBNAIL_CAPTURE);
 				if ($actionList)
-					KExternalErrors::dieError(KExternalErrors::NOT_ALLOWED_PARAMETER);
+					VExternalErrors::dieError(VExternalErrors::NOT_ALLOWED_PARAMETER);
 			}
 		}
 
@@ -365,7 +365,7 @@ class thumbnailAction extends sfAction
 				$density = $partner->getDefThumbDensity();
 		}
 
-		$thumbParams = new kThumbnailParameters();
+		$thumbParams = new vThumbnailParameters();
 		$thumbParams->setSupportAnimatedThumbnail($partner->getSupportAnimatedThumbnails());
 		
 		
@@ -391,15 +391,15 @@ class thumbnailAction extends sfAction
 			$subType = entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA;
 			
 		$dataKey = $entry->getSyncKey($subType);
-		list ( $file_sync , $local ) = kFileSyncUtils::getReadyFileSyncForKey( $dataKey ,true , false );
+		list ( $file_sync , $local ) = vFileSyncUtils::getReadyFileSyncForKey( $dataKey ,true , false );
 		
 		$tempThumbPath = null;
 		$entry_status = $entry->getStatus();
 		
-		// both 640x480 and 0x0 requests are probably coming from the kdp
-		// 640x480 - old kdp version requesting thumbnail
-		// 0x0 - new kdp version requesting the thumbnail of an unready entry
-		// we need to distinguish between calls from the kdp and calls from a browser: <img src=...>
+		// both 640x480 and 0x0 requests are probably coming from the vdp
+		// 640x480 - old vdp version requesting thumbnail
+		// 0x0 - new vdp version requesting the thumbnail of an unready entry
+		// we need to distinguish between calls from the vdp and calls from a browser: <img src=...>
 		// that can't handle swf input
 		if (($width == 640 && $height == 480 || $width == 0 && $height == 0) &&
 			($entry_status == entryStatus::PRECONVERT || $entry_status == entryStatus::IMPORT ||
@@ -418,34 +418,34 @@ class thumbnailAction extends sfAction
 							"entry_error.swf" : "entry_converting.swf";
 			}
 						
-			kFileUtils::dumpFile($msgPath, null, 0);
+			vFileUtils::dumpFile($msgPath, null, 0);
 		}
 			
 		if ( ! $file_sync )
 		{
 			$tempThumbPath = $entry->getLocalThumbFilePath($version, $width, $height, $type, $bgcolor, $crop_provider, $quality, $src_x, $src_y, $src_w, $src_h, $vid_sec, $vid_slice, $vid_slices, $density, $stripProfiles, $flavor_id, $file_name, $start_sec, $end_sec);
 			if (!$tempThumbPath ){
-				KExternalErrors::dieError ( KExternalErrors::MISSING_THUMBNAIL_FILESYNC );
+				VExternalErrors::dieError ( VExternalErrors::MISSING_THUMBNAIL_FILESYNC );
 			}
 		}
 		
 		if ( !$local && !$tempThumbPath && $file_sync )
 		{
-			if (!in_array($file_sync->getDc(), kDataCenterMgr::getDcIds()))
+			if (!in_array($file_sync->getDc(), vDataCenterMgr::getDcIds()))
 			{
 				$remoteUrl =  $file_sync->getExternalUrl($entry->getId());
    				header("Location: $remoteUrl");
-   				KExternalErrors::dieGracefully();
+   				VExternalErrors::dieGracefully();
 			}
 			
-			$remoteUrl = kDataCenterMgr::getRedirectExternalUrl ( $file_sync , $_SERVER['REQUEST_URI'] );
-			kFileUtils::dumpUrl($remoteUrl);
+			$remoteUrl = vDataCenterMgr::getRedirectExternalUrl ( $file_sync , $_SERVER['REQUEST_URI'] );
+			vFileUtils::dumpUrl($remoteUrl);
 		}
 		
 		// if we didnt return a template for the player die and dont return the original deleted thumb
 		if ($entry_status == entryStatus::DELETED)
 		{
-			KExternalErrors::dieError(KExternalErrors::ENTRY_DELETED_MODERATED);
+			VExternalErrors::dieError(VExternalErrors::ENTRY_DELETED_MODERATED);
 		}
 
 		if (!$tempThumbPath)
@@ -457,47 +457,47 @@ class thumbnailAction extends sfAction
 			}
 			catch(Exception $ex)
 			{
-				if($ex->getCode() != kFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC)
+				if($ex->getCode() != vFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC)
 				{
-					KalturaLog::err( "Resize image failed");
-					KExternalErrors::dieError(KExternalErrors::MISSING_THUMBNAIL_FILESYNC);
+					VidiunLog::err( "Resize image failed");
+					VExternalErrors::dieError(VExternalErrors::MISSING_THUMBNAIL_FILESYNC);
 				}
 				
 				// get original flavor asset
 				$origFlavorAsset = assetPeer::retrieveOriginalByEntryId($entry_id);
 				if(!$origFlavorAsset)
 				{
-					KalturaLog::err( "No original flavor for entry [$entry_id]");
-					KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+					VidiunLog::err( "No original flavor for entry [$entry_id]");
+					VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 				}
 
 				$syncKey = $origFlavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-				$remoteFileSync = kFileSyncUtils::getOriginFileSyncForKey($syncKey, false);
+				$remoteFileSync = vFileSyncUtils::getOriginFileSyncForKey($syncKey, false);
 				if(!$remoteFileSync)
 				{
 					// file does not exist on any DC - die
-					KalturaLog::log( "Error - no FileSync for entry [$entry_id]");
-					KExternalErrors::dieError(KExternalErrors::MISSING_THUMBNAIL_FILESYNC);
+					VidiunLog::log( "Error - no FileSync for entry [$entry_id]");
+					VExternalErrors::dieError(VExternalErrors::MISSING_THUMBNAIL_FILESYNC);
 				}
 				
-				if($remoteFileSync->getDc() == kDataCenterMgr::getCurrentDcId())
+				if($remoteFileSync->getDc() == vDataCenterMgr::getCurrentDcId())
 				{
-					KalturaLog::err("Trying to redirect to myself - stop here.");
-					KExternalErrors::dieError(KExternalErrors::MISSING_THUMBNAIL_FILESYNC);
+					VidiunLog::err("Trying to redirect to myself - stop here.");
+					VExternalErrors::dieError(VExternalErrors::MISSING_THUMBNAIL_FILESYNC);
 				}
 				
-				if (!in_array($remoteFileSync->getDc(), kDataCenterMgr::getDcIds()))
+				if (!in_array($remoteFileSync->getDc(), vDataCenterMgr::getDcIds()))
 				{
-					KExternalErrors::dieError ( KExternalErrors::MISSING_THUMBNAIL_FILESYNC );
+					VExternalErrors::dieError ( VExternalErrors::MISSING_THUMBNAIL_FILESYNC );
 				}
 
-				$remoteUrl = kDataCenterMgr::getRedirectExternalUrl($remoteFileSync);
-				kFileUtils::dumpUrl($remoteUrl);
+				$remoteUrl = vDataCenterMgr::getRedirectExternalUrl($remoteFileSync);
+				vFileUtils::dumpUrl($remoteUrl);
 			}
 		}
 		
-		$nocache = ($enableCacheValidation && ($secureEntryHelper->shouldDisableCache() || kApiCache::hasExtraFields() ||
-			(!$secureEntryHelper->isKsWidget() && $secureEntryHelper->hasRules(ContextType::THUMBNAIL))) );
+		$nocache = ($enableCacheValidation && ($secureEntryHelper->shouldDisableCache() || vApiCache::hasExtraFields() ||
+			(!$secureEntryHelper->isVsWidget() && $secureEntryHelper->hasRules(ContextType::THUMBNAIL))) );
 
 		$cache = null;
 		
@@ -526,23 +526,23 @@ class thumbnailAction extends sfAction
 
 		$lastModified = $this->getLastModified($entry, $isCapturing);
 
-		$entryKey = kFileUtils::isFileEncrypt($tempThumbPath) ? $entry->getGeneralEncryptionKey() : null;
+		$entryKey = vFileUtils::isFileEncrypt($tempThumbPath) ? $entry->getGeneralEncryptionKey() : null;
 		$entryIv = $entryKey ? $entry->getEncryptionIv() : null;
-		$renderer = kFileUtils::getDumpFileRenderer($tempThumbPath, null, $cacheAge, 0, $lastModified, $entryKey, $entryIv);
+		$renderer = vFileUtils::getDumpFileRenderer($tempThumbPath, null, $cacheAge, 0, $lastModified, $entryKey, $entryIv);
 		$renderer->partnerId = $entry->getPartnerId();
 		
 		if ($cache)
 		{
 			$invalidationKey = $entry->getCacheInvalidationKeys();
-			$invalidationKey = kQueryCache::CACHE_PREFIX_INVALIDATION_KEY . $invalidationKey[0];
-			$cacheTime = time() - kQueryCache::CLOCK_SYNC_TIME_MARGIN_SEC;
+			$invalidationKey = vQueryCache::CACHE_PREFIX_INVALIDATION_KEY . $invalidationKey[0];
+			$cacheTime = time() - vQueryCache::CLOCK_SYNC_TIME_MARGIN_SEC;
 			$cachedResponse = array($renderer, $invalidationKey, $cacheTime);
 			$cache->put($_SERVER["REQUEST_URI"], $cachedResponse);
 		}
 		
 		$renderer->output();
 	
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 		
 		// TODO - can delete from disk assuming we caneasily recreate it and it will anyway be cached in the CDN
 		// however dumpfile dies at the end so we cant just write it here (maybe register a shutdown callback)
@@ -553,7 +553,7 @@ class thumbnailAction extends sfAction
 		if(!$isCapturing)
 		{
 			$entryImageSyncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-			$fileSync= kFileSyncUtils::getOriginFileSyncForKey($entryImageSyncKey,false);
+			$fileSync= vFileSyncUtils::getOriginFileSyncForKey($entryImageSyncKey,false);
 			if($fileSync)
 			{
 				return $fileSync->getUpdatedAt(null);

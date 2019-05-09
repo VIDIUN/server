@@ -51,7 +51,7 @@ abstract class myBatchBase
 		self::$batch_script_name = $script_name;
 		/* easeier process management */
 		$batch_script = substr(self::$batch_script_name, strrpos(str_replace("\\", "/", self::$batch_script_name), "/")+1);
-		if(kConf::get('kaltura_installation_type') == 'CE')
+		if(vConf::get('vidiun_installation_type') == 'CE')
 		{
 			/* on CE verify that other batches are not running */
 			$stub_status = new batchStatus();
@@ -157,13 +157,13 @@ abstract class myBatchBase
 	{
 		if ( self::$s_databaseManager == NULL )
 		{
-			$dbConf = kConf::getDB();
+			$dbConf = vConf::getDB();
 			DbManager::setConfig($dbConf);
 			//self::$s_databaseManager = new sfDatabaseManager();
 		}
 		if ( $should_perform_shutdown )
 		{
-			KalturaLog::log ( "Attempting shutdown of DB due to errors" );
+			VidiunLog::log ( "Attempting shutdown of DB due to errors" );
 			// All of this brutal shutdown & init is to release all DB connections and restart as clean as possible
 			//
 			//self::$s_databaseManager->shutdown();
@@ -181,10 +181,10 @@ abstract class myBatchBase
 	{
 		self::$s_failure_count++;
 
-		KalturaLog::debug ( "Failed [" . self::$s_failure_count . "] times out of the allowed [" . self::MAX_FAILURES . "]" );
+		VidiunLog::debug ( "Failed [" . self::$s_failure_count . "] times out of the allowed [" . self::MAX_FAILURES . "]" );
 		if ( self::$s_failure_count >= self::MAX_FAILURES )
 		{
-			KalturaLog::debug ( "Fatal error, failed too many times [" . self::$s_failure_count . "]" );
+			VidiunLog::debug ( "Fatal error, failed too many times [" . self::$s_failure_count . "]" );
 			exit ( );
 		}
 	}
@@ -201,10 +201,10 @@ abstract class myBatchBase
 			return true;
 		$mem_usage =  memory_get_usage() ;
 		$limit =  self::parseMemorySize ( ini_get( "memory_limit") );
-//		KalturaLog::debug ( "shouldProceed: $mem_usage / $limit [" . ( $mem_usage < 0.8 * $limit ) . "]" );
+//		VidiunLog::debug ( "shouldProceed: $mem_usage / $limit [" . ( $mem_usage < 0.8 * $limit ) . "]" );
 		if  ( $mem_usage > ( 0.8 * $limit ) )
 		{
-	//		KalturaLog::debug ( "shouldProceed - NO! memory: [$mem_usage] limit [$limit]" );
+	//		VidiunLog::debug ( "shouldProceed - NO! memory: [$mem_usage] limit [$limit]" );
 			return false;
 		}
 		
@@ -215,9 +215,9 @@ abstract class myBatchBase
 	private static function parseMemorySize ( $size_str )
 	{
 		$fixed_str = strtolower( $size_str );
-		if ( kString::endsWith( $fixed_str , "m" ) )
+		if ( vString::endsWith( $fixed_str , "m" ) )
 			return $size_str * 1024 * 1024;
-		if ( kString::endsWith( $fixed_str , "k" ) )
+		if ( vString::endsWith( $fixed_str , "v" ) )
 			return $size_str * 1024;
 		return $size_str;
 	}
@@ -228,7 +228,7 @@ abstract class myBatchBase
 		{
 			if ( self::$s_pending_tasks == 0  )
 			{
-				KalturaLog::log ( "Gracefully exiting..." );
+				VidiunLog::log ( "Gracefully exiting..." );
 				die();
 			}
 			else 
@@ -237,17 +237,17 @@ abstract class myBatchBase
 				{
 					// set the force_die_time 
 					self::$s_force_die_time = time() + self::SECONDS_TO_FORCE_DIE;
-					KalturaLog::debug ( "Should exis but still exists [" . self::$s_pending_tasks . "] pending tasts ... Will FORCE DIE in [" . 
+					VidiunLog::debug ( "Should exis but still exists [" . self::$s_pending_tasks . "] pending tasts ... Will FORCE DIE in [" . 
 						self::SECONDS_TO_FORCE_DIE . "] seconds");
 				}
 				elseif ( time() > self::$s_force_die_time )
 				{
-					KalturaLog::debug ( "FORCE DIE !!. There are still [" . self::$s_pending_tasks . "] pending tasts but their time has come !" );
+					VidiunLog::debug ( "FORCE DIE !!. There are still [" . self::$s_pending_tasks . "] pending tasts but their time has come !" );
 					die();
 				}
 				else
 				{
-					KalturaLog::debug ( "Should exit but still exists [" . self::$s_pending_tasks . "] pending tasts ... Will FORCE DIE in [" . 
+					VidiunLog::debug ( "Should exit but still exists [" . self::$s_pending_tasks . "] pending tasts ... Will FORCE DIE in [" . 
 						(time() - self::$s_force_die_time ) . "] seconds");					
 				}
 			}

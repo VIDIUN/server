@@ -3,12 +3,12 @@
  * @package plugins.scheduledTask
  * @subpackage model.enum
  */ 
-class ScheduledTaskBatchType implements IKalturaPluginEnum, BatchJobType
+class ScheduledTaskBatchType implements IVidiunPluginEnum, BatchJobType
 {
 	const SCHEDULED_TASK = 'ScheduledTask';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -18,7 +18,7 @@ class ScheduledTaskBatchType implements IKalturaPluginEnum, BatchJobType
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions() 
 	{

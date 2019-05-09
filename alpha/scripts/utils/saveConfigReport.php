@@ -14,7 +14,7 @@ while (false !== ($iniFile = $configDir->read()))
 	{
 		$mapName = $matches[1];
 		
-		KalturaLog::info("Loads template file [$iniFile]");
+		VidiunLog::info("Loads template file [$iniFile]");
 		$tamplateConfig = new Zend_Config_Ini("$configPath/$iniFile");
 		$tamplates[$mapName] = $tamplateConfig->toArray();
 	}
@@ -24,22 +24,22 @@ while (false !== ($iniFile = $configDir->read()))
 		if($mapName == 'base')
 			continue;
 		
-		KalturaLog::info("Loads ini file [$iniFile] for map [$mapName]");
-		kConf::getMap($mapName);
+		VidiunLog::info("Loads ini file [$iniFile] for map [$mapName]");
+		vConf::getMap($mapName);
 	}
 }
 $configDir->close();
 
 //try
 //{
-//	$config = new Zend_Config(kConf::getAll());
+//	$config = new Zend_Config(vConf::getAll());
 //	$configWriter = new Zend_Config_Writer_Xml();
 //	$configWriter->write($xmlFilename, $config);
-//	KalturaLog::info("Saved config to history [$xmlFilename]");
+//	VidiunLog::info("Saved config to history [$xmlFilename]");
 //}
 //catch(Exception $e)
 //{
-//	KalturaLog::err($e->getMessage());
+//	VidiunLog::err($e->getMessage());
 //}
 
 $reports = array();
@@ -47,13 +47,13 @@ foreach($tamplates as $mapName => $tamplate)
 {
 	try
 	{
-		$map = kConf::getMap($mapName);
+		$map = vConf::getMap($mapName);
 	}
 	catch(Exception $e)
 	{
 		$msg = $e->getMessage();
 		$reports[] = $msg;
-		KalturaLog::debug($msg);
+		VidiunLog::debug($msg);
 		continue;
 	}
 	$iniFile = realpath("$configPath/$mapName.ini");
@@ -71,12 +71,12 @@ foreach($tamplates as $mapName => $tamplate)
 	{
 		$msg = "Valid config map [$mapName] file [$iniFile]";
 		$reports[] = $msg;
-		KalturaLog::debug($msg);
+		VidiunLog::debug($msg);
 	}
 }
 
 file_put_contents($reportFilename, implode("\n", $reports));
-KalturaLog::info("Saved report to history [$reportFilename]");
+VidiunLog::info("Saved report to history [$reportFilename]");
 
 
 function compareMaps($mapName, $tamplate, $map)

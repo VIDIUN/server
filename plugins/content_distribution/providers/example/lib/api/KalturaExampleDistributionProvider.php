@@ -3,7 +3,7 @@
  * @package plugins.exampleDistribution
  * @subpackage api.objects
  */
-class KalturaExampleDistributionProvider extends KalturaDistributionProvider
+class VidiunExampleDistributionProvider extends VidiunDistributionProvider
 {
 	
 }

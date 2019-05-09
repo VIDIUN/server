@@ -4,7 +4,7 @@
  *
  */
 
-class KSchedulerConfig extends Zend_Config_Ini
+class VSchedulerConfig extends Zend_Config_Ini
 {
     const EXTENSION_SEPARATOR = '@';
 
@@ -29,7 +29,7 @@ class KSchedulerConfig extends Zend_Config_Ini
 	private $configTimestamp;
 
 	/**
-	 * @var array<KSchedularTaskConfig>
+	 * @var array<VSchedularTaskConfig>
 	 */
 	private $taskConfigList = array();
 
@@ -47,11 +47,11 @@ class KSchedulerConfig extends Zend_Config_Ini
 		$this->configTimestamp = $this->calculateFileTimestamp();
 
 		$configFileName = $this->configFileName;
-		KalturaLog::log("loading configuration $configFileName at ".$this->configTimestamp);
+		VidiunLog::log("loading configuration $configFileName at ".$this->configTimestamp);
 
 		if(is_dir($this->configFileName))
 		{
-			$configFileName = kEnvironment::get('cache_root_path') . DIRECTORY_SEPARATOR . 'batch' . DIRECTORY_SEPARATOR . 'config.ini';
+			$configFileName = vEnvironment::get('cache_root_path') . DIRECTORY_SEPARATOR . 'batch' . DIRECTORY_SEPARATOR . 'config.ini';
 			$this->implodeDirectoryFiles($configFileName);
 		}
 
@@ -66,7 +66,7 @@ class KSchedulerConfig extends Zend_Config_Ini
 			if(!$maxInstances)
 				continue;
 
-			$task = new KSchedularTaskConfig($configFileName, $workerName, $maxInstances);
+			$task = new VSchedularTaskConfig($configFileName, $workerName, $maxInstances);
 			$task->setPartnerId($this->getPartnerId());
 			$task->setSecret($this->getSecret());
 			$task->setCurlTimeout($this->getCurlTimeout());
@@ -143,7 +143,7 @@ class KSchedulerConfig extends Zend_Config_Ini
         	if(!isset($iniArray[$section]))
         		throw new Zend_Config_Exception("Section '$section' cannot be found in $filename, '$extensionName' is invalid extension name");
         		
-        	$iniArray[$section] = kEnvironment::mergeConfigItem($iniArray[$section], $extension, false, false);
+        	$iniArray[$section] = vEnvironment::mergeConfigItem($iniArray[$section], $extension, false, false);
         }
 
         return $iniArray;
@@ -344,7 +344,7 @@ class KSchedulerConfig extends Zend_Config_Ini
 
 	/**
 	 * @param string $name
-	 * @return KSchedularTaskConfig
+	 * @return VSchedularTaskConfig
 	 */
 	public function getTaskConfig($name)
 	{

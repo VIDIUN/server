@@ -11,7 +11,7 @@ require_once( __DIR__ . '/AJAX_getObjectsAction.class.php');
  */ 
 class AJAX_getEntriesAction extends AJAX_getObjectsAction
 {
-	private $kuser_id = null;
+	private $vuser_id = null;
 	
 	private $public_only = false;
 	
@@ -23,17 +23,17 @@ class AJAX_getEntriesAction extends AJAX_getObjectsAction
 	public function getComlumnNames () 		{ return entry::getColumnNames() ; } //  alter table entry add FULLTEXT ( name , tags );
 	public function getSearchableColumnName () 		{ return entry::getSearchableColumnName(); } //  alter table entry add FULLTEXT ( name , tags );
 	public function getFilterPrefix ( ) 	{ return "entry_filter_" ; }
-	public function getPeerMethod ()		{ return "doSelect"; } //return "doSelectJoinkuser" ; }
-	public function getPeerCountMethod () 	{ return "doCountWithLimit" ; } //"doCountJoinAll" ; } //return "doCountJoinkuser" ; }
+	public function getPeerMethod ()		{ return "doSelect"; } //return "doSelectJoinvuser" ; }
+	public function getPeerCountMethod () 	{ return "doCountWithLimit" ; } //"doCountJoinAll" ; } //return "doCountJoinvuser" ; }
 
 	public function setPublicOnly ( $v )
 	{
 		$this->public_only = $v;
 	}
 
-	public function setOnlyForKuser ( $kuser_id )
+	public function setOnlyForVuser ( $vuser_id )
 	{
-		$this->kuser_id = $kuser_id;
+		$this->vuser_id = $vuser_id;
 	}
 	
 	public function setMediaType ( $media_type )
@@ -46,12 +46,12 @@ class AJAX_getEntriesAction extends AJAX_getObjectsAction
 	{
 //		entryPeer::setUseCriteriaFilter( false );
 		
-//		$c->addJoin( entryPeer::KSHOW_ID , kshowPeer::ID , Criteria::LEFT_JOIN);
-//		$c->addJoin( entryPeer::KUSER_ID , kuserPeer::ID , Criteria::LEFT_JOIN);
+//		$c->addJoin( entryPeer::VSHOW_ID , vshowPeer::ID , Criteria::LEFT_JOIN);
+//		$c->addJoin( entryPeer::VUSER_ID , vuserPeer::ID , Criteria::LEFT_JOIN);
 
-		if ( $this->kuser_id  )
+		if ( $this->vuser_id  )
 		{
-			$c->addAnd ( entryPeer::KUSER_ID ,  $this->kuser_id );
+			$c->addAnd ( entryPeer::VUSER_ID ,  $this->vuser_id );
 		}
 		
 		if ( $this->media_type )

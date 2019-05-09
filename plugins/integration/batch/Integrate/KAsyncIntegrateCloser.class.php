@@ -3,35 +3,35 @@
  * @package plugins.integration
  * @subpackage Scheduler
  */
-class KAsyncIntegrateCloser extends KJobCloserWorker
+class VAsyncIntegrateCloser extends VJobCloserWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::INTEGRATION;
+		return VidiunBatchJobType::INTEGRATION;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->close($job, $job->data);
 	}
 	
-	protected function close(KalturaBatchJob $job, KalturaIntegrationJobData $data)
+	protected function close(VidiunBatchJob $job, VidiunIntegrationJobData $data)
 	{
 		if(($job->queueTime + self::$taskConfig->params->maxTimeBeforeFail) < time())
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', VidiunBatchJobStatus::FAILED);
 		}
 		
 		$engine = $this->getEngine($job->jobSubType);
 		if(!$engine)
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::ENGINE_NOT_FOUND, "Engine not found", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::ENGINE_NOT_FOUND, "Engine not found", VidiunBatchJobStatus::FAILED);
 		}
 		
 		$this->impersonate($job->partnerId);
@@ -40,18 +40,18 @@ class KAsyncIntegrateCloser extends KJobCloserWorker
 		
 		if(!$finished)
 		{
-			return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::ALMOST_DONE, $data);
+			return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::ALMOST_DONE, $data);
 		}
 		
-		return $this->closeJob($job, null, null, "Integrated", KalturaBatchJobStatus::FINISHED, $data);
+		return $this->closeJob($job, null, null, "Integrated", VidiunBatchJobStatus::FINISHED, $data);
 	}
 
 	/**
-	 * @param KalturaIntegrationProviderType $type
-	 * @return KIntegrationCloserEngine
+	 * @param VidiunIntegrationProviderType $type
+	 * @return VIntegrationCloserEngine
 	 */
 	protected function getEngine($type)
 	{
-		return KalturaPluginManager::loadObject('KIntegrationCloserEngine', $type);
+		return VidiunPluginManager::loadObject('VIntegrationCloserEngine', $type);
 	}
 }

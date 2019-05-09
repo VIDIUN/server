@@ -1,5 +1,5 @@
 <?php
-class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObjectChangedEventConsumer
+class vDropFolderXmlEventsConsumer implements vBatchJobStatusEventConsumer, vObjectChangedEventConsumer
 {
 	const UPLOADED_BY = 'Drop Folder';
 	const DROP_FOLDER_RESOURCE_NODE_NAME = 'dropFolderFileContentResource';
@@ -9,7 +9,7 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 	
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns) 
 	{
@@ -28,13 +28,13 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process objectChangedEvent for drop folder file ['.$object->getDropFolderId().'] - '.$e->getMessage());
+			VidiunLog::err('Failed to process objectChangedEvent for drop folder file ['.$object->getDropFolderId().'] - '.$e->getMessage());
 		}
 		return true;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns) 
 	{
@@ -48,7 +48,7 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 				
 				if(!$folder)
 				{
-					KalturaLog::err('Failed to process shouldConsumeChangedEvent - Failed to retrieve drop folder with ID ' . $object->getDropFolderId());
+					VidiunLog::err('Failed to process shouldConsumeChangedEvent - Failed to retrieve drop folder with ID ' . $object->getDropFolderId());
 					return false;
 				}
 				
@@ -58,14 +58,14 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process shouldConsumeChangedEvent - '.$e->getMessage());
+			VidiunLog::err('Failed to process shouldConsumeChangedEvent - '.$e->getMessage());
 		} 		
 		
 		return false;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -78,19 +78,19 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 						in_array($dbBatchJob->getStatus(), $jobStatuses))
 			{
 				$data = $dbBatchJob->getData();
-				if($data instanceof kBulkUploadJobData && $data->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY)
+				if($data instanceof vBulkUploadJobData && $data->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY)
 					return true;
 			}	
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process shouldConsumeJobStatusEvent - '.$e->getMessage());
+			VidiunLog::err('Failed to process shouldConsumeJobStatusEvent - '.$e->getMessage());
 		}
 		return false;	
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -100,7 +100,7 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process updatedJob - '.$e->getMessage());
+			VidiunLog::err('Failed to process updatedJob - '.$e->getMessage());
 		}
 		return true;
 	}
@@ -117,20 +117,20 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 				if(!is_null($jobData->getFilePath()))
 				{
 					$syncKey = $dbBatchJob->getSyncKey(BatchJob::FILE_SYNC_BATCHJOB_SUB_TYPE_BULKUPLOAD);
-					if(!kFileSyncUtils::fileSync_exists($syncKey))
+					if(!vFileSyncUtils::fileSync_exists($syncKey))
 					{
 						try
 						{
-							kFileSyncUtils::moveFromFile($jobData->getFilePath(), $syncKey, true);
+							vFileSyncUtils::moveFromFile($jobData->getFilePath(), $syncKey, true);
 						}
 						catch (Exception $e)
 						{
-							KalturaLog::err($e);
+							VidiunLog::err($e);
 							throw new APIException(APIErrors::BULK_UPLOAD_CREATE_CSV_FILE_SYNC_ERROR);
 						}
 					}
 
-					$filePath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+					$filePath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 					$jobData->setFilePath($filePath);
 					
 					//save new info on the batch job
@@ -177,7 +177,7 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 	
 	private function setFileError(DropFolderFile $file, $status, $errorCode, $errorDescription)
 	{
-		KalturaLog::err('Error with file ['.$file->getId().'] -'.$errorDescription);
+		VidiunLog::err('Error with file ['.$file->getId().'] -'.$errorDescription);
 		
 		$file->setStatus($status);
 		$file->setErrorCode($errorCode);
@@ -194,7 +194,7 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 	private function onXmlDropFolderFileStatusChangedToPurged(DropFolder $folder, DropFolderFile $file)
 	{
 		
-		$xmlFileHandler = kDropFolderXmlFileHandler::getHandlerInstance($folder->getType());
+		$xmlFileHandler = vDropFolderXmlFileHandler::getHandlerInstance($folder->getType());
 		$xmlFileHandler->handlePurgedDropFolderFile($folder, $file);
 	}
 	
@@ -210,12 +210,12 @@ class kDropFolderXmlEventsConsumer implements kBatchJobStatusEventConsumer, kObj
 		$relatedFiles = array();
 		try 
 		{
-			$xmlFileHandler = kDropFolderXmlFileHandler::getHandlerInstance($folder->getType());
+			$xmlFileHandler = vDropFolderXmlFileHandler::getHandlerInstance($folder->getType());
 			$xmlFileHandler->handlePendingDropFolderFile($folder, $file);
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err("Error in  onXmlDropFolderFileStatusChangedToPending -".$e->getMessage());
+			VidiunLog::err("Error in  onXmlDropFolderFileStatusChangedToPending -".$e->getMessage());
 			if($e->getCode() == DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::ERROR_ADDING_BULK_UPLOAD))
 			{
 				foreach ($relatedFiles as $relatedFile) 

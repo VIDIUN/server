@@ -28,43 +28,43 @@ class serveManifestAction extends sfAction
 			list($objectId, $type) = @explode(".", $objectIdStr);
 		
 		if (!$type || !$objectId)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER);
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER);
 			
-		$ks = $this->getRequestParameter( "ks" );
+		$vs = $this->getRequestParameter( "vs" );
 		$referrer = base64_decode($this->getRequestParameter("referrer"));
 		if (!is_string($referrer)) // base64_decode can return binary data
 			$referrer = '';
 						
 		$syncKey = $this->getFileSyncKey($objectId, $type);
 		
-		KalturaMonitorClient::initApiMonitor(false, 'extwidget.serveManifest', $this->entry->getPartnerId());
+		VidiunMonitorClient::initApiMonitor(false, 'extwidget.serveManifest', $this->entry->getPartnerId());
 		
 		myPartnerUtils::enforceDelivery($this->entry, $this->flavorAsset);
 		
-		if (!kFileSyncUtils::file_exists($syncKey, false))
+		if (!vFileSyncUtils::file_exists($syncKey, false))
 		{
-			list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+			list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 			
 			if (is_null($fileSync))
 			{
-				KalturaLog::log("Error - no FileSync for type [$type] objectId [$objectId]");
-				KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+				VidiunLog::log("Error - no FileSync for type [$type] objectId [$objectId]");
+				VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 			}
 			
-			$remoteUrl = kDataCenterMgr::getRedirectExternalUrl($fileSync);
-			kFileUtils::dumpUrl($remoteUrl);
+			$remoteUrl = vDataCenterMgr::getRedirectExternalUrl($fileSync);
+			vFileUtils::dumpUrl($remoteUrl);
 		}
 		
 		if($type == 'ism')
 		{
-			$fileData = kExtWidgetUtils::fixIsmManifestForReplacedEntry($syncKey, $this->entry);
-			$renderer = new kRendererString($fileData, 'image/ism');
+			$fileData = vExtWidgetUtils::fixIsmManifestForReplacedEntry($syncKey, $this->entry);
+			$renderer = new vRendererString($fileData, 'image/ism');
 			$renderer->output();
-            KExternalErrors::dieGracefully();	
+            VExternalErrors::dieGracefully();	
 		}
 		else
 		{
-			kFileSyncUtils::dumpFileByFileSyncKey($syncKey);
+			vFileSyncUtils::dumpFileByFileSyncKey($syncKey);
 		}
 		
 		
@@ -82,7 +82,7 @@ class serveManifestAction extends sfAction
 		
 		if($hasVersion)
 		{
-			list($objectId, $version, $subType, $isAsset, $entryId) = kExtWidgetUtils::parseObjectId($objectId);
+			list($objectId, $version, $subType, $isAsset, $entryId) = vExtWidgetUtils::parseObjectId($objectId);
 		}
 
 		switch ($type)
@@ -113,12 +113,12 @@ class serveManifestAction extends sfAction
 				$isAsset = true;
 				break;
 			default:
-				KExternalErrors::dieError(KExternalErrors::INVALID_ISM_FILE_TYPE);
+				VExternalErrors::dieError(VExternalErrors::INVALID_ISM_FILE_TYPE);
 		}
 		
 		$object = $this->getObject($objectId, $isAsset);
 		if(!$object)
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 			
 		
 		$key = $object->getSyncKey($subType, $version);
@@ -132,11 +132,11 @@ class serveManifestAction extends sfAction
 		{
 			$this->flavorAsset = assetPeer::retrieveById($objectId);
 			if (is_null($this->flavorAsset))
-				KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 				
 			$this->entry = entryPeer::retrieveByPK($this->flavorAsset->getEntryId());
 			if (is_null($this->entry))
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 				
 			return $this->flavorAsset;
 		}	
@@ -144,7 +144,7 @@ class serveManifestAction extends sfAction
 		{
 			$this->entry = entryPeer::retrieveByPK($objectId);
 			if (is_null($this->entry))
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 				
 				return $this->entry;
 		}				

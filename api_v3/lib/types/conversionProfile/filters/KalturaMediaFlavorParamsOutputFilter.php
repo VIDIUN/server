@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaMediaFlavorParamsOutputFilter extends KalturaMediaFlavorParamsOutputBaseFilter
+class VidiunMediaFlavorParamsOutputFilter extends VidiunMediaFlavorParamsOutputBaseFilter
 {
 }

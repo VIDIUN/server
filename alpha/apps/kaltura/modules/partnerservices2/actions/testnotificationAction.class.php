@@ -27,18 +27,18 @@ class testnotificationAction extends defPartnerservices2Action
 	}
 	
 	protected function ticketType()	{		return self::REQUIED_TICKET_REGULAR;	}
-	// ask to fetch the kuser from puser_kuser
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER ;	}
+	// ask to fetch the vuser from puser_vuser
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER ;	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$prefix = null;
-		$notData = new kNotificationJobData();
+		$notData = new vNotificationJobData();
 		$notData->setData('');
-		$notData->setType(kNotificationJobData::NOTIFICATION_TYPE_TEST);
+		$notData->setType(vNotificationJobData::NOTIFICATION_TYPE_TEST);
 		$notData->setUserId($puser_id);
 		$job = new BatchJob();
-		$job->setId(kNotificationJobData::NOTIFICATION_TYPE_TEST + (int)time());
+		$job->setId(vNotificationJobData::NOTIFICATION_TYPE_TEST + (int)time());
 		$job->setData($notData);
 		$job->setPartnerId($partner_id);
 		

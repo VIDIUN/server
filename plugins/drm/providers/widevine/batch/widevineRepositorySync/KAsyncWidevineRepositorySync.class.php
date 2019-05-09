@@ -1,17 +1,17 @@
 <?php
 
-class KAsyncWidevineRepositorySync extends KJobHandlerWorker
+class VAsyncWidevineRepositorySync extends VJobHandlerWorker
 {	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::WIDEVINE_REPOSITORY_SYNC;
+		return VidiunBatchJobType::WIDEVINE_REPOSITORY_SYNC;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getJobType()
+	 * @see VBatchBase::getJobType()
 	 */
 	public function getJobType()
 	{
@@ -19,36 +19,36 @@ class KAsyncWidevineRepositorySync extends KJobHandlerWorker
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->syncRepository($job, $job->data);			
 	}
 
-	protected function syncRepository(KalturaBatchJob $job, KalturaWidevineRepositorySyncJobData $data)
+	protected function syncRepository(VidiunBatchJob $job, VidiunWidevineRepositorySyncJobData $data)
 	{
-		$job = $this->updateJob($job, "Start synchronization of Widevine repository", KalturaBatchJobStatus::QUEUED);
+		$job = $this->updateJob($job, "Start synchronization of Widevine repository", VidiunBatchJobStatus::QUEUED);
 				
 		switch ($data->syncMode)
 		{
-			case KalturaWidevineRepositorySyncMode::MODIFY:
+			case VidiunWidevineRepositorySyncMode::MODIFY:
 				$this->sendModifyRequest($job, $data);
 				break;
 			default:
-				throw new kApplicativeException(null, "Unknown sync mode [".$data->syncMode. "]");
+				throw new vApplicativeException(null, "Unknown sync mode [".$data->syncMode. "]");
 		}
 
-		return $this->closeJob($job, null, null, "Sync request sent successfully", KalturaBatchJobStatus::FINISHED, $data);
+		return $this->closeJob($job, null, null, "Sync request sent successfully", VidiunBatchJobStatus::FINISHED, $data);
 	}		
 
 	/**
 	 * Send asset notify request to VOD Dealer to update widevine assets
 	 * 
-	 * @param KalturaBatchJob $job
-	 * @param KalturaWidevineRepositorySyncJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunWidevineRepositorySyncJobData $data
 	 */
-	private function sendModifyRequest(KalturaBatchJob $job, KalturaWidevineRepositorySyncJobData $data)
+	private function sendModifyRequest(VidiunBatchJob $job, VidiunWidevineRepositorySyncJobData $data)
 	{
 		$dataWrap = new WidevineRepositorySyncJobDataWrap($data);		
 		$widevineAssets = $dataWrap->getWidevineAssetIds();
@@ -57,8 +57,8 @@ class KAsyncWidevineRepositorySync extends KJobHandlerWorker
 
 		$this->impersonate($job->partnerId);
 
-		$drmPlugin = KalturaDrmClientPlugin::get(KBatchBase::$kClient);
-		$profile = $drmPlugin->drmProfile->getByProvider(KalturaDrmProviderType::WIDEVINE);
+		$drmPlugin = VidiunDrmClientPlugin::get(VBatchBase::$vClient);
+		$profile = $drmPlugin->drmProfile->getByProvider(VidiunDrmProviderType::WIDEVINE);
 
 		foreach ($widevineAssets as $assetId) 
 		{
@@ -77,15 +77,15 @@ class KAsyncWidevineRepositorySync extends KJobHandlerWorker
 	 * @param int $assetId
 	 * @param string $licenseStartDate
 	 * @param string $licenseEndDate
-	 * @throws kApplicativeException
+	 * @throws vApplicativeException
 	 */
 	private function updateWidevineAsset($assetId, $licenseStartDate, $licenseEndDate, $profile)
 	{
-		KalturaLog::debug("Update asset [".$assetId."] license start date [".$licenseStartDate.'] license end date ['.$licenseEndDate.']');
+		VidiunLog::debug("Update asset [".$assetId."] license start date [".$licenseStartDate.'] license end date ['.$licenseEndDate.']');
 		
 		$errorMessage = '';
 		
-		$wvAssetId = KWidevineBatchHelper::sendRegisterAssetRequest(
+		$wvAssetId = VWidevineBatchHelper::sendRegisterAssetRequest(
 										$profile->regServerHost,
 										null,
 										$assetId,
@@ -99,38 +99,38 @@ class KAsyncWidevineRepositorySync extends KJobHandlerWorker
 		
 		if(!$wvAssetId)
 		{
-			KBatchBase::unimpersonate();
+			VBatchBase::unimpersonate();
 			
 			$logMessage = 'Asset update failed, asset id: '.$assetId.' error: '.$errorMessage;
-			KalturaLog::err($logMessage);
-			throw new kApplicativeException(null, $logMessage);
+			VidiunLog::err($logMessage);
+			throw new vApplicativeException(null, $logMessage);
 		}			
 	}
 	
 	/**
-	 * Update flavorAsset in Kaltura after the distribution dates apllied to Wideivne asset
+	 * Update flavorAsset in Vidiun after the distribution dates apllied to Wideivne asset
 	 * 
-	 * @param KalturaBatchJob $job
+	 * @param VidiunBatchJob $job
 	 * @param WidevineRepositorySyncJobDataWrap $dataWrap
 	 */
-	private function updateFlavorAssets(KalturaBatchJob $job, WidevineRepositorySyncJobDataWrap $dataWrap)
+	private function updateFlavorAssets(VidiunBatchJob $job, WidevineRepositorySyncJobDataWrap $dataWrap)
 	{	
 		$startDate = $dataWrap->getLicenseStartDate();
 		$endDate = $dataWrap->getLicenseEndDate();	
 		
-		$filter = new KalturaAssetFilter();
+		$filter = new VidiunAssetFilter();
 		$filter->entryIdEqual = $job->entryId;
 		$filter->tagsLike = 'widevine';
-		$flavorAssetsList = self::$kClient->flavorAsset->listAction($filter, new KalturaFilterPager());
+		$flavorAssetsList = self::$vClient->flavorAsset->listAction($filter, new VidiunFilterPager());
 		
 		foreach ($flavorAssetsList->objects as $flavorAsset) 
 		{
-			if($flavorAsset instanceof KalturaWidevineFlavorAsset && $dataWrap->hasAssetId($flavorAsset->widevineAssetId))
+			if($flavorAsset instanceof VidiunWidevineFlavorAsset && $dataWrap->hasAssetId($flavorAsset->widevineAssetId))
 			{
-				$updatedFlavorAsset = new KalturaWidevineFlavorAsset();
+				$updatedFlavorAsset = new VidiunWidevineFlavorAsset();
 				$updatedFlavorAsset->widevineDistributionStartDate = $startDate;
 				$updatedFlavorAsset->widevineDistributionEndDate = $endDate;
-				self::$kClient->flavorAsset->update($flavorAsset->id, $updatedFlavorAsset);
+				self::$vClient->flavorAsset->update($flavorAsset->id, $updatedFlavorAsset);
 			}		
 		}		
 	}

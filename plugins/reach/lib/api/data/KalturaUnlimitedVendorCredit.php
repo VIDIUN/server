@@ -4,7 +4,7 @@
  * @subpackage api.objects
  */
 
-class KalturaUnlimitedVendorCredit extends KalturaBaseVendorCredit
+class VidiunUnlimitedVendorCredit extends VidiunBaseVendorCredit
 {
 	/**
 	 *  @var int
@@ -34,7 +34,7 @@ class KalturaUnlimitedVendorCredit extends KalturaBaseVendorCredit
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	*/
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -44,13 +44,13 @@ class KalturaUnlimitedVendorCredit extends KalturaBaseVendorCredit
 	}
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+ 	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
  	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kUnlimitedVendorCredit();
+			$dbObject = new vUnlimitedVendorCredit();
 		}
 
 		return parent::toObject($dbObject, $propsToSkip);
@@ -61,7 +61,7 @@ class KalturaUnlimitedVendorCredit extends KalturaBaseVendorCredit
 		if(parent::hasObjectChanged($sourceObject))
 			return true;
 		
-		/* @var $sourceObject kUnlimitedVendorCredit */
+		/* @var $sourceObject vUnlimitedVendorCredit */
 		if( ($this->credit && $this->credit != $sourceObject->getCredit())
 			|| ($this->fromDate && $this->fromDate != $sourceObject->getFromDate())
 		)

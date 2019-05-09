@@ -3,7 +3,7 @@
  * @package plugins.sphinxSearch
  * @subpackage model.filters
  */
-class SphinxKuserCriteria extends SphinxCriteria
+class SphinxVuserCriteria extends SphinxCriteria
 {
     public function __construct()
     {
@@ -11,7 +11,7 @@ class SphinxKuserCriteria extends SphinxCriteria
     }
     
     public function getIndexObjectName() {
-    	return "kuserIndex";
+    	return "vuserIndex";
     }
     
 	/* (non-PHPdoc)
@@ -19,33 +19,33 @@ class SphinxKuserCriteria extends SphinxCriteria
 	 */
 	protected function applyFilterFields(baseObjectFilter $filter)
 	{		
-		//Role ids and kuser permission names are indexed with the partner ID
+		//Role ids and vuser permission names are indexed with the partner ID
 		if ($filter->get('_eq_role_ids'))
 		{
-			$filter->set('_eq_role_ids', kuser::getIndexedFieldValue('kuserPeer::ROLE_IDS', $filter->get('_eq_role_ids'), kCurrentContext::getCurrentPartnerId()));
+			$filter->set('_eq_role_ids', vuser::getIndexedFieldValue('vuserPeer::ROLE_IDS', $filter->get('_eq_role_ids'), vCurrentContext::getCurrentPartnerId()));
 		}
 		if ($filter->get('_in_role_ids'))
 		{
-			$filter->set('_eq_role_ids', kuser::getIndexedFieldValue('kuserPeer::ROLE_IDS', $filter->get('_eq_role_ids'), kCurrentContext::getCurrentPartnerId()));
+			$filter->set('_eq_role_ids', vuser::getIndexedFieldValue('vuserPeer::ROLE_IDS', $filter->get('_eq_role_ids'), vCurrentContext::getCurrentPartnerId()));
 		}
 		if ($filter->get('_mlikeand_permission_names'))
 		{
-			$permissionNames = kuser::getIndexedFieldValue('kuserPeer::PERMISSION_NAMES', $filter->get('_mlikeand_permission_names'), kCurrentContext::getCurrentPartnerId());
+			$permissionNames = vuser::getIndexedFieldValue('vuserPeer::PERMISSION_NAMES', $filter->get('_mlikeand_permission_names'), vCurrentContext::getCurrentPartnerId());
 			$permissionNames = implode(' ', explode(',', $permissionNames));
-			$universalPermissionName = kuser::getIndexedFieldValue('kuserPeer::PERMISSION_NAMES', kuser::UNIVERSAL_PERMISSION, kCurrentContext::getCurrentPartnerId());
+			$universalPermissionName = vuser::getIndexedFieldValue('vuserPeer::PERMISSION_NAMES', vuser::UNIVERSAL_PERMISSION, vCurrentContext::getCurrentPartnerId());
 			$value = "($universalPermissionName | ($permissionNames))";
 			$this->addMatch("@permission_names $value");
 			$filter->unsetByName('_mlikeand_permission_names');
 		}
 		if ($filter->get('_mlikeor_permission_names'))
 		{
-			$filter->set('_mlikeor_permission_names', kuser::getIndexedFieldValue('kuserPeer::PERMISSION_NAMES', $filter->get('_mlikeor_permission_names').','.kuser::UNIVERSAL_PERMISSION, kCurrentContext::getCurrentPartnerId()));
+			$filter->set('_mlikeor_permission_names', vuser::getIndexedFieldValue('vuserPeer::PERMISSION_NAMES', $filter->get('_mlikeor_permission_names').','.vuser::UNIVERSAL_PERMISSION, vCurrentContext::getCurrentPartnerId()));
 		}
 		
 		if($filter->get('_likex_puser_id_or_screen_name'))
 		{
 			$freeTexts = $filter->get('_likex_puser_id_or_screen_name');
-			KalturaLog::debug("Attach free text [$freeTexts]");
+			VidiunLog::debug("Attach free text [$freeTexts]");
 			
 			$additionalConditions = array();
 			$advancedSearch = $filter->getAdvancedSearch();
@@ -54,16 +54,16 @@ class SphinxKuserCriteria extends SphinxCriteria
 				$additionalConditions = $advancedSearch->getFreeTextConditions($filter->getPartnerSearchScope(), $freeTexts);
 			}
 			
-			$this->addFreeTextToMatchClauseByMatchFields($freeTexts, kuserFilter::PUSER_ID_OR_SCREEN_NAME, $additionalConditions, true);
+			$this->addFreeTextToMatchClauseByMatchFields($freeTexts, vuserFilter::PUSER_ID_OR_SCREEN_NAME, $additionalConditions, true);
 		}
 		$filter->unsetByName('_likex_puser_id_or_screen_name');
 		
 		if($filter->get('_likex_first_name_or_last_name'))
 		{
 			$names = $filter->get('_likex_first_name_or_last_name');
-			KalturaLog::debug("Attach free text [$names]");
+			VidiunLog::debug("Attach free text [$names]");
 			
-			$this->addFreeTextToMatchClauseByMatchFields($names, kuserFilter::FIRST_NAME_OR_LAST_NAME, null, true);
+			$this->addFreeTextToMatchClauseByMatchFields($names, vuserFilter::FIRST_NAME_OR_LAST_NAME, null, true);
 		}
 		$filter->unsetByName('_likex_first_name_or_last_name');
 		

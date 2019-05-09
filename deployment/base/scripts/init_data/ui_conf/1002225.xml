@@ -1,9 +1,9 @@
-<kcw>
+<vcw>
   <UIConfigList>
     <UIConfig>
       <target>ContributionWizard.swf</target>
-      <cssUrl id="" name="">/content/uiconf/kaltura/generic/kcw_2.0/light/kcw_styles.swf?R=13977.16021037954</cssUrl>
-      <localeUrl id="" name="">/content/uiconf/moodle/kcw/dark/kcw_en_US.swf?R=13977.16021037954</localeUrl>
+      <cssUrl id="" name="">/content/uiconf/vidiun/generic/vcw_2.0/light/vcw_styles.swf?R=13977.16021037954</cssUrl>
+      <localeUrl id="" name="">/content/uiconf/moodle/vcw/dark/vcw_en_US.swf?R=13977.16021037954</localeUrl>
     </UIConfig>
   </UIConfigList>
   <webcamParams>
@@ -153,4 +153,4 @@
       <mediaProviderName>upload</mediaProviderName>
     </gotoScreen>
   </StartupDefaults>
-</kcw>
+</vcw>

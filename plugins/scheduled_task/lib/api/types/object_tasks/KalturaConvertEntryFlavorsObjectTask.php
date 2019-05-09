@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects.objectTasks
  */
-class KalturaConvertEntryFlavorsObjectTask extends KalturaObjectTask
+class VidiunConvertEntryFlavorsObjectTask extends VidiunObjectTask
 {
 	/**
 	 * Comma separated list of flavor param ids to convert
@@ -27,20 +27,20 @@ class KalturaConvertEntryFlavorsObjectTask extends KalturaObjectTask
 
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/** @var kObjectTask $dbObject */
+		/** @var vObjectTask $dbObject */
 		$dbObject = parent::toObject($dbObject, $skip);
 
-		$flavorParamsIds = array_unique(kString::fromCommaSeparatedToArray($this->flavorParamsIds));
+		$flavorParamsIds = array_unique(vString::fromCommaSeparatedToArray($this->flavorParamsIds));
 		$dbObject->setDataValue('flavorParamsIds', $flavorParamsIds);
 		$dbObject->setDataValue('reconvert', $this->reconvert);
 		return $dbObject;
 	}
 
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
 
-		/** @var kObjectTask $srcObj */
+		/** @var vObjectTask $srcObj */
 		if($this->shouldGet('flavorParamsIds', $responseProfile))
 			$this->flavorParamsIds = implode(',', $srcObj->getDataValue('flavorParamsIds'));
 			

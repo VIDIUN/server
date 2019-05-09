@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaVendorCatalogItemPricing extends KalturaObject
+class VidiunVendorCatalogItemPricing extends VidiunObject
 {
 	/**
 	 * @var float
@@ -11,7 +11,7 @@ class KalturaVendorCatalogItemPricing extends KalturaObject
 	public $pricePerUnit;
 	
 	/**
-	 * @var KalturaVendorCatalogItemPriceFunction
+	 * @var VidiunVendorCatalogItemPriceFunction
 	 */
 	public $priceFunction;
 	
@@ -22,7 +22,7 @@ class KalturaVendorCatalogItemPricing extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::getMapBetweenObjects()
+ 	 * @see VidiunObject::getMapBetweenObjects()
  	 */
 	public function getMapBetweenObjects()
 	{
@@ -30,13 +30,13 @@ class KalturaVendorCatalogItemPricing extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kVendorCatalogItemPricing();
+			$dbObject = new vVendorCatalogItemPricing();
 		}
 		
 		return parent::toObject($dbObject, $propsToSkip);

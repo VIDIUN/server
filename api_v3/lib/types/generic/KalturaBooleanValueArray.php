@@ -1,26 +1,26 @@
 <?php
 /**
- * An array of KalturaBooleanValue
+ * An array of VidiunBooleanValue
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaBooleanValueArray extends KalturaTypedArray
+class VidiunBooleanValueArray extends VidiunTypedArray
 {
 	/**
-	 * @param array<string|kBooleanValue> $strings
-	 * @return KalturaBooleanValueArray
+	 * @param array<string|vBooleanValue> $strings
+	 * @return VidiunBooleanValueArray
 	 */
-	public static function fromDbArray(array $bools = null, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $bools = null, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$boolArray = new KalturaBooleanValueArray();
+		$boolArray = new VidiunBooleanValueArray();
 		if($bools && is_array($bools))
 		{
 			foreach($bools as $bool)
 			{
-				$boolObject = new KalturaBooleanValue();
+				$boolObject = new VidiunBooleanValue();
 				
-				if($bool instanceof kValue)
+				if($bool instanceof vValue)
 				{
 					$boolObject->fromObject($bool, $responseProfile);;
 				}
@@ -37,6 +37,6 @@ class KalturaBooleanValueArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaBooleanValue");
+		return parent::__construct("VidiunBooleanValue");
 	}
 }

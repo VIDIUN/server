@@ -11,14 +11,14 @@ class Form_ContentFileHandlerConfig extends Form_BaseFileHandlerConfig
 	 */
 	protected function getFileHandlerType()
 	{
-		return Kaltura_Client_DropFolder_Enum_DropFolderFileHandlerType::CONTENT;
+		return Vidiun_Client_DropFolder_Enum_DropFolderFileHandlerType::CONTENT;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see Form_BaseFileHandlerConfig::applyObjectAttributes()
 	 */
-	public function applyObjectAttributes(Kaltura_Client_DropFolder_Type_DropFolder &$object)
+	public function applyObjectAttributes(Vidiun_Client_DropFolder_Type_DropFolder &$object)
 	{
 		if (isset ($object->fileHandlerConfig1['metadataProfileId']))
 			$object->metadataProfileId = $object->fileHandlerConfig1['metadataProfileId'];
@@ -42,7 +42,7 @@ class Form_ContentFileHandlerConfig extends Form_BaseFileHandlerConfig
 	 */
 	public function init()
 	{
-		$fileDeletePolicies = new Kaltura_Form_Element_EnumSelect('contentMatchPolicy', array('enum' => 'Kaltura_Client_DropFolder_Enum_DropFolderContentFileHandlerMatchPolicy'));
+		$fileDeletePolicies = new Vidiun_Form_Element_EnumSelect('contentMatchPolicy', array('enum' => 'Vidiun_Client_DropFolder_Enum_DropFolderContentFileHandlerMatchPolicy'));
 		$fileDeletePolicies->setLabel('Content Match Policy:');
 		$fileDeletePolicies->setRequired(true);
 		$this->addElement($fileDeletePolicies);
@@ -72,7 +72,7 @@ class Form_ContentFileHandlerConfig extends Form_BaseFileHandlerConfig
 	}
 
 	/**
-	 * @param Kaltura_Client_ObjectBase $object
+	 * @param Vidiun_Client_ObjectBase $object
 	 * @param boolean $add_underscore
 	 */
 	public function populateFromObject($object, $dropFolderObject, $add_underscore = true)

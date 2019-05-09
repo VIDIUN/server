@@ -4,12 +4,12 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects.objectTasks
  */
-class KalturaDeleteEntryFlavorsObjectTask extends KalturaObjectTask
+class VidiunDeleteEntryFlavorsObjectTask extends VidiunObjectTask
 {
 	/**
 	 * The logic to use to choose the flavors for deletion
 	 *
-	 * @var KalturaDeleteFlavorsLogicType
+	 * @var VidiunDeleteFlavorsLogicType
 	 */
 	public $deleteType;
 
@@ -27,20 +27,20 @@ class KalturaDeleteEntryFlavorsObjectTask extends KalturaObjectTask
 
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/** @var kObjectTask $dbObject */
+		/** @var vObjectTask $dbObject */
 		$dbObject = parent::toObject($dbObject, $skip);
 
-		$flavorParamsIds = array_unique(kString::fromCommaSeparatedToArray($this->flavorParamsIds));
+		$flavorParamsIds = array_unique(vString::fromCommaSeparatedToArray($this->flavorParamsIds));
 		$dbObject->setDataValue('deleteType', $this->deleteType);
 		$dbObject->setDataValue('flavorParamsIds', $flavorParamsIds);
 		return $dbObject;
 	}
 
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
 
-		/** @var kObjectTask $srcObj */
+		/** @var vObjectTask $srcObj */
 		$this->deleteType = $srcObj->getDataValue('deleteType');
 		$this->flavorParamsIds = implode(',', $srcObj->getDataValue('flavorParamsIds'));
 	}

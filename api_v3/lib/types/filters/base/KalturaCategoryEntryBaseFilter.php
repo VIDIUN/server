@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaCategoryEntryBaseFilter extends KalturaRelatedFilter
+abstract class VidiunCategoryEntryBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -74,7 +74,7 @@ abstract class KalturaCategoryEntryBaseFilter extends KalturaRelatedFilter
 	public $categoryFullIdsStartsWith;
 
 	/**
-	 * @var KalturaCategoryEntryStatus
+	 * @var VidiunCategoryEntryStatus
 	 */
 	public $statusEqual;
 

@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model
  */
-class kCategoryIdentifier extends kObjectIdentifier
+class vCategoryIdentifier extends vObjectIdentifier
 {
 	/* (non-PHPdoc)
-	 * @see KObjectIdentifier::retrieveByIdentifier()
+	 * @see VObjectIdentifier::retrieveByIdentifier()
 	 */
 	public function retrieveByIdentifier ($value, $partnerId = null)
 	{

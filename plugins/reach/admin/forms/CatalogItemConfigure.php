@@ -61,50 +61,50 @@ class Form_CatalogItemConfigure extends ConfigureForm
 			'readonly' => $this->disableAttributes,
 		));
 
-		$catalogItemForView = new Kaltura_Form_Element_EnumSelect('serviceFeature', array('enum' => 'Kaltura_Client_Reach_Enum_VendorServiceFeature'));
+		$catalogItemForView = new Vidiun_Form_Element_EnumSelect('serviceFeature', array('enum' => 'Vidiun_Client_Reach_Enum_VendorServiceFeature'));
 		$catalogItemForView->setLabel('Service Feature:');
 		if ($this->catalogItemType)
 			$catalogItemForView->setValue($this->catalogItemType);
 		else
-			$catalogItemForView->setValue(Kaltura_Client_Reach_Enum_VendorServiceFeature::CAPTIONS);
+			$catalogItemForView->setValue(Vidiun_Client_Reach_Enum_VendorServiceFeature::CAPTIONS);
 		$catalogItemForView->setAttrib('disabled', 'disabled');
 		$this->addElement($catalogItemForView);
 
-		$serviceTypeForView = new Kaltura_Form_Element_EnumSelect('serviceType', array('enum' => 'Kaltura_Client_Reach_Enum_VendorServiceType'));
+		$serviceTypeForView = new Vidiun_Form_Element_EnumSelect('serviceType', array('enum' => 'Vidiun_Client_Reach_Enum_VendorServiceType'));
 		$serviceTypeForView->setLabel('Service Type:');
 		$serviceTypeForView->setRequired(true);
 		if ($this->catalogItemServiceType)
 			$serviceTypeForView->setValue($this->catalogItemServiceType);
 		else
-			$serviceTypeForView->setValue(Kaltura_Client_Reach_Enum_VendorServiceType::HUMAN);
+			$serviceTypeForView->setValue(Vidiun_Client_Reach_Enum_VendorServiceType::HUMAN);
 
 		$this->addElement($serviceTypeForView);
 
-		$turnAroundTimeForView = new Kaltura_Form_Element_EnumSelect('turnAroundTime', array('enum' => 'Kaltura_Client_Reach_Enum_VendorServiceTurnAroundTime'));
+		$turnAroundTimeForView = new Vidiun_Form_Element_EnumSelect('turnAroundTime', array('enum' => 'Vidiun_Client_Reach_Enum_VendorServiceTurnAroundTime'));
 		$turnAroundTimeForView->setLabel('Turn Around Time:');
 		$turnAroundTimeForView->setRequired(true);
 		if ($this->catalogItemTurnAroundTime)
 			$turnAroundTimeForView->setValue($this->catalogItemTurnAroundTime);
 		else
-			$turnAroundTimeForView->setValue(Kaltura_Client_Reach_Enum_VendorServiceTurnAroundTime::BEST_EFFORT);
+			$turnAroundTimeForView->setValue(Vidiun_Client_Reach_Enum_VendorServiceTurnAroundTime::BEST_EFFORT);
 		$this->addElement($turnAroundTimeForView);
 
-		$sourceLanguage = new Kaltura_Form_Element_EnumSelect('sourceLanguage', array('enum' => 'Kaltura_Client_Reach_Enum_CatalogItemLanguage'));
+		$sourceLanguage = new Vidiun_Form_Element_EnumSelect('sourceLanguage', array('enum' => 'Vidiun_Client_Reach_Enum_CatalogItemLanguage'));
 		$sourceLanguage->setLabel('Source Language:');
 		$sourceLanguage->setRequired(true);
-		$sourceLanguage->setValue(Kaltura_Client_Reach_Enum_CatalogItemLanguage::EN);
+		$sourceLanguage->setValue(Vidiun_Client_Reach_Enum_CatalogItemLanguage::EN);
 		$this->addElement($sourceLanguage);
 
-		if ($this->catalogItemType == Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
+		if ($this->catalogItemType == Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
 		{
-			$targetLanguage = new Kaltura_Form_Element_EnumSelect('targetLanguage', array('enum' => 'Kaltura_Client_Reach_Enum_CatalogItemLanguage'));
+			$targetLanguage = new Vidiun_Form_Element_EnumSelect('targetLanguage', array('enum' => 'Vidiun_Client_Reach_Enum_CatalogItemLanguage'));
 			$targetLanguage->setLabel('Target Language:');
 			$targetLanguage->setRequired(true);
-			$targetLanguage->setValue(Kaltura_Client_Reach_Enum_CatalogItemLanguage::EN);
+			$targetLanguage->setValue(Vidiun_Client_Reach_Enum_CatalogItemLanguage::EN);
 			$this->addElement($targetLanguage);
 		}
 		
-		if ($this->catalogItemType == Kaltura_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
+		if ($this->catalogItemType == Vidiun_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
 		{
 			$this->addElement('text', 'flavorParamsId', array(
 				'label' => 'Flavor Params ID:',
@@ -114,18 +114,18 @@ class Form_CatalogItemConfigure extends ConfigureForm
 			));
 		}
 		
-		if ($this->catalogItemType != Kaltura_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
+		if ($this->catalogItemType != Vidiun_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
 		{
-			$outputFormat = new Kaltura_Form_Element_EnumSelect('outputFormat', array('enum' => 'Kaltura_Client_Reach_Enum_VendorCatalogItemOutputFormat'), array( null => "PartnerDefault"));
+			$outputFormat = new Vidiun_Form_Element_EnumSelect('outputFormat', array('enum' => 'Vidiun_Client_Reach_Enum_VendorCatalogItemOutputFormat'), array( null => "PartnerDefault"));
 			$outputFormat->setLabel('Output Format:');
 			$outputFormat->setValue(null);
 			$this->addElement($outputFormat);
 			
-			$enableSpeakerId = new Kaltura_Form_Element_EnumSelect('enableSpeakerId', array('enum' => 'Kaltura_Client_Enum_NullableBoolean', 'excludes' => array(
-				Kaltura_Client_Enum_NullableBoolean::NULL_VALUE)));
+			$enableSpeakerId = new Vidiun_Form_Element_EnumSelect('enableSpeakerId', array('enum' => 'Vidiun_Client_Enum_NullableBoolean', 'excludes' => array(
+				Vidiun_Client_Enum_NullableBoolean::NULL_VALUE)));
 			$enableSpeakerId->setLabel('Enable Speaker ID:');
 			$enableSpeakerId->setRequired(true);
-			$enableSpeakerId->setValue(Kaltura_Client_Enum_NullableBoolean::FALSE_VALUE);
+			$enableSpeakerId->setValue(Vidiun_Client_Enum_NullableBoolean::FALSE_VALUE);
 			$this->addElement($enableSpeakerId);
 		}
 
@@ -164,7 +164,7 @@ class Form_CatalogItemConfigure extends ConfigureForm
 		$allElements = $this->getElements();
 		foreach ($allElements as $element)
 		{
-			if ($element instanceof Kaltura_Form_Element_EnumSelect)
+			if ($element instanceof Vidiun_Form_Element_EnumSelect)
 			{
 				$elementName = $element->getName();
 				if (isset($props[$elementName]))
@@ -180,9 +180,9 @@ class Form_CatalogItemConfigure extends ConfigureForm
 
 	/**
 	 * Set to null all the attributes that shouldn't be updated
-	 * @param Kaltura_Client_Reach_Type_VendorCatalogItem $catalogItem
+	 * @param Vidiun_Client_Reach_Type_VendorCatalogItem $catalogItem
 	 */
-	public function resetUnUpdatebleAttributes(Kaltura_Client_Reach_Type_VendorCatalogItem $catalogItem)
+	public function resetUnUpdatebleAttributes(Vidiun_Client_Reach_Type_VendorCatalogItem $catalogItem)
 	{
 		// reset readonly attributes
 		$catalogItem->id = null;

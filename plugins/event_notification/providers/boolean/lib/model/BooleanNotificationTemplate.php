@@ -14,9 +14,9 @@ class BooleanNotificationTemplate extends BatchEventNotificationTemplate //imple
 	/* (non-PHPdoc)
 	* @see BatchEventNotificationTemplate::getJobData()
 	*/
-	protected function getJobData(kScope $scope = null)
+	protected function getJobData(vScope $scope = null)
 	{
-		$jobData = new kEventNotificationDispatchJobData();
+		$jobData = new vEventNotificationDispatchJobData();
 		$jobData->setTemplateId($this->getId());
 		return $jobData;
 	}

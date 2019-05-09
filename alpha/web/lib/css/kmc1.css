@@ -2,26 +2,26 @@
 html { height: 100%;}
 * { margin:0; padding:0;}
 
-body { height:100%; background:#1e2020 url(../images/kmc/bg.png) repeat-x 0 -7px; font: normal 62.5% arial,sans-serif; color: #fff;}
-/* body.login{ background:#1b1e1f url(../images/kmc/glowBG.png) center 96px no-repeat; } */
+body { height:100%; background:#1e2020 url(../images/vmc/bg.png) repeat-x 0 -7px; font: normal 62.5% arial,sans-serif; color: #fff;}
+/* body.login{ background:#1b1e1f url(../images/vmc/glowBG.png) center 96px no-repeat; } */
 
 a{ color:#7fb1c4; text-decoration:none; cursor:pointer; }
 a:hover{ color:#3483A1; }
 
-  #kmcHeader { height:29px; padding-top:4px; margin: 0 6px;} /* height:43px; */
-   #kmcHeader img { width:227px; height:17px; margin-top:3px; float:left;}
-   #kmcHeader ul { height:29px; margin: -4px 0 0 36px; float:left;}
-    #kmcHeader li { float:left;}
-     #kmcHeader li a { _width:0; height:17px; padding: 8px 0 7px 2px; border-right: solid 1px #444; border-left: solid 1px #5A6E73; display:block; font-size:1.4em; color:#fff;} /* padding: 15px 0 14px 2px; */
-      #kmcHeader li a span { padding: 0px 12px 0px; backgrounds:url(../images/kmc/tabs.png) right 0;} /* padding: 14px 17px 11px; */  
-      #kmcHeader li a:hover { color:#FBFFCA;} /* 9dc8d3 */
-      #kmcHeader li a.active { padding-right:2px; border-right: solid 1px #5A6E73; border-left: solid 2px #444; background-color:#f7f7f7; color:#313F43;} /* background:url(/lib/images/kmc/tabs.png) 0 40px;  */
-      #kmcHeader li a.active span { background:#f7f7f7; font-weight:bold;}
-   #kmcHeader div { margin-top:-2px; float:right; font-size:1.1em; color:#9eab6f;}
-    div.login #kmcHeader div { margin-top:13px;}
-    #kmcHeader div span { color:#D2D6D8;}
-	#kmcHeader div a { color:#9eab6f;}
-	#kmcHeader div a:hover { color:#fbffca;}
+  #vmcHeader { height:29px; padding-top:4px; margin: 0 6px;} /* height:43px; */
+   #vmcHeader img { width:227px; height:17px; margin-top:3px; float:left;}
+   #vmcHeader ul { height:29px; margin: -4px 0 0 36px; float:left;}
+    #vmcHeader li { float:left;}
+     #vmcHeader li a { _width:0; height:17px; padding: 8px 0 7px 2px; border-right: solid 1px #444; border-left: solid 1px #5A6E73; display:block; font-size:1.4em; color:#fff;} /* padding: 15px 0 14px 2px; */
+      #vmcHeader li a span { padding: 0px 12px 0px; backgrounds:url(../images/vmc/tabs.png) right 0;} /* padding: 14px 17px 11px; */  
+      #vmcHeader li a:hover { color:#FBFFCA;} /* 9dc8d3 */
+      #vmcHeader li a.active { padding-right:2px; border-right: solid 1px #5A6E73; border-left: solid 2px #444; background-color:#f7f7f7; color:#313F43;} /* background:url(/lib/images/vmc/tabs.png) 0 40px;  */
+      #vmcHeader li a.active span { background:#f7f7f7; font-weight:bold;}
+   #vmcHeader div { margin-top:-2px; float:right; font-size:1.1em; color:#9eab6f;}
+    div.login #vmcHeader div { margin-top:13px;}
+    #vmcHeader div span { color:#D2D6D8;}
+	#vmcHeader div a { color:#9eab6f;}
+	#vmcHeader div a:hover { color:#fbffca;}
 
 #wrap{ padding-bottom:4px; }
 table{ border: none; }
@@ -66,15 +66,15 @@ fieldset{ border:0 none; position:relative; }
 ---------------------------------*/
 #main{  background-color:#f4f4f6;  margin: 0px 5px 0; position:relative; overflow:hidden; bottom:1px; }
 #main.help_page { background-color:#f4f4f6; }
-	#main ul{ height:29px; background:url(../images/kmc/navbar.gif) 0 -29px repeat-x; overflow:hidden; }
-		#main ul li{ float:left; width:9em; height:29px; line-height:29px; text-align:center; display:inline; padding:0 5px 0 7px; background:url(../images/kmc/menu_sep.gif) 0 center no-repeat; }
+	#main ul{ height:29px; background:url(../images/vmc/navbar.gif) 0 -29px repeat-x; overflow:hidden; }
+		#main ul li{ float:left; width:9em; height:29px; line-height:29px; text-align:center; display:inline; padding:0 5px 0 7px; background:url(../images/vmc/menu_sep.gif) 0 center no-repeat; }
 			#main ul li a{ display:block; color:#00364a; margin:3px 0 0; }
 			#main ul li a:hover{ color:#78a3b2; }
-			#main ul li.active a{ color:#fff; background:url(../images/kmc/tab_over.gif) right 3px no-repeat; }
-				#main ul li.active b{ float:left; margin-right:-4px; position:relative; z-index:2; width:4px; height:100%; background:url(../images/kmc/tab_over.gif) 0 6px no-repeat; }
-	#main .corner{ position:absolute; width:5px; height:29px; z-index:2; top:0; left:0; background:url(../images/kmc/navbar.gif) 0 0 repeat-x; }
+			#main ul li.active a{ color:#fff; background:url(../images/vmc/tab_over.gif) right 3px no-repeat; }
+				#main ul li.active b{ float:left; margin-right:-4px; position:relative; z-index:2; width:4px; height:100%; background:url(../images/vmc/tab_over.gif) 0 6px no-repeat; }
+	#main .corner{ position:absolute; width:5px; height:29px; z-index:2; top:0; left:0; background:url(../images/vmc/navbar.gif) 0 0 repeat-x; }
 	#main .corner.right{ background-position:0 -58px; left:auto; right:0; }
-	#main .bcorner{ position:absolute; width:5px; height:5px; z-index:2; bottom:0; left:0; background:url(../images/kmc/bottom_corners.gif) -5px 0 repeat-x; }
+	#main .bcorner{ position:absolute; width:5px; height:5px; z-index:2; bottom:0; left:0; background:url(../images/vmc/bottom_corners.gif) -5px 0 repeat-x; }
 	#main .bcorner.right{ background-position:0 0; left:auto; right:0; }
 	#main .flash_wrap{ margin:0px; background-color:#f4f4f5; }
 	#main .flash_wrap object { min-height: 100%; }
@@ -106,8 +106,8 @@ fieldset{ border:0 none; position:relative; }
 			#main .content .contwrap .toc{ width: 470px; margin-bottom:50px; }
 				#main .content .contwrap .toc h3{ display:block; margin-bottom:5px; }
 				#main .content .contwrap .toc dl{ margin:0 0 20px 15px; font-weight:bold; }
-					#main .content .contwrap .toc dt{ display:block; background:url(../images/kmc/dots.gif) 0 90% repeat-x; }
-					#main .content .contwrap .toc dd{ display:block; padding:1px 0; margin-left:15px; background:url(../images/kmc/dots.gif) 0 90% repeat-x; }
+					#main .content .contwrap .toc dt{ display:block; background:url(../images/vmc/dots.gif) 0 90% repeat-x; }
+					#main .content .contwrap .toc dd{ display:block; padding:1px 0; margin-left:15px; background:url(../images/vmc/dots.gif) 0 90% repeat-x; }
 					#main .content .contwrap .toc dl a{ background-color:#F4F4F6; padding-right:4px; }
 					#main .content .contwrap .toc dl span{ float:right; width:50px; color:#666; padding-left:4px; background-color:#F4F4F6; }
 			

@@ -3,7 +3,7 @@
  * @package plugins.fileSync
  * @subpackage api.objects
  */
-class KalturaFileSync extends KalturaObject implements IFilterable 
+class VidiunFileSync extends VidiunObject implements IFilterable 
 {
 	/**
 	 * 
@@ -25,7 +25,7 @@ class KalturaFileSync extends KalturaObject implements IFilterable
 	
 	/**
 	 * 
-	 * @var KalturaFileSyncObjectType
+	 * @var VidiunFileSyncObjectType
 	 * @filter eq,in
 	 * @readonly
 	 */
@@ -125,7 +125,7 @@ class KalturaFileSync extends KalturaObject implements IFilterable
 	
 	/**
 	 * 
-	 * @var KalturaFileSyncStatus
+	 * @var VidiunFileSyncStatus
 	 * @filter eq,in
 	 */
 	public $status;
@@ -134,7 +134,7 @@ class KalturaFileSync extends KalturaObject implements IFilterable
 	
 	/**
 	 * 
-	 * @var KalturaFileSyncType
+	 * @var VidiunFileSyncType
 	 * @filter eq,in
 	 * @readonly
 	 */
@@ -306,7 +306,7 @@ class KalturaFileSync extends KalturaObject implements IFilterable
 		return parent::toObject($dbFileSync, $propsToSkip);
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		
@@ -314,24 +314,24 @@ class KalturaFileSync extends KalturaObject implements IFilterable
 			$this->fileUrl = $source_object->getExternalUrl($this->getEntryId($source_object));
 		
 		if($this->shouldGet('isCurrentDc', $responseProfile))
-			$this->isCurrentDc = ($source_object->getDc() == kDataCenterMgr::getCurrentDcId());
+			$this->isCurrentDc = ($source_object->getDc() == vDataCenterMgr::getCurrentDcId());
 		
 		if($source_object->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_LINK && 
 			($this->shouldGet('fileRoot', $responseProfile) || $this->shouldGet('filePath', $responseProfile)))
 		{
-			$fileSync = kFileSyncUtils::resolve($source_object);
+			$fileSync = vFileSyncUtils::resolve($source_object);
 			$this->fileRoot = $fileSync->getFileRoot();
 			$this->filePath = $fileSync->getFilePath();
 		}
 		
-		if($source_object->getDc() == kDataCenterMgr::getCurrentDcId())
+		if($source_object->getDc() == vDataCenterMgr::getCurrentDcId())
 		{
 			$path = $source_object->getFullPath();
 			if($this->shouldGet('fileDiscSize', $responseProfile))
-				$this->fileDiscSize = kFile::fileSize($path);
+				$this->fileDiscSize = vFile::fileSize($path);
 			if($this->shouldGet('fileContent', $responseProfile))
 			{
-				$content = kFileSyncUtils::getLocalContentsByFileSync($source_object, false, null, 0, 1024);
+				$content = vFileSyncUtils::getLocalContentsByFileSync($source_object, false, null, 0, 1024);
 				if(ctype_print($content) || ctype_cntrl($content))
 					$this->fileContent = $content;
 			}

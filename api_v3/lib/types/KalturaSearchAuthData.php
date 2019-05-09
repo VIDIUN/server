@@ -4,7 +4,7 @@
  * @subpackage objects
  * @deprecated
  */
-class KalturaSearchAuthData extends KalturaObject
+class VidiunSearchAuthData extends VidiunObject
 {
 	/**
 	 * The authentication data that further should be used for search

@@ -23,7 +23,7 @@ class genericSyndicationFeed extends syndicationFeed implements ISyncableFile
 	public function applyDefaultValues()
 	{
 		parent::applyDefaultValues();
-		$this->setType(syndicationFeedType::KALTURA);
+		$this->setType(syndicationFeedType::VIDIUN);
 	}
 		
 	/**
@@ -81,7 +81,7 @@ class genericSyndicationFeed extends syndicationFeed implements ISyncableFile
 	
 	public function incrementVersion()
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::SYNDICATION_FEED, self::FILE_SYNC_SYNDICATION_FEED_XSLT);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::SYNDICATION_FEED, self::FILE_SYNC_SYNDICATION_FEED_XSLT);
 		
 		$this->setVersion($newVersion);
 	}
@@ -135,7 +135,7 @@ class genericSyndicationFeed extends syndicationFeed implements ISyncableFile
 			return $this->xslt;
 
 		$key = $this->getSyncKey(self::FILE_SYNC_SYNDICATION_FEED_XSLT);
-		$this->xslt = kFileSyncUtils::file_get_contents($key, true, false);
+		$this->xslt = vFileSyncUtils::file_get_contents($key, true, false);
 		return $this->xslt;
 	}
 	

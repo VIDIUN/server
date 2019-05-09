@@ -3,9 +3,9 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-abstract class kDistributionJobProviderData
+abstract class vDistributionJobProviderData
 {
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		
 	}

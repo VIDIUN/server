@@ -3,7 +3,7 @@
  * @package plugins.systemPartner
  * @subpackage api.enum
  */
-class KalturaSystemPartnerLimitType extends KalturaStringEnum
+class VidiunSystemPartnerLimitType extends VidiunStringEnum
 {
 	const ENTRIES = 'ENTRIES';
 	const MONTHLY_STREAM_ENTRIES = 'MONTHLY_STREAM_ENTRIES';

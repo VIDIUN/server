@@ -25,7 +25,7 @@ if(isset($options['d']))
 	}
 }
 
-KalturaLog::info("Adding permissions from directory [$dirPath]");
+VidiunLog::info("Adding permissions from directory [$dirPath]");
 $dir = dir($dirPath);
 /* @var $dir Directory */
 
@@ -47,7 +47,7 @@ foreach($files as $index => $fileName)
 		continue;
 	
 	unset($files[$index]);
-	KalturaLog::info("Adding permissions from file [$filePath]");
+	VidiunLog::info("Adding permissions from file [$filePath]");
 	passthru("php $scriptPath $filePath", $returnValue);
 	if($returnValue !== 0)
 		exit(-1);
@@ -57,7 +57,7 @@ foreach($files as $index => $fileName)
 foreach($files as $index => $fileName)
 {
 	$filePath = realpath("$dirPath/$fileName");
-	KalturaLog::info("Adding permissions from file [$filePath]");
+	VidiunLog::info("Adding permissions from file [$filePath]");
 	passthru("php $scriptPath $filePath", $returnValue);
 	if($returnValue !== 0)
 		exit(-1);

@@ -4,12 +4,12 @@
  * @subpackage lib.entitlement
  */
 
-class kElasticPublicEntriesEntitlementDecorator implements IKalturaESearchEntryEntitlementDecorator
+class vElasticPublicEntriesEntitlementDecorator implements IVidiunESearchEntryEntitlementDecorator
 {
 
 	public static function shouldContribute()
 	{
-		if(kEntryElasticEntitlement::$publicEntries || kEntryElasticEntitlement::$publicActiveEntries)
+		if(vEntryElasticEntitlement::$publicEntries || vEntryElasticEntitlement::$publicActiveEntries)
 			return true;
 		
 		return false;
@@ -17,10 +17,10 @@ class kElasticPublicEntriesEntitlementDecorator implements IKalturaESearchEntryE
 
 	public static function getEntitlementCondition(array $params = array(), $fieldPrefix = '')
 	{
-		$condition = new kESearchBoolQuery();
+		$condition = new vESearchBoolQuery();
 		$statuses = $params['category_statues'];
 		$statuses = array_map('elasticSearchUtils::formatCategoryEntryStatus', $statuses);
-		$termsQuery = new kESearchTermsQuery($fieldPrefix . ESearchBaseCategoryEntryItem::CATEGORY_IDS_MAPPING_FIELD, $statuses);
+		$termsQuery = new vESearchTermsQuery($fieldPrefix . ESearchBaseCategoryEntryItem::CATEGORY_IDS_MAPPING_FIELD, $statuses);
 		$condition->addToMustNot($termsQuery);
 		return $condition;
 	}
@@ -28,9 +28,9 @@ class kElasticPublicEntriesEntitlementDecorator implements IKalturaESearchEntryE
 	public static function applyCondition(&$entryQuery, &$parentEntryQuery)
 	{
 
-		if(kEntryElasticEntitlement::$publicEntries)
+		if(vEntryElasticEntitlement::$publicEntries)
 			$params['category_statues'] = array(CategoryEntryStatus::ACTIVE, CategoryEntryStatus::PENDING);
-		else if(kEntryElasticEntitlement::$publicActiveEntries)
+		else if(vEntryElasticEntitlement::$publicActiveEntries)
 			$params['category_statues'] = array(CategoryEntryStatus::ACTIVE);
 
 		if($parentEntryQuery)

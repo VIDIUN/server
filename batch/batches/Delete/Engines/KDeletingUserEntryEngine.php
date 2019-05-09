@@ -3,35 +3,35 @@
  * @package Scheduler
  * @subpackage Delete
  */
-class KDeletingUserEntryEngine extends KDeletingEngine
+class VDeletingUserEntryEngine extends VDeletingEngine
 {
 	/* (non-PHPdoc)
-	 * @see KDeletingEngine::delete()
+	 * @see VDeletingEngine::delete()
 	 */
-	protected function delete(KalturaFilter $filter)
+	protected function delete(VidiunFilter $filter)
 	{
 		return $this->deleteUserEntries($filter);
 	}
 	
 	/**
-	 * @param KalturaUserEntryFilter $filter The filter should return the list of user entries that need to be deleted
+	 * @param VidiunUserEntryFilter $filter The filter should return the list of user entries that need to be deleted
 	 * @return int the number of deleted category entries
 	 */
-	protected function deleteUserEntries(KalturaUserEntryFilter $filter)
+	protected function deleteUserEntries(VidiunUserEntryFilter $filter)
 	{
-		$filter->orderBy = KalturaUserEntryOrderBy::CREATED_AT_ASC;
+		$filter->orderBy = VidiunUserEntryOrderBy::CREATED_AT_ASC;
 		
-		$userEntryList = KBatchBase::$kClient->userEntry->listAction($filter, $this->pager);
+		$userEntryList = VBatchBase::$vClient->userEntry->listAction($filter, $this->pager);
 		if(!$userEntryList->objects || !count($userEntryList->objects))
 			return 0;
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($userEntryList->objects as $userEntry)
 		{
-			/* @var $categoryEntry KalturaUserEntry */
-			KBatchBase::$kClient->userEntry->delete($userEntry->id);
+			/* @var $categoryEntry VidiunUserEntry */
+			VBatchBase::$vClient->userEntry->delete($userEntry->id);
 		}
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(is_array($result) && isset($result['code']))
 				unset($results[$index]);

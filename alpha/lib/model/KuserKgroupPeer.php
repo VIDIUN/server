@@ -2,7 +2,7 @@
 
 
 /**
- * Skeleton subclass for performing query and update operations on the 'kuser_kgroup' table.
+ * Skeleton subclass for performing query and update operations on the 'vuser_vgroup' table.
  *
  * 
  *
@@ -13,9 +13,9 @@
  * @package Core
  * @subpackage model
  */
-class KuserKgroupPeer extends BaseKuserKgroupPeer implements IRelatedObjectPeer
+class VuserVgroupPeer extends BaseVuserVgroupPeer implements IRelatedObjectPeer
 {
-	private static $kgroupIdsByKuserId = array();
+	private static $vgroupIdsByVuserId = array();
 
 	/**
 	 * Creates default criteria filter
@@ -25,101 +25,101 @@ class KuserKgroupPeer extends BaseKuserKgroupPeer implements IRelatedObjectPeer
 		if(self::$s_criteria_filter == null)
 			self::$s_criteria_filter = new criteriaFilter();
 
-		$c =  KalturaCriteria::create(KuserKgroupPeer::OM_CLASS);
-		$c->addAnd ( KuserKgroupPeer::STATUS, array(KuserKgroupStatus::DELETED), Criteria::NOT_IN);
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$c =  VidiunCriteria::create(VuserVgroupPeer::OM_CLASS);
+		$c->addAnd ( VuserVgroupPeer::STATUS, array(VuserVgroupStatus::DELETED), Criteria::NOT_IN);
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		if($partnerId)
-			$c->addAnd ( KuserKgroupPeer::PARTNER_ID, $partnerId, Criteria::EQUAL );
+			$c->addAnd ( VuserVgroupPeer::PARTNER_ID, $partnerId, Criteria::EQUAL );
 		self::$s_criteria_filter->setFilter($c);
 	}
 
 
 	/**
-	 * @param int $kuserId
-	 * @param int $kgroupId
+	 * @param int $vuserId
+	 * @param int $vgroupId
 	 */
-	static public function retrieveByKuserIdAndKgroupId ($kuserId, $kgroupId){
+	static public function retrieveByVuserIdAndVgroupId ($vuserId, $vgroupId){
 
 		$criteria = new Criteria();
-		$criteria->add(KuserKgroupPeer::KUSER_ID, $kuserId);
-		$criteria->add(KuserKgroupPeer::KGROUP_ID, $kgroupId);
-		$criteria->add(KuserKgroupPeer::STATUS, KuserKgroupStatus::ACTIVE);
+		$criteria->add(VuserVgroupPeer::VUSER_ID, $vuserId);
+		$criteria->add(VuserVgroupPeer::VGROUP_ID, $vgroupId);
+		$criteria->add(VuserVgroupPeer::STATUS, VuserVgroupStatus::ACTIVE);
 
-		return KuserKgroupPeer::doSelectOne($criteria);
+		return VuserVgroupPeer::doSelectOne($criteria);
 	}
 
 	/**
-	 * delete all kuserKgroups that belong to kuserId
+	 * delete all vuserVgroups that belong to vuserId
 	 *
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 */
-	public static function deleteByKuserId($kuserId){
-		$kuserKgroups = self::retrieveByKuserIds(array($kuserId));
-		foreach($kuserKgroups as $kuserKgroup) {
-			/* @var $kuserKgroup KuserKgroup */
-			$kuserKgroup->setStatus(KuserKgroupStatus::DELETED);
-			$kuserKgroup->save();
+	public static function deleteByVuserId($vuserId){
+		$vuserVgroups = self::retrieveByVuserIds(array($vuserId));
+		foreach($vuserVgroups as $vuserVgroup) {
+			/* @var $vuserVgroup VuserVgroup */
+			$vuserVgroup->setStatus(VuserVgroupStatus::DELETED);
+			$vuserVgroup->save();
 		}
 	}
 
 	/**
-	 * get kgroups by kusers
+	 * get vgroups by vusers
 	 *
-	 * @param array $kuserIds
+	 * @param array $vuserIds
 	 * @return array
 	 */
-	public static function retrieveByKuserIds($kuserIds){
+	public static function retrieveByVuserIds($vuserIds){
 		$c = new Criteria();
-		$c->add(KuserKgroupPeer::KUSER_ID, $kuserIds, Criteria::IN);
-		return KuserKgroupPeer::doSelect($c);
+		$c->add(VuserVgroupPeer::VUSER_ID, $vuserIds, Criteria::IN);
+		return VuserVgroupPeer::doSelect($c);
 	}
 
 	/**
-	 * @param array $kuserIds
+	 * @param array $vuserIds
 	 * @return array
 	 */
-	public static function retrieveKgroupIdsByKuserIds($kuserIds){
-		$kuserKgroups = self::retrieveByKuserIds($kuserIds);
-		$kgroupIds = array();
-		foreach ($kuserKgroups as $kuserKgroup){
-			/* @var $kuserKgroup KuserKgroup */
-			$kgroupIds[] = $kuserKgroup->getKgroupId();
+	public static function retrieveVgroupIdsByVuserIds($vuserIds){
+		$vuserVgroups = self::retrieveByVuserIds($vuserIds);
+		$vgroupIds = array();
+		foreach ($vuserVgroups as $vuserVgroup){
+			/* @var $vuserVgroup VuserVgroup */
+			$vgroupIds[] = $vuserVgroup->getVgroupId();
 		}
-		return $kgroupIds;
+		return $vgroupIds;
 	}
 
 	/**
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @return array
 	 */
-	public static function retrieveKgroupIdsByKuserId($kuserId){
-		if (isset(self::$kgroupIdsByKuserId[$kuserId])){
-			return self::$kgroupIdsByKuserId[$kuserId];
+	public static function retrieveVgroupIdsByVuserId($vuserId){
+		if (isset(self::$vgroupIdsByVuserId[$vuserId])){
+			return self::$vgroupIdsByVuserId[$vuserId];
 		}
 
-		self::$kgroupIdsByKuserId[$kuserId] = self::retrieveKgroupIdsByKuserIds(array($kuserId));
+		self::$vgroupIdsByVuserId[$vuserId] = self::retrieveVgroupIdsByVuserIds(array($vuserId));
 
-		return self::$kgroupIdsByKuserId[$kuserId];
+		return self::$vgroupIdsByVuserId[$vuserId];
 	}
 
 	/**
-	 * @param $kuserId
+	 * @param $vuserId
 	 * @param $partnerId
 	 * @return array|mixed
 	 */
-	public static function retrieveKgroupByKuserIdAndPartnerId($kuserId, $partnerId)
+	public static function retrieveVgroupByVuserIdAndPartnerId($vuserId, $partnerId)
 	{
 		//remove default criteria
 		self::setUseCriteriaFilter(false);
 		$c = new Criteria();
-		$c->add(KuserKgroupPeer::KUSER_ID, array($kuserId), Criteria::IN);
-		$c->addAnd ( KuserKgroupPeer::PARTNER_ID, $partnerId, Criteria::EQUAL );
-		$c->addAnd ( KuserKgroupPeer::STATUS, array(KuserKgroupStatus::DELETED), Criteria::NOT_IN);
+		$c->add(VuserVgroupPeer::VUSER_ID, array($vuserId), Criteria::IN);
+		$c->addAnd ( VuserVgroupPeer::PARTNER_ID, $partnerId, Criteria::EQUAL );
+		$c->addAnd ( VuserVgroupPeer::STATUS, array(VuserVgroupStatus::DELETED), Criteria::NOT_IN);
 
-		$kuserKgroups = KuserKgroupPeer::doSelect($c);
+		$vuserVgroups = VuserVgroupPeer::doSelect($c);
 		self::setUseCriteriaFilter(true);
 
-		return $kuserKgroups;
+		return $vuserVgroups;
 
 	}
 
@@ -129,8 +129,8 @@ class KuserKgroupPeer extends BaseKuserKgroupPeer implements IRelatedObjectPeer
 	public function getRootObjects(IRelatedObject $object)
 	{
 		return array(
-			kuserPeer::retrieveByPK($object->getKuserId()),
-			kuserPeer::retrieveByPK($object->getKgroupId()),
+			vuserPeer::retrieveByPK($object->getVuserId()),
+			vuserPeer::retrieveByPK($object->getVgroupId()),
 		);
 	}
 
@@ -144,19 +144,19 @@ class KuserKgroupPeer extends BaseKuserKgroupPeer implements IRelatedObjectPeer
 
 	public static function getCacheInvalidationKeys()
 	{
-		return array(array("kuserKgroup:kuserId=%s", self::KUSER_ID), array("kuserKgroup:kgroupId=%s", self::KGROUP_ID));		
+		return array(array("vuserVgroup:vuserId=%s", self::VUSER_ID), array("vuserVgroup:vgroupId=%s", self::VGROUP_ID));		
 	}
 
 	/**
-	 * @param int $kgroupId
+	 * @param int $vgroupId
 	 */
-	static public function retrieveKuserKgroupByKgroupId ($kgroupId)
+	static public function retrieveVuserVgroupByVgroupId ($vgroupId)
 	{
 
 		$criteria = new Criteria();
-		$criteria->add(KuserKgroupPeer::KGROUP_ID, $kgroupId);
-		$criteria->add(KuserKgroupPeer::STATUS, KuserKgroupStatus::ACTIVE);
+		$criteria->add(VuserVgroupPeer::VGROUP_ID, $vgroupId);
+		$criteria->add(VuserVgroupPeer::STATUS, VuserVgroupStatus::ACTIVE);
 
-		return KuserKgroupPeer::doSelect($criteria);
+		return VuserVgroupPeer::doSelect($criteria);
 	}
-} // KuserKgroupPeer
+} // VuserVgroupPeer

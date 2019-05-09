@@ -4,9 +4,9 @@
  * @package infra
  * @subpackage Storage
  */
-require_once(dirname(__file__) . '/kFileBase.php');
+require_once(dirname(__file__) . '/vFileBase.php');
 
-class kEncryptFileUtils
+class vEncryptFileUtils
 {
     //iv length should be 16
     CONST ENCRYPT_METHOD = "AES-256-CBC";
@@ -29,9 +29,9 @@ class kEncryptFileUtils
     public static function getEncryptedFileContent($fileName, $key = null, $iv = null, $from_byte = 0, $len = 0)
     {
         if (!$key)
-            return kFileBase::getFileContent($fileName, $from_byte, $from_byte + $len);
+            return vFileBase::getFileContent($fileName, $from_byte, $from_byte + $len);
 
-        $data = kFileBase::getFileContent($fileName);
+        $data = vFileBase::getFileContent($fileName);
         $plainData = self::decryptData($data, $key, $iv);
         $len = max($len,0);
         if (!$from_byte && !$len)
@@ -107,7 +107,7 @@ class kEncryptFileUtils
 
     public static function fileSize($filePath, $key = null, $iv = null)
     {
-        $size = kFileBase::fileSize($filePath);
+        $size = vFileBase::fileSize($filePath);
         if (!$key)
             return $size;
         
@@ -116,14 +116,14 @@ class kEncryptFileUtils
 
         $tempPath = self::getClearTempPath($filePath);
         self::decryptFile($filePath, $key, $iv, $tempPath);
-        $size = kFileBase::fileSize($tempPath);
+        $size = vFileBase::fileSize($tempPath);
         unlink($tempPath);
         return $size;
     }
     
     public static function encryptFolder($dirName, $key, $iv)
     {
-        $filesPaths = kFile::dirList($dirName);
+        $filesPaths = vFile::dirList($dirName);
         $done = true;
         foreach ($filesPaths as $filePath)
             $done &= self::encryptFile($filePath, $key, $iv);

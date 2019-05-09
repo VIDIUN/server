@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaAccessControlProfileBaseFilter extends KalturaRelatedFilter
+abstract class VidiunAccessControlProfileBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(

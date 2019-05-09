@@ -15,23 +15,23 @@
 	<session />
 	<!-- Global Purge - Content Type: Meeting -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Global Purge - Content Type: Meeting</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtLessThanOrEqual>{php:return -30*24*60*60;}</createdAtLessThanOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='ContentType']</field>
 									<value>Meeting</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='LegalHold']</field>
 									<value>-1</value>
 								</item>
@@ -41,30 +41,30 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDeleteEntryObjectTask">
+				<item objectType="VidiunDeleteEntryObjectTask">
 				</item>
 			</objectTasks>
 		</scheduledTaskProfile>
 	</request>
 	<!-- Global Purge - Content Type: Announcement -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Global Purge - Content Type: Announcement</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtLessThanOrEqual>{php:return -30*24*60*60;}</createdAtLessThanOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='ContentType']</field>
 									<value>Announcement</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='LegalHold']</field>
 									<value>-1</value>
 								</item>
@@ -74,30 +74,30 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDeleteEntryObjectTask">
+				<item objectType="VidiunDeleteEntryObjectTask">
 				</item>
 			</objectTasks>
 		</scheduledTaskProfile>
 	</request>
 	<!-- Global Purge - Content Type: Document -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Global Purge - Content Type: Document</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtLessThanOrEqual>{php:return -3*365*24*60*60;}</createdAtLessThanOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='ContentType']</field>
 									<value>Document</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='LegalHold']</field>
 									<value>-1</value>
 								</item>
@@ -107,30 +107,30 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDeleteEntryObjectTask">
+				<item objectType="VidiunDeleteEntryObjectTask">
 				</item>
 			</objectTasks>
 		</scheduledTaskProfile>
 	</request>
 	<!-- Global Purge - Content Type: Training -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Global Purge - Content Type: Training</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtLessThanOrEqual>{php:return -7*365*24*60*60;}</createdAtLessThanOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='ContentType']</field>
 									<value>Training</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='LegalHold']</field>
 									<value>-1</value>
 								</item>
@@ -140,34 +140,34 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDeleteEntryObjectTask">
+				<item objectType="VidiunDeleteEntryObjectTask">
 				</item>
 			</objectTasks>
 		</scheduledTaskProfile>
 	</request>
 	<!-- Global Purge - Content Type: Training (Expedited)-->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Global Purge - Content Type: Training (Expedited)</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtLessThanOrEqual>{php:return -3*365*24*60*60;}</createdAtLessThanOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='ContentType']</field>
 									<value>Training</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='Expedite']</field>
 									<value>True</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='LegalHold']</field>
 									<value>-1</value>
 								</item>
@@ -177,38 +177,38 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDeleteEntryObjectTask">
+				<item objectType="VidiunDeleteEntryObjectTask">
 				</item>
 			</objectTasks>
 		</scheduledTaskProfile>
 	</request>
 	<!-- Global Purge - Content Type: Training (Expedited, Send notice email)-->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Global Purge - Content Type: Training (Expedited, Send Notice Email)</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtLessThanOrEqual>{php:return -3*365*24*60*60 + 30*24*60*60;}</createdAtLessThanOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='ContentType']</field>
 									<value>Training</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='Expedite']</field>
 									<value>True</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='LegalHold']</field>
 									<value>-1</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='PurgeNotificationStatus']</field>
 									<value>Not Sent</value>
 								</item>
@@ -218,10 +218,10 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDispatchEventNotificationObjectTask">
+				<item objectType="VidiunDispatchEventNotificationObjectTask">
 					<eventNotificationTemplateId>{variable:eventNotificationTemplateId}</eventNotificationTemplateId>
 				</item>
-				<item objectType="KalturaExecuteMetadataXsltObjectTask">
+				<item objectType="VidiunExecuteMetadataXsltObjectTask">
 					<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 					<metadataObjectType>1</metadataObjectType><!-- ENTRY -->
 					<xslt>
@@ -249,23 +249,23 @@
 	</request>
 	<!-- Global Purge - Content Type: Extended Document -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Global Purge - Content Type: Extended Document</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtLessThanOrEqual>{php:return -7*365*24*60*60;}</createdAtLessThanOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='ContentType']</field>
 									<value>Extended Document</value>
 								</item>
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='LegalHold']</field>
 									<value>-1</value>
 								</item>
@@ -275,25 +275,25 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDeleteEntryObjectTask">
+				<item objectType="VidiunDeleteEntryObjectTask">
 				</item>
 			</objectTasks>
 		</scheduledTaskProfile>
 	</request>
 	<!-- Global Purge - Override Date -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Global Purge - Override Date</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
-				<advancedSearch objectType="KalturaSearchOperator">
+			<objectFilter objectType="VidiunMediaEntryFilter">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchComparableCondition">
+								<item objectType="VidiunSearchComparableCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='OverrideDate']</field>
 									<comparison>5</comparison><!-- LESS_THAN_OR_EQUAL -->
 									<value>0</value>
@@ -304,26 +304,26 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDeleteEntryObjectTask">
+				<item objectType="VidiunDeleteEntryObjectTask">
 				</item>
 			</objectTasks>
 		</scheduledTaskProfile>
 	</request>
 	<!-- Expedite by Last Played Time -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>Expedite by Last Played Time</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<lastPlayedAtLessThenOrEqual>{php:return -14*30*24*60*60;}</lastPlayedAtLessThenOrEqual>
-				<advancedSearch objectType="KalturaSearchOperator">
+				<advancedSearch objectType="VidiunSearchOperator">
 					<type>1</type>
 					<items objectType="array">
-						<item objectType="KalturaMetadataSearchItem">
+						<item objectType="VidiunMetadataSearchItem">
 							<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 							<type>1</type>
 							<items objectType="array">
-								<item objectType="KalturaSearchCondition">
+								<item objectType="VidiunSearchCondition">
 									<field>/*[local-name()='metadata']/*[local-name()='Expedite']</field>
 									<value>False</value>
 								</item>
@@ -333,7 +333,7 @@
 				</advancedSearch>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaExecuteMetadataXsltObjectTask">
+				<item objectType="VidiunExecuteMetadataXsltObjectTask">
 					<metadataProfileId>{variable:metadataProfileId}</metadataProfileId>
 					<metadataObjectType>1</metadataObjectType><!-- ENTRY -->
 					<xslt>

@@ -3,7 +3,7 @@
  * @package plugins.verizonVcastDistribution
  * @subpackage api.objects
  */
-class KalturaVerizonVcastDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunVerizonVcastDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
 	 * @var string

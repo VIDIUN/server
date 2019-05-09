@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kIpAddressCondition extends kMatchCondition
+class vIpAddressCondition extends vMatchCondition
 {
 	const PARTNER_INTERNAL_IP = 'partnerInternalIp';
 
@@ -56,16 +56,16 @@ class kIpAddressCondition extends kMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::getFieldValue()
+	 * @see vCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
 		if ($this->getHttpHeader() || $this->getAcceptInternalIps())
 		{
-			kApiCache::addExtraField(array("type" => kApiCache::ECF_IP,
-					kApiCache::ECFD_IP_HTTP_HEADER => $this->getHttpHeader(),
-					kApiCache::ECFD_IP_ACCEPT_INTERNAL_IPS => $this->getAcceptInternalIps()),
-					kApiCache::COND_IP_RANGE, $this->getStringValues($scope));
+			vApiCache::addExtraField(array("type" => vApiCache::ECF_IP,
+					vApiCache::ECFD_IP_HTTP_HEADER => $this->getHttpHeader(),
+					vApiCache::ECFD_IP_ACCEPT_INTERNAL_IPS => $this->getAcceptInternalIps()),
+					vApiCache::COND_IP_RANGE, $this->getStringValues($scope));
 
 			$headerIp = infraRequestUtils::getIpFromHttpHeader($this->getHttpHeader(), $this->getAcceptInternalIps(), true);
 			if ($headerIp)
@@ -75,20 +75,20 @@ class kIpAddressCondition extends kMatchCondition
 			return $headerIp;
 		}
 		
-		kApiCache::addExtraField(kApiCache::ECF_IP, kApiCache::COND_IP_RANGE, $this->getStringValues($scope));
+		vApiCache::addExtraField(vApiCache::ECF_IP, vApiCache::COND_IP_RANGE, $this->getStringValues($scope));
 		return $scope->getIp();
 	}
 
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::matches()
+	 * @see vMatchCondition::matches()
 	 */
 	protected function matches($field, $value)
 	{
-		return kIpAddressUtils::isIpInRanges($field, $value);
+		return vIpAddressUtils::isIpInRanges($field, $value);
 	}
 
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return bool
 	 */
 	public function shouldFieldDisableCache($scope)

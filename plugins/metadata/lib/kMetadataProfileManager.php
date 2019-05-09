@@ -1,6 +1,6 @@
 <?php
 
-class kMetadataProfileManager
+class vMetadataProfileManager
 {
     public static function validateXsdData($xsdData, &$errorMessage)
     {
@@ -8,10 +8,10 @@ class kMetadataProfileManager
         libxml_use_internal_errors(true);
         libxml_clear_errors();
         
-        $xml = new KDOMDocument();
+        $xml = new VDOMDocument();
         if(!$xml->loadXML($xsdData))
         {
-            $errorMessage = kXml::getLibXmlErrorDescription($xsdData);
+            $errorMessage = vXml::getLibXmlErrorDescription($xsdData);
             return false;
         }
         

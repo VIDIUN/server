@@ -16,33 +16,33 @@
 
 	<multirequest>
 		<request service="responseProfile" action="add" partnerId="0">
-			<responseProfile objectType="KalturaResponseProfile">
+			<responseProfile objectType="VidiunResponseProfile">
 				<type>1</type>
 				<name>reach_vendor</name>
 				<systemName>reach_vendor</systemName>
 				<fields>id,partnerId,vendorPartnerId,createdAt,entryId,status,reachProfileId,catalogItemId,accessKey,notes,dictionary</fields>
 				<relatedProfiles objectType="array">
-					<item objectType="KalturaDetachedResponseProfile">
+					<item objectType="VidiunDetachedResponseProfile">
 						<name>reach_vendor_catalog_item</name>
 						<type>2</type>
 						<fields>id,vendorPartnerId,name,systemName,createdAt,updatedAt,status,pricing,fixedPriceAddons</fields>
-						<filter objectType="KalturaVendorCatalogItemFilter">
+						<filter objectType="VidiunVendorCatalogItemFilter">
 						</filter>
 						<mappings objectType="array">
-							<item objectType="KalturaResponseProfileMapping">
+							<item objectType="VidiunResponseProfileMapping">
 								<parentProperty>catalogItemId</parentProperty>
 								<filterProperty>idEqual</filterProperty>
 							</item>
 						</mappings>
 					</item>
-					<item objectType="KalturaDetachedResponseProfile">
+					<item objectType="VidiunDetachedResponseProfile">
 						<name>reach_vendor_profile</name>
 						<type>2</type>
 						<fields>id,partnerId,createdAt,updatedAt,status,profileType,rules,credit,usedCredit,dictionaries,autoDisplayMachineCaptionsOnPlayer,autoDisplayHumanCaptionsOnPlayer,enableMachineModeration,enableHumanModeration</fields>
-						<filter objectType="KalturaReachProfileFilter">
+						<filter objectType="VidiunReachProfileFilter">
 						</filter>
 						<mappings objectType="array">
-							<item objectType="KalturaResponseProfileMapping">
+							<item objectType="VidiunResponseProfileMapping">
 								<parentProperty>reachProfileId</parentProperty>
 								<filterProperty>idEqual</filterProperty>
 							</item>

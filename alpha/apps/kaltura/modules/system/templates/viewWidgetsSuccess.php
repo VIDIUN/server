@@ -1,14 +1,14 @@
 <?php
 
-function addRow($widget_log, $kshow_data, $entry_data, $even_row )
+function addRow($widget_log, $vshow_data, $entry_data, $even_row )
 {
 	if ( $widget_log instanceof WidgetLog )
 	{
 		$widget_log = new genericObjectWrapper ( $widget_log , true );
 	}
 	
-	$contributors = $kshow_data ? $kshow_data->getContributors() : 0;
-	$entries = $kshow_data ? $kshow_data->getEntries() : 0;
+	$contributors = $vshow_data ? $vshow_data->getContributors() : 0;
+	$entries = $vshow_data ? $vshow_data->getEntries() : 0;
 	
 	$plays = $entry_data ? $entry_data["plays"] : 0;
 	$views = $entry_data ? $entry_data["views"] : 0;
@@ -19,7 +19,7 @@ function addRow($widget_log, $kshow_data, $entry_data, $even_row )
 	
 	$s = '<tr ' . ( $even_row ? 'class="even" ' : '' ). '>'.
 		'<td>'.$widget_log->id.'</td>'.
-	 	'<td>'.$widget_log->kshowId.'</td>'.
+	 	'<td>'.$widget_log->vshowId.'</td>'.
 	 	'<td class="info"><a href="'.$entry_link.'">'.$widget_log->entryId . " " . $widget_log->entry->name . '</a></td>'.
 	 	'<td style="text-align:left;">' . $referer_link . '</td>'.
 		'<td>'.$widget_log->createdAt . '</td>'.
@@ -41,14 +41,14 @@ $htmlPager = mySmartPagerRenderer::createHtmlPager( $lastPage , $page );
 $i=0;
 $media_content = "";
 
-// fetch #contribs and #entries per kshow
-$kshow_ids = array();
+// fetch #contribs and #entries per vshow
+$vshow_ids = array();
 $entry_ids = array();
 foreach($widget_log_list as $widget_log)
 {
-	$kshow_id = $widget_log->getKshowId();
-	if ($kshow_id)
-		$kshow_ids[] = $kshow_id;
+	$vshow_id = $widget_log->getVshowId();
+	if ($vshow_id)
+		$vshow_ids[] = $vshow_id;
 		
 	$entry_id = $widget_log->getEntryId();
 	if ($entry_id)
@@ -56,13 +56,13 @@ foreach($widget_log_list as $widget_log)
 }
 
 $c = new Criteria();
-$c->add(kshowPeer::ID, $kshow_ids, Criteria::IN);
-$kshows = kshowPeer::doSelect($c);
+$c->add(vshowPeer::ID, $vshow_ids, Criteria::IN);
+$vshows = vshowPeer::doSelect($c);
 
 
-$kshows_data = array();
-foreach($kshows as $kshow)
-	$kshows_data[$kshow->getId()] = $kshow;
+$vshows_data = array();
+foreach($vshows as $vshow)
+	$vshows_data[$vshow->getId()] = $vshow;
 
 // fetch sum of plays per entry_id
 $c = new Criteria();
@@ -95,7 +95,7 @@ foreach($res as $record)
 	
 foreach($widget_log_list as $widget_log)
 {
-	 $media_content .= addRow($widget_log, @$kshows_data[$widget_log->getKshowId()], @$entries_data[$widget_log->getEntryId()], ( $i % 2 == 0 ) );
+	 $media_content .= addRow($widget_log, @$vshows_data[$widget_log->getVshowId()], @$entries_data[$widget_log->getEntryId()], ( $i % 2 == 0 ) );
 	++$i;
 }
 
@@ -133,7 +133,7 @@ function openInNewWindow ( url )
 
 </script>
 
-<div class="mykaltura_viewAll mykaltura_media" style="width: 80%;">
+<div class="myvidiun_viewAll myvidiun_media" style="width: 80%;">
 	<div>
 	</div>
 	<div class="content">
@@ -154,7 +154,7 @@ function openInNewWindow ( url )
 					<thead>
 						<tr>
 							<td class="type" style="width: 40px;" onclick='changeMediaSortOrder (this, "+id")'><span>Id</span></td>
-							<td class="type" onclick='changeMediaSortOrder (this, "+kshow_id")'><span>KshowId</span></td>
+							<td class="type" onclick='changeMediaSortOrder (this, "+vshow_id")'><span>VshowId</span></td>
 							<td class="type" onclick='changeMediaSortOrder ( this, "+entry_id")'><span>EntryId</span></td>
 							<td class="info" style="text-align:center;" onclick='changeMediaSortOrder (this, "referer")'><span>Referrer</span></td>
 							<td class="type" onclick='changeMediaSortOrder ( this, "-created_at")'>Created At</td>

@@ -1,9 +1,9 @@
 <?php
 $config = null;
 $clientConfig = null;
-/* @var $clientConfig KalturaConfiguration */
+/* @var $clientConfig VidiunConfiguration */
 $client = null;
-/* @var $client KalturaClient */
+/* @var $client VidiunClient */
 
 require_once __DIR__ . '/lib/init.php';
 echo "Test started [" . __FILE__ . "]\n";
@@ -13,7 +13,7 @@ $logrotate = $config['dwh']['logRotateBin'];
 $kitchen_script= $config['dwh']['kitchenScript'];
 $appDir = $config['global']['appDir'];
 $dwhDir = $config['dwh']['baseDir'];
-$kalturaUser = $config['os']['kalturaUser'];
+$vidiunUser = $config['os']['vidiunUser'];
 
 
 /**
@@ -21,7 +21,7 @@ $kalturaUser = $config['os']['kalturaUser'];
  */
 $partnerId = $config['session']['partnerId'];
 $adminSecretForSigning = $config['session']['adminSecret'];
-$client->setKs($client->generateSessionV2($adminSecretForSigning, 'sanity-user', KalturaSessionType::ADMIN, $partnerId, 86400, ''));
+$client->setVs($client->generateSessionV2($adminSecretForSigning, 'sanity-user', VidiunSessionType::ADMIN, $partnerId, 86400, ''));
 echo "Session started\n";
 
 
@@ -30,15 +30,15 @@ echo "Session started\n";
 /**
  * List players
  */
-$playersFilter = new KalturaUiConfFilter();
-$playersFilter->objTypeIn = KalturaUiConfObjType::PLAYER_V3 . ',' . KalturaUiConfObjType::PLAYER;
-$playersFilter->orderBy = KalturaUiConfOrderBy::CREATED_AT_DESC;
+$playersFilter = new VidiunUiConfFilter();
+$playersFilter->objTypeIn = VidiunUiConfObjType::PLAYER_V3 . ',' . VidiunUiConfObjType::PLAYER;
+$playersFilter->orderBy = VidiunUiConfOrderBy::CREATED_AT_DESC;
 
-$playersPager = new KalturaFilterPager();
+$playersPager = new VidiunFilterPager();
 $playersPager->pageSize = 1;
 
 $playersList = $client->uiConf->listAction($playersFilter, $playersPager);
-/* @var $playersList KalturaUiConfListResponse */
+/* @var $playersList VidiunUiConfListResponse */
 
 if(!$playersList || !$playersList->totalCount || !count($playersList->objects))
 {
@@ -46,7 +46,7 @@ if(!$playersList || !$playersList->totalCount || !count($playersList->objects))
 	exit(-1);
 }
 $player = reset($playersList->objects);
-/* @var $player KalturaUiConf */
+/* @var $player VidiunUiConf */
 echo "Found player ui-conf [$player->id]\n";
 
 
@@ -55,16 +55,16 @@ echo "Found player ui-conf [$player->id]\n";
 /**
  * List ready media entries
  */
-$entriesFilter = new KalturaMediaEntryFilter();
-$entriesFilter->mediaTypeEqual = KalturaMediaType::VIDEO;
-$entriesFilter->statusEqual = KalturaEntryStatus::READY;
-$entriesFilter->orderBy = KalturaMediaEntryOrderBy::DURATION_ASC;
+$entriesFilter = new VidiunMediaEntryFilter();
+$entriesFilter->mediaTypeEqual = VidiunMediaType::VIDEO;
+$entriesFilter->statusEqual = VidiunEntryStatus::READY;
+$entriesFilter->orderBy = VidiunMediaEntryOrderBy::DURATION_ASC;
 
-$entriesPager = new KalturaFilterPager();
+$entriesPager = new VidiunFilterPager();
 $entriesPager->pageSize = 1;
 
 $entriesList = $client->media->listAction($entriesFilter, $entriesPager);
-/* @var $entriesList KalturaMediaListResponse */
+/* @var $entriesList VidiunMediaListResponse */
 
 if(!$entriesList || !$entriesList->totalCount || !count($entriesList->objects))
 {
@@ -72,7 +72,7 @@ if(!$entriesList || !$entriesList->totalCount || !count($entriesList->objects))
 	exit(-1);
 }
 $entry = reset($entriesList->objects);
-/* @var $entry KalturaMediaEntry */
+/* @var $entry VidiunMediaEntry */
 echo "Found entry [$entry->id]\n";
 
 
@@ -83,9 +83,9 @@ echo "Found entry [$entry->id]\n";
  * TODO:
  *  - Run it once on each API server.
  */
-$client->getConfig()->method = KalturaClientBase::METHOD_GET;
+$client->getConfig()->method = VidiunClientBase::METHOD_GET;
 
-$event = new KalturaStatsEvent();
+$event = new VidiunStatsEvent();
 $event->isFirstInSession = false;
 $event->seek = false;
 
@@ -100,80 +100,80 @@ $event->currentPoint = 0;
 
 $event->uiconfId = $player->id;
 
-$event->eventType = KalturaStatsEventType::WIDGET_LOADED;
+$event->eventType = VidiunStatsEventType::WIDGET_LOADED;
 $event->eventTimestamp = microtime(true);
 try
 {
 	$client->stats->collect($event);
 }
-catch (KalturaClientException $e){}
-echo "Sent event [KalturaStatsEventType::WIDGET_LOADED]\n";
+catch (VidiunClientException $e){}
+echo "Sent event [VidiunStatsEventType::WIDGET_LOADED]\n";
 
-$event->eventType = KalturaStatsEventType::MEDIA_LOADED;
+$event->eventType = VidiunStatsEventType::MEDIA_LOADED;
 $event->eventTimestamp = microtime(true);
 try
 {
 	$client->stats->collect($event);
 }
-catch (KalturaClientException $e){}
-echo "Sent event [KalturaStatsEventType::MEDIA_LOADED]\n";
+catch (VidiunClientException $e){}
+echo "Sent event [VidiunStatsEventType::MEDIA_LOADED]\n";
 
-$event->eventType = KalturaStatsEventType::PLAY;
+$event->eventType = VidiunStatsEventType::PLAY;
 $event->eventTimestamp = microtime(true);
 try
 {
 	$client->stats->collect($event);
 }
-catch (KalturaClientException $e){}
-echo "Sent event [KalturaStatsEventType::PLAY]\n";
+catch (VidiunClientException $e){}
+echo "Sent event [VidiunStatsEventType::PLAY]\n";
 
 $quarter = ceil(($entry->msDuration / 4) * 1000);
 
 usleep($quarter);
 $event->currentPoint += $quarter;
-$event->eventType = KalturaStatsEventType::PLAY_REACHED_25;
+$event->eventType = VidiunStatsEventType::PLAY_REACHED_25;
 $event->eventTimestamp = microtime(true);
 try
 {
 	$client->stats->collect($event);
 }
-catch (KalturaClientException $e){}
-echo "Sent event [KalturaStatsEventType::PLAY_REACHED_25]\n";
+catch (VidiunClientException $e){}
+echo "Sent event [VidiunStatsEventType::PLAY_REACHED_25]\n";
 
 usleep($quarter);
 $event->currentPoint += $quarter;
-$event->eventType = KalturaStatsEventType::PLAY_REACHED_50;
+$event->eventType = VidiunStatsEventType::PLAY_REACHED_50;
 $event->eventTimestamp = microtime(true);
 try
 {
 	$client->stats->collect($event);
 }
-catch (KalturaClientException $e){}
-echo "Sent event [KalturaStatsEventType::PLAY_REACHED_50]\n";
+catch (VidiunClientException $e){}
+echo "Sent event [VidiunStatsEventType::PLAY_REACHED_50]\n";
 
 usleep($quarter);
 $event->currentPoint += $quarter;
-$event->eventType = KalturaStatsEventType::PLAY_REACHED_75;
+$event->eventType = VidiunStatsEventType::PLAY_REACHED_75;
 $event->eventTimestamp = microtime(true);
 try
 {
 	$client->stats->collect($event);
 }
-catch (KalturaClientException $e){}
-echo "Sent event [KalturaStatsEventType::PLAY_REACHED_75]\n";
+catch (VidiunClientException $e){}
+echo "Sent event [VidiunStatsEventType::PLAY_REACHED_75]\n";
 
 usleep($quarter);
 $event->currentPoint = $entry->msDuration;
-$event->eventType = KalturaStatsEventType::PLAY_REACHED_100;
+$event->eventType = VidiunStatsEventType::PLAY_REACHED_100;
 $event->eventTimestamp = microtime(true);
 try
 {
 	$client->stats->collect($event);
 }
-catch (KalturaClientException $e){}
-echo "Sent event [KalturaStatsEventType::PLAY_REACHED_100]\n";
+catch (VidiunClientException $e){}
+echo "Sent event [VidiunStatsEventType::PLAY_REACHED_100]\n";
 
-$client->getConfig()->method = KalturaClientBase::METHOD_POST;
+$client->getConfig()->method = VidiunClientBase::METHOD_POST;
 
 
 
@@ -182,7 +182,7 @@ $client->getConfig()->method = KalturaClientBase::METHOD_POST;
  * Rotate logs.
  */
 $returnedValue = null;
-$cmd = "$logrotate -f -vv $appDir/configurations/logrotate/kaltura_apache";
+$cmd = "$logrotate -f -vv $appDir/configurations/logrotate/vidiun_apache";
 echo "Executing [$cmd]";
 passthru($cmd, $returnedValue);
 if($returnedValue !== 0)
@@ -197,7 +197,7 @@ echo " log rotated\n";
 /**
  * Run hourly scripts.
  */
-$cmd = "su $kalturaUser -c '$dwhDir/etlsource/execute/etl_hourly.sh -p $dwhDir  -k $kitchen_script '";
+$cmd = "su $vidiunUser -c '$dwhDir/etlsource/execute/etl_hourly.sh -p $dwhDir  -k $kitchen_script '";
 echo "Executing [$cmd]";
 passthru($cmd, $returnedValue);
 if($returnedValue !== 0)
@@ -211,7 +211,7 @@ echo " OK\n";
 /**
  * Run update dimensions.
  */
-$cmd = "su $kalturaUser -c '$dwhDir/etlsource/execute/etl_update_dims.sh -p $dwhDir -k $kitchen_script'";
+$cmd = "su $vidiunUser -c '$dwhDir/etlsource/execute/etl_update_dims.sh -p $dwhDir -k $kitchen_script'";
 echo "Executing [$cmd]";
 passthru($cmd, $returnedValue);
 //if($returnedValue !== 0)
@@ -226,7 +226,7 @@ echo " OK\n";
 /**
  * Run daily scripts.
  */
-$cmd = "su $kalturaUser -c '$dwhDir/etlsource/execute/etl_daily.sh -p $dwhDir -k $kitchen_script'";
+$cmd = "su $vidiunUser -c '$dwhDir/etlsource/execute/etl_daily.sh -p $dwhDir -k $kitchen_script'";
 echo "Executing [$cmd]";
 passthru($cmd, $returnedValue);
 if($returnedValue !== 0)
@@ -249,14 +249,14 @@ $dateTimeZoneUTC = new DateTimeZone("UTC");
 $dateTimeUTC = new DateTime("now", $dateTimeZoneUTC);
 $timeOffsetSeconds = $dateTimeZoneServer->getOffset($dateTimeUTC);
 
-$reportInputFilter = new KalturaReportInputFilter();
+$reportInputFilter = new VidiunReportInputFilter();
 $reportInputFilter->timeZoneOffset = ($timeOffsetSeconds / -60);
 $reportInputFilter->fromDay = date('Ymd', time() - (60 * 60 * 24));
 $reportInputFilter->toDay = date('Ymd');
 
-$reportInputPager = new KalturaFilterPager();
-$reportTable = $client->report->getTable(KalturaReportType::TOP_CONTENT, $reportInputFilter, $reportInputPager, null, $entry->id);
-/* @var $reportTable KalturaReportTable */
+$reportInputPager = new VidiunFilterPager();
+$reportTable = $client->report->getTable(VidiunReportType::TOP_CONTENT, $reportInputFilter, $reportInputPager, null, $entry->id);
+/* @var $reportTable VidiunReportTable */
 
 if($reportTable->totalCount != 1)
 {
@@ -302,7 +302,7 @@ echo "Reports OK\n";
 /**
  * Syncyng plays and view from the dwh to the operational db
  */
-$cmd = "su $kalturaUser -c $appDir/alpha/scripts/dwh/dwh_plays_views_sync.sh";
+$cmd = "su $vidiunUser -c $appDir/alpha/scripts/dwh/dwh_plays_views_sync.sh";
 echo "Executing [$cmd]";
 passthru($cmd, $returnedValue);
 if($returnedValue !== 0)
@@ -318,7 +318,7 @@ echo " OK\n";
  * Reload the entry and check plays and views
  */
 $reloadedEntry = $client->media->get($entry->id);
-/* @var $reloadedEntry KalturaMediaEntry */
+/* @var $reloadedEntry VidiunMediaEntry */
 
 if($reloadedEntry->plays <= $entry->plays)
 {

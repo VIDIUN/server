@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage api.objects
  */
-class KalturaDrmLicenseAccessDetails extends  KalturaObject {
+class VidiunDrmLicenseAccessDetails extends  VidiunObject {
 
     /**
      * Drm policy name
@@ -25,7 +25,7 @@ class KalturaDrmLicenseAccessDetails extends  KalturaObject {
     public $absolute_duration;
 
     /**
-     * @var KalturaKeyValueArray
+     * @var VidiunKeyValueArray
      */
     public $licenseParams;
 }

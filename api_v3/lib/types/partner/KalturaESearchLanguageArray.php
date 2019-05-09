@@ -4,21 +4,21 @@
  * @subpackage objects
  */
 
-class KalturaESearchLanguageArray extends KalturaTypedArray
+class VidiunESearchLanguageArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		return parent::__construct("KalturaESearchLanguageItem");
+		return parent::__construct("VidiunESearchLanguageItem");
 	}
 
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaESearchLanguageArray();
+		$newArr = new VidiunESearchLanguageArray();
 		if($arr && is_array($arr))
 		{
 			foreach($arr as $item)
 			{
-				$arrayObject = new KalturaESearchLanguageItem();
+				$arrayObject = new VidiunESearchLanguageItem();
 				$arrayObject->eSerachLanguage = $item;
 				$newArr[] = $arrayObject;
 			}
@@ -31,7 +31,7 @@ class KalturaESearchLanguageArray extends KalturaTypedArray
 		$ret = array();
 		foreach ($this->toArray() as $item)
 		{
-			/* @var $item KalturaESearchLanguageItem */
+			/* @var $item VidiunESearchLanguageItem */
 			$ret[] = $item->eSerachLanguage;
 		}
 

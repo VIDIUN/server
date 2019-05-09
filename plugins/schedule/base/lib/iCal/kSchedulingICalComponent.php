@@ -1,6 +1,6 @@
 <?php
 
-abstract class kSchedulingICalComponent
+abstract class vSchedulingICalComponent
 {
 	/**
 	 * @var array
@@ -18,12 +18,12 @@ abstract class kSchedulingICalComponent
 	protected $components = array();
 
 	/**
-	 * @var kSchedulingICalComponent
+	 * @var vSchedulingICalComponent
 	 */
 	protected $parent = null;
 
 	/**
-	 * @var KalturaScheduleEventType
+	 * @var VidiunScheduleEventType
 	 */
 	protected $eventsType = null;
 
@@ -93,7 +93,7 @@ abstract class kSchedulingICalComponent
 
 			if ($field === 'BEGIN')
 			{
-				$component = kSchedulingICal::parseComponent(strtoupper($value), $lines);
+				$component = vSchedulingICal::parseComponent(strtoupper($value), $lines);
 				if ($component != null)
 				{
 					$this->addComponent($component);
@@ -142,12 +142,12 @@ abstract class kSchedulingICalComponent
 		return implode("\r\n", $lines);
 	}
 
-	public function setParentComponent(kSchedulingICalComponent $parent)
+	public function setParentComponent(vSchedulingICalComponent $parent)
 	{
 		$this->parent = $parent;
 	}
 
-	public function addComponent(kSchedulingICalComponent $component)
+	public function addComponent(vSchedulingICalComponent $component)
 	{
 		$component->setParentComponent($this);
 		$this->components[] = $component;
@@ -199,23 +199,23 @@ abstract class kSchedulingICalComponent
 	}
 
 	/**
-	 * @param KalturaScheduleEventType $type
+	 * @param VidiunScheduleEventType $type
 	 */
-	protected function setKalturaType($type)
+	protected function setVidiunType($type)
 	{
 		$this->eventsType = $type;
 	}
 
 	/**
-	 * @return KalturaScheduleEventType
+	 * @return VidiunScheduleEventType
 	 */
-	protected function getKalturaType()
+	protected function getVidiunType()
 	{
 		if ($this->eventsType)
 			return $this->eventsType;
 
 		if ($this->parent)
-			return $this->parent->getKalturaType();
+			return $this->parent->getVidiunType();
 
 		return null;
 	}

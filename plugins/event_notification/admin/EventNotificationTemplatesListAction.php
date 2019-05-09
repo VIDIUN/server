@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage admin
  */
-class EventNotificationTemplatesListAction extends KalturaApplicationPlugin implements IKalturaAdminConsolePublisherAction
+class EventNotificationTemplatesListAction extends VidiunApplicationPlugin implements IVidiunAdminConsolePublisherAction
 {
 	public function __construct()
 	{
@@ -13,7 +13,7 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::getTemplatePath()
+	 * @see VidiunApplicationPlugin::getTemplatePath()
 	 */
 	public function getTemplatePath()
 	{
@@ -21,16 +21,16 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::getRequiredPermissions()
+	 * @see VidiunApplicationPlugin::getRequiredPermissions()
 	 */
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_EVENT_NOTIFICATION_BASE);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_EVENT_NOTIFICATION_BASE);
 	}
 	
 	/**
 	 * @param Zend_Controller_Request_Abstract $request
-	 * @return Kaltura_Client_Type_PartnerFilter
+	 * @return Vidiun_Client_Type_PartnerFilter
 	 */
 	private function getPartnerFilterFromRequest(Zend_Controller_Request_Abstract $request)
 	{
@@ -38,7 +38,7 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 		if(!strlen($filterInput))
 			return null;
 			
-		$filter = new Kaltura_Client_Type_PartnerFilter();
+		$filter = new Vidiun_Client_Type_PartnerFilter();
 		$filterType = $request->getParam('filter_type');
 		if ($filterType == 'byid')
 		{
@@ -55,7 +55,7 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::doAction()
+	 * @see VidiunApplicationPlugin::doAction()
 	 */
 	public function doAction(Zend_Controller_Action $action)
 	{
@@ -75,7 +75,7 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 		$partnerFilter = $this->getPartnerFilterFromRequest($request);
 		
 		$client = Infra_ClientHelper::getClient();
-		$eventNotificationPlugin = Kaltura_Client_EventNotification_Plugin::get($client);
+		$eventNotificationPlugin = Vidiun_Client_EventNotification_Plugin::get($client);
 		
 		// get results and paginate
 		$paginatorAdapter = new Infra_FilterPaginator($eventNotificationPlugin->eventNotificationTemplate, "listByPartner", null, $partnerFilter);
@@ -85,7 +85,7 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 		if ($partnerFilter)
 		    $newForm->getElement('newPartnerId')->setValue($partnerFilter->idIn);
 		
-		$listTemplatespager = new Kaltura_Client_Type_FilterPager();
+		$listTemplatespager = new Vidiun_Client_Type_FilterPager();
 		$listTemplatespager->pageSize = 500;
 		$templatesList = $eventNotificationPlugin->eventNotificationTemplate->listTemplates(null, $listTemplatespager);
 		
@@ -107,7 +107,7 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaAdminConsolePublisherAction::getPublisherAdminActionOptions()
+	 * @see IVidiunAdminConsolePublisherAction::getPublisherAdminActionOptions()
 	 */
 	public function getPublisherAdminActionOptions($partner, $permissions)
 	{
@@ -117,7 +117,7 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaAdminConsolePublisherAction::getPublisherAdminActionJavascript()
+	 * @see IVidiunAdminConsolePublisherAction::getPublisherAdminActionJavascript()
 	 */
 	public function getPublisherAdminActionJavascript()
 	{
@@ -129,7 +129,7 @@ class EventNotificationTemplatesListAction extends KalturaApplicationPlugin impl
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBase::getInstance()
+	 * @see IVidiunBase::getInstance()
 	 */
 	public function getInstance($interface)
 	{

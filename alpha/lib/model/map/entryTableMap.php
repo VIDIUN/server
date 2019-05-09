@@ -38,8 +38,8 @@ class entryTableMap extends TableMap {
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'VARCHAR', true, 20, null);
-		$this->addColumn('KSHOW_ID', 'KshowId', 'VARCHAR', false, 20, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
+		$this->addColumn('VSHOW_ID', 'VshowId', 'VARCHAR', false, 20, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
 		$this->addColumn('NAME', 'Name', 'VARCHAR', false, 60, null);
 		$this->addColumn('TYPE', 'Type', 'SMALLINT', false, null, null);
 		$this->addColumn('MEDIA_TYPE', 'MediaType', 'SMALLINT', false, null, null);
@@ -98,10 +98,10 @@ class entryTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
     $this->addRelation('LiveChannelSegmentRelatedByChannelId', 'LiveChannelSegment', RelationMap::ONE_TO_MANY, array('id' => 'channel_id', ), null, null);
     $this->addRelation('LiveChannelSegmentRelatedByEntryId', 'LiveChannelSegment', RelationMap::ONE_TO_MANY, array('id' => 'entry_id', ), null, null);
-    $this->addRelation('kvote', 'kvote', RelationMap::ONE_TO_MANY, array('id' => 'entry_id', ), null, null);
+    $this->addRelation('vvote', 'vvote', RelationMap::ONE_TO_MANY, array('id' => 'entry_id', ), null, null);
     $this->addRelation('conversion', 'conversion', RelationMap::ONE_TO_MANY, array('id' => 'entry_id', ), null, null);
     $this->addRelation('WidgetLog', 'WidgetLog', RelationMap::ONE_TO_MANY, array('id' => 'entry_id', ), null, null);
     $this->addRelation('moderationFlag', 'moderationFlag', RelationMap::ONE_TO_MANY, array('id' => 'flagged_entry_id', ), null, null);

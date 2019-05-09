@@ -29,7 +29,7 @@ class adddataentryAction extends addentrybaseAction
 					),
 				"errors" => array (
 					APIErrors::NO_FIELDS_SET_FOR_GENERIC_ENTRY ,
-					APIErrors::INVALID_KSHOW_ID
+					APIErrors::INVALID_VSHOW_ID
 				)
 			); 
 	}
@@ -51,10 +51,10 @@ class adddataentryAction extends addentrybaseAction
 	{
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// validate the xml of the dynamic playlist and update the update the entry_group table for a static playlist   
-		$res = parent::executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser );
+		$res = parent::executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser );
 	}
 }
 ?>

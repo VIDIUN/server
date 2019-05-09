@@ -3,7 +3,7 @@
  * @package plugins.searchHistory
  * @subpackage model
  */
-class kESearchHistoryCoreAdapter
+class vESearchHistoryCoreAdapter
 {
 
 	const HITS_KEY = 'hits';

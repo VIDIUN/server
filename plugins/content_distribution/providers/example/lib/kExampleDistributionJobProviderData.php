@@ -3,7 +3,7 @@
  * @package plugins.exampleDistribution
  * @subpackage model.data
  */
-class kExampleDistributionJobProviderData extends kDistributionJobProviderData
+class vExampleDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * Demonstrate storing array of paths in the job data
@@ -19,7 +19,7 @@ class kExampleDistributionJobProviderData extends kDistributionJobProviderData
 	 */
 	public $thumbAssetFilePath;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

@@ -3,12 +3,12 @@
  * Enable Conference servers
  * @package plugins.conference
  */
-class ConferencePlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator, IKalturaServices
+class ConferencePlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator, IVidiunServices
 {
 	const PLUGIN_NAME = 'conference';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -16,7 +16,7 @@ class ConferencePlugin extends KalturaPlugin implements IKalturaObjectLoader, IK
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -33,19 +33,19 @@ class ConferencePlugin extends KalturaPlugin implements IKalturaObjectLoader, IK
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaServerNode' && $enumValue == self::getCoreValue('serverNodeType',ConferenceServerNodeType::CONFERENCE_SERVER))
-			return new KalturaConferenceServerNode();
-		if($baseClass == 'KalturaEntryServerNode' && $enumValue == self::getCoreValue('EntryServerNodeType',ConferenceEntryServerNodeType::CONFERENCE_ENTRY_SERVER))
-			return new KalturaConferenceEntryServerNode();
+		if($baseClass == 'VidiunServerNode' && $enumValue == self::getCoreValue('serverNodeType',ConferenceServerNodeType::CONFERENCE_SERVER))
+			return new VidiunConferenceServerNode();
+		if($baseClass == 'VidiunEntryServerNode' && $enumValue == self::getCoreValue('EntryServerNodeType',ConferenceEntryServerNodeType::CONFERENCE_ENTRY_SERVER))
+			return new VidiunConferenceEntryServerNode();
 
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -57,13 +57,13 @@ class ConferencePlugin extends KalturaPlugin implements IKalturaObjectLoader, IK
 
 	public static function getCoreValue($type, $valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore($type, $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore($type, $value);
 	}
 
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 	public static function getServicesMap()

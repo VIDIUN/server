@@ -6,7 +6,7 @@ SELECT
 	IFNULL(SUM(sum_time_viewed)/SUM(count_plays),0) avg_time_viewed,
 	IFNULL(SUM(count_loads),0) count_loads
 FROM 
-	dwh_hourly_events_entry ev, kalturadw.dwh_dim_entries en
+	dwh_hourly_events_entry ev, vidiundw.dwh_dim_entries en
 WHERE 	
 	en.entry_id=ev.entry_id
 	AND {OBJ_ID_CLAUSE}

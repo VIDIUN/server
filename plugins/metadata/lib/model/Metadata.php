@@ -57,10 +57,10 @@ class Metadata extends BaseMetadata implements IIndexable, ISyncableFile, IRelat
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 
 		if($objectUpdated)
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 			
 		return $ret;
 	}
@@ -72,12 +72,12 @@ class Metadata extends BaseMetadata implements IIndexable, ISyncableFile, IRelat
 	{
 		parent::postInsert($con);
 
-		kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 	}
 
 	public function incrementVersion()
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::METADATA, self::FILE_SYNC_METADATA_DATA);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::METADATA, self::FILE_SYNC_METADATA_DATA);
 		$this->setVersion($newVersion);
 	}
 	
@@ -105,7 +105,7 @@ class Metadata extends BaseMetadata implements IIndexable, ISyncableFile, IRelat
 		if(!$version)
 			$version = $this->getVersion();
 			
-		return kMetadataManager::getObjectTypeName($this->getObjectType()) . "_" . $this->getObjectId() . "_" . $this->getId() . "_$version.xml";
+		return vMetadataManager::getObjectTypeName($this->getObjectType()) . "_" . $this->getObjectId() . "_" . $this->getId() . "_$version.xml";
 	}
 	
 	/**
@@ -230,7 +230,7 @@ class Metadata extends BaseMetadata implements IIndexable, ISyncableFile, IRelat
 	public function indexToSearchIndex()
 	{
 		if ($this->getObjectType() == MetadataObjectType::DYNAMIC_OBJECT)
-			kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+			vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 
 	/**

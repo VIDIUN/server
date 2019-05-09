@@ -13,7 +13,7 @@
 
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaHttpNotificationTemplate">
+            <template objectType="VidiunHttpNotificationTemplate">
                 <name>Flavor Asset changed - PlayServer</name>
                 <systemName>FLAVOR_ASSET_CHANGED_PLAY_SERVER</systemName>
                 <description>HTTP notification template to be sent when a flavor asset is changed</description>
@@ -21,51 +21,51 @@
                 <eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
                 <eventObjectType>4</eventObjectType> <!-- EventNotificationEventObjectType::FLAVORASSET -->
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Play server feature is set for partner</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>PermissionPeer::isValidForPartner(PermissionName::FEATURE_PLAY_SERVER, $scope->getObject()->getPartnerId())</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Status field modified</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>in_array(assetPeer::VERSION, $scope->getEvent()->getModifiedColumns())</code>
                         </field>
                     </item>
-                    <item objectType="KalturaFieldMatchCondition">
+                    <item objectType="VidiunFieldMatchCondition">
                         <description>Entry type equal</description>
-                        <field objectType="KalturaEvalStringField">
+                        <field objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getentry()->getType()</code>
                         </field>
                         <values objectType="array">
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>1</value>
                             </item>
                         </values>
                     </item>
-                    <item objectType="KalturaFieldMatchCondition">
+                    <item objectType="VidiunFieldMatchCondition">
                         <description>Entry status equal</description>
-                        <field objectType="KalturaEvalStringField">
+                        <field objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getentry()->getStatus()</code>
                         </field>
                         <values objectType="array">
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>2</value>
                             </item>
                         </values>
                     </item>
                 </eventConditions>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_id</key>
                         <description>Entry ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getEntryId()</code>
                         </value>
                     </item>
                 </contentParameters>
-                <method>1</method> <!-- KalturaHttpNotificationMethod::GET -->
+                <method>1</method> <!-- VidiunHttpNotificationMethod::GET -->
             </template>
         </request>
         <request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -76,7 +76,7 @@
 
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaHttpNotificationTemplate">
+            <template objectType="VidiunHttpNotificationTemplate">
                 <name>Flavor Asset deleted - PlayServer</name>
                 <systemName>FLAVOR_ASSET_DELETED_PLAY_SERVER</systemName>
                 <description>HTTP notification template to be sent when a flavor asset is deleted</description>
@@ -84,45 +84,45 @@
                 <eventType>7</eventType> <!-- EventNotificationEventType::OBJECT_DELETED -->
                 <eventObjectType>4</eventObjectType> <!-- EventNotificationEventObjectType::FLAVORASSET -->
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Play server feature is set for partner</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>PermissionPeer::isValidForPartner(PermissionName::FEATURE_PLAY_SERVER, $scope->getObject()->getPartnerId())</code>
                         </field>
                     </item>
-                    <item objectType="KalturaFieldMatchCondition">
+                    <item objectType="VidiunFieldMatchCondition">
                         <description>Entry type equal</description>
-                        <field objectType="KalturaEvalStringField">
+                        <field objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getentry()->getType()</code>
                         </field>
                         <values objectType="array">
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>1</value>
                             </item>
                         </values>
                     </item>
-                    <item objectType="KalturaFieldMatchCondition">
+                    <item objectType="VidiunFieldMatchCondition">
                         <description>Entry status equal</description>
-                        <field objectType="KalturaEvalStringField">
+                        <field objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getentry()->getStatus()</code>
                         </field>
                         <values objectType="array">
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>2</value>
                             </item>
                         </values>
                     </item>
                 </eventConditions>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_id</key>
                         <description>Entry ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getEntryId()</code>
                         </value>
                     </item>
                 </contentParameters>
-                <method>1</method> <!-- KalturaHttpNotificationMethod::GET -->
+                <method>1</method> <!-- VidiunHttpNotificationMethod::GET -->
             </template>
         </request>
         <request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">

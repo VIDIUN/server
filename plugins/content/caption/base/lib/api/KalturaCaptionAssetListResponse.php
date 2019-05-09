@@ -3,10 +3,10 @@
  * @package plugins.caption
  * @subpackage api.objects
  */
-class KalturaCaptionAssetListResponse extends KalturaListResponse
+class VidiunCaptionAssetListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaCaptionAssetArray
+	 * @var VidiunCaptionAssetArray
 	 * @readonly
 	 */
 	public $objects;

@@ -3,6 +3,6 @@
  * @package plugins.ideticDistribution
  * @subpackage api.filters.enum
  */
-class KalturaIdeticDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunIdeticDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

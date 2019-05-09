@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage AccessControl
  */
-abstract class kGeoCoder
+abstract class vGeoCoder
 {
 	/**
 	 * @param string $ip

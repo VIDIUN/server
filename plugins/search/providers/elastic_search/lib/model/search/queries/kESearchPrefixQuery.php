@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchPrefixQuery extends kESearchBaseFieldQuery
+class vESearchPrefixQuery extends vESearchBaseFieldQuery
 {
 	const PREFIX_KEY = 'prefix';
 	const VALUE_KEY = 'value';

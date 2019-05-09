@@ -9,14 +9,14 @@
 ?>
 <link href="/lib/css/login.css" media="screen" rel="stylesheet" type="text/css" />
 
-<div id="kmcHeader">
-	<img src="<?php echo $service_url; ?>/lib/images/kmc/logo_kmc.png" alt="Kaltura CMS" />
+<div id="vmcHeader">
+	<img src="<?php echo $service_url; ?>/lib/images/vmc/logo_vmc.png" alt="Vidiun CMS" />
 		<div id="user_links">
-        	<a href="<?php echo $service_url; ?>/lib/pdf/KMC_Quick_Start_Guide.pdf" target="_blank">Quickstart Guide</a>
+        	<a href="<?php echo $service_url; ?>/lib/pdf/VMC_Quick_Start_Guide.pdf" target="_blank">Quickstart Guide</a>
 	</div> 
 </div>
 
-<div id="mainLogin" class="kmcLoginPage">
+<div id="mainLogin" class="vmcLoginPage">
 	<form method="post" id="loginForm" autocomplete="off">
 		<div class="title"><h1>Login</h1></div>
 		<div class="content">
@@ -38,20 +38,20 @@
 		</div>			
 		<div class="bottom">
 			<a id="forgotPasswordLink" href="#" >Forgot Password?</a>
-			<a id="signupLink" href="<?php echo kConf::get('signup_url'); ?>">Sigunup</a>	 
+			<a id="signupLink" href="<?php echo vConf::get('signup_url'); ?>">Sigunup</a>	 
 			<input type="submit" value="Login" />
 		</div>
 	</form>
 </div>
 
-<div id="forgotPasswordExtension" class="kmcLoginPage">
+<div id="forgotPasswordExtension" class="vmcLoginPage">
 	<form method="post" id="forgotPasswordForm">
 		<div class="title"><h1>Forgot Password?</h1></div>
 		<div class="content">
 				<div class="item bottomSpace">
 					<p>
 						Instructions to reset your password will be sent to your email. If you have forgotten which email you used, please
-						<a href="<?php echo kConf::get('contact_url'); ?>">contact us</a>.
+						<a href="<?php echo vConf::get('contact_url'); ?>">contact us</a>.
 					</p>
 				</div>
 				<div class="item clearfix ">
@@ -69,7 +69,7 @@
 	</form>
 </div>
 
-<div id="newPasswordError" class="kmcLoginPage">
+<div id="newPasswordError" class="vmcLoginPage">
 	<form method="post" id="newPasswordErrorForm">
 		<div class="title"><h1>Link Invalid</h1></div>
 		<div class="content">
@@ -93,13 +93,13 @@
 	</form>
 </div>
 
-<div id="newPasswordSuccess" class="kmcLoginPage">
+<div id="newPasswordSuccess" class="vmcLoginPage">
 	<form method="post" id="newPasswordSuccessForm" autocomplete="off">
 		<div class="title"><h1>Set Password</h1></div>
 		<div class="content">
 				<div class="item">
 					<p>
-						Welcome to Kaltura, please select your password.
+						Welcome to Vidiun, please select your password.
 					</p>
 				</div>
 				<div class="item">
@@ -121,7 +121,7 @@
 	</form>
 </div>
 
-<div id="passwordExpired" class="kmcLoginPage">
+<div id="passwordExpired" class="vmcLoginPage">
 	<form method="post" id="passwordExpiredForm" autocomplete="off">
 		<div class="title"><h1>Password Expired</h1></div>
 		<div class="content">
@@ -163,7 +163,7 @@ if(top != window) { top.location = window.location; }
  * General page events
  */
 var toggleDiv = function (divId) {
-	$('.kmcLoginPage').hide();
+	$('.vmcLoginPage').hide();
 	$('#'+ divId).show();
 };
 //selecting the div to show first
@@ -197,7 +197,7 @@ $("#loginForm input[name=loginId]").change(function(){
 });
 
 //validate email inserted
-$(".kmcLoginPage input[name=loginId]").change(function(){
+$(".vmcLoginPage input[name=loginId]").change(function(){
 	valid = validate.email($(this));
 	if (!valid){
 		showError("Invalid e-mail");
@@ -223,9 +223,9 @@ var login = {
 					}
 					else
 					{
-						var ks = data;
+						var vs = data;
 						var expiryTime = $("input[name=expiry]").val();
-						var url = '<?php echo str_replace ( "https://" , "http://" , $service_url );?>/index.php/kmc/extlogin?ks='+ ks +'&exp=' + expiryTime; 
+						var url = '<?php echo str_replace ( "https://" , "http://" , $service_url );?>/index.php/vmc/extlogin?vs='+ vs +'&exp=' + expiryTime; 
 						window.location = url;
 					}
 				}
@@ -358,9 +358,9 @@ var passwordExpired = {
 					}
 					else
 					{						
-						var ks = data;
+						var vs = data;
 						var expiryTime = $("input[name=expiry]").val();
-						var url = '<?php echo str_replace ( "https://" , "http://" , $service_url );?>/index.php/kmc/extlogin?ks='+ ks +'&exp=' + expiryTime; 
+						var url = '<?php echo str_replace ( "https://" , "http://" , $service_url );?>/index.php/vmc/extlogin?vs='+ vs +'&exp=' + expiryTime; 
 						window.location = url;
 					}
 				}
@@ -440,7 +440,7 @@ var setInitialPassword = {
 				}
 				else
 				{
-					alert('The new password has been set, please login to Kaltura management console.');
+					alert('The new password has been set, please login to Vidiun management console.');
 					$("#newPasswordSuccess").fadeOut("slow", function(){ 
 						$("#mainLogin").fadeIn();
 					});	

@@ -19,18 +19,18 @@ class myContentStorage
 	
 	/**
 	 * This function returns the file system path for a requested content entity.
-	 * The given file name is of the form last_ugc_version.ext&kaltua_template
+	 * The given file name is of the form last_ugc_version.ext&vidiun_template
 	 * last_ugc_version - the last version of ugc the user uploaded
-	 * kaltura_template - a kaltura made content available for the user
+	 * vidiun_template - a vidiun made content available for the user
 	 * each one of these two may be omitted.
-	 * A user never uploaded his own content : "&kaltura_template"
+	 * A user never uploaded his own content : "&vidiun_template"
 	 * A user uploaded his own content : "ugc_version"
-	 * A user replaced his old content with a template : "last_ugc_version&kaltura_template"
+	 * A user replaced his old content with a template : "last_ugc_version&vidiun_template"
 	 * This way we keep the last version the user used. This allows us to force caching of the UGC
 	 * on the browser side without even checking for modification on the server side. A new ugc will
 	 * simply get another name through the version process.
-	 * When we want to set a kaltura template will set the $fileName parameter to '&'.kaltura_template_name.
-	 * The path is composed from the entity name (kshow, entry, kuser),
+	 * When we want to set a vidiun template will set the $fileName parameter to '&'.vidiun_template_name.
+	 * The path is composed from the entity name (vshow, entry, vuser),
 	 * the entity id and it's random obfuscator (which is used also for versioning)
 	 * @param string $entityName = the entity object name
 	 * @param int $id = the entity id
@@ -116,7 +116,7 @@ class myContentStorage
 		// TODO - use glob rather than  dirListExtended
 		//$pattern = "|" . self::getFSContentRootPath(). "/" . $dir . "/^{$file_base}.*\.xml$";
 		
-		$files = kFile::dirListExtended( self::getFSContentRootPath() . "/" . $dir , false , false , '/^' . $file_base . '.*\.xml$/' ) ;
+		$files = vFile::dirListExtended( self::getFSContentRootPath() . "/" . $dir , false , false , '/^' . $file_base . '.*\.xml$/' ) ;
 		
 		if ( $files == null ) return null;
 				
@@ -125,7 +125,7 @@ class myContentStorage
 		foreach ( $files as &$file_tuple )
 		{
 			//  the file_name includes the id and the _, then the verson and finally the file extension
-			$file_version = substr( kFile::getFileNameNoExtension ( $file_tuple[0] ) , $id_len );
+			$file_version = substr( vFile::getFileNameNoExtension ( $file_tuple[0] ) , $id_len );
 			$file_tuple[] = $file_version; // set the version in the forth place of the tuple.
 		}
 
@@ -137,7 +137,7 @@ class myContentStorage
 	/**
 	 * This function generates a random file name consisting of a random number and
 	 * a given file extension. If the new filename begins with a '&' or '^' character, the new
-	 * file is a kaltura template and it's appended to the previous filename UGC part.
+	 * file is a vidiun template and it's appended to the previous filename UGC part.
 	 * This way the old UGC version is mantained. look above at getGeneralEntityPath documentation.
 	 * The random number is in the interval [100000,900000].
 	 * The 900000 upper limit provides space for storing 100000 versions
@@ -160,7 +160,7 @@ class myContentStorage
 		else
 			$parts = array('');
 		
-		if (strlen($fileName) && ( $fileName[0] == '&' || $fileName[0] == '^' ) ) // setting to a kaltura template
+		if (strlen($fileName) && ( $fileName[0] == '&' || $fileName[0] == '^' ) ) // setting to a vidiun template
 		{
 			return $parts[0].$fileName;
 		}
@@ -170,29 +170,29 @@ class myContentStorage
 		else
 			$version = rand(myContentStorage::MIN_OBFUSCATOR_VALUE, myContentStorage::MAX_OBFUSCATOR_VALUE);
 		
-		$version = kDataCenterMgr::incrementVersion($version);
+		$version = vDataCenterMgr::incrementVersion($version);
 			
 		return $version.'.'.strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 	}
 
 	/**
 	 * This function returns the hash used secure the file uploading.
-	 * The hash is the SHA1 of the kuser salt, kuser id and given entity
+	 * The hash is the SHA1 of the vuser salt, vuser id and given entity
 	 * If the user doesnt exist in the database the returned hash is empty - an error.
 	 * @param string $entityName = the entity object name
-	 * @param int $kuser_id = the uploading kuser id
+	 * @param int $vuser_id = the uploading vuser id
 	 * @return string the hash
 	 */
-	public static function getTempUploadHash($entityName, $kuser_id, $user = NULL)
+	public static function getTempUploadHash($entityName, $vuser_id, $user = NULL)
 	{
-		if ( !$user ) $user = kuserPeer::retrieveByPK($kuser_id);
+		if ( !$user ) $user = vuserPeer::retrieveByPK($vuser_id);
 
 		// found user in db, generate hash
 		if($user)
 		{
-			$salt = ''; // kusers didn't have salt'
+			$salt = ''; // vusers didn't have salt'
 
-			return $hash = sha1($salt.$kuser_id.$entityName);
+			return $hash = sha1($salt.$vuser_id.$entityName);
 		}
 
 		return "";
@@ -204,22 +204,22 @@ class myContentStorage
 	 * The filename is the given entity name (thumbnail, audio, etc...)
 	 * The hash is generated using the myContentStorage::getTempUploadHash function.
 	 * @param string $entityName = the entity object name
-	 * @param int $kuser_id = the uploading kuser id
+	 * @param int $vuser_id = the uploading vuser id
 	 * @return string the url parameters string
 	 */
-	public static function getTempUploadUrlParams($entityName, $kuser_id, $user = NULL)
+	public static function getTempUploadUrlParams($entityName, $vuser_id, $user = NULL)
 	{
 		// TODO - i added  this becuase it took me 3 hours to find this bug.
 		// it's clear that the module from which this is called should enforce logging in, but i added this extra defence - Eran ??
-		if ( $kuser_id == NULL || strlen ( $kuser_id ) == 0 )
+		if ( $vuser_id == NULL || strlen ( $vuser_id ) == 0 )
 		{
 			throw new Exception ( "Should not be called when user is not logged in !" );
 		}
 		
-		$hash = myContentStorage::getTempUploadHash($entityName, $kuser_id, $user );
+		$hash = myContentStorage::getTempUploadHash($entityName, $vuser_id, $user );
 
 		if ($hash != "")
-		return "?id=$kuser_id&filename=$entityName&hash=$hash";
+		return "?id=$vuser_id&filename=$entityName&hash=$hash";
 
 		return "";
 	}
@@ -237,18 +237,18 @@ class myContentStorage
 		
 		if ( !is_dir ( dirname ( $to )) )
 		{
-			kFile::fullMkdir($to);
+			vFile::fullMkdir($to);
 		}
 
-		KalturaLog::log("myContentStorage::moveFile ($copy): $from to $to");
+		VidiunLog::log("myContentStorage::moveFile ($copy): $from to $to");
 		
 		if ( file_exists( $from ))
 		{
-			KalturaLog::log(__METHOD__." - $from file exists");
+			VidiunLog::log(__METHOD__." - $from file exists");
 		}
 		else
 		{
-			KalturaLog::log(__METHOD__." - $from file doesnt exist");
+			VidiunLog::log(__METHOD__." - $from file doesnt exist");
 		}
 		
 		if ($copy)
@@ -280,7 +280,7 @@ class myContentStorage
 	 */
 	public static function getFSContentRootPath ()
 	{
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		return $dc["root"];
 		
 		//return realpath(sfConfig::get('sf_root_dir')."/../../").'/';
@@ -298,7 +298,7 @@ class myContentStorage
 	
 	public static function getFSCacheRootPath ()
 	{
-		return kConf::get("general_cache_dir");
+		return vConf::get("general_cache_dir");
 	}
 	
 	public static function getFSDeletedContentRootPath ( $original_path )
@@ -316,7 +316,7 @@ class myContentStorage
 		$deleted_path = self::getFSDeletedContentRootPath ( $original_path );
 		if ( $deleted_path  == null ) return "";
 		if ( ! file_exists( $original_path )) return "";
-		kFile::fullMkdir( $deleted_path );
+		vFile::fullMkdir( $deleted_path );
 		self::moveFile( $original_path , $deleted_path , true , $copy );
 		return $deleted_path;
 	}
@@ -349,17 +349,17 @@ class myContentStorage
 	}
 	
 	
-	public static function removeTempThumbnails($kuser_id)
+	public static function removeTempThumbnails($vuser_id)
 	{
-		$thumbPattern = myContentStorage::getFSUploadsPath().$kuser_id.'_thumbnail_*.*';
+		$thumbPattern = myContentStorage::getFSUploadsPath().$vuser_id.'_thumbnail_*.*';
 		
 		foreach (glob($thumbPattern) as $filename)
 	      unlink($filename);
 	}
 	
-	public static function removeTempKUserContent($kuser_id)
+	public static function removeTempVUserContent($vuser_id)
 	{
-		$filePattern = myContentStorage::getFSUploadsPath().$kuser_id.'_*.*';
+		$filePattern = myContentStorage::getFSUploadsPath().$vuser_id.'_*.*';
 		
 		foreach (glob($filePattern) as $filename)
 	      unlink($filename);
@@ -367,7 +367,7 @@ class myContentStorage
 	
 	public static function fileExtAccepted($ext)
 	{
-		// TODO - support all document types or enable kConf
+		// TODO - support all document types or enable vConf
 		$fileExts = array("jpg", "jpeg", "bmp", "png", "gif", "tif", "tiff" );
 		return in_array($ext, $fileExts);
 	}

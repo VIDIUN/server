@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Subclass for representing a row from the 'puser_kuser' table.
+ * Subclass for representing a row from the 'puser_vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model
  */ 
-class PuserKuser extends BasePuserKuser
+class PuserVuser extends BasePuserVuser
 {
 	public $exists = false;
 }

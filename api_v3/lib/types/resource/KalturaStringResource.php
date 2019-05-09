@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStringResource extends KalturaContentResource
+class VidiunStringResource extends VidiunContentResource
 {
 	/**
 	 * Textual content
@@ -14,7 +14,7 @@ class KalturaStringResource extends KalturaContentResource
 	public $content;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -24,14 +24,14 @@ class KalturaStringResource extends KalturaContentResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kLocalFileResource();
+			$object_to_fill = new vLocalFileResource();
 		
-		kFileBase::setFileContent($fname = tempnam(myContentStorage::getFSUploadsPath(), "KFR"), $this->content);
+		vFileBase::setFileContent($fname = tempnam(myContentStorage::getFSUploadsPath(), "KFR"), $this->content);
 		$object_to_fill->setLocalFilePath($fname);
 		$object_to_fill->setSourceType(entry::ENTRY_MEDIA_SOURCE_TEXT);
 		

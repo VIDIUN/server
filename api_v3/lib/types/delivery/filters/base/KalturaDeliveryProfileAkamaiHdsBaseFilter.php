@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaDeliveryProfileAkamaiHdsBaseFilter extends KalturaDeliveryProfileFilter
+abstract class VidiunDeliveryProfileAkamaiHdsBaseFilter extends VidiunDeliveryProfileFilter
 {
 	static private $map_between_objects = array
 	(

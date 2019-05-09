@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage lib
  */
-class DocumentCreatedHandler implements kObjectCreatedEventConsumer, kObjectAddedEventConsumer
+class DocumentCreatedHandler implements vObjectCreatedEventConsumer, vObjectAddedEventConsumer
 {
 	protected static $fileExtensions = array(
 		entry::ENTRY_MEDIA_TYPE_DOCUMENT => array(
@@ -54,7 +54,7 @@ class DocumentCreatedHandler implements kObjectCreatedEventConsumer, kObjectAdde
 		
 		if($object->getType() != entryType::DOCUMENT)
 		{
-			KalturaLog::info("entry id [" . $object->getId() . "] type [" . $object->getType() . "]");
+			VidiunLog::info("entry id [" . $object->getId() . "] type [" . $object->getType() . "]");
 			return true;
 		}
 	
@@ -65,7 +65,7 @@ class DocumentCreatedHandler implements kObjectCreatedEventConsumer, kObjectAdde
 			
 		if($object instanceof DocumentEntry)
 		{
-			KalturaLog::info("entry id [" . $object->getId() . "] already handled");
+			VidiunLog::info("entry id [" . $object->getId() . "] already handled");
 			return true;
 		}
 	
@@ -79,7 +79,7 @@ class DocumentCreatedHandler implements kObjectCreatedEventConsumer, kObjectAdde
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object)
 	{
@@ -90,7 +90,7 @@ class DocumentCreatedHandler implements kObjectCreatedEventConsumer, kObjectAdde
 	}
 		
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object)
 	{
@@ -98,7 +98,7 @@ class DocumentCreatedHandler implements kObjectCreatedEventConsumer, kObjectAdde
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -109,7 +109,7 @@ class DocumentCreatedHandler implements kObjectCreatedEventConsumer, kObjectAdde
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -119,8 +119,8 @@ class DocumentCreatedHandler implements kObjectCreatedEventConsumer, kObjectAdde
 			if($entry->getConversionQuality() > 0)
 			{
 				$syncKey = $object->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-				$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
-				kJobsManager::addConvertProfileJob($raisedJob, $entry, $object->getId(), $fileSync);
+				$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
+				vJobsManager::addConvertProfileJob($raisedJob, $entry, $object->getId(), $fileSync);
 			}
 			else
 			{

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaUserMode extends KalturaEnum implements KuserMode
+class VidiunUserMode extends VidiunEnum implements VuserMode
 {
 
 }

@@ -10,7 +10,7 @@
  */ 
 class moderation extends Basemoderation implements IBaseObject
 {
-	const MODERATION_OBJECT_TYPE_KSHOW = 1;
+	const MODERATION_OBJECT_TYPE_VSHOW = 1;
 	const MODERATION_OBJECT_TYPE_ENTRY = 2;
 	const MODERATION_OBJECT_TYPE_USER = 3;
 	
@@ -57,8 +57,8 @@ class moderation extends Basemoderation implements IBaseObject
 		
 		switch ( $this->getObjectType()  )
 		{
-			case self::MODERATION_OBJECT_TYPE_KSHOW:
-				$this->m_object = kshowPeer::retrieveByPK( $object_id );
+			case self::MODERATION_OBJECT_TYPE_VSHOW:
+				$this->m_object = vshowPeer::retrieveByPK( $object_id );
 				break;
 			case self::MODERATION_OBJECT_TYPE_ENTRY:
 				// be able to fetch entries that are deleted
@@ -68,9 +68,9 @@ class moderation extends Basemoderation implements IBaseObject
 				break;
 			case self::MODERATION_OBJECT_TYPE_USER:
 				// $object_id is the puser_id
-				$puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid( $this->getPartnerId() , NULL , $object_id , true );
-				if ( $puser_kuser && $puser_kuser->getKuser() ) $this->m_object = $puser_kuser->getKuser();
-//				$this->m_object = kuserPeer::retrieveByPK( $object_id );
+				$puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid( $this->getPartnerId() , NULL , $object_id , true );
+				if ( $puser_vuser && $puser_vuser->getVuser() ) $this->m_object = $puser_vuser->getVuser();
+//				$this->m_object = vuserPeer::retrieveByPK( $object_id );
 				break;
 		}
 		
@@ -114,7 +114,7 @@ class moderation extends Basemoderation implements IBaseObject
 		if ( self::$MODERATION_TYPE_MAP == null )
 		{
 			self::$MODERATION_TYPE_MAP = array (
-				self::MODERATION_OBJECT_TYPE_KSHOW => "kshow",
+				self::MODERATION_OBJECT_TYPE_VSHOW => "vshow",
 				self::MODERATION_OBJECT_TYPE_ENTRY => "entry" ,
 				self::MODERATION_OBJECT_TYPE_USER => "user" ,
 			);

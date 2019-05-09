@@ -1,5 +1,5 @@
 <?php
-class kAkamaiProvisionJobData extends kProvisionJobData 
+class vAkamaiProvisionJobData extends vProvisionJobData 
 { 
 	/**
 	 * @var string
@@ -128,7 +128,7 @@ class kAkamaiProvisionJobData extends kProvisionJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kProvisionJobData::populateFromPartner()
+	 * @see vProvisionJobData::populateFromPartner()
 	 */
 	public function populateFromPartner(Partner $partner) 
 	{
@@ -146,7 +146,7 @@ class kAkamaiProvisionJobData extends kProvisionJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kProvisionJobData::populateEntryFromData()
+	 * @see vProvisionJobData::populateEntryFromData()
 	 */
 	public function populateEntryFromData (LiveStreamEntry $entry)
 	{
@@ -160,7 +160,7 @@ class kAkamaiProvisionJobData extends kProvisionJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kProvisionJobData::populateFromEntry()
+	 * @see vProvisionJobData::populateFromEntry()
 	 */
 	public function populateFromEntry(LiveStreamEntry $entry) 
 	{

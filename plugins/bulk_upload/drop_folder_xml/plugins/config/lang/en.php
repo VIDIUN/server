@@ -1,6 +1,6 @@
 <?php
 return array (
-	'Kaltura_Client_DropFolder_Enum_DropFolderType::FEED' => 'Feed',
+	'Vidiun_Client_DropFolder_Enum_DropFolderType::FEED' => 'Feed',
 	
 	'item-xpath' => 'Item XPath:',
 	'item-unique-id' => 'Item unique identifier tag xpath (relative to item tag):',

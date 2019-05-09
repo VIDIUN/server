@@ -1,6 +1,6 @@
 <?php
 /**
- * IMPORTANT !!! This class should not depend on anything other than kConf (e.g. NOT KalturaLog)
+ * IMPORTANT !!! This class should not depend on anything other than vConf (e.g. NOT VidiunLog)
  *
  * Will hold helper functions and conventions for working with the HttpRequest object
  *
@@ -203,17 +203,17 @@ class infraRequestUtils
 
 	public static function getSignedIpAddressHeader($ip = null)
 	{
-		if (!kConf::hasParam('remote_addr_header_salt'))
+		if (!vConf::hasParam('remote_addr_header_salt'))
 			return null;
 			
 		if (!$ip)
 			$ip = self::getRemoteAddress();
 
-		$salt = kConf::get('remote_addr_header_salt');
+		$salt = vConf::get('remote_addr_header_salt');
 		$baseHeader = array(trim($ip), time(), microtime(true));
 		$baseHeader = implode(',', $baseHeader);
 		$ipHeader = $baseHeader . ',' . md5($baseHeader . ',' . $salt);
-		return array('X-KALTURA-REMOTE-ADDR', $ipHeader);
+		return array('X-VIDIUN-REMOTE-ADDR', $ipHeader);
 	}
 	
 	public static function isIpPrivate($ip)
@@ -312,7 +312,7 @@ class infraRequestUtils
 			return self::$remoteAddress["ip"];
 		}
 			
-		// Prevent call cycles in case KalturaLog will be used in internalGetRemoteAddress
+		// Prevent call cycles in case VidiunLog will be used in internalGetRemoteAddress
 		if (self::$isInGetRemoteAddress)
 			return null;
 		
@@ -329,7 +329,7 @@ class infraRequestUtils
 		}
 			
 		// enable access control debug
-		if(isset($_POST['debug_ip']) && kConf::hasParam('debug_ip_enabled') && kConf::get('debug_ip_enabled'))
+		if(isset($_POST['debug_ip']) && vConf::hasParam('debug_ip_enabled') && vConf::get('debug_ip_enabled'))
 		{
 			header('Debug IP: ' . $_POST['debug_ip']);
 			return $_POST['debug_ip'];
@@ -337,14 +337,14 @@ class infraRequestUtils
 			
 		$remote_addr = null;
 
-		if (!$remote_addr && isset ( $_SERVER['HTTP_X_KALTURA_REMOTE_ADDR'] ) )
+		if (!$remote_addr && isset ( $_SERVER['HTTP_X_VIDIUN_REMOTE_ADDR'] ) )
 		{
-			list($remote_addr, $time, $uniqueId, $hash) = @explode(",", $_SERVER['HTTP_X_KALTURA_REMOTE_ADDR']);
+			list($remote_addr, $time, $uniqueId, $hash) = @explode(",", $_SERVER['HTTP_X_VIDIUN_REMOTE_ADDR']);
 			
-			if (kConf::hasParam('remote_addr_header_salt') && kConf::hasParam("remote_addr_header_timeout"))
+			if (vConf::hasParam('remote_addr_header_salt') && vConf::hasParam("remote_addr_header_timeout"))
 			{
-				$salt = kConf::get('remote_addr_header_salt');
-				$timeout = kConf::get("remote_addr_header_timeout");
+				$salt = vConf::get('remote_addr_header_salt');
+				$timeout = vConf::get("remote_addr_header_timeout");
 				
 				if ($timeout) {
 					// Compare the absolute value of the difference between the current time
@@ -365,19 +365,19 @@ class infraRequestUtils
 		if (!$remote_addr &&
 			isset($_SERVER['HTTP_X_FORWARDED_FOR']) &&
 			(isset($_SERVER['HTTP_HOST']) && 
-			in_array($_SERVER['HTTP_HOST'], kConf::get('remote_addr_whitelisted_hosts') ) ||
+			in_array($_SERVER['HTTP_HOST'], vConf::get('remote_addr_whitelisted_hosts') ) ||
 			isset($_SERVER['HTTP_X_FORWARDED_HOST']) &&
-			in_array($_SERVER['HTTP_X_FORWARDED_HOST'], kConf::get('remote_addr_whitelisted_hosts') ) ) )
+			in_array($_SERVER['HTTP_X_FORWARDED_HOST'], vConf::get('remote_addr_whitelisted_hosts') ) ) )
 		{
-			$remote_addr = self::getIpFromHttpHeader('HTTP_X_FORWARDED_FOR', kConf::get('accept_private_ips'));
+			$remote_addr = self::getIpFromHttpHeader('HTTP_X_FORWARDED_FOR', vConf::get('accept_private_ips'));
 		}
 
 		// support passing ip when proxying through apache. check the proxying server is indeed an internal server
 		if (!$remote_addr &&
 				isset($_SERVER['HTTP_X_FORWARDED_FOR']) &&
 				isset($_SERVER['HTTP_X_FORWARDED_SERVER']) &&
-				kConf::hasParam('remote_addr_header_server') &&
-				$_SERVER['HTTP_X_FORWARDED_SERVER'] == kConf::get('remote_addr_header_server') )
+				vConf::hasParam('remote_addr_header_server') &&
+				$_SERVER['HTTP_X_FORWARDED_SERVER'] == vConf::get('remote_addr_header_server') )
 		{
 			// pick the last ip
 			$headerIPs = explode(",", $_SERVER['HTTP_X_FORWARDED_FOR']);
@@ -398,8 +398,8 @@ class infraRequestUtils
 		
 		$params = self::getRequestParams();
 		if (isset($params['apiProtocol']) &&
-			kConf::hasParam('https_param_salt') &&
-			$params['apiProtocol'] == 'https_' . kConf::get('https_param_salt'))
+			vConf::hasParam('https_param_salt') &&
+			$params['apiProtocol'] == 'https_' . vConf::get('https_param_salt'))
 			return self::PROTOCOL_HTTPS;
 		
 		return self::PROTOCOL_HTTP;
@@ -416,7 +416,7 @@ class infraRequestUtils
 		{
 			// parse_url could not extract domain, but returned path
 			// we validate that this path could be considered a domain
-			$result = rtrim($urlDetails['path'], '/'); // trim trailing slashes. example: www.kaltura.com/test.php
+			$result = rtrim($urlDetails['path'], '/'); // trim trailing slashes. example: www.vidiun.com/test.php
 			
 			// stop string at first slash. example: httpssss/google.com - malformed url...
 			if (strpos($result, "/") !== false)
@@ -509,8 +509,8 @@ class infraRequestUtils
 		
 		self::$requestParams = array_replace_recursive($post, $_FILES, $_GET, $params);
 
-		$v3cacheTruncateParams = kConf::get('v3cache_truncate_time_params', 'local', array());
-		$v3cacheTruncateValue = kConf::get('v3cache_truncate_time_value', 'local', 60);
+		$v3cacheTruncateParams = vConf::get('v3cache_truncate_time_params', 'local', array());
+		$v3cacheTruncateValue = vConf::get('v3cache_truncate_time_value', 'local', 60);
 		foreach($v3cacheTruncateParams as $paramName)
 		{
 			if (isset(self::$requestParams[$paramName]))

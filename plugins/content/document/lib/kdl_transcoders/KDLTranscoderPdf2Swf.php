@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage lib
  */
-class KDLTranscoderPdf2Swf extends KDLOperatorBase
+class VDLTranscoderPdf2Swf extends VDLOperatorBase
 {
     
 	
@@ -13,7 +13,7 @@ class KDLTranscoderPdf2Swf extends KDLOperatorBase
     }
     	
 	
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 		/* PDF to SWF - will use SWFTOOLS */
 		
@@ -50,8 +50,8 @@ class KDLTranscoderPdf2Swf extends KDLOperatorBase
 				$cmdStr .= '-s poly2bitmap';
 			}
 		}
-		$cmdStr .= $extra . KDLCmdlinePlaceholders::InFileName.
-		           ' -o '.KDLCmdlinePlaceholders::OutFileName;
+		$cmdStr .= $extra . VDLCmdlinePlaceholders::InFileName.
+		           ' -o '.VDLCmdlinePlaceholders::OutFileName;
 		
 		return trim($cmdStr);
 	}

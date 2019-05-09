@@ -7,7 +7,7 @@ $(function() {
 
 function autoSizeIframe(){
 	var availableHeight = $(window).height();
-	var takenHeight =  $('#kmcHeader').outerHeight(true) + $('#sub-header').outerHeight(true);
+	var takenHeight =  $('#vmcHeader').outerHeight(true) + $('#sub-header').outerHeight(true);
 	var height = availableHeight - takenHeight;
 	$('iframe.auto-height').height(height);
 	$('#wrapper').height(height); // fixes weird scrolling

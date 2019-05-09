@@ -3,7 +3,7 @@
  * @package plugins.playReady
  * @subpackage model.enum
  */
-class PlayReadyLicenseType implements IKalturaPluginEnum, DrmLicenseType
+class PlayReadyLicenseType implements IVidiunPluginEnum, DrmLicenseType
 {
 	const PERSISTENT = 'PERSISTENT';
 	const NON_PERSISTENT = 'NON_PERSISTENT';

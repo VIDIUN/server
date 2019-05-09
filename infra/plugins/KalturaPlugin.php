@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage Plugins
  */
-abstract class KalturaPlugin implements IKalturaPlugin
+abstract class VidiunPlugin implements IVidiunPlugin
 {
 	public function getInstance($interface)
 	{

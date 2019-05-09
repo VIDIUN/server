@@ -4,11 +4,11 @@
  * @subpackage model.data
  * @abstract
  */
-abstract class kCompareCondition extends kCondition
+abstract class vCompareCondition extends vCondition
 {
 	/**
 	 * Value to evaluate against the field and operator
-	 * @var kIntegerValue
+	 * @var vIntegerValue
 	 */
 	protected $value;
 	
@@ -19,7 +19,7 @@ abstract class kCompareCondition extends kCondition
 	protected $comparison;
 
 	/**
-	 * @return kIntegerValue
+	 * @return vIntegerValue
 	 */
 	public function getValue() 
 	{
@@ -36,9 +36,9 @@ abstract class kCompareCondition extends kCondition
 	}
 
 	/**
-	 * @param kIntegerValue $value
+	 * @param vIntegerValue $value
 	 */
-	public function setValue(kIntegerValue $value) 
+	public function setValue(vIntegerValue $value) 
 	{
 		$this->value = $value;
 	}
@@ -54,10 +54,10 @@ abstract class kCompareCondition extends kCondition
 
 	/**
 	 * Return single integer or array of integers
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return int|array<int> the field content
 	 */
-	abstract public function getFieldValue(kScope $scope);
+	abstract public function getFieldValue(vScope $scope);
 	
 	/**
 	 * @return int
@@ -66,7 +66,7 @@ abstract class kCompareCondition extends kCondition
 	{
 		if(is_object($this->value))
 		{
-			if($this->value instanceof kIntegerField)
+			if($this->value instanceof vIntegerField)
 				$this->value->setScope($scope);
 				
 			return $this->value->getValue();
@@ -85,46 +85,46 @@ abstract class kCompareCondition extends kCondition
 		switch($this->comparison)
 		{
 			case searchConditionComparison::GREATER_THAN:
-				KalturaLog::debug("Compares field[$field] > value[$value]");
+				VidiunLog::debug("Compares field[$field] > value[$value]");
 				return ($field > $value);
 				
 			case searchConditionComparison::GREATER_THAN_OR_EQUAL:
-				KalturaLog::debug("Compares field[$field] >= value[$value]");
+				VidiunLog::debug("Compares field[$field] >= value[$value]");
 				return ($field >= $value);
 				
 			case searchConditionComparison::LESS_THAN:
-				KalturaLog::debug("Compares field[$field] < value[$value]");
+				VidiunLog::debug("Compares field[$field] < value[$value]");
 				return ($field < $value);
 				
 			case searchConditionComparison::LESS_THAN_OR_EQUAL:
-				KalturaLog::debug("Compares field[$field] <= value[$value]");
+				VidiunLog::debug("Compares field[$field] <= value[$value]");
 				return ($field <= $value);
 				
 			case searchConditionComparison::EQUAL:
 			default:
-				KalturaLog::debug("Compares field[$field] == value[$value]");
+				VidiunLog::debug("Compares field[$field] == value[$value]");
 				return ($field == $value);
 		}
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		$field = $this->getFieldValue($scope);
 		$value = $this->getIntegerValue($scope);
 		
-		KalturaLog::debug("Copares field [$field] to value [$value]");
+		VidiunLog::debug("Copares field [$field] to value [$value]");
 		if (is_null($value))
 		{
-			KalturaLog::debug("Value is null, condition is true");
+			VidiunLog::debug("Value is null, condition is true");
 			return true;
 		}
 		
 		if (!$field)
 		{
-			KalturaLog::debug("Field is empty, condition is false");
+			VidiunLog::debug("Field is empty, condition is false");
 			return false;
 		}
 
@@ -134,11 +134,11 @@ abstract class kCompareCondition extends kCondition
 			{
 				if(!$this->fieldFulfilled($fieldItem, $value))
 				{
-					KalturaLog::debug("Field item [$fieldItem] does not fulfill, condition is false");
+					VidiunLog::debug("Field item [$fieldItem] does not fulfill, condition is false");
 					return false;
 				}
 			}
-			KalturaLog::debug("All field items fulfilled, condition is true");
+			VidiunLog::debug("All field items fulfilled, condition is true");
 			return true;
 		}
 		
@@ -146,7 +146,7 @@ abstract class kCompareCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::shouldDisableCache()
+	 * @see vCondition::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{
@@ -155,7 +155,7 @@ abstract class kCompareCondition extends kCondition
 	}
 
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return bool
 	 */
 	public function shouldFieldDisableCache($scope)

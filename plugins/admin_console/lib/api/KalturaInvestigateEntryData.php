@@ -3,40 +3,40 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaInvestigateEntryData extends KalturaObject
+class VidiunInvestigateEntryData extends VidiunObject
 {
 	/**
-	 * @var KalturaBaseEntry
+	 * @var VidiunBaseEntry
 	 * @readonly
 	 */
 	public $entry;
 
 	/**
-	 * @var KalturaFileSyncListResponse
+	 * @var VidiunFileSyncListResponse
 	 * @readonly
 	 */
 	public $fileSyncs;
 
 	/**
-	 * @var KalturaBatchJobListResponse
+	 * @var VidiunBatchJobListResponse
 	 * @readonly
 	 */
 	public $jobs;
 	
 	/**
-	 * @var KalturaInvestigateFlavorAssetDataArray
+	 * @var VidiunInvestigateFlavorAssetDataArray
 	 * @readonly
 	 */
 	public $flavorAssets;
 	
 	/**
-	 * @var KalturaInvestigateThumbAssetDataArray
+	 * @var VidiunInvestigateThumbAssetDataArray
 	 * @readonly
 	 */
 	public $thumbAssets;
 	
 	/**
-	 * @var KalturaTrackEntryArray
+	 * @var VidiunTrackEntryArray
 	 * @readonly
 	 */
 	public $tracks;

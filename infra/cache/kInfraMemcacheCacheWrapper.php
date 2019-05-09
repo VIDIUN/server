@@ -1,12 +1,12 @@
 <?php
 
-require_once(dirname(__FILE__) . '/kInfraBaseCacheWrapper.php');
+require_once(dirname(__FILE__) . '/vInfraBaseCacheWrapper.php');
 
 /**
  * @package infra
  * @subpackage cache
  */
-class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
+class vInfraMemcacheCacheWrapper extends vInfraBaseCacheWrapper
 {
 	const MAX_CONNECT_ATTEMPTS = 4;
 	
@@ -22,7 +22,7 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 	protected $connectAttempts = 0;
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::doInit()
+	 * @see vBaseCacheWrapper::doInit()
 	 */
 	protected function doInit($config)
 	{
@@ -77,8 +77,8 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 		$connTook = microtime(true) - $connStart;
 		self::safeLog("connect took - {$connTook} seconds to {$this->hostName}:{$this->port} attempts {$this->connectAttempts}");
 		
-		if (class_exists("KalturaMonitorClient"))
-			KalturaMonitorClient::monitorConnTook($this->hostName, $connTook);
+		if (class_exists("VidiunMonitorClient"))
+			VidiunMonitorClient::monitorConnTook($this->hostName, $connTook);
 
 		if (!$connectResult)
 		{
@@ -130,7 +130,7 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::get()
+	 * @see vBaseCacheWrapper::get()
 	 */
 	protected function doGet($key)
 	{
@@ -138,7 +138,7 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::set()
+	 * @see vBaseCacheWrapper::set()
 	 */
 	protected function doSet($key, $var, $expiry = 0)
 	{
@@ -146,7 +146,7 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::add()
+	 * @see vBaseCacheWrapper::add()
 	 */
 	public function doAdd($key, $var, $expiry = 0)
 	{
@@ -154,7 +154,7 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::multiGet()
+	 * @see vBaseCacheWrapper::multiGet()
 	 */
 	public function doMultiGet($keys)
 	{
@@ -162,7 +162,7 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::delete()
+	 * @see vBaseCacheWrapper::delete()
 	 */
 	public function doDelete($key)
 	{
@@ -170,7 +170,7 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::increment()
+	 * @see vBaseCacheWrapper::increment()
 	 */
 	public function doIncrement($key, $delta = 1)
 	{
@@ -178,7 +178,7 @@ class kInfraMemcacheCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::decrement()
+	 * @see vBaseCacheWrapper::decrement()
 	 */
 	public function doDecrement($key, $delta = 1)
 	{

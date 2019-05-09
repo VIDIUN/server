@@ -2,7 +2,7 @@
 /**
  * @package plugins.yahooeDistribution
  */
-class YahooDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class YahooDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'yahooDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -17,12 +17,12 @@ class YahooDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -83,7 +83,7 @@ class YahooDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::YAHOO)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::YAHOO)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'YahooDistributionEngine';
@@ -106,34 +106,34 @@ class YahooDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 			if($baseClass == 'IDistributionEngineUpdate')
 				return 'YahooDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaYahooDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunYahooDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaYahooDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunYahooDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::YAHOO)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::YAHOO)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_YahooProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_YahooDistribution_Type_YahooDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_YahooDistribution_Type_YahooDistributionProfile';
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		//if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')												
+		//if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')												
 			//return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(YahooDistributionProviderType::YAHOO))
-			return 'KalturaYahooDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(YahooDistributionProviderType::YAHOO))
+			return 'VidiunYahooDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(YahooDistributionProviderType::YAHOO))
-			return 'kYahooDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(YahooDistributionProviderType::YAHOO))
+			return 'vYahooDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YahooDistributionProviderType::YAHOO))
-			return 'KalturaYahooDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YahooDistributionProviderType::YAHOO))
+			return 'VidiunYahooDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YahooDistributionProviderType::YAHOO))
 			return 'YahooDistributionProfile';
@@ -154,11 +154,11 @@ class YahooDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaYahooDistributionProvider();
+		$distributionProvider = new VidiunYahooDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -183,8 +183,8 @@ class YahooDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -192,6 +192,6 @@ class YahooDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

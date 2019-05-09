@@ -37,23 +37,23 @@ for (;;)
 	{
 		$lastID = $result->getId();
 
-		$ksKey = kSessionBase::INVALID_SESSION_KEY_PREFIX . $result->getKs();
-		$ksValidUntil = $result->getKsValidUntil(null);
+		$vsKey = vSessionBase::INVALID_SESSION_KEY_PREFIX . $result->getVs();
+		$vsValidUntil = $result->getVsValidUntil(null);
 		$keyExpiry = 0;			// non expiring
-		if ($ksValidUntil !== null)
+		if ($vsValidUntil !== null)
 		{
-			if ($ksValidUntil + EXPIRY_TIME_MARGIN < time())
+			if ($vsValidUntil + EXPIRY_TIME_MARGIN < time())
 				continue;		// already expired
-			$keyExpiry = $ksValidUntil + EXPIRY_TIME_MARGIN;
+			$keyExpiry = $vsValidUntil + EXPIRY_TIME_MARGIN;
 		}
-		if ($memcache->set($ksKey, true, 0, $keyExpiry) === false)
-			die("Error: failed to set key [{$ksKey}] with expiry [{$keyExpiry}]");
+		if ($memcache->set($vsKey, true, 0, $keyExpiry) === false)
+			die("Error: failed to set key [{$vsKey}] with expiry [{$keyExpiry}]");
 			
 		$setCount++;
 	}
 }
 
-if ($memcache->set(kSessionBase::INVALID_SESSIONS_SYNCED_KEY, true) === false)
-	die("Error: failed to set key [" . kSessionBase::INVALID_SESSIONS_SYNCED_KEY . "]");
+if ($memcache->set(vSessionBase::INVALID_SESSIONS_SYNCED_KEY, true) === false)
+	die("Error: failed to set key [" . vSessionBase::INVALID_SESSIONS_SYNCED_KEY . "]");
 
 print("Done!\n{$setCount} keys set\n");

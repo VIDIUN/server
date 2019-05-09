@@ -26,7 +26,7 @@ while(count($accessControls))
 		$lastId = $accessControl->getId();
 		echo "Migrated access control profile [$lastId]." . PHP_EOL;
 	}
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 
 	$nextCriteria = clone $criteria;
 	$nextCriteria->add(accessControlPeer::ID, $lastId, Criteria::GREATER_THAN);

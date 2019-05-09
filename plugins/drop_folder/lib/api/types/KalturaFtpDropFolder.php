@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage api.objects
  */
-class KalturaFtpDropFolder extends KalturaRemoteDropFolder
+class VidiunFtpDropFolder extends VidiunRemoteDropFolder
 {
 
     /**

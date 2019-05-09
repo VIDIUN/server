@@ -3,7 +3,7 @@
  * @package plugins.expressionEncoder
  * @subpackage lib
  */
-class KDLOperatorExpressionEncoder extends KDLExpressionEncoder3 {
+class VDLOperatorExpressionEncoder extends VDLExpressionEncoder3 {
 
 }
 

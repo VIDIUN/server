@@ -2,11 +2,11 @@
 /**
  * An int representation to return an array of ints
  * 
- * @see KalturaIntegerValueArray
+ * @see VidiunIntegerValueArray
  * @package api
  * @subpackage objects
  */
-class KalturaIntegerValue extends KalturaValue
+class VidiunIntegerValue extends VidiunValue
 {
 	/**
 	 * @var int
@@ -14,12 +14,12 @@ class KalturaIntegerValue extends KalturaValue
     public $value;
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kIntegerValue();
+			$dbObject = new vIntegerValue();
 			
 		return parent::toObject($dbObject, $skip);
 	}

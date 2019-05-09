@@ -4,19 +4,19 @@
  * @subpackage objects
  * @deprecated
  */
-class KalturaDirectoryRestriction extends KalturaBaseRestriction 
+class VidiunDirectoryRestriction extends VidiunBaseRestriction 
 {
 	/**
-	 * Kaltura directory restriction type
+	 * Vidiun directory restriction type
 	 * 
-	 * @var KalturaDirectoryRestrictionType
+	 * @var VidiunDirectoryRestrictionType
 	 */
 	public $directoryRestrictionType;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseRestriction::toRule()
+	 * @see VidiunBaseRestriction::toRule()
 	 */
-	public function toRule(KalturaRestrictionArray $restrictions)
+	public function toRule(VidiunRestrictionArray $restrictions)
 	{
 		return null;
 	}

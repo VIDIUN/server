@@ -23,6 +23,6 @@ class ScpDropFolder extends SshDropFolder
 	
 	protected function getRemoteFileTransferMgrType()
 	{
-	    return kFileTransferMgrType::SCP;
+	    return vFileTransferMgrType::SCP;
 	}
 }

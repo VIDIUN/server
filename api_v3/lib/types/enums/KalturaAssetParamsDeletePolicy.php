@@ -3,6 +3,6 @@
  * @package api
  * @subpackage enum
  */
-class KalturaAssetParamsDeletePolicy extends KalturaEnum implements AssetParamsDeletePolicy
+class VidiunAssetParamsDeletePolicy extends VidiunEnum implements AssetParamsDeletePolicy
 {
 }

@@ -45,12 +45,12 @@ class Form_DistributionFieldConfig_SubForm extends Zend_Form_SubForm
 			'label'			=> 'MRSS XSLT:',
 		));
 		
-		$isRequired = new Kaltura_Form_Element_EnumSelect('isRequired', array('enum' => 'Kaltura_Client_ContentDistribution_Enum_DistributionFieldRequiredStatus'));
+		$isRequired = new Vidiun_Form_Element_EnumSelect('isRequired', array('enum' => 'Vidiun_Client_ContentDistribution_Enum_DistributionFieldRequiredStatus'));
 		$isRequired->setLabel('Required:');
 		$isRequired->setFilters(array('StringTrim'));
 		$this->addElements(array($isRequired));
 
-		$type = new Kaltura_Form_Element_EnumSelect('type', array('enum' => 'Kaltura_Client_ContentDistribution_Enum_DistributionFieldType'));
+		$type = new Vidiun_Form_Element_EnumSelect('type', array('enum' => 'Vidiun_Client_ContentDistribution_Enum_DistributionFieldType'));
 		$type->setLabel('Type:');
 		$type->setFilters(array('StringTrim'));
 		$this->addElements(array($type));
@@ -104,13 +104,13 @@ class Form_DistributionFieldConfig_SubForm extends Zend_Form_SubForm
 		}
 		
 		$requiredStatus = isset($props['isRequired']) ? $props['isRequired'] : null;
-		if ($requiredStatus == Kaltura_Client_ContentDistribution_Enum_DistributionFieldRequiredStatus::REQUIRED_BY_PROVIDER) {
+		if ($requiredStatus == Vidiun_Client_ContentDistribution_Enum_DistributionFieldRequiredStatus::REQUIRED_BY_PROVIDER) {
 			$this->getElement('isRequired')->setAttrib('disabled', 'disabled');
 		}
 		else 
 		{
 			// required by provider shouldn't be selectable by the user
-			$this->getElement('isRequired')->removeMultiOption(Kaltura_Client_ContentDistribution_Enum_DistributionFieldRequiredStatus::REQUIRED_BY_PROVIDER);
+			$this->getElement('isRequired')->removeMultiOption(Vidiun_Client_ContentDistribution_Enum_DistributionFieldRequiredStatus::REQUIRED_BY_PROVIDER);
 		}
 
 		$fieldType = isset($props['type']) ? $props['type'] : null;
@@ -148,7 +148,7 @@ class Form_DistributionFieldConfig_SubForm extends Zend_Form_SubForm
 		foreach ($updateParamsArray as $updateParam)
 		{
 			if (!empty($updateParam)) {
-				$newString = new Kaltura_Client_Type_String();
+				$newString = new Vidiun_Client_Type_String();
 				$newString->value = $updateParam;
 				$updateParams[] = $newString;
 			}
@@ -164,13 +164,13 @@ class Form_DistributionFieldConfig_SubForm extends Zend_Form_SubForm
 	{
 		switch ($type)
 		{
-			case Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::INT:
+			case Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::INT:
 				return "int";
-			case Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::STRING:
+			case Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::STRING:
 				return "string";
-			case Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::LONG:
+			case Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::LONG:
 				return "long";
-			case Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::TIMESTAMP:
+			case Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::TIMESTAMP:
 				return "timestamp";
 			default:
 				return "string";
@@ -182,15 +182,15 @@ class Form_DistributionFieldConfig_SubForm extends Zend_Form_SubForm
 		switch ($type)
 		{
 			case "int":
-				return Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::INT;
+				return Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::INT;
 			case "string":
-				return Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::STRING;
+				return Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::STRING;
 			case "long";
-				return Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::LONG;
+				return Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::LONG;
 			case "timestamp":
-				return Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::TIMESTAMP;
+				return Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::TIMESTAMP;
 			default:
-				return Kaltura_Client_ContentDistribution_Enum_DistributionFieldType::STRING;
+				return Vidiun_Client_ContentDistribution_Enum_DistributionFieldType::STRING;
 		}
 	}
 

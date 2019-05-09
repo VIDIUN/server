@@ -3,9 +3,9 @@
  * @package Core
  * @subpackage events
  */
-class kObjectErasedEvent extends KalturaEvent implements IKalturaDatabaseEvent, IKalturaObjectRelatedEvent
+class vObjectErasedEvent extends VidiunEvent implements IVidiunDatabaseEvent, IVidiunObjectRelatedEvent
 {
-    const EVENT_CONSUMER = 'kObjectErasedEventConsumer';
+    const EVENT_CONSUMER = 'vObjectErasedEventConsumer';
 	
 	/**
 	 * @var BaseObject
@@ -13,9 +13,9 @@ class kObjectErasedEvent extends KalturaEvent implements IKalturaDatabaseEvent, 
 	private $object;
     
 	/* (non-PHPdoc)
-     * @see KalturaEvent::doConsume()
+     * @see VidiunEvent::doConsume()
      */
-    protected function doConsume (KalturaEventConsumer $consumer)
+    protected function doConsume (VidiunEventConsumer $consumer)
     {
         if(!$consumer->shouldConsumeErasedEvent($this->object))
 			return true;
@@ -24,14 +24,14 @@ class kObjectErasedEvent extends KalturaEvent implements IKalturaDatabaseEvent, 
 		if(method_exists($this->object, 'getId'))
 			$additionalLog .= 'id [' . $this->object->getId() . ']';
 			
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		$result = $consumer->objectErased($this->object);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		return $result;
     }
 
 	/* (non-PHPdoc)
-     * @see KalturaEvent::getConsumerInterface()
+     * @see VidiunEvent::getConsumerInterface()
      */
     public function getConsumerInterface ()
     {
@@ -47,7 +47,7 @@ class kObjectErasedEvent extends KalturaEvent implements IKalturaDatabaseEvent, 
 		if(method_exists($object, 'getId'))
 			$additionalLog .= ' id [' . $object->getId() . ']';
 			
-		KalturaLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
+		VidiunLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
 	}
 	
 	public function getKey()
@@ -67,7 +67,7 @@ class kObjectErasedEvent extends KalturaEvent implements IKalturaDatabaseEvent, 
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::getScope()
+	 * @see VidiunEvent::getScope()
 	 */
 	public function getScope()
 	{

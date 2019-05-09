@@ -6,7 +6,7 @@ SELECT
 	IFNULL(SUM(count_download),0) count_download,
 	IFNULL(SUM(count_report),0) count_report
 FROM 
-	dwh_hourly_events_context_app ev, kalturadw.dwh_dim_applications ap
+	dwh_hourly_events_context_app ev, vidiundw.dwh_dim_applications ap
 WHERE 	
 	{CAT_ID_CLAUSE}
 	AND ap.name = {APPLICATION_NAME}

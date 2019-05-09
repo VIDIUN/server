@@ -3,11 +3,11 @@
  * @package plugins.widevine
  * @subpackage api.objects
  */
-class KalturaWidevineRepositorySyncJobData extends KalturaJobData
+class VidiunWidevineRepositorySyncJobData extends VidiunJobData
 {
 	/**
 	 * 
-	 * @var KalturaWidevineRepositorySyncMode
+	 * @var VidiunWidevineRepositorySyncMode
 	 */
 	public $syncMode;
 	

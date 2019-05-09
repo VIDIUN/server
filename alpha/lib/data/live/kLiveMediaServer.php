@@ -6,7 +6,7 @@
  * @subpackage model
  *
  */
-class kLiveMediaServer
+class vLiveMediaServer
 {
 	/**
 	 * @var int

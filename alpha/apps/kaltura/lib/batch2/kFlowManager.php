@@ -8,51 +8,51 @@
  * @subpackage Batch
  *
  */
-class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventConsumer, kObjectChangedEventConsumer, kObjectDeletedEventConsumer, kObjectReadyForReplacmentEventConsumer,kObjectDataChangedEventConsumer
+class vFlowManager implements vBatchJobStatusEventConsumer, vObjectAddedEventConsumer, vObjectChangedEventConsumer, vObjectDeletedEventConsumer, vObjectReadyForReplacmentEventConsumer,vObjectDataChangedEventConsumer
 {
 	public final function __construct()
 	{
 	}
 
-	protected function updatedImport(BatchJob $dbBatchJob, kImportJobData $data)
+	protected function updatedImport(BatchJob $dbBatchJob, vImportJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleImportFinished($dbBatchJob, $data);
+				return vFlowHelper::handleImportFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_RETRY:
-				return kFlowHelper::handleImportRetried($dbBatchJob, $data);
+				return vFlowHelper::handleImportRetried($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleImportFailed($dbBatchJob, $data);
+				return vFlowHelper::handleImportFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedConcat(BatchJob $dbBatchJob, kConcatJobData $data)
+	protected function updatedConcat(BatchJob $dbBatchJob, vConcatJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleConcatFinished($dbBatchJob, $data);
+				return vFlowHelper::handleConcatFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleConcatFailed($dbBatchJob, $data);
+				return vFlowHelper::handleConcatFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedConvertLiveSegment(BatchJob $dbBatchJob, kConvertLiveSegmentJobData $data)
+	protected function updatedConvertLiveSegment(BatchJob $dbBatchJob, vConvertLiveSegmentJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleConvertLiveSegmentFinished($dbBatchJob, $data);
+				return vFlowHelper::handleConvertLiveSegmentFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleConvertLiveSegmentFailed($dbBatchJob, $data);
+				return vFlowHelper::handleConvertLiveSegmentFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
@@ -63,122 +63,122 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_PENDING:
-				return kFlowHelper::handleIndexPending($dbBatchJob, $data);
+				return vFlowHelper::handleIndexPending($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleIndexFinished($dbBatchJob, $data);
+				return vFlowHelper::handleIndexFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleIndexFailed($dbBatchJob, $data);
+				return vFlowHelper::handleIndexFailed($dbBatchJob, $data);
 				return $dbBatchJob;
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedCopy(BatchJob $dbBatchJob, kCopyJobData $data)
+	protected function updatedCopy(BatchJob $dbBatchJob, vCopyJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-//				return kFlowHelper::handleCopyFinished($dbBatchJob, $data);
+//				return vFlowHelper::handleCopyFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-//				return kFlowHelper::handleCopyFailed($dbBatchJob, $data);
+//				return vFlowHelper::handleCopyFailed($dbBatchJob, $data);
 				return $dbBatchJob;
 			default:
 				return $dbBatchJob;
 		}
 	}
 	
-	protected function updatedDelete(BatchJob $dbBatchJob, kDeleteJobData $data)
+	protected function updatedDelete(BatchJob $dbBatchJob, vDeleteJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				//				return kFlowHelper::handleDeleteFinished($dbBatchJob, $data);
+				//				return vFlowHelper::handleDeleteFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				//				return kFlowHelper::handleDeleteFailed($dbBatchJob, $data);
+				//				return vFlowHelper::handleDeleteFailed($dbBatchJob, $data);
 				return $dbBatchJob;
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedExtractMedia(BatchJob $dbBatchJob, kExtractMediaJobData $data)
+	protected function updatedExtractMedia(BatchJob $dbBatchJob, vExtractMediaJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleExtractMediaClosed($dbBatchJob, $data);
+				return vFlowHelper::handleExtractMediaClosed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedMoveCategoryEntries(BatchJob $dbBatchJob, kMoveCategoryEntriesJobData $data)
+	protected function updatedMoveCategoryEntries(BatchJob $dbBatchJob, vMoveCategoryEntriesJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-//				return kFlowHelper::handleMoveCategoryEntriesFinished($dbBatchJob, $data);
+//				return vFlowHelper::handleMoveCategoryEntriesFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-//				return kFlowHelper::handleMoveCategoryEntriesFailed($dbBatchJob, $data);
+//				return vFlowHelper::handleMoveCategoryEntriesFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedStorageExport(BatchJob $dbBatchJob, kStorageExportJobData $data)
+	protected function updatedStorageExport(BatchJob $dbBatchJob, vStorageExportJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleStorageExportFinished($dbBatchJob, $data);
+				return vFlowHelper::handleStorageExportFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleStorageExportFailed($dbBatchJob, $data);
+				return vFlowHelper::handleStorageExportFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedStorageDelete(BatchJob $dbBatchJob, kStorageDeleteJobData $data)
+	protected function updatedStorageDelete(BatchJob $dbBatchJob, vStorageDeleteJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleStorageDeleteFinished($dbBatchJob, $data);
+				return vFlowHelper::handleStorageDeleteFinished($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedCaptureThumb(BatchJob $dbBatchJob, kCaptureThumbJobData $data)
+	protected function updatedCaptureThumb(BatchJob $dbBatchJob, vCaptureThumbJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleCaptureThumbFinished($dbBatchJob, $data);
+				return vFlowHelper::handleCaptureThumbFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleCaptureThumbFailed($dbBatchJob, $data);
+				return vFlowHelper::handleCaptureThumbFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 	
-	protected function updatedDeleteFile (BatchJob $dbBatchJob, kDeleteFileJobData $data)
+	protected function updatedDeleteFile (BatchJob $dbBatchJob, vDeleteFileJobData $data)
 	{
 		switch ($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_PROCESSING:
-				kFlowHelper::handleDeleteFileProcessing($data);
+				vFlowHelper::handleDeleteFileProcessing($data);
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleDeleteFileFinished($dbBatchJob, $data);
+				return vFlowHelper::handleDeleteFileFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
 			default:
@@ -186,149 +186,149 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		}	
 	}
 
-	protected function updatedConvert(BatchJob $dbBatchJob, kConvertJobData $data)
+	protected function updatedConvert(BatchJob $dbBatchJob, vConvertJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_PENDING:
-				return kFlowHelper::handleConvertPending($dbBatchJob, $data);
+				return vFlowHelper::handleConvertPending($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_QUEUED:
-				return kFlowHelper::handleConvertQueued($dbBatchJob, $data);
+				return vFlowHelper::handleConvertQueued($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleConvertFinished($dbBatchJob, $data);
+				return vFlowHelper::handleConvertFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleConvertFailed($dbBatchJob, $data);
+				return vFlowHelper::handleConvertFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedPostConvert(BatchJob $dbBatchJob, kPostConvertJobData $data)
+	protected function updatedPostConvert(BatchJob $dbBatchJob, vPostConvertJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handlePostConvertFinished($dbBatchJob, $data);
+				return vFlowHelper::handlePostConvertFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handlePostConvertFailed($dbBatchJob, $data);
+				return vFlowHelper::handlePostConvertFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedBulkUpload(BatchJob $dbBatchJob, kBulkUploadJobData $data)
+	protected function updatedBulkUpload(BatchJob $dbBatchJob, vBulkUploadJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FAILED: 
 			case BatchJob::BATCHJOB_STATUS_FATAL: 
-				return kFlowHelper::handleBulkUploadFailed($dbBatchJob, $data);
+				return vFlowHelper::handleBulkUploadFailed($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FINISHED: 
-				return kFlowHelper::handleBulkUploadFinished($dbBatchJob, $data);
+				return vFlowHelper::handleBulkUploadFinished($dbBatchJob, $data);
 			default: return $dbBatchJob;
 		}
 	}
 
-	protected function updatedConvertCollection(BatchJob $dbBatchJob, kConvertCollectionJobData $data)
+	protected function updatedConvertCollection(BatchJob $dbBatchJob, vConvertCollectionJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_PENDING:
-				return kFlowHelper::handleConvertCollectionPending($dbBatchJob, $data);
+				return vFlowHelper::handleConvertCollectionPending($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleConvertCollectionFinished($dbBatchJob, $data);
+				return vFlowHelper::handleConvertCollectionFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleConvertCollectionFailed($dbBatchJob, $data);
+				return vFlowHelper::handleConvertCollectionFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedConvertProfile(BatchJob $dbBatchJob, kConvertProfileJobData $data)
+	protected function updatedConvertProfile(BatchJob $dbBatchJob, vConvertProfileJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_PENDING:
-				return kFlowHelper::handleConvertProfilePending($dbBatchJob, $data);
+				return vFlowHelper::handleConvertProfilePending($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleConvertProfileFinished($dbBatchJob, $data);
+				return vFlowHelper::handleConvertProfileFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleConvertProfileFailed($dbBatchJob, $data);
+				return vFlowHelper::handleConvertProfileFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedBulkDownload(BatchJob $dbBatchJob, kBulkDownloadJobData $data)
+	protected function updatedBulkDownload(BatchJob $dbBatchJob, vBulkDownloadJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_PENDING:
-				return kFlowHelper::handleBulkDownloadPending($dbBatchJob, $data);
+				return vFlowHelper::handleBulkDownloadPending($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleBulkDownloadFinished($dbBatchJob, $data);
+				return vFlowHelper::handleBulkDownloadFinished($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedProvisionDelete(BatchJob $dbBatchJob, kProvisionJobData $data)
+	protected function updatedProvisionDelete(BatchJob $dbBatchJob, vProvisionJobData $data)
 	{
 		return $dbBatchJob;
 	}
 
-	protected function updatedProvisionProvide(BatchJob $dbBatchJob, kProvisionJobData $data)
+	protected function updatedProvisionProvide(BatchJob $dbBatchJob, vProvisionJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleProvisionProvideFinished($dbBatchJob, $data);
+				return vFlowHelper::handleProvisionProvideFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleProvisionProvideFailed($dbBatchJob, $data);
+				return vFlowHelper::handleProvisionProvideFailed($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 	
-	protected function updatedLiveReportExport(BatchJob $dbBatchJob, kLiveReportExportJobData $data)
+	protected function updatedLiveReportExport(BatchJob $dbBatchJob, vLiveReportExportJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleLiveReportExportFinished($dbBatchJob, $data);
+				return vFlowHelper::handleLiveReportExportFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleLiveReportExportFailed($dbBatchJob, $data);
+				return vFlowHelper::handleLiveReportExportFailed($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_ABORTED:
-				return kFlowHelper::handleLiveReportExportAborted($dbBatchJob, $data);
+				return vFlowHelper::handleLiveReportExportAborted($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
-	protected function updatedReportExport(BatchJob $dbBatchJob, kReportExportJobData $data)
+	protected function updatedReportExport(BatchJob $dbBatchJob, vReportExportJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleReportExportFinished($dbBatchJob, $data);
+				return vFlowHelper::handleReportExportFinished($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:
-				return kFlowHelper::handleReportExportFailed($dbBatchJob, $data);
+				return vFlowHelper::handleReportExportFailed($dbBatchJob, $data);
 			case BatchJob::BATCHJOB_STATUS_ABORTED:
-				return kFlowHelper::handleReportExportAborted($dbBatchJob, $data);
+				return vFlowHelper::handleReportExportAborted($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -336,7 +336,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{ 
@@ -345,7 +345,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		try
 		{
 			if($dbBatchJob->getStatus() == BatchJob::BATCHJOB_STATUS_FAILED || $dbBatchJob->getStatus() == BatchJob::BATCHJOB_STATUS_FATAL)	{
-				kJobsManager::abortChildJobs($dbBatchJob);
+				vJobsManager::abortChildJobs($dbBatchJob);
 			}
 			
 			$jobType = $dbBatchJob->getJobType();
@@ -450,7 +450,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 			if($dbBatchJob->getStatus() == BatchJob::BATCHJOB_STATUS_RETRY) {
 				
 				if($dbBatchJobLock && $dbBatchJobLock->getExecutionAttempts() >= BatchJobLockPeer::getMaxExecutionAttempts($jobType))
-					$dbBatchJob = kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FAILED);
+					$dbBatchJob = vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FAILED);
 			}
 			
 			if(in_array($dbBatchJob->getStatus(), BatchJobPeer::getClosedStatusList()))
@@ -463,7 +463,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		catch ( Exception $ex )
 		{
 			self::alert($dbBatchJob, $ex);
-			KalturaLog::err( "Error:" . $ex->getMessage() );
+			VidiunLog::err( "Error:" . $ex->getMessage() );
 		}
 			
 		return true;
@@ -472,25 +472,25 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 	// creates a mail job with the exception data
 	protected static function alert(BatchJob $dbBatchJob, Exception $exception)
 	{
-		$jobData = new kMailJobData();
-		$jobData->setMailPriority( kMailJobData::MAIL_PRIORITY_HIGH);
-		$jobData->setStatus(kMailJobData::MAIL_STATUS_PENDING);
+		$jobData = new vMailJobData();
+		$jobData->setMailPriority( vMailJobData::MAIL_PRIORITY_HIGH);
+		$jobData->setStatus(vMailJobData::MAIL_STATUS_PENDING);
 
-		KalturaLog::alert("Error in job [{$dbBatchJob->getId()}]\n".$exception);
+		VidiunLog::alert("Error in job [{$dbBatchJob->getId()}]\n".$exception);
 
 		$jobData->setMailType(90); // is the email template
 		$jobData->setBodyParamsArray(array($dbBatchJob->getId(), $exception->getFile(), $exception->getLine(), $exception->getMessage(), $exception->getTraceAsString()));
 
-		$jobData->setFromEmail(kConf::get("batch_alert_email"));
-		$jobData->setFromName(kConf::get("batch_alert_name"));
-		$jobData->setRecipientEmail(kConf::get("batch_alert_email"));
+		$jobData->setFromEmail(vConf::get("batch_alert_email"));
+		$jobData->setFromName(vConf::get("batch_alert_name"));
+		$jobData->setRecipientEmail(vConf::get("batch_alert_email"));
 		$jobData->setSubjectParamsArray( array() );
 
-		kJobsManager::addJob($dbBatchJob->createChild(BatchJobType::MAIL, $jobData->getMailType()), $jobData, BatchJobType::MAIL, $jobData->getMailType());
+		vJobsManager::addJob($dbBatchJob->createChild(BatchJobType::MAIL, $jobData->getMailType()), $jobData, BatchJobType::MAIL, $jobData->getMailType());
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -501,7 +501,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -526,15 +526,15 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 					}
 					$allowedFlows = array(EntryFlowType::CLIP_CONCAT, EntryFlowType::TRIM_CONCAT);
 					if ($entry->getOperationAttributes() && $object->getIsOriginal() && !in_array($entry->getFlowType(), $allowedFlows))
-						kBusinessPreConvertDL::convertSource($object, null, null, $raisedJob);
+						vBusinessPreConvertDL::convertSource($object, null, null, $raisedJob);
 					else
 					{
 						$syncKey = $object->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 
-						if (kFileSyncUtils::fileSync_exists($syncKey))
+						if (vFileSyncUtils::fileSync_exists($syncKey))
 						{
-							list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
-							kJobsManager::addConvertProfileJob($raisedJob, $entry, $object->getId(), $fileSync);
+							list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+							vJobsManager::addConvertProfileJob($raisedJob, $entry, $object->getId(), $fileSync);
 						}
 					}
 
@@ -549,10 +549,10 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		if ($object->getStatus() == asset::FLAVOR_ASSET_STATUS_READY && $object instanceof thumbAsset)
 		{
 			if ($object->getFlavorParamsId())
-				kFlowHelper::generateThumbnailsFromFlavor($object->getEntryId(), $raisedJob, $object->getFlavorParamsId());
+				vFlowHelper::generateThumbnailsFromFlavor($object->getEntryId(), $raisedJob, $object->getFlavorParamsId());
 			else
 				if ($object->hasTag(thumbParams::TAG_DEFAULT_THUMB))
-					kBusinessConvertDL::setAsDefaultThumbAsset($object);
+					vBusinessConvertDL::setAsDefaultThumbAsset($object);
 			return true;
 		}
 
@@ -567,7 +567,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -620,7 +620,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -631,7 +631,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 			&&	$object->getReplacedEntryId()
 		)
 		{
-			kFlowHelper::handleEntryReplacement($object);
+			vFlowHelper::handleEntryReplacement($object);
 			return true;
 		}
 
@@ -641,7 +641,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 			&&	$object->getStatus() == UploadToken::UPLOAD_TOKEN_FULL_UPLOAD
 		)
 		{
-			kFlowHelper::handleUploadFinished($object);
+			vFlowHelper::handleUploadFinished($object);
 			return true;
 		}
 		
@@ -651,7 +651,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		)
 		{
 			if ($object->getServerType() == EntryServerNodeType::LIVE_CLIPPING_TASK)
-				kFlowHelper::handleClippingTaskStatusUpdate($object);
+				vFlowHelper::handleClippingTaskStatusUpdate($object);
 			return true;
 		}
 
@@ -665,7 +665,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		{
 			$partner = $object->getPartner();
 			if($partner->getEnableBulkUploadNotificationsEmails())
-				kFlowHelper::sendBulkUploadNotificationEmail($object, MailType::MAIL_TYPE_BULKUPLOAD_ABORTED, array($partner->getAdminName(), $object->getId(), kFlowHelper::createBulkUploadLogUrl($object)));
+				vFlowHelper::sendBulkUploadNotificationEmail($object, MailType::MAIL_TYPE_BULKUPLOAD_ABORTED, array($partner->getAdminName(), $object->getId(), vFlowHelper::createBulkUploadLogUrl($object)));
 				
 			return true;
 		}
@@ -673,9 +673,9 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		if ($object instanceof UserRole
 			&& in_array(UserRolePeer::PERMISSION_NAMES, $modifiedColumns))
 		{
-			$filter = new kuserFilter();
+			$filter = new vuserFilter();
 			$filter->set('_eq_role_ids', $object->getId());
-			kJobsManager::addIndexJob($object->getPartnerId(), IndexObjectType::USER, $filter, false);
+			vJobsManager::addIndexJob($object->getPartnerId(), IndexObjectType::USER, $filter, false);
 			return true;
 		}
 
@@ -688,7 +688,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 			
 		$entry = entryPeer::retrieveByPKNoFilter($object->getEntryId());
 
-		KalturaLog::info("Asset id [" . $object->getId() . "] isOriginal [" . $object->getIsOriginal() . "] status [" . $object->getStatus() . "]");
+		VidiunLog::info("Asset id [" . $object->getId() . "] isOriginal [" . $object->getIsOriginal() . "] status [" . $object->getStatus() . "]");
 		if($object->getIsOriginal())
 			return true;
 		
@@ -698,13 +698,13 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 			$offset = $entry->getThumbOffset(); // entry getThumbOffset now takes the partner DefThumbOffset into consideration
 			$syncKey = $object->getSyncKey(asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 
-			$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
+			$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
 			if(!$fileSync)
 				return true;
 
 
-			if(kFileSyncUtils::getLocalFilePathForKey($syncKey))
-				kJobsManager::addPostConvertJob(null, $postConvertAssetType, $syncKey, $object->getId(), null, $entry->getCreateThumb(), $offset);
+			if(vFileSyncUtils::getLocalFilePathForKey($syncKey))
+				vJobsManager::addPostConvertJob(null, $postConvertAssetType, $syncKey, $object->getId(), null, $entry->getCreateThumb(), $offset);
 
 			$conversionProfile = $entry->getconversionProfile2();
 			if($conversionProfile && !flavorParamsConversionProfilePeer::retrieveByConversionProfile( $entry->getConversionProfileId()) )
@@ -733,7 +733,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
@@ -744,7 +744,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeReadyForReplacmentEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeReadyForReplacmentEvent()
 	 */
 	public function shouldConsumeReadyForReplacmentEvent(BaseObject $object)
 	{
@@ -755,7 +755,7 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectReadyForReplacment()
+	 * @see vObjectAddedEventConsumer::objectReadyForReplacment()
 	 */
 	public function objectReadyForReplacment(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -763,21 +763,21 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		$entry = entryPeer::retrieveByPK($object->getReplacedEntryId());
 		if(!$entry)
 		{
-			KalturaLog::err("Real entry id [" . $object->getReplacedEntryId() . "] not found");
+			VidiunLog::err("Real entry id [" . $object->getReplacedEntryId() . "] not found");
 			return true;
 		}
 		
-		kBusinessConvertDL::replaceEntry($entry, $object);
+		vBusinessConvertDL::replaceEntry($entry, $object);
 		return true;
 	}
 	
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{
-		kFlowHelper::handleUploadCanceled($object);
+		vFlowHelper::handleUploadCanceled($object);
 		return true;
 	}
 
@@ -816,12 +816,12 @@ class kFlowManager implements kBatchJobStatusEventConsumer, kObjectAddedEventCon
 		return true;
 	}
 	
-	protected function updatedExportCsv (BatchJob $dbBatchJob, kExportCsvJobData $data)
+	protected function updatedExportCsv (BatchJob $dbBatchJob, vExportCsvJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_FINISHED:
-				return kFlowHelper::handleExportCsvFinished($dbBatchJob, $data);
+				return vFlowHelper::handleExportCsvFinished($dbBatchJob, $data);
 			default:
 				return $dbBatchJob;
 		}

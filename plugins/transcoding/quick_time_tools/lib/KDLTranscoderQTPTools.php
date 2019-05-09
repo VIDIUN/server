@@ -3,19 +3,19 @@
  * @package plugins.quickTimeTools
  * @subpackage lib
  */
-class KDLTranscoderQTPTools extends KDLOperatorBase {
+class VDLTranscoderQTPTools extends VDLOperatorBase {
     public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	if(is_null($targetBlacklist)){
 			parent::__construct($id,$name,$sourceBlacklist, 
 				array(
-					KDLConstants::ContainerIndex=>array(KDLContainerTarget::WMV, KDLContainerTarget::ISMV),
-					KDLConstants::VideoIndex=>array("wvc1", KDLVideoTarget::WMV2,KDLVideoTarget::WMV3,KDLVideoTarget::FLV,KDLVideoTarget::VP6)));
+					VDLConstants::ContainerIndex=>array(VDLContainerTarget::WMV, VDLContainerTarget::ISMV),
+					VDLConstants::VideoIndex=>array("wvc1", VDLVideoTarget::WMV2,VDLVideoTarget::WMV3,VDLVideoTarget::FLV,VDLVideoTarget::VP6)));
     	}
     	else
     		parent::__construct($id,$name,$sourceBlacklist,$targetBlacklist);
     }
 
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 /*
 pcastaction encode --input=/Users/macuser/Downloads/APCN.pr_the_dark_knight_now_showing_DM.mov --output=/web/content/tmp/apcn.h264_hint_server.mp4 --encoder=h264_hint_server --basedir=~/Downloads/tmp
@@ -33,21 +33,21 @@ $vcodecParams = "fl";
 $format = "fl";
 $acodec = "libmp3lam";
 
-		$cmdStr = " ".KDLCmdlinePlaceholders::InFileName;
+		$cmdStr = " ".VDLCmdlinePlaceholders::InFileName;
 
 		if($target->_video){
 			$vid = $target->_video;
 			switch($vid->_id){
-				case KDLVideoTarget::H263:
+				case VDLVideoTarget::H263:
 					$vcodecParams = "h263";
 					break; 
-				case KDLVideoTarget::H264:
-				case KDLVideoTarget::H264B:
-				case KDLVideoTarget::H264M:
-				case KDLVideoTarget::H264H:
+				case VDLVideoTarget::H264:
+				case VDLVideoTarget::H264B:
+				case VDLVideoTarget::H264M:
+				case VDLVideoTarget::H264H:
 					$vcodecParams = "avc1";
 					break; 				
-				case KDLVideoTarget::MPEG4:
+				case VDLVideoTarget::MPEG4:
 					$vcodecParams = "mp4v";
 					break;
 				default:
@@ -85,19 +85,19 @@ $acodec = "libmp3lam";
 		if(0 && $target->_audio) {
 			$aud = $target->_audio;
 			switch($aud->_id){
-				case KDLAudioTarget::MP3:
+				case VDLAudioTarget::MP3:
 					$acodec = "libmp3lame";
 					break;
-				case KDLAudioTarget::AAC:
+				case VDLAudioTarget::AAC:
 					$acodec = "libfaac";
 					break;
-				case KDLAudioTarget::VORBIS:
+				case VDLAudioTarget::VORBIS:
 					$acodec = "libvorbis";
 					break;
-				case KDLAudioTarget::WMA:
+				case VDLAudioTarget::WMA:
 					$acodec = "wmav2";
 					break;
-				case KDLAudioTarget::COPY:
+				case VDLAudioTarget::COPY:
 					$acodec = "copy";
 					break;
 				default:
@@ -133,22 +133,22 @@ $acodec = "libmp3lam";
 		if(0 && $target->_container) {
 			$cont = $target->_container;
 			switch($cont->_id){
-				case KDLContainerTarget::FLV:
+				case VDLContainerTarget::FLV:
 					$format = "flv";
 					break;
-				case KDLContainerTarget::AVI:
-				case KDLContainerTarget::MP4:
-				case KDLContainerTarget::_3GP:
-				case KDLContainerTarget::MOV:
-				case KDLContainerTarget::MP3:
-				case KDLContainerTarget::OGG:
-				case KDLContainerTarget::WEBM:
+				case VDLContainerTarget::AVI:
+				case VDLContainerTarget::MP4:
+				case VDLContainerTarget::_3GP:
+				case VDLContainerTarget::MOV:
+				case VDLContainerTarget::MP3:
+				case VDLContainerTarget::OGG:
+				case VDLContainerTarget::WEBM:
 					$format = $cont->_id;
 					break;
-				case KDLContainerTarget::WMV:
+				case VDLContainerTarget::WMV:
 					$format = "asf";
 					break;
-				case KDLContainerTarget::MKV:
+				case VDLContainerTarget::MKV:
 					$format = "matroska";
 					break;
 				default:
@@ -161,7 +161,7 @@ $acodec = "libmp3lam";
 		if($extra)
 			$cmdStr .= " ".$extra;
 		
-		$cmdStr .= " --replacefile -1 ".KDLCmdlinePlaceholders::OutFileName;
+		$cmdStr .= " --replacefile -1 ".VDLCmdlinePlaceholders::OutFileName;
 
 		return $cmdStr;
 	}
@@ -169,7 +169,7 @@ $acodec = "libmp3lam";
     /* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    return parent::CheckConstraints($source, $target, $errors, $warnings);
 	}

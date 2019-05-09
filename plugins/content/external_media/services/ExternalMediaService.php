@@ -6,24 +6,24 @@
  * @package plugins.externalMedia
  * @subpackage api.services
  */
-class ExternalMediaService extends KalturaEntryService
+class ExternalMediaService extends VidiunEntryService
 {
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if($actionName === 'get')
 			return true;
 		
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 	
 	/**
 	 * Add external media entry
 	 *
 	 * @action add
-	 * @param KalturaExternalMediaEntry $entry
-	 * @return KalturaExternalMediaEntry
+	 * @param VidiunExternalMediaEntry $entry
+	 * @return VidiunExternalMediaEntry
 	 */
-	function addAction(KalturaExternalMediaEntry $entry)
+	function addAction(VidiunExternalMediaEntry $entry)
 	{
 		$dbEntry = parent::add($entry, $entry->conversionProfileId);
 		$dbEntry->setStatus(entryStatus::READY);
@@ -44,9 +44,9 @@ class ExternalMediaService extends KalturaEntryService
 	 * 
 	 * @action get
 	 * @param string $id External media entry id
-	 * @return KalturaExternalMediaEntry The requested external media entry
+	 * @return VidiunExternalMediaEntry The requested external media entry
 	 * 
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	function getAction($id)
 	{
@@ -58,12 +58,12 @@ class ExternalMediaService extends KalturaEntryService
 	 * 
 	 * @action update
 	 * @param string $id External media entry id to update
-	 * @param KalturaExternalMediaEntry $entry External media entry object to update
-	 * @return KalturaExternalMediaEntry The updated external media entry
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @param VidiunExternalMediaEntry $entry External media entry object to update
+	 * @return VidiunExternalMediaEntry The updated external media entry
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 * @validateUser entry id edit
 	 */
-	function updateAction($id, KalturaExternalMediaEntry $entry)
+	function updateAction($id, VidiunExternalMediaEntry $entry)
 	{
 		return $this->updateEntry($id, $entry, ExternalMediaPlugin::getEntryTypeCoreValue(ExternalMediaEntryType::EXTERNAL_MEDIA));
 	}
@@ -74,7 +74,7 @@ class ExternalMediaService extends KalturaEntryService
 	 * @action delete
 	 * @param string $id External media entry id to delete
 	 * 
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 * @validateUser entry id edit
 	 */
 	function deleteAction($id)
@@ -86,19 +86,19 @@ class ExternalMediaService extends KalturaEntryService
 	 * List media entries by filter with paging support.
 	 * 
 	 * @action list
-	 * @param KalturaExternalMediaEntryFilter $filter External media entry filter
-	 * @param KalturaFilterPager $pager Pager
-	 * @return KalturaExternalMediaEntryListResponse Wrapper for array of media entries and total count
+	 * @param VidiunExternalMediaEntryFilter $filter External media entry filter
+	 * @param VidiunFilterPager $pager Pager
+	 * @return VidiunExternalMediaEntryListResponse Wrapper for array of media entries and total count
 	 */
-	function listAction(KalturaExternalMediaEntryFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunExternalMediaEntryFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if(!$filter)
-			$filter = new KalturaExternalMediaEntryFilter();
+			$filter = new VidiunExternalMediaEntryFilter();
 		
 		list($list, $totalCount) = parent::listEntriesByFilter($filter, $pager);
 		
-		$response = new KalturaExternalMediaEntryListResponse();
-		$response->objects = KalturaExternalMediaEntryArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunExternalMediaEntryListResponse();
+		$response->objects = VidiunExternalMediaEntryArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = $totalCount;
 		return $response;
 	}
@@ -107,13 +107,13 @@ class ExternalMediaService extends KalturaEntryService
 	 * Count media entries by filter.
 	 * 
 	 * @action count
-	 * @param KalturaExternalMediaEntryFilter $filter External media entry filter
+	 * @param VidiunExternalMediaEntryFilter $filter External media entry filter
 	 * @return int
 	 */
-	function countAction(KalturaExternalMediaEntryFilter $filter = null)
+	function countAction(VidiunExternalMediaEntryFilter $filter = null)
 	{
 		if(!$filter)
-			$filter = new KalturaExternalMediaEntryFilter();
+			$filter = new VidiunExternalMediaEntryFilter();
 		
 		return parent::countEntriesByFilter($filter);
 	}

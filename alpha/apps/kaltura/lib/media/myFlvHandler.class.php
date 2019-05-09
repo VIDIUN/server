@@ -966,7 +966,7 @@ class myFlvStaticHandler
 	public static function isMultiFlavor ( $file_name )
 	{
 		$edit_file_name = self::getFileNameEdit( $file_name );
-		return ( file_exists ( $edit_file_name ) && kFile::fileSize ( $edit_file_name ) > 0 ) ;
+		return ( file_exists ( $edit_file_name ) && vFile::fileSize ( $edit_file_name ) > 0 ) ;
 	}
 
 
@@ -976,7 +976,7 @@ class myFlvStaticHandler
 	public static function getBestFileFlavor ( $file_name  )
 	{
 		$edit_file_name = self::getFileNameEdit( $file_name );
-		if ( file_exists ( $edit_file_name ) && kFile::fileSize ( $edit_file_name ) > 0 )
+		if ( file_exists ( $edit_file_name ) && vFile::fileSize ( $edit_file_name ) > 0 )
 		{
 			return $edit_file_name;
 		}
@@ -1132,7 +1132,7 @@ class FlvInfoVideo extends FlvInfo
 	public function open()
 	{
 		parent::open();
-		$this->last_index = kFile::fileSize($this->info_file_name) / $this->TAG_INFO_SIZE - 1;
+		$this->last_index = vFile::fileSize($this->info_file_name) / $this->TAG_INFO_SIZE - 1;
 	}
 
 	public function hasTags()
@@ -1307,7 +1307,7 @@ class FlvMetadataVideo extends FlvInfo
 	
 	public function getSize()
 	{
-		return kFile::fileSize($this->info_file_name);
+		return vFile::fileSize($this->info_file_name);
 	}
 	
 	public function dump()
@@ -1377,7 +1377,7 @@ class FlvMetadataVideo extends FlvInfo
 		
 		$meta_tag = myFlvHandler::createMetadataTag($data);
 
-		kFile::safeFilePutContents($this->info_file_name, $meta_tag); // sync - OK
+		vFile::safeFilePutContents($this->info_file_name, $meta_tag); // sync - OK
 		
 		$meta_tag = null;
 		$amfSerializer = null;

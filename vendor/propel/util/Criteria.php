@@ -1456,7 +1456,7 @@ class Criterion  {
 
 	/**
 	 * Get the list of clauses in this Criterion.
-	 * Changed from private by Kaltura team to support filter
+	 * Changed from private by Vidiun team to support filter
 	 * @return     array
 	 */
 	public function getClauses()

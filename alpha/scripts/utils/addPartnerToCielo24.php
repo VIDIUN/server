@@ -13,14 +13,14 @@
 
 	$partner = PartnerPeer::retrieveByPK($partnerId);
 
-	if($partner->getKsMaxExpiryInSeconds() < kIntegrationFlowManager::THREE_DAYS_IN_SECONDS)
+	if($partner->getVsMaxExpiryInSeconds() < vIntegrationFlowManager::THREE_DAYS_IN_SECONDS)
 	{
-		$partner->setKsMaxExpiryInSeconds(kIntegrationFlowManager::THREE_DAYS_IN_SECONDS);
+		$partner->setVsMaxExpiryInSeconds(vIntegrationFlowManager::THREE_DAYS_IN_SECONDS);
 		$partner->save();
 	}
 
 	$options = Cielo24Plugin::getPartnerCielo24Options($partnerId);
-	KalturaLog::debug('Current options: '.json_encode($options));
+	VidiunLog::debug('Current options: '.json_encode($options));
 
 	if (is_null($options)) {
 		$options = new Cielo24Options($username, $password, $baseUrl);
@@ -40,5 +40,5 @@
 		$options->defaultParams = $defaultParams;
 	}
 
-	KalturaLog::debug('Setting options to: '.json_encode($options));
+	VidiunLog::debug('Setting options to: '.json_encode($options));
 	Cielo24Plugin::setPartnerCielo24Options($partnerId, $options);

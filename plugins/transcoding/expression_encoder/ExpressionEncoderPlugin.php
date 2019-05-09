@@ -2,7 +2,7 @@
 /**
  * @package plugins.expressionEncoder
  */
-class ExpressionEncoderPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator
+class ExpressionEncoderPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'expressionEncoder';
 	
@@ -19,18 +19,18 @@ class ExpressionEncoderPlugin extends KalturaPlugin implements IKalturaObjectLoa
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::EXPRESSION_ENCODER)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::EXPRESSION_ENCODER)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineExpressionEncoder($params->expEncoderCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineExpressionEncoder($params->expEncoderCmd, $constructorArgs['outFilePath']);
 		}
 			
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(ExpressionEncoderConversionEngineType::EXPRESSION_ENCODER))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(ExpressionEncoderConversionEngineType::EXPRESSION_ENCODER))
 		{
-			return new KDLOperatorExpressionEncoder($enumValue);
+			return new VDLOperatorExpressionEncoder($enumValue);
 		}
 		
 		return null;
@@ -43,11 +43,11 @@ class ExpressionEncoderPlugin extends KalturaPlugin implements IKalturaObjectLoa
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(ExpressionEncoderConversionEngineType::EXPRESSION_ENCODER))
-			return 'KOperationExpressionEncoder';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(ExpressionEncoderConversionEngineType::EXPRESSION_ENCODER))
+			return 'VOperationExpressionEncoder';
 			
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(ExpressionEncoderConversionEngineType::EXPRESSION_ENCODER))
-			return 'KDLOperatorExpressionEncoder';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(ExpressionEncoderConversionEngineType::EXPRESSION_ENCODER))
+			return 'VDLOperatorExpressionEncoder';
 		
 		return null;
 	}
@@ -71,8 +71,8 @@ class ExpressionEncoderPlugin extends KalturaPlugin implements IKalturaObjectLoa
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -80,6 +80,6 @@ class ExpressionEncoderPlugin extends KalturaPlugin implements IKalturaObjectLoa
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

@@ -17,20 +17,20 @@ abstract class DistributionEngine implements IDistributionEngine
 	
 	/**
 	 * @param string $interface
-	 * @param KalturaDistributionProviderType $providerType
-	 * @param KalturaDistributionJobData $data
+	 * @param VidiunDistributionProviderType $providerType
+	 * @param VidiunDistributionJobData $data
 	 * @return DistributionEngine
 	 */
-	public static function getEngine($interface, $providerType, KalturaDistributionJobData $data)
+	public static function getEngine($interface, $providerType, VidiunDistributionJobData $data)
 	{
 		$engine = null;
-		if($providerType == KalturaDistributionProviderType::GENERIC)
+		if($providerType == VidiunDistributionProviderType::GENERIC)
 		{
 			$engine = new GenericDistributionEngine();
 		}
 		else
 		{
-			$engine = KalturaPluginManager::loadObject($interface, $providerType);
+			$engine = VidiunPluginManager::loadObject($interface, $providerType);
 		}
 		
 		if($engine)
@@ -47,7 +47,7 @@ abstract class DistributionEngine implements IDistributionEngine
 	 */
 	public function setClient()
 	{
-		$this->partnerId = KBatchBase::$kClient->getPartnerId();
+		$this->partnerId = VBatchBase::$vClient->getPartnerId();
 	}
 	
 	/* (non-PHPdoc)
@@ -55,42 +55,42 @@ abstract class DistributionEngine implements IDistributionEngine
 	 */
 	public function configure()
 	{
-		$this->tempDirectory = isset(KBatchBase::$taskConfig->params->tempDirectoryPath) ? KBatchBase::$taskConfig->params->tempDirectoryPath : sys_get_temp_dir();
+		$this->tempDirectory = isset(VBatchBase::$taskConfig->params->tempDirectoryPath) ? VBatchBase::$taskConfig->params->tempDirectoryPath : sys_get_temp_dir();
 		if (!is_dir($this->tempDirectory)) 
-			kFile::fullMkfileDir($this->tempDirectory, 0700, true);
+			vFile::fullMkfileDir($this->tempDirectory, 0700, true);
 	}
 
 	/**
 	 * @param string $entryId
-	 * @return KalturaMediaEntry
+	 * @return VidiunMediaEntry
 	 */
 	protected function getEntry($partnerId, $entryId)
 	{
-		KBatchBase::impersonate($partnerId);
-		$entry = KBatchBase::$kClient->baseEntry->get($entryId);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($partnerId);
+		$entry = VBatchBase::$vClient->baseEntry->get($entryId);
+		VBatchBase::unimpersonate();
 		
 		return $entry;
 	}
 
 	/**
 	 * @param string $flavorAssetIds comma seperated
-	 * @return array<KalturaFlavorAsset>
+	 * @return array<VidiunFlavorAsset>
 	 */
 	protected function getFlavorAssets($partnerId, $flavorAssetIds)
 	{
-		$filter = new KalturaAssetFilter();
+		$filter = new VidiunAssetFilter();
 		$filter->idIn = $flavorAssetIds;
 		
 		try
 		{
-			KBatchBase::impersonate($entryDistribution->partnerId);
-			$flavorAssetsList = KBatchBase::$kClient->flavorAsset->listAction($filter);
-			KBatchBase::unimpersonate();
+			VBatchBase::impersonate($entryDistribution->partnerId);
+			$flavorAssetsList = VBatchBase::$vClient->flavorAsset->listAction($filter);
+			VBatchBase::unimpersonate();
 		}
 		catch (Exception $e)
 		{
-			KBatchBase::unimpersonate();
+			VBatchBase::unimpersonate();
 			throw $e;
 		}
 		
@@ -99,22 +99,22 @@ abstract class DistributionEngine implements IDistributionEngine
 
 	/**
 	 * @param string $thumbAssetIds comma seperated
-	 * @return array<KalturaThumbAsset>
+	 * @return array<VidiunThumbAsset>
 	 */
 	protected function getThumbAssets($partnerId, $thumbAssetIds)
 	{
-		$filter = new KalturaAssetFilter();
+		$filter = new VidiunAssetFilter();
 		$filter->idIn = $thumbAssetIds;
 		
 		try
 		{
-			KBatchBase::impersonate($partnerId);
-			$thumbAssetsList = KBatchBase::$kClient->thumbAsset->listAction($filter);
-			KBatchBase::unimpersonate();
+			VBatchBase::impersonate($partnerId);
+			$thumbAssetsList = VBatchBase::$vClient->thumbAsset->listAction($filter);
+			VBatchBase::unimpersonate();
 		}
 		catch (Exception $e)
 		{
-			KBatchBase::unimpersonate();
+			VBatchBase::unimpersonate();
 			throw $e;
 		}
 		
@@ -127,15 +127,15 @@ abstract class DistributionEngine implements IDistributionEngine
 	 */
 	protected function getAssetUrl($assetId)
 	{
-		$contentDistributionPlugin = KalturaContentDistributionClientPlugin::get(KBatchBase::$kClient);
+		$contentDistributionPlugin = VidiunContentDistributionClientPlugin::get(VBatchBase::$vClient);
 		return $contentDistributionPlugin->contentDistributionBatch->getAssetUrl($assetId);
 	
-//		$domain = $this->kalturaClient->getConfig()->serviceUrl;
+//		$domain = $this->vidiunClient->getConfig()->serviceUrl;
 //		return "$domain/api_v3/service/thumbAsset/action/serve/thumbAssetId/$thumbAssetId";
 	}
 
 	/**
-	 * @param array<KalturaMetadata> $metadataObjects
+	 * @param array<VidiunMetadata> $metadataObjects
 	 * @param string $field
 	 * @return array|string
 	 */
@@ -165,29 +165,29 @@ abstract class DistributionEngine implements IDistributionEngine
 
 	/**
 	 * @param string $objectId
-	 * @param KalturaMetadataObjectType $objectType
-	 * @return array<KalturaMetadata>
+	 * @param VidiunMetadataObjectType $objectType
+	 * @return array<VidiunMetadata>
 	 */
-	protected function getMetadataObjects($partnerId, $objectId, $objectType = KalturaMetadataObjectType::ENTRY, $metadataProfileId = null)
+	protected function getMetadataObjects($partnerId, $objectId, $objectType = VidiunMetadataObjectType::ENTRY, $metadataProfileId = null)
 	{
-		if(!class_exists('KalturaMetadata'))
+		if(!class_exists('VidiunMetadata'))
 			return null;
 			
-		KBatchBase::impersonate($partnerId);
+		VBatchBase::impersonate($partnerId);
 		
-		$metadataFilter = new KalturaMetadataFilter();
+		$metadataFilter = new VidiunMetadataFilter();
 		$metadataFilter->objectIdEqual = $objectId;
 		$metadataFilter->metadataObjectTypeEqual = $objectType;
-		$metadataFilter->orderBy = KalturaMetadataOrderBy::CREATED_AT_DESC;
+		$metadataFilter->orderBy = VidiunMetadataOrderBy::CREATED_AT_DESC;
 		
 		if($metadataProfileId)
 			$metadataFilter->metadataProfileIdEqual = $metadataProfileId;
 		
-		$metadataPager = new KalturaFilterPager();
+		$metadataPager = new VidiunFilterPager();
 		$metadataPager->pageSize = 1;
-		$metadataListResponse = KBatchBase::$kClient->metadata->listAction($metadataFilter, $metadataPager);
+		$metadataListResponse = VBatchBase::$vClient->metadata->listAction($metadataFilter, $metadataPager);
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		if(!$metadataListResponse->totalCount)
 			throw new Exception("No metadata objects found");
@@ -197,22 +197,22 @@ abstract class DistributionEngine implements IDistributionEngine
 
 	protected function getCaptionContent($captionAssetId)
 	{
-		KalturaLog::info("Retrieve caption assets content for captionAssetId: [$captionAssetId]");
+		VidiunLog::info("Retrieve caption assets content for captionAssetId: [$captionAssetId]");
 		try
 		{
-			$captionClientPlugin = KalturaCaptionClientPlugin::get(KBatchBase::$kClient);
+			$captionClientPlugin = VidiunCaptionClientPlugin::get(VBatchBase::$vClient);
 			$captionAssetContentUrl= $captionClientPlugin->captionAsset->serve($captionAssetId);
-			return KCurlWrapper::getContent($captionAssetContentUrl);
+			return VCurlWrapper::getContent($captionAssetContentUrl);
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::info("Can't serve caption asset id [$captionAssetId] " . $e->getMessage());
+			VidiunLog::info("Can't serve caption asset id [$captionAssetId] " . $e->getMessage());
 		}
 	}
 
 	protected function getAssetFile($assetId, $directory, $fileName = null)
 	{
-		KalturaLog::info("Retrieve asset content for assetId: [$assetId]");
+		VidiunLog::info("Retrieve asset content for assetId: [$assetId]");
 		try
 		{
 			$filePath = $directory;
@@ -222,13 +222,13 @@ abstract class DistributionEngine implements IDistributionEngine
 				$filePath .= '/asset_'.$assetId;
 
 			$assetContentUrl = $this->getAssetUrl($assetId);
-			$res = KCurlWrapper::getDataFromFile($assetContentUrl, $filePath, null, true);
+			$res = VCurlWrapper::getDataFromFile($assetContentUrl, $filePath, null, true);
 			if ($res)
 				return $filePath;
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::info("Can't serve asset id [$assetId] " . $e->getMessage());
+			VidiunLog::info("Can't serve asset id [$assetId] " . $e->getMessage());
 		}
 		return null;
 	}

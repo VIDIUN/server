@@ -13,7 +13,7 @@ class getlastversionsinfoAction extends defPartnerservices2Action
 				"desc" => "" ,
 				"in" => array (
 					"mandatory" => array ( 
-						"kshow_id" => array ("type" => "string", "desc" => "")
+						"vshow_id" => array ("type" => "string", "desc" => "")
 						)
 					),
 				"out" => array (
@@ -25,29 +25,29 @@ class getlastversionsinfoAction extends defPartnerservices2Action
 	
 	protected function ticketType ()	{		return self::REQUIED_TICKET_REGULAR;	}
 
-	protected function needKuserFromPuser ( )	
+	protected function needVuserFromPuser ( )	
 	{	
-			return self::KUSER_DATA_NO_KUSER;
+			return self::VUSER_DATA_NO_VUSER;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		$kshowId = $this->getP("kshow_id");
+		$vshowId = $this->getP("vshow_id");
 		$numberOfVersions = $this->getP("number_of_versions", 5);
 		
 		// must be int and not more than 50
 		$numberOfVersions = (int)$numberOfVersions;
 		$numberOfVersions = min($numberOfVersions, 50);
 
-		$kshow = kshowPeer::retrieveByPK( $kshowId );
+		$vshow = vshowPeer::retrieveByPK( $vshowId );
 		
-		if (!$kshow)
+		if (!$vshow)
 		{
-			$this->addError(APIErrors::KSHOW_DOES_NOT_EXISTS);
+			$this->addError(APIErrors::VSHOW_DOES_NOT_EXISTS);
 			return;
 		}
 		
-		$showEntry = $kshow->getShowEntry();
+		$showEntry = $vshow->getShowEntry();
 		if (!$showEntry)
 		{
 			$this->addError(APIErrors::ROUGHCUT_NOT_FOUND);
@@ -55,21 +55,21 @@ class getlastversionsinfoAction extends defPartnerservices2Action
 		}
 		
 		$sync_key = $showEntry->getSyncKey ( entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA );
-		$showEntryDataPath = kFileSyncUtils::getLocalFilePathForKey($sync_key);
+		$showEntryDataPath = vFileSyncUtils::getLocalFilePathForKey($sync_key);
 		
 		$versionsInfoFilePath 	= $showEntryDataPath.'.info';
 		
-		$lastVersionDoc = new KDOMDocument();
-		$lastVersionDoc->loadXML(kFileSyncUtils::file_get_contents( $sync_key , true , false ));
+		$lastVersionDoc = new VDOMDocument();
+		$lastVersionDoc->loadXML(vFileSyncUtils::file_get_contents( $sync_key , true , false ));
 		$lastVersion = myContentStorage::getVersion($showEntryDataPath);
 
 		// check if we need to refresh the data in the info file
 		$refreshInfoFile = true;
 		if (file_exists($versionsInfoFilePath))
 		{
-			$versionsInfoDoc = new KDOMDocument();
+			$versionsInfoDoc = new VDOMDocument();
 			$versionsInfoDoc->load($versionsInfoFilePath);
-			$lastVersionInInfoFile = kXml::getLastElementAsText($versionsInfoDoc, "ShowVersion");
+			$lastVersionInInfoFile = vXml::getLastElementAsText($versionsInfoDoc, "ShowVersion");
 
 			if ($lastVersionInInfoFile && $lastVersion == $lastVersionInInfoFile)
 				$refreshInfoFile = false;
@@ -84,7 +84,7 @@ class getlastversionsinfoAction extends defPartnerservices2Action
 		// refresh or create the data in the info file
 		if ($refreshInfoFile)
 		{
-			$versionsInfoDoc = new KDOMDocument();
+			$versionsInfoDoc = new VDOMDocument();
 			$xmlElement = $versionsInfoDoc->createElement("xml");
 			
 			// start from the first edited version (100001) and don't use 100000
@@ -92,13 +92,13 @@ class getlastversionsinfoAction extends defPartnerservices2Action
 			{
 				$version_sync_key = $showEntry->getSyncKey ( entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $i );
 				
-				if (kFileSyncUtils::file_exists($version_sync_key,false))
+				if (vFileSyncUtils::file_exists($version_sync_key,false))
 				{
-					$xmlContent = kFileSyncUtils::file_get_contents($version_sync_key);
+					$xmlContent = vFileSyncUtils::file_get_contents($version_sync_key);
 //echo "[" . htmlspecialchars( $xmlContent ) . "]<br>";					
-					$xmlDoc = new KDOMDocument();
+					$xmlDoc = new VDOMDocument();
 					$xmlDoc->loadXML($xmlContent);
-					$elementToCopy = kXml::getFirstElement($xmlDoc, "MetaData");
+					$elementToCopy = vXml::getFirstElement($xmlDoc, "MetaData");
 //echo "[$i]";				
 					$elementCloned = $elementToCopy->cloneNode(true);
 					
@@ -108,7 +108,7 @@ class getlastversionsinfoAction extends defPartnerservices2Action
 				}
 			}
 			$versionsInfoDoc->appendChild($xmlElement);
-			kFile::setFileContent($versionsInfoFilePath, $versionsInfoDoc->saveXML()); // FileSync OK - created a temp file on DC's disk
+			vFile::setFileContent($versionsInfoFilePath, $versionsInfoDoc->saveXML()); // FileSync OK - created a temp file on DC's disk
 		}
 		
 		$metadataNodes = $versionsInfoDoc->getElementsByTagName("MetaData");
@@ -118,16 +118,16 @@ class getlastversionsinfoAction extends defPartnerservices2Action
 		{
 			$metadataNode = $metadataNodes->item($i);
 
-			$node = kXml::getFirstElement($metadataNode, "ShowVersion");
+			$node = vXml::getFirstElement($metadataNode, "ShowVersion");
 			$showVersion = $node ? $node->nodeValue : "";
 
-			$node = kXml::getFirstElement($metadataNode, "PuserId");
+			$node = vXml::getFirstElement($metadataNode, "PuserId");
 			$puserId = $node ? $node->nodeValue : "";
 			
-			$node = kXml::getFirstElement($metadataNode, "ScreenName");
+			$node = vXml::getFirstElement($metadataNode, "ScreenName");
 			$screenName = $node ? $node->nodeValue : "";
 			
-			$node = kXml::getFirstElement($metadataNode, "UpdatedAt");
+			$node = vXml::getFirstElement($metadataNode, "UpdatedAt");
 			$updatedAt = $node ? $node->nodeValue : "";
 
 			$versionsInfo[] = array(

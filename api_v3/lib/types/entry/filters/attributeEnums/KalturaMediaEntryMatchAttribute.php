@@ -3,7 +3,7 @@
 /**
  * Auto-generated enum class
 */
-class KalturaMediaEntryMatchAttribute extends KalturaPlayableEntryMatchAttribute
+class VidiunMediaEntryMatchAttribute extends VidiunPlayableEntryMatchAttribute
 {
 	const FLAVOR_PARAMS_IDS = "flavorParamsIds";
 }

@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.enum
  */
-class KalturaReachProfileStatus extends KalturaEnum implements ReachProfileStatus
+class VidiunReachProfileStatus extends VidiunEnum implements ReachProfileStatus
 {
 
 }

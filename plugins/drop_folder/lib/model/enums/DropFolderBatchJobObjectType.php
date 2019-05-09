@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage model.enum
  */
-class DropFolderBatchJobObjectType implements IKalturaPluginEnum, BatchJobObjectType
+class DropFolderBatchJobObjectType implements IVidiunPluginEnum, BatchJobObjectType
 {
 	const DROP_FOLDER_FILE		= "DropFolderFile";
 	

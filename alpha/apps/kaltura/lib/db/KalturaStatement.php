@@ -3,7 +3,7 @@
  *  @package server-infra
  *  @subpackage DB
  */
-class KalturaStatement extends PDOStatement
+class VidiunStatement extends PDOStatement
 {
 	protected static $dryRun = false;
 	
@@ -30,8 +30,8 @@ class KalturaStatement extends PDOStatement
 
 	public function execute ($input_parameters = null) 
 	{
-		if (!kQueryCache::isCurrentQueryHandled())
-			kApiCache::disableConditionalCache();
+		if (!vQueryCache::isCurrentQueryHandled())
+			vApiCache::disableConditionalCache();
 	
 		$search = array();
 		$replace = array();
@@ -58,12 +58,12 @@ class KalturaStatement extends PDOStatement
 			
 		$sql = str_replace($search, $replace, $this->queryString);
 		
-		KalturaLog::debug($sql);
+		VidiunLog::debug($sql);
 		
 		$sqlStart = microtime(true);
 		if(self::$dryRun && !preg_match('/^(\/\*.+\*\/ )?SELECT/i', $sql))
 		{
-			KalturaLog::debug("Sql dry run - " . (microtime(true) - $sqlStart) . " seconds");
+			VidiunLog::debug("Sql dry run - " . (microtime(true) - $sqlStart) . " seconds");
 		}
 		else
 		{
@@ -73,12 +73,12 @@ class KalturaStatement extends PDOStatement
 			}
 			catch(PropelException $pex)
 			{
-				KalturaLog::alert($pex->getMessage());
+				VidiunLog::alert($pex->getMessage());
 				throw new PropelException("Database error");
 			}
 			$sqlTook = (microtime(true) - $sqlStart);
-			KalturaLog::debug("Sql took - " . $sqlTook . " seconds");
-			KalturaMonitorClient::monitorDatabaseAccess($sql, $sqlTook);
+			VidiunLog::debug("Sql took - " . $sqlTook . " seconds");
+			VidiunMonitorClient::monitorDatabaseAccess($sql, $sqlTook);
 		}
 	}
 	

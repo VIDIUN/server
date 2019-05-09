@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.enum
  */
-class KalturaDistributionAction extends KalturaEnum implements DistributionAction
+class VidiunDistributionAction extends VidiunEnum implements DistributionAction
 {
 	
 }

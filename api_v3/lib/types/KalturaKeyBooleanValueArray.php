@@ -1,11 +1,11 @@
 <?php
 /**
- * An array of KalturaKeyBooleanValue
+ * An array of VidiunKeyBooleanValue
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaKeyBooleanValueArray extends KalturaTypedArray
+class VidiunKeyBooleanValueArray extends VidiunTypedArray
 {
 	public static function fromDbArray(array $pairs = null)
 	{
@@ -22,7 +22,7 @@ class KalturaKeyBooleanValueArray extends KalturaTypedArray
 				continue;
 			}
 			
-			$pairObject = new KalturaKeyBooleanValue();
+			$pairObject = new VidiunKeyBooleanValue();
 			$pairObject->key = $prefix . $key;
 			$pairObject->value = (bool)$value;
 			$this[] = $pairObject;
@@ -31,7 +31,7 @@ class KalturaKeyBooleanValueArray extends KalturaTypedArray
 	
 	public static function fromKeyValueArray(array $pairs = null)
 	{
-		$pairsArray = new KalturaKeyBooleanValueArray();
+		$pairsArray = new VidiunKeyBooleanValueArray();
 		if($pairs && is_array($pairs))
 		{
 			foreach($pairs as $key => $value)
@@ -42,7 +42,7 @@ class KalturaKeyBooleanValueArray extends KalturaTypedArray
 					continue;
 				}
 				
-				$pairObject = new KalturaKeyBooleanValue();
+				$pairObject = new VidiunKeyBooleanValue();
 				$pairObject->key = $key;
 				$pairObject->value = (bool)$value;
 				$pairsArray[] = $pairObject;
@@ -53,7 +53,7 @@ class KalturaKeyBooleanValueArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaKeyBooleanValue");
+		return parent::__construct("VidiunKeyBooleanValue");
 	}
 	
 	public function toObjectsArray()
@@ -61,7 +61,7 @@ class KalturaKeyBooleanValueArray extends KalturaTypedArray
 		$ret = array();
 		foreach ($this->toArray() as $keyValueObject)
 		{
-			/* @var $keyValueObject KalturaKeyBooleanValue */
+			/* @var $keyValueObject VidiunKeyBooleanValue */
 			$ret[$keyValueObject->key] = $keyValueObject->value;
 		}
 		

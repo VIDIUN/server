@@ -1,5 +1,5 @@
 <?php
-class kChtHttpUrlTokenizer extends kUrlTokenizer
+class vChtHttpUrlTokenizer extends vUrlTokenizer
 {
 	
 	/**

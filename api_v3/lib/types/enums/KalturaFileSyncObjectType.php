@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaFileSyncObjectType extends KalturaDynamicEnum implements FileSyncObjectType 
+class VidiunFileSyncObjectType extends VidiunDynamicEnum implements FileSyncObjectType 
 {
 	/**
 	 * @return string

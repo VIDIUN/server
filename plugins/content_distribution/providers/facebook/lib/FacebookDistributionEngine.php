@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__."/KalturaFacebookLanguageMatch.php");
+require_once(__DIR__."/VidiunFacebookLanguageMatch.php");
 /**
  * @package plugins.facebookDistribution
  * @subpackage lib
@@ -21,15 +21,15 @@ class FacebookDistributionEngine extends DistributionEngine implements
 	public function configure()
 	{
 		parent::configure();
-		$this->appId = kConf::get(FacebookConstants::FACEBOOK_APP_ID_REQUEST_PARAM, 'facebook', null);
-		$this->appSecret = kConf::get(FacebookConstants::FACEBOOK_APP_SECRET_REQUEST_PARAM, 'facebook', null);
+		$this->appId = vConf::get(FacebookConstants::FACEBOOK_APP_ID_REQUEST_PARAM, 'facebook', null);
+		$this->appSecret = vConf::get(FacebookConstants::FACEBOOK_APP_SECRET_REQUEST_PARAM, 'facebook', null);
 
 	}
 
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		$this->validate($data);
 		if ($data->entryDistribution->remoteId)
@@ -54,13 +54,13 @@ class FacebookDistributionEngine extends DistributionEngine implements
 	 * 8. scheduled_publishing_time
 	 * 9. feed targeting
 	 */
-	protected function doSubmit(KalturaDistributionSubmitJobData $data)
+	protected function doSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		$videoPath = $data->providerData->videoAssetFilePath;
 		if (!$videoPath)
 			throw new Exception('No video asset to distribute, the job will fail');
 		if (!file_exists($videoPath))
-			throw new KalturaDistributionException("The file [$videoPath] was not found (probably not synced yet), the job will retry");
+			throw new VidiunDistributionException("The file [$videoPath] was not found (probably not synced yet), the job will retry");
 
 		$facebookMetadata = $this->convertToFacebookData($data->providerData->fieldValues, true);
 
@@ -93,7 +93,7 @@ class FacebookDistributionEngine extends DistributionEngine implements
 
 		if (isset($data->providerData->captionsInfo))
 		{
-			/* @var $captionInfo KalturaFacebookCaptionDistributionInfo */
+			/* @var $captionInfo VidiunFacebookCaptionDistributionInfo */
 			foreach ($data->providerData->captionsInfo as $captionInfo)
 			{
 				$data->mediaFiles[] = $this->submitCaption($data->distributionProfile, $captionInfo, $data->remoteId);
@@ -106,13 +106,13 @@ class FacebookDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
 		$this->validate($data);
 		return $this->doUpdate($data);
 	}
 
-	protected function doUpdate(KalturaDistributionUpdateJobData $data)
+	protected function doUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		try
 		{
@@ -151,7 +151,7 @@ class FacebookDistributionEngine extends DistributionEngine implements
 		}
 	}
 
-	private function handleCaptions(KalturaDistributionUpdateJobData $data)
+	private function handleCaptions(VidiunDistributionUpdateJobData $data)
 	{
 		try
 		{
@@ -166,7 +166,7 @@ class FacebookDistributionEngine extends DistributionEngine implements
 			{
 				foreach ($data->providerData->captionsInfo as $captionInfo)
 				{
-					/* @var $captionInfo KalturaFacebookCaptionDistributionInfo */
+					/* @var $captionInfo VidiunFacebookCaptionDistributionInfo */
 					$data->mediaFiles[] = $this->submitCaption($data->distributionProfile, $captionInfo, $data->entryDistribution->remoteId);
 				}
 			}
@@ -177,13 +177,13 @@ class FacebookDistributionEngine extends DistributionEngine implements
 		}
 	}
 
-	private function submitCaption(KalturaFacebookDistributionProfile $distributionProfile, KalturaFacebookCaptionDistributionInfo $captionInfo, $remoteId)
+	private function submitCaption(VidiunFacebookDistributionProfile $distributionProfile, VidiunFacebookCaptionDistributionInfo $captionInfo, $remoteId)
 	{
 		if (!$captionInfo->label && !$captionInfo->language)
 			throw new Exception("No label/language were configured for this caption aborting");
 
 		if ($captionInfo->language)
-			$locale = KalturaFacebookLanguageMatch::getFacebookCodeForKalturaLanguage($captionInfo->language);
+			$locale = VidiunFacebookLanguageMatch::getFacebookCodeForVidiunLanguage($captionInfo->language);
 
 		if (!$locale && $captionInfo->label)
 			$locale = $captionInfo->label;
@@ -202,7 +202,7 @@ class FacebookDistributionEngine extends DistributionEngine implements
 			$this->tempDirectory
 			);
 
-		$mediaFile = new KalturaDistributionRemoteMediaFile();
+		$mediaFile = new VidiunDistributionRemoteMediaFile();
 		$mediaFile->assetId = $captionInfo->assetId;
 		$mediaFile->version = $captionInfo->version;
 		$mediaFile->remoteId = $locale;
@@ -212,7 +212,7 @@ class FacebookDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	*/
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		try {
 			if ($data->entryDistribution->remoteId) {
@@ -231,7 +231,7 @@ class FacebookDistributionEngine extends DistributionEngine implements
 		return true;
 	}
 
-	private function deleteCaption(KalturaFacebookDistributionProfile $distributionProfile, $locale, $remoteId)
+	private function deleteCaption(VidiunFacebookDistributionProfile $distributionProfile, $locale, $remoteId)
 	{
 		FacebookGraphSdkUtils::deleteCaptions(
 			$this->appId,
@@ -243,10 +243,10 @@ class FacebookDistributionEngine extends DistributionEngine implements
 		return true;
 	}
 
-	private function validate(KalturaDistributionJobData $data)
+	private function validate(VidiunDistributionJobData $data)
 	{
-		if (!$data->distributionProfile || !($data->distributionProfile instanceof KalturaFacebookDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaFacebookDistributionProfile");
+		if (!$data->distributionProfile || !($data->distributionProfile instanceof VidiunFacebookDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunFacebookDistributionProfile");
 
 		if (!$this->appId)
 			throw new Exception("Facebook appId is not configured");
@@ -321,7 +321,7 @@ class FacebookDistributionEngine extends DistributionEngine implements
 			$this->insertToFacebookMetadata($facebookMetadata, 'name', $fieldValues[FacebookDistributionField::TITLE], false);
 		}
 
-		KalturaLog::info("Facebook metadata constructed as : ".print_r($facebookMetadata, true));
+		VidiunLog::info("Facebook metadata constructed as : ".print_r($facebookMetadata, true));
 		return $facebookMetadata;
 	}
 

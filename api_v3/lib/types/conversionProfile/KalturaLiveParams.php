@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveParams extends KalturaFlavorParams 
+class VidiunLiveParams extends VidiunFlavorParams 
 {
 	/**
 	 * Suffix to be added to the stream name after the entry id {entry_id}_{stream_suffix}, e.g. for entry id 0_kjdu5jr6 and suffix 1, the stream name will be 0_kjdu5jr6_1
@@ -18,7 +18,7 @@ class KalturaLiveParams extends KalturaFlavorParams
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFlavorParams::getMapBetweenObjects()
+	 * @see VidiunFlavorParams::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -26,7 +26,7 @@ class KalturaLiveParams extends KalturaFlavorParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($object = null, $skip = array())
 	{

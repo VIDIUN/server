@@ -3,7 +3,7 @@
  * @package plugins.scheduledTask
  * @subpackage lib
  */
-class kScheduledTaskBatchJobFlowManager implements kBatchJobStatusEventConsumer
+class vScheduledTaskBatchJobFlowManager implements vBatchJobStatusEventConsumer
 {
 	/**
 	 * @param BatchJob $dbBatchJob
@@ -34,7 +34,7 @@ class kScheduledTaskBatchJobFlowManager implements kBatchJobStatusEventConsumer
 		}
 	}
 
-	public static function handleJobFinished(BatchJob $job, kScheduledTaskJobData $data)
+	public static function handleJobFinished(BatchJob $job, vScheduledTaskJobData $data)
 	{
 		$resultFilePath = $data->getResultsFilePath();
 		if (!file_exists($resultFilePath))
@@ -44,11 +44,11 @@ class kScheduledTaskBatchJobFlowManager implements kBatchJobStatusEventConsumer
 		$syncKey = $job->getSyncKey(BatchJob::FILE_SYNC_BATCHJOB_SUB_TYPE_BULKUPLOAD);
 		try
 		{
-			kFileSyncUtils::moveFromFile($resultFilePath, $syncKey, true);
+			vFileSyncUtils::moveFromFile($resultFilePath, $syncKey, true);
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::err($ex);
+			VidiunLog::err($ex);
 			return self::finishJobWithError($job, 'Failed to move file: '.$ex->getMessage());
 		}
 		return $job;

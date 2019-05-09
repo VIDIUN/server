@@ -2,12 +2,12 @@
 require_once(__DIR__ . "/../../../../batch/bootstrap.php");
 
 /**
- * Executes the KAsyncDistributeEnableCloser
+ * Executes the VAsyncDistributeEnableCloser
  * 
  * @package plugins.contentDistribution 
  * @subpackage Scheduler.Distribute
  */
 
-$instance = new KAsyncDistributeEnableCloser();
+$instance = new VAsyncDistributeEnableCloser();
 $instance->run(); 
 $instance->done();

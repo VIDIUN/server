@@ -3,10 +3,10 @@
  * @package plugins.group
  * @subpackage api.objects
  */
-class KalturaESearchGroupItem extends KalturaESearchAbstractGroupItem
+class VidiunESearchGroupItem extends VidiunESearchAbstractGroupItem
 {
 	/**
-	 * @var KalturaESearchGroupFieldName
+	 * @var VidiunESearchGroupFieldName
 	 */
 	public $fieldName;
 
@@ -17,17 +17,17 @@ class KalturaESearchGroupItem extends KalturaESearchAbstractGroupItem
 	private static $map_dynamic_enum = array();
 
 	private static $map_field_enum = array(
-		KalturaESearchGroupFieldName::SCREEN_NAME => ESearchUserFieldName::SCREEN_NAME,
-		KalturaESearchGroupFieldName::EMAIL => ESearchUserFieldName::EMAIL,
-		KalturaESearchGroupFieldName::TAGS => ESearchUserFieldName::TAGS,
-		KalturaESearchGroupFieldName::UPDATED_AT => ESearchUserFieldName::UPDATED_AT,
-		KalturaESearchGroupFieldName::CREATED_AT => ESearchUserFieldName::CREATED_AT,
-		KalturaESearchGroupFieldName::LAST_NAME => ESearchUserFieldName::LAST_NAME,
-		KalturaESearchGroupFieldName::FIRST_NAME => ESearchUserFieldName::FIRST_NAME,
-		KalturaESearchGroupFieldName::PERMISSION_NAMES => ESearchUserFieldName::PERMISSION_NAMES,
-		KalturaESearchGroupFieldName::GROUP_IDS => ESearchUserFieldName::GROUP_IDS,
-		KalturaESearchGroupFieldName::ROLE_IDS => ESearchUserFieldName::ROLE_IDS,
-		KalturaESearchGroupFieldName::USER_ID => ESearchUserFieldName::PUSER_ID,
+		VidiunESearchGroupFieldName::SCREEN_NAME => ESearchUserFieldName::SCREEN_NAME,
+		VidiunESearchGroupFieldName::EMAIL => ESearchUserFieldName::EMAIL,
+		VidiunESearchGroupFieldName::TAGS => ESearchUserFieldName::TAGS,
+		VidiunESearchGroupFieldName::UPDATED_AT => ESearchUserFieldName::UPDATED_AT,
+		VidiunESearchGroupFieldName::CREATED_AT => ESearchUserFieldName::CREATED_AT,
+		VidiunESearchGroupFieldName::LAST_NAME => ESearchUserFieldName::LAST_NAME,
+		VidiunESearchGroupFieldName::FIRST_NAME => ESearchUserFieldName::FIRST_NAME,
+		VidiunESearchGroupFieldName::PERMISSION_NAMES => ESearchUserFieldName::PERMISSION_NAMES,
+		VidiunESearchGroupFieldName::GROUP_IDS => ESearchUserFieldName::GROUP_IDS,
+		VidiunESearchGroupFieldName::ROLE_IDS => ESearchUserFieldName::ROLE_IDS,
+		VidiunESearchGroupFieldName::USER_ID => ESearchUserFieldName::PUSER_ID,
 	);
 
 	protected function getMapBetweenObjects()

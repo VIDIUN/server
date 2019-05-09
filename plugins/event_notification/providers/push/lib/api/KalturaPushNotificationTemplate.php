@@ -3,36 +3,36 @@
  * @package plugins.pushNotification
  * @subpackage api.objects
 */
-class KalturaPushNotificationTemplate extends KalturaEventNotificationTemplate
+class VidiunPushNotificationTemplate extends VidiunEventNotificationTemplate
 {
 	/**
 	 * Define the content dynamic parameters
-	 * @var KalturaPushEventNotificationParameterArray
+	 * @var VidiunPushEventNotificationParameterArray
 	 * @requiresPermission update
 	 */
 	public $queueNameParameters;
 	
 	/**
 	 * Define the content dynamic parameters
-	 * @var KalturaPushEventNotificationParameterArray
+	 * @var VidiunPushEventNotificationParameterArray
 	 * @requiresPermission update
 	 */
 	public $queueKeyParameters;
 	
     /**
-     * Kaltura API object type
+     * Vidiun API object type
      * @var string
      */
     public $apiObjectType;
     
     /**
-     * Kaltura Object format
-     * @var KalturaResponseType
+     * Vidiun Object format
+     * @var VidiunResponseType
      */    
     public $objectFormat;
     
     /**
-     * Kaltura response-profile id
+     * Vidiun response-profile id
      * @var int
      */    
     public $responseProfileId;
@@ -46,7 +46,7 @@ class KalturaPushNotificationTemplate extends KalturaEventNotificationTemplate
     }
     
     /* (non-PHPdoc)
-     * @see KalturaObject::getMapBetweenObjects()
+     * @see VidiunObject::getMapBetweenObjects()
      */
     public function getMapBetweenObjects()
     {
@@ -54,7 +54,7 @@ class KalturaPushNotificationTemplate extends KalturaEventNotificationTemplate
     }    
 
     /* (non-PHPdoc)
-     * @see KalturaObject::validateForUpdate()
+     * @see VidiunObject::validateForUpdate()
      */
     public function validateForUpdate($sourceObject, $propertiesToSkip = array())
     {
@@ -63,7 +63,7 @@ class KalturaPushNotificationTemplate extends KalturaEventNotificationTemplate
     }
     
     /* (non-PHPdoc)
-     * @see KalturaObject::toObject()
+     * @see VidiunObject::toObject()
      */
     public function toObject($dbObject = null, $propertiesToSkip = array())
     {

@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaContentDistributionSearchItem extends KalturaSearchItem
+class VidiunContentDistributionSearchItem extends VidiunSearchItem
 {
 	/**
 	 * @var bool
@@ -16,17 +16,17 @@ class KalturaContentDistributionSearchItem extends KalturaSearchItem
 	public $distributionProfileId;
 	
 	/**
-	 * @var KalturaEntryDistributionSunStatus
+	 * @var VidiunEntryDistributionSunStatus
 	 */
 	public $distributionSunStatus;
 	
 	/**
-	 * @var KalturaEntryDistributionFlag
+	 * @var VidiunEntryDistributionFlag
 	 */
 	public $entryDistributionFlag;
 	
 	/**
-	 * @var KalturaEntryDistributionStatus
+	 * @var VidiunEntryDistributionStatus
 	 */
 	public $entryDistributionStatus;
 	
@@ -37,7 +37,7 @@ class KalturaContentDistributionSearchItem extends KalturaSearchItem
 	
 	/**
 	 * Comma seperated validation error types
-	 * @dynamicType KalturaDistributionErrorType
+	 * @dynamicType VidiunDistributionErrorType
 	 * @var string
 	 */
 	public $entryDistributionValidationErrors;
@@ -69,7 +69,7 @@ class KalturaContentDistributionSearchItem extends KalturaSearchItem
 		return $object;
 	}
 
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		

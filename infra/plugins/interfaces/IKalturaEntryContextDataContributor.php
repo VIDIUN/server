@@ -4,10 +4,10 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaEntryContextDataContributor {
+interface IVidiunEntryContextDataContributor {
 
     /**
-     * Receives the context-data result and adds an instance of KalturaPluginData to the pluginData containing
+     * Receives the context-data result and adds an instance of VidiunPluginData to the pluginData containing
      * the specific plugins context-data.
      *
      * @param entry $entry
@@ -15,5 +15,5 @@ interface IKalturaEntryContextDataContributor {
      * @param contributeToEntryContextDataResult $result
      * @return PluginData
      */
-    public function contributeToEntryContextDataResult(entry $entry, accessControlScope $contextDataParams, kContextDataHelper $contextDataHelper);
+    public function contributeToEntryContextDataResult(entry $entry, accessControlScope $contextDataParams, vContextDataHelper $contextDataHelper);
 }

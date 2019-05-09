@@ -7,18 +7,18 @@
 		"number_of_replicas" : 1,
 		"analysis": {
 			"char_filter": {
-				"kaltura_whitespace_filter": {
+				"vidiun_whitespace_filter": {
 					"type": "pattern_replace",
 					"pattern": "(\\s+)",
 					"replacement": " "
 				}
 			},
 			"analyzer": {
-				"kaltura_keyword": {
+				"vidiun_keyword": {
 					"type": "custom",
 					"tokenizer": "keyword",
 					"char_filter": [
-						"kaltura_whitespace_filter"
+						"vidiun_whitespace_filter"
 					],
 					"filter": [
 						"lowercase",
@@ -46,26 +46,26 @@
 			"properties": {
 				"event_type": {
 					"type" : "text",
-					"analyzer" : "kaltura_keyword"
+					"analyzer" : "vidiun_keyword"
 				},
 				"object_id": {
 					"type" : "text",
-					"analyzer" : "kaltura_keyword"
+					"analyzer" : "vidiun_keyword"
 				},
 				"partner_id": {
 					"type" : "text",
-					"analyzer" : "kaltura_keyword"
+					"analyzer" : "vidiun_keyword"
 				},
 				"private_data": {
 					"type" : "object"
 				},
 				"raw_data": {
 					"type" : "text",
-					"analyzer" : "kaltura_keyword"
+					"analyzer" : "vidiun_keyword"
 				},
 				"related_object_type": {
 					"type" : "text",
-					"analyzer" : "kaltura_keyword"
+					"analyzer" : "vidiun_keyword"
 				},
 				"updated_at": {
 					"type": "date",

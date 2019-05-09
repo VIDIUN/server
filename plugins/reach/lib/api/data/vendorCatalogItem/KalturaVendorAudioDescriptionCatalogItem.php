@@ -3,10 +3,10 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaVendorAudioDescriptionCatalogItem extends KalturaVendorCatalogItem
+class VidiunVendorAudioDescriptionCatalogItem extends VidiunVendorCatalogItem
 {
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 * @filter eq,in
 	 */
 	public $sourceLanguage;
@@ -24,11 +24,11 @@ class KalturaVendorAudioDescriptionCatalogItem extends KalturaVendorCatalogItem
 	
 	protected function getServiceFeature()
 	{
-		return KalturaVendorServiceFeature::AUDIO_DESCRIPTION;
+		return VidiunVendorServiceFeature::AUDIO_DESCRIPTION;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -36,7 +36,7 @@ class KalturaVendorAudioDescriptionCatalogItem extends KalturaVendorCatalogItem
 	}
 	
 	/* (non-PHPdoc)
- * @see KalturaObject::toInsertableObject()
+ * @see VidiunObject::toInsertableObject()
  */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -77,17 +77,17 @@ class KalturaVendorAudioDescriptionCatalogItem extends KalturaVendorCatalogItem
 	{
 		$flavorParams = assetParamsPeer::retrieveByPK($id);
 		if (!$flavorParams)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 	}
 	
 	protected function validateServiceType()
 	{
-		if($this->serviceType != KalturaVendorServiceType::HUMAN)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_ONLY_HUMAN_ALLOWED);
+		if($this->serviceType != VidiunVendorServiceType::HUMAN)
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_ONLY_HUMAN_ALLOWED);
 	}
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+ 	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
  	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{

@@ -4,17 +4,17 @@
  * @package Core
  * @subpackage model.data
  */
-class kUserEmailContextField extends kStringField
+class vUserEmailContextField extends vStringField
 {
 	/* (non-PHPdoc)
-	 * @see kStringField::getFieldValue()
+	 * @see vStringField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null) 
+	protected function getFieldValue(vScope $scope = null) 
 	{
 		if(!$scope)
-			$scope = new kScope();
+			$scope = new vScope();
 			
-		$kuser = kuserPeer::getKuserByPartnerAndUid($scope->getKs()->partner_id, $scope->getKs()->user);
-		return $kuser->getEmail();
+		$vuser = vuserPeer::getVuserByPartnerAndUid($scope->getVs()->partner_id, $scope->getVs()->user);
+		return $vuser->getEmail();
 	}
 }

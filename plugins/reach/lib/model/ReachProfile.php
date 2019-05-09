@@ -110,7 +110,7 @@ class ReachProfile extends BaseReachProfile
 			$this->setRulesArrayCompressed(true);
 			$serializedRulesArray = gzcompress($serializedRulesArray);
 			if(strlen(utf8_encode($serializedRulesArray)) > myCustomData::MAX_MEDIUM_TEXT_FIELD_SIZE)
-				throw new kCoreException('Exceeded max size allowed for access control', kCoreException::EXCEEDED_MAX_CUSTOM_DATA_SIZE);
+				throw new vCoreException('Exceeded max size allowed for access control', vCoreException::EXCEEDED_MAX_CUSTOM_DATA_SIZE);
 			
 		}
 		else
@@ -135,7 +135,7 @@ class ReachProfile extends BaseReachProfile
 			$this->setDictionariesArrayCompressed(true);
 			$serializedDictionariesArray = gzcompress($serializedDictionariesArray);
 			if(strlen(utf8_encode($serializedDictionariesArray)) > myCustomData::MAX_MEDIUM_TEXT_FIELD_SIZE)
-				throw new kCoreException('Exceeded max size allowed for access control', kCoreException::EXCEEDED_MAX_CUSTOM_DATA_SIZE);
+				throw new vCoreException('Exceeded max size allowed for access control', vCoreException::EXCEEDED_MAX_CUSTOM_DATA_SIZE);
 			
 		}
 		else
@@ -152,7 +152,7 @@ class ReachProfile extends BaseReachProfile
 	}
 	
 	/**
-	 * @return array<kDictionary>
+	 * @return array<vDictionary>
 	 */
 	public function getDictionariesArray()
 	{
@@ -169,7 +169,7 @@ class ReachProfile extends BaseReachProfile
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err("Unable to unserialize [$dictionariesString ], " . $e->getMessage());
+				VidiunLog::err("Unable to unserialize [$dictionariesString ], " . $e->getMessage());
 				$dictionaries = array();
 			}
 		}
@@ -268,7 +268,7 @@ class ReachProfile extends BaseReachProfile
 	}
 	
 	/**
-	 * @return array<kRule>
+	 * @return array<vRule>
 	 */
 	public function getRulesArray()
 	{
@@ -285,7 +285,7 @@ class ReachProfile extends BaseReachProfile
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err("Unable to unserialize [$rulesString], " . $e->getMessage());
+				VidiunLog::err("Unable to unserialize [$rulesString], " . $e->getMessage());
 				$rules = array();
 			}
 		}
@@ -294,7 +294,7 @@ class ReachProfile extends BaseReachProfile
 	}
 	
 	/**
-	 * @return kVendorCredit
+	 * @return vVendorCredit
 	 */
 	public function getCredit()
 	{
@@ -314,7 +314,7 @@ class ReachProfile extends BaseReachProfile
 	{
 		foreach ($this->getDictionariesArray() as $dictionary)
 		{
-			/* @var kDictionary $dictionary*/
+			/* @var vDictionary $dictionary*/
 			if ($dictionary->getLanguage() == $language)
 			{
 				return $dictionary;
@@ -436,9 +436,9 @@ class ReachProfile extends BaseReachProfile
 	/**
 	 * Validate if the entry should be exported to the remote storage according to the defined export rules
 	 *
-	 * @param kCategoryEntryScope $scope
+	 * @param vCategoryEntryScope $scope
 	 */
-	public function fulfillsRules(kScope $scope, $checkEmptyRulesOnly = false)
+	public function fulfillsRules(vScope $scope, $checkEmptyRulesOnly = false)
 	{
 		$gotBooleanCondition = false;
 		$gotNonBooleanCondition = false;
@@ -446,7 +446,7 @@ class ReachProfile extends BaseReachProfile
 		if(!is_array($this->getRulesArray()) || !count($this->getRulesArray()))
 			return $fullFilledCatalogItemIds;
 		
-		$context = new kContextDataResult();
+		$context = new vContextDataResult();
 		foreach ($this->getRulesArray() as $rule)
 		{
 			if (count($rule->getConditions()))
@@ -481,10 +481,10 @@ class ReachProfile extends BaseReachProfile
 			{
 				foreach ($context->getActions() as $action)
 				{
-					/* @var $action kRuleAction */
+					/* @var $action vRuleAction */
 					if($action->getType() == ReachPlugin::getRuleActionTypeCoreValue(ReachRuleActionType::ADD_ENTRY_VENDOR_TASK))
 					{
-						/* $var $action kAddEntryVendorTaskAction */
+						/* $var $action vAddEntryVendorTaskAction */
 						$fullFilledCatalogItemIds = array_merge($fullFilledCatalogItemIds, explode(",", $action->getCatalogItemIds()));
 					}
 				}

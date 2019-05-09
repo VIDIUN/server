@@ -5,7 +5,7 @@
  *
  * @service category
  */
-class CategoryService extends KalturaBaseService
+class CategoryService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -21,18 +21,18 @@ class CategoryService extends KalturaBaseService
 	 * Add new Category
 	 * 
 	 * @action add
-	 * @param KalturaCategory $category
-	 * @throws KalturaAPIException
-	 * @return KalturaCategory
+	 * @param VidiunCategory $category
+	 * @throws VidiunAPIException
+	 * @return VidiunCategory
 	 */
-	function addAction(KalturaCategory $category)
+	function addAction(VidiunCategory $category)
 	{	
 		if($category->owner == '')
 			$category->owner = null;
 			
 		if ($category->parentId != null && //batch to index categories or to move categories might miss this category to be moved or index
 			$this->getPartner()->getFeaturesStatusByType(IndexObjectType::LOCK_CATEGORY))
-			throw new KalturaAPIException(KalturaErrors::CATEGORIES_LOCKED);
+			throw new VidiunAPIException(VidiunErrors::CATEGORIES_LOCKED);
 			
 		if($category->privacyContext != null && 
 		   $category->privacyContext != '')
@@ -43,8 +43,8 @@ class CategoryService extends KalturaBaseService
 		  	{
 		  		if(!preg_match('/^[a-zA-Z\d]+$/', $privacyContext) || strlen($privacyContext) < 4)
 		  		{
-		  			KalturaLog::err('Invalid privacy context: ' . print_r($privacyContext, true));
-		   			throw new KalturaAPIException(KalturaErrors::PRIVACY_CONTEXT_INVALID_STRING, $privacyContext);
+		  			VidiunLog::err('Invalid privacy context: ' . print_r($privacyContext, true));
+		   			throw new VidiunAPIException(VidiunErrors::PRIVACY_CONTEXT_INVALID_STRING, $privacyContext);
 		  		}
 		  	}
 	   	}
@@ -58,13 +58,13 @@ class CategoryService extends KalturaBaseService
 		}
 		catch(Exception $ex)
 		{
-			if ($ex instanceof kCoreException)
+			if ($ex instanceof vCoreException)
 				$this->handleCoreException($ex, $categoryDb, $category);
 			else
 				throw $ex;
 		}
 		
-		$category = new KalturaCategory();
+		$category = new VidiunCategory();
 		$category->fromObject($categoryDb, $this->getResponseProfile());
 		
 		return $category;
@@ -75,15 +75,15 @@ class CategoryService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaCategory
+	 * @return VidiunCategory
 	 */
 	function getAction($id)
 	{
 		$categoryDb = categoryPeer::retrieveByPK($id);
 		if (!$categoryDb)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $id);
 		
-		$category = new KalturaCategory();
+		$category = new VidiunCategory();
 		$category->fromObject($categoryDb, $this->getResponseProfile());
 		return $category;
 	}
@@ -93,18 +93,18 @@ class CategoryService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaCategory $category
-	 * @throws KalturaAPIException
-	 * @return KalturaCategory
+	 * @param VidiunCategory $category
+	 * @throws VidiunAPIException
+	 * @return VidiunCategory
 	 */
-	function updateAction($id, KalturaCategory $category)
+	function updateAction($id, VidiunCategory $category)
 	{		
 		if($category->owner == '')
 			$category->owner = null;
 			
 		$categoryDb = categoryPeer::retrieveByPK($id);
 		if (!$categoryDb)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $id );
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $id );
 		
 		if ($category->privacyContext != null && $category->privacyContext != '') 
 		{
@@ -114,8 +114,8 @@ class CategoryService extends KalturaBaseService
 			{
 				if (! preg_match ( '/^[a-zA-Z\d]+$/', $privacyContext ) || strlen ( $privacyContext ) < 4) 
 				{
-					KalturaLog::err ( 'Invalid privacy context: ' . print_r ( $privacyContext, true ) );
-					throw new KalturaAPIException ( KalturaErrors::PRIVACY_CONTEXT_INVALID_STRING, $privacyContext );
+					VidiunLog::err ( 'Invalid privacy context: ' . print_r ( $privacyContext, true ) );
+					throw new VidiunAPIException ( VidiunErrors::PRIVACY_CONTEXT_INVALID_STRING, $privacyContext );
 				}
 			}
 		}
@@ -125,13 +125,13 @@ class CategoryService extends KalturaBaseService
 		//batch to index categories or to move categories might miss this category to be moved or index
 		if (($category->parentId != null && $category->parentId !=  $categoryDb->getParentId()) && 
 			$this->getPartner()->getFeaturesStatusByType(IndexObjectType::LOCK_CATEGORY))
-			throw new KalturaAPIException(KalturaErrors::CATEGORIES_LOCKED);
+			throw new VidiunAPIException(VidiunErrors::CATEGORIES_LOCKED);
 
-		if (kEntitlementUtils::getEntitlementEnforcement())
+		if (vEntitlementUtils::getEntitlementEnforcement())
 		{
-			$currentKuserCategoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryDb->getId(), kCurrentContext::getCurrentKsKuserId(), array(PermissionName::CATEGORY_EDIT));
-			if(!$currentKuserCategoryKuser || $currentKuserCategoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MANAGER)
-				throw new KalturaAPIException(KalturaErrors::NOT_ENTITLED_TO_UPDATE_CATEGORY);
+			$currentVuserCategoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryDb->getId(), vCurrentContext::getCurrentVsVuserId(), array(PermissionName::CATEGORY_EDIT));
+			if(!$currentVuserCategoryVuser || $currentVuserCategoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MANAGER)
+				throw new VidiunAPIException(VidiunErrors::NOT_ENTITLED_TO_UPDATE_CATEGORY);
 		}
 		try
 		{		
@@ -140,13 +140,13 @@ class CategoryService extends KalturaBaseService
 		}
 		catch(Exception $ex)
 		{
-			if ($ex instanceof kCoreException)
+			if ($ex instanceof vCoreException)
 				$this->handleCoreException($ex, $categoryDb, $category);
 			else
 				throw $ex;
 		}
 		
-		$category = new KalturaCategory();
+		$category = new VidiunCategory();
 		$category->fromObject($categoryDb, $this->getResponseProfile());
 		return $category;
 	}
@@ -156,23 +156,23 @@ class CategoryService extends KalturaBaseService
 	 *
 	 * @action delete
 	 * @param int $id
-	 * @param KalturaNullableBoolean $moveEntriesToParentCategory
-	 * @throws KalturaAPIException
+	 * @param VidiunNullableBoolean $moveEntriesToParentCategory
+	 * @throws VidiunAPIException
 	 */
-	function deleteAction($id, $moveEntriesToParentCategory = KalturaNullableBoolean::TRUE_VALUE)
+	function deleteAction($id, $moveEntriesToParentCategory = VidiunNullableBoolean::TRUE_VALUE)
 	{
 		if ($this->getPartner()->getFeaturesStatusByType(IndexObjectType::LOCK_CATEGORY))
-			throw new KalturaAPIException(KalturaErrors::CATEGORIES_LOCKED);
+			throw new VidiunAPIException(VidiunErrors::CATEGORIES_LOCKED);
 
 		$categoryDb = categoryPeer::retrieveByPK($id);
 		if (!$categoryDb)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $id);
 
-		if (kEntitlementUtils::getEntitlementEnforcement())
+		if (vEntitlementUtils::getEntitlementEnforcement())
 		{
-			$currentKuserCategoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryDb->getId(), kCurrentContext::getCurrentKsKuserId());
-			if(!$currentKuserCategoryKuser || $currentKuserCategoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MANAGER)
-				throw new KalturaAPIException(KalturaErrors::NOT_ENTITLED_TO_UPDATE_CATEGORY);
+			$currentVuserCategoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryDb->getId(), vCurrentContext::getCurrentVsVuserId());
+			if(!$currentVuserCategoryVuser || $currentVuserCategoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MANAGER)
+				throw new VidiunAPIException(VidiunErrors::NOT_ENTITLED_TO_UPDATE_CATEGORY);
 		}
 
 		$this->getPartner()->addFeaturesStatus(IndexObjectType::LOCK_CATEGORY);
@@ -198,24 +198,24 @@ class CategoryService extends KalturaBaseService
 	 * List all categories
 	 * 
 	 * @action list
-	 * @param KalturaCategoryFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaCategoryListResponse
+	 * @param VidiunCategoryFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunCategoryListResponse
 	 */
-	function listAction(KalturaCategoryFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunCategoryFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if ($filter === null)
-			$filter = new KalturaCategoryFilter();
+			$filter = new VidiunCategoryFilter();
 	
 		if ($pager == null)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			//before falcon we didn't have a pager for action category->list,
 			//and since we added a pager - and remove the limit for partners categories,
 			//for backward compatibility this will be the page size. 
 			$pager->pageIndex = 1;
 			$pager->pageSize = Partner::MAX_NUMBER_OF_CATEGORIES;
-			KalturaCriteria::setMaxRecords(Partner::MAX_NUMBER_OF_CATEGORIES);
+			VidiunCriteria::setMaxRecords(Partner::MAX_NUMBER_OF_CATEGORIES);
 			baseObjectFilter::setMaxInValues(Partner::MAX_NUMBER_OF_CATEGORIES);
 		}
 		
@@ -232,12 +232,12 @@ class CategoryService extends KalturaBaseService
 	 */
 	function indexAction($id, $shouldUpdate = true)
 	{
-		if(kEntitlementUtils::getEntitlementEnforcement())
-			throw new KalturaAPIException(KalturaErrors::CANNOT_INDEX_OBJECT_WHEN_ENTITLEMENT_IS_ENABLE);
+		if(vEntitlementUtils::getEntitlementEnforcement())
+			throw new VidiunAPIException(VidiunErrors::CANNOT_INDEX_OBJECT_WHEN_ENTITLEMENT_IS_ENABLE);
 			
 		$categoryDb = categoryPeer::retrieveByPK($id);
 		if (!$categoryDb)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $id);
 			
 		if (!$shouldUpdate)
 		{
@@ -268,18 +268,18 @@ class CategoryService extends KalturaBaseService
 		return $categoryDb->getId();
 	}
 	
-	private function handleCoreException(kCoreException $ex, category $categoryDb, KalturaCategory $category)
+	private function handleCoreException(vCoreException $ex, category $categoryDb, VidiunCategory $category)
 	{
 		switch($ex->getCode())
 		{
-			case kCoreException::DUPLICATE_CATEGORY:
-				throw new KalturaAPIException(KalturaErrors::DUPLICATE_CATEGORY, $categoryDb->getFullName());
+			case vCoreException::DUPLICATE_CATEGORY:
+				throw new VidiunAPIException(VidiunErrors::DUPLICATE_CATEGORY, $categoryDb->getFullName());
 				
-			case kCoreException::PARENT_ID_IS_CHILD:
-				throw new KalturaAPIException(KalturaErrors::PARENT_CATEGORY_IS_CHILD, $category->parentId, $categoryDb->getId());
+			case vCoreException::PARENT_ID_IS_CHILD:
+				throw new VidiunAPIException(VidiunErrors::PARENT_CATEGORY_IS_CHILD, $category->parentId, $categoryDb->getId());
 				
-			case kCoreException::DISABLE_CATEGORY_LIMIT_MULTI_PRIVACY_CONTEXT_FORBIDDEN:
-				throw new KalturaAPIException(KalturaErrors::CANNOT_SET_MULTI_PRIVACY_CONTEXT);
+			case vCoreException::DISABLE_CATEGORY_LIMIT_MULTI_PRIVACY_CONTEXT_FORBIDDEN:
+				throw new VidiunAPIException(VidiunErrors::CANNOT_SET_MULTI_PRIVACY_CONTEXT);
 				
 			default:
 				throw $ex;
@@ -287,21 +287,21 @@ class CategoryService extends KalturaBaseService
 	}
 	
 	/**
-	 * Move categories that belong to the same parent category to a target categroy - enabled only for ks with disable entitlement
+	 * Move categories that belong to the same parent category to a target categroy - enabled only for vs with disable entitlement
 	 * 
 	 * @action move
 	 * @param string $categoryIds
 	 * @param int $targetCategoryParentId
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 * @return bool
 	 */
 	function moveAction($categoryIds, $targetCategoryParentId)
 	{
-		if(kEntitlementUtils::getEntitlementEnforcement())
-			throw new KalturaAPIException(KalturaErrors::CANNOT_MOVE_CATEGORIES_FROM_DIFFERENT_PARENT_CATEGORY);
+		if(vEntitlementUtils::getEntitlementEnforcement())
+			throw new VidiunAPIException(VidiunErrors::CANNOT_MOVE_CATEGORIES_FROM_DIFFERENT_PARENT_CATEGORY);
 		
 		if ($this->getPartner()->getFeaturesStatusByType(IndexObjectType::LOCK_CATEGORY))
-			throw new KalturaAPIException(KalturaErrors::CATEGORIES_LOCKED);
+			throw new VidiunAPIException(VidiunErrors::CATEGORIES_LOCKED);
 		
 		$categories = explode(',', $categoryIds);
 		$dbCategories = array();
@@ -314,13 +314,13 @@ class CategoryService extends KalturaBaseService
 				
 			$dbCategory = categoryPeer::retrieveByPK($categoryId);
 			if (!$dbCategory)
-				throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $categoryId);
+				throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $categoryId);
 			
 			if($parentId == category::CATEGORY_ID_THAT_DOES_NOT_EXIST)
 				$parentId = $dbCategory->getParentId();
 				
 			if($parentId != $dbCategory->getParentId())
-				throw new KalturaAPIException(KalturaErrors::CANNOT_MOVE_CATEGORIES_FROM_DIFFERENT_PARENT_CATEGORY);
+				throw new VidiunAPIException(VidiunErrors::CANNOT_MOVE_CATEGORIES_FROM_DIFFERENT_PARENT_CATEGORY);
 				
 			$dbCategories[] = $dbCategory;
 		}
@@ -330,7 +330,7 @@ class CategoryService extends KalturaBaseService
 		{
 			$dbTargetCategory = categoryPeer::retrieveByPK($targetCategoryParentId);
 			if (!$dbTargetCategory)
-				throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $targetCategoryParentId);
+				throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $targetCategoryParentId);
 		}		
 		
 		foreach ($dbCategories as $dbCategory)

@@ -4,7 +4,7 @@
  * @subpackage ExportCsv
  */
 
-class KExportMediaEsearchEngine extends KObjectExportEngine
+class VExportMediaEsearchEngine extends VObjectExportEngine
 {
 	
 	const LIMIT = 10000;
@@ -13,37 +13,37 @@ class KExportMediaEsearchEngine extends KObjectExportEngine
 	
 	public function fillCsv(&$csvFile, &$data)
 	{
-		KalturaLog::info ('Exporting content for media items through Esearch');
+		VidiunLog::info ('Exporting content for media items through Esearch');
 		$entrySearchParams = clone $data->searchParams;
 		
-		$results = KalturaElasticSearchClientPlugin::get(KBatchBase::$kClient)->eSearch->searchEntry($entrySearchParams);
+		$results = VidiunElasticSearchClientPlugin::get(VBatchBase::$vClient)->eSearch->searchEntry($entrySearchParams);
 		if ($results->totalCount > self::LIMIT)
 		{
-			KalturaLog::info ('More than 10000 results detected. Only the first 10000 results will be returned.');
+			VidiunLog::info ('More than 10000 results detected. Only the first 10000 results will be returned.');
 		}
 		
 		// TODO: at this point, no additional fields are allowed to be passed
 		$this->addHeaderRowToCsv($csvFile, array());
 		
-		$entryPager = new KalturaFilterPager();
+		$entryPager = new VidiunFilterPager();
 		$entryPager->pageSize = self::PAGE_SIZE;
 		$entryPager->pageIndex = 1;
 		
 		$entriesToReturn = array();
 		do
 		{
-			$results = KalturaElasticSearchClientPlugin::get(KBatchBase::$kClient)->eSearch->searchEntry($entrySearchParams, $entryPager);
+			$results = VidiunElasticSearchClientPlugin::get(VBatchBase::$vClient)->eSearch->searchEntry($entrySearchParams, $entryPager);
 			
 			foreach ($results->objects as $singleResult)
 			{
-				/* @var $singleResult KalturaESearchEntryResult */
+				/* @var $singleResult VidiunESearchEntryResult */
 				
 				$entriesToReturn[] = $singleResult->object;
 			}
 			
 			if (count($entriesToReturn) > self::LIMIT)
 			{
-				KalturaLog::info ('Upper limit for object count reached.');
+				VidiunLog::info ('Upper limit for object count reached.');
 				break;
 			}
 			
@@ -60,7 +60,7 @@ class KExportMediaEsearchEngine extends KObjectExportEngine
 	protected function addHeaderRowToCsv($csvFile, $additionalFields)
 	{
 		$headerRow = 'EntryID, Name, Description, Tags, Categories, UserID, CreatedAt, UpdatedAt ';
-		KCsvWrapper::sanitizedFputCsv($csvFile, explode(',', $headerRow));
+		VCsvWrapper::sanitizedFputCsv($csvFile, explode(',', $headerRow));
 		
 		return $csvFile;
 	}
@@ -81,17 +81,17 @@ class KExportMediaEsearchEngine extends KObjectExportEngine
 		
 		foreach ($entriesData as $entryId => $values)
 		{
-			KCsvWrapper::sanitizedFputCsv($csvFile, $values);
+			VCsvWrapper::sanitizedFputCsv($csvFile, $values);
 		}
 	}
 	
 	/**
 	 * This function calculates the default values for CSV row representing a single entry and returns them as an array
 	 *
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 * @return array
 	 */
-	protected function getCsvRowValues (KalturaBaseEntry $entry)
+	protected function getCsvRowValues (VidiunBaseEntry $entry)
 	{
 		$entryCategories = $this->retrieveEntryCategories ($entry->id);
 		
@@ -118,15 +118,15 @@ class KExportMediaEsearchEngine extends KObjectExportEngine
 	 */
 	protected function retrieveEntryCategories ($entryId)
 	{
-		$categoryEntryFilter = new KalturaCategoryEntryFilter();
+		$categoryEntryFilter = new VidiunCategoryEntryFilter();
 		$categoryEntryFilter->entryIdEqual = $entryId;
-		$categoryEntryFilter->statusEqual = KalturaCategoryEntryStatus::ACTIVE;
+		$categoryEntryFilter->statusEqual = VidiunCategoryEntryStatus::ACTIVE;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageIndex = 1;
 		$pager->pageSize = self::PAGE_SIZE;
 		
-		$categoryEntryResult = KBatchBase::$kClient->categoryEntry->listAction($categoryEntryFilter, $pager);
+		$categoryEntryResult = VBatchBase::$vClient->categoryEntry->listAction($categoryEntryFilter, $pager);
 		
 		$result = array();
 		foreach ($categoryEntryResult->objects as $categoryEntry)

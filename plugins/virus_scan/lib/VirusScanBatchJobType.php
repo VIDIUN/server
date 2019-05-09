@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class VirusScanBatchJobType implements IKalturaPluginEnum, BatchJobType
+class VirusScanBatchJobType implements IVidiunPluginEnum, BatchJobType
 {
 	const VIRUS_SCAN = 'VirusScan';
 	

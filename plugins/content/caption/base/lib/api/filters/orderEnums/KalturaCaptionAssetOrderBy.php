@@ -3,6 +3,6 @@
  * @package plugins.caption
  * @subpackage api.filters.enum
  */
-class KalturaCaptionAssetOrderBy extends KalturaAssetOrderBy
+class VidiunCaptionAssetOrderBy extends VidiunAssetOrderBy
 {
 }

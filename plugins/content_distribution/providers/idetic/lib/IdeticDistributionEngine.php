@@ -39,20 +39,20 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 		parent::configure();
 		
 		$this->tempXmlPath = sys_get_temp_dir();
-		if(KBatchBase::$taskConfig->params->ideticFetchReportPath)
-			$this->fetchReportPath = KBatchBase::$taskConfig->params->ideticFetchReportPath;
+		if(VBatchBase::$taskConfig->params->ideticFetchReportPath)
+			$this->fetchReportPath = VBatchBase::$taskConfig->params->ideticFetchReportPath;
 	}
 
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaIdeticDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaIdeticDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunIdeticDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunIdeticDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaIdeticDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaIdeticDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunIdeticDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunIdeticDistributionJobProviderData");
 		
 		$data->remoteId = $this->handleSend($data);
 		
@@ -61,12 +61,12 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 
 	/**
 	 * @param string $path
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaIdeticDistributionProfile $distributionProfile
-	 * @param KalturaIdeticDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunIdeticDistributionProfile $distributionProfile
+	 * @param VidiunIdeticDistributionJobProviderData $providerData
 	 * @throws Exception
 	 */
-	public function handleDelete(KalturaDistributionJobData $data, KalturaIdeticDistributionProfile $distributionProfile, KalturaIdeticDistributionJobProviderData $providerData)
+	public function handleDelete(VidiunDistributionJobData $data, VidiunIdeticDistributionProfile $distributionProfile, VidiunIdeticDistributionJobProviderData $providerData)
 	{
 		$domain = $distributionProfile->domain;
 		$username = $distributionProfile->username;
@@ -85,8 +85,8 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 		$destFile = "{$path}/{$fileName}";
 			
 		
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$fileTransferMgr = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$fileTransferMgr = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP, $engineOptions);
 		if(!$fileTransferMgr)
 			throw new Exception("FTP manager not loaded");
 			
@@ -101,10 +101,10 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	
 	/**
 	 * @param string $path
-	 * @param KalturaDistributionJobData $data
+	 * @param VidiunDistributionJobData $data
 	 * @throws Exception
 	 */
-	public function handleSend(KalturaDistributionJobData $data)
+	public function handleSend(VidiunDistributionJobData $data)
 	{
 		$distributionProfile = $data->distributionProfile;
 		$providerData = $data->providerData;
@@ -112,7 +112,7 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 		
 		$this->fieldValues = unserialize($providerData->fieldValues);
 		if (!$this->fieldValues) {
-			KalturaLog::err("fieldValues array is empty or null");
+			VidiunLog::err("fieldValues array is empty or null");
 			throw new Exception("fieldValues array is empty or null");		
 		}		
 		$domain = $distributionProfile->domain;
@@ -142,10 +142,10 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 		$destFile = "{$path}/{$fileName}";
 			
 		file_put_contents($srcFile, $feedHelper->getXmlString());
-		KalturaLog::info("XML written to file [$srcFile]");
+		VidiunLog::info("XML written to file [$srcFile]");
 		
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$fileTransferMgr = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$fileTransferMgr = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP, $engineOptions);
 		if(!$fileTransferMgr)
 			throw new Exception("FTP manager not loaded");
 			
@@ -162,21 +162,21 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	 */
 	protected function insertToXml(IdeticDistributionFeedHelper $feedHelper)
 	{
-		$feedHelper->setTitle($this->getValueForField(KalturaIdeticDistributionField::SHORT_TITLE));
-		$feedHelper->setShortTitle($this->getValueForField(KalturaIdeticDistributionField::TITLE));
-		$feedHelper->setKeyword($this->getValueForField(KalturaIdeticDistributionField::KEYWORD));
-		$feedHelper->setSynopsis($this->getValueForField(KalturaIdeticDistributionField::SYNOPSIS));
-		$feedHelper->setGenre($this->getValueForField(KalturaIdeticDistributionField::GENRE));
-		$feedHelper->setSlot($this->getValueForField(KalturaIdeticDistributionField::SLOT));
-		$feedHelper->setFolder($this->getValueForField(KalturaIdeticDistributionField::FOLDER));
+		$feedHelper->setTitle($this->getValueForField(VidiunIdeticDistributionField::SHORT_TITLE));
+		$feedHelper->setShortTitle($this->getValueForField(VidiunIdeticDistributionField::TITLE));
+		$feedHelper->setKeyword($this->getValueForField(VidiunIdeticDistributionField::KEYWORD));
+		$feedHelper->setSynopsis($this->getValueForField(VidiunIdeticDistributionField::SYNOPSIS));
+		$feedHelper->setGenre($this->getValueForField(VidiunIdeticDistributionField::GENRE));
+		$feedHelper->setSlot($this->getValueForField(VidiunIdeticDistributionField::SLOT));
+		$feedHelper->setFolder($this->getValueForField(VidiunIdeticDistributionField::FOLDER));
 		
-		$startTime = $this->getValueForField(KalturaIdeticDistributionField::START_OF_AVAILABILITY);
+		$startTime = $this->getValueForField(VidiunIdeticDistributionField::START_OF_AVAILABILITY);
 		if (is_null($startTime)) {
 		    $startTime = time() - 24*60*60;  // yesterday, to make the video public by default
 		}
 		$feedHelper->setStartTime(date('c', intval($startTime)));
 		
-		$endTime = $this->getValueForField(KalturaIdeticDistributionField::END_OF_AVAILABILITY);
+		$endTime = $this->getValueForField(VidiunIdeticDistributionField::END_OF_AVAILABILITY);
 		if ($endTime && intval($endTime)) {
             $feedHelper->setEndTime(date('c', $endTime));
 		}
@@ -199,7 +199,7 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		$publishState = $this->fetchStatus($data);
 		switch($publishState)
@@ -211,20 +211,20 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 				return false;
 				
 			default:
-				KalturaLog::err("Unknown publishState [$publishState]");
+				VidiunLog::err("Unknown publishState [$publishState]");
 				throw new Exception("IDETIC error: $publishState");
 				return false;
 		}
 	}
 
 	/**
-	 * @param KalturaDistributionSubmitJobData $data
+	 * @param VidiunDistributionSubmitJobData $data
 	 * @return string status
 	 */
-	public function fetchStatus(KalturaDistributionSubmitJobData $data)
+	public function fetchStatus(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaIdeticDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaIdeticDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunIdeticDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunIdeticDistributionProfile");
 	
 		$fileArray = $this->fetchFilesList($data, $data->distributionProfile);
 		
@@ -245,20 +245,20 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	}
 
 	/**
-	 * @param KalturaDistributionSubmitJobData $data
+	 * @param VidiunDistributionSubmitJobData $data
 	 * @throws Exception
 	 * @return DOMDocument
 	 */
-	public function fetchFilesList(KalturaDistributionSubmitJobData $data, KalturaIdeticDistributionProfile $distributionProfile)
+	public function fetchFilesList(VidiunDistributionSubmitJobData $data, VidiunIdeticDistributionProfile $distributionProfile)
 	{
 		$domain = $distributionProfile->domain;
 		$username = $distributionProfile->username;
 		$password = $distributionProfile->password;
 		
-		KalturaLog::info("Listing content for [$this->path]");
+		VidiunLog::info("Listing content for [$this->path]");
 		
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$fileTransferMgr = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$fileTransferMgr = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP, $engineOptions);
 		if(!$fileTransferMgr)
 			throw new Exception("FTP manager not loaded");
 			
@@ -269,13 +269,13 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaIdeticDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaIdeticDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunIdeticDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunIdeticDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaIdeticDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaIdeticDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunIdeticDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunIdeticDistributionJobProviderData");
 			
 		$this->handleDelete($data, $data->distributionProfile, $data->providerData);
 		
@@ -285,7 +285,7 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseDelete::closeDelete()
 	 */
-	public function closeDelete(KalturaDistributionDeleteJobData $data)
+	public function closeDelete(VidiunDistributionDeleteJobData $data)
 	{
 		$publishState = $this->fetchStatus($data);
 		switch($publishState)
@@ -297,7 +297,7 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 				return false;
 				
 			default:
-				KalturaLog::err("Unknown publishState [$publishState]");
+				VidiunLog::err("Unknown publishState [$publishState]");
 				throw new Exception("IDETIC error: $publishState");
 				return false;
 		}
@@ -306,7 +306,7 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		$publishState = $this->fetchStatus($data);
 		switch($publishState)
@@ -318,7 +318,7 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 				return false;
 				
 			default:
-				KalturaLog::err("Unknown publishState [$publishState]");
+				VidiunLog::err("Unknown publishState [$publishState]");
 				throw new Exception("IDETIC error: $publishState");
 				return false;
 		}
@@ -327,10 +327,10 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineReport::fetchReport()
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data)
+	public function fetchReport(VidiunDistributionFetchReportJobData $data)
 	{
-/*		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaIdeticDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaIdeticDistributionProfile");
+/*		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunIdeticDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunIdeticDistributionProfile");
 	
 		$xml = $this->fetchXML($data, $data->distributionProfile);
 			
@@ -384,7 +384,7 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 					break;
 					
 				default:
-					KalturaLog::err("Unknown counterType [{$typeAttr->value}]");
+					VidiunLog::err("Unknown counterType [{$typeAttr->value}]");
 					break;
 			}
 		}
@@ -395,13 +395,13 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaIdeticDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaIdeticDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunIdeticDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunIdeticDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaIdeticDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaIdeticDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunIdeticDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunIdeticDistributionJobProviderData");
 		
 		$this->handleSend($data);
 		
@@ -410,17 +410,17 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 	
 	/**
 	 * 
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
 	 * @return sftpMgr
 	 */
-	protected function getSFTPManager(KalturaYouTubeDistributionProfile $distributionProfile)
+	protected function getSFTPManager(VidiunYouTubeDistributionProfile $distributionProfile)
 	{
 		$serverUrl = $distributionProfile->sftpHost;
 		$loginName = $distributionProfile->sftpLogin;
 		$publicKeyFile = $this->getFileLocationForSFTPKey($distributionProfile->id, $distributionProfile->sftpPublicKey, 'publickey');
 		$privateKeyFile = $this->getFileLocationForSFTPKey($distributionProfile->id, $distributionProfile->sftpPrivateKey, 'privatekey');
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$sftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$sftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP, $engineOptions);
 		$sftpManager->loginPubKey($serverUrl, $loginName, $publicKeyFile, $privateKeyFile);
 		return $sftpManager;
 	}
@@ -429,24 +429,24 @@ class IdeticDistributionEngine extends PublicPrivateKeysDistributionEngine imple
 
 	
 /**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 * @return Status XML or FALSE when status is not available yet
 	 */
-	protected function fetchStatusXml(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function fetchStatusXml(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$statusFilePath = $providerData->sftpDirectory . '/' . 'status-' . $providerData->sftpMetadataFilename;
 		$sftpManager = $this->getSFTPManager($distributionProfile);
 		$statusXml = null;
 		try 
 		{
-			KalturaLog::info('Trying to get the following status file: ['.$statusFilePath.']');
+			VidiunLog::info('Trying to get the following status file: ['.$statusFilePath.']');
 			$statusXml = $sftpManager->getFile($statusFilePath);
 		}
-		catch(kFileTransferMgrException $ex) // file is still missing
+		catch(vFileTransferMgrException $ex) // file is still missing
 		{
-			KalturaLog::info('File doesn\'t exist yet, retry later');
+			VidiunLog::info('File doesn\'t exist yet, retry later');
 			return false;
 		}
 		

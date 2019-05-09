@@ -92,12 +92,12 @@
 					<xs:documentation>Entry link URL</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="type" minOccurs="1" maxOccurs="1" type="KalturaEntryType">
+			<xs:element name="type" minOccurs="1" maxOccurs="1" type="VidiunEntryType">
 				<xs:annotation>
 					<xs:documentation>Entry type</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="licenseType" minOccurs="0" maxOccurs="1" type="KalturaLicenseType">
+			<xs:element name="licenseType" minOccurs="0" maxOccurs="1" type="VidiunLicenseType">
 				<xs:annotation>
 					<xs:documentation>Entry license type</xs:documentation>
 				</xs:annotation>
@@ -117,7 +117,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element name="status" minOccurs="1" maxOccurs="1" type="KalturaEntryStatus">
+			<xs:element name="status" minOccurs="1" maxOccurs="1" type="VidiunEntryStatus">
 				<xs:annotation>
 					<xs:documentation>Entry status</xs:documentation>
 				</xs:annotation>
@@ -208,7 +208,7 @@
 	</xs:complexType>
 	<xs:complexType name="T_media">
 		<xs:sequence>
-			<xs:element name="mediaType" minOccurs="1" maxOccurs="1" type="KalturaMediaType">
+			<xs:element name="mediaType" minOccurs="1" maxOccurs="1" type="VidiunMediaType">
 				<xs:annotation>
 					<xs:documentation>Entry media type</xs:documentation>
 				</xs:annotation>
@@ -237,7 +237,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<!-- Not yet supported <xs:complexType name="T_mix"> <xs:sequence> <xs:element 
-		name="editorType" minOccurs="1" maxOccurs="1" type="KalturaEditorType"/> 
+		name="editorType" minOccurs="1" maxOccurs="1" type="VidiunEditorType"/> 
 		<xs:element name="dataContent" minOccurs="0" maxOccurs="1"> <xs:annotation> 
 		<xs:documentation> The xml data of the mix </xs:documentation> </xs:annotation> 
 		<xs:complexType> <xs:sequence> <xs:any processContents="skip"/> </xs:sequence> 
@@ -245,7 +245,7 @@
 		maxOccurs="unbounded"/> </xs:sequence> </xs:complexType> -->
 
 	<!-- Not yet supported <xs:complexType name="T_playlist"> <xs:sequence> 
-		<xs:element name="playlistType" minOccurs="1" maxOccurs="1" type="KalturaPlaylistType"/> 
+		<xs:element name="playlistType" minOccurs="1" maxOccurs="1" type="VidiunPlaylistType"/> 
 		<xs:element name="playlistContent" minOccurs="0" maxOccurs="1"> <xs:annotation> 
 		<xs:documentation> Content of the playlist - - XML if the playlistType is 
 		dynamic - Text if the playlistType is static - URL if the playlistType is 
@@ -555,7 +555,7 @@
 						<name>my entry name</name>
 						<status>2</status>
 						<description>my entry free text description</description>
-						<thumbnailUrl url="http://kaltura.domain/thumbnail/path/to/file.jpg"/>
+						<thumbnailUrl url="http://vidiun.domain/thumbnail/path/to/file.jpg"/>
 						<tags>
 							<tag>example</tag>
 							<tag>my_tag</tag>
@@ -570,10 +570,10 @@
 							<duration>34951</duration>
 							<flavorParamsIds>0,3</flavorParamsIds>
 						</media>
-						<thumbnail url="http://kaltura.domain/thumbnail/path/to/thumbnail1.jpg">...</thumbnail>
-						<thumbnail url="http://kaltura.domain/thumbnail/path/to/thumbnail2.jpg">...</thumbnail>
-						<content url="http://kaltura.domain/flavor/path/to/flavor1.flv">...</content>
-						<content url="http://kaltura.domain/flavor/path/to/flavor2.flv">...</content>
+						<thumbnail url="http://vidiun.domain/thumbnail/path/to/thumbnail1.jpg">...</thumbnail>
+						<thumbnail url="http://vidiun.domain/thumbnail/path/to/thumbnail2.jpg">...</thumbnail>
+						<content url="http://vidiun.domain/flavor/path/to/flavor1.flv">...</content>
+						<content url="http://vidiun.domain/flavor/path/to/flavor2.flv">...</content>
 					</item>
 				</example>
 			</xs:appinfo>
@@ -609,7 +609,7 @@
 						<media>
 							<mediaType>1</mediaType>
 						</media>
-						<content	url="http://kaltura.domain/path/my_flavor_asset.flv"
+						<content	url="http://vidiun.domain/path/my_flavor_asset.flv"
 									isSource="true" 
 									containerFormat="flash video" 
 									extension="flv" 
@@ -645,7 +645,7 @@
 						<media>
 							<mediaType>1</mediaType>
 						</media>
-						<thumbnail	url="http://kaltura.domain/path/my_thumbnail_asset.flv" 
+						<thumbnail	url="http://vidiun.domain/path/my_thumbnail_asset.flv" 
 									thumbAssetId="{thumb asset id}" 
 									isDefault="false" 
 									format="" 
@@ -672,7 +672,7 @@
 						<media>
 							<mediaType>1</mediaType>
 						</media>
-						<player	url="http://kaltura.domain/path/my_player_widget.swf"/>
+						<player	url="http://vidiun.domain/path/my_player_widget.swf"/>
 					</item>
 				</example>
 			</xs:appinfo>

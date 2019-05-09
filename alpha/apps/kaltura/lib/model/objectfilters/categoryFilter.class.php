@@ -13,7 +13,7 @@ class categoryFilter extends baseObjectFilter
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			'_eq_id',
 			'_in_id',
 			'_notin_id',
@@ -82,7 +82,7 @@ class categoryFilter extends baseObjectFilter
 		);
 
 		$this->aliases = array ( 
-			'owner' => 'kuser_id'
+			'owner' => 'vuser_id'
 		);
 	}
 
@@ -149,7 +149,7 @@ class categoryFilter extends baseObjectFilter
 		}
 
 		$cats = explode(",", $cats);
-		kArray::trim($cats);
+		vArray::trim($cats);
 		
 		$categoryFullIdsToIds = array();
 		$items = array();

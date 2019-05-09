@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class genericStatsAction extends kalturaSystemAction
+class genericStatsAction extends vidiunSystemAction
 {
 	public function execute()
 	{
@@ -21,7 +21,7 @@ class genericStatsAction extends kalturaSystemAction
 		
 		$end_date = $this->getP ( "end_date" , null );
 		
-		$connection = Propel::getConnection("kaltura_stats");
+		$connection = Propel::getConnection("vidiun_stats");
 
 		$this->cookies_7 = $this->getUvForDays  ( $connection , "unique_visitors_cookie" , 7 , $end_date );
 		$this->cookies_30 = $this->getUvForDays  ( $connection , "unique_visitors_cookie" , 30 , $end_date );

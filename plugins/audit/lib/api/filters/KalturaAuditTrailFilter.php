@@ -3,7 +3,7 @@
  * @package plugins.audit
  * @subpackage api.filters
  */
-class KalturaAuditTrailFilter extends KalturaAuditTrailBaseFilter
+class VidiunAuditTrailFilter extends VidiunAuditTrailBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -26,7 +26,7 @@ class KalturaAuditTrailFilter extends KalturaAuditTrailBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -42,28 +42,28 @@ class KalturaAuditTrailFilter extends KalturaAuditTrailBaseFilter
 	{
 		if(isset($this->userIdEqual))
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, $this->userIdEqual, true);
-			if($kuser)
-				$this->userIdEqual = $kuser->getId();
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, $this->userIdEqual, true);
+			if($vuser)
+				$this->userIdEqual = $vuser->getId();
 		}
 		
 		if(isset($this->userIdIn))
 		{
-			$kusers = kuserPeer::getKuserByPartnerAndUids(kCurrentContext::$ks_partner_id, $this->userIdIn);
-			$kuserIds = array();
-			foreach($kusers as $kuser)
-				$kuserIds[] = $kuser->getId();
+			$vusers = vuserPeer::getVuserByPartnerAndUids(vCurrentContext::$vs_partner_id, $this->userIdIn);
+			$vuserIds = array();
+			foreach($vusers as $vuser)
+				$vuserIds[] = $vuser->getId();
 				
-			$this->userIdIn = implode(',', $kuserIds);
+			$this->userIdIn = implode(',', $vuserIds);
 		}
 			
 		return parent::toObject($auditTrailFilter, $propsToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$auditTrailFilter = $this->toObject();
 		
@@ -74,8 +74,8 @@ class KalturaAuditTrailFilter extends KalturaAuditTrailBaseFilter
 		$pager->attachToCriteria($c);
 		$list = AuditTrailPeer::doSelect($c);
 		
-		$response = new KalturaAuditTrailListResponse();
-		$response->objects = KalturaAuditTrailArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunAuditTrailListResponse();
+		$response->objects = VidiunAuditTrailArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $count;
 		
 		return $response;

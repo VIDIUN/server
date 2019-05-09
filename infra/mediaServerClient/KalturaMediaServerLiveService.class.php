@@ -1,8 +1,8 @@
 <?php
 
-require_once(__DIR__ . '/KalturaMediaServerClient.class.php');
+require_once(__DIR__ . '/VidiunMediaServerClient.class.php');
 	
-class KalturaMediaServerLiveService extends KalturaMediaServerClient
+class VidiunMediaServerLiveService extends VidiunMediaServerClient
 {
 	function __construct($url)
 	{
@@ -13,7 +13,7 @@ class KalturaMediaServerLiveService extends KalturaMediaServerClient
 	/**
 	 * 
 	 * @param string $liveEntryId
-	 * @return KalturaMediaServerSplitRecordingNowResponse
+	 * @return VidiunMediaServerSplitRecordingNowResponse
 	 **/
 	public function splitRecordingNow($liveEntryId)
 	{
@@ -21,7 +21,7 @@ class KalturaMediaServerLiveService extends KalturaMediaServerClient
 		
 		$params["liveEntryId"] = $this->parseParam($liveEntryId, 'xsd:string');
 
-		return $this->doCall("splitRecordingNow", $params, 'KalturaMediaServerSplitRecordingNowResponse');
+		return $this->doCall("splitRecordingNow", $params, 'VidiunMediaServerSplitRecordingNowResponse');
 	}
 	
 }		

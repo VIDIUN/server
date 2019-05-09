@@ -6,7 +6,7 @@
  * @package api
  * @subpackage services
  */
-class EmailIngestionProfileService extends KalturaEntryService
+class EmailIngestionProfileService extends VidiunEntryService
 {
 	
 	public function initService($serviceId, $serviceName, $actionName)
@@ -16,27 +16,27 @@ class EmailIngestionProfileService extends KalturaEntryService
 	}
 
 	/**
-	 * EmailIngestionProfile Add action allows you to add a EmailIngestionProfile to Kaltura DB
+	 * EmailIngestionProfile Add action allows you to add a EmailIngestionProfile to Vidiun DB
 	 *
 	 * @action add
-	 * @param KalturaEmailIngestionProfile $EmailIP Mandatory input parameter of type KalturaEmailIngestionProfile
-	 * @return KalturaEmailIngestionProfile
+	 * @param VidiunEmailIngestionProfile $EmailIP Mandatory input parameter of type VidiunEmailIngestionProfile
+	 * @return VidiunEmailIngestionProfile
 	 *
-	 * @throws KalturaErrors::EMAIL_INGESTION_PROFILE_EMAIL_EXISTS
+	 * @throws VidiunErrors::EMAIL_INGESTION_PROFILE_EMAIL_EXISTS
 	 */
-	function addAction( KalturaEmailIngestionProfile $EmailIP )
+	function addAction( VidiunEmailIngestionProfile $EmailIP )
 	{
 		$existingEIP = EmailIngestionProfilePeer::retrieveByEmailAddressNoFilter($EmailIP->emailAddress);
 		if($existingEIP)
 		{
-			throw new KalturaAPIException(KalturaErrors::EMAIL_INGESTION_PROFILE_EMAIL_EXISTS, $EmailIP->emailAddress);
+			throw new VidiunAPIException(VidiunErrors::EMAIL_INGESTION_PROFILE_EMAIL_EXISTS, $EmailIP->emailAddress);
 		}
 
 		$dbEIP = $EmailIP->toInsertableObject();
 		$dbEIP->setPartnerId ( $this->getPartnerId() );
 		$dbEIP->save();
 
-		$savedEIP = new KalturaEmailIngestionProfile(); // start from blank
+		$savedEIP = new VidiunEmailIngestionProfile(); // start from blank
 		$savedEIP->fromObject($dbEIP, $this->getResponseProfile());
 
 		return $savedEIP;
@@ -47,17 +47,17 @@ class EmailIngestionProfileService extends KalturaEntryService
 	 *
 	 * @action getByEmailAddress
 	 * @param string $emailAddress
-	 * @return KalturaEmailIngestionProfile
+	 * @return VidiunEmailIngestionProfile
 	 *
-	 * @throws KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
+	 * @throws VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
 	 */
 	function getByEmailAddressAction($emailAddress)
 	{
 		$existingEIP = EmailIngestionProfilePeer::retrieveByEmailAddressNoFilter($emailAddress);
 		if(!$existingEIP)
-		throw new KalturaAPIException(KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND, $emailAddress);
+		throw new VidiunAPIException(VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND, $emailAddress);
 
-		$emailIP = new KalturaEmailIngestionProfile();
+		$emailIP = new VidiunEmailIngestionProfile();
 		$emailIP->fromObject($existingEIP, $this->getResponseProfile());
 
 		return $emailIP;
@@ -68,17 +68,17 @@ class EmailIngestionProfileService extends KalturaEntryService
 	 *
 	 * @action get
 	 * @param int $id
-	 * @return KalturaEmailIngestionProfile
+	 * @return VidiunEmailIngestionProfile
 	 *
-	 * @throws KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
+	 * @throws VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$existingEIP = EmailIngestionProfilePeer::retrieveByPK($id);
 		if(!$existingEIP)
-		throw new KalturaAPIException(KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND, $id);
+		throw new VidiunAPIException(VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND, $id);
 			
-		$emailIP = new KalturaEmailIngestionProfile();
+		$emailIP = new VidiunEmailIngestionProfile();
 		$emailIP->fromObject($existingEIP, $this->getResponseProfile());
 
 		return $emailIP;
@@ -89,17 +89,17 @@ class EmailIngestionProfileService extends KalturaEntryService
 	 *
 	 * @action update
 	 * @param int $id
-	 * @param KalturaEmailIngestionProfile $EmailIP
-	 * @return KalturaEmailIngestionProfile
+	 * @param VidiunEmailIngestionProfile $EmailIP
+	 * @return VidiunEmailIngestionProfile
 	 *
-	 * @throws KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
+	 * @throws VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
 	 */
-	function updateAction( $id , KalturaEmailIngestionProfile $EmailIP )
+	function updateAction( $id , VidiunEmailIngestionProfile $EmailIP )
 	{
 		$dbEIP = EmailIngestionProfilePeer::retrieveByPK( $id );
 
 		if ( ! $dbEIP )
-			throw new KalturaAPIException ( KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND , $id );
+			throw new VidiunAPIException ( VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND , $id );
 
 		$EmailIP->emailAddress = $dbEIP->getEmailAddress();
 		$updateEIP = $EmailIP->toUpdatableObject($dbEIP);
@@ -116,14 +116,14 @@ class EmailIngestionProfileService extends KalturaEntryService
 	 * @action delete
 	 * @param int $id
 	 *
-	 * @throws KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
+	 * @throws VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
 	 */
 	function deleteAction( $id )
 	{
 		$dbEIP = EmailIngestionProfilePeer::retrieveByPK( $id );
 
 		if ( ! $dbEIP )
-		throw new KalturaAPIException ( KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND , $id );
+		throw new VidiunAPIException ( VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND , $id );
 
 		$dbEIP->setStatus ( EmailIngestionProfile::EMAIL_INGESTION_PROFILE_STATUS_INACTIVE );
 
@@ -131,46 +131,46 @@ class EmailIngestionProfileService extends KalturaEntryService
 	}
 
 	/**
-	 * add KalturaMediaEntry from email ingestion
+	 * add VidiunMediaEntry from email ingestion
 	 *
 	 * @action addMediaEntry
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata
 	 * @param string $uploadTokenId Upload token id
 	 * @param int $emailProfId
 	 * @param string $fromAddress
 	 * @param string $emailMsgId
 	 *
-	 * @return KalturaMediaEntry
+	 * @return VidiunMediaEntry
 	 *
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND
 	 *
 	 */
-	function addMediaEntryAction(KalturaMediaEntry $mediaEntry, $uploadTokenId, $emailProfId, $fromAddress, $emailMsgId)
+	function addMediaEntryAction(VidiunMediaEntry $mediaEntry, $uploadTokenId, $emailProfId, $fromAddress, $emailMsgId)
 	{
 		try
 		{
 			// check that the uploaded file exists
-			$entryFullPath = kUploadTokenMgr::getFullPathByUploadTokenId($uploadTokenId);
+			$entryFullPath = vUploadTokenMgr::getFullPathByUploadTokenId($uploadTokenId);
 		}
-		catch(kCoreException $ex)
+		catch(vCoreException $ex)
 		{
-			if ($ex->getCode() == kUploadTokenException::UPLOAD_TOKEN_INVALID_STATUS)
+			if ($ex->getCode() == vUploadTokenException::UPLOAD_TOKEN_INVALID_STATUS)
 			{
-				throw new KalturaAPIException(KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY);
+				throw new VidiunAPIException(VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY);
 			}
 			throw($ex);
 		}
 
 		if (!file_exists($entryFullPath))
-			throw new KalturaAPIException(KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN);
+			throw new VidiunAPIException(VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN);
 
 		// get the email profile by the given id
 		$existingEIP = EmailIngestionProfilePeer::retrieveByPK($emailProfId);
 		if(!$existingEIP)
-			throw new KalturaAPIException(KalturaErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND, $emailProfId);
+			throw new VidiunAPIException(VidiunErrors::EMAIL_INGESTION_PROFILE_NOT_FOUND, $emailProfId);
 
-		$emailIP = new KalturaEmailIngestionProfile();
+		$emailIP = new VidiunEmailIngestionProfile();
 		$emailIP->fromObject($existingEIP, $this->getResponseProfile());
 
 
@@ -192,12 +192,12 @@ class EmailIngestionProfileService extends KalturaEntryService
 		// first copy all the properties to the db entry, then we'll check for security stuff
 		$dbEntry = $mediaEntry->toObject(new entry());
 
-		if($emailIP->moderationStatus == KalturaEntryModerationStatus::PENDING_MODERATION)
+		if($emailIP->moderationStatus == VidiunEntryModerationStatus::PENDING_MODERATION)
 		{
 			$dbEntry->setModerate(true);
 		}
 
-		$dbEntry->setType(KalturaEntryType::MEDIA_CLIP);
+		$dbEntry->setType(VidiunEntryType::MEDIA_CLIP);
 		$dbEntry->setMediaType(entry::ENTRY_MEDIA_TYPE_AUTOMATIC);
 
 		$this->checkAndSetValidUserInsert($mediaEntry, $dbEntry);
@@ -222,14 +222,14 @@ class EmailIngestionProfileService extends KalturaEntryService
 		$te->setParam3Str($emailProfId.'::'.$emailIP->emailAddress.'::'.$emailIP->mailboxId);
 		TrackEntry::addTrackEntry( $te );
 
-		$kshow = $this->createDummyKShow();
-		$kshowId = $kshow->getId();
+		$vshow = $this->createDummyVShow();
+		$vshowId = $vshow->getId();
 
 		myEntryUtils::setEntryTypeAndMediaTypeFromFile($dbEntry, $entryFullPath);
 
 		// setup the needed params for my insert entry helper
 		$paramsArray = array (
-			"entry_media_source" => KalturaSourceType::FILE,
+			"entry_media_source" => VidiunSourceType::FILE,
 			"entry_media_type" => $dbEntry->getMediaType(),
 			"entry_full_path" => $entryFullPath,
 			"entry_license" => $dbEntry->getLicenseType(),
@@ -238,15 +238,15 @@ class EmailIngestionProfileService extends KalturaEntryService
 			"entry_tags" => $dbEntry->getTags(),
 		);
 
-		$token = $this->getKsUniqueString();
-		$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getKuserId(), $kshowId, $paramsArray);
+		$token = $this->getVsUniqueString();
+		$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getVuserId(), $vshowId, $paramsArray);
 		$insert_entry_helper->setPartnerId($this->getPartnerId(), $this->getPartnerId() * 100);
 		$insert_entry_helper->insertEntry($token, $dbEntry->getType(), $dbEntry->getId(), $dbEntry->getName(), $dbEntry->getTags(), $dbEntry);
 		$dbEntry = $insert_entry_helper->getEntry();
 
-		kUploadTokenMgr::closeUploadTokenById($uploadTokenId);
+		vUploadTokenMgr::closeUploadTokenById($uploadTokenId);
 
-		myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
+		myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
 
 		$mediaEntry->fromObject($dbEntry, $this->getResponseProfile());
 		return $mediaEntry;

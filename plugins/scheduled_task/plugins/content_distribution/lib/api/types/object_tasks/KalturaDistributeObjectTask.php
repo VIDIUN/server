@@ -4,7 +4,7 @@
  * @package plugins.scheduledTaskContentDistribution
  * @subpackage api.objects.objectTasks
  */
-class KalturaDistributeObjectTask extends KalturaObjectTask
+class VidiunDistributeObjectTask extends VidiunObjectTask
 {
 	/**
 	 * Distribution profile id
@@ -20,18 +20,18 @@ class KalturaDistributeObjectTask extends KalturaObjectTask
 
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/** @var kObjectTask $dbObject */
+		/** @var vObjectTask $dbObject */
 		$dbObject = parent::toObject($dbObject, $skip);
 
 		$dbObject->setDataValue('distributionProfileId', $this->distributionProfileId);
 		return $dbObject;
 	}
 
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
 
-		/** @var kObjectTask $srcObj */
+		/** @var vObjectTask $srcObj */
 		$this->distributionProfileId = $srcObj->getDataValue('distributionProfileId');
 	}
 }

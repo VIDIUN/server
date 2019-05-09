@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
+class PartnerCatalogItemConfigureAction extends VidiunApplicationPlugin
 {
 	const ADMIN_CONSOLE_PARTNER = "-2";
 	/**
@@ -30,7 +30,7 @@ class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
 				$form = $this->handleConfigureCatalogItem($action, $partnerId);
 		} catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 		}
 		Infra_ClientHelper::unimpersonate();
@@ -71,13 +71,13 @@ class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
 			$catalogItemProfileFilter->idNotIn = implode(',', $partnerCatalogItems);
 			$catalogItemProfileFilter->sourceLanguageEqual = $sourceLanguage;
 			$catalogItemProfileFilter->vendorPartnerIdEqual = $vendorPartnerId;
-			$catalogItemProfileFilter->statusEqual =  Kaltura_Client_Reach_Enum_VendorCatalogItemStatus::ACTIVE;
+			$catalogItemProfileFilter->statusEqual =  Vidiun_Client_Reach_Enum_VendorCatalogItemStatus::ACTIVE;
 
-			if($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
+			if($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
 				$catalogItemProfileFilter->targetLanguageEqual = $targetLanguage;
 
 			$client = Infra_ClientHelper::getClient();
-			$reachPluginClient = Kaltura_Client_Reach_Plugin::get($client);
+			$reachPluginClient = Vidiun_Client_Reach_Plugin::get($client);
 
 			// get results and paginate
 			$paginatorAdapter = new Infra_FilterPaginator($reachPluginClient->vendorCatalogItem, "listAction", null, $catalogItemProfileFilter);
@@ -96,16 +96,16 @@ class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
 
 	protected function getCatalogItemFilter($serviceFeature)
 	{
-		if ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::CAPTIONS)
-			return new Kaltura_Client_Reach_Type_VendorCaptionsCatalogItemFilter();
-		elseif ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
-			return new Kaltura_Client_Reach_Type_VendorTranslationCatalogItemFilter();
-		elseif ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT)
-			return new Kaltura_Client_Reach_Type_VendorAlignmentCatalogItemFilter();
-		elseif ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
-			return new Kaltura_Client_Reach_Type_VendorAudioDescriptionCatalogItemFilter();
+		if ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::CAPTIONS)
+			return new Vidiun_Client_Reach_Type_VendorCaptionsCatalogItemFilter();
+		elseif ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
+			return new Vidiun_Client_Reach_Type_VendorTranslationCatalogItemFilter();
+		elseif ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT)
+			return new Vidiun_Client_Reach_Type_VendorAlignmentCatalogItemFilter();
+		elseif ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
+			return new Vidiun_Client_Reach_Type_VendorAudioDescriptionCatalogItemFilter();
 		else
-			return new Kaltura_Client_Reach_Type_VendorCatalogItemFilter();
+			return new Vidiun_Client_Reach_Type_VendorCatalogItemFilter();
 	}
 	/***
 	 * @param $action
@@ -129,7 +129,7 @@ class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
 				$partnerCatalogItems = $formData['catalogItemsCheckBoxes'];
 
 			$this->client = Infra_ClientHelper::getClient();
-			$reachPluginClient = Kaltura_Client_Reach_Plugin::get($this->client);
+			$reachPluginClient = Vidiun_Client_Reach_Plugin::get($this->client);
 			Infra_ClientHelper::impersonate($partnerId);
 			$this->client->startMultiRequest();
 			foreach ($partnerCatalogItems as $partnerCatalogItem)
@@ -173,14 +173,14 @@ class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
 		if ($partnerCatalogItemsNoIn)
 			$catalogItemProfileFilter->idNotIn = implode(',', $partnerCatalogItemsNoIn);
 
-		if ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
+		if ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
 			$catalogItemProfileFilter->targetLanguageEqual = $targetLanguage;
 
 		$this->client = Infra_ClientHelper::getClient();
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($this->client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($this->client);
 		Infra_ClientHelper::impersonate($partnerId);
 
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$pager->pageIndex = 1;
 		$pager->pageSize = 500;
 
@@ -191,7 +191,7 @@ class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
 		{
 			foreach ($result->objects as $partnerCatalogItem)
 			{
-				/* @var $partnerCatalogItem Kaltura_Client_Reach_Type_VendorCatalogItem */
+				/* @var $partnerCatalogItem Vidiun_Client_Reach_Type_VendorCatalogItem */
 				$partnerCatalogItems[] = $partnerCatalogItem->id;
 			}
 			$pager->pageIndex++;
@@ -217,8 +217,8 @@ class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
 	{
 		$client = Infra_ClientHelper::getClient();
 		$client->setPartnerId($partnerId);
-		$filter = new Kaltura_Client_Type_PermissionFilter();
-		$filter->nameEqual = Kaltura_Client_Enum_PermissionName::REACH_PLUGIN_PERMISSION;
+		$filter = new Vidiun_Client_Type_PermissionFilter();
+		$filter->nameEqual = Vidiun_Client_Enum_PermissionName::REACH_PLUGIN_PERMISSION;
 		$filter->partnerIdEqual = $partnerId;
 		try
 		{
@@ -230,7 +230,7 @@ class PartnerCatalogItemConfigureAction extends KalturaApplicationPlugin
 		}
 		$client->setPartnerId(self::ADMIN_CONSOLE_PARTNER);
 
-		$isAllowed = ($result->totalCount > 0) && ($result->objects[0]->status == Kaltura_Client_Enum_PermissionStatus::ACTIVE);
+		$isAllowed = ($result->totalCount > 0) && ($result->objects[0]->status == Vidiun_Client_Enum_PermissionStatus::ACTIVE);
 		return $isAllowed;
 	}
 }

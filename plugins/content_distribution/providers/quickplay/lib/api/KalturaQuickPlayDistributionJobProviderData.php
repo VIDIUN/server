@@ -3,7 +3,7 @@
  * @package plugins.quickPlayDistribution
  * @subpackage api.objects
  */
-class KalturaQuickPlayDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunQuickPlayDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -11,31 +11,31 @@ class KalturaQuickPlayDistributionJobProviderData extends KalturaConfigurableDis
 	public $xml;
 	
 	/**
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 */
 	public $videoFilePaths;
 
 	/**
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 */
 	public $thumbnailFilePaths;
 
 	/**
 	 * Called on the server side and enables you to populate the object with any data from the DB
 	 * 
-	 * @param KalturaDistributionJobData $distributionJobData
+	 * @param VidiunDistributionJobData $distributionJobData
 	 */
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaQuickPlayDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunQuickPlayDistributionProfile))
 			return;
 			
-		$this->videoFilePaths = new KalturaStringArray();
-		$this->thumbnailFilePaths = new KalturaStringArray();
+		$this->videoFilePaths = new VidiunStringArray();
+		$this->thumbnailFilePaths = new VidiunStringArray();
 
 		// loads all the flavor assets that should be submitted to the remote destination site
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
@@ -45,10 +45,10 @@ class KalturaQuickPlayDistributionJobProviderData extends KalturaConfigurableDis
 		foreach($flavorAssets as $asset)
 		{
 			$syncKey = $asset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey))
+			if(vFileSyncUtils::fileSync_exists($syncKey))
 			{
-				$str = new KalturaString();
-				$str->value = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+				$str = new VidiunString();
+				$str->value = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 			    $this->videoFilePaths[] = $str;
 			}
 		}
@@ -56,10 +56,10 @@ class KalturaQuickPlayDistributionJobProviderData extends KalturaConfigurableDis
 		foreach($thumbAssets as $asset)
 		{
 			$syncKey = $asset->getSyncKey(thumbAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey))
+			if(vFileSyncUtils::fileSync_exists($syncKey))
 			{
-				$str = new KalturaString();
-				$str->value = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+				$str = new VidiunString();
+				$str->value = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 			    $this->thumbnailFilePaths[] = $str;
 			}
 		}
@@ -79,7 +79,7 @@ class KalturaQuickPlayDistributionJobProviderData extends KalturaConfigurableDis
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{

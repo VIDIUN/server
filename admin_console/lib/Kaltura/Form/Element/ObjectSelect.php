@@ -3,7 +3,7 @@
  * @package Admin
  * @subpackage forms
  */
-class Kaltura_Form_Element_ObjectSelect extends Zend_Form_Element_Select
+class Vidiun_Form_Element_ObjectSelect extends Zend_Form_Element_Select
 {
 	function __construct($spec, $options = null)
 	{
@@ -40,7 +40,7 @@ class Kaltura_Form_Element_ObjectSelect extends Zend_Form_Element_Select
 			$filter = $options['filter'];
 		}
 
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		if(isset($options['pageIndex']))
 		{
 			$pager->pageIndex = $options['pageIndex'];

@@ -3,13 +3,13 @@ check process apache
     start program = "/sbin/service @APACHE_SERVICE@ start" with timeout 60 seconds
     stop program = "/sbin/service @APACHE_SERVICE@ stop"
 
-    if failed host localhost port @KALTURA_VIRTUAL_HOST_PORT@ protocol @PROTOCOL@ then restart
+    if failed host localhost port @VIDIUN_VIRTUAL_HOST_PORT@ protocol @PROTOCOL@ then restart
 
-    group kaltura
+    group vidiun
     depends on httpd.conf, httpd
    
 check file httpd.conf
-    with path "@APP_DIR@/configurations/apache/kaltura.conf"
+    with path "@APP_DIR@/configurations/apache/vidiun.conf"
     # Reload apache if the httpd.conf file was changed
     if changed checksum
         then exec "/usr/sbin/apachectl graceful"

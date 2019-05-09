@@ -35,7 +35,7 @@ abstract class UserEntry extends BaseUserEntry {
 	{
 		$userEntryCriteria = new Criteria();
 		$userEntryCriteria->add(UserEntryPeer::ENTRY_ID, $this->getEntryId());
-		$userEntryCriteria->add(UserEntryPeer::KUSER_ID, $this->getKuserId());
+		$userEntryCriteria->add(UserEntryPeer::VUSER_ID, $this->getVuserId());
 		$userEntryCriteria->add(UserEntryPeer::TYPE, $this->getType());
 		
 		return UserEntryPeer::doSelectOne($userEntryCriteria);
@@ -43,7 +43,7 @@ abstract class UserEntry extends BaseUserEntry {
 
 	public function getCacheInvalidationKeys()
 	{
-		return array("userEntry:kuserId=".strtolower($this->getKuserId()));
+		return array("userEntry:vuserId=".strtolower($this->getVuserId()));
 	}
 
 	public function setBulkUploadId ( $bulkUploadId ){$this->putInCustomData ( self::CUSTOM_DATA_BULK_UPLOAD_ID , $bulkUploadId );}

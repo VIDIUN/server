@@ -3,7 +3,7 @@
  * @package plugins.pushNotification
  * @subpackage model
  */
-class kPushEventNotificationParameter extends kEventNotificationParameter
+class vPushEventNotificationParameter extends vEventNotificationParameter
 {
 	/**
 	 * @var string

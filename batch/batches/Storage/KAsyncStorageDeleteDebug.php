@@ -10,5 +10,5 @@ require_once(__DIR__ . "/../../bootstrap.php");
 
 $iniDir = dirname ( __FILE__ ) . "/../configurations/batch";
  
-$kdebuger = new KGenericDebuger($iniDir);
-$kdebuger->run('KAsyncStorageDelete');
+$vdebuger = new VGenericDebuger($iniDir);
+$vdebuger->run('VAsyncStorageDelete');

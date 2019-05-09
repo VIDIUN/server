@@ -9,7 +9,7 @@ interface ESearchCategoryFieldName extends BaseEnum
 	const PRIVACY = 'privacy';
 	const PRIVACY_CONTEXT = 'privacy_context';
 	const PRIVACY_CONTEXTS = 'privacy_contexts';
-	const KUSER_IDS = 'kuser_ids';
+	const VUSER_IDS = 'vuser_ids';
 	const PARENT_ID = 'parent_id';
 	const DEPTH = 'depth';
 	const NAME = 'name';
@@ -19,7 +19,7 @@ interface ESearchCategoryFieldName extends BaseEnum
 	const TAGS = 'tags';
 	const DISPLAY_IN_SEARCH = 'display_in_search';
 	const INHERITANCE_TYPE = 'inheritance_type';
-	const KUSER_ID = 'kuser_id';
+	const VUSER_ID = 'vuser_id';
 	const REFERENCE_ID = 'reference_id';
 	const INHERITED_PARENT_ID = 'inherited_parent_id';
 	const MODERATION = 'moderation';

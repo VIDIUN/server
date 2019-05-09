@@ -3,7 +3,7 @@
  * @package plugins.FeedDropFolder
  * @subpackage api.objects
  */
-class KalturaFeedItemInfo extends KalturaObject
+class VidiunFeedItemInfo extends VidiunObject
 {
 	/**
 	 * @var string
@@ -82,18 +82,18 @@ class KalturaFeedItemInfo extends KalturaObject
 	public function validate ()
 	{
 		if (! isset ($this->itemXPath))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemXPath');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemXPath');
 			
 		if (! isset ($this->itemUniqueIdentifierXPath))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemUniqueIdentifierXPath');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemUniqueIdentifierXPath');
 			
 		if (! isset ($this->itemPublishDateXPath))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemPublishDateXPath');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemPublishDateXPath');
 			
 		if (! isset ($this->itemContentUrlXPath))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemContentUrlXPath');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemContentUrlXPath');
 			
 		if (! isset ($this->itemContentXpath))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemContentXpath');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'itemContentXpath');
 	}
 }

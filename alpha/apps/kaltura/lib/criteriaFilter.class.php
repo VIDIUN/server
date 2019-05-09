@@ -64,9 +64,9 @@ class criteriaFilter
 		foreach ( $columns as $column )
 		{
 			$filterCriterion = $fromCriteria->getCriterion ( $column );
-			if ($filterCriterion instanceof KalturaCriterion && !$filterCriterion->isEnabled())
+			if ($filterCriterion instanceof VidiunCriterion && !$filterCriterion->isEnabled())
 			{
-				KalturaLog::debug("Skip criterion[" . $filterCriterion->getColumn() . "] comparison [ " . $filterCriterion->getComparison() . " ] with disabled tag [ " . print_r($filterCriterion->getTags(), true) . " ]");
+				VidiunLog::debug("Skip criterion[" . $filterCriterion->getColumn() . "] comparison [ " . $filterCriterion->getComparison() . " ] with disabled tag [ " . print_r($filterCriterion->getTags(), true) . " ]");
 				continue;
 			}
 			
@@ -114,7 +114,7 @@ class criteriaFilter
 		$i=0;
 		foreach ( $clauses as $clause )
 		{
-			if($clause instanceof KalturaCriterion && !$clause->isEnabled())
+			if($clause instanceof VidiunCriterion && !$clause->isEnabled())
 				continue;
 				
 			/* @var $clause Criterion */

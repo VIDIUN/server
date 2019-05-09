@@ -3,10 +3,10 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaEventNotificationTemplateListResponse extends KalturaListResponse
+class VidiunEventNotificationTemplateListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaEventNotificationTemplateArray
+	 * @var VidiunEventNotificationTemplateArray
 	 * @readonly
 	 */
 	public $objects;

@@ -3,7 +3,7 @@
  * @package plugins.businessProcessNotification
  * @subpackage admin
  */
-class BusinessProcessNotificationTemplatesListProcessesAction extends KalturaApplicationPlugin
+class BusinessProcessNotificationTemplatesListProcessesAction extends VidiunApplicationPlugin
 {
 	public function __construct()
 	{
@@ -11,7 +11,7 @@ class BusinessProcessNotificationTemplatesListProcessesAction extends KalturaApp
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::getTemplatePath()
+	 * @see VidiunApplicationPlugin::getTemplatePath()
 	 */
 	public function getTemplatePath()
 	{
@@ -19,15 +19,15 @@ class BusinessProcessNotificationTemplatesListProcessesAction extends KalturaApp
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::getRequiredPermissions()
+	 * @see VidiunApplicationPlugin::getRequiredPermissions()
 	 */
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_EVENT_NOTIFICATION_MODIFY);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_EVENT_NOTIFICATION_MODIFY);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::doAction()
+	 * @see VidiunApplicationPlugin::doAction()
 	 */
 	public function doAction(Zend_Controller_Action $action)
 	{	
@@ -35,7 +35,7 @@ class BusinessProcessNotificationTemplatesListProcessesAction extends KalturaApp
 		$serverId = $this->_getParam('server_id');
 		
 		$client = Infra_ClientHelper::getClient();
-		$businessProcessNotificationPlugin = Kaltura_Client_BusinessProcessNotification_Plugin::get($client);
+		$businessProcessNotificationPlugin = Vidiun_Client_BusinessProcessNotification_Plugin::get($client);
 		
 		$partnerId = $this->_getParam('partner_id');
 		if($partnerId)
@@ -44,25 +44,25 @@ class BusinessProcessNotificationTemplatesListProcessesAction extends KalturaApp
 		try{
 			if($serverId == 0)
 			{
-				$filter = new Kaltura_Client_BusinessProcessNotification_Type_BusinessProcessServerFilter();
-				$filter->currentDc = Kaltura_Client_Enum_NullableBoolean::TRUE_VALUE;
-				$pager = new Kaltura_Client_Type_FilterPager();
+				$filter = new Vidiun_Client_BusinessProcessNotification_Type_BusinessProcessServerFilter();
+				$filter->currentDc = Vidiun_Client_Enum_NullableBoolean::TRUE_VALUE;
+				$pager = new Vidiun_Client_Type_FilterPager();
 				$pager->pageSize = 1;
 				$serversList = $businessProcessNotificationPlugin->businessProcessServer->listAction($filter, $pager);
-				/* @var $serversList Kaltura_Client_BusinessProcessNotification_Type_BusinessProcessServerListResponse */
+				/* @var $serversList Vidiun_Client_BusinessProcessNotification_Type_BusinessProcessServerListResponse */
 				$server = $serversList->objects[0];
 			}
 			else
 				$server = $businessProcessNotificationPlugin->businessProcessServer->get($serverId);
-				/* @var $server Kaltura_Client_BusinessProcessNotification_Type_BusinessProcessServer */
+				/* @var $server Vidiun_Client_BusinessProcessNotification_Type_BusinessProcessServer */
 
-			$businessProcessProvider = kBusinessProcessProvider::get($server);
+			$businessProcessProvider = vBusinessProcessProvider::get($server);
 			$processes = $businessProcessProvider->listBusinessProcesses();
 			asort($processes);
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 		

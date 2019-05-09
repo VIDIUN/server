@@ -1,31 +1,31 @@
 <?php
-require_once (__DIR__ . "/cache/kCacheConfFactory.php");
+require_once (__DIR__ . "/cache/vCacheConfFactory.php");
 
-class kConfCacheManager
+class vConfCacheManager
 {
-	private static $mapLoadFlow	= array(kCacheConfFactory::SESSION,
-										kCacheConfFactory::APC,
-										kCacheConfFactory::LOCAL_MEM_CACHE,
-										kCacheConfFactory::FILE_SYSTEM,
-										kCacheConfFactory::REMOTE_MEM_CACHE);
+	private static $mapLoadFlow	= array(vCacheConfFactory::SESSION,
+										vCacheConfFactory::APC,
+										vCacheConfFactory::LOCAL_MEM_CACHE,
+										vCacheConfFactory::FILE_SYSTEM,
+										vCacheConfFactory::REMOTE_MEM_CACHE);
 
-	private static $mapStoreFlow = array(kCacheConfFactory::SESSION	=> array(),
-										kCacheConfFactory::APC => array(kCacheConfFactory::SESSION),
-										kCacheConfFactory::LOCAL_MEM_CACHE => array(kCacheConfFactory::APC, kCacheConfFactory::SESSION),
-										kCacheConfFactory::FILE_SYSTEM => array(kCacheConfFactory::APC, kCacheConfFactory::SESSION),
-										kCacheConfFactory::REMOTE_MEM_CACHE	=> array(kCacheConfFactory::APC, kCacheConfFactory::SESSION, kCacheConfFactory::LOCAL_MEM_CACHE));
+	private static $mapStoreFlow = array(vCacheConfFactory::SESSION	=> array(),
+										vCacheConfFactory::APC => array(vCacheConfFactory::SESSION),
+										vCacheConfFactory::LOCAL_MEM_CACHE => array(vCacheConfFactory::APC, vCacheConfFactory::SESSION),
+										vCacheConfFactory::FILE_SYSTEM => array(vCacheConfFactory::APC, vCacheConfFactory::SESSION),
+										vCacheConfFactory::REMOTE_MEM_CACHE	=> array(vCacheConfFactory::APC, vCacheConfFactory::SESSION, vCacheConfFactory::LOCAL_MEM_CACHE));
 
-	private static $keyLoadFlow	= array(kCacheConfFactory::SESSION,
-										kCacheConfFactory::APC,
-										kCacheConfFactory::REMOTE_MEM_CACHE);
+	private static $keyLoadFlow	= array(vCacheConfFactory::SESSION,
+										vCacheConfFactory::APC,
+										vCacheConfFactory::REMOTE_MEM_CACHE);
 
-	private static $keyStoreFlow = array(kCacheConfFactory::SESSION	=> array(),
-										kCacheConfFactory::APC => array(kCacheConfFactory::SESSION),
-										kCacheConfFactory::REMOTE_MEM_CACHE	=> array(kCacheConfFactory::APC, kCacheConfFactory::SESSION));
+	private static $keyStoreFlow = array(vCacheConfFactory::SESSION	=> array(),
+										vCacheConfFactory::APC => array(vCacheConfFactory::SESSION),
+										vCacheConfFactory::REMOTE_MEM_CACHE	=> array(vCacheConfFactory::APC, vCacheConfFactory::SESSION));
 
-	private static $mapInitFlow = array(kCacheConfFactory::SESSION,
-										kCacheConfFactory::APC,
-										kCacheConfFactory::FILE_SYSTEM);
+	private static $mapInitFlow = array(vCacheConfFactory::SESSION,
+										vCacheConfFactory::APC,
+										vCacheConfFactory::FILE_SYSTEM);
 
 	private static $init=false;
 
@@ -37,13 +37,13 @@ class kConfCacheManager
 	{
 		foreach (self::$mapInitFlow as $cacheEntity)
 		{
-			/* @var $cacheObj kBaseConfCache*/
-			$cacheObj = kCacheConfFactory::getInstance($cacheEntity);
+			/* @var $cacheObj vBaseConfCache*/
+			$cacheObj = vCacheConfFactory::getInstance($cacheEntity);
 			$map = $cacheObj->load(null, $cacheName);
 			if($map)
 			{
 				self::store(null, $cacheName, $map, $cacheEntity);
-				kCacheConfFactory::getInstance($cacheName);
+				vCacheConfFactory::getInstance($cacheName);
 				return;
 			}
 		}
@@ -59,8 +59,8 @@ class kConfCacheManager
 		self::$init=true;
 		//load basic parameters
 		//remote and local memcache	configuration maps
-		self::initLoad(kCacheConfFactory::LOCAL_MEM_CACHE);
-		self::initLoad(kCacheConfFactory::REMOTE_MEM_CACHE);
+		self::initLoad(vCacheConfFactory::LOCAL_MEM_CACHE);
+		self::initLoad(vCacheConfFactory::REMOTE_MEM_CACHE);
 	}
 
 
@@ -75,7 +75,7 @@ class kConfCacheManager
 
 		foreach (self::$keyLoadFlow as $cacheEntity)
 		{
-			$cacheObj = kCacheConfFactory::getInstance($cacheEntity);
+			$cacheObj = vCacheConfFactory::getInstance($cacheEntity);
 			$ret = $cacheObj->loadKey();
 			if($ret)
 			{
@@ -89,7 +89,7 @@ class kConfCacheManager
 
 	protected static function storeKey($key, $foundIn)
 	{
-		$remoteCache = kCacheConfFactory::getInstance(kCacheConfFactory::REMOTE_MEM_CACHE);
+		$remoteCache = vCacheConfFactory::getInstance(vCacheConfFactory::REMOTE_MEM_CACHE);
 		$ttl=self::LONG_KEY_TTL;
 		if($remoteCache->isActive())
 		{
@@ -99,7 +99,7 @@ class kConfCacheManager
 		$storeFlow = self::$keyStoreFlow[$foundIn];
 
 		foreach ($storeFlow as $cacheEntity)
-			kCacheConfFactory::getInstance($cacheEntity)->storeKey($key,$ttl);
+			vCacheConfFactory::getInstance($cacheEntity)->storeKey($key,$ttl);
 	}
 
 	public static function hasMap ($mapName)
@@ -121,8 +121,8 @@ class kConfCacheManager
 
 		foreach (self::$mapLoadFlow as $cacheEntity)
 		{
-			/* @var $cacheObj kBaseConfCache*/
-			$cacheObj = kCacheConfFactory::getInstance($cacheEntity);
+			/* @var $cacheObj vBaseConfCache*/
+			$cacheObj = vCacheConfFactory::getInstance($cacheEntity);
 			if(!$key && $cacheObj->isKeyRequired() && PHP_SAPI != 'cli')
 				$key = self::loadKey();
 
@@ -136,7 +136,7 @@ class kConfCacheManager
 			}
 			$cacheObj->incCacheMissCounter();
 		}
-		kCacheConfFactory::getInstance(kCacheConfFactory::SESSION) -> store($key, $mapName,array());
+		vCacheConfFactory::getInstance(vCacheConfFactory::SESSION) -> store($key, $mapName,array());
 		self::$loadRecursiveLock=false;
 		return array();
 	}
@@ -145,7 +145,7 @@ class kConfCacheManager
 	{
 		$storeFlow = self::$mapStoreFlow[$foundIn];
 		foreach ($storeFlow as $cacheEntity)
-			kCacheConfFactory::getInstance($cacheEntity)->store($key, $mapName, $map);
+			vCacheConfFactory::getInstance($cacheEntity)->store($key, $mapName, $map);
 	}
 
 	static public function getUsage()
@@ -153,11 +153,11 @@ class kConfCacheManager
 		$out = array();
 		foreach (self::$mapLoadFlow as $cacheEntity)
 		{
-			$out['usage'][$cacheEntity] = kCacheConfFactory::getInstance($cacheEntity)->getUsageCounter();
-			$out['cacheMiss'][$cacheEntity] = kCacheConfFactory::getInstance($cacheEntity)->getCacheMissCounter();
+			$out['usage'][$cacheEntity] = vCacheConfFactory::getInstance($cacheEntity)->getUsageCounter();
+			$out['cacheMiss'][$cacheEntity] = vCacheConfFactory::getInstance($cacheEntity)->getCacheMissCounter();
 		}
 		foreach (self::$keyLoadFlow as $cacheEntity)
-			$out['getKey'][$cacheEntity] = kCacheConfFactory::getInstance($cacheEntity)->getKeyUsageCounter();
+			$out['getKey'][$cacheEntity] = vCacheConfFactory::getInstance($cacheEntity)->getKeyUsageCounter();
 		return $out;
 	}
 
@@ -165,19 +165,19 @@ class kConfCacheManager
 	{
 		$str = "Conf usage:";
 		foreach (self::$mapLoadFlow as $cacheEntity)
-			$str .= $cacheEntity.'={'. kCacheConfFactory::getInstance($cacheEntity)->getUsageCounter().'}';
+			$str .= $cacheEntity.'={'. vCacheConfFactory::getInstance($cacheEntity)->getUsageCounter().'}';
 			$str .= '| Key usage: ';
 		foreach (self::$keyLoadFlow as $cacheEntity)
-			$str .= $cacheEntity.'={'. kCacheConfFactory::getInstance($cacheEntity)->getKeyUsageCounter().'}';
+			$str .= $cacheEntity.'={'. vCacheConfFactory::getInstance($cacheEntity)->getKeyUsageCounter().'}';
 		$str .= '| Cache Miss: ';
 		foreach (self::$mapLoadFlow as $cacheEntity)
-			$str .= $cacheEntity.'={'. kCacheConfFactory::getInstance($cacheEntity)->getCacheMissCounter().'}';
+			$str .= $cacheEntity.'={'. vCacheConfFactory::getInstance($cacheEntity)->getCacheMissCounter().'}';
 
 			foreach (self::$mapLoadFlow as $cacheEntity)
 		{
-			$mapStr = kCacheConfFactory::getInstance($cacheEntity)->getUsageMap();
+			$mapStr = vCacheConfFactory::getInstance($cacheEntity)->getUsageMap();
 			$str .= "\n\r" . $cacheEntity . '=============>' . print_r($mapStr, true);
 		}
-		KalturaLog::debug($str);
+		VidiunLog::debug($str);
 	}
 }

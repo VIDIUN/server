@@ -3,17 +3,17 @@
  * @package plugins.fileSync
  * @subpackage api.objects
  */
-class KalturaFileSyncArray extends KalturaTypedArray
+class VidiunFileSyncArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaFileSyncArray();
+		$newArr = new VidiunFileSyncArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaFileSync();
+    		$nObj = new VidiunFileSync();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaFileSyncArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaFileSync");	
+		parent::__construct("VidiunFileSync");	
 	}
 }

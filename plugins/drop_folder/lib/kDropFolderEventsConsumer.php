@@ -1,5 +1,5 @@
 <?php
-class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObjectChangedEventConsumer
+class vDropFolderEventsConsumer implements vBatchJobStatusEventConsumer, vObjectChangedEventConsumer
 {
 	const REFERENCE_ID_WILDCARD = 'referenceId';
 	const FLAVOR_NAME_WILDCARD  = 'flavorName';
@@ -7,7 +7,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 	const DEFAULT_SLUG_REGEX = '/(?P<referenceId>.+)[.]\w{3,}/';
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns) 
 	{
@@ -28,14 +28,14 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process objectChangedEvent for drop folder file ['.$object->getDropFolderId().'] - '.$e->getMessage());
+			VidiunLog::err('Failed to process objectChangedEvent for drop folder file ['.$object->getDropFolderId().'] - '.$e->getMessage());
 		}
 		
 		return true;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns) 
 	{
@@ -59,14 +59,14 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process shouldConsumeChangedEvent - '.$e->getMessage());
+			VidiunLog::err('Failed to process shouldConsumeChangedEvent - '.$e->getMessage());
 		}
 		
 		return false;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -79,13 +79,13 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process shouldConsumeJobStatusEvent - '.$e->getMessage());
+			VidiunLog::err('Failed to process shouldConsumeJobStatusEvent - '.$e->getMessage());
 		}
 		return false;		
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -104,7 +104,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process updatedJob - '.$e->getMessage());
+			VidiunLog::err('Failed to process updatedJob - '.$e->getMessage());
 		}
 		return true;					
 	}
@@ -113,7 +113,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 	{	
 		$jobStatuses = array(BatchJob::BATCHJOB_STATUS_FINISHED, BatchJob::BATCHJOB_STATUS_FAILED, BatchJob::BATCHJOB_STATUS_FATAL);
 		$isMatch =  $dbBatchJob->getJobType() == BatchJobType::IMPORT && 
-					$dbBatchJob->getData() instanceof kDropFolderImportJobData &&
+					$dbBatchJob->getData() instanceof vDropFolderImportJobData &&
 					in_array($dbBatchJob->getStatus(), $jobStatuses);
 		return $isMatch;
 	}
@@ -126,7 +126,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 		return $isMatch;
 	}
 	
-	private function onImportJobStatusUpdated(BatchJob $dbBatchJob, kDropFolderImportJobData $data)
+	private function onImportJobStatusUpdated(BatchJob $dbBatchJob, vDropFolderImportJobData $data)
 	{
 		$dropFolderFile = DropFolderFilePeer::retrieveByPK($data->getDropFolderFileId());
 		if(!$dropFolderFile)
@@ -142,7 +142,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 						&& $dropFolder->getFileDeletePolicy() == DropFolderFileDeletePolicy::AUTO_DELETE_WHEN_ENTRY_IS_READY )
 				{
 					// Shift the state to PROCESSING until the associated entry will reach the READY (or ERROR_CONVERTING) state
-					KalturaLog::info("Shifting drop folder file id [{$dropFolderFile->getId()}] from status [{$dropFolderFile->getStatus()}] to PROCESSING due to AUTO_DELETE_WHEN_ENTRY_IS_READY policy"); 
+					VidiunLog::info("Shifting drop folder file id [{$dropFolderFile->getId()}] from status [{$dropFolderFile->getStatus()}] to PROCESSING due to AUTO_DELETE_WHEN_ENTRY_IS_READY policy"); 
 					$newStatus = DropFolderFileStatus::PROCESSING;
 				}
 
@@ -161,9 +161,9 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 	 * 1. Retry - set files status to NO_MATCH
 	 * 2. Failure - set to ERROR_HANDLING
 	 * @param BatchJob $dbBatchJob
-	 * @param kDropFolderContentProcessorJobData $data
+	 * @param vDropFolderContentProcessorJobData $data
 	 */
-	private function onContentProcessorJobStatusUpdated(BatchJob $dbBatchJob, kDropFolderContentProcessorJobData $data)
+	private function onContentProcessorJobStatusUpdated(BatchJob $dbBatchJob, vDropFolderContentProcessorJobData $data)
 	{
 		$idsArray = explode(',', $data->getDropFolderFileIds());
 		$dropFolderFiles = DropFolderFilePeer::retrieveByPKs($idsArray);
@@ -173,7 +173,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 		switch($dbBatchJob->getStatus())
 		{
 			case BatchJob::BATCHJOB_STATUS_RETRY: //TODO: check  error code
-				KalturaLog::info('Batch job status RETRY => set files ['.$data->getDropFolderFileIds().'] to NO_MATCH');
+				VidiunLog::info('Batch job status RETRY => set files ['.$data->getDropFolderFileIds().'] to NO_MATCH');
 				foreach ($dropFolderFiles as $dropFolderFile) 
 				{
 					$dropFolderFile->setStatus(DropFolderFileStatus::NO_MATCH);
@@ -182,7 +182,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 				break;
 			case BatchJob::BATCHJOB_STATUS_FAILED:
 			case BatchJob::BATCHJOB_STATUS_FATAL:	
-				KalturaLog::info('Batch job FAILED => set files ['.$data->getDropFolderFileIds().'] to ERROR_HANDLING');			
+				VidiunLog::info('Batch job FAILED => set files ['.$data->getDropFolderFileIds().'] to ERROR_HANDLING');			
 				foreach ($dropFolderFiles as $dropFolderFile) 
 				{
 					$this->setFileError($dropFolderFile, DropFolderFileStatus::ERROR_HANDLING, DropFolderFileErrorCode::ERROR_IN_CONTENT_PROCESSOR, DropFolderPlugin::ERROR_IN_CONTENT_PROCESSOR_MESSAGE);
@@ -210,7 +210,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 			$file = $updatedFile;
 			if(is_null($file->getParsedFlavor()))
 			{
-				KalturaLog::log('Parsed flavor is null, triggering ContentProcessing job for source');
+				VidiunLog::log('Parsed flavor is null, triggering ContentProcessing job for source');
 				$this->triggerContentDropFolderFileProcessing($folder, $file);
 			}
 			else
@@ -220,7 +220,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 				
 				if($flavorNameValid)
 				{
-					KalturaLog::log('Parsed flavor is set, verifying if all files ready');
+					VidiunLog::log('Parsed flavor is set, verifying if all files ready');
 					$statuses = array(DropFolderFileStatus::PENDING, DropFolderFileStatus::WAITING, DropFolderFileStatus::NO_MATCH);					
 					$relatedFiles = DropFolderFilePeer::retrieveByDropFolderIdStatusesAndSlug($folder->getId(), $statuses, $file->getParsedSlug());				
 					$isReady = $this->isAllContentDropFolderIngestedFilesReady($folder, $relatedFiles, $assetParamsList);
@@ -306,7 +306,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 				}
 			}
 
-			KalturaLog::info("Entry id [{$entry->getId()}] status [{$entryStatus}], drop folder file id [{$dropFolderFile->getId()}] status [{$dropFolderFile->getStatus()}] => ["
+			VidiunLog::info("Entry id [{$entry->getId()}] status [{$entryStatus}], drop folder file id [{$dropFolderFile->getId()}] status [{$dropFolderFile->getStatus()}] => ["
 								. ($newDropFolderFileStatus ? $newDropFolderFileStatus : "{$dropFolderFile->getStatus()} (unchanged)") . "]");
 
 			if ( $newDropFolderFileStatus )
@@ -325,7 +325,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 		$existingFlavors = array();		
 		foreach ($relatedFiles as $relatedFile)
 		{
-			KalturaLog::info('flavor ['.$relatedFile->getParsedFlavor().'] file id ['.$relatedFile->getId().']');
+			VidiunLog::info('flavor ['.$relatedFile->getParsedFlavor().'] file id ['.$relatedFile->getId().']');
 			$existingFlavors[$relatedFile->getParsedFlavor()] = $relatedFile->getId();
 		}
 		
@@ -335,7 +335,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 			{
 				if(!array_key_exists($assetParams->getSystemName(), $existingFlavors))
 				{
-					KalturaLog::info('Flavor ['.$assetParams->getSystemName().'] is required and must be ingested');
+					VidiunLog::info('Flavor ['.$assetParams->getSystemName().'] is required and must be ingested');
 					return false;
 				}			
 			}			
@@ -380,7 +380,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 			try 
 			{
 				$job = $this->addDropFolderContentProcessorJob($folder, $file, $dropFolderFileIds);
-				KalturaLog::info('DropFolderContent processor job id ['.$job->getId().']');
+				VidiunLog::info('DropFolderContent processor job id ['.$job->getId().']');
 				foreach ($relatedFiles as $relatedFile) 
 				{
 					$relatedFile->setBatchJobId($job->getId());
@@ -389,7 +389,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err('Error when adding DropFolderContentProcessor job - '.$e->getMessage());
+				VidiunLog::err('Error when adding DropFolderContentProcessor job - '.$e->getMessage());
 				foreach ($relatedFiles as $relatedFile) {
 					$this->setFileError($relatedFile, DropFolderFileStatus::ERROR_HANDLING, DropFolderFileErrorCode::ERROR_ADDING_CONTENT_PROCESSOR, 
 								'Failed to add DropFolderContentProcessor job');
@@ -407,25 +407,25 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 		$batchJob->setObjectId($dropFolderFileForObject->getId());
 		$batchJob->setObjectType(DropFolderPlugin::getCoreValue('BatchJobObjectType',DropFolderBatchJobObjectType::DROP_FOLDER_FILE));
 		
-		$jobData = kDropFolderContentProcessorJobData::getInstance($folder->getType());
+		$jobData = vDropFolderContentProcessorJobData::getInstance($folder->getType());
 		//Required for plugins which require data to be set on the created entry from the drop folder files.
 		$jobData->setData($folder, $dropFolderFileForObject, $dropFolderFileIds) ;		
 		
-		return kJobsManager::addJob($batchJob, $jobData, $batchJobType, $folder->getType());		
+		return vJobsManager::addJob($batchJob, $jobData, $batchJobType, $folder->getType());		
 	}
 	
 	private function setFileProcessing(DropFolderFile $file, array $relatedFiles)
 	{
 		$file->setStatus(DropFolderFileStatus::PROCESSING);
 		$affectedRows = $file->save();
-		KalturaLog::info('Changing file status to Processing, file id ['.$file->getId().'] affected rows ['.$affectedRows.']');
+		VidiunLog::info('Changing file status to Processing, file id ['.$file->getId().'] affected rows ['.$affectedRows.']');
 		if($affectedRows > 0)
 		{
 			foreach ($relatedFiles as $relatedFile) 
 			{
 				if($relatedFile->getId() != $file->getId())
 				{
-					KalturaLog::info('Changing file status to Processing, file id ['.$relatedFile->getId().']');
+					VidiunLog::info('Changing file status to Processing, file id ['.$relatedFile->getId().']');
 					$relatedFile->setStatus(DropFolderFileStatus::PROCESSING);
 					$relatedFile->save();
 				}
@@ -436,7 +436,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 	
 	private function setFileError(DropFolderFile $file, $status, $errorCode, $errorDescription)
 	{
-		KalturaLog::err('Error with file ['.$file->getId().'] -'.$errorDescription);
+		VidiunLog::err('Error with file ['.$file->getId().'] -'.$errorDescription);
 		
 		$file->setStatus($status);
 		$file->setErrorCode($errorCode);
@@ -488,7 +488,7 @@ class kDropFolderEventsConsumer implements kBatchJobStatusEventConsumer, kObject
 			$parsedSlug   = isset($matches[self::REFERENCE_ID_WILDCARD]) ? $matches[self::REFERENCE_ID_WILDCARD] : null;
 			$parsedFlavor = isset($matches[self::FLAVOR_NAME_WILDCARD])  ? $matches[self::FLAVOR_NAME_WILDCARD]  : null;
 			$parsedUserId = isset($matches[self::USER_ID_WILDCARD])  ? $matches[self::USER_ID_WILDCARD]  : null;
-			KalturaLog::info('Parsed slug ['.$parsedSlug.'], Parsed flavor ['.$parsedFlavor.'], parsed user id ['. $parsedUserId .']');
+			VidiunLog::info('Parsed slug ['.$parsedSlug.'], Parsed flavor ['.$parsedFlavor.'], parsed user id ['. $parsedUserId .']');
 		}
 		if(!$parsedSlug)
 			$matchFound = false;

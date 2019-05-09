@@ -41,23 +41,23 @@ abstract class SyndicationFeedRenderer {
 	
 	protected function getPlayerUrl($entryId)
 	{
-		$url = requestUtils::getProtocol() . '://' . kConf::get('www_host');
+		$url = requestUtils::getProtocol() . '://' . vConf::get('www_host');
 		$partnerId = $this->syndicationFeed->partnerId;
 		if ( $this->syndicationFeedDB->getPlayerType() == PlayerType::HTML5Player )
 		{
-		    $isPlaykit = false;
+		    $isPakhshkit = false;
 		    if ($this->syndicationFeed->playerUiconfId) 
 		    {
 			$dbUiConf = uiConfPeer::retrieveByPK( $this->syndicationFeed->playerUiconfId );
-			if($dbUiConf && strpos( $dbUiConf->getTags() , 'kalturaPlayerJs') !== false) 
+			if($dbUiConf && strpos( $dbUiConf->getTags() , 'vidiunPlayerJs') !== false) 
 			{
-			    $isPlaykit = true;
+			    $isPakhshkit = true;
 			}
 		    }
 		    $uiconfId = ($this->syndicationFeed->playerUiconfId)? '/uiconf_id/'.$this->syndicationFeed->playerUiconfId: '';
-		    if ($isPlaykit)
+		    if ($isPakhshkit)
 		    {
-			$url .= '/p/' .$partnerId.'/embedPlaykitJs' .$uiconfId. '?iframeembed=true&entry_id=' .$entryId;
+			$url .= '/p/' .$partnerId.'/embedPakhshkitJs' .$uiconfId. '?iframeembed=true&entry_id=' .$entryId;
 		    } 
 		    else 
 		    {
@@ -67,7 +67,7 @@ abstract class SyndicationFeedRenderer {
 		else
 		{
 			$uiconfId = ($this->syndicationFeed->playerUiconfId)? '/ui_conf_id/'.$this->syndicationFeed->playerUiconfId: '';
-			$url .= '/kwidget/wid/_'.$partnerId. '/entry_id/'.$entryId.$uiconfId;
+			$url .= '/vwidget/wid/_'.$partnerId. '/entry_id/'.$entryId.$uiconfId;
 		}
 
 		$url = htmlEntities($url);
@@ -80,7 +80,7 @@ abstract class SyndicationFeedRenderer {
 	protected function stringToSafeXml($string, $now = false)
 	{
 		$string = @iconv('utf-8', 'utf-8', $string);
-		$safe = kString::xmlEncode($string);
+		$safe = vString::xmlEncode($string);
 		return $safe;
 	}
 	
@@ -89,7 +89,7 @@ abstract class SyndicationFeedRenderer {
 	{
 		$res = '';
 		$res .= $this->writeOpenXmlNode($nodeName, $level, $attributes, false);
-		$res .= kString::xmlEncode(kString::xmlDecode("$value")); //to create a valid XML (without unescaped special chars)
+		$res .= vString::xmlEncode(vString::xmlDecode("$value")); //to create a valid XML (without unescaped special chars)
 		//we decode before encoding to avoid breaking an xml which its special chars had already been escaped
 		$res .= $this->writeClosingXmlNode($nodeName, 0);
 		return $res;

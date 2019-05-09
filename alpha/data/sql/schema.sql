@@ -4,13 +4,13 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 #-----------------------------------------------------------------------------
-#-- kuser
+#-- vuser
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `kuser`;
+DROP TABLE IF EXISTS `vuser`;
 
 
-CREATE TABLE `kuser`
+CREATE TABLE `vuser`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`login_data_id` INTEGER,
@@ -46,7 +46,7 @@ CREATE TABLE `kuser`
 	`fans` INTEGER default 0,
 	`entries` INTEGER default 0,
 	`storage_size` INTEGER default 0,
-	`produced_kshows` INTEGER default 0,
+	`produced_vshows` INTEGER default 0,
 	`status` INTEGER,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
@@ -73,13 +73,13 @@ CREATE TABLE `kuser`
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
-#-- kshow
+#-- vshow
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `kshow`;
+DROP TABLE IF EXISTS `vshow`;
 
 
-CREATE TABLE `kshow`
+CREATE TABLE `vshow`
 (
 	`id` VARCHAR(20)  NOT NULL,
 	`producer_id` INTEGER,
@@ -143,9 +143,9 @@ CREATE TABLE `kshow`
 	KEY `producer_id_index`(`producer_id`),
 	KEY `display_in_search_index`(`display_in_search`),
 	KEY `partner_group_index`(`partner_id`, `group_id`),
-	CONSTRAINT `kshow_FK_1`
+	CONSTRAINT `vshow_FK_1`
 		FOREIGN KEY (`producer_id`)
-		REFERENCES `kuser` (`id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -158,8 +158,8 @@ DROP TABLE IF EXISTS `entry`;
 CREATE TABLE `entry`
 (
 	`id` VARCHAR(20)  NOT NULL,
-	`kshow_id` VARCHAR(20),
-	`kuser_id` INTEGER,
+	`vshow_id` VARCHAR(20),
+	`vuser_id` INTEGER,
 	`name` VARCHAR(60),
 	`type` SMALLINT,
 	`media_type` SMALLINT,
@@ -211,22 +211,22 @@ CREATE TABLE `entry`
 	`available_from` DATETIME,
 	`last_played_at` DATETIME,
 	PRIMARY KEY (`id`),
-	KEY `kshow_rank_index`(`kshow_id`, `rank`),
-	KEY `kshow_views_index`(`kshow_id`, `views`),
-	KEY `kshow_votes_index`(`kshow_id`, `votes`),
-	KEY `kshow_created_index`(`kshow_id`, `created_at`),
+	KEY `vshow_rank_index`(`vshow_id`, `rank`),
+	KEY `vshow_views_index`(`vshow_id`, `views`),
+	KEY `vshow_votes_index`(`vshow_id`, `votes`),
+	KEY `vshow_created_index`(`vshow_id`, `created_at`),
 	KEY `views_index`(`views`),
 	KEY `votes_index`(`votes`),
 	KEY `display_in_search_index`(`display_in_search`),
 	KEY `partner_group_index`(`partner_id`, `group_id`),
-	KEY `partner_kuser_indexed_custom_data_index`(`partner_id`, `kuser_id`, `indexed_custom_data_1`),
+	KEY `partner_vuser_indexed_custom_data_index`(`partner_id`, `vuser_id`, `indexed_custom_data_1`),
 	KEY `partner_status_index`(`partner_id`, `status`),
 	KEY `partner_moderation_status`(`partner_id`, `moderation_status`),
 	KEY `partner_modified_at_index`(`partner_id`, `modified_at`),
-	INDEX `entry_FI_1` (`kuser_id`),
+	INDEX `entry_FI_1` (`vuser_id`),
 	CONSTRAINT `entry_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -275,38 +275,38 @@ CREATE TABLE `live_channel_segment`
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
-#-- kvote
+#-- vvote
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `kvote`;
+DROP TABLE IF EXISTS `vvote`;
 
 
-CREATE TABLE `kvote`
+CREATE TABLE `vvote`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`kshow_id` VARCHAR(20),
+	`vshow_id` VARCHAR(20),
 	`entry_id` VARCHAR(20),
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`puser_id` VARCHAR(100),
 	`partner_id` INTEGER,
 	`rank` INTEGER,
 	`status` INTEGER,
-	`kvote_type` INTEGER default 1,
+	`vvote_type` INTEGER default 1,
 	`created_at` DATETIME,
 	`custom_data` TEXT,
 	PRIMARY KEY (`id`),
-	KEY `kshow_index`(`kshow_id`),
-	KEY `entry_user_status_index`(`entry_id`, `kuser_id`, `status`),
-	CONSTRAINT `kvote_FK_1`
-		FOREIGN KEY (`kshow_id`)
-		REFERENCES `kshow` (`id`),
-	CONSTRAINT `kvote_FK_2`
+	KEY `vshow_index`(`vshow_id`),
+	KEY `entry_user_status_index`(`entry_id`, `vuser_id`, `status`),
+	CONSTRAINT `vvote_FK_1`
+		FOREIGN KEY (`vshow_id`)
+		REFERENCES `vshow` (`id`),
+	CONSTRAINT `vvote_FK_2`
 		FOREIGN KEY (`entry_id`)
 		REFERENCES `entry` (`id`),
-	INDEX `kvote_FI_3` (`kuser_id`),
-	CONSTRAINT `kvote_FK_3`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kshow` (`id`)
+	INDEX `vvote_FI_3` (`vuser_id`),
+	CONSTRAINT `vvote_FK_3`
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vshow` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -319,7 +319,7 @@ DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`comment_type` INTEGER,
 	`subject_id` INTEGER,
 	`base_date` DATE,
@@ -328,10 +328,10 @@ CREATE TABLE `comment`
 	`created_at` DATETIME,
 	PRIMARY KEY (`id`),
 	KEY `subject_created_index`(`comment_type`, `subject_id`, `base_date`, `reply_to`, `created_at`),
-	INDEX `comment_FI_1` (`kuser_id`),
+	INDEX `comment_FI_1` (`vuser_id`),
 	CONSTRAINT `comment_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -344,7 +344,7 @@ DROP TABLE IF EXISTS `flag`;
 CREATE TABLE `flag`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`subject_type` INTEGER,
 	`subject_id` INTEGER,
 	`flag_type` INTEGER,
@@ -353,10 +353,10 @@ CREATE TABLE `flag`
 	`created_at` DATETIME,
 	PRIMARY KEY (`id`),
 	KEY `subject_created_index`(`subject_type`, `subject_id`, `created_at`),
-	INDEX `flag_FI_1` (`kuser_id`),
+	INDEX `flag_FI_1` (`vuser_id`),
 	CONSTRAINT `flag_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -368,43 +368,43 @@ DROP TABLE IF EXISTS `favorite`;
 
 CREATE TABLE `favorite`
 (
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`subject_type` INTEGER,
 	`subject_id` INTEGER,
 	`privacy` INTEGER,
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	PRIMARY KEY (`id`),
-	KEY `kuser_index`(`kuser_id`),
+	KEY `vuser_index`(`vuser_id`),
 	KEY `subject_index`(`subject_type`, `subject_id`),
 	CONSTRAINT `favorite_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
-#-- kshow_kuser
+#-- vshow_vuser
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `kshow_kuser`;
+DROP TABLE IF EXISTS `vshow_vuser`;
 
 
-CREATE TABLE `kshow_kuser`
+CREATE TABLE `vshow_vuser`
 (
-	`kshow_id` VARCHAR(20),
-	`kuser_id` INTEGER,
+	`vshow_id` VARCHAR(20),
+	`vuser_id` INTEGER,
 	`subscription_type` INTEGER,
 	`alert_type` INTEGER,
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	PRIMARY KEY (`id`),
-	KEY `kshow_index`(`kshow_id`),
-	KEY `kuser_index`(`kuser_id`),
-	KEY `subscription_index`(`kshow_id`, `subscription_type`),
-	CONSTRAINT `kshow_kuser_FK_1`
-		FOREIGN KEY (`kshow_id`)
-		REFERENCES `kshow` (`id`),
-	CONSTRAINT `kshow_kuser_FK_2`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+	KEY `vshow_index`(`vshow_id`),
+	KEY `vuser_index`(`vuser_id`),
+	KEY `subscription_index`(`vshow_id`, `subscription_type`),
+	CONSTRAINT `vshow_vuser_FK_1`
+		FOREIGN KEY (`vshow_id`)
+		REFERENCES `vshow` (`id`),
+	CONSTRAINT `vshow_vuser_FK_2`
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -836,7 +836,7 @@ DROP TABLE IF EXISTS `flickr_token`;
 
 CREATE TABLE `flickr_token`
 (
-	`kalt_token` VARCHAR(256)  NOT NULL,
+	`vidi_token` VARCHAR(256)  NOT NULL,
 	`frob` VARCHAR(64),
 	`token` VARCHAR(64),
 	`nsid` VARCHAR(64),
@@ -844,23 +844,23 @@ CREATE TABLE `flickr_token`
 	`is_valid` TINYINT default 0,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
-	PRIMARY KEY (`kalt_token`),
-	KEY `is_valid_index`(`is_valid`, `kalt_token`)
+	PRIMARY KEY (`vidi_token`),
+	KEY `is_valid_index`(`is_valid`, `vidi_token`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
-#-- puser_kuser
+#-- puser_vuser
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `puser_kuser`;
+DROP TABLE IF EXISTS `puser_vuser`;
 
 
-CREATE TABLE `puser_kuser`
+CREATE TABLE `puser_vuser`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`partner_id` INTEGER,
 	`puser_id` VARCHAR(64),
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`puser_name` VARCHAR(64),
 	`custom_data` VARCHAR(1024),
 	`created_at` DATETIME,
@@ -869,11 +869,11 @@ CREATE TABLE `puser_kuser`
 	`subp_id` INTEGER default 0,
 	PRIMARY KEY (`id`),
 	KEY `partner_puser_index`(`partner_id`, `puser_id`),
-	KEY `kuser_id_index`(`kuser_id`),
+	KEY `vuser_id_index`(`vuser_id`),
 	INDEX `I_referenced_puser_role_FK_3_1` (`puser_id`),
-	CONSTRAINT `puser_kuser_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+	CONSTRAINT `puser_vuser_FK_1`
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -886,7 +886,7 @@ DROP TABLE IF EXISTS `puser_role`;
 CREATE TABLE `puser_role`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`kshow_id` VARCHAR(20),
+	`vshow_id` VARCHAR(20),
 	`partner_id` INTEGER,
 	`puser_id` VARCHAR(64),
 	`role` INTEGER,
@@ -895,17 +895,17 @@ CREATE TABLE `puser_role`
 	`subp_id` INTEGER default 0,
 	PRIMARY KEY (`id`),
 	KEY `partner_puser_index`(`partner_id`, `puser_id`),
-	KEY `kshow_id_index`(`kshow_id`),
+	KEY `vshow_id_index`(`vshow_id`),
 	CONSTRAINT `puser_role_FK_1`
-		FOREIGN KEY (`kshow_id`)
-		REFERENCES `kshow` (`id`),
+		FOREIGN KEY (`vshow_id`)
+		REFERENCES `vshow` (`id`),
 	CONSTRAINT `puser_role_FK_2`
 		FOREIGN KEY (`partner_id`)
-		REFERENCES `puser_kuser` (`partner_id`),
+		REFERENCES `puser_vuser` (`partner_id`),
 	INDEX `puser_role_FI_3` (`puser_id`),
 	CONSTRAINT `puser_role_FK_3`
 		FOREIGN KEY (`puser_id`)
-		REFERENCES `puser_kuser` (`puser_id`)
+		REFERENCES `puser_vuser` (`puser_id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -929,8 +929,8 @@ CREATE TABLE `partner`
 	`debug_level` INTEGER default 0,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
-	`anonymous_kuser_id` INTEGER,
-	`ks_max_expiry_in_seconds` INTEGER default 86400,
+	`anonymous_vuser_id` INTEGER,
+	`vs_max_expiry_in_seconds` INTEGER default 86400,
 	`create_user_on_demand` TINYINT default 1,
 	`prefix` VARCHAR(32),
 	`admin_name` VARCHAR(50),
@@ -956,14 +956,14 @@ CREATE TABLE `partner`
 	`priority_group_id` INTEGER,
 	`partner_group_type` SMALLINT default 1,
 	`partner_parent_id` INTEGER,
-	`kmc_version` VARCHAR(15) default '1',
+	`vmc_version` VARCHAR(15) default '1',
 	PRIMARY KEY (`id`),
 	KEY `partner_alias_index`(`partner_alias`),
 	KEY `partner_parent_index`(`partner_parent_id`),
-	INDEX `partner_FI_1` (`anonymous_kuser_id`),
+	INDEX `partner_FI_1` (`anonymous_vuser_id`),
 	CONSTRAINT `partner_FK_1`
-		FOREIGN KEY (`anonymous_kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`anonymous_vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -976,9 +976,9 @@ DROP TABLE IF EXISTS `widget_log`;
 CREATE TABLE `widget_log`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`kshow_id` VARCHAR(20),
+	`vshow_id` VARCHAR(20),
 	`entry_id` VARCHAR(20),
-	`kmedia_type` INTEGER,
+	`vmedia_type` INTEGER,
 	`widget_type` VARCHAR(32),
 	`referer` VARCHAR(1024),
 	`views` INTEGER default 0,
@@ -993,7 +993,7 @@ CREATE TABLE `widget_log`
 	`subp_id` INTEGER default 0,
 	PRIMARY KEY (`id`),
 	KEY `referer_index`(`referer`),
-	KEY `entry_id_kshow_id_index`(`entry_id`, `kshow_id`),
+	KEY `entry_id_vshow_id_index`(`entry_id`, `vshow_id`),
 	KEY `partner_id_subp_id_index`(`partner_id`, `subp_id`),
 	CONSTRAINT `widget_log_FK_1`
 		FOREIGN KEY (`entry_id`)
@@ -1014,7 +1014,7 @@ CREATE TABLE `moderation`
 	`subp_id` INTEGER,
 	`object_id` VARCHAR(20),
 	`object_type` SMALLINT,
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`puser_id` VARCHAR(64),
 	`status` INTEGER,
 	`created_at` DATETIME,
@@ -1026,10 +1026,10 @@ CREATE TABLE `moderation`
 	KEY `partner_id_status_index`(`partner_id`, `status`),
 	KEY `partner_id_group_id_status_index`(`partner_id`, `group_id`, `status`),
 	KEY `object_index`(`partner_id`, `status`, `object_id`, `object_type`),
-	INDEX `moderation_FI_1` (`kuser_id`),
+	INDEX `moderation_FI_1` (`vuser_id`),
 	CONSTRAINT `moderation_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -1043,10 +1043,10 @@ CREATE TABLE `moderation_flag`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`partner_id` INTEGER,
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`object_type` SMALLINT,
 	`flagged_entry_id` VARCHAR(20),
-	`flagged_kuser_id` INTEGER,
+	`flagged_vuser_id` INTEGER,
 	`status` INTEGER,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
@@ -1054,19 +1054,19 @@ CREATE TABLE `moderation_flag`
 	`flag_type` INTEGER,
 	PRIMARY KEY (`id`),
 	KEY `partner_id_status_index`(`partner_id`, `status`),
-	KEY `entry_object_index`(`partner_id`, `status`, `object_type`, `flagged_kuser_id`),
-	INDEX `moderation_flag_FI_1` (`kuser_id`),
+	KEY `entry_object_index`(`partner_id`, `status`, `object_type`, `flagged_vuser_id`),
+	INDEX `moderation_flag_FI_1` (`vuser_id`),
 	CONSTRAINT `moderation_flag_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`),
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`),
 	INDEX `moderation_flag_FI_2` (`flagged_entry_id`),
 	CONSTRAINT `moderation_flag_FK_2`
 		FOREIGN KEY (`flagged_entry_id`)
 		REFERENCES `entry` (`id`),
-	INDEX `moderation_flag_FI_3` (`flagged_kuser_id`),
+	INDEX `moderation_flag_FI_3` (`flagged_vuser_id`),
 	CONSTRAINT `moderation_flag_FK_3`
-		FOREIGN KEY (`flagged_kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`flagged_vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -1081,7 +1081,7 @@ CREATE TABLE `roughcut_entry`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`roughcut_id` VARCHAR(20),
 	`roughcut_version` INTEGER,
-	`roughcut_kshow_id` VARCHAR(20),
+	`roughcut_vshow_id` VARCHAR(20),
 	`entry_id` VARCHAR(20),
 	`partner_id` INTEGER,
 	`op_type` SMALLINT,
@@ -1091,13 +1091,13 @@ CREATE TABLE `roughcut_entry`
 	KEY `partner_id_index`(`partner_id`),
 	KEY `entry_id_index`(`entry_id`),
 	KEY `roughcut_id_index`(`roughcut_id`),
-	KEY `roughcut_kshow_id_index`(`roughcut_kshow_id`),
+	KEY `roughcut_vshow_id_index`(`roughcut_vshow_id`),
 	CONSTRAINT `roughcut_entry_FK_1`
 		FOREIGN KEY (`roughcut_id`)
 		REFERENCES `entry` (`id`),
 	CONSTRAINT `roughcut_entry_FK_2`
-		FOREIGN KEY (`roughcut_kshow_id`)
-		REFERENCES `kshow` (`id`),
+		FOREIGN KEY (`roughcut_vshow_id`)
+		REFERENCES `vshow` (`id`),
 	CONSTRAINT `roughcut_entry_FK_3`
 		FOREIGN KEY (`entry_id`)
 		REFERENCES `entry` (`id`)
@@ -1118,7 +1118,7 @@ CREATE TABLE `widget`
 	`root_widget_id` VARCHAR(32),
 	`partner_id` INTEGER,
 	`subp_id` INTEGER,
-	`kshow_id` VARCHAR(20),
+	`vshow_id` VARCHAR(20),
 	`entry_id` VARCHAR(20),
 	`ui_conf_id` INTEGER,
 	`custom_data` VARCHAR(1024),
@@ -1129,10 +1129,10 @@ CREATE TABLE `widget`
 	`partner_data` VARCHAR(4096),
 	PRIMARY KEY (`id`),
 	KEY `int_id_index`(`int_id`),
-	INDEX `widget_FI_1` (`kshow_id`),
+	INDEX `widget_FI_1` (`vshow_id`),
 	CONSTRAINT `widget_FK_1`
-		FOREIGN KEY (`kshow_id`)
-		REFERENCES `kshow` (`id`),
+		FOREIGN KEY (`vshow_id`)
+		REFERENCES `vshow` (`id`),
 	INDEX `widget_FI_2` (`entry_id`),
 	CONSTRAINT `widget_FK_2`
 		FOREIGN KEY (`entry_id`)
@@ -1200,8 +1200,8 @@ CREATE TABLE `partner_stats`
 	`users_2` INTEGER,
 	`rc_1` INTEGER,
 	`rc_2` INTEGER,
-	`kshows_1` INTEGER,
-	`kshows_2` INTEGER,
+	`vshows_1` INTEGER,
+	`vshows_2` INTEGER,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
 	`custom_data` TEXT,
@@ -1295,13 +1295,13 @@ CREATE TABLE `conversion_params`
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
-#-- kce_installation_error
+#-- vce_installation_error
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `kce_installation_error`;
+DROP TABLE IF EXISTS `vce_installation_error`;
 
 
-CREATE TABLE `kce_installation_error`
+CREATE TABLE `vce_installation_error`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`partner_id` INTEGER,
@@ -1378,10 +1378,10 @@ CREATE TABLE `access_control`
 	`site_restrict_list` VARCHAR(1024),
 	`country_restrict_type` TINYINT,
 	`country_restrict_list` VARCHAR(1024),
-	`ks_restrict_privilege` VARCHAR(20),
+	`vs_restrict_privilege` VARCHAR(20),
 	`prv_restrict_privilege` VARCHAR(20),
 	`prv_restrict_length` INTEGER,
-	`kdir_restrict_type` TINYINT,
+	`vdir_restrict_type` TINYINT,
 	`custom_data` TEXT,
 	`rules` TEXT,
 	PRIMARY KEY (`id`)
@@ -1682,7 +1682,7 @@ CREATE TABLE `category`
 	`inheritance_type` TINYINT default 2,
 	`user_join_policy` TINYINT default 3,
 	`default_permission_level` TINYINT default 3,
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`puser_id` VARCHAR(100),
 	`reference_id` VARCHAR(512),
 	`contribution_policy` TINYINT default 2,
@@ -1714,7 +1714,7 @@ CREATE TABLE `category_entry`
 	`custom_data` TEXT,
 	`status` INTEGER default 2,
 	`privacy_context` VARCHAR(255),
-	`creator_kuser_id` INTEGER,
+	`creator_vuser_id` INTEGER,
 	PRIMARY KEY (`id`),
 	KEY `partner_id_category_id_index`(`partner_id`, `category_id`),
 	KEY `partner_id_entry_id_index`(`partner_id`, `entry_id`),
@@ -1723,17 +1723,17 @@ CREATE TABLE `category_entry`
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
-#-- category_kuser
+#-- category_vuser
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `category_kuser`;
+DROP TABLE IF EXISTS `category_vuser`;
 
 
-CREATE TABLE `category_kuser`
+CREATE TABLE `category_vuser`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`category_id` INTEGER  NOT NULL,
-	`kuser_id` INTEGER  NOT NULL,
+	`vuser_id` INTEGER  NOT NULL,
 	`puser_id` VARCHAR(100)  NOT NULL,
 	`screen_name` VARCHAR(100)  NOT NULL,
 	`partner_id` INTEGER  NOT NULL,
@@ -1748,14 +1748,14 @@ CREATE TABLE `category_kuser`
 	`permission_names` TEXT,
 	PRIMARY KEY (`id`),
 	KEY `partner_id_category_index`(`category_id`, `status`),
-	KEY `partner_id_kuser_index`(`kuser_id`, `status`, `category_id`),
+	KEY `partner_id_vuser_index`(`vuser_id`, `status`, `category_id`),
 	KEY `partner_id_index`(`partner_id`, `status`),
-	CONSTRAINT `category_kuser_FK_1`
+	CONSTRAINT `category_vuser_FK_1`
 		FOREIGN KEY (`category_id`)
 		REFERENCES `category` (`id`),
-	CONSTRAINT `category_kuser_FK_2`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+	CONSTRAINT `category_vuser_FK_2`
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -1821,7 +1821,7 @@ CREATE TABLE `track_entry`
 	`param_1_str` VARCHAR(255),
 	`param_2_str` VARCHAR(511),
 	`param_3_str` VARCHAR(511),
-	`ks` VARCHAR(511),
+	`vs` VARCHAR(511),
 	`description` VARCHAR(127),
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
@@ -1994,7 +1994,7 @@ CREATE TABLE `upload_token`
 	`id` VARCHAR(35)  NOT NULL,
 	`int_id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`partner_id` INTEGER default 0,
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	`status` INTEGER,
 	`file_name` VARCHAR(256),
 	`file_size` BIGINT,
@@ -2012,10 +2012,10 @@ CREATE TABLE `upload_token`
 	KEY `partner_id_created_at`(`partner_id`, `created_at`),
 	KEY `status_created_at`(`status`, `created_at`),
 	KEY `creatd_at`(`created_at`),
-	INDEX `upload_token_FI_1` (`kuser_id`),
+	INDEX `upload_token_FI_1` (`vuser_id`),
 	CONSTRAINT `upload_token_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -2028,13 +2028,13 @@ DROP TABLE IF EXISTS `invalid_session`;
 CREATE TABLE `invalid_session`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`ks` VARCHAR(300),
-	`ks_valid_until` DATETIME,
+	`vs` VARCHAR(300),
+	`vs_valid_until` DATETIME,
 	`created_at` DATETIME,
 	`actions_limit` INTEGER,
 	`type` INTEGER,
 	PRIMARY KEY (`id`),
-	KEY `ks_index`(`ks`)
+	KEY `vs_index`(`vs`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -2179,26 +2179,26 @@ CREATE TABLE `permission_to_permission_item`
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
-#-- kuser_to_user_role
+#-- vuser_to_user_role
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `kuser_to_user_role`;
+DROP TABLE IF EXISTS `vuser_to_user_role`;
 
 
-CREATE TABLE `kuser_to_user_role`
+CREATE TABLE `vuser_to_user_role`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`kuser_id` INTEGER  NOT NULL,
+	`vuser_id` INTEGER  NOT NULL,
 	`user_role_id` INTEGER  NOT NULL,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
 	PRIMARY KEY (`id`),
-	INDEX `kuser_to_user_role_FI_1` (`kuser_id`),
-	CONSTRAINT `kuser_to_user_role_FK_1`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`),
-	INDEX `kuser_to_user_role_FI_2` (`user_role_id`),
-	CONSTRAINT `kuser_to_user_role_FK_2`
+	INDEX `vuser_to_user_role_FI_1` (`vuser_id`),
+	CONSTRAINT `vuser_to_user_role_FK_1`
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`),
+	INDEX `vuser_to_user_role_FI_2` (`user_role_id`),
+	CONSTRAINT `vuser_to_user_role_FK_2`
 		FOREIGN KEY (`user_role_id`)
 		REFERENCES `user_role` (`id`)
 )Type=InnoDB;
@@ -2363,18 +2363,18 @@ CREATE TABLE `response_profile`
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
-#-- kuser_kgroup
+#-- vuser_vgroup
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `kuser_kgroup`;
+DROP TABLE IF EXISTS `vuser_vgroup`;
 
 
-CREATE TABLE `kuser_kgroup`
+CREATE TABLE `vuser_vgroup`
 (
 	`id` BIGINT  NOT NULL AUTO_INCREMENT,
-	`kuser_id` INTEGER  NOT NULL,
+	`vuser_id` INTEGER  NOT NULL,
 	`puser_id` VARCHAR(100)  NOT NULL,
-	`kgroup_id` INTEGER  NOT NULL,
+	`vgroup_id` INTEGER  NOT NULL,
 	`pgroup_id` VARCHAR(100)  NOT NULL,
 	`status` TINYINT  NOT NULL,
 	`partner_id` INTEGER  NOT NULL,
@@ -2382,15 +2382,15 @@ CREATE TABLE `kuser_kgroup`
 	`updated_at` DATETIME,
 	`custom_data` TEXT,
 	PRIMARY KEY (`id`),
-	KEY `partner_kuser_index`(`kuser_id`, `status`),
-	KEY `partner_kgroup_index`(`kgroup_id`, `status`),
+	KEY `partner_vuser_index`(`vuser_id`, `status`),
+	KEY `partner_vgroup_index`(`vgroup_id`, `status`),
 	KEY `partner_index`(`partner_id`, `status`),
-	CONSTRAINT `kuser_kgroup_FK_1`
-		FOREIGN KEY (`kgroup_id`)
-		REFERENCES `kuser` (`id`),
-	CONSTRAINT `kuser_kgroup_FK_2`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+	CONSTRAINT `vuser_vgroup_FK_1`
+		FOREIGN KEY (`vgroup_id`)
+		REFERENCES `vuser` (`id`),
+	CONSTRAINT `vuser_vgroup_FK_2`
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -2404,7 +2404,7 @@ CREATE TABLE `user_entry`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`entry_id` VARCHAR(20)  NOT NULL,
-	`kuser_id` INTEGER  NOT NULL,
+	`vuser_id` INTEGER  NOT NULL,
 	`partner_id` INTEGER,
 	`created_at` DATETIME,
 	`updated_at` DATETIME,
@@ -2415,16 +2415,16 @@ CREATE TABLE `user_entry`
 	`privacy_context` VARCHAR(255),
 	`custom_data` TEXT,
 	PRIMARY KEY (`id`),
-	KEY `kuser_id_entry_id`(`kuser_id`, `entry_id`, `privacy_context`),
-	KEY `kuser_id_updated_at`(`kuser_id`, `updated_at`, `privacy_context`),
-	KEY `kuser_id_extended_status_updated_at`(`kuser_id`, `extended_status`, `updated_at`, `privacy_context`),
+	KEY `vuser_id_entry_id`(`vuser_id`, `entry_id`, `privacy_context`),
+	KEY `vuser_id_updated_at`(`vuser_id`, `updated_at`, `privacy_context`),
+	KEY `vuser_id_extended_status_updated_at`(`vuser_id`, `extended_status`, `updated_at`, `privacy_context`),
 	INDEX `user_entry_FI_1` (`entry_id`),
 	CONSTRAINT `user_entry_FK_1`
 		FOREIGN KEY (`entry_id`)
 		REFERENCES `entry` (`id`),
 	CONSTRAINT `user_entry_FK_2`
-		FOREIGN KEY (`kuser_id`)
-		REFERENCES `kuser` (`id`)
+		FOREIGN KEY (`vuser_id`)
+		REFERENCES `vuser` (`id`)
 )Type=InnoDB COMMENT='Describes the relationship between a specific user and a specific entry';
 
 #-----------------------------------------------------------------------------
@@ -2450,9 +2450,9 @@ CREATE TABLE `app_token`
 	`session_privileges` TEXT,
 	`token` TEXT,
 	`custom_data` TEXT,
-	`kuser_id` INTEGER,
+	`vuser_id` INTEGER,
 	PRIMARY KEY (`id`),
-	KEY `kuser_id`(`kuser_id`)
+	KEY `vuser_id`(`vuser_id`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------

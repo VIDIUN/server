@@ -31,13 +31,13 @@ class handlemoderationAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_ADMIN;
 	}
 
-	// ask to fetch the kuser from puser_kuser - so we can tel the difference between a
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser - so we can tel the difference between a
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_NO_KUSER;
+		return self::VUSER_DATA_NO_VUSER;
 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$moderation_id = $this->getPM ( "moderation_id" );
 		$moderation_status = $this->getPM ( "moderation_status" );

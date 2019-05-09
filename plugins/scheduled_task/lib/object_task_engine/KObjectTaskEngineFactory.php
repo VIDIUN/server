@@ -4,28 +4,28 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskEngineFactory
+class VObjectTaskEngineFactory
 {
 	public static function getInstanceByType($type)
 	{
 		switch($type)
 		{
 			case ObjectTaskType::DELETE_ENTRY:
-				return new KObjectTaskDeleteEntryEngine();
+				return new VObjectTaskDeleteEntryEngine();
 			case ObjectTaskType::MODIFY_CATEGORIES:
-				return new KObjectTaskModifyCategoriesEngine();
+				return new VObjectTaskModifyCategoriesEngine();
 			case ObjectTaskType::DELETE_ENTRY_FLAVORS:
-				return new KObjectTaskDeleteEntryFlavorsEngine();
+				return new VObjectTaskDeleteEntryFlavorsEngine();
 			case ObjectTaskType::CONVERT_ENTRY_FLAVORS:
-				return new KObjectTaskConvertEntryFlavorsEngine();
+				return new VObjectTaskConvertEntryFlavorsEngine();
 			case ObjectTaskType::DELETE_LOCAL_CONTENT:
-				return new KObjectTaskDeleteLocalContentEngine();
+				return new VObjectTaskDeleteLocalContentEngine();
 			case ObjectTaskType::STORAGE_EXPORT:
-				return new KObjectTaskStorageExportEngine();
+				return new VObjectTaskStorageExportEngine();
 			case ObjectTaskType::MODIFY_ENTRY:
-				return new KObjectTaskModifyEntryEngine();
+				return new VObjectTaskModifyEntryEngine();
 			default:
-				return KalturaPluginManager::loadObject('KObjectTaskEntryEngineBase', $type);
+				return VidiunPluginManager::loadObject('VObjectTaskEntryEngineBase', $type);
 		}
 	}
 } 

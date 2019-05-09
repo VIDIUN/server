@@ -1,18 +1,18 @@
 <?php
 /**
- * Will return all clips for kuser (in specific partner_id - a kuser is always in a partner context)
+ * Will return all clips for vuser (in specific partner_id - a vuser is always in a partner context)
  * 
  * @package Core
  * @subpackage ExternalServices
  */
-class myKalturaUserClipsServices extends myBaseMediaSource implements IMediaSource
+class myVidiunUserClipsServices extends myBaseMediaSource implements IMediaSource
 {
 	protected $supported_media_types = 7; // support all media//self::SUPPORT_MEDIA_TYPE_VIDEO + (int)self::SUPPORT_MEDIA_TYPE_IMAGE;  
 	protected $source_name = "My Clips";
 	protected $auth_method = array ( self::AUTH_METHOD_PUBLIC );
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_kaltura.gif";
-	protected $id = entry::ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS;
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_vidiun.gif";
+	protected $id = entry::ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS;
 	
 	private static $NEED_MEDIA_INFO = "0";
 	
@@ -44,40 +44,40 @@ class myKalturaUserClipsServices extends myBaseMediaSource implements IMediaSour
 		$objects = array();
 		
 		$should_serach = true;
-		if (kCurrentContext::isApiV3Context())
+		if (vCurrentContext::isApiV3Context())
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid(self::$partner_id, self::$puser_id);
+			$vuser = vuserPeer::getVuserByPartnerAndUid(self::$partner_id, self::$puser_id);
 			$should_serach = true;
-			$kuser_id = $kuser->getId();
+			$vuser_id = $vuser->getId();
 		}
 		else
 		{
-			$puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid ( self::$partner_id , self::$subp_id, self::$puser_id , true );		
-			if ( ! $puser_kuser )
+			$puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid ( self::$partner_id , self::$subp_id, self::$puser_id , true );		
+			if ( ! $puser_vuser )
 			{
 				// very bad - does not exist in system
 				$should_serach = false;  
 			}
 			else
 			{
-				$kuser = $puser_kuser->getKuser();
-				if ( !$kuser )
+				$vuser = $puser_vuser->getVuser();
+				if ( !$vuser )
 				{
 					$should_serach = false; 
 				}
 				else
 				{
-					$kuser_id = $kuser->getId();
+					$vuser_id = $vuser->getId();
 				}
 			}
 		}
 		
-//		echo "[" . self::$partner_id . "],[".  self::$subp_id . "],[" . self::$puser_id . "],[$kuser_id]";
+//		echo "[" . self::$partner_id . "],[".  self::$subp_id . "],[" . self::$puser_id . "],[$vuser_id]";
 		
 		if ( $should_serach )
 		{
-			$c = KalturaCriteria::create(entryPeer::OM_CLASS);
-			$c->add ( entryPeer::KUSER_ID , $kuser_id );
+			$c = VidiunCriteria::create(entryPeer::OM_CLASS);
+			$c->add ( entryPeer::VUSER_ID , $vuser_id );
 			$c->add ( entryPeer::MEDIA_TYPE , $media_type );
 			$c->add ( entryPeer::TYPE , entryType::MEDIA_CLIP );
 	
@@ -132,7 +132,7 @@ class myKalturaUserClipsServices extends myBaseMediaSource implements IMediaSour
 	
 	/**
 	*/
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 
 	}

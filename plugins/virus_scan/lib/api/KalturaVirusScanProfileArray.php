@@ -3,17 +3,17 @@
  * @package plugins.virusScan
  * @subpackage api.objects
  */
-class KalturaVirusScanProfileArray extends KalturaTypedArray
+class VidiunVirusScanProfileArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaVirusScanProfileArray();
+		$newArr = new VidiunVirusScanProfileArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaVirusScanProfile();
+    		$nObj = new VidiunVirusScanProfile();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaVirusScanProfileArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaVirusScanProfile");	
+		parent::__construct("VidiunVirusScanProfile");	
 	}
 }

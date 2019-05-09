@@ -3,7 +3,7 @@
  * @package plugins.audit
  * @subpackage api.objects
  */
-class KalturaAuditTrailChangeItem extends KalturaObject
+class VidiunAuditTrailChangeItem extends VidiunObject
 {
 	/**
 	 * @var string
@@ -34,14 +34,14 @@ class KalturaAuditTrailChangeItem extends KalturaObject
 	}
 	
 	/**
-	 * @param kAuditTrailChangeItem $dbAuditTrail
+	 * @param vAuditTrailChangeItem $dbAuditTrail
 	 * @param array $propsToSkip
-	 * @return kAuditTrailInfo
+	 * @return vAuditTrailInfo
 	 */
 	public function toObject($auditTrailInfo = null, $propsToSkip = array())
 	{
 		if(is_null($auditTrailInfo))
-			$auditTrailInfo = new kAuditTrailChangeItem();
+			$auditTrailInfo = new vAuditTrailChangeItem();
 			
 		return parent::toObject($auditTrailInfo, $propsToSkip);
 	}

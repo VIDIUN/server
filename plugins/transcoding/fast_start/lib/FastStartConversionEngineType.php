@@ -3,7 +3,7 @@
  * @package plugins.fastStart
  * @subpackage lib
  */
-class FastStartConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class FastStartConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const FAST_START = 'FastStart';
 	

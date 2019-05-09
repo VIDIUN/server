@@ -14,12 +14,12 @@ class DeliveryProfileGenericHdsManifest extends DeliveryProfileGenericHds {
 			$this->initDeliveryDynamicAttributes($this->params->getManifestFileSync());
 			if ($manifestFileSync->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_FILE)
 			{
-				// return kaltura urls with serveSmil / serveManifest
+				// return vidiun urls with serveSmil / serveManifest
 				$partnerPath = myPartnerUtils::getUrlForPartner($manifestFileSync->getPartnerId(), $manifestFileSync->getPartnerId() * 100);
 				$manifestObjectId = $manifestFileSync->getObjectId() . '_' . $manifestFileSync->getObjectSubType() . '_' . $manifestFileSync->getVersion();
 				$extension = pathinfo($manifestFileSync->getFilePath(), PATHINFO_EXTENSION);
 				$url = $partnerPath . '/serveManifest/objectId/' . $manifestObjectId . '.' . $extension;
-				$url = kDeliveryUtils::formatGenericUrl($url, $this->getPattern(), $this->params);
+				$url = vDeliveryUtils::formatGenericUrl($url, $this->getPattern(), $this->params);
 			}
 			else
 			{
@@ -29,7 +29,7 @@ class DeliveryProfileGenericHdsManifest extends DeliveryProfileGenericHds {
 			
 			return array($manifestInfo);
 		} else {
-			KalturaLog::log("No manifest file was found");
+			VidiunLog::log("No manifest file was found");
 			return null;
 		}
 	}

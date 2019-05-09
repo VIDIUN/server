@@ -3,14 +3,14 @@
  * @package plugins.varConsole
  * @subpackage api.types
  */
-class KalturaPartnerUsageListResponse extends KalturaListResponse
+class VidiunPartnerUsageListResponse extends VidiunListResponse
 {
     /**
-     * @var KalturaVarPartnerUsageItem
+     * @var VidiunVarPartnerUsageItem
      */
     public $total;
     /**
-     * @var KalturaVarPartnerUsageArray
+     * @var VidiunVarPartnerUsageArray
      */
     public $objects;
 }

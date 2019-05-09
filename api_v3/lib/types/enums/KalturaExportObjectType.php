@@ -4,7 +4,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaExportObjectType extends KalturaDynamicEnum implements ExportObjectType
+class VidiunExportObjectType extends VidiunDynamicEnum implements ExportObjectType
 {
 	public static function getEnumClass()
 	{

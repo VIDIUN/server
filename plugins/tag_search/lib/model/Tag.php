@@ -50,18 +50,18 @@ class Tag extends BaseTag implements IIndexable
 		parent::postInsert($con);
 	
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectReadyForIndexEvent($this));
+			vEventsManager::raiseEvent(new vObjectReadyForIndexEvent($this));
 	}
 	
 	/* (non-PHPdoc)
-	 * @see BasecategoryKuser::postUpdate()
+	 * @see BasecategoryVuser::postUpdate()
 	 */
 	public function postUpdate(PropelPDO $con = null)
 	{
 		parent::postUpdate($con);
 		
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 	}
 	
 	/**
@@ -87,7 +87,7 @@ class Tag extends BaseTag implements IIndexable
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
     
 	public function getIndexPrivacyContext ()

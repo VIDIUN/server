@@ -10,18 +10,18 @@ class ESearchCategoryEntryItemFactory
 	{
 		switch ($fieldName)
 		{
-			case KalturaESearchCategoryEntryFieldName::ID:
+			case VidiunESearchCategoryEntryFieldName::ID:
 				return new ESearchCategoryEntryIdItem();
-			case KalturaESearchCategoryEntryFieldName::NAME:
+			case VidiunESearchCategoryEntryFieldName::NAME:
 				return new ESearchCategoryEntryNameItem();
-			case KalturaESearchCategoryEntryFieldName::FULL_IDS:
+			case VidiunESearchCategoryEntryFieldName::FULL_IDS:
 				return new ESearchCategoryEntryFullIdsItem();
-			case KalturaESearchCategoryEntryFieldName::ANCESTOR_ID:
+			case VidiunESearchCategoryEntryFieldName::ANCESTOR_ID:
 				return new ESearchCategoryEntryAncestorIdItem();
-			case KalturaESearchCategoryEntryFieldName::ANCESTOR_NAME:
+			case VidiunESearchCategoryEntryFieldName::ANCESTOR_NAME:
 				return new ESearchCategoryEntryAncestorNameItem();
 			default:
-				KalturaLog::err("Unknown field name $fieldName in ESearchCategoryEntryItemFactory");
+				VidiunLog::err("Unknown field name $fieldName in ESearchCategoryEntryItemFactory");
 				return null;
 		}
 	}

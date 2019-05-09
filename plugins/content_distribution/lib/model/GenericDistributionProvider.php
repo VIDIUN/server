@@ -166,7 +166,7 @@ class GenericDistributionProvider extends BaseGenericDistributionProvider implem
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
@@ -184,7 +184,7 @@ class GenericDistributionProvider extends BaseGenericDistributionProvider implem
 	}
 	
 	/**
-	 * @return array<kDistributionThumbDimensions>
+	 * @return array<vDistributionThumbDimensions>
 	 */
 	public function getRequiredThumbDimensionsObjects()
 	{
@@ -197,7 +197,7 @@ class GenericDistributionProvider extends BaseGenericDistributionProvider implem
 				$requiredThumbDimensions = unserialize($requiredThumbDimensionsStr);
 			}
 			catch(Exception $e){
-				KalturaLog::err("Unable to unserialize [$requiredThumbDimensionsStr]");
+				VidiunLog::err("Unable to unserialize [$requiredThumbDimensionsStr]");
 			}
 		}
 			
@@ -208,7 +208,7 @@ class GenericDistributionProvider extends BaseGenericDistributionProvider implem
 	}
 	
 	/**
-	 * @param array<kDistributionThumbDimensions> $v
+	 * @param array<vDistributionThumbDimensions> $v
 	 * @return DistributionProfile The current object (for fluent API support)
 	 */
 	public function setRequiredThumbDimensionsObjects(array $v)
@@ -218,7 +218,7 @@ class GenericDistributionProvider extends BaseGenericDistributionProvider implem
 	}
 	
 	/**
-	 * @return array<kDistributionThumbDimensions>
+	 * @return array<vDistributionThumbDimensions>
 	 */
 	public function getOptionalThumbDimensionsObjects()
 	{
@@ -231,7 +231,7 @@ class GenericDistributionProvider extends BaseGenericDistributionProvider implem
 				$optionalThumbDimensions = unserialize($optionalThumbDimensionsStr);
 			}
 			catch(Exception $e){
-				KalturaLog::err("Unable to unserialize [$optionalThumbDimensionsStr]");
+				VidiunLog::err("Unable to unserialize [$optionalThumbDimensionsStr]");
 			}
 		}
 			
@@ -242,7 +242,7 @@ class GenericDistributionProvider extends BaseGenericDistributionProvider implem
 	}
 	
 	/**
-	 * @param array<kDistributionThumbDimensions> $v
+	 * @param array<vDistributionThumbDimensions> $v
 	 * @return DistributionProfile The current object (for fluent API support)
 	 */
 	public function setOptionalThumbDimensionsObjects(array $v)
@@ -252,7 +252,7 @@ class GenericDistributionProvider extends BaseGenericDistributionProvider implem
 	}
 	
 	/**
-	 * @return array<kDistributionThumbDimensions>
+	 * @return array<vDistributionThumbDimensions>
 	 */
 	public function getThumbDimensionsObjects()
 	{

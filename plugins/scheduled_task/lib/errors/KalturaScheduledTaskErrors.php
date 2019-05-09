@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage api.errors
  */
-class KalturaScheduledTaskErrors extends KalturaErrors
+class VidiunScheduledTaskErrors extends VidiunErrors
 {
 	const SCHEDULED_TASK_PROFILE_NOT_FOUND = "SCHEDULED_TASK_PROFILE_NOT_FOUND;ID;Scheduled task profile [@ID@] not found";
 

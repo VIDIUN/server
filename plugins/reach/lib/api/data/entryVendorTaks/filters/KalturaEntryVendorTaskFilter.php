@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.filters
  */
-class KalturaEntryVendorTaskFilter extends KalturaEntryVendorTaskBaseFilter
+class VidiunEntryVendorTaskFilter extends VidiunEntryVendorTaskBaseFilter
 {
 	/**
 	 * @var string
@@ -12,7 +12,7 @@ class KalturaEntryVendorTaskFilter extends KalturaEntryVendorTaskBaseFilter
 	
 	static private $map_between_objects = array
 	(
-		"userIdEqual" => "_eq_kuser_id",
+		"userIdEqual" => "_eq_vuser_id",
 		"freeText" => "_free_text",
 	);
 	
@@ -28,11 +28,11 @@ class KalturaEntryVendorTaskFilter extends KalturaEntryVendorTaskBaseFilter
 	
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaRelatedFilter::getListResponse()
+ 	 * @see VidiunRelatedFilter::getListResponse()
  	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$c = KalturaCriteria::create(EntryVendorTaskPeer::OM_CLASS);
+		$c = VidiunCriteria::create(EntryVendorTaskPeer::OM_CLASS);
 		$filter = $this->toObject();
 		$filter->attachToCriteria($c);
 		$pager->attachToCriteria($c);
@@ -42,24 +42,24 @@ class KalturaEntryVendorTaskFilter extends KalturaEntryVendorTaskBaseFilter
 		$list = EntryVendorTaskPeer::doSelect($c);
 		$totalCount = $c->getRecordsCount();
 		
-		$response = new KalturaEntryVendorTaskListResponse();
-		$response->objects = KalturaEntryVendorTaskArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunEntryVendorTaskListResponse();
+		$response->objects = VidiunEntryVendorTaskArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;
 	}
 	
 	/**
-	 * The user_id is infact a puser_id and the kuser_id should be retrieved
+	 * The user_id is infact a puser_id and the vuser_id should be retrieved
 	 */
 	private function fixFilterUserId(Criteria $c)
 	{
 		if ($this->userIdEqual !== null) 
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::getCurrentPartnerId(), $this->userIdEqual);
-			if ($kuser)
-				$c->add(EntryVendorTaskPeer::KUSER_ID, $kuser->getId());
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::getCurrentPartnerId(), $this->userIdEqual);
+			if ($vuser)
+				$c->add(EntryVendorTaskPeer::VUSER_ID, $vuser->getId());
 			else
-				$c->add(EntryVendorTaskPeer::KUSER_ID, -1); // no result will be returned when the user is missing
+				$c->add(EntryVendorTaskPeer::VUSER_ID, -1); // no result will be returned when the user is missing
 		}
 	}
 }

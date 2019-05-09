@@ -3,7 +3,7 @@
  * @package plugins.quickPlayDistribution
  * @subpackage model.data
  */
-class kQuickPlayDistributionJobProviderData extends kDistributionJobProviderData
+class vQuickPlayDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -20,7 +20,7 @@ class kQuickPlayDistributionJobProviderData extends kDistributionJobProviderData
 		$this->xml = $xml;
 	}
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

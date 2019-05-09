@@ -3,13 +3,13 @@
  * @package Core
  * @subpackage model.filters
  */ 
-class categoryKuserFilter extends baseObjectFilter
+class categoryVuserFilter extends baseObjectFilter
 {
 	public function init ()
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 				"_eq_category_id",
 				"_in_category_id",
 				"_eq_user_id",
@@ -36,7 +36,7 @@ class categoryKuserFilter extends baseObjectFilter
 		$this->allowed_order_fields = array ( "created_at" , "updated_at", "full_name");
 		
 		$this->aliases = array ( 
-			"user_id" => "kuser_id"
+			"user_id" => "vuser_id"
 		);
 	}
 
@@ -44,7 +44,7 @@ class categoryKuserFilter extends baseObjectFilter
 	{
 		return 
 			array (
-				"display_name" => "CategoryKuserFilter",
+				"display_name" => "CategoryVuserFilter",
 				"desc" => ""
 			);
 	}
@@ -53,13 +53,13 @@ class categoryKuserFilter extends baseObjectFilter
 	// The base class should invoke $peer_class::translateFieldName( $field_name , BasePeer::TYPE_FIELDNAME , BasePeer::TYPE_COLNAME );
 	public function getFieldNameFromPeer ( $field_name )
 	{
-		$res = categoryKuserPeer::translateFieldName( $field_name , $this->field_name_translation_type , BasePeer::TYPE_COLNAME );
+		$res = categoryVuserPeer::translateFieldName( $field_name , $this->field_name_translation_type , BasePeer::TYPE_COLNAME );
 		return $res;
 	}
 
 	public function getIdFromPeer (  )
 	{
-		return categoryKuserPeer::ID;
+		return categoryVuserPeer::ID;
 	}
 	
 	public function setCategoryIdEqual($v)

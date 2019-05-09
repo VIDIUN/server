@@ -1,1 +1,1 @@
-ALTER TABLE app_token ADD kuser_id INTEGER NULL AFTER custom_data, add index kuser_id(kuser_id);
+ALTER TABLE app_token ADD vuser_id INTEGER NULL AFTER custom_data, add index vuser_id(vuser_id);

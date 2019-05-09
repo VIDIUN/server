@@ -1,6 +1,6 @@
 <?php
 
-class KAMFData
+class VAMFData
 {
 	public $pts;
 	public $ts;
@@ -9,13 +9,13 @@ class KAMFData
 /**
  * @package plugins.cuePoint
  */
-class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEventConsumer, kObjectChangedEventConsumer, kObjectAddedEventConsumer, kObjectReplacedEventConsumer, kObjectCopiedEventConsumer
+class vCuePointManager implements vBatchJobStatusEventConsumer, vObjectDeletedEventConsumer, vObjectChangedEventConsumer, vObjectAddedEventConsumer, vObjectReplacedEventConsumer, vObjectCopiedEventConsumer
 {
 	const MAX_CUE_POINTS_TO_COPY_TO_VOD = 100;
 	const MAX_CUE_POINTS_TO_COPY = 1000;
 
 	/* (non-PHPdoc)
- 	 * @see kBatchJobStatusEventConsumer::updatedJob()
+ 	 * @see vBatchJobStatusEventConsumer::updatedJob()
  	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -39,7 +39,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		return true;
 	}
 
-	private function handleConvertLiveSegmentJobFinished(BatchJob $dbBatchJob, kConvertLiveSegmentJobData $data)
+	private function handleConvertLiveSegmentJobFinished(BatchJob $dbBatchJob, vConvertLiveSegmentJobData $data)
 	{
 		$files = self::getAssetDataFilesArray($data);
 
@@ -47,23 +47,23 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		$recordedVODDurationInMS = $amfArray[0];
 		array_shift($amfArray);
 		if (!unlink($files[0]))
-			KalturaLog::warning("failed to delete file " . $files[0]);
+			VidiunLog::warning("failed to delete file " . $files[0]);
 
 		$amfArray = self::parseAmfArrayAndShift($amfArray, 0);
 		$entry = $dbBatchJob->getEntry();
 		if (!isset($entry))
 		{
-			KalturaLog::warning("failed to get entry, not calling copyCuePointsFromLiveToVodEntry");
+			VidiunLog::warning("failed to get entry, not calling copyCuePointsFromLiveToVodEntry");
 			return $dbBatchJob;
 		}
 		self::copyCuePointsFromLiveToVodEntry($entry->getRecordedEntryId(), $recordedVODDurationInMS, $recordedVODDurationInMS, $amfArray);
 	}
 
-	private function handleConcatJobFinished(BatchJob $dbBatchJob, kConcatJobData $data)
+	private function handleConcatJobFinished(BatchJob $dbBatchJob, vConcatJobData $data)
 	{
 		if (!$dbBatchJob->getParentJob() || !$dbBatchJob->getParentJob()->getData())
 		{
-			KalturaLog::warning("failed to get parent job data, not calling copyCuePointsFromLiveToVodEntry");
+			VidiunLog::warning("failed to get parent job data, not calling copyCuePointsFromLiveToVodEntry");
 			return $dbBatchJob;
 		}
 		$convertJobData = ($dbBatchJob->getParentJob()->getData());
@@ -74,7 +74,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		$amfArray = array();
 
 		foreach($files as $file){
-			KalturaLog::debug('file is: ' . $file);
+			VidiunLog::debug('file is: ' . $file);
 
 			if (self::getSegmentIndexFromFileName($file) <= $lastFileIndex)
 			{
@@ -85,14 +85,14 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 				$amfArray = array_merge($amfArray, self::parseAmfArrayAndShift($arr, $segmentDuration));
 				$segmentDuration += $currentSegmentDuration;
 				if (!unlink($file))
-					KalturaLog::warning("failed to delete file " . $file);
+					VidiunLog::warning("failed to delete file " . $file);
 			}
 		}
 
 		$entry = $dbBatchJob->getParentJob()->getEntry();
 		if (!isset($entry))
 		{
-			KalturaLog::warning("failed to get entry, not calling copyCuePointsFromLiveToVodEntry");
+			VidiunLog::warning("failed to get entry, not calling copyCuePointsFromLiveToVodEntry");
 			return $dbBatchJob;
 		}
 
@@ -101,40 +101,40 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kClipConcatJobData $data
+	 * @param vClipConcatJobData $data
 	 */
 	private static function handleConcatAfterClipJobFinished($dbBatchJob, $data)
 	{
-		/** @var kClipDescription[] $kClipDescriptionArray */
-		$kClipDescriptionArray = self::getClipDescriptionFromOperationAttribute($data->getOperationAttributes(), $data->getSourceEntryId());
-		KalturaLog::debug("Cue Point Destination Entry ID: [{$data->getDestEntryId()}] and source entry ID: [{$data->getSourceEntryId()}]");
-		kJobsManager::addMultiClipCopyCuePointsJob($data->getDestEntryId(), $data->getPartnerId(), $kClipDescriptionArray);
+		/** @var vClipDescription[] $vClipDescriptionArray */
+		$vClipDescriptionArray = self::getClipDescriptionFromOperationAttribute($data->getOperationAttributes(), $data->getSourceEntryId());
+		VidiunLog::debug("Cue Point Destination Entry ID: [{$data->getDestEntryId()}] and source entry ID: [{$data->getSourceEntryId()}]");
+		vJobsManager::addMultiClipCopyCuePointsJob($data->getDestEntryId(), $data->getPartnerId(), $vClipDescriptionArray);
 	}
 
 	/**
-	 * @param kClipAttributes $operationAttribute
+	 * @param vClipAttributes $operationAttribute
 	 * @param int $globalOffset
-	 * @param kClipDescription $kClipDescription
+	 * @param vClipDescription $vClipDescription
 	 */
-	private static function setCuePointGlobalOffset($operationAttribute, $globalOffset, &$kClipDescription)
+	private static function setCuePointGlobalOffset($operationAttribute, $globalOffset, &$vClipDescription)
 	{
 		if ($operationAttribute->getGlobalOffsetInDestination() || $operationAttribute->getGlobalOffsetInDestination() === 0) {
-			$kClipDescription->setOffsetInDestination($operationAttribute->getGlobalOffsetInDestination());
+			$vClipDescription->setOffsetInDestination($operationAttribute->getGlobalOffsetInDestination());
 		} else {
-			$kClipDescription->setOffsetInDestination($globalOffset);
+			$vClipDescription->setOffsetInDestination($globalOffset);
 		}
 	}
 
-	private function handleExtractMediaFinished(BatchJob $dbBatchJob, kExtractMediaJobData $data)
+	private function handleExtractMediaFinished(BatchJob $dbBatchJob, vExtractMediaJobData $data)
 	{
 		$entry = entryPeer::retrieveByPKNoFilter($dbBatchJob->getEntryId());
 		if(!$entry)
 		{
-			KalturaLog::warning("Failed to get entry [{$dbBatchJob->getEntryId()}], not calling copyCuePointsFromLiveToVodEntry");
+			VidiunLog::warning("Failed to get entry [{$dbBatchJob->getEntryId()}], not calling copyCuePointsFromLiveToVodEntry");
 			return $dbBatchJob;
 		}
 		
-		if($entry->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE && $data->getDestDataFilePath())
+		if($entry->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE && $data->getDestDataFilePath())
 		{
 			$replacedEntry = $entry->getReplacedEntryId() ? entryPeer::retrieveByPK($entry->getReplacedEntryId()) : null;
 			$liveClipping = ($replacedEntry && $replacedEntry->getFlowType() == EntryFlowType::LIVE_CLIPPING);
@@ -147,21 +147,21 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 			$rawSyncPointDataPath = $data->getDestDataFilePath();
 			if(!$rawSyncPointDataPath)
 			{
-				KalturaLog::debug("SyncPoint data file pat not found, copy live to vod will not execute");
+				VidiunLog::debug("SyncPoint data file pat not found, copy live to vod will not execute");
 				return $dbBatchJob;
 			}
 			
-			$rawSyncPointInfo = kFile::getFileContent($rawSyncPointDataPath);
+			$rawSyncPointInfo = vFile::getFileContent($rawSyncPointDataPath);
 			if(!$rawSyncPointInfo)
 			{
-				KalturaLog::debug("Failed to read sync point info from file [$rawSyncPointDataPath], copy live to vod will not execute");
+				VidiunLog::debug("Failed to read sync point info from file [$rawSyncPointDataPath], copy live to vod will not execute");
 				return $dbBatchJob;
 			}
 
 			$liveEntry = entryPeer::retrieveByPK($liveEntryId);
-			if(!$liveEntry || !in_array($liveEntry->getSourceType(), LiveEntry::$kalturaLiveSourceTypes))
+			if(!$liveEntry || !in_array($liveEntry->getSourceType(), LiveEntry::$vidiunLiveSourceTypes))
 			{
-				KalturaLog::debug("Live entry with id [$liveEntryId] not found, this should not happen, copy live to vod will not execute");
+				VidiunLog::debug("Live entry with id [$liveEntryId] not found, this should not happen, copy live to vod will not execute");
 				return $dbBatchJob;
 			}
 			
@@ -170,7 +170,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 			foreach($syncPointInfoArr as $syncPoint)
 			{
 				$amfParts = explode(';', $syncPoint);
-				$curr = new KAMFData();
+				$curr = new VAMFData();
 				$curr->pts = $amfParts[0];
 				$curr->ts = $amfParts[1];
 				array_push($syncPointIntoToAmfArr, $curr);
@@ -188,7 +188,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 			//get last cue points sync, to avoid two sequential jobs working on the same cue points  
 			$lastCuePointSyncTime = self::getLatestCuePointSyncTime($liveEntry, reset($syncPointIntoToAmfArr), $lastSegmentDuration, $segmentDrift, $liveClipping);
 			
-			$liveToVodJobData = new kLiveToVodJobData();
+			$liveToVodJobData = new vLiveToVodJobData();
 			$liveToVodJobData->setLiveEntryId($liveEntryId);
 			$liveToVodJobData->setLastSegmentDuration($lastSegmentDuration);
 			$liveToVodJobData->setTotalVodDuration($totalVodDuration);
@@ -202,9 +202,9 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 			$liveToVodBatchJob->setPartnerId($entry->getPartnerId());
 
 			if ($liveClipping)
-				return kJobsManager::addJob($liveToVodBatchJob, $liveToVodJobData, BatchJobType::COPY_CUE_POINTS, CopyCuePointJobType::LIVE_CLIPPING);
+				return vJobsManager::addJob($liveToVodBatchJob, $liveToVodJobData, BatchJobType::COPY_CUE_POINTS, CopyCuePointJobType::LIVE_CLIPPING);
 			
-			kJobsManager::addJob($liveToVodBatchJob, $liveToVodJobData, BatchJobType::LIVE_TO_VOD);
+			vJobsManager::addJob($liveToVodBatchJob, $liveToVodJobData, BatchJobType::LIVE_TO_VOD);
 		}
 	}
 	
@@ -215,7 +215,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		$closest = self::getClosestSyncPointPts($totalVodDuration - $lastSegmentDuration, $syncPointIntoToAmfArr);
 		if(!$closest)
 		{
-			KalturaLog::debug("Closest pts not found for current segment");
+			VidiunLog::debug("Closest pts not found for current segment");
 			return $syncPointIntoToAmfArr;
 		}
 		
@@ -246,17 +246,17 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		return $closest->pts;
 	}
 
-	// Get an array of strings of the form pts;ts and return an array of KAMFData
+	// Get an array of strings of the form pts;ts and return an array of VAMFData
 	private static function parseAmfArrayAndShift($amfArray, $shift){
 		$retArr = array();
 
 		for($i=0; $i < count($amfArray); ++$i){
-			$amf = new KAMFData();
+			$amf = new VAMFData();
 			$amfParts = explode(';', $amfArray[$i]);
 			$amf->pts = $amfParts[0] + $shift;
 			$amf->ts = $amfParts[1];
 
-			KalturaLog::debug('adding AMF to AMFs: ' . print_r($amf, true) . ' extracted from ' . $amfArray[$i]);
+			VidiunLog::debug('adding AMF to AMFs: ' . print_r($amf, true) . ' extracted from ' . $amfArray[$i]);
 			array_push($retArr, $amf);
 		}
 		return $retArr;
@@ -267,7 +267,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		/** @var $liveEntry LiveEntry */
 		if ($liveClipping)
 		{
-			KalturaLog::debug("Live Clipping Flow on [" . $liveEntry->getId() . "] , return lastSyncTime as created Time");
+			VidiunLog::debug("Live Clipping Flow on [" . $liveEntry->getId() . "] , return lastSyncTime as created Time");
 			return $liveEntry->getCreatedAt(null);
 		}
 
@@ -276,17 +276,17 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 			$lastCuePointSyncTime = $liveEntry->getCreatedAt(null);
 
 		$currentCuePointSyncTime =  (($syncPoint->ts - $syncPoint->pts) + $lastSegmentDuration + $segmentDrift) / 1000;
-		KalturaLog::debug("LastCuePointSyncTime found with value [$lastCuePointSyncTime], new one is set to [$currentCuePointSyncTime]");
+		VidiunLog::debug("LastCuePointSyncTime found with value [$lastCuePointSyncTime], new one is set to [$currentCuePointSyncTime]");
 		$liveEntry->setLastCuePointSyncTime($currentCuePointSyncTime);
 		$liveEntry->save();
 		return $lastCuePointSyncTime;
 	}
 
-	private function getAssetDataFilesArray(kConvertLiveSegmentJobData $data){
+	private function getAssetDataFilesArray(vConvertLiveSegmentJobData $data){
 
 		$amfFilesDir = dirname($data->getDestDataFilePath());
 		$pattern = "/{$data->getEntryId()}_{$data->getAssetId()}_{$data->getMediaServerIndex()}_[0-9]*.data/";
-		$files = kFile::recursiveDirList($amfFilesDir, true, false, $pattern);
+		$files = vFile::recursiveDirList($amfFilesDir, true, false, $pattern);
 		natsort($files);
 		return $files;
 	}
@@ -299,7 +299,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
- 	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+ 	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
  	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -335,7 +335,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -345,7 +345,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
@@ -362,7 +362,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
+	 * @see vObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
 	 */
 	public function shouldConsumeReplacedEvent(BaseObject $object)
 	{
@@ -373,7 +373,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
+	 * @see vObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
 	 */
 	public function shouldConsumeCopiedEvent(BaseObject $fromObject, BaseObject $toObject)
 	{
@@ -409,7 +409,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -420,7 +420,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -446,7 +446,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 
 
 	/* (non-PHPdoc)
-	 * @see kObjectReplacedEventConsumer::objectReplaced()
+	 * @see vObjectReplacedEventConsumer::objectReplaced()
 	*/
 	public function objectReplaced(BaseObject $object, BaseObject $replacingObject, BatchJob $raisedJob = null) {
 		//replacement as a result of convertLiveSegmentFinished
@@ -456,14 +456,14 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		$c = new Criteria();
 		$c->add(CuePointPeer::ENTRY_ID, $object->getId());
 		if ( CuePointPeer::doCount($c) > self::MAX_CUE_POINTS_TO_COPY ) {
-			KalturaLog::alert("Can't handle cuePoints after replacement for entry [{$object->getId()}] because cuePoints count exceeded max limit of [" . self::MAX_CUE_POINTS_TO_COPY . "]");
+			VidiunLog::alert("Can't handle cuePoints after replacement for entry [{$object->getId()}] because cuePoints count exceeded max limit of [" . self::MAX_CUE_POINTS_TO_COPY . "]");
 			return true;
 		}
 		$clipAttributes = self::getClipAttributesFromEntry( $replacingObject );
 		$isClipConcatTrimFlow = self::isClipConcatTrimFlow( $replacingObject );
 		//replacement as a result of trimming
 		if ( !is_null($clipAttributes) || $isClipConcatTrimFlow ) {
-			kEventsManager::setForceDeferredEvents( true );
+			vEventsManager::setForceDeferredEvents( true );
 			$this->deleteCuePoints($c);
 			//copy cuepoints from replacement entry
 			$replacementCuePoints = CuePointPeer::retrieveByEntryId($replacingObject->getId());
@@ -471,7 +471,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 				$cuePoint->setEntryId($object->getId());
 				$cuePoint->save();
 			}
-			kEventsManager::flushEvents();
+			vEventsManager::flushEvents();
 		} else if (PermissionPeer::isValidForPartner(CuePointPermissionName::REMOVE_CUE_POINTS_WHEN_REPLACING_MEDIA, $object->getPartnerId())) {
 			$this->deleteCuePoints($c);
 		}
@@ -485,10 +485,10 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	private static function getCuePointTypeToClone($entry)
 	{
 		$listOfEnumIds = array();
-		$cue_point_plugin_map = kPluginableEnumsManager::getCoreMap('CuePointType');
+		$cue_point_plugin_map = vPluginableEnumsManager::getCoreMap('CuePointType');
 		foreach ($cue_point_plugin_map as $dynamic_enum_id => $plugin_name)
 		{
-			$plugin = kPluginableEnumsManager::getPlugin($plugin_name);
+			$plugin = vPluginableEnumsManager::getPlugin($plugin_name);
 			if($plugin::shouldCloneByProperty($entry)==true) {
 				$listOfEnumIds[] = $dynamic_enum_id;
 			}
@@ -497,12 +497,12 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::objectCopied()
+	 * @see vObjectCopiedEventConsumer::objectCopied()
 	 */
 	public function objectCopied(BaseObject $fromObject, BaseObject $toObject)
 	{
 		if($fromObject instanceof entry) {
-			$c = new KalturaCriteria();
+			$c = new VidiunCriteria();
 			$c->add(CuePointPeer::ENTRY_ID, $fromObject->getId());
 			$c->addAscendingOrderByColumn(CuePointPeer::CREATED_AT);
 			$c->setLimit(self::MAX_CUE_POINTS_TO_COPY);
@@ -518,14 +518,14 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 
 	/**
 	 * @param BaseObject $entry entry to check
-	 * @return kClipAttributes|null
+	 * @return vClipAttributes|null
 	 */
 	protected static function getClipAttributesFromEntry( BaseObject $object ) {
 		if ( $object instanceof entry ) {
 			$operationAtts = $object->getOperationAttributes();
 			if ( !is_null($operationAtts) && count($operationAtts) > 0 ) {
 				$clipAtts = reset($operationAtts);
-				if ($clipAtts instanceof kClipAttributes) {
+				if ($clipAtts instanceof vClipAttributes) {
 					return $clipAtts;
 				}
 			}
@@ -591,7 +591,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		{
 			$cuePoint->setStatus(CuePointStatus::DELETED);
 			$cuePoint->indexToSearchIndex();
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($cuePoint));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($cuePoint));
 		}
 	}
 
@@ -608,7 +608,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		$entryId = $scene['entryId'];
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry)
-			throw new kCoreException("Entry [$entryId] not found", kCoreException::INVALID_ENTRY_ID);
+			throw new vCoreException("Entry [$entryId] not found", vCoreException::INVALID_ENTRY_ID);
 
 		if(isset($scene['sceneId']) && $scene['sceneId'])
 			$cuePoint = CuePointPeer::retrieveByPK($scene['sceneId']);
@@ -620,7 +620,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 			$cuePoint = $newCuePoint;
 
 		$cuePoint->setPartnerId($partnerId);
-		$cuePoint->setStartTime(kXml::timeToInteger($scene->sceneStartTime));
+		$cuePoint->setStartTime(vXml::timeToInteger($scene->sceneStartTime));
 
 		$tags = array();
 		foreach ($scene->tags->children() as $tag)
@@ -648,17 +648,17 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		$scene->addAttribute('sceneId', $cuePoint->getId());
 		$scene->addAttribute('entryId', $cuePoint->getEntryId());
 		if($cuePoint->getSystemName())
-			$scene->addAttribute('systemName', kMrssManager::stringToSafeXml($cuePoint->getSystemName()));
+			$scene->addAttribute('systemName', vMrssManager::stringToSafeXml($cuePoint->getSystemName()));
 
-		$scene->addChild('sceneStartTime', kXml::integerToTime($cuePoint->getStartTime()));
+		$scene->addChild('sceneStartTime', vXml::integerToTime($cuePoint->getStartTime()));
 		if($cuePoint->getPuserId())
-			$scene->addChild('userId', kMrssManager::stringToSafeXml($cuePoint->getPuserId()));
+			$scene->addChild('userId', vMrssManager::stringToSafeXml($cuePoint->getPuserId()));
 
 		if(trim($cuePoint->getTags(), " \r\n\t"))
 		{
 			$tags = $scene->addChild('tags');
 			foreach(explode(',', $cuePoint->getTags()) as $tag)
-				$tags->addChild('tag', kMrssManager::stringToSafeXml($tag));
+				$tags->addChild('tag', vMrssManager::stringToSafeXml($tag));
 		}
 
 		return $scene;
@@ -673,19 +673,19 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	{
 		$scene->addAttribute('sceneId', $cuePoint->getId());
 		if($cuePoint->getSystemName())
-			$scene->addAttribute('systemName', kMrssManager::stringToSafeXml($cuePoint->getSystemName()));
+			$scene->addAttribute('systemName', vMrssManager::stringToSafeXml($cuePoint->getSystemName()));
 
-		$scene->addChild('sceneStartTime', kXml::integerToTime($cuePoint->getStartTime()));
-		$scene->addChild('createdAt', ($cuePoint->getCreatedAt(kMrssManager::FORMAT_DATETIME)));
-		$scene->addChild('updatedAt', ($cuePoint->getCreatedAt(kMrssManager::FORMAT_DATETIME)));
+		$scene->addChild('sceneStartTime', vXml::integerToTime($cuePoint->getStartTime()));
+		$scene->addChild('createdAt', ($cuePoint->getCreatedAt(vMrssManager::FORMAT_DATETIME)));
+		$scene->addChild('updatedAt', ($cuePoint->getCreatedAt(vMrssManager::FORMAT_DATETIME)));
 		if($cuePoint->getPuserId())
-			$scene->addChild('userId', kMrssManager::stringToSafeXml($cuePoint->getPuserId()));
+			$scene->addChild('userId', vMrssManager::stringToSafeXml($cuePoint->getPuserId()));
 
 		if(trim($cuePoint->getTags(), " \r\n\t"))
 		{
 			$tags = $scene->addChild('tags');
 			foreach(explode(',', $cuePoint->getTags()) as $tag)
-				$tags->addChild('tag', kMrssManager::stringToSafeXml($tag));
+				$tags->addChild('tag', vMrssManager::stringToSafeXml($tag));
 		}
 
 		return $scene;
@@ -699,26 +699,26 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	public static function addFromXml($xmlPath, $partnerId)
 	{
 		if(!file_exists($xmlPath))
-			throw new kCuePointException("XML file [$xmlPath] not found", kCuePointException::XML_FILE_NOT_FOUND);
+			throw new vCuePointException("XML file [$xmlPath] not found", vCuePointException::XML_FILE_NOT_FOUND);
 
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		if(!$xml->load($xmlPath))
 		{
-			$errorMessage = kXml::getLibXmlErrorDescription(file_get_contents($xmlPath));
-			throw new kCuePointException("XML [$xmlPath] is invalid:\n{$errorMessage}", kCuePointException::XML_INVALID);
+			$errorMessage = vXml::getLibXmlErrorDescription(file_get_contents($xmlPath));
+			throw new vCuePointException("XML [$xmlPath] is invalid:\n{$errorMessage}", vCuePointException::XML_INVALID);
 		}
 
 		$xsdPath = SchemaService::getSchemaPath(CuePointPlugin::getApiValue(CuePointSchemaType::INGEST_API));
 		libxml_clear_errors();
 		if(!$xml->schemaValidate($xsdPath))
 		{
-			$errorMessage = kXml::getLibXmlErrorDescription(file_get_contents($xmlPath));
-			throw new kCuePointException("XML [$xmlPath] is invalid:\n{$errorMessage}", kCuePointException::XML_INVALID);
+			$errorMessage = vXml::getLibXmlErrorDescription(file_get_contents($xmlPath));
+			throw new vCuePointException("XML [$xmlPath] is invalid:\n{$errorMessage}", vCuePointException::XML_INVALID);
 		}
 
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaCuePointXmlParser');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunCuePointXmlParser');
 		$scenes = new SimpleXMLElement(file_get_contents($xmlPath));
 		$cuePoints = array();
 
@@ -747,7 +747,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	 */
 	public static function syndicate(array $cuePoints, SimpleXMLElement $scenes)
 	{
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaCuePointXmlParser');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunCuePointXmlParser');
 		foreach($cuePoints as $cuePoint)
 		{
 			$scene = null;
@@ -763,11 +763,11 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	public static function generateXml(array $cuePoints)
 	{
 		$schemaType = CuePointPlugin::getApiValue(CuePointSchemaType::SERVE_API);
-		$xsdUrl = "http://" . kConf::get('cdn_host') . "/api_v3/service/schema/action/serve/type/$schemaType";
+		$xsdUrl = "http://" . vConf::get('cdn_host') . "/api_v3/service/schema/action/serve/type/$schemaType";
 
 		$scenes = new SimpleXMLElement('<scenes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="' . $xsdUrl . '" />');
 
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaCuePointXmlParser');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunCuePointXmlParser');
 
 		foreach($cuePoints as $cuePoint)
 		{
@@ -778,28 +778,28 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 
 		$xmlContent = $scenes->asXML();
 
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		libxml_use_internal_errors(true);
 		libxml_clear_errors();
 		if(!$xml->loadXML($xmlContent))
 		{
-			$errorMessage = kXml::getLibXmlErrorDescription($xmlContent);
-			throw new kCuePointException("XML is invalid:\n{$errorMessage}", kCuePointException::XML_INVALID);
+			$errorMessage = vXml::getLibXmlErrorDescription($xmlContent);
+			throw new vCuePointException("XML is invalid:\n{$errorMessage}", vCuePointException::XML_INVALID);
 		}
 
 		$xsdPath = SchemaService::getSchemaPath($schemaType);
 		libxml_clear_errors();
 		if(!$xml->schemaValidate($xsdPath))
 		{
-			$errorMessage = kXml::getLibXmlErrorDescription($xmlContent);
-			throw new kCuePointException("XML is invalid:\n{$errorMessage}", kCuePointException::XML_INVALID);
+			$errorMessage = vXml::getLibXmlErrorDescription($xmlContent);
+			throw new vCuePointException("XML is invalid:\n{$errorMessage}", vCuePointException::XML_INVALID);
 		}
 
 		return $xmlContent;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -820,7 +820,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -896,7 +896,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		
 		if(!is_array($cuePointsIds) || !count($cuePointsIds))
 		{
-			KalturaLog::debug("No cue point to post process for entry [" . $liveEntry->getId() . "]");
+			VidiunLog::debug("No cue point to post process for entry [" . $liveEntry->getId() . "]");
 			return;
 		}
 		
@@ -929,13 +929,13 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 	 */
 	public static function copyCuePointsFromLiveToVodEntry( $vodEntryId, $totalVODDuration, $lastSegmentDuration, $amfArray )
 	{
-		KalturaLog::debug("VOD entry ID: " . $vodEntryId .
+		VidiunLog::debug("VOD entry ID: " . $vodEntryId .
 			" totalVODDuration: " . $totalVODDuration .
 			" lastSegmentDuration " . $lastSegmentDuration .
 			" AMFs: " . print_r($amfArray, true));
 
 		if (is_null($vodEntryId) || is_null($totalVODDuration) || is_null($lastSegmentDuration) || is_null($amfArray) || count($amfArray) == 0){
-			KalturaLog::warning('bad arguments passed to function. quiting');
+			VidiunLog::warning('bad arguments passed to function. quiting');
 			return;
 		}
 
@@ -946,18 +946,18 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		}
 		$liveEntryId = $vodEntry->getRootEntryId();
 
-		/** @var $liveEntry KalturaLiveEntry */
+		/** @var $liveEntry VidiunLiveEntry */
 		$liveEntry = entryPeer::retrieveByPK( $liveEntryId );
 		if ( ! $liveEntry || ! $liveEntry instanceof LiveEntry )
 		{
-			KalturaLog::err("Can't find live entry with id [$liveEntryId]");
+			VidiunLog::err("Can't find live entry with id [$liveEntryId]");
 			return;
  		}
 
 		if (!CuePointPeer::hasReadyCuePointOnEntry($liveEntryId))
 			return;
 
-		$jobData = new kLiveToVodJobData();
+		$jobData = new vLiveToVodJobData();
 		$jobData->setVodEntryId($vodEntryId);
 		$jobData->setLiveEntryId($liveEntryId);
 		$jobData->setTotalVodDuration($totalVODDuration);
@@ -968,7 +968,7 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		$batchJob->setEntryId($vodEntryId);
 		$batchJob->setPartnerId($vodEntry->getPartnerId());
 		
-		kJobsManager::addJob($batchJob, $jobData, BatchJobType::LIVE_TO_VOD);
+		vJobsManager::addJob($batchJob, $jobData, BatchJobType::LIVE_TO_VOD);
 		return;
  	}
 
@@ -1003,14 +1003,14 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 		if ( $clipAtts &&  !in_array($clipEntry->getFlowType(), $allowedFlows)) {
 			$sourceEntry = entryPeer::retrieveByPK( $clipEntry->getSourceEntryId() );
 			if ( is_null($sourceEntry) ) {
-				KalturaLog::info("Didn't copy cuePoints for entry [{$clipEntry->getId()}] because source entry [" . $clipEntry->getSourceEntryId() . "] wasn't found");
+				VidiunLog::info("Didn't copy cuePoints for entry [{$clipEntry->getId()}] because source entry [" . $clipEntry->getSourceEntryId() . "] wasn't found");
 				return;
 			}
 			$sourceEntryId = $sourceEntry->getID();
 			$destEntryId = $clipEntry->getID();
-			$kClipDescriptionArray = self::getClipDescriptionFromOperationAttribute(array($clipAtts), $sourceEntryId);
-			KalturaLog::debug("Execute Cue-Point copy for clip. From [$sourceEntryId] to [$destEntryId] with operation of " . print_r($kClipDescriptionArray, true));
-			return kJobsManager::addMultiClipCopyCuePointsJob($destEntryId, $clipEntry->getPartnerId(), $kClipDescriptionArray);
+			$vClipDescriptionArray = self::getClipDescriptionFromOperationAttribute(array($clipAtts), $sourceEntryId);
+			VidiunLog::debug("Execute Cue-Point copy for clip. From [$sourceEntryId] to [$destEntryId] with operation of " . print_r($vClipDescriptionArray, true));
+			return vJobsManager::addMultiClipCopyCuePointsJob($destEntryId, $clipEntry->getPartnerId(), $vClipDescriptionArray);
 		}
 	}
 
@@ -1024,27 +1024,27 @@ class kCuePointManager implements kBatchJobStatusEventConsumer, kObjectDeletedEv
 
 	private static function getClipDescriptionFromOperationAttribute($operationAttributes, $sourceEntryId)
 	{
-		$kClipDescriptionArray = array();
+		$vClipDescriptionArray = array();
 		$globalOffset = 0;
-		/** @var kClipAttributes $operationAttribute */
+		/** @var vClipAttributes $operationAttribute */
 		foreach ($operationAttributes as $operationAttribute)
 		{
-			$kClipDescription = new kClipDescription();
+			$vClipDescription = new vClipDescription();
 			if (!$sourceEntryId)
 			{
 				//if no source entry id we will not copy the entry. add clip offset to global offset and continue
 				$globalOffset = $globalOffset + $operationAttribute->getDuration();
 				continue;
 			}
-			$kClipDescription->setSourceEntryId($sourceEntryId);
-			$kClipDescription->setStartTime($operationAttribute->getOffset());
-			$kClipDescription->setDuration($operationAttribute->getDuration());
-			self::setCuePointGlobalOffset($operationAttribute, $globalOffset,$kClipDescription);
-			$kClipDescriptionArray[] = $kClipDescription;
+			$vClipDescription->setSourceEntryId($sourceEntryId);
+			$vClipDescription->setStartTime($operationAttribute->getOffset());
+			$vClipDescription->setDuration($operationAttribute->getDuration());
+			self::setCuePointGlobalOffset($operationAttribute, $globalOffset,$vClipDescription);
+			$vClipDescriptionArray[] = $vClipDescription;
 			//add clip offset to global offset
 			$globalOffset += $operationAttribute->getDuration();
 		}
-		return $kClipDescriptionArray;
+		return $vClipDescriptionArray;
 	}
 }
 

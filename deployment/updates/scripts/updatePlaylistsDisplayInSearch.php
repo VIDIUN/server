@@ -1,7 +1,7 @@
 <?php
 require_once (__DIR__ . '/../../bootstrap.php');
 
-$dbConfig = kConf::getDB();
+$dbConfig = vConf::getDB();
 
 if(!isset($dbConfig['datasources']) || !isset($dbConfig['datasources']['propel']) || !isset($dbConfig['datasources']['propel']['connection']))
 {
@@ -40,5 +40,5 @@ $mysqlQuery = "SELECT CONCAT('UPDATE entry SET display_in_search = ', appear_in_
 $mysqlExec = "mysql --skip-column-names -h$host -u$username -p$password $database";
 $exec = "echo \"$mysqlQuery\" | $mysqlExec | $mysqlExec";
 
-KalturaLog::debug("Executing: $exec");
+VidiunLog::debug("Executing: $exec");
 passthru($exec);

@@ -1,31 +1,31 @@
 <?php
 
 // AWS SDK PHP Client Library
-require_once(KAutoloader::buildPath(KALTURA_ROOT_PATH, 'vendor', 'aws', 'aws-autoloader.php'));
+require_once(VAutoloader::buildPath(VIDIUN_ROOT_PATH, 'vendor', 'aws', 'aws-autoloader.php'));
 
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\Enum\CannedAcl;
 
 /**
- * Extends the 'kFileTransferMgr' class & implements a file transfer manager using the Amazon S3 protocol with Authentication Version 4.
- * For additional comments please look at the 'kFileTransferMgr' class.
+ * Extends the 'vFileTransferMgr' class & implements a file transfer manager using the Amazon S3 protocol with Authentication Version 4.
+ * For additional comments please look at the 'vFileTransferMgr' class.
  *
  * @package infra
  * @subpackage Storage
  */
-class s3Mgr extends kFileTransferMgr
+class s3Mgr extends vFileTransferMgr
 {
 	private $s3;
 	const MULTIPART_UPLOAD_MINIMUM_FILE_SIZE = 5368709120;
 	protected $filesAcl = CannedAcl::PRIVATE_ACCESS;
 	protected $s3Region = '';
 	protected $sseType = '';
-	protected $sseKmsKeyId = '';
+	protected $sseVmsKeyId = '';
 	protected $signatureType = null;
 	protected $endPoint = null;
 	
-	// instances of this class should be created usign the 'getInstance' of the 'kFileTransferMgr' class
+	// instances of this class should be created usign the 'getInstance' of the 'vFileTransferMgr' class
 	protected function __construct(array $options = null)
 	{
 		parent::__construct($options);
@@ -45,9 +45,9 @@ class s3Mgr extends kFileTransferMgr
 			$this->sseType = $options['sseType'];
 		}
 		
-		if($options && isset($options['sseKmsKeyId']))
+		if($options && isset($options['sseVmsKeyId']))
 		{
-			$this->sseKmsKeyId = $options['sseKmsKeyId'];
+			$this->sseVmsKeyId = $options['sseVmsKeyId'];
 		}
 		
 		if($options && isset($options['signatureType']))
@@ -72,7 +72,7 @@ class s3Mgr extends kFileTransferMgr
 	}
 
 	/**********************************************************************/
-	/* Implementation of abstract functions from class 'kFileTransferMgr' */
+	/* Implementation of abstract functions from class 'vFileTransferMgr' */
 	/**********************************************************************/
 
 	// sftp connect to server:port
@@ -84,13 +84,13 @@ class s3Mgr extends kFileTransferMgr
 
 	// login to an existing connection with given user/pass (ftp_passive_mode is irrelevant)
 	//
-	// S3 Signature is required to be V4 for SSE-KMS support. Newer S3 regions also require V4.
+	// S3 Signature is required to be V4 for SSE-VMS support. Newer S3 regions also require V4.
 	//
 	protected function doLogin($sftp_user, $sftp_pass)
 	{
 		if(!class_exists('Aws\S3\S3Client')) 
 		{
-			KalturaLog::err('Class Aws\S3\S3Client was not found!!');
+			VidiunLog::err('Class Aws\S3\S3Client was not found!!');
 			return false;
 		}
 
@@ -131,10 +131,10 @@ class s3Mgr extends kFileTransferMgr
 		$retries = 3;
 
 		$params = array();
-		if ($this->sseType === "KMS")
+		if ($this->sseType === "VMS")
 		{
-			$params['ServerSideEncryption'] = "aws:kms";
-			$params['SSEKMSKeyId'] = $this->sseKmsKeyId;
+			$params['ServerSideEncryption'] = "aws:vms";
+			$params['SSEVMSKeyId'] = $this->sseVmsKeyId;
 		}
 
 		if ($this->sseType === "AES256")
@@ -148,26 +148,26 @@ class s3Mgr extends kFileTransferMgr
 			if ($success)
 				return true;
 
-			KalturaLog::debug("Failed to export File: " . $remote_file . " number of retries left: " . $retries);
+			VidiunLog::debug("Failed to export File: " . $remote_file . " number of retries left: " . $retries);
 			$retries--;
 		}
 		//throw temporary exception so that the batch will retry
-		throw new kTemporaryException("Can't put file [$remote_file] - " . $message);
+		throw new vTemporaryException("Can't put file [$remote_file] - " . $message);
 	}
 
 	private function doPutFileHelper($remote_file , $local_file, $params)
 	{
 		list($bucket, $remote_file) = explode("/", ltrim($remote_file, "/"), 2);
-		KalturaLog::debug("remote_file: " . $remote_file);
+		VidiunLog::debug("remote_file: " . $remote_file);
 		$fp = null;
 		try
 		{
 			$size = filesize($local_file);
-			KalturaLog::debug("file size is : " . $size);
+			VidiunLog::debug("file size is : " . $size);
 
 			if ($size > self::MULTIPART_UPLOAD_MINIMUM_FILE_SIZE)
 			{
-				KalturaLog::debug("Executing Multipart upload to S3: for " . $local_file);
+				VidiunLog::debug("Executing Multipart upload to S3: for " . $local_file);
 				$fp = fopen($local_file, 'r');
 				$res = $this->s3->upload($bucket,
 					$remote_file,
@@ -179,7 +179,7 @@ class s3Mgr extends kFileTransferMgr
 			}
 			else
 			{
-				KalturaLog::debug("Executing Single-part upload to S3: for " . $local_file);
+				VidiunLog::debug("Executing Single-part upload to S3: for " . $local_file);
 				$params['Bucket'] = $bucket;
 				$params['Key'] = $remote_file;
 				$params['SourceFile'] = $local_file;
@@ -188,7 +188,7 @@ class s3Mgr extends kFileTransferMgr
 				$res = $this->s3->putObject($params);
 			}
 
-			KalturaLog::debug("File uploaded to Amazon, info: " . print_r($res, true));
+			VidiunLog::debug("File uploaded to Amazon, info: " . print_r($res, true));
 			return array(true, null);
 		}
 		catch (Exception $e)
@@ -197,7 +197,7 @@ class s3Mgr extends kFileTransferMgr
 			{
 				fclose($fp);
 			}
-			KalturaLog::err("error uploading file " . $local_file . " s3 info: " . $e->getMessage());
+			VidiunLog::err("error uploading file " . $local_file . " s3 info: " . $e->getMessage());
 			return array(false, $e->getMessage());
 		}
 	}
@@ -206,7 +206,7 @@ class s3Mgr extends kFileTransferMgr
 	protected function doGetFile ($remote_file, $local_file = null)
 	{
 		list($bucket, $remote_file) = explode("/",ltrim($remote_file,"/"),2);
-		KalturaLog::debug("remote_file: ".$remote_file);
+		VidiunLog::debug("remote_file: ".$remote_file);
 
 		$params = array(
 				'Bucket' => $bucket,
@@ -247,7 +247,7 @@ class s3Mgr extends kFileTransferMgr
 		{
 			return true;
 		}
-		KalturaLog::debug("remote_file: ".$remote_file);
+		VidiunLog::debug("remote_file: ".$remote_file);
 
 		$exists = $this->s3->doesObjectExist($bucket, $remote_file);
 		return $exists;
@@ -268,7 +268,7 @@ class s3Mgr extends kFileTransferMgr
 	protected function doDelFile ($remote_file)
 	{
 		list($bucket, $remote_file) = explode("/",ltrim($remote_file,"/"),2);
-		KalturaLog::debug("remote_file: ".$remote_file);
+		VidiunLog::debug("remote_file: ".$remote_file);
 
 		$deleted = false;
 		try
@@ -282,7 +282,7 @@ class s3Mgr extends kFileTransferMgr
 		}
 		catch ( Exception $e )
 		{
-			KalturaLog::err("Couldn't delete file [$remote_file] from bucket [$bucket]: {$e->getMessage()}");
+			VidiunLog::err("Couldn't delete file [$remote_file] from bucket [$bucket]: {$e->getMessage()}");
 		}
 		
 		return $deleted;

@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaShortLinkBaseFilter extends KalturaFilter
+abstract class VidiunShortLinkBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -117,7 +117,7 @@ abstract class KalturaShortLinkBaseFilter extends KalturaFilter
 	public $systemNameIn;
 
 	/**
-	 * @var KalturaShortLinkStatus
+	 * @var VidiunShortLinkStatus
 	 */
 	public $statusEqual;
 

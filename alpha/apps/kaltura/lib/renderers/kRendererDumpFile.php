@@ -1,13 +1,13 @@
 <?php
 
 require_once(dirname(__file__) . '/../request/infraRequestUtils.class.php');
-require_once(dirname(__file__) . '/kRendererBase.php');
-require_once(dirname(__file__) . '/../../../../../infra/storage/kEncryptFileUtils.php');
+require_once(dirname(__file__) . '/vRendererBase.php');
+require_once(dirname(__file__) . '/../../../../../infra/storage/vEncryptFileUtils.php');
 /*
  * @package server-infra
  * @subpackage renderers
  */
-class kRendererDumpFile implements kRendererBase
+class vRendererDumpFile implements vRendererBase
 {
 	const CACHE_FILE_CONTENTS_MAX_SIZE = 262144;	// 256K
 	
@@ -43,14 +43,14 @@ class kRendererDumpFile implements kRendererBase
 		{
 			clearstatcache();
 			if (!$fileSize || $fileSize < 0)
-				$fileSize = kEncryptFileUtils::fileSize($filePath, $key, $iv);
+				$fileSize = vEncryptFileUtils::fileSize($filePath, $key, $iv);
 			$this->fileSize = $fileSize;
 			$this->xSendFileAllowed = $xSendFileAllowed;
 		}
 		
 		if ($this->fileSize && $this->fileSize < self::CACHE_FILE_CONTENTS_MAX_SIZE)
 		{
-			$this->fileData = kEncryptFileUtils::getEncryptedFileContent($this->filePath, $key, $iv, 0, $limitFileSize);
+			$this->fileData = vEncryptFileUtils::getEncryptedFileContent($this->filePath, $key, $iv, 0, $limitFileSize);
 		}
 	}
 	
@@ -76,9 +76,9 @@ class kRendererDumpFile implements kRendererBase
 		else
 			list($rangeFrom, $rangeTo, $rangeLength) = infraRequestUtils::handleRangeRequest($this->fileSize);
 
-		if (class_exists('KalturaMonitorClient'))
+		if (class_exists('VidiunMonitorClient'))
 		{
-			KalturaMonitorClient::monitorDumpFile($this->fileSize, $this->filePath);
+			VidiunMonitorClient::monitorDumpFile($this->fileSize, $this->filePath);
 		}
 				
 		infraRequestUtils::sendCdnHeaders($this->fileExt, $rangeLength, $this->maxAge, $this->mimeType, false, $this->lastModified);
@@ -94,13 +94,13 @@ class kRendererDumpFile implements kRendererBase
 		}
 		else if ($useXsendFile)
 		{
-			header('X-Kaltura-Sendfile:');
+			header('X-Vidiun-Sendfile:');
 			header("X-Sendfile: {$this->filePath}");
 		}
 		else
 		{
 			if ($this->key)
-				kEncryptFileUtils::dumpEncryptFilePart($this->filePath, $this->key, $this->iv, $rangeFrom, $rangeLength);
+				vEncryptFileUtils::dumpEncryptFilePart($this->filePath, $this->key, $this->iv, $rangeFrom, $rangeLength);
 			else
 				infraRequestUtils::dumpFilePart($this->filePath, $rangeFrom, $rangeLength);		
 		}

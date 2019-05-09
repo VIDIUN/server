@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.enum
  */
-class KalturaMetadataObjectType extends KalturaDynamicEnum implements MetadataObjectType
+class VidiunMetadataObjectType extends VidiunDynamicEnum implements MetadataObjectType
 {
 	public static function getEnumClass()
 	{

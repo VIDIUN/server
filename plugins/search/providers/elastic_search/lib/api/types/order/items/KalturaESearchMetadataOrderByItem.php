@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchMetadataOrderByItem extends KalturaESearchOrderByItem
+class VidiunESearchMetadataOrderByItem extends VidiunESearchOrderByItem
 {
 	/**
 	 *  @var string

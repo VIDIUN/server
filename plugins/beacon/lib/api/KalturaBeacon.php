@@ -4,7 +4,7 @@
  * @package plugins.beacon
  * @subpackage api.objects
  */
-class KalturaBeacon extends KalturaObject implements IFilterable
+class VidiunBeacon extends VidiunObject implements IFilterable
 {
 	/**
 	 * Beacon id
@@ -34,7 +34,7 @@ class KalturaBeacon extends KalturaObject implements IFilterable
 	/**
 	 * The object which this beacon belongs to
 	 *
-	 * @var KalturaBeaconObjectTypes
+	 * @var VidiunBeaconObjectTypes
 	 * @filter eq,in
 	 */
 	public $relatedObjectType;
@@ -97,12 +97,12 @@ class KalturaBeacon extends KalturaObject implements IFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if (is_null($object_to_fill))
-			$object_to_fill = new kBeacon();
+			$object_to_fill = new vBeacon();
 		
 		return parent::toInsertableObject($object_to_fill, $props_to_skip);
 	}
@@ -111,15 +111,15 @@ class KalturaBeacon extends KalturaObject implements IFilterable
 	{
 		parent::fromArray($source_array);
 		
-		$this->updatedAt = $source_array[kBeacon::FIELD_UPDATED_AT];
-		$this->relatedObjectType = $source_array[kBeacon::FIELD_RELATED_OBJECT_TYPE];
-		$this->eventType = $source_array[kBeacon::FIELD_EVENT_TYPE];
-		$this->objectId = $source_array[kBeacon::FIELD_OBJECT_ID];
+		$this->updatedAt = $source_array[vBeacon::FIELD_UPDATED_AT];
+		$this->relatedObjectType = $source_array[vBeacon::FIELD_RELATED_OBJECT_TYPE];
+		$this->eventType = $source_array[vBeacon::FIELD_EVENT_TYPE];
+		$this->objectId = $source_array[vBeacon::FIELD_OBJECT_ID];
 		
-		if (isset($source_array[kBeacon::FIELD_PRIVATE_DATA]))
-			$this->privateData = json_encode($source_array[kBeacon::FIELD_PRIVATE_DATA]);
+		if (isset($source_array[vBeacon::FIELD_PRIVATE_DATA]))
+			$this->privateData = json_encode($source_array[vBeacon::FIELD_PRIVATE_DATA]);
 		
-		if (isset($source_array[kBeacon::FIELD_RAW_DATA]))
-			$this->rawData = $source_array[kBeacon::FIELD_RAW_DATA];
+		if (isset($source_array[vBeacon::FIELD_RAW_DATA]))
+			$this->rawData = $source_array[vBeacon::FIELD_RAW_DATA];
 	}
 }

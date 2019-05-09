@@ -45,7 +45,7 @@ class EventNotificationTemplatePeer extends BaseEventNotificationTemplatePeer
 			if (isset ( self::$class_types_cache [$type] ))
 				return self::$class_types_cache [$type];
 			
-			$extendedCls = KalturaPluginManager::getObjectClass ( 'EventNotificationTemplate', $type );
+			$extendedCls = VidiunPluginManager::getObjectClass ( 'EventNotificationTemplate', $type );
 			if ($extendedCls)
 			{
 				self::$class_types_cache [$type] = $extendedCls;
@@ -53,7 +53,7 @@ class EventNotificationTemplatePeer extends BaseEventNotificationTemplatePeer
 			}
 		}
 		
-		throw new kCoreException ( "Event notification template type [$type] not found", kCoreException::OBJECT_TYPE_NOT_FOUND, $type );
+		throw new vCoreException ( "Event notification template type [$type] not found", vCoreException::OBJECT_TYPE_NOT_FOUND, $type );
 	}
 	
 	/* (non-PHPdoc)
@@ -172,7 +172,7 @@ class EventNotificationTemplatePeer extends BaseEventNotificationTemplatePeer
 		// use the partner ids list if given
 		if (!$partnerIds)
 		{
-		    $partnerIds = array (kCurrentContext::getCurrentPartnerId());
+		    $partnerIds = array (vCurrentContext::getCurrentPartnerId());
 		}
 		
 		$criteria->add(EventNotificationTemplatePeer::PARTNER_ID, array_map('strval',  $partnerIds), Criteria::IN);

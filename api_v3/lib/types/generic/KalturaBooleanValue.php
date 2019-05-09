@@ -2,11 +2,11 @@
 /**
  * A boolean representation to return an array of booleans
  * 
- * @see KalturaBooleanValueArray
+ * @see VidiunBooleanValueArray
  * @package api
  * @subpackage objects
  */
-class KalturaBooleanValue extends KalturaValue
+class VidiunBooleanValue extends VidiunValue
 {
 	/**
 	 * @var bool
@@ -14,12 +14,12 @@ class KalturaBooleanValue extends KalturaValue
     public $value;
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kBooleanValue();
+			$dbObject = new vBooleanValue();
 			
 		return parent::toObject($dbObject, $skip);
 	}

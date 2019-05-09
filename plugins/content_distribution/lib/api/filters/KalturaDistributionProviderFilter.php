@@ -3,10 +3,10 @@
  * @package plugins.contentDistribution
  * @subpackage api.filters
  */
-class KalturaDistributionProviderFilter extends KalturaDistributionProviderBaseFilter
+class VidiunDistributionProviderFilter extends VidiunDistributionProviderBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

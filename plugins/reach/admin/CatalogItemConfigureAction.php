@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class CatalogItemConfigureAction extends KalturaApplicationPlugin
+class CatalogItemConfigureAction extends VidiunApplicationPlugin
 {
 	/**
 	 * @return string - absolute file path of the phtml template
@@ -33,20 +33,20 @@ class CatalogItemConfigureAction extends KalturaApplicationPlugin
 				$form = $this->handleNewCatalogItem($action);
 		} catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 			if ($form)
 			{
 				$formData = $action->getRequest()->getPost();
 				$form->populate($formData);
-				if ($formData['catalogItemTypeForView'] == Kaltura_Client_Reach_Enum_VendorServiceFeature::CAPTIONS)
-					$catalogItem = $form->getObject('Kaltura_Client_Reach_Type_VendorCaptionsCatalogItem', $formData, false, true);
-				elseif ($formData['catalogItemTypeForView'] == Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
-					$catalogItem = $form->getObject('Kaltura_Client_Reach_Type_VendorTranslationCatalogItem', $formData, false, true);
-				elseif ($formData['catalogItemTypeForView'] == Kaltura_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT)
-					$catalogItem = $form->getObject('Kaltura_Client_Reach_Type_VendorAlignmentCatalogItem', $formData, false, true);
-				elseif ($formData['catalogItemTypeForView'] == Kaltura_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
-					$catalogItem = $form->getObject('Kaltura_Client_Reach_Type_VendorAudioDescriptionCatalogItem', $formData, false, true);
+				if ($formData['catalogItemTypeForView'] == Vidiun_Client_Reach_Enum_VendorServiceFeature::CAPTIONS)
+					$catalogItem = $form->getObject('Vidiun_Client_Reach_Type_VendorCaptionsCatalogItem', $formData, false, true);
+				elseif ($formData['catalogItemTypeForView'] == Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
+					$catalogItem = $form->getObject('Vidiun_Client_Reach_Type_VendorTranslationCatalogItem', $formData, false, true);
+				elseif ($formData['catalogItemTypeForView'] == Vidiun_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT)
+					$catalogItem = $form->getObject('Vidiun_Client_Reach_Type_VendorAlignmentCatalogItem', $formData, false, true);
+				elseif ($formData['catalogItemTypeForView'] == Vidiun_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
+					$catalogItem = $form->getObject('Vidiun_Client_Reach_Type_VendorAudioDescriptionCatalogItem', $formData, false, true);
 			}
 		}
 		$action->view->form = $form;
@@ -67,7 +67,7 @@ class CatalogItemConfigureAction extends KalturaApplicationPlugin
 			$this->handlePost($action, $form, null, $cloneTemplateId);
 		} else
 		{
-			$reachPluginClient = Kaltura_Client_Reach_Plugin::get($this->client);
+			$reachPluginClient = Vidiun_Client_Reach_Plugin::get($this->client);
 			$catalogItem = $reachPluginClient->vendorCatalogItem->get($cloneTemplateId);
 			$catalogItemType = $catalogItem->serviceFeature;
 			$catalogItemServiceType = $catalogItem->serviceType;
@@ -86,7 +86,7 @@ class CatalogItemConfigureAction extends KalturaApplicationPlugin
 	protected function handleExistingCatalogItem($action, $catalogItemId)
 	{
 		$request = $action->getRequest();
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($this->client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($this->client);
 		$catalogItem = $reachPluginClient->vendorCatalogItem->get($catalogItemId);
 		$catalogItemType = $catalogItem->serviceFeature;
 		$serviceType = $catalogItem->serviceType;
@@ -130,7 +130,7 @@ class CatalogItemConfigureAction extends KalturaApplicationPlugin
 	 */
 	protected function handlePost($action, ConfigureForm $form, $catalogItemId = null, $cloneTemplateId = null)
 	{
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($this->client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($this->client);
 		$formData = $action->getRequest()->getPost();
 		$form->populate($formData);
 		if ($form->isValid($formData))
@@ -141,14 +141,14 @@ class CatalogItemConfigureAction extends KalturaApplicationPlugin
 				$catalogItemId = $catalogItem->id;
 			}
 
-			if ($formData['type'] == Kaltura_Client_Reach_Enum_VendorServiceFeature::CAPTIONS)
-				$catalogItem = $form->getObject('Kaltura_Client_Reach_Type_VendorCaptionsCatalogItem', $formData, false, true);
-			elseif ($formData['type'] == Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
-				$catalogItem = $form->getObject('Kaltura_Client_Reach_Type_VendorTranslationCatalogItem', $formData, false, true);
-			elseif ($formData['type'] == Kaltura_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT)
-				$catalogItem = $form->getObject('Kaltura_Client_Reach_Type_VendorAlignmentCatalogItem', $formData, false, true);
-			elseif ($formData['type'] == Kaltura_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
-				$catalogItem = $form->getObject('Kaltura_Client_Reach_Type_VendorAudioDescriptionCatalogItem', $formData, false, true);
+			if ($formData['type'] == Vidiun_Client_Reach_Enum_VendorServiceFeature::CAPTIONS)
+				$catalogItem = $form->getObject('Vidiun_Client_Reach_Type_VendorCaptionsCatalogItem', $formData, false, true);
+			elseif ($formData['type'] == Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
+				$catalogItem = $form->getObject('Vidiun_Client_Reach_Type_VendorTranslationCatalogItem', $formData, false, true);
+			elseif ($formData['type'] == Vidiun_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT)
+				$catalogItem = $form->getObject('Vidiun_Client_Reach_Type_VendorAlignmentCatalogItem', $formData, false, true);
+			elseif ($formData['type'] == Vidiun_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
+				$catalogItem = $form->getObject('Vidiun_Client_Reach_Type_VendorAudioDescriptionCatalogItem', $formData, false, true);
 
 			$form->resetUnUpdatebleAttributes($catalogItem);
 			if($catalogItemId)

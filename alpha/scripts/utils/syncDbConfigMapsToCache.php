@@ -5,7 +5,7 @@ if($argc != 3)
 
 chdir(__DIR__.'/../');
 require_once(__DIR__ . '/../bootstrap.php');
-require_once __DIR__ . '/../../config/cache/kRemoteMemCacheConf.php';
+require_once __DIR__ . '/../../config/cache/vRemoteMemCacheConf.php';
 
 $port = $argv[1];
 $cacheHostList = explode(',',$argv[2]);
@@ -14,7 +14,7 @@ $cacheHostList = explode(',',$argv[2]);
 $cacheObjects = array();
 foreach ($cacheHostList as $cacheHost)
 {
-	$cacheObject = new kInfraMemcacheCacheWrapper();
+	$cacheObject = new vInfraMemcacheCacheWrapper();
 	$ret = $cacheObject->init(array('host'=>$cacheHost ,'port'=>$port));
 	if(!$ret)
 		die ("Failed to connect to cache host {$cacheHost} port {$port} ");
@@ -22,7 +22,7 @@ foreach ($cacheHostList as $cacheHost)
 }
 
 //Load existing map
-$mapListInCache = $cacheObjects[0]->get(kRemoteMemCacheConf::MAP_LIST_KEY);
+$mapListInCache = $cacheObjects[0]->get(vRemoteMemCacheConf::MAP_LIST_KEY);
 
 $dbConnection = getPdoConnection();
 //Find all exsiting map names in DB
@@ -40,7 +40,7 @@ foreach($mapsInfo as $mapInfo)
 	$cmdLine = "select version,content from conf_maps where conf_maps.map_name='$rawMapName' and conf_maps.host_name='$hostNameFilter' and status=1 order by version desc limit 1 ;";
 
 	$output2 = query($dbConnection,$cmdLine);
-	$mapName = $rawMapName.kRemoteMemCacheConf::MAP_DELIMITER.$hostNameFilter;
+	$mapName = $rawMapName.vRemoteMemCacheConf::MAP_DELIMITER.$hostNameFilter;
 	$version = $output2[0]['version'];
 	$content = $output2[0]['content'];
 	if(!isset($mapListInCache[$mapName]))
@@ -54,7 +54,7 @@ foreach($mapsInfo as $mapInfo)
 	$mapListInCache[$mapName]=$version;//set version
 	foreach ($cacheObjects as $cacheObject)
 	{
-		$cacheObject->set(kBaseConfCache::CONF_MAP_PREFIX.$mapName,$content);
+		$cacheObject->set(vBaseConfCache::CONF_MAP_PREFIX.$mapName,$content);
 	}
 }
 
@@ -62,14 +62,14 @@ foreach($mapsInfo as $mapInfo)
 $mapListInCache['UPDATED_AT']=date("Y-m-d H:i:s");
 foreach ($cacheObjects as $cacheObject)
 {
-	$cacheObject->set(kRemoteMemCacheConf::MAP_LIST_KEY, $mapListInCache);
+	$cacheObject->set(vRemoteMemCacheConf::MAP_LIST_KEY, $mapListInCache);
 }
 
 //Set key in all cache items
-$chacheKey = kBaseConfCache::generateKey();
+$chacheKey = vBaseConfCache::generateKey();
 foreach ($cacheObjects as $cacheObject)
 {
-	$ret = $cacheObject->set(kBaseConfCache::CONF_CACHE_VERSION_KEY, $chacheKey);
+	$ret = $cacheObject->set(vBaseConfCache::CONF_CACHE_VERSION_KEY, $chacheKey);
 	if(!$ret)
 		die ("\nFailed inserting key to cache\n");
 	print_r($cacheObject);
@@ -79,7 +79,7 @@ foreach ($cacheObjects as $cacheObject)
 
 function getPdoConnection()
 {
-	$dbMap = kConf::getMap('db');
+	$dbMap = vConf::getMap('db');
 	if(!$dbMap)
 	{
 		die('Cannot get db.ini map from configuration!');

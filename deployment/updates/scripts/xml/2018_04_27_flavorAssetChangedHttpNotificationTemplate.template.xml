@@ -15,7 +15,7 @@
 
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaHttpNotificationTemplate">
+            <template objectType="VidiunHttpNotificationTemplate">
                 <name>Flavor Asset Status Changed</name>
                 <systemName>HTTP_Flavor_Asset_Status_Changed</systemName>
                 <description>HTTP notification template to be sent when a flavor-asset status changes.</description>
@@ -25,88 +25,88 @@
                 <eventObjectType>4</eventObjectType>
                 <!-- EventNotificationEventObjectType::FLAVORASSET -->
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Status field modified</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>in_array(assetPeer::STATUS, $scope->getEvent()->getModifiedColumns())</code>
                         </field>
                     </item>
                 </eventConditions>		
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_id</key>
                         <description>Entry ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getEntryId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_name</key>
                         <description>Entry name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getentry()->getName()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_status</key>
                         <description>Entry status</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getentry()->getStatus()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_reference_id</key>
                         <description>Entry reference ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getentry()->getReferenceID()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>flavor_id</key>
                         <description>Flavor ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>flavor_status</key>
                         <description>Flavor status</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getStatus()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>flavor_bitrate</key>
                         <description>Flavor bitrate</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getBitrate()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>flavor_width</key>
                         <description>Flavor width</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getWidth()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>flavor_height</key>
                         <description>Flavor height</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getHeight()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>flavor_tags</key>
                         <description>Flavor tags</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getTags()</code>
                         </value>
                     </item>
                 </contentParameters>
                 <userParameters/>
                 <method>2</method>
-                <!-- KalturaHttpNotificationMethod::POST -->
+                <!-- VidiunHttpNotificationMethod::POST -->
             </template>
         </request>
         <request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">

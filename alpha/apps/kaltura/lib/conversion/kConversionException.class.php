@@ -7,7 +7,7 @@
  * @subpackage Conversion
  * @deprecated
  */
-class kConversionException extends Exception
+class vConversionException extends Exception
 {
 	
 }

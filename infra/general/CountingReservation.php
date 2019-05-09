@@ -8,7 +8,7 @@ class CountingReservation
 	const DEFAULT_TIME_IN_CACHE_FOR_RESERVATION = 300;
 
 	/**
-	 * @var kBaseCacheWrapper $cache
+	 * @var vBaseCacheWrapper $cache
 	 */
 	private $cache;
 
@@ -52,11 +52,11 @@ class CountingReservation
 		$cacheCounter = $this->cache->get($this->getCacheKeyForResource($resourceId));
 		if ($cacheCounter)
 		{
-			KalturaLog::info("Resource id [$resourceId] is already stored. Existing counter value: [$cacheCounter]");
+			VidiunLog::info("Resource id [$resourceId] is already stored. Existing counter value: [$cacheCounter]");
 			$cacheCounter = $cacheCounter - 1;
 			if ($cacheCounter <= 0)
 			{
-				KalturaLog::info("Resource was acquired more then [$this->maxValue] times");
+				VidiunLog::info("Resource was acquired more then [$this->maxValue] times");
 				return false;
 			}
 			else
@@ -66,7 +66,7 @@ class CountingReservation
 		}
 		else
 		{
-			KalturaLog::info("Resource id [$resourceId] is not stored. Adding with counter value: [$this->maxValue]");
+			VidiunLog::info("Resource id [$resourceId] is not stored. Adding with counter value: [$this->maxValue]");
 			$this->storeResourceInCache($resourceId);
 		}
 		return true;
@@ -89,7 +89,7 @@ class CountingReservation
 		{
 			return true;
 		}
-		KalturaLog::info("Could not set counter value");
+		VidiunLog::info("Could not set counter value");
 		return false;
 	}
 

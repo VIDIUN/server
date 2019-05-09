@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class fixMetadataAction extends kalturaSystemAction
+class fixMetadataAction extends vidiunSystemAction
 {
 	/**
 	 * Will investigate a single entry
@@ -25,9 +25,9 @@ class fixMetadataAction extends kalturaSystemAction
 		entryPeer::setUseCriteriaFilter( false );
 		$this->result = NULL;
 
-		$kshow_ids = @$_REQUEST["kshow_ids"];
-		$this->kshow_ids = $kshow_ids;
-		$this->kshow = NULL;
+		$vshow_ids = @$_REQUEST["vshow_ids"];
+		$this->vshow_ids = $vshow_ids;
+		$this->vshow = NULL;
 
 		$entry_ids = @$_REQUEST["entry_ids"];
 		$this->entry_ids = $entry_ids;
@@ -36,20 +36,20 @@ class fixMetadataAction extends kalturaSystemAction
 
 		$show_entry_list = array();
 
-		if ( !empty ( $kshow_ids ))
+		if ( !empty ( $vshow_ids ))
 		{
-			$ids_arr = explode ( "," , $kshow_ids );
-			$kshows = kshowPeer::retrieveByPKs( $ids_arr );
+			$ids_arr = explode ( "," , $vshow_ids );
+			$vshows = vshowPeer::retrieveByPKs( $ids_arr );
 
-			if ( ! $kshows )
+			if ( ! $vshows )
 			{
-				$this->result = "No kshows [$kshow_ids] in DB";
+				$this->result = "No vshows [$vshow_ids] in DB";
 				return;
 			}
 
-			foreach ( $kshows as $kshow )
+			foreach ( $vshows as $vshow )
 			{
-				$show_entry =  $kshow->getShowEntry();
+				$show_entry =  $vshow->getShowEntry();
 				$show_entry_list[] = $show_entry;
 			}
 		}
@@ -57,7 +57,7 @@ class fixMetadataAction extends kalturaSystemAction
 		{
 			if ( empty ( $entry_ids ))
 			{
-				$this->result = "Submit an entry_id of a kshow_id to fix";
+				$this->result = "Submit an entry_id of a vshow_id to fix";
 				return;
 			}
 			$ids_arr = explode ( "," , $entry_ids );

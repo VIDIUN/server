@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaITunesSyndicationFeedAdultValues extends KalturaStringEnum
+class VidiunITunesSyndicationFeedAdultValues extends VidiunStringEnum
 {
 	// applied on <itunes:explicit>
 	const YES = "yes"; // an "explicit" parental advisory graphic will appear next to your podcast artwork

@@ -8,15 +8,15 @@ abstract class Form_BaseFileHandlerConfig extends Zend_Form_SubForm
 	abstract protected function getFileHandlerType();
 
 	/**
-	 * @param Kaltura_Client_DropFolder_Type_DropFolder $object
+	 * @param Vidiun_Client_DropFolder_Type_DropFolder $object
 	 */
-	public function applyObjectAttributes(Kaltura_Client_DropFolder_Type_DropFolder &$object)
+	public function applyObjectAttributes(Vidiun_Client_DropFolder_Type_DropFolder &$object)
 	{
 	}
 	
 	public static function getFileHandlerTypes()
 	{
-		$oClass = new ReflectionClass('Kaltura_Client_DropFolder_Enum_DropFolderFileHandlerType');
+		$oClass = new ReflectionClass('Vidiun_Client_DropFolder_Enum_DropFolderFileHandlerType');
 		return $oClass->getConstants();
 	}
 	

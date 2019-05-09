@@ -1,5 +1,5 @@
 <?php
-class kAuditTrailChangeItem
+class vAuditTrailChangeItem
 {
 	/**
 	 * @var string

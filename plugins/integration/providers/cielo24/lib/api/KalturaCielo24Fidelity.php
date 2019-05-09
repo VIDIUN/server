@@ -3,7 +3,7 @@
  * @package plugins.cielo24
  * @subpackage api.enum
  */
-class KalturaCielo24Fidelity extends KalturaStringEnum
+class VidiunCielo24Fidelity extends VidiunStringEnum
 {
 	const MECHANICAL = "MECHANICAL";
 	const PREMIUM = "PREMIUM";

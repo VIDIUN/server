@@ -50,7 +50,7 @@ class TrackEntryTableMap extends TableMap {
 		$this->addColumn('PARAM_1_STR', 'Param1Str', 'VARCHAR', false, 255, null);
 		$this->addColumn('PARAM_2_STR', 'Param2Str', 'VARCHAR', false, 511, null);
 		$this->addColumn('PARAM_3_STR', 'Param3Str', 'VARCHAR', false, 511, null);
-		$this->addColumn('KS', 'Ks', 'VARCHAR', false, 511, null);
+		$this->addColumn('VS', 'Vs', 'VARCHAR', false, 511, null);
 		$this->addColumn('DESCRIPTION', 'Description', 'VARCHAR', false, 127, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);

@@ -2,7 +2,7 @@
 /**
  * @package plugins.webexNbrplayer
  */
-class WebexNbrplayerPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator
+class WebexNbrplayerPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'webexNbrplayer';
 	
@@ -19,18 +19,18 @@ class WebexNbrplayerPlugin extends KalturaPlugin implements IKalturaObjectLoader
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::WEBEX_NBRPLAYER)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::WEBEX_NBRPLAYER)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineWebexNbrplayer($params->webexNbrplayerCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineWebexNbrplayer($params->webexNbrplayerCmd, $constructorArgs['outFilePath']);
 		}
 			
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(WebexNbrplayerConversionEngineType::WEBEX_NBRPLAYER))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(WebexNbrplayerConversionEngineType::WEBEX_NBRPLAYER))
 		{
-			return new KDLOperatorWebexNbrplayer($enumValue);
+			return new VDLOperatorWebexNbrplayer($enumValue);
 		}
 		
 		return null;
@@ -43,11 +43,11 @@ class WebexNbrplayerPlugin extends KalturaPlugin implements IKalturaObjectLoader
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(WebexNbrplayerConversionEngineType::WEBEX_NBRPLAYER))
-			return 'KOperationWebexNbrplayer';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(WebexNbrplayerConversionEngineType::WEBEX_NBRPLAYER))
+			return 'VOperationWebexNbrplayer';
 			
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(WebexNbrplayerConversionEngineType::WEBEX_NBRPLAYER))
-			return 'KDLOperatorWebexNbrplayer';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(WebexNbrplayerConversionEngineType::WEBEX_NBRPLAYER))
+			return 'VDLOperatorWebexNbrplayer';
 		
 		return null;
 	}
@@ -71,8 +71,8 @@ class WebexNbrplayerPlugin extends KalturaPlugin implements IKalturaObjectLoader
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -80,6 +80,6 @@ class WebexNbrplayerPlugin extends KalturaPlugin implements IKalturaObjectLoader
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

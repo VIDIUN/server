@@ -9,22 +9,22 @@ SELECT
 	COUNT(DISTINCT IF(entry_media_type_id = 6, entry_id,NULL)) count_mix 
 FROM (
 	SELECT 	
-		ev.kuser_id,
-		ku.screen_name,
-		ku.full_name,
-		ku.puser_id,
+		ev.vuser_id,
+		vu.screen_name,
+		vu.full_name,
+		vu.puser_id,
 		ev.entry_id,
 		ev.entry_media_type_id
 	FROM 
-		dwh_dim_entries ev JOIN dwh_dim_kusers ku ON ev.kuser_id = ku.kuser_id  
+		dwh_dim_entries ev JOIN dwh_dim_vusers vu ON ev.vuser_id = vu.vuser_id  
 	WHERE {OBJ_ID_CLAUSE} 
 		AND entry_media_type_id IN (1,2,5,6)
 		AND ev.partner_id = {PARTNER_ID} /* PARTNER_ID*/
 		AND ev.created_at BETWEEN '{FROM_TIME}' - interval {TIME_SHIFT} hour /*FROM_TIME*/ 
 			AND '{TO_TIME}' - interval {TIME_SHIFT} hour /*TO_TIME*/
 	 
-	GROUP BY ev.kuser_id,ku.screen_name,ev.entry_id,ev.entry_media_type_id
+	GROUP BY ev.vuser_id,vu.screen_name,ev.entry_id,ev.entry_media_type_id
 ) a
-GROUP BY kuser_id,screen_name
+GROUP BY vuser_id,screen_name
 ORDER BY {SORT_FIELD}
 LIMIT {PAGINATION_FIRST},{PAGINATION_SIZE}  /* pagination  */

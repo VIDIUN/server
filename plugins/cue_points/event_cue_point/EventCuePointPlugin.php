@@ -3,7 +3,7 @@
  * Enable event cue point objects management on entry objects
  * @package plugins.EventCuePoint
  */
-class EventCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKalturaEventConsumers
+class EventCuePointPlugin extends BaseCuePointPlugin implements IVidiunCuePoint, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'eventCuePoint';
 	const CUE_POINT_VERSION_MAJOR = 1;
@@ -11,10 +11,10 @@ class EventCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	const CUE_POINT_VERSION_BUILD = 0;
 	const CUE_POINT_NAME = 'cuePoint';
 	
-	const EVENT_CUE_POINT_CONSUMER = 'kEventCuePointConsumer';
+	const EVENT_CUE_POINT_CONSUMER = 'vEventCuePointConsumer';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -22,7 +22,7 @@ class EventCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -30,7 +30,7 @@ class EventCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -44,30 +44,30 @@ class EventCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$cuePointVersion = new KalturaVersion(
+		$cuePointVersion = new VidiunVersion(
 			self::CUE_POINT_VERSION_MAJOR,
 			self::CUE_POINT_VERSION_MINOR,
 			self::CUE_POINT_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(self::CUE_POINT_NAME, $cuePointVersion);
+		$dependency = new VidiunDependency(self::CUE_POINT_NAME, $cuePointVersion);
 		return array($dependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaCuePoint' && $enumValue == self::getCuePointTypeCoreValue(EventCuePointType::EVENT))
-			return new KalturaEventCuePoint();
+		if($baseClass == 'VidiunCuePoint' && $enumValue == self::getCuePointTypeCoreValue(EventCuePointType::EVENT))
+			return new VidiunEventCuePoint();
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -76,20 +76,20 @@ class EventCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getCuePointTypeCoreValue()
+	 * @see IVidiunCuePoint::getCuePointTypeCoreValue()
 	 */
 	public static function getCuePointTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('CuePointType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('CuePointType', $value);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getApiValue()
+	 * @see IVidiunCuePoint::getApiValue()
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	public static function contributeToSchema($type)
@@ -98,7 +98,7 @@ class EventCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	*/
 	public static function getEventConsumers()
 	{

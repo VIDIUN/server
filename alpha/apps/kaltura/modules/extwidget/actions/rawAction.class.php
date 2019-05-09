@@ -14,7 +14,7 @@ class rawAction extends sfAction
 		
 		$entry_id = $this->getRequestParameter( "entry_id" );
 		$type = $this->getRequestParameter( "type" );
-		$ks = $this->getRequestParameter( "ks" );
+		$vs = $this->getRequestParameter( "vs" );
 		$file_sync = null;
 		$ret_file_name = "name";
 		$referrer = $this->getRequestParameter("referrer");
@@ -30,43 +30,43 @@ class rawAction extends sfAction
 	
 		$entry = null;
 		
-		if($ks)
+		if($vs)
 		{
 			try {
-				kCurrentContext::initKsPartnerUser($ks);
+				vCurrentContext::initVsPartnerUser($vs);
 			}
 			catch (Exception $ex)
 			{
-				KExternalErrors::dieError(KExternalErrors::INVALID_KS);
+				VExternalErrors::dieError(VExternalErrors::INVALID_VS);
 			}
 		}
 		else
 		{
-			$entry = kCurrentContext::initPartnerByEntryId($entry_id);
+			$entry = vCurrentContext::initPartnerByEntryId($entry_id);
 			if(!$entry)
-				KExternalErrors::dieGracefully();
+				VExternalErrors::dieGracefully();
 		}
 		
-		kEntitlementUtils::initEntitlementEnforcement();
+		vEntitlementUtils::initEntitlementEnforcement();
 		
 		if ( ! $entry )
 		{
 			$entry = entryPeer::retrieveByPK( $entry_id );
 			
 			if(!$entry)
-				KExternalErrors::dieGracefully();
+				VExternalErrors::dieGracefully();
 		}
 		else
 		{
-			if(!kEntitlementUtils::isEntryEntitled($entry))
-				KExternalErrors::dieGracefully();
+			if(!vEntitlementUtils::isEntryEntitled($entry))
+				VExternalErrors::dieGracefully();
 		}
 
-		KalturaMonitorClient::initApiMonitor(false, 'extwidget.raw', $entry->getPartnerId());
+		VidiunMonitorClient::initApiMonitor(false, 'extwidget.raw', $entry->getPartnerId());
 		
 		myPartnerUtils::blockInactivePartner($entry->getPartnerId());
 		
-		$securyEntryHelper = new KSecureEntryHelper($entry, $ks, $referrer, ContextType::DOWNLOAD);
+		$securyEntryHelper = new VSecureEntryHelper($entry, $vs, $referrer, ContextType::DOWNLOAD);
 		$securyEntryHelper->validateForDownload();
 
 		// relocate = did we use the redirect and added the extension to the name
@@ -92,14 +92,14 @@ class rawAction extends sfAction
 					$file_ext = pathinfo ( $relocate , PATHINFO_EXTENSION );
 					$name .= ".$file_ext";
 				}
-				$name = kString::removeNewLine($name);
+				$name = vString::removeNewLine($name);
 				if(!$direct_serve)
 				{
 					$entry_data = $entry->getData();
 					if(strpos($name , ".") === false && !is_null($entry_data))
 					{
 						$file_ext = pathinfo($entry_data, PATHINFO_EXTENSION);
-						$image_extensions = kConf::get('image_file_ext');
+						$image_extensions = vConf::get('image_file_ext');
 						if ($file_ext && in_array($file_ext, $image_extensions))
 							$name .= '.' . $file_ext;
 					}
@@ -125,15 +125,15 @@ class rawAction extends sfAction
 			}
 			else
 			{
-				header('KalturaRaw: no flavor asset for extension');
+				header('VidiunRaw: no flavor asset for extension');
 				header("HTTP/1.0 404 Not Found");
-				KExternalErrors::dieGracefully();
+				VExternalErrors::dieGracefully();
 			}
 
 			$archive_file = $file_sync->getFullPath();
-			$mime_type = kFile::mimeType( $archive_file );
+			$mime_type = vFile::mimeType( $archive_file );
 						
-			kFileUtils::dumpFile($archive_file, $mime_type);
+			vFileUtils::dumpFile($archive_file, $mime_type);
 		}
 		
 		// TODO - move to a different action - document should be plugin
@@ -155,9 +155,9 @@ class rawAction extends sfAction
 			}
 			else
 			{
-				header('KalturaRaw: no flavor asset for extension');
+				header('VidiunRaw: no flavor asset for extension');
 				header("HTTP/1.0 404 Not Found");
-				KExternalErrors::dieGracefully();
+				VExternalErrors::dieGracefully();
 			}
 			// Gonen 2010-08-05 workaround to make sure file name includes correct extension
 			// make sure a file extension is added to the downloaded file so browser will identify and
@@ -172,16 +172,16 @@ class rawAction extends sfAction
 					$reloc_ext = pathinfo ( $relocate , PATHINFO_EXTENSION );
 					$name = str_replace(".$reloc_ext", '', $name);
 				}
-				$name = kString::removeNewLine($name. '.' .$ext);
+				$name = vString::removeNewLine($name. '.' .$ext);
 				header("Content-Disposition: attachment; filename=\"$name\"");
 			}
-			kFileUtils::dumpFile($file_sync->getFullPath());
+			vFileUtils::dumpFile($file_sync->getFullPath());
 		}
 		elseif ($entry->getType() == entryType::DATA)
 		{
 			$version = $this->getRequestParameter("version");
 			$syncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA, $version);
-			list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+			list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 			
 			$path = null;
 			if($local)
@@ -190,18 +190,18 @@ class rawAction extends sfAction
 			}
 			elseif($fileSync)
 			{
-				$path = kDataCenterMgr::getRedirectExternalUrl($fileSync);
+				$path = vDataCenterMgr::getRedirectExternalUrl($fileSync);
 				header("Location: $path");
-				KExternalErrors::dieGracefully();
+				VExternalErrors::dieGracefully();
 			}
 			
 			if (!$path)
 			{
-				header('KalturaRaw: no data was found available for download');
+				header('VidiunRaw: no data was found available for download');
 				header("HTTP/1.0 404 Not Found");
 			}
 			else
-				kFileUtils::dumpFile($path);
+				vFileUtils::dumpFile($path);
 		}
 		
 		//$archive_file = $entry->getArchiveFile();
@@ -211,7 +211,7 @@ class rawAction extends sfAction
 			// image - use data for entry
 			$file_sync = $this->redirectIfRemote ( $entry ,  entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA , null );
 			$key = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-			kFileUtils::dumpFile(kFileSyncUtils::getLocalFilePathForKey($key, true));
+			vFileUtils::dumpFile(vFileSyncUtils::getLocalFilePathForKey($key, true));
 		}
 		elseif ( $media_type == entry::ENTRY_MEDIA_TYPE_VIDEO || $media_type == entry::ENTRY_MEDIA_TYPE_AUDIO  )
 		{
@@ -226,8 +226,8 @@ class rawAction extends sfAction
 				}
 				else
 				{
-					header('KalturaRaw: no flavor asset for extension');
-					KExternalErrors::dieGracefully();
+					header('VidiunRaw: no flavor asset for extension');
+					VExternalErrors::dieGracefully();
 				}
 				
 				$archive_file = $file_sync->getFullPath();
@@ -252,14 +252,14 @@ class rawAction extends sfAction
 					$flavor_asset = $this->getAllowedFlavorAssets( $securyEntryHelper, $entry_id , null, false, true );
 					if(!$flavor_asset)
 					{
-						header('KalturaRaw: no original flavor asset for entry, no best play asset for entry');
-						KExternalErrors::dieGracefully();
+						header('VidiunRaw: no original flavor asset for entry, no best play asset for entry');
+						VExternalErrors::dieGracefully();
 					}
 					$file_sync = $this->redirectIfRemote ( $flavor_asset ,  flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET , null , false ); // NOT strict - if there is no archive, get the data version
 					if(!$file_sync)
 					{
-						header('KalturaRaw: no file sync found for flavor ['.$flavor_asset->getId().']');
-						KExternalErrors::dieGracefully();
+						header('VidiunRaw: no file sync found for flavor ['.$flavor_asset->getId().']');
+						VExternalErrors::dieGracefully();
 					}
 					$archive_file = $file_sync->getFullPath();
 				}
@@ -272,7 +272,7 @@ class rawAction extends sfAction
 			$version = $this->getRequestParameter ( "version" );
 			
 			// hotfix - links sent after flattening is done look like:
-			// http://cdn.kaltura.com/p/387/sp/38700/raw/entry_id/0_ix99151g/version/100001
+			// http://cdn.vidiun.com/p/387/sp/38700/raw/entry_id/0_ix99151g/version/100001
 			// while waiting for flavor-adaptation in flattening, we want to find at least one file to return.
 			$try_formats = array('mp4', 'mov', 'avi', 'flv');
 			if($format)
@@ -288,11 +288,11 @@ class rawAction extends sfAction
 			{
 				foreach($try_formats as $ext)
 				{
-					KalturaLog::log( "raw for mix - trying to find filesync for extension: [$ext] on entry [{$entry->getId()}]");
+					VidiunLog::log( "raw for mix - trying to find filesync for extension: [$ext] on entry [{$entry->getId()}]");
 					$file_sync = $this->redirectIfRemote( $entry , entry::FILE_SYNC_ENTRY_SUB_TYPE_DOWNLOAD, $ext, false);
 					if($file_sync && file_exists($file_sync->getFullPath()))
 					{
-						KalturaLog::log( "raw for mix - found flattened video of extension: [$ext] continuing with this file {$file_sync->getFullPath()}");
+						VidiunLog::log( "raw for mix - found flattened video of extension: [$ext] continuing with this file {$file_sync->getFullPath()}");
 						break;
 					}
 				}
@@ -312,11 +312,11 @@ class rawAction extends sfAction
 		{
 			// no archive for this file
 			header("HTTP/1.0 404 Not Found");
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 
 //		echo "[$archive_file][" . file_exists ( $archive_file ) . "]";
-		$mime_type = kFile::mimeType( $archive_file);
+		$mime_type = vFile::mimeType( $archive_file);
 //		echo "[[$mime_type]]";
 
 
@@ -324,8 +324,8 @@ class rawAction extends sfAction
 		if($shouldProxy || !empty($relocate))
 		{
 			// dump the file
-			kFileUtils::dumpFile($archive_file , $mime_type );
-			KExternalErrors::dieGracefully();
+			vFileUtils::dumpFile($archive_file , $mime_type );
+			VExternalErrors::dieGracefully();
 		}
 		
 		// use new Location to add the best extension we can find for the file
@@ -370,7 +370,7 @@ class rawAction extends sfAction
 		
 		// or redirect if no proxy
 		header ( "Location: {$url}" );
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 	
 	/**
@@ -383,7 +383,7 @@ class rawAction extends sfAction
 	private function redirectIfRemote ( $obj , $sub_type , $version , $strict = true )
 	{
 		$dataKey = $obj->getSyncKey( $sub_type , $version );
-		list ( $file_sync , $local ) = kFileSyncUtils::getReadyFileSyncForKey( $dataKey ,true , false );
+		list ( $file_sync , $local ) = vFileSyncUtils::getReadyFileSyncForKey( $dataKey ,true , false );
 		
 		if ( ! $file_sync )
 		{
@@ -391,9 +391,9 @@ class rawAction extends sfAction
 			{
 				// file does not exist on any DC - die
 
-				KalturaLog::log( "Error - no FileSync for object [{$obj->getId()}]");
+				VidiunLog::log( "Error - no FileSync for object [{$obj->getId()}]");
 				header("HTTP/1.0 404 Not Found");
-				KExternalErrors::dieGracefully();
+				VExternalErrors::dieGracefully();
 			}
 			else
 				return null;
@@ -414,11 +414,11 @@ class rawAction extends sfAction
 		if ( !$local )
 		{
 			$shouldProxy = $this->getRequestParameter("forceproxy", false);
-			$remote_url = kDataCenterMgr::getRedirectExternalUrl ( $file_sync , $_SERVER['REQUEST_URI'] );
-			KalturaLog::log ( __METHOD__ . ": redirecting to [$remote_url]" );
+			$remote_url = vDataCenterMgr::getRedirectExternalUrl ( $file_sync , $_SERVER['REQUEST_URI'] );
+			VidiunLog::log ( __METHOD__ . ": redirecting to [$remote_url]" );
 			if($shouldProxy)
 			{
-				kFileUtils::dumpUrl($remote_url);
+				vFileUtils::dumpUrl($remote_url);
 			}
 			else
 			{
@@ -430,7 +430,7 @@ class rawAction extends sfAction
 		return $file_sync;
 	}
 	
-	private function getAllowedFlavorAssets(KSecureEntryHelper $secureEntryHelper, $entryId, $format = null, $isOriginal = false, $isBestPlay = false)
+	private function getAllowedFlavorAssets(VSecureEntryHelper $secureEntryHelper, $entryId, $format = null, $isOriginal = false, $isBestPlay = false)
 	{
 		$flavorAsset = null;
 		

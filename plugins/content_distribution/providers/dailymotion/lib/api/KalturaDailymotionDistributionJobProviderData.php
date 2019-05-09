@@ -3,7 +3,7 @@
  * @package plugins.dailymotionDistribution
  * @subpackage api.objects
  */
-class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunDailymotionDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -21,19 +21,19 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 	public $accessControlGeoBlockingCountryList;
 	
 	/**
-	 * @var KalturaDailymotionDistributionCaptionInfoArray
+	 * @var VidiunDailymotionDistributionCaptionInfoArray
 	 */
 	public $captionsInfo;
 	
 	
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 	    parent::__construct($distributionJobData);
 	    
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaDailymotionDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunDailymotionDistributionProfile))
 			return;
 			
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
@@ -45,10 +45,10 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 		if($flavorAsset) 
 		{
 			$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			$this->videoAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			$this->videoAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 		}
 
-		// look for krule with action block and condition of country
+		// look for vrule with action block and condition of country
 		$entry = entryPeer::retrieveByPK($distributionJobData->entryDistribution->entryId);
 		if ($entry && $entry->getAccessControl())
 			$this->setGeoBlocking($entry->getAccessControl());
@@ -91,10 +91,10 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 		foreach($rules as $rule)
 		{
 			$hasBlockAction = false;
-			/* @var $rule kRule */
+			/* @var $rule vRule */
 			foreach($rule->getActions() as $action)
 			{
-				/* @var $action kAccessControlAction */
+				/* @var $action vAccessControlAction */
 				if($action->getType() == RuleActionType::BLOCK)
 				{
 					$hasBlockAction = true;
@@ -107,9 +107,9 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 
 			foreach($rule->getConditions() as $condition)
 			{
-				if ($condition instanceof kCountryCondition)
+				if ($condition instanceof vCountryCondition)
 				{
-					/* @var $condition kCountryCondition */
+					/* @var $condition vCountryCondition */
 					$this->accessControlGeoBlockingCountryList = implode(',', $condition->getStringValues());
 					if ($condition->getNot() === true)
 						$this->accessControlGeoBlockingOperation = 'allow';
@@ -122,25 +122,25 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 		}
 	}
 	
-	private function addCaptionsData(KalturaDistributionJobData $distributionJobData) {
-		/* @var $mediaFile KalturaDistributionRemoteMediaFile */
+	private function addCaptionsData(VidiunDistributionJobData $distributionJobData) {
+		/* @var $mediaFile VidiunDistributionRemoteMediaFile */
 		$assetIdsArray = explode ( ',', $distributionJobData->entryDistribution->assetIds );
 		if (empty($assetIdsArray)) return;
 		$assets = array ();
-		$this->captionsInfo = new KalturaDailymotionDistributionCaptionInfoArray();
+		$this->captionsInfo = new VidiunDailymotionDistributionCaptionInfoArray();
 		
 		foreach ( $assetIdsArray as $assetId ) {
 			$asset = assetPeer::retrieveByIdNoFilter( $assetId );
 			if (!$asset){
-				KalturaLog::err("Asset [$assetId] not found");
+				VidiunLog::err("Asset [$assetId] not found");
 				continue;
 			}
 			if ($asset->getStatus() == asset::ASSET_STATUS_READY) {
 				$assets [] = $asset;
 			}
 			elseif($asset->getStatus()== asset::ASSET_STATUS_DELETED) {
-				$captionInfo = new KalturaDailymotionDistributionCaptionInfo ();
-				$captionInfo->action = KalturaDailymotionDistributionCaptionAction::DELETE_ACTION;
+				$captionInfo = new VidiunDailymotionDistributionCaptionInfo ();
+				$captionInfo->action = VidiunDailymotionDistributionCaptionAction::DELETE_ACTION;
 				$captionInfo->assetId = $assetId;
 				//getting the asset's remote id
 				foreach ( $distributionJobData->mediaFiles as $mediaFile ) {
@@ -152,7 +152,7 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 				}
 			}
 			else{
-				KalturaLog::err("Asset [$assetId] has status [".$asset->getStatus()."]. not added to provider data");
+				VidiunLog::err("Asset [$assetId] has status [".$asset->getStatus()."]. not added to provider data");
 			}
 		}
 		
@@ -161,7 +161,7 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 			switch ($assetType) {
 				case CaptionPlugin::getAssetTypeCoreValue ( CaptionAssetType::CAPTION ):
 					$syncKey = $asset->getSyncKey ( asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET );
-					if (kFileSyncUtils::fileSync_exists ( $syncKey )) {
+					if (vFileSyncUtils::fileSync_exists ( $syncKey )) {
 						$captionInfo = $this->getCaptionInfo($asset, $syncKey, $distributionJobData);
 						if ($captionInfo){
 							$captionInfo->language = $this->getLanguageCode($asset->getLanguage());
@@ -169,24 +169,24 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 							if ($captionInfo->language)
 								$this->captionsInfo [] = $captionInfo;
 							else
-								KalturaLog::err('The caption ['.$asset->getId().'] has unrecognized language ['.$asset->getLanguage().']'); 
+								VidiunLog::err('The caption ['.$asset->getId().'] has unrecognized language ['.$asset->getLanguage().']'); 
 						}
 					}
 					break;
 				case AttachmentPlugin::getAssetTypeCoreValue ( AttachmentAssetType::ATTACHMENT ) :
 					$syncKey = $asset->getSyncKey ( asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET );
-					if (kFileSyncUtils::fileSync_exists ( $syncKey )) {
+					if (vFileSyncUtils::fileSync_exists ( $syncKey )) {
 						$captionInfo = $this->getCaptionInfo($asset, $syncKey, $distributionJobData);
 						if ($captionInfo){
 							//language code should be set in the attachments title
 							$captionInfo->language = $asset->getTitle();
 							$captionInfo->format = $this->getCaptionFormat($asset);
-							$languageCodeReflector = KalturaTypeReflectorCacher::get('KalturaLanguageCode');
+							$languageCodeReflector = VidiunTypeReflectorCacher::get('VidiunLanguageCode');
 							//check if the language code exists 
 						    if($languageCodeReflector && $languageCodeReflector->getConstantName($captionInfo->language))
 								$this->captionsInfo [] = $captionInfo;
 							else
-								KalturaLog::err('The attachment ['.$asset->getId().'] has unrecognized language ['.$asset->getTitle().']'); 		    
+								VidiunLog::err('The attachment ['.$asset->getId().'] has unrecognized language ['.$asset->getTitle().']'); 		    
 						}
 					}
 					break;
@@ -195,8 +195,8 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 	}
 	
 	private function getLanguageCode($language = null){
-		$languageReflector = KalturaTypeReflectorCacher::get('KalturaLanguage');
-		$languageCodeReflector = KalturaTypeReflectorCacher::get('KalturaLanguageCode');
+		$languageReflector = VidiunTypeReflectorCacher::get('VidiunLanguage');
+		$languageCodeReflector = VidiunTypeReflectorCacher::get('VidiunLanguageCode');
 		if($languageReflector && $languageCodeReflector)
 		{
 			$languageCode = $languageReflector->getConstantName($language);
@@ -206,25 +206,25 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 		return null;
 	}
 	
-	private function getCaptionInfo($asset, $syncKey, KalturaDistributionJobData $distributionJobData) {
-		$captionInfo = new KalturaDailymotionDistributionCaptionInfo ();
-		$captionInfo->filePath = kFileSyncUtils::getLocalFilePathForKey ( $syncKey, false );
+	private function getCaptionInfo($asset, $syncKey, VidiunDistributionJobData $distributionJobData) {
+		$captionInfo = new VidiunDailymotionDistributionCaptionInfo ();
+		$captionInfo->filePath = vFileSyncUtils::getLocalFilePathForKey ( $syncKey, false );
 		$captionInfo->assetId = $asset->getId();
 		$captionInfo->version = $asset->getVersion();
-		/* @var $mediaFile KalturaDistributionRemoteMediaFile */
+		/* @var $mediaFile VidiunDistributionRemoteMediaFile */
 		$distributed = false;
 		foreach ( $distributionJobData->mediaFiles as $mediaFile ) {
 			if ($mediaFile->assetId == $asset->getId ()) {
 				$distributed = true;
 				if ($asset->getVersion () > $mediaFile->version) {
-					$captionInfo->action = KalturaDailymotionDistributionCaptionAction::UPDATE_ACTION;
+					$captionInfo->action = VidiunDailymotionDistributionCaptionAction::UPDATE_ACTION;
 				}
 				break;
 			}
 		}
 		if (! $distributed)
-			$captionInfo->action = KalturaDailymotionDistributionCaptionAction::SUBMIT_ACTION;
-		elseif ($captionInfo->action != KalturaDailymotionDistributionCaptionAction::UPDATE_ACTION) {
+			$captionInfo->action = VidiunDailymotionDistributionCaptionAction::SUBMIT_ACTION;
+		elseif ($captionInfo->action != VidiunDailymotionDistributionCaptionAction::UPDATE_ACTION) {
 			return;
 		}
 		return $captionInfo;
@@ -232,17 +232,17 @@ class KalturaDailymotionDistributionJobProviderData extends KalturaConfigurableD
 	
 	private function getCaptionFormat($asset){		
 		if ($asset instanceof  AttachmentAsset && ($asset->getPartnerDescription() == 'smpte-tt'))
-			return KalturaDailymotionDistributionCaptionFormat::TT;
+			return VidiunDailymotionDistributionCaptionFormat::TT;
 			
 		if ($asset instanceof  captionAsset){
 			switch ($asset->getContainerFormat()){
-				case KalturaCaptionType::SRT:
-					return KalturaDailymotionDistributionCaptionFormat::SRT;
-				case KalturaCaptionType::DFXP:
-					return KalturaDailymotionDistributionCaptionFormat::TT;	
+				case VidiunCaptionType::SRT:
+					return VidiunDailymotionDistributionCaptionFormat::SRT;
+				case VidiunCaptionType::DFXP:
+					return VidiunDailymotionDistributionCaptionFormat::TT;	
 			}
 		}
-		KalturaLog::err("caption [".$asset->getId()."] has an unknow format.");
+		VidiunLog::err("caption [".$asset->getId()."] has an unknow format.");
 		return null;
 	}
 }

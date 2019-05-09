@@ -4,7 +4,7 @@
  * @subpackage model.search
  */
 
-class kCategorySearch extends kBaseESearch
+class vCategorySearch extends vBaseESearch
 {
 
     public function __construct()
@@ -12,9 +12,9 @@ class kCategorySearch extends kBaseESearch
         parent::__construct();
     }
 
-    public function doSearch(ESearchOperator $eSearchOperator, kPager $pager = null, $statuses = array(), $objectId = null, ESearchOrderBy $order = null)
+    public function doSearch(ESearchOperator $eSearchOperator, vPager $pager = null, $statuses = array(), $objectId = null, ESearchOrderBy $order = null)
     {
-        kCategoryElasticEntitlement::init();
+        vCategoryElasticEntitlement::init();
         if (!count($statuses))
             $statuses = array(CategoryStatus::ACTIVE);
 
@@ -24,7 +24,7 @@ class kCategorySearch extends kBaseESearch
         return $result;
     }
 
-    protected function initQuery(array $statuses, $objectId, kPager $pager = null, ESearchOrderBy $order = null)
+    protected function initQuery(array $statuses, $objectId, vPager $pager = null, ESearchOrderBy $order = null)
     {
         $this->query = array(
             'index' => ElasticIndexMap::ELASTIC_CATEGORY_INDEX,
@@ -36,7 +36,7 @@ class kCategorySearch extends kBaseESearch
 
     private function initEntitlement()
 	{
-		$entitlementFilterQueries = kCategoryElasticEntitlement::getEntitlementFilterQueries();
+		$entitlementFilterQueries = vCategoryElasticEntitlement::getEntitlementFilterQueries();
 		if($entitlementFilterQueries)
 		{
 			$this->mainBoolQuery->addQueriesToFilter($entitlementFilterQueries);

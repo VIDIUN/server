@@ -5,9 +5,9 @@
 ini_set("memory_limit","512M");
 
 	/********************
-	 * KSrtText
+	 * VSrtText
 	 */
-	class KSrtText {
+	class VSrtText {
 		protected $num = 0;
 		protected $times = array();
 		
@@ -60,7 +60,7 @@ ini_set("memory_limit","512M");
 			$s = (int)$rem;
 			$u = round(($rem-$s)*1000);
 			$str = sprintf('%02d:%02d:%02d,%03d',$h,$m,$s,$u);
-			KalturaLog::log("$tm:$str");
+			VidiunLog::log("$tm:$str");
 			return $str;
 		}
 		
@@ -82,7 +82,7 @@ ini_set("memory_limit","512M");
 				}
 			}
 			else {
-				$str = KSrtText::emptyToString($fileName);
+				$str = VSrtText::emptyToString($fileName);
 				file_put_contents($fileName, "$str", FILE_APPEND);
 			}
 		}
@@ -92,7 +92,7 @@ ini_set("memory_limit","512M");
 		 */
 		protected function toString($num=null, $offset=0)
 		{
-			KalturaLog::log("$num, $offset");
+			VidiunLog::log("$num, $offset");
 			if(!isset($num))
 				$num = $this->num;
 			$tm0 = $this->times[0]-$offset;
@@ -179,7 +179,7 @@ ini_set("memory_limit","512M");
 				if($rv!=1)
 					continue;
 				
-				$tx = new KSrtText();
+				$tx = new VSrtText();
 				$tx->num = $num;
 
 				/*

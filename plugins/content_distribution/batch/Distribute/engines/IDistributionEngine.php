@@ -6,12 +6,12 @@
 interface IDistributionEngine
 {
 	/**
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VSchedularTaskConfig $taskConfig
 	 */
 	public function configure();
 	
 	/**
-	 * @param KalturaClient $kalturaClient
+	 * @param VidiunClient $vidiunClient
 	 */
 	public function setClient();
 }

@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaApplicationImages extends IKalturaBase
+interface IVidiunApplicationImages extends IVidiunBase
 {
 	/**
 	 * Returns the physical path to the image file

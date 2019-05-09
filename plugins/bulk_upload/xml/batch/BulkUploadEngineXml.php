@@ -5,7 +5,7 @@
  * @package plugins.bulkUploadXml
  * @subpackage Scheduler.BulkUpload
  */
-class BulkUploadEngineXml extends KBulkUploadEngine
+class BulkUploadEngineXml extends VBulkUploadEngine
 {
 	/**
 	 * The defalut thumbnail tag
@@ -78,18 +78,18 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	protected $xslTransformedContent = null;
 	
 	/**
-	 * @param KalturaBatchJob $job
+	 * @param VidiunBatchJob $job
 	 */
-	public function __construct(KalturaBatchJob $job)
+	public function __construct(VidiunBatchJob $job)
 	{
 		parent::__construct($job);
 		
-		if(KBatchBase::$taskConfig->params->allowServerResource)
-			$this->allowServerResource = (bool) KBatchBase::$taskConfig->params->allowServerResource;
+		if(VBatchBase::$taskConfig->params->allowServerResource)
+			$this->allowServerResource = (bool) VBatchBase::$taskConfig->params->allowServerResource;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBulkUploadEngine::HandleBulkUpload()
+	 * @see VBulkUploadEngine::HandleBulkUpload()
 	 */
 	public function handleBulkUpload()
 	{
@@ -99,7 +99,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	protected function getSchemaType()
 	{
-		return KalturaSchemaType::BULK_UPLOAD_XML;
+		return VidiunSchemaType::BULK_UPLOAD_XML;
 	}
 	
 	/**
@@ -110,36 +110,36 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	{
 		if(!file_exists($this->data->filePath))
 		{
-			throw new KalturaBatchException("File doesn't exist [{$this->data->filePath}]", KalturaBatchJobAppErrors::BULK_FILE_NOT_FOUND);
+			throw new VidiunBatchException("File doesn't exist [{$this->data->filePath}]", VidiunBatchJobAppErrors::BULK_FILE_NOT_FOUND);
 		}
 		
 		libxml_use_internal_errors(true);
 		
 		$this->loadXslt();
 		
-		$xdoc = new KDOMDocument();
+		$xdoc = new VDOMDocument();
 		
 		$this->xslTransformedContent = $this->xslTransform($this->data->filePath);
 		
-		KalturaLog::info("Transformed content: " . $this->xslTransformedContent);
+		VidiunLog::info("Transformed content: " . $this->xslTransformedContent);
 		
 		libxml_clear_errors();
 		if(!$xdoc->loadXML($this->xslTransformedContent)){
-			$errorMessage = kXml::getLibXmlErrorDescription($this->xslTransformedContent);
-			throw new KalturaBatchException("Could not load xml [{$this->job->id}], $errorMessage", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+			$errorMessage = vXml::getLibXmlErrorDescription($this->xslTransformedContent);
+			throw new VidiunBatchException("Could not load xml [{$this->job->id}], $errorMessage", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
 		//Validate the XML file against the schema
 		libxml_clear_errors();
 		
-		$xsdURL = KBatchBase::$kClient->schema->serve($this->getSchemaType());
-		if(KBatchBase::$taskConfig->params->xmlSchemaVersion)
-			$xsdURL .=  "&version=" . KBatchBase::$taskConfig->params->xmlSchemaVersion;
-		$xsd = KCurlWrapper::getContent($xsdURL, null, true);
+		$xsdURL = VBatchBase::$vClient->schema->serve($this->getSchemaType());
+		if(VBatchBase::$taskConfig->params->xmlSchemaVersion)
+			$xsdURL .=  "&version=" . VBatchBase::$taskConfig->params->xmlSchemaVersion;
+		$xsd = VCurlWrapper::getContent($xsdURL, null, true);
 		
 		if(!$xdoc->schemaValidateSource($xsd))
 		{
-			$errorMessage = kXml::getLibXmlErrorDescription($this->xslTransformedContent);
-			throw new KalturaBatchException("Validate files failed on job [{$this->job->id}], $errorMessage", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+			$errorMessage = vXml::getLibXmlErrorDescription($this->xslTransformedContent);
+			throw new VidiunBatchException("Validate files failed on job [{$this->job->id}], $errorMessage", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
 		
 		return true;
@@ -154,11 +154,11 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		//TODO: remove this statement once its purpose is served - conversionProfileId information should be taken only from the objectData
 		$conversionProfileId = isset ($data->objectData->conversionProfileId) ? $data->objectData->conversionProfileId : $data->conversionProfileId;
 		if(!$conversionProfileId)
-			throw new KalturaBatchException("Conversion profile not defined", KalturaBatchJobAppErrors::BULK_MISSING_MANDATORY_PARAMETER);
+			throw new VidiunBatchException("Conversion profile not defined", VidiunBatchJobAppErrors::BULK_MISSING_MANDATORY_PARAMETER);
 		
-		KBatchBase::impersonate($this->currentPartnerId);;
-		$conversionProfile = KBatchBase::$kClient->conversionProfile->get($conversionProfileId);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		$conversionProfile = VBatchBase::$vClient->conversionProfile->get($conversionProfileId);
+		VBatchBase::unimpersonate();
 		if(!$conversionProfile || !$conversionProfile->xslTransformation)
 			return false;
 		$this->conversionProfileXsl = $conversionProfile->xslTransformation;
@@ -178,26 +178,26 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			return $xdoc;
 		
 		libxml_clear_errors();
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		if(!$xml->loadXML($xdoc)){
-			$errorMessage = kXml::getLibXmlErrorDescription($xdoc);
-			throw new KalturaBatchException("Could not load xml [{$this->job->id}], $errorMessage", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+			$errorMessage = vXml::getLibXmlErrorDescription($xdoc);
+			throw new VidiunBatchException("Could not load xml [{$this->job->id}], $errorMessage", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
 		
 		libxml_clear_errors();
 		$proc = new XSLTProcessor;
-		$proc->registerPHPFunctions(kXml::getXslEnabledPhpFunctions());
-		$xsl = new KDOMDocument();
+		$proc->registerPHPFunctions(vXml::getXslEnabledPhpFunctions());
+		$xsl = new VDOMDocument();
 		if(!$xsl->loadXML($this->conversionProfileXsl)){
-			$errorMessage = kXml::getLibXmlErrorDescription($this->conversionProfileXsl);
-			throw new KalturaBatchException("Could not load xsl [{$this->job->id}], $errorMessage", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+			$errorMessage = vXml::getLibXmlErrorDescription($this->conversionProfileXsl);
+			throw new VidiunBatchException("Could not load xsl [{$this->job->id}], $errorMessage", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
 		$proc->importStyleSheet($xsl);
 		libxml_clear_errors();
 		$transformedXml = $proc->transformToXML($xml);
 		if(!$transformedXml){
-			$errorMessage = kXml::getLibXmlErrorDescription($this->conversionProfileXsl);
-			throw new KalturaBatchException("Could not transform xml [{$this->job->id}], $errorMessage", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+			$errorMessage = vXml::getLibXmlErrorDescription($this->conversionProfileXsl);
+			throw new VidiunBatchException("Could not transform xml [{$this->job->id}], $errorMessage", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
 		return $transformedXml;
 	}
@@ -234,37 +234,37 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * @param string $referenceId
-	 * @return KalturaBaseEntry
+	 * @return VidiunBaseEntry
 	 */
 	protected function getEntryFromReference($referenceId)
 	{
-		$filter = new KalturaBaseEntryFilter();
+		$filter = new VidiunBaseEntryFilter();
 		$filter->referenceIdEqual = $referenceId;
 		$filter->statusIn = implode(',', array(
-			KalturaEntryStatus::ERROR_IMPORTING,
-			KalturaEntryStatus::ERROR_CONVERTING,
-			KalturaEntryStatus::IMPORT,
-			KalturaEntryStatus::PRECONVERT,
-			KalturaEntryStatus::READY,
-			KalturaEntryStatus::PENDING,
-			KalturaEntryStatus::NO_CONTENT,
+			VidiunEntryStatus::ERROR_IMPORTING,
+			VidiunEntryStatus::ERROR_CONVERTING,
+			VidiunEntryStatus::IMPORT,
+			VidiunEntryStatus::PRECONVERT,
+			VidiunEntryStatus::READY,
+			VidiunEntryStatus::PENDING,
+			VidiunEntryStatus::NO_CONTENT,
 		));
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 1;
 		
-		KBatchBase::impersonate($this->currentPartnerId);;
+		VBatchBase::impersonate($this->currentPartnerId);;
 		$entries = null;
 		try
 		{
-			$entries = KBatchBase::$kClient->baseEntry->listAction($filter, $pager);
+			$entries = VBatchBase::$vClient->baseEntry->listAction($filter, $pager);
 		}
-		catch (KalturaException $e)
+		catch (VidiunException $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 		}
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
-		/* @var $entries KalturaBaseEntryListResponse */
+		/* @var $entries VidiunBaseEntryListResponse */
 		if(!$entries || !$entries->totalCount)
 			return null;
 		
@@ -273,21 +273,21 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * @param string $entryId
-	 * @return KalturaBaseEntry
+	 * @return VidiunBaseEntry
 	 */
 	protected function getEntry($entryId)
 	{
 		$entry = null;
-		KBatchBase::impersonate($this->currentPartnerId);;
+		VBatchBase::impersonate($this->currentPartnerId);;
 		try
 		{
-			$entry = KBatchBase::$kClient->baseEntry->get($entryId);
+			$entry = VBatchBase::$vClient->baseEntry->get($entryId);
 		}
-		catch (KalturaException $e)
+		catch (VidiunException $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 		}
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		return $entry;
 	}
@@ -317,54 +317,54 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			{
 				$this->checkAborted();
 				
-				$actionToPerform = self::$actionsMap[KalturaBulkUploadAction::ADD];
+				$actionToPerform = self::$actionsMap[VidiunBulkUploadAction::ADD];
 				
-				$action = KalturaBulkUploadAction::ADD;
+				$action = VidiunBulkUploadAction::ADD;
 				if(isset($item->action))
 				{
 					$actionToPerform = strtolower($item->action);
 				}
 				elseif(isset($item->entryId))
 				{
-					$actionToPerform = self::$actionsMap[KalturaBulkUploadAction::UPDATE];
+					$actionToPerform = self::$actionsMap[VidiunBulkUploadAction::UPDATE];
 				}
 				elseif(isset($item->referenceId))
 				{
 					if($this->getEntryIdFromReference("{$item->referenceId}"))
-						$actionToPerform = self::$actionsMap[KalturaBulkUploadAction::UPDATE];
+						$actionToPerform = self::$actionsMap[VidiunBulkUploadAction::UPDATE];
 				}
 				
 				switch($actionToPerform)
 				{
-					case self::$actionsMap[KalturaBulkUploadAction::ADD]:
-						$action = KalturaBulkUploadAction::ADD;
+					case self::$actionsMap[VidiunBulkUploadAction::ADD]:
+						$action = VidiunBulkUploadAction::ADD;
 						$this->validateItem($item);
 						$this->handleItemAdd($item);
 						break;
-					case self::$actionsMap[KalturaBulkUploadAction::UPDATE]:
-						$action = KalturaBulkUploadAction::UPDATE;
+					case self::$actionsMap[VidiunBulkUploadAction::UPDATE]:
+						$action = VidiunBulkUploadAction::UPDATE;
 						$this->handleItemUpdate($item);
 						break;
-					case self::$actionsMap[KalturaBulkUploadAction::DELETE]:
-						$action = KalturaBulkUploadAction::DELETE;
+					case self::$actionsMap[VidiunBulkUploadAction::DELETE]:
+						$action = VidiunBulkUploadAction::DELETE;
 						$this->handleItemDelete($item);
 						break;
 					default :
-						throw new KalturaBatchException("Action: {$actionToPerform} is not supported", KalturaBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
+						throw new VidiunBatchException("Action: {$actionToPerform} is not supported", VidiunBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
 				}
 			}
 			catch (Exception $e)
 			{
 				//in case an exception was thrown we need to change back to batch user in order to addBulkResult
-				KBatchBase::unimpersonate();
-				KalturaLog::err('Item failed (' . get_class($e) . '): ' . $e->getMessage());
+				VBatchBase::unimpersonate();
+				VidiunLog::err('Item failed (' . get_class($e) . '): ' . $e->getMessage());
 				$bulkUploadResult = $this->createUploadResult($item, $action);
 				if ($this->exceededMaxRecordsEachRun){
 					return;
 				}
-				$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
+				$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
 				$bulkUploadResult->errorDescription = $e->getMessage();
-				$bulkUploadResult->entryStatus = KalturaEntryStatus::ERROR_IMPORTING;
+				$bulkUploadResult->entryStatus = VidiunEntryStatus::ERROR_IMPORTING;
 				$this->addBulkUploadResult($bulkUploadResult);
 			}
 		}
@@ -397,15 +397,15 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		}
 		else //The asset wasn't found on the entry
 		{
-			throw new KalturaBatchException("Asset Id [$assetId] not found on entry [$entryId]", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			throw new VidiunBatchException("Asset Id [$assetId] not found on entry [$entryId]", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 	}
 	
 	/**
 	 * Removes all non updatble fields from the entry
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 */
-	protected function removeNonUpdatbleFields(KalturaBaseEntry $entry)
+	protected function removeNonUpdatbleFields(VidiunBaseEntry $entry)
 	{
 		$retEntry = clone $entry;
 		$retEntry->conversionProfileId = null;
@@ -415,7 +415,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Handles xml bulk upload update
 	 * @param SimpleXMLElement $item
-	 * @throws KalturaException
+	 * @throws VidiunException
 	 */
 	protected function handleItemUpdate(SimpleXMLElement $item)
 	{
@@ -427,7 +427,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			
 			$existingEntry = $this->getEntry($entryId);
 			if(!$existingEntry)
-				throw new KalturaBatchException("Entry id [$entryId] not found", KalturaBatchJobAppErrors::BULK_ITEM_NOT_FOUND);
+				throw new VidiunBatchException("Entry id [$entryId] not found", VidiunBatchJobAppErrors::BULK_ITEM_NOT_FOUND);
 			
 			$conversionProfileId = $existingEntry->conversionProfileId;
 		}
@@ -435,23 +435,23 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		{
 			$existingEntry = $this->getEntryFromReference("{$item->referenceId}");
 			if(!$existingEntry)
-				throw new KalturaBatchException("Reference id [{$item->referenceId}] not found", KalturaBatchJobAppErrors::BULK_ITEM_NOT_FOUND);
+				throw new VidiunBatchException("Reference id [{$item->referenceId}] not found", VidiunBatchJobAppErrors::BULK_ITEM_NOT_FOUND);
 			
 			$entryId = $existingEntry->id;
 			$conversionProfileId = $existingEntry->conversionProfileId;
 		}
 		else
 		{
-			throw new KalturaBatchException("Missing entry id element", KalturaBatchJobAppErrors::BULK_MISSING_MANDATORY_PARAMETER);
+			throw new VidiunBatchException("Missing entry id element", VidiunBatchJobAppErrors::BULK_MISSING_MANDATORY_PARAMETER);
 		}
 		
 		// Overwriting conversionProfileId if one is supplied in the XML
 		if(isset($item->conversionProfileId) || isset($item->conversionProfile))
 			$conversionProfileId = $this->getConversionProfileId($item);
-		KalturaLog::info("Conversion profile found within XML - setting to [ $conversionProfileId ]");
+		VidiunLog::info("Conversion profile found within XML - setting to [ $conversionProfileId ]");
 		
 		//Throw exception in case of max proccessed items and handle all exceptions there
-		$updatedEntryBulkUploadResult = $this->createUploadResult($item, KalturaBulkUploadAction::UPDATE);
+		$updatedEntryBulkUploadResult = $this->createUploadResult($item, VidiunBulkUploadAction::UPDATE);
 		
 		if($this->exceededMaxRecordsEachRun) // exit if we have proccessed max num of items
 			return;
@@ -472,12 +472,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		$flavorResources = array();
 		$thumbAssetsForUpdate = array();
 		$thumbResources = array();
-		$resource = new KalturaAssetsParamsResourceContainers(); // holds all teh needed resources for the conversion
+		$resource = new VidiunAssetsParamsResourceContainers(); // holds all teh needed resources for the conversion
 		$resource->resources = array();
 		
 		//default action to perfom for assets and thumbnails is replace
-		$contentAssetsAction = self::$actionsMap[KalturaBulkUploadAction::REPLACE];
-		$thumbnailsAction = self::$actionsMap[KalturaBulkUploadAction::REPLACE];
+		$contentAssetsAction = self::$actionsMap[VidiunBulkUploadAction::REPLACE];
+		$thumbnailsAction = self::$actionsMap[VidiunBulkUploadAction::REPLACE];
 		if(isset($item->contentAssets->action) && (isset($item->thumbnails->action)))
 		{
 			$contentAssetsAction = strtolower($item->contentAssets->action);
@@ -495,14 +495,14 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		}
 		
 		if (isset($item->contentAssets->action) && isset($item->thumbnails->action) && ($contentAssetsAction != $thumbnailsAction))
-			throw new KalturaBatchException("ContentAsset->action: {$contentAssetsAction} must be the same as thumbnails->action: {$thumbnailsAction}", KalturaBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
+			throw new VidiunBatchException("ContentAsset->action: {$contentAssetsAction} must be the same as thumbnails->action: {$thumbnailsAction}", VidiunBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
 		
 		//For each content in the item element we add a new flavor asset
 		if(isset($item->contentAssets))
 		{
 			foreach ($item->contentAssets->content as $contentElement)
 			{
-				KalturaLog::info("contentElement [" . print_r($contentElement->asXml(), true). "]");
+				VidiunLog::info("contentElement [" . print_r($contentElement->asXml(), true). "]");
 				
 				if(empty($contentElement)) // if the content is empty skip
 				{
@@ -514,17 +514,17 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				
 				$assetParamsId = $flavorAsset->flavorParamsId;
 				
-				$assetId = kXml::getXmlAttributeAsString($contentElement, "assetId");
+				$assetId = vXml::getXmlAttributeAsString($contentElement, "assetId");
 				if($assetId) // if we have an asset id then we need to update the asset
 				{
-					KalturaLog::info("Asset id [ $assetId]");
+					VidiunLog::info("Asset id [ $assetId]");
 					$assetParamsId = $this->getAssetParamsIdFromAssetId($assetId, $entryId);
 				}
 				
 				if(isset($contentElement->streams))
 					$this->handleStreamsElement($contentElement->streams, $entry);
 				
-				KalturaLog::info("assetParamsId [$assetParamsId]");
+				VidiunLog::info("assetParamsId [$assetParamsId]");
 				
 				if(is_null($assetParamsId)) // no params resource
 				{
@@ -538,7 +538,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				}
 				
 				$flavorAssets[$flavorAsset->flavorParamsId] = $flavorAsset;
-				$assetResource = new KalturaAssetParamsResourceContainer();
+				$assetResource = new VidiunAssetParamsResourceContainer();
 				$assetResource->resource = $flavorAssetResource;
 				$assetResource->assetParamsId = $assetParamsId;
 				$resource->resources[] = $assetResource;
@@ -556,7 +556,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 					continue;
 				}
 				
-				KalturaLog::info("thumbElement [" . print_r($thumbElement->asXml(), true). "]");
+				VidiunLog::info("thumbElement [" . print_r($thumbElement->asXml(), true). "]");
 				
 				$thumbAsset = $this->getThumbAsset($thumbElement, $conversionProfileId);
 				$thumbAssetResource = $this->getResource($thumbElement, $conversionProfileId);
@@ -565,14 +565,14 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				
 				$assetParamsId = $thumbAsset->thumbParamsId;
 				
-				$assetId = kXml::getXmlAttributeAsString($thumbElement, "assetId");
+				$assetId = vXml::getXmlAttributeAsString($thumbElement, "assetId");
 				if($assetId) // if we have an asset id then we need to update the asset
 				{
-					KalturaLog::info("Asset id [ $assetId]");
+					VidiunLog::info("Asset id [ $assetId]");
 					$assetParamsId = $this->getAssetParamsIdFromAssetId($assetId, $entryId);
 				}
 				
-				KalturaLog::info("assetParamsId [$assetParamsId]");
+				VidiunLog::info("assetParamsId [$assetParamsId]");
 				
 				if(is_null($assetParamsId))
 				{
@@ -586,7 +586,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				}
 				
 				$thumbAssets[$thumbAsset->thumbParamsId] = $thumbAsset;
-				$assetResource = new KalturaAssetParamsResourceContainer();
+				$assetResource = new VidiunAssetParamsResourceContainer();
 				$assetResource->resource = $thumbAssetResource;
 				$assetResource->assetParamsId = $assetParamsId;
 				$resource->resources[] = $assetResource;
@@ -613,17 +613,17 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		switch($contentAssetsAction)
 		{
-			case self::$actionsMap[KalturaBulkUploadAction::UPDATE]:
+			case self::$actionsMap[VidiunBulkUploadAction::UPDATE]:
 				list($entry, $nonCriticalErrors) = $this->sendItemUpdateData($entryId, $entry, $flavorAssets, $flavorAssetsResources, $thumbAssets, $thumbAssetsResources);
 				break;
-			case self::$actionsMap[KalturaBulkUploadAction::REPLACE]:
+			case self::$actionsMap[VidiunBulkUploadAction::REPLACE]:
 				list($entry, $nonCriticalErrors) = $this->sendItemReplaceData($entryId, $entry, $resource,
 					$noParamsFlavorAssets, $noParamsFlavorResources,
 					$noParamsThumbAssets, $noParamsThumbResources, $pluginReplacementOptions, $item->keepManualThumbnails);
 				$entryId = $entry->id;
 				break;
 			default :
-				throw new KalturaBatchException("Action: {$contentAssetsAction} is not supported", KalturaBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
+				throw new VidiunBatchException("Action: {$contentAssetsAction} is not supported", VidiunBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
 		}
 		//Creates new category associations between the entry and the categories
 		$updatedEntryBulkUploadResult = $this->createCategoryAssociations($entryId, $item->categories, $updatedEntryBulkUploadResult, true);
@@ -637,9 +637,9 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see KBulkUploadEngine::addBulkUploadResult()
+	 * @see VBulkUploadEngine::addBulkUploadResult()
 	 */
-	protected function addBulkUploadResult(KalturaBulkUploadResult $bulkUploadResult)
+	protected function addBulkUploadResult(VidiunBulkUploadResult $bulkUploadResult)
 	{
 		parent::addBulkUploadResult($bulkUploadResult);
 		
@@ -649,8 +649,8 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Sends the data using a multi requsest according to the given data
 	 * @param int $entryID
-	 * @param KalturaBaseEntry $entry
-	 * @param KalturaResource $resource - the main resource collection for the entry
+	 * @param VidiunBaseEntry $entry
+	 * @param VidiunResource $resource - the main resource collection for the entry
 	 * @param array $noParamsFlavorAssets - Holds the no flavor params flavor assets
 	 * @param array $noParamsFlavorResources - Holds the no flavor params flavor resources
 	 * @param array $noParamsThumbAssets - Holds the no flavor params thumb assets
@@ -658,18 +658,18 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 * @param boolean $keepManualThumbnails - flag to keep thumbnails
 	 * @return $requestResults - the multi request result
 	 */
-	protected function sendItemReplaceData($entryId, KalturaBaseEntry $entry ,KalturaResource $resource = null,
+	protected function sendItemReplaceData($entryId, VidiunBaseEntry $entry ,VidiunResource $resource = null,
 	                                       array $noParamsFlavorAssets, array $noParamsFlavorResources,
 	                                       array $noParamsThumbAssets, array $noParamsThumbResources, array $pluginReplacementOptions, $keepManualThumbnails = false)
 	{
 		
-		KalturaLog::info("Resource is: " . print_r($resource, true));
+		VidiunLog::info("Resource is: " . print_r($resource, true));
 		
-		KBatchBase::impersonate($this->currentPartnerId);;
+		VBatchBase::impersonate($this->currentPartnerId);;
 		$updateEntry = $this->removeNonUpdatbleFields($entry);
-		$updatedEntry = KBatchBase::$kClient->baseEntry->get($entryId);
+		$updatedEntry = VBatchBase::$vClient->baseEntry->get($entryId);
 		
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		
 		$updatedEntryId = $updatedEntry->id;
 		if(!is_null($updatedEntry->replacingEntryId))
@@ -680,7 +680,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		{
 			if(is_null($advancedOptions))
 			{
-				$advancedOptions = new KalturaEntryReplacementOptions();
+				$advancedOptions = new VidiunEntryReplacementOptions();
 				$advancedOptions->pluginOptionItems = array();
 			}
 			$replacementObject = new $pluginReplacementObjectName();
@@ -694,7 +694,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		if ($keepManualThumbnails)
 		{
 			if (is_null($advancedOptions))
-				$advancedOptions = new KalturaEntryReplacementOptions();
+				$advancedOptions = new VidiunEntryReplacementOptions();
 			$advancedOptions->keepManualThumbnails = 1;
 		}
 		
@@ -702,45 +702,45 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		{
 			if ($updateEntry->streams )
 			{
-				$baseEntry = new KalturaMediaEntry();
+				$baseEntry = new VidiunMediaEntry();
 				$baseEntry->streams = $updateEntry->streams;
-				$updatedEntry = KBatchBase::$kClient->baseEntry->update($entryId, $baseEntry);
+				$updatedEntry = VBatchBase::$vClient->baseEntry->update($entryId, $baseEntry);
 			}
-			KBatchBase::$kClient->baseEntry->updateContent($updatedEntryId ,$resource, $entry->conversionProfileId, $advancedOptions); //to create a temporery entry.
+			VBatchBase::$vClient->baseEntry->updateContent($updatedEntryId ,$resource, $entry->conversionProfileId, $advancedOptions); //to create a temporery entry.
 		}
 		
 		
 		foreach($noParamsFlavorAssets as $index => $flavorAsset) // Adds all the entry flavors
 		{
 			$flavorResource = $noParamsFlavorResources[$index];
-			$flavor = KBatchBase::$kClient->flavorAsset->add($updatedEntryId, $flavorAsset);
-			KBatchBase::$kClient->flavorAsset->setContent(KBatchBase::$kClient->getMultiRequestResult()->id, $flavorResource);		// TODO: use flavor instead of getMultiRequestResult
+			$flavor = VBatchBase::$vClient->flavorAsset->add($updatedEntryId, $flavorAsset);
+			VBatchBase::$vClient->flavorAsset->setContent(VBatchBase::$vClient->getMultiRequestResult()->id, $flavorResource);		// TODO: use flavor instead of getMultiRequestResult
 		}
 		
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		if(is_array($requestResults))
 			foreach($requestResults as $requestResult)
 			{
 				if(is_array($requestResult) && isset($requestResult['code']))
-					throw new KalturaException($requestResult['message'], $requestResult['code'], $requestResult['args']);
+					throw new VidiunException($requestResult['message'], $requestResult['code'], $requestResult['args']);
 				
 				if($requestResult instanceof Exception)
 					throw $requestResult;
 			}
 		
 		
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		
 		foreach($noParamsThumbAssets as $index => $thumbAsset) //Adds the entry thumb assests
 		{
 			$thumbResource = $noParamsThumbResources[$index];
-			$thumb = KBatchBase::$kClient->thumbAsset->add($updatedEntryId, $thumbAsset);
-			KBatchBase::$kClient->thumbAsset->setContent(KBatchBase::$kClient->getMultiRequestResult()->id, $thumbResource);		// TODO: use thumb instead of getMultiRequestResult
+			$thumb = VBatchBase::$vClient->thumbAsset->add($updatedEntryId, $thumbAsset);
+			VBatchBase::$vClient->thumbAsset->setContent(VBatchBase::$vClient->getMultiRequestResult()->id, $thumbResource);		// TODO: use thumb instead of getMultiRequestResult
 			if (strpos($thumbAsset->tags, self::DEFAULT_THUMB_TAG) !== false)
-				KBatchBase::$kClient->thumbAsset->setAsDefault($thumb->id);
+				VBatchBase::$vClient->thumbAsset->setAsDefault($thumb->id);
 		}
 		
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		
 		$nonCriticalErrors = '';
 		$newThumbAssetsIds = array();
@@ -750,7 +750,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				$nonCriticalErrors .= $requestResult['message']."\n";
 			if ($requestResult instanceof Exception)
 				$nonCriticalErrors .= $requestResult->getMessage()."\n";
-			if ($requestResult instanceof KalturaThumbAsset)
+			if ($requestResult instanceof VidiunThumbAsset)
 				$newThumbAssetsIds[] = $requestResult->id;
 		}
 		
@@ -760,26 +760,26 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		
 		//update is after add content since in case entry replacement we want the duration to be set on the new entry.
-		$updatedEntry = KBatchBase::$kClient->baseEntry->update($entryId, $updateEntry);
+		$updatedEntry = VBatchBase::$vClient->baseEntry->update($entryId, $updateEntry);
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		return array($updatedEntry, $nonCriticalErrors);
 	}
 	
 	protected function removeOldThumbnails($updatedEntryId, $newThumbAssetsIds)
 	{
-		$filter = new KalturaAssetFilter();
+		$filter = new VidiunAssetFilter();
 		$filter->entryIdEqual = $updatedEntryId;
-		$thumbList = KBatchBase::$kClient->thumbAsset->listAction($filter);
+		$thumbList = VBatchBase::$vClient->thumbAsset->listAction($filter);
 		
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($thumbList->objects as $thumbAsset)
 		{
 			if(!in_array($thumbAsset->id, $newThumbAssetsIds))
-				KBatchBase::$kClient->thumbAsset->delete($thumbAsset->id);
+				VBatchBase::$vClient->thumbAsset->delete($thumbAsset->id);
 		}
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		
 		$nonCriticalErrors = '';
 		foreach($requestResults as $requestResult)
@@ -795,7 +795,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Handles xml bulk upload delete
 	 * @param SimpleXMLElement $item
-	 * @throws KalturaException
+	 * @throws VidiunException
 	 */
 	protected function handleItemDelete(SimpleXMLElement $item)
 	{
@@ -808,18 +808,18 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		{
 			$entryId = $this->getEntryIdFromReference("{$item->referenceId}");
 			if(!$entryId)
-				throw new KalturaBatchException("Reference id [{$item->referenceId}] not found", KalturaBatchJobAppErrors::BULK_ITEM_NOT_FOUND);
+				throw new VidiunBatchException("Reference id [{$item->referenceId}] not found", VidiunBatchJobAppErrors::BULK_ITEM_NOT_FOUND);
 		}
 		else
 		{
-			throw new KalturaBatchException("Missing entry id element", KalturaBatchJobAppErrors::BULK_MISSING_MANDATORY_PARAMETER);
+			throw new VidiunBatchException("Missing entry id element", VidiunBatchJobAppErrors::BULK_MISSING_MANDATORY_PARAMETER);
 		}
 		
-		KBatchBase::impersonate($this->currentPartnerId);;
-		$result = KBatchBase::$kClient->baseEntry->delete($entryId);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		$result = VBatchBase::$vClient->baseEntry->delete($entryId);
+		VBatchBase::unimpersonate();
 		
-		$bulkUploadResult = $this->createUploadResult($item, KalturaBulkUploadAction::DELETE);
+		$bulkUploadResult = $this->createUploadResult($item, VidiunBulkUploadAction::DELETE);
 		if($this->exceededMaxRecordsEachRun) // exit if we have proccessed max num of items
 			return;
 		
@@ -834,7 +834,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	protected function handleItemAdd(SimpleXMLElement $item)
 	{
 		//Throw exception in case of  max proccessed items and handle all exceptions there
-		$createdEntryBulkUploadResult = $this->createUploadResult($item, KalturaBulkUploadAction::ADD);
+		$createdEntryBulkUploadResult = $this->createUploadResult($item, VidiunBulkUploadAction::ADD);
 		if($this->exceededMaxRecordsEachRun) // exit if we have proccessed max num of items
 			return;
 		
@@ -848,7 +848,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		$noParamsThumbResources = array(); //Holds the no flavor params resources assests
 		$noParamsFlavorAssets = array();  //Holds the no flavor params flavor assests
 		$noParamsFlavorResources = array(); //Holds the no flavor params flavor resources
-		$resource = new KalturaAssetsParamsResourceContainers(); // holds all teh needed resources for the conversion
+		$resource = new VidiunAssetsParamsResourceContainers(); // holds all teh needed resources for the conversion
 		$resource->resources = array();
 		
 		//For each content in the item element we add a new flavor asset
@@ -860,18 +860,18 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				if(!$assetResource)
 					continue;
 				
-				$assetResourceContainer = new KalturaAssetParamsResourceContainer();
+				$assetResourceContainer = new VidiunAssetParamsResourceContainer();
 				$flavorAsset = $this->getFlavorAsset($contentElement, $entry->conversionProfileId);
 				
 				if(is_null($flavorAsset->flavorParamsId))
 				{
-					KalturaLog::info("flavorAsset [". print_r($flavorAsset, true) . "]");
+					VidiunLog::info("flavorAsset [". print_r($flavorAsset, true) . "]");
 					$noParamsFlavorAssets[] = $flavorAsset;
 					$noParamsFlavorResources[] = $assetResource;
 				}
 				else
 				{
-					KalturaLog::info("flavorAsset->flavorParamsId [$flavorAsset->flavorParamsId]");
+					VidiunLog::info("flavorAsset->flavorParamsId [$flavorAsset->flavorParamsId]");
 					$flavorAssets[$flavorAsset->flavorParamsId] = $flavorAsset;
 					$assetResourceContainer->assetParamsId = $flavorAsset->flavorParamsId;
 					$assetResourceContainer->resource = $assetResource;
@@ -892,18 +892,18 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				if(!$assetResource)
 					continue;
 				
-				$assetResourceContainer = new KalturaAssetParamsResourceContainer();
+				$assetResourceContainer = new VidiunAssetParamsResourceContainer();
 				$thumbAsset = $this->getThumbAsset($thumbElement, $entry->conversionProfileId);
 				
 				if(is_null($thumbAsset->thumbParamsId))
 				{
-					KalturaLog::info("thumbAsset [". print_r($thumbAsset, true) . "]");
+					VidiunLog::info("thumbAsset [". print_r($thumbAsset, true) . "]");
 					$noParamsThumbAssets[] = $thumbAsset;
 					$noParamsThumbResources[] = $assetResource;
 				}
 				else //we have a thumbParamsId so we add to the resources
 				{
-					KalturaLog::info("thumbAsset->thumbParamsId [$thumbAsset->thumbParamsId]");
+					VidiunLog::info("thumbAsset->thumbParamsId [$thumbAsset->thumbParamsId]");
 					$thumbAssets[$thumbAsset->thumbParamsId] = $thumbAsset;
 					$assetResourceContainer->assetParamsId = $thumbAsset->thumbParamsId;
 					$assetResourceContainer->resource = $assetResource;
@@ -939,17 +939,17 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		//Handles the plugin added data
 		$pluginsErrorResults = array();
-		$pluginsInstances = KalturaPluginManager::getPluginInstances('IKalturaBulkUploadXmlHandler');
+		$pluginsInstances = VidiunPluginManager::getPluginInstances('IVidiunBulkUploadXmlHandler');
 		foreach($pluginsInstances as $pluginsInstance)
 		{
-			/* @var $pluginsInstance IKalturaBulkUploadXmlHandler */
+			/* @var $pluginsInstance IVidiunBulkUploadXmlHandler */
 			try {
 				$pluginsInstance->configureBulkUploadXmlHandler($this);
 				$pluginsInstance->handleItemAdded($createdEntry, $item);
 			}catch (Exception $e)
 			{
-				KBatchBase::unimpersonate();
-				KalturaLog::err($pluginsInstance->getContainerName() . ' failed: ' . $e->getMessage());
+				VBatchBase::unimpersonate();
+				VidiunLog::err($pluginsInstance->getContainerName() . ' failed: ' . $e->getMessage());
 				$pluginsErrorResults[] = $pluginsInstance->getContainerName() . ' failed: ' . $e->getMessage();
 			}
 		}
@@ -964,13 +964,13 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		$streamsArray = array();
 		foreach ($streams->stream as $stream)
 		{
-			$streamContainer = new KalturaStreamContainer();
-			$streamContainer->type = kXml::getXmlAttributeAsString($stream, "type");
-			$streamContainer->trackIndex = kXml::getXmlAttributeAsString($stream, "trackIndex");
-			$streamContainer->channelIndex = kXml::getXmlAttributeAsString($stream, "channelIndex");
-			$streamContainer->channelLayout = kXml::getXmlAttributeAsString($stream, "channelLayout");
-			$streamContainer->language = kXml::getXmlAttributeAsString($stream, "language");
-			$streamContainer->label = kXml::getXmlAttributeAsString($stream, "label");
+			$streamContainer = new VidiunStreamContainer();
+			$streamContainer->type = vXml::getXmlAttributeAsString($stream, "type");
+			$streamContainer->trackIndex = vXml::getXmlAttributeAsString($stream, "trackIndex");
+			$streamContainer->channelIndex = vXml::getXmlAttributeAsString($stream, "channelIndex");
+			$streamContainer->channelLayout = vXml::getXmlAttributeAsString($stream, "channelLayout");
+			$streamContainer->language = vXml::getXmlAttributeAsString($stream, "language");
+			$streamContainer->label = vXml::getXmlAttributeAsString($stream, "label");
 			
 			$streamsArray[] = $streamContainer;
 		}
@@ -980,45 +980,45 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * Sends the data using a multi requsest according to the given data
-	 * @param KalturaBaseEntry $entry
-	 * @param KalturaResource $resource
+	 * @param VidiunBaseEntry $entry
+	 * @param VidiunResource $resource
 	 * @param array $noParamsFlavorAssets
 	 * @param array $noParamsFlavorResources
 	 * @param array $noParamsThumbAssets
 	 * @param array $noParamsThumbResources
 	 * @return $requestResults - the multi request result
 	 */
-	protected function sendItemAddData(KalturaBaseEntry $entry ,KalturaResource $resource = null, array $noParamsFlavorAssets, array $noParamsFlavorResources, array $noParamsThumbAssets, array $noParamsThumbResources, array $flavorAssets)
+	protected function sendItemAddData(VidiunBaseEntry $entry ,VidiunResource $resource = null, array $noParamsFlavorAssets, array $noParamsFlavorResources, array $noParamsThumbAssets, array $noParamsThumbResources, array $flavorAssets)
 	{
-		KBatchBase::impersonate($this->currentPartnerId);;
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		VBatchBase::$vClient->startMultiRequest();
 		
-		KalturaLog::info("Resource is: " . print_r($resource, true));
+		VidiunLog::info("Resource is: " . print_r($resource, true));
 		
-		KBatchBase::$kClient->baseEntry->add($entry); //Adds the entry
-		$newEntryId = KBatchBase::$kClient->getMultiRequestResult()->id;							// TODO: use the return value of add instead of getMultiRequestResult
+		VBatchBase::$vClient->baseEntry->add($entry); //Adds the entry
+		$newEntryId = VBatchBase::$vClient->getMultiRequestResult()->id;							// TODO: use the return value of add instead of getMultiRequestResult
 		
 		foreach ($flavorAssets as $currFlavorAsset)
 		{
-			KBatchBase::$kClient->flavorAsset->add($newEntryId, $currFlavorAsset);
+			VBatchBase::$vClient->flavorAsset->add($newEntryId, $currFlavorAsset);
 		}
 		
 		if($resource)
-			KBatchBase::$kClient->baseEntry->addContent($newEntryId, $resource); // adds the entry resources
+			VBatchBase::$vClient->baseEntry->addContent($newEntryId, $resource); // adds the entry resources
 		
 		foreach($noParamsFlavorAssets as $index => $flavorAsset) // Adds all the entry flavors
 		{
 			$flavorResource = $noParamsFlavorResources[$index];
-			$flavor = KBatchBase::$kClient->flavorAsset->add($newEntryId, $flavorAsset);
-			KBatchBase::$kClient->flavorAsset->setContent(KBatchBase::$kClient->getMultiRequestResult()->id, $flavorResource);			// TODO: use flavor instead of getMultiRequestResult
+			$flavor = VBatchBase::$vClient->flavorAsset->add($newEntryId, $flavorAsset);
+			VBatchBase::$vClient->flavorAsset->setContent(VBatchBase::$vClient->getMultiRequestResult()->id, $flavorResource);			// TODO: use flavor instead of getMultiRequestResult
 		}
 		//Seperating to two multi-requests since if any of these fails we should fail all the process but if only thumbs fail it should continue fine
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		
 		foreach($requestResults as $requestResult)
 		{
 			if(is_array($requestResult) && isset($requestResult['code']))
-				throw new KalturaException($requestResult['message'], $requestResult['code']);
+				throw new VidiunException($requestResult['message'], $requestResult['code']);
 			
 			if($requestResult instanceof Exception)
 				throw $requestResult;
@@ -1026,24 +1026,24 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		$createdEntry = reset($requestResults);
 		if(is_null($createdEntry)) //checks that the entry was created
-			throw new KalturaBulkUploadXmlException("The entry wasn't created", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			throw new VidiunBulkUploadXmlException("The entry wasn't created", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		
-		if(!($createdEntry instanceof KalturaObjectBase)) // if the entry is not kaltura object (in case of errors)
-			throw new KalturaBulkUploadXmlException("Returned type is [" . get_class($createdEntry) . "], KalturaObjectBase was expected", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		if(!($createdEntry instanceof VidiunObjectBase)) // if the entry is not vidiun object (in case of errors)
+			throw new VidiunBulkUploadXmlException("Returned type is [" . get_class($createdEntry) . "], VidiunObjectBase was expected", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($noParamsThumbAssets as $index => $thumbAsset) //Adds the entry thumb assests
 		{
 			
 			$thumbResource = $noParamsThumbResources[$index];
-			$thumb = KBatchBase::$kClient->thumbAsset->add($createdEntry->id, $thumbAsset, $thumbResource);
-			KBatchBase::$kClient->thumbAsset->setContent(KBatchBase::$kClient->getMultiRequestResult()->id, $thumbResource);			// TODO: use thumb instead of getMultiRequestResult
+			$thumb = VBatchBase::$vClient->thumbAsset->add($createdEntry->id, $thumbAsset, $thumbResource);
+			VBatchBase::$vClient->thumbAsset->setContent(VBatchBase::$vClient->getMultiRequestResult()->id, $thumbResource);			// TODO: use thumb instead of getMultiRequestResult
 			if (strpos($thumbAsset->tags, self::DEFAULT_THUMB_TAG) !== false)
-				KBatchBase::$kClient->thumbAsset->setAsDefault($thumb->id);
+				VBatchBase::$vClient->thumbAsset->setAsDefault($thumb->id);
 		}
 		
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
-		KBatchBase::unimpersonate();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
+		VBatchBase::unimpersonate();
 		
 		$nonCriticalErrors = '';
 		if($requestResults)
@@ -1057,7 +1057,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			}
 		}
 		else
-			KalturaLog::log('Failed to get response from multiRequest');
+			VidiunLog::log('Failed to get response from multiRequest');
 		
 		return array($createdEntry, $nonCriticalErrors);
 	}
@@ -1070,16 +1070,16 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 */
 	protected function handleFlavorAndThumbsAdditionalData($createdEntryId, $flavorAssets, $thumbAssets)
 	{
-		KBatchBase::impersonate($this->currentPartnerId);;
-		KBatchBase::$kClient->startMultiRequest();
-		KBatchBase::$kClient->flavorAsset->getByEntryId($createdEntryId);
-		KBatchBase::$kClient->thumbAsset->getByEntryId($createdEntryId);
-		$result = KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		VBatchBase::$vClient->startMultiRequest();
+		VBatchBase::$vClient->flavorAsset->getByEntryId($createdEntryId);
+		VBatchBase::$vClient->thumbAsset->getByEntryId($createdEntryId);
+		$result = VBatchBase::$vClient->doMultiRequest();
 		
 		foreach($result as $requestResult)
 		{
 			if(is_array($requestResult) && isset($requestResult['code']))
-				throw new KalturaException($requestResult['message'], $requestResult['code']);
+				throw new VidiunException($requestResult['message'], $requestResult['code']);
 			
 			if($requestResult instanceof Exception)
 				throw $requestResult;
@@ -1088,7 +1088,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		$createdFlavorAssets = $result[0];
 		$createdThumbAssets =  $result[1];
 		
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		///For each flavor asset that we just added without his data then we need to update his additional data
 		foreach($createdFlavorAssets as $createdFlavorAsset)
 		{
@@ -1099,7 +1099,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				continue;
 			
 			$flavorAsset = $flavorAssets[$createdFlavorAsset->flavorParamsId];
-			KBatchBase::$kClient->flavorAsset->update($createdFlavorAsset->id, $flavorAsset);
+			VBatchBase::$vClient->flavorAsset->update($createdFlavorAsset->id, $flavorAsset);
 		}
 		
 		foreach($createdThumbAssets as $createdThumbAsset)
@@ -1111,17 +1111,17 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				continue;
 			
 			$thumbAsset = $thumbAssets[$createdThumbAsset->thumbParamsId];
-			KBatchBase::$kClient->thumbAsset->update($createdThumbAsset->id, $thumbAsset);
+			VBatchBase::$vClient->thumbAsset->update($createdThumbAsset->id, $thumbAsset);
 		}
 		
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
-		KBatchBase::unimpersonate();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
+		VBatchBase::unimpersonate();
 		
 		if(is_array($requestResults))
 			foreach($requestResults as $requestResult)
 			{
 				if(is_array($requestResult) && isset($requestResult['code']))
-					throw new KalturaException($requestResult['message'], $requestResult['code']);
+					throw new VidiunException($requestResult['message'], $requestResult['code']);
 				
 				if($requestResult instanceof Exception)
 					throw $requestResult;
@@ -1145,7 +1145,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			if(isset($item->pluginReplacementOptions->metadataReplacementOptionsItem))
 			{
 				if(isset($item->pluginReplacementOptions->metadataReplacementOptionsItem->shouldCopyMetadata) && $item->pluginReplacementOptions->metadataReplacementOptionsItem->shouldCopyMetadata == 'true')
-					$options['KalturaMetadataReplacementOptionsItem'] = array("shouldCopyMetadata" => true);
+					$options['VidiunMetadataReplacementOptionsItem'] = array("shouldCopyMetadata" => true);
 			}
 		}
 		return $options;
@@ -1154,7 +1154,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Handles the adding of additional data to the preciously created flavors and thumbs
 	 * @param int $entryId
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 * @param array $flavorAssets
 	 * @param array $flavorAssetsResources
 	 * @param array $thumbAssets
@@ -1162,19 +1162,19 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 */
 	protected function sendItemUpdateData($entryId, $entry, array $flavorAssets, array $flavorAssetsResources, array $thumbAssets, array $thumbAssetsResources)
 	{
-		KBatchBase::impersonate($this->currentPartnerId);;
+		VBatchBase::impersonate($this->currentPartnerId);;
 		$updateEntry = $this->removeNonUpdatbleFields($entry);
-		$updatedEntry = KBatchBase::$kClient->baseEntry->update($entryId, $updateEntry);
+		$updatedEntry = VBatchBase::$vClient->baseEntry->update($entryId, $updateEntry);
 		
-		KBatchBase::$kClient->startMultiRequest();
-		KBatchBase::$kClient->flavorAsset->getByEntryId($entryId);
-		KBatchBase::$kClient->thumbAsset->getByEntryId($entryId);
-		$result = KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
+		VBatchBase::$vClient->flavorAsset->getByEntryId($entryId);
+		VBatchBase::$vClient->thumbAsset->getByEntryId($entryId);
+		$result = VBatchBase::$vClient->doMultiRequest();
 		
 		foreach($result as $requestResult)
 		{
 			if(is_array($requestResult) && isset($requestResult['code']))
-				throw new KalturaException($requestResult['message'], $requestResult['code']);
+				throw new VidiunException($requestResult['message'], $requestResult['code']);
 			
 			if($requestResult instanceof Exception)
 				throw $requestResult;
@@ -1193,35 +1193,35 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			$existingflavorAssets[$createdFlavorAsset->flavorParamsId] = $createdFlavorAsset->id;
 		}
 		
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach ($flavorAssetsResources as $flavorParamsId => $flavorAssetsResource)
 		{
 			$id = null;
 			if (!isset($existingflavorAssets[$flavorParamsId]))
 			{
-				KBatchBase::$kClient->flavorAsset->add($entryId, $flavorAssets[$flavorParamsId]);
-				$id = KBatchBase::$kClient->getMultiRequestResult()->id;
+				VBatchBase::$vClient->flavorAsset->add($entryId, $flavorAssets[$flavorParamsId]);
+				$id = VBatchBase::$vClient->getMultiRequestResult()->id;
 			} else
 			{
 				$id = $existingflavorAssets[$flavorParamsId];
-				KBatchBase::$kClient->flavorAsset->update($id, $flavorAssets[$flavorParamsId]);
+				VBatchBase::$vClient->flavorAsset->update($id, $flavorAssets[$flavorParamsId]);
 			}
 			if ($flavorAssetsResource)
-				KBatchBase::$kClient->flavorAsset->setContent($id, $flavorAssetsResource);
+				VBatchBase::$vClient->flavorAsset->setContent($id, $flavorAssetsResource);
 		}
 		
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		
 		foreach($requestResults as $requestResult)
 		{
 			if(is_array($requestResult) && isset($requestResult['code']))
-				throw new KalturaException($requestResult['message'], $requestResult['code']);
+				throw new VidiunException($requestResult['message'], $requestResult['code']);
 			
 			if($requestResult instanceof Exception)
 				throw $requestResult;
 		}
 		
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($createdThumbAssets as $createdThumbAsset)
 		{
 			if(is_null($createdThumbAsset->thumbParamsId))
@@ -1235,18 +1235,18 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		{
 			if(!isset($existingthumbAssets[$thumbParamsId]))
 			{
-				$thumbsAsset = KBatchBase::$kClient->thumbAsset->add($entryId, $thumbAssets[$thumbParamsId]);
-				KBatchBase::$kClient->thumbAsset->setContent(KBatchBase::$kClient->getMultiRequestResult()->id, $thumbAssetsResource);
+				$thumbsAsset = VBatchBase::$vClient->thumbAsset->add($entryId, $thumbAssets[$thumbParamsId]);
+				VBatchBase::$vClient->thumbAsset->setContent(VBatchBase::$vClient->getMultiRequestResult()->id, $thumbAssetsResource);
 			}else{
-				$thumbsAsset = KBatchBase::$kClient->thumbAsset->update($existingthumbAssets[$thumbParamsId], $thumbAssets[$thumbParamsId]);
-				KBatchBase::$kClient->thumbAsset->setContent($existingthumbAssets[$thumbParamsId], $thumbAssetsResource);
+				$thumbsAsset = VBatchBase::$vClient->thumbAsset->update($existingthumbAssets[$thumbParamsId], $thumbAssets[$thumbParamsId]);
+				VBatchBase::$vClient->thumbAsset->setContent($existingthumbAssets[$thumbParamsId], $thumbAssetsResource);
 			}
 			if (strpos($thumbAssetsResource->tags, self::DEFAULT_THUMB_TAG) !== false)
-				KBatchBase::$kClient->thumbAsset->setAsDefault($thumbsAsset->id);
+				VBatchBase::$vClient->thumbAsset->setAsDefault($thumbsAsset->id);
 		}
 		
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
-		KBatchBase::unimpersonate();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
+		VBatchBase::unimpersonate();
 		
 		$nonCriticalErrors = '';
 		foreach($requestResults as $requestResult)
@@ -1264,10 +1264,10 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * @param string $entryId
 	 * @param SimpleXMLElement $categories element containing the categories
-	 * @param KalturaBulkUploadResultEntry $bulkuploadResult
+	 * @param VidiunBulkUploadResultEntry $bulkuploadResult
 	 * @param bool $update indicates that we are in update state and old categories that aren't in the list should be removed.
 	 */
-	protected function createCategoryAssociations($entryId, SimpleXMLElement $categories, KalturaBulkUploadResultEntry $bulkuploadResult, $update = false)
+	protected function createCategoryAssociations($entryId, SimpleXMLElement $categories, VidiunBulkUploadResultEntry $bulkuploadResult, $update = false)
 	{
 		if(!empty($categories) && count($categories->children()))
 		{
@@ -1283,7 +1283,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		}
 		else
 		{
-			KalturaLog::info ("Entry [$entryId] not published to categories");
+			VidiunLog::info ("Entry [$entryId] not published to categories");
 			return $bulkuploadResult;
 		}
 		
@@ -1292,10 +1292,10 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * @param string $entryId
 	 * @param string $categories comma seperated categoy full names.
-	 * @param KalturaBulkUploadResultEntry $bulkuploadResult
+	 * @param VidiunBulkUploadResultEntry $bulkuploadResult
 	 * @param bool $update indicates that we are in update state and old categories that aren't in the list should be removed.
 	 */
-	protected function createCategoryAssociationsByFullNames($entryId, $categories, KalturaBulkUploadResultEntry $bulkuploadResult, $update = false)
+	protected function createCategoryAssociationsByFullNames($entryId, $categories, VidiunBulkUploadResultEntry $bulkuploadResult, $update = false)
 	{
 		// no change requested
 		if(is_null($categories))
@@ -1303,7 +1303,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			return $bulkuploadResult;
 		}
 		
-		KBatchBase::impersonate($this->currentPartnerId);
+		VBatchBase::impersonate($this->currentPartnerId);
 		
 		$existingCategoryIds = array(); // category ids that already associated with the entry - current list
 		$requiredCategoryIds = array(); // category ids that should be associated with the entry - final list
@@ -1311,28 +1311,28 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		try
 		{
-			KBatchBase::$kClient->startMultiRequest();
+			VBatchBase::$vClient->startMultiRequest();
 			if($update)
 			{
-				$categoryEntryFilter = new KalturaCategoryEntryFilter();
+				$categoryEntryFilter = new VidiunCategoryEntryFilter();
 				$categoryEntryFilter->entryIdEqual = $entryId;
-				KBatchBase::$kClient->categoryEntry->listAction($categoryEntryFilter);
+				VBatchBase::$vClient->categoryEntry->listAction($categoryEntryFilter);
 			}
 			if($categories)
 			{
-				$categoryFilter = new KalturaCategoryFilter();
+				$categoryFilter = new VidiunCategoryFilter();
 				$categoryFilter->fullNameIn = $categories;
-				KBatchBase::$kClient->category->listAction($categoryFilter);
+				VBatchBase::$vClient->category->listAction($categoryFilter);
 			}
-			$responses = KBatchBase::$kClient->doMultiRequest();
+			$responses = VBatchBase::$vClient->doMultiRequest();
 			if($update)
 			{
 				$categoryEntryListResponse = array_shift($responses);
-				/* @var $categoryEntryListResponse KalturaCategoryEntryListResponse */
+				/* @var $categoryEntryListResponse VidiunCategoryEntryListResponse */
 				
 				foreach($categoryEntryListResponse->objects as $categoryEntry)
 				{
-					/* @var $categoryEntry KalturaCategoryEntry */
+					/* @var $categoryEntry VidiunCategoryEntry */
 					$existingCategoryIds[] = $categoryEntry->categoryId;
 				}
 			}
@@ -1340,7 +1340,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			if($categories)
 			{
 				$categoryListResponse = array_shift($responses);
-				/* @var $categoryEntryListResponse KalturaCategoryEntryListResponse */
+				/* @var $categoryEntryListResponse VidiunCategoryEntryListResponse */
 				
 				$existingCategoryNames = array();
 				foreach($categoryListResponse->objects as $category)
@@ -1354,7 +1354,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				{
 					if(!in_array($categoryName, $existingCategoryNames)) //Category does not exis
 					{
-						KalturaLog::info("Creating a new category by the name [$categoryName]");
+						VidiunLog::info("Creating a new category by the name [$categoryName]");
 						$createdCategories[] = $this->createCategoryByPath($categoryName);
 					}
 				}
@@ -1362,7 +1362,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				if ($createdCategories) {
 					foreach($createdCategories as $createdCategory)
 					{
-						/* @var $createdCategory KalturaCategory */
+						/* @var $createdCategory VidiunCategory */
 						$requiredCategoryIds[] = $createdCategory->id; //Adding the newly created category IDs to the ToWork list
 					}
 				}
@@ -1375,9 +1375,9 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				if (count ($categoryIdsToRemove))
 				{
 					//If any of these categories are aggregation categories - the deletion will occur automatically, and is not required here.
-					$categoryFilter = new KalturaCategoryFilter();
+					$categoryFilter = new VidiunCategoryFilter();
 					$categoryFilter->idIn = implode(',', $categoryIdsToRemove);
-					$response = KBatchBase::$kClient->category->listAction($categoryFilter);
+					$response = VBatchBase::$vClient->category->listAction($categoryFilter);
 					
 					$categoriesToCheck = array();
 					foreach ($response->objects as $category)
@@ -1387,7 +1387,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				}
 			}
 			
-			KBatchBase::$kClient->startMultiRequest();
+			VBatchBase::$vClient->startMultiRequest();
 			
 			if($update) // Remove existing categories and associations
 			{
@@ -1395,12 +1395,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				{
 					if (isset ($categoriesToCheck[$categoryIdToRemove]) && $categoriesToCheck[$categoryIdToRemove]->isAggregationCategory)
 					{
-						KalturaLog::info ("No need to remove entry from category $categoryIdToRemove - this is an aggregation category.");
+						VidiunLog::info ("No need to remove entry from category $categoryIdToRemove - this is an aggregation category.");
 						continue;
 					}
 					
-					KalturaLog::info("Removing category ID [$categoryIdToRemove] from entry [$entryId]");
-					KBatchBase::$kClient->categoryEntry->delete($entryId, $categoryIdToRemove);
+					VidiunLog::info("Removing category ID [$categoryIdToRemove] from entry [$entryId]");
+					VBatchBase::$vClient->categoryEntry->delete($entryId, $categoryIdToRemove);
 				}
 			}
 			
@@ -1408,32 +1408,32 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			$categoryIdsToAdd = array_diff($requiredCategoryIds, $existingCategoryIds);
 			foreach($categoryIdsToAdd as $categoryIdToAdd)
 			{
-				$categoryEntryToAdd = new KalturaCategoryEntry();
+				$categoryEntryToAdd = new VidiunCategoryEntry();
 				$categoryEntryToAdd->categoryId = $categoryIdToAdd;
 				$categoryEntryToAdd->entryId = $entryId;
-				KalturaLog::info("Adding category ID [$categoryIdToAdd] to entry [$entryId]");
-				KBatchBase::$kClient->categoryEntry->add($categoryEntryToAdd);
+				VidiunLog::info("Adding category ID [$categoryIdToAdd] to entry [$entryId]");
+				VBatchBase::$vClient->categoryEntry->add($categoryEntryToAdd);
 			}
 			
-			KBatchBase::$kClient->doMultiRequest();
+			VBatchBase::$vClient->doMultiRequest();
 			
 		}
-		catch(KalturaException $ex)
+		catch(VidiunException $ex)
 		{
 			$bulkuploadResult->errorDescription .= $ex->getMessage();
 		}
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		return $bulkuploadResult;
 	}
 	
 	/**
 	 * @param string $entryId
 	 * @param string $categories comma seperated categoy full names.
-	 * @param KalturaBulkUploadResultEntry $bulkuploadResult
+	 * @param VidiunBulkUploadResultEntry $bulkuploadResult
 	 * @param bool $update indicates that we are in update state and old categories that aren't in the list should be removed.
 	 */
-	protected function createCategoryAssociationsByCategoryIds ($entryId, $categories, KalturaBulkUploadResultEntry $bulkuploadResult, $update = false)
+	protected function createCategoryAssociationsByCategoryIds ($entryId, $categories, VidiunBulkUploadResultEntry $bulkuploadResult, $update = false)
 	{
 		// no change requested
 		if(is_null($categories))
@@ -1441,8 +1441,8 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			return $bulkuploadResult;
 		}
 		
-		KalturaLog::info("Publishing entry $entryId to categories: $categories");
-		KBatchBase::impersonate($this->currentPartnerId);
+		VidiunLog::info("Publishing entry $entryId to categories: $categories");
+		VBatchBase::impersonate($this->currentPartnerId);
 		
 		$categoriesToAdd = explode(',', $categories);
 		$categoriesToRemove = array();
@@ -1451,12 +1451,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			// if update - check whether the same entry already exists on some of the intended category IDs
 			if ($update)
 			{
-				KalturaLog::info("Update context - determining categoryEntry diff for entry [$entryId].");
+				VidiunLog::info("Update context - determining categoryEntry diff for entry [$entryId].");
 				$existingCategories = array();
 				$categoriesToRemove = array();
-				$categoryEntryFilter = new kalturaCategoryEntryFilter();
+				$categoryEntryFilter = new vidiunCategoryEntryFilter();
 				$categoryEntryFilter->entryIdEqual = $entryId;
-				$result = KBatchBase::$kClient->categoryEntry->listAction($categoryEntryFilter);
+				$result = VBatchBase::$vClient->categoryEntry->listAction($categoryEntryFilter);
 				
 				foreach ($result->objects as $categoryEntry) {
 					if (in_array($categoryEntry->categoryId, explode(',', $categories))) {
@@ -1471,14 +1471,14 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				//no need to do category->list unless there are actual categories to remove.
 				if (count($categoriesToRemove))
 				{
-					$categoryFilter = new KalturaCategoryFilter();
+					$categoryFilter = new VidiunCategoryFilter();
 					$categoryFilter->idIn = implode(',', $categoriesToRemove);
-					$categoriesToRemoveResponse = KBatchBase::$kClient->category->listAction($categoryFilter);
+					$categoriesToRemoveResponse = VBatchBase::$vClient->category->listAction($categoryFilter);
 
 					foreach ($categoriesToRemoveResponse->objects as $categoryToRemove) {
-						/* @var $categoryToRemove KalturaCategory */
+						/* @var $categoryToRemove VidiunCategory */
 						if ($categoryToRemove->isAggregationCategory) {
-							KalturaLog::info('No need to unpublish entry from category ID ' . $categoryToRemove->id . ' - it is an aggregation category and the deletion will occur automatically');
+							VidiunLog::info('No need to unpublish entry from category ID ' . $categoryToRemove->id . ' - it is an aggregation category and the deletion will occur automatically');
 							if (($key = array_search($categoryToRemove->id, $categoriesToRemove)) !== false) {
 								unset($categoriesToRemove[$key]);
 							}
@@ -1487,25 +1487,25 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				}
 			}
 			
-			KalturaLog::info("Entry $entryId will be removed from categories: " . print_r($categoriesToRemove, true));
-			KalturaLog::info("Entry $entryId will be published to categories: " . print_r($categoriesToAdd, true));
+			VidiunLog::info("Entry $entryId will be removed from categories: " . print_r($categoriesToRemove, true));
+			VidiunLog::info("Entry $entryId will be published to categories: " . print_r($categoriesToAdd, true));
 			
-			KBatchBase::$kClient->startMultiRequest();
+			VBatchBase::$vClient->startMultiRequest();
 			foreach ($categoriesToRemove as $categoryId)
 			{
-				KBatchBase::$kClient->categoryEntry->delete($entryId, $categoryId);
+				VBatchBase::$vClient->categoryEntry->delete($entryId, $categoryId);
 			}
 			
 			foreach ($categoriesToAdd as $categoryId)
 			{
-				$categoryEntry = new KalturaCategoryEntry();
+				$categoryEntry = new VidiunCategoryEntry();
 				$categoryEntry->categoryId = $categoryId;
 				$categoryEntry->entryId = $entryId;
 				
-				KBatchBase::$kClient->categoryEntry->add($categoryEntry);
+				VBatchBase::$vClient->categoryEntry->add($categoryEntry);
 			}
 			
-			$response = KBatchBase::$kClient->doMultiRequest();
+			$response = VBatchBase::$vClient->doMultiRequest();
 			foreach ($response as $singleResponse)
 			{
 				if (is_array($singleResponse) && isset($singleResponse['code']) && isset($singleResponse['message']))
@@ -1514,12 +1514,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				}
 			}
 		}
-		catch(KalturaException $ex)
+		catch(VidiunException $ex)
 		{
 			$bulkuploadResult->errorDescription .= $ex->getMessage();
 		}
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		return $bulkuploadResult;
 		
 	}
@@ -1531,7 +1531,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		$fullNameEq = '';
 		foreach ($catNames as $catName)
 		{
-			$category = new KalturaCategory();
+			$category = new VidiunCategory();
 			$category->name = $catName;
 			$category->parentId = $parentId;
 			
@@ -1542,16 +1542,16 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			
 			try
 			{
-				$category = KBatchBase::$kClient->category->add($category);
+				$category = VBatchBase::$vClient->category->add($category);
 			}
 			catch (Exception $e)
 			{
 				if ($e->getCode() == 'DUPLICATE_CATEGORY')
 				{
-					KalturaLog::info("Category [$fullNameEq] already exists");
-					$catFilter = new KalturaCategoryFilter();
+					VidiunLog::info("Category [$fullNameEq] already exists");
+					$catFilter = new VidiunCategoryFilter();
 					$catFilter->fullNameEqual = $fullNameEq;
-					$res = KBatchBase::$kClient->category->listAction($catFilter);
+					$res = VBatchBase::$vClient->category->listAction($catFilter);
 					$category = $res->objects[0];
 				}
 				else
@@ -1570,17 +1570,17 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * returns a flavor asset form the current content element
 	 * @param SimpleXMLElement $contentElement
-	 * @return KalturaFlavorAsset
+	 * @return VidiunFlavorAsset
 	 */
 	protected function getFlavorAsset(SimpleXMLElement $contentElement, $conversionProfileId)
 	{
-		$flavorAsset = new KalturaFlavorAsset(); //we create a new asset (for add)
+		$flavorAsset = new VidiunFlavorAsset(); //we create a new asset (for add)
 		$flavorAsset->flavorParamsId = $this->getFlavorParamsId($contentElement, $conversionProfileId, true);
 		$flavorAsset->tags = $this->implodeChildElements($contentElement->tags);
 		if (isset($contentElement->assetInfo))
 		{
-			$flavorAsset->language = languageCodeManager::getFullLanguageNameFromThreeCode(kXml::getXmlAttributeAsString($contentElement->assetInfo, "language"));
-			$flavorAsset->label = kXml::getXmlAttributeAsString($contentElement->assetInfo, "label");
+			$flavorAsset->language = languageCodeManager::getFullLanguageNameFromThreeCode(vXml::getXmlAttributeAsString($contentElement->assetInfo, "language"));
+			$flavorAsset->label = vXml::getXmlAttributeAsString($contentElement->assetInfo, "label");
 		}
 		return $flavorAsset;
 	}
@@ -1589,11 +1589,11 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 * returns a thumbnail asset form the current thumbnail element
 	 * @param SimpleXMLElement $thumbElement
 	 * @param int $conversionProfileId - The converrsion profile id
-	 * @return KalturaThumbAsset
+	 * @return VidiunThumbAsset
 	 */
 	protected function getThumbAsset(SimpleXMLElement $thumbElement, $conversionProfileId)
 	{
-		$thumbAsset = new KalturaThumbAsset();
+		$thumbAsset = new VidiunThumbAsset();
 		$thumbAsset->thumbParamsId = $this->getThumbParamsId($thumbElement, $conversionProfileId);
 		
 		if(isset($thumbElement["isDefault"]) && $thumbElement["isDefault"] == 'true') // if the attribute is set to true we add the is default tag to the thumb
@@ -1606,22 +1606,22 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * Validates if the resource is valid
-	 * @param KalturaResource $resource
+	 * @param VidiunResource $resource
 	 * @param SimpleXMLElement $elementToSearchIn
 	 */
-	protected function validateResource(KalturaResource $resource = null, SimpleXMLElement $elementToSearchIn)
+	protected function validateResource(VidiunResource $resource = null, SimpleXMLElement $elementToSearchIn)
 	{
 		if(!$resource)
 			return;
 		
 		//We only check for filesize and check sum in local files
-		if($resource instanceof KalturaServerFileResource)
+		if($resource instanceof VidiunServerFileResource)
 		{
 			$filePath = $resource->localFilePath;
 			
 			if(is_null($filePath))
 			{
-				throw new KalturaBulkUploadXmlException("Can't validate file as file path is null", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+				throw new VidiunBulkUploadXmlException("Can't validate file as file path is null", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 			}
 			
 			if(isset($elementToSearchIn->serverFileContentResource->fileChecksum)) //Check checksum if exists
@@ -1639,17 +1639,17 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 				
 				if($xmlChecksum != $checksum)
 				{
-					throw new KalturaBulkUploadXmlException("File checksum is invalid for file [$filePath], Xml checksum [$xmlChecksum], actual checksum [$checksum]", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+					throw new VidiunBulkUploadXmlException("File checksum is invalid for file [$filePath], Xml checksum [$xmlChecksum], actual checksum [$checksum]", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 				}
 			}
 			
 			if(isset($elementToSearchIn->serverFileContentResource->fileSize)) //Check checksum if exists
 			{
-				$fileSize = kFile::fileSize($filePath);
+				$fileSize = vFile::fileSize($filePath);
 				$xmlFileSize = (int)$elementToSearchIn->serverFileContentResource->fileSize;
 				if($xmlFileSize != $fileSize)
 				{
-					throw new KalturaBulkUploadXmlException("File size is invalid for file [$filePath], Xml size [$xmlFileSize], actual size [$fileSize]", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+					throw new VidiunBulkUploadXmlException("File size is invalid for file [$filePath], Xml size [$xmlFileSize], actual size [$fileSize]", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 				}
 			}
 		}
@@ -1659,7 +1659,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 * Gets an item and returns the resource
 	 * @param SimpleXMLElement $elementToSearchIn
 	 * @param int $conversionProfileId
-	 * @return KalturaResource - the resource located in the given element
+	 * @return VidiunResource - the resource located in the given element
 	 */
 	public function getResource(SimpleXMLElement $elementToSearchIn, $conversionProfileId)
 	{
@@ -1674,7 +1674,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 * Returns the right resource instance for the source content of the item
 	 * @param SimpleXMLElement $elementToSearchIn
 	 * @param int $conversionProfileId
-	 * @return KalturaResource - the resource located in the given element
+	 * @return VidiunResource - the resource located in the given element
 	 */
 	protected function getResourceInstance(SimpleXMLElement $elementToSearchIn, $conversionProfileId)
 	{
@@ -1684,65 +1684,65 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		{
 			if($this->allowServerResource)
 			{
-				$resource = new KalturaServerFileResource();
+				$resource = new VidiunServerFileResource();
 				$localContentResource = $elementToSearchIn->serverFileContentResource;
-				$resource->localFilePath = kXml::getXmlAttributeAsString($localContentResource, "filePath");
+				$resource->localFilePath = vXml::getXmlAttributeAsString($localContentResource, "filePath");
 			}
 			else
 			{
-				KalturaLog::err("serverFileContentResource is not allowed");
+				VidiunLog::err("serverFileContentResource is not allowed");
 			}
 		}
 		elseif(isset($elementToSearchIn->urlContentResource))
 		{
-			$resource = new KalturaUrlResource();
+			$resource = new VidiunUrlResource();
 			$urlContentResource = $elementToSearchIn->urlContentResource;
-			$resource->url = kXml::getXmlAttributeAsString($urlContentResource, "url");
+			$resource->url = vXml::getXmlAttributeAsString($urlContentResource, "url");
 		}
 		elseif(isset($elementToSearchIn->sshUrlContentResource))
 		{
-			$resource = new KalturaSshUrlResource();
+			$resource = new VidiunSshUrlResource();
 			$sshUrlContentResource = $elementToSearchIn->sshUrlContentResource;
-			$resource->url = kXml::getXmlAttributeAsString($sshUrlContentResource, "url");
-			$resource->keyPassphrase = kXml::getXmlAttributeAsString($sshUrlContentResource, "keyPassphrase");
+			$resource->url = vXml::getXmlAttributeAsString($sshUrlContentResource, "url");
+			$resource->keyPassphrase = vXml::getXmlAttributeAsString($sshUrlContentResource, "keyPassphrase");
 			$resource->privateKey = strval($sshUrlContentResource->privateKey);
 			$resource->publicKey = strval($sshUrlContentResource->publicKey);
 		}
 		elseif(isset($elementToSearchIn->remoteStorageContentResource))
 		{
-			$resource = new KalturaRemoteStorageResource();
+			$resource = new VidiunRemoteStorageResource();
 			$remoteContentResource = $elementToSearchIn->remoteStorageContentResource;
-			$resource->url = kXml::getXmlAttributeAsString($remoteContentResource, "url");
+			$resource->url = vXml::getXmlAttributeAsString($remoteContentResource, "url");
 			$resource->storageProfileId = $this->getStorageProfileId($remoteContentResource);
 		}
 		elseif(isset($elementToSearchIn->remoteStorageContentResources))
 		{
-			$resource = new KalturaRemoteStorageResources();
+			$resource = new VidiunRemoteStorageResources();
 			$resource->resources = array();
 			$remoteContentResources = $elementToSearchIn->remoteStorageContentResources;
 			
 			foreach($remoteContentResources->remoteStorageContentResource as $remoteContentResource)
 			{
 				/* @var $remoteContentResource SimpleXMLElement */
-				KalturaLog::info("Resources name [" . $remoteContentResource->getName() . "] url [" . $remoteContentResource['url'] . "] storage [$remoteContentResource->storageProfile]");
-				$childResource = new KalturaRemoteStorageResource();
-				$childResource->url = kXml::getXmlAttributeAsString($remoteContentResource, "url");
+				VidiunLog::info("Resources name [" . $remoteContentResource->getName() . "] url [" . $remoteContentResource['url'] . "] storage [$remoteContentResource->storageProfile]");
+				$childResource = new VidiunRemoteStorageResource();
+				$childResource->url = vXml::getXmlAttributeAsString($remoteContentResource, "url");
 				$childResource->storageProfileId = $this->getStorageProfileId($remoteContentResource);
 				$resource->resources[] = $childResource;
 			}
 		}
 		elseif(isset($elementToSearchIn->entryContentResource))
 		{
-			$resource = new KalturaEntryResource();
+			$resource = new VidiunEntryResource();
 			$entryContentResource = $elementToSearchIn->entryContentResource;
-			$resource->entryId = kXml::getXmlAttributeAsString($entryContentResource, "entryId");
+			$resource->entryId = vXml::getXmlAttributeAsString($entryContentResource, "entryId");
 			$resource->flavorParamsId = $this->getFlavorParamsId($entryContentResource, $conversionProfileId, false);
 		}
 		elseif(isset($elementToSearchIn->assetContentResource))
 		{
-			$resource = new KalturaAssetResource();
+			$resource = new VidiunAssetResource();
 			$assetContentResource = $elementToSearchIn->assetContentResource;
-			$resource->assetId = kXml::getXmlAttributeAsString($assetContentResource, "assetId");
+			$resource->assetId = vXml::getXmlAttributeAsString($assetContentResource, "assetId");
 		}
 		
 		return $resource;
@@ -1764,7 +1764,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 * @param int $assetParamsId - The asset id
 	 * @param string $assetType - The asset type (flavor or thumb)
 	 * @param $conversionProfileId - The conversion profile this asset relates to
-	 * @throws KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED
+	 * @throws VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED
 	 */
 	protected function validateAssetParamsId($assetParamsId, $assetType, $conversionProfileId)
 	{
@@ -1775,7 +1775,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		if(!in_array($assetParamsId, $this->assetParamsNameToIdPerConversionProfile[$conversionProfileId]))
 		{
-			throw new KalturaBatchException("Asset Params Id [$assetParamsId] not found for conversion profile [$conversionProfileId] ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			throw new VidiunBatchException("Asset Params Id [$assetParamsId] not found for conversion profile [$conversionProfileId] ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 	}
 	
@@ -1825,7 +1825,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		if(isset($this->assetParamsNameToIdPerConversionProfile["$conversionProfileId"]["$assetParamsName"]))
 			return $this->assetParamsNameToIdPerConversionProfile["$conversionProfileId"]["$assetParamsName"];
 		
-		throw new KalturaBatchException("{$assetParams} system name [$assetParamsName] not found for conversion profile [$conversionProfileId] ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		throw new VidiunBatchException("{$assetParams} system name [$assetParamsName] not found for conversion profile [$conversionProfileId] ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 	}
 	
 	/**
@@ -1837,12 +1837,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	{
 		$conversionProfileId = $this->getConversionProfileIdFromElement($elementToSearchIn);
 		
-		KalturaLog::info("conversionProfileid from element [ $conversionProfileId ]");
+		VidiunLog::info("conversionProfileid from element [ $conversionProfileId ]");
 		
 		if(is_null($conversionProfileId)) // if we didn't set it in the item element
 		{
 			$conversionProfileId = $this->data->conversionProfileId;
-			KalturaLog::info("conversionProfileid from data [ $conversionProfileId ]");
+			VidiunLog::info("conversionProfileid from data [ $conversionProfileId ]");
 		}
 		
 		if(is_null($conversionProfileId)) // if we didn't set it in the item element
@@ -1850,14 +1850,14 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			//Gets the user default conversion
 			if(!isset($this->defaultConversionProfileId))
 			{
-				KBatchBase::impersonate($this->currentPartnerId);;
-				$conversionProfile = KBatchBase::$kClient->conversionProfile->getDefault();
-				KBatchBase::unimpersonate();
+				VBatchBase::impersonate($this->currentPartnerId);;
+				$conversionProfile = VBatchBase::$vClient->conversionProfile->getDefault();
+				VBatchBase::unimpersonate();
 				$this->defaultConversionProfileId = $conversionProfile->id;
 			}
 			
 			$conversionProfileId = $this->defaultConversionProfileId;
-			KalturaLog::info("conversionProfileid from default [ $conversionProfileId ]");
+			VidiunLog::info("conversionProfileid from default [ $conversionProfileId ]");
 		}
 		
 		return $conversionProfileId;
@@ -1866,7 +1866,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Validates a given conversion profile id for the current partner
 	 * @param int $converionProfileId
-	 * @throws KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED
+	 * @throws VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED
 	 */
 	protected function validateConversionProfileId($converionProfileId)
 	{
@@ -1877,14 +1877,14 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		if(!in_array($converionProfileId, $this->conversionProfileNameToId))
 		{
-			throw new KalturaBatchException("conversion profile Id [$converionProfileId] not found", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			throw new VidiunBatchException("conversion profile Id [$converionProfileId] not found", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 	}
 	
 	/**
 	 * Validates a given storage profile id for the current partner
 	 * @param int $storageProfileId
-	 * @throws KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED
+	 * @throws VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED
 	 */
 	protected function validateStorageProfileId($storageProfileId)
 	{
@@ -1895,7 +1895,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		if(!in_array($storageProfileId, $this->storageProfileNameToId))
 		{
-			throw new KalturaBatchException("Storage profile id [$storageProfileId] not found", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			throw new VidiunBatchException("Storage profile id [$storageProfileId] not found", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 	}
 	
@@ -1923,7 +1923,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		if(isset($this->conversionProfileNameToId["$elementToSearchIn->conversionProfile"]))
 			return $this->conversionProfileNameToId["$elementToSearchIn->conversionProfile"];
 		
-		throw new KalturaBatchException("conversion profile system name [{$elementToSearchIn->conversionProfile}] not valid", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		throw new VidiunBatchException("conversion profile system name [{$elementToSearchIn->conversionProfile}] not valid", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 	}
 	
 	/**
@@ -1941,7 +1941,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Validates a given access control id for the current partner
 	 * @param int $accessControlId
-	 * @throws KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED
+	 * @throws VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED
 	 */
 	protected function validateAccessControlId($accessControlId)
 	{
@@ -1952,7 +1952,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		
 		if(!in_array($accessControlId, $this->accessControlNameToId))
 		{
-			throw new KalturaBatchException("access control Id [$accessControlId] not valid", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			throw new VidiunBatchException("access control Id [$accessControlId] not valid", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 	}
 	
@@ -1980,7 +1980,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		if(isset($this->accessControlNameToId["$elementToSearchIn->accessControl"]))
 			return trim($this->accessControlNameToId["$elementToSearchIn->accessControl"]);
 		
-		throw new KalturaBatchException("access control system name [{$elementToSearchIn->accessControl}] not found", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		throw new VidiunBatchException("access control system name [{$elementToSearchIn->accessControl}] not found", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 	}
 	
 	/**
@@ -2007,7 +2007,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		if(isset($this->storageProfileNameToId["$elementToSearchIn->storageProfile"]))
 			return trim($this->storageProfileNameToId["$elementToSearchIn->storageProfile"]);
 		
-		throw new KalturaBatchException("storage profile system name [{$elementToSearchIn->storageProfileId}] not found", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		throw new VidiunBatchException("storage profile system name [{$elementToSearchIn->storageProfileId}] not found", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 	}
 	
 	/**
@@ -2016,15 +2016,15 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 */
 	protected function initAssetParamsNameToId($conversionProfileId)
 	{
-		$conversionProfileFilter = new KalturaConversionProfileAssetParamsFilter();
+		$conversionProfileFilter = new VidiunConversionProfileAssetParamsFilter();
 		$conversionProfileFilter->conversionProfileIdEqual = $conversionProfileId;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		
-		KBatchBase::impersonate($this->currentPartnerId);;
-		$allFlavorParams = KBatchBase::$kClient->conversionProfileAssetParams->listAction($conversionProfileFilter, $pager);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		$allFlavorParams = VBatchBase::$vClient->conversionProfileAssetParams->listAction($conversionProfileFilter, $pager);
+		VBatchBase::unimpersonate();
 		$allFlavorParams = $allFlavorParams->objects;
 		
 		foreach ($allFlavorParams as $flavorParams)
@@ -2041,12 +2041,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 */
 	protected function initAccessControlNameToId()
 	{
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		
-		KBatchBase::impersonate($this->currentPartnerId);;
-		$allAccessControl = KBatchBase::$kClient->accessControl->listAction(null, $pager);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		$allAccessControl = VBatchBase::$vClient->accessControl->listAction(null, $pager);
+		VBatchBase::unimpersonate();
 		$allAccessControl = $allAccessControl->objects;
 		
 		foreach ($allAccessControl as $accessControl)
@@ -2065,10 +2065,10 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 */
 	protected function initAssetIdToAssetParamsId($entryId)
 	{
-		KBatchBase::impersonate($this->currentPartnerId);;
-		$allFlavorAssets = KBatchBase::$kClient->flavorAsset->getByEntryId($entryId);
-		$allThumbAssets = KBatchBase::$kClient->thumbAsset->getByEntryId($entryId);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		$allFlavorAssets = VBatchBase::$vClient->flavorAsset->getByEntryId($entryId);
+		$allThumbAssets = VBatchBase::$vClient->thumbAsset->getByEntryId($entryId);
+		VBatchBase::unimpersonate();
 		
 		foreach ($allFlavorAssets as $flavorAsset)
 		{
@@ -2088,12 +2088,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 */
 	protected function initConversionProfileNameToId()
 	{
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		
-		KBatchBase::impersonate($this->currentPartnerId);;
-		$allConversionProfile = KBatchBase::$kClient->conversionProfile->listAction(null, $pager);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		$allConversionProfile = VBatchBase::$vClient->conversionProfile->listAction(null, $pager);
+		VBatchBase::unimpersonate();
 		$allConversionProfile = $allConversionProfile->objects;
 		
 		foreach ($allConversionProfile as $conversionProfile)
@@ -2111,12 +2111,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 */
 	protected function initStorageProfileNameToId()
 	{
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		
-		KBatchBase::impersonate($this->currentPartnerId);;
-		$allStorageProfiles = KBatchBase::$kClient->storageProfile->listAction(null, $pager);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		$allStorageProfiles = VBatchBase::$vClient->storageProfile->listAction(null, $pager);
+		VBatchBase::unimpersonate();
 		$allStorageProfiles = $allStorageProfiles->objects;
 		
 		foreach ($allStorageProfiles as $storageProfile)
@@ -2132,10 +2132,10 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	 * Creates and returns a new media entry for the given job data and bulk upload result object
 	 * @param SimpleXMLElement $bulkUploadResult
 	 * @param int $type
-	 * @param KalturaBaseEntry $existingItem
-	 * @return KalturaBaseEntry
+	 * @param VidiunBaseEntry $existingItem
+	 * @return VidiunBaseEntry
 	 */
-	protected function createEntryFromItem(SimpleXMLElement $item, $type = null, KalturaBaseEntry $existingItem = null)
+	protected function createEntryFromItem(SimpleXMLElement $item, $type = null, VidiunBaseEntry $existingItem = null)
 	{
 		//Create the new media entry and set basic values
 		if(isset($item->type))
@@ -2143,7 +2143,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		elseif($type)
 			$entryType = $type;
 		else
-			throw new KalturaBulkUploadXmlException("entry type must be set to a value on item [$item->name] ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			throw new VidiunBulkUploadXmlException("entry type must be set to a value on item [$item->name] ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		
 		$entry = $this->getEntryInstanceByType($entryType);
 		$entry->type = (int)$item->type;
@@ -2186,7 +2186,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			$entry->endDate = self::parseFormatedDate((string)$item->endDate);
 		if(isset($item->conversionProfileId) || isset($item->conversionProfile))
 			$entry->conversionProfileId = $this->getConversionProfileId($item);
-		if(($entry instanceof KalturaPlayableEntry) && isset($item->msDuration))
+		if(($entry instanceof VidiunPlayableEntry) && isset($item->msDuration))
 			$entry->msDuration = (int)$item->msDuration;
 		if(isset($item->templateEntryId))
 			$entry->templateEntryId = $item->templateEntryId;
@@ -2196,7 +2196,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			if($templateEntryId)
 				$entry->templateEntryId = $templateEntryId;
 			else
-				throw new KalturaBulkUploadXmlException("Template entry id with reference id [$item->templateEntry] not found ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+				throw new VidiunBulkUploadXmlException("Template entry id with reference id [$item->templateEntry] not found ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 		
 		if($entry->templateEntryId)
@@ -2211,13 +2211,13 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			if($parentEntryId)
 				$entry->parentEntryId = $parentEntryId;
 			else
-				throw new KalturaBulkUploadXmlException("Parent entry id with reference id [$item->parentReferenceId] not found ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+				throw new VidiunBulkUploadXmlException("Parent entry id with reference id [$item->parentReferenceId] not found ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 		
 		return $entry;
 	}
 	
-	protected function parseAndAddToExistingValues ($fieldName, SimpleXMLElement $item, KalturaBaseEntry $existingItem = null)
+	protected function parseAndAddToExistingValues ($fieldName, SimpleXMLElement $item, VidiunBaseEntry $existingItem = null)
 	{
 		$values = $this->implodeChildElements($item->$fieldName);
 		if($existingItem && strpos($values, self::EXISTING_VALUE_DELIMITER) !== false)
@@ -2235,59 +2235,59 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Returns the right entry instace by the given item type
 	 * @param int $item
-	 * @return KalturaBaseEntry
+	 * @return VidiunBaseEntry
 	 */
 	protected function getEntryInstanceByType($type)
 	{
 		switch(trim($type))
 		{
-			case KalturaEntryType::MEDIA_CLIP :
-				return new KalturaMediaEntry();
-			case KalturaEntryType::DATA:
-				return new KalturaDataEntry();
-			case KalturaEntryType::LIVE_STREAM:
-				return new KalturaLiveStreamEntry();
-			case KalturaEntryType::MIX:
-				return new KalturaMixEntry();
-			case KalturaEntryType::PLAYLIST:
-				return new KalturaPlaylist();
+			case VidiunEntryType::MEDIA_CLIP :
+				return new VidiunMediaEntry();
+			case VidiunEntryType::DATA:
+				return new VidiunDataEntry();
+			case VidiunEntryType::LIVE_STREAM:
+				return new VidiunLiveStreamEntry();
+			case VidiunEntryType::MIX:
+				return new VidiunMixEntry();
+			case VidiunEntryType::PLAYLIST:
+				return new VidiunPlaylist();
 			default:
-				return new KalturaBaseEntry();
+				return new VidiunBaseEntry();
 		}
 	}
 	
 	/**
 	 * Handles the type additional data for the given item
-	 * @param KalturaBaseEntry $media
+	 * @param VidiunBaseEntry $media
 	 * @param SimpleXMLElement $item
 	 */
-	protected function handleTypedElement(KalturaBaseEntry $entry, SimpleXMLElement $item)
+	protected function handleTypedElement(VidiunBaseEntry $entry, SimpleXMLElement $item)
 	{
 		// TODO take type from ingestion profile default entry
 		switch ($entry->type)
 		{
-			case KalturaEntryType::MEDIA_CLIP:
+			case VidiunEntryType::MEDIA_CLIP:
 				$this->setMediaElementValues($entry, $item);
 				break;
 			
-			case KalturaEntryType::MIX:
+			case VidiunEntryType::MIX:
 				$this->setMixElementValues($entry, $item);
 				break;
 			
-			case KalturaEntryType::DATA:
+			case VidiunEntryType::DATA:
 				$this->setDataElementValues($entry, $item);
 				break;
 			
-			case KalturaEntryType::LIVE_STREAM:
+			case VidiunEntryType::LIVE_STREAM:
 				$this->setLiveStreamElementValues($entry, $item);
 				break;
 			
-			case KalturaEntryType::PLAYLIST:
+			case VidiunEntryType::PLAYLIST:
 				$this->setPlaylistElementValues($entry, $item);
 				break;
 			
 			default:
-				$entry->type = KalturaEntryType::AUTOMATIC;
+				$entry->type = VidiunEntryType::AUTOMATIC;
 				break;
 		}
 	}
@@ -2295,35 +2295,35 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Check if the item type and the type element are matching
 	 * @param SimpleXMLElement $item
-	 * @throws KalturaBatchException - KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED ;
+	 * @throws VidiunBatchException - VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED ;
 	 */
 	protected function validateTypeToTypedElement(SimpleXMLElement $item)
 	{
 		$typeNumber = $item->type;
 		$typeNumber = trim($typeNumber);
 		
-		if(isset($item->media) && $item->type != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		if(isset($item->media) && $item->type != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		
-		if(isset($item->mix) && $item->type != KalturaEntryType::MIX)
-			throw new KalturaBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		if(isset($item->mix) && $item->type != VidiunEntryType::MIX)
+			throw new VidiunBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		
-		if(isset($item->playlist) && $item->type != KalturaEntryType::PLAYLIST)
-			throw new KalturaBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		if(isset($item->playlist) && $item->type != VidiunEntryType::PLAYLIST)
+			throw new VidiunBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		
-		if(isset($item->liveStream) && $item->type != KalturaEntryType::LIVE_STREAM)
-			throw new KalturaBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		if(isset($item->liveStream) && $item->type != VidiunEntryType::LIVE_STREAM)
+			throw new VidiunBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		
-		if(isset($item->data) && $item->type != KalturaEntryType::DATA)
-			throw new KalturaBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		if(isset($item->data) && $item->type != VidiunEntryType::DATA)
+			throw new VidiunBulkUploadXmlException("Conflicted typed element for type [$typeNumber] on item [$item->name] ", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 	}
 	
 	/**
 	 * Sets the media values in the media entry according to the given item node
-	 * @param KalturaMediaEntry $media
+	 * @param VidiunMediaEntry $media
 	 * @param SimpleXMLElement $itemElement
 	 */
-	protected function setMediaElementValues(KalturaMediaEntry $media, SimpleXMLElement $itemElement)
+	protected function setMediaElementValues(VidiunMediaEntry $media, SimpleXMLElement $itemElement)
 	{
 		if(!isset($itemElement->media))
 			return;
@@ -2338,10 +2338,10 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * Sets the playlist values in the live stream entry according to the given item node
-	 * @param KalturaPlaylist $playlistEntry
+	 * @param VidiunPlaylist $playlistEntry
 	 * @param SimpleXMLElement $itemElement
 	 */
-	protected function setPlaylistElementValues(KalturaPlaylist $playlistEntry, SimpleXMLElement $itemElement)
+	protected function setPlaylistElementValues(VidiunPlaylist $playlistEntry, SimpleXMLElement $itemElement)
 	{
 		$playlistElement = $itemElement->playlist;
 		$playlistEntry->playlistType = (int)$playlistElement->playlistType;
@@ -2350,10 +2350,10 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * Sets the live stream values in the live stream entry according to the given item node
-	 * @param KalturaLiveStreamEntry $liveStreamEntry
+	 * @param VidiunLiveStreamEntry $liveStreamEntry
 	 * @param SimpleXMLElement $itemElement
 	 */
-	protected function setLiveStreamElementValues(KalturaLiveStreamEntry $liveStreamEntry, SimpleXMLElement $itemElement)
+	protected function setLiveStreamElementValues(VidiunLiveStreamEntry $liveStreamEntry, SimpleXMLElement $itemElement)
 	{
 		$liveStreamElement = $itemElement->liveStream;
 		$liveStreamEntry->bitrates = (int)$liveStreamElement->bitrates;
@@ -2365,10 +2365,10 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * Sets the data values in the data entry according to the given item node
-	 * @param KalturaDataEntry $dataEntry
+	 * @param VidiunDataEntry $dataEntry
 	 * @param SimpleXMLElement $itemElement
 	 */
-	protected function setDataElementValues(KalturaDataEntry $dataEntry, SimpleXMLElement $itemElement)
+	protected function setDataElementValues(VidiunDataEntry $dataEntry, SimpleXMLElement $itemElement)
 	{
 		$dataElement = $itemElement->media;
 		$dataEntry->dataContent = (string)$dataElement->dataContent;
@@ -2377,10 +2377,10 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * Sets the mix values in the mix entry according to the given item node
-	 * @param KalturaMixEntry $mix
+	 * @param VidiunMixEntry $mix
 	 * @param SimpleXMLElement $itemElement
 	 */
-	protected function setMixElementValues(KalturaMixEntry $mix, SimpleXMLElement $itemElement)
+	protected function setMixElementValues(VidiunMixEntry $mix, SimpleXMLElement $itemElement)
 	{
 		//TOOD: add support for the mix elements
 		$mixElement = $itemElement->mix;
@@ -2390,22 +2390,22 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	/**
 	 * Checks if the media type and the type are valid
-	 * @param KalturaMediaType $mediaType
+	 * @param VidiunMediaType $mediaType
 	 */
 	protected function validateMediaTypes($mediaType)
 	{
 		$mediaTypes = array(
-			KalturaMediaType::LIVE_STREAM_FLASH,
-			KalturaMediaType::LIVE_STREAM_QUICKTIME,
-			KalturaMediaType::LIVE_STREAM_REAL_MEDIA,
-			KalturaMediaType::LIVE_STREAM_WINDOWS_MEDIA
+			VidiunMediaType::LIVE_STREAM_FLASH,
+			VidiunMediaType::LIVE_STREAM_QUICKTIME,
+			VidiunMediaType::LIVE_STREAM_REAL_MEDIA,
+			VidiunMediaType::LIVE_STREAM_WINDOWS_MEDIA
 		);
 		
 		//TODO: use this function
 		if(in_array($mediaType, $mediaTypes))
 			return false;
 		
-		if($mediaType == KalturaMediaType::IMAGE)
+		if($mediaType == VidiunMediaType::IMAGE)
 		{
 			// TODO - make sure that there are no flavors or thumbnails in the XML
 		}
@@ -2456,13 +2456,13 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Gets the entry status from the given item
 	 * @param unknown_type $item
-	 * @return KalturaEntryStatus - the new entry status
+	 * @return VidiunEntryStatus - the new entry status
 	 */
 	protected function getEntryStatusFromItem(SimpleXMLElement $item)
 	{
-		$status = KalturaEntryStatus::IMPORT;
-		if($item->action == self::$actionsMap[KalturaBulkUploadAction::ADD])
-			$status = KalturaEntryStatus::DELETED;
+		$status = VidiunEntryStatus::IMPORT;
+		if($item->action == self::$actionsMap[VidiunBulkUploadAction::ADD])
+			$status = VidiunEntryStatus::DELETED;
 		
 		return $status;
 	}
@@ -2470,8 +2470,8 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	/**
 	 * Creates a new upload result object from the given SimpleXMLElement item
 	 * @param SimpleXMLElement $item
-	 * @param KalturaBulkUploadAction $action
-	 * @return KalturaBulkUploadResult
+	 * @param VidiunBulkUploadAction $action
+	 * @return VidiunBulkUploadResult
 	 */
 	protected function createUploadResult(SimpleXMLElement $item, $action)
 	{
@@ -2484,8 +2484,8 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		//TODO: What should we write in the bulk upload result for update?
 		//only the changed parameters or just the one theat was changed
 		
-		$bulkUploadResult = new KalturaBulkUploadResultEntry();
-		$bulkUploadResult->status = KalturaBulkUploadResultStatus::IN_PROGRESS;
+		$bulkUploadResult = new VidiunBulkUploadResultEntry();
+		$bulkUploadResult->status = VidiunBulkUploadResultStatus::IN_PROGRESS;
 		$bulkUploadResult->action = $action;
 		$bulkUploadResult->bulkUploadJobId = $this->job->id;
 		
@@ -2506,7 +2506,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		{
 			if((string)$item->startDate && !self::isFormatedDate((string)$item->startDate))
 			{
-				$bulkUploadResult->entryStatus = KalturaEntryStatus::ERROR_IMPORTING;
+				$bulkUploadResult->entryStatus = VidiunEntryStatus::ERROR_IMPORTING;
 				$bulkUploadResult->errorDescription = "Invalid schedule start date {$item->startDate} on item $item->name";
 			}
 		}
@@ -2515,12 +2515,12 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 		{
 			if((string)$item->endDate && !self::isFormatedDate((string)$item->endDate))
 			{
-				$bulkUploadResult->entryStatus = KalturaEntryStatus::ERROR_IMPORTING;
+				$bulkUploadResult->entryStatus = VidiunEntryStatus::ERROR_IMPORTING;
 				$bulkUploadResult->errorDescription = "Invalid schedule end date {$item->endDate} on item $item->name";
 			}
 		}
 		
-		if($bulkUploadResult->entryStatus == KalturaEntryStatus::ERROR_IMPORTING)
+		if($bulkUploadResult->entryStatus == VidiunEntryStatus::ERROR_IMPORTING)
 		{
 			$this->addBulkUploadResult($bulkUploadResult);
 			return;
@@ -2534,20 +2534,20 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	
 	protected function updateObjectsResults(array $requestResults, array $bulkUploadResults)
 	{
-		KBatchBase::$kClient->startMultiRequest();
-		KalturaLog::info("Updating " . count($requestResults) . " results");
+		VBatchBase::$vClient->startMultiRequest();
+		VidiunLog::info("Updating " . count($requestResults) . " results");
 		
 		// checking the created entries
 		foreach($requestResults as $index => $requestResult)
 		{
 			$bulkUploadResult = $bulkUploadResults[$index];
 			/**
-			 * @var KalturaBulkUploadResult $bulkUploadResult
+			 * @var VidiunBulkUploadResult $bulkUploadResult
 			 */
 			if(is_array($requestResult) && isset($requestResult['code']))
 			{
-				$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-				$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
+				$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+				$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
 				$bulkUploadResult->entryStatus = $requestResult['code'];
 				$bulkUploadResult->errorDescription = $requestResult['message'];
 				$this->addBulkUploadResult($bulkUploadResult);
@@ -2556,20 +2556,20 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			
 			if($requestResult instanceof Exception)
 			{
-				$bulkUploadResult->entryStatus = KalturaEntryStatus::ERROR_IMPORTING;
-				$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-				$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
+				$bulkUploadResult->entryStatus = VidiunEntryStatus::ERROR_IMPORTING;
+				$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+				$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
 				$bulkUploadResult->errorDescription = $requestResult->getMessage();
 				$this->addBulkUploadResult($bulkUploadResult);
 				continue;
 			}
 			
-			if(! ($requestResult instanceof KalturaBaseEntry))
+			if(! ($requestResult instanceof VidiunBaseEntry))
 			{
-				$bulkUploadResult->entryStatus = KalturaEntryStatus::ERROR_IMPORTING;
-				$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-				$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
-				$bulkUploadResult->errorDescription = "Returned type is " . get_class($requestResult) . ', KalturaMediaEntry was expected';
+				$bulkUploadResult->entryStatus = VidiunEntryStatus::ERROR_IMPORTING;
+				$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+				$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
+				$bulkUploadResult->errorDescription = "Returned type is " . get_class($requestResult) . ', VidiunMediaEntry was expected';
 				$this->addBulkUploadResult($bulkUploadResult);
 				continue;
 			}
@@ -2580,7 +2580,7 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 			$this->addBulkUploadResult($bulkUploadResult);
 		}
 		
-		KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->doMultiRequest();
 	}
 	
 	public function getObjectTypeTitle()
@@ -2597,17 +2597,17 @@ class BulkUploadEngineXml extends KBulkUploadEngine
 	{
 		//Handles the plugin added data
 		$pluginsErrorResults = array();
-		$pluginsInstances = KalturaPluginManager::getPluginInstances('IKalturaBulkUploadXmlHandler');
+		$pluginsInstances = VidiunPluginManager::getPluginInstances('IVidiunBulkUploadXmlHandler');
 		foreach ($pluginsInstances as $pluginsInstance)
 		{
-			/* @var $pluginsInstance IKalturaBulkUploadXmlHandler */
+			/* @var $pluginsInstance IVidiunBulkUploadXmlHandler */
 			try
 			{
 				$pluginsInstance->configureBulkUploadXmlHandler($this);
 				$pluginsInstance->handleItemUpdated($entry, $item);
 			} catch (Exception $e)
 			{
-				KalturaLog::err($pluginsInstance->getContainerName() . ' failed: ' . $e->getMessage());
+				VidiunLog::err($pluginsInstance->getContainerName() . ' failed: ' . $e->getMessage());
 				$pluginsErrorResults[] = $pluginsInstance->getContainerName() . ' failed: ' . $e->getMessage();
 			}
 		}

@@ -2,7 +2,7 @@
 /**
  * @package plugins.verizonVcastDistribution
  */
-class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class VerizonVcastDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'verizonVcastDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -16,12 +16,12 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -57,7 +57,7 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::VERIZON_VCAST)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::VERIZON_VCAST)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return new VerizonVcastDistributionEngine();
@@ -77,14 +77,14 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 			if($baseClass == 'IDistributionEngineUpdate')
 				return new VerizonVcastDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaVerizonVcastDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunVerizonVcastDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaVerizonVcastDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunVerizonVcastDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::VERIZON_VCAST)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::VERIZON_VCAST)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -94,23 +94,23 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
 		{
-			$reflect = new ReflectionClass('KalturaVerizonVcastDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunVerizonVcastDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
 		{
-			$reflect = new ReflectionClass('kVerizonVcastDistributionJobProviderData');
+			$reflect = new ReflectionClass('vVerizonVcastDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
-			return new KalturaVerizonVcastDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
+			return new VidiunVerizonVcastDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
 			return new VerizonVcastDistributionProfile();
@@ -126,7 +126,7 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::VERIZON_VCAST)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::VERIZON_VCAST)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'VerizonVcastDistributionEngine';
@@ -146,34 +146,34 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 			if($baseClass == 'IDistributionEngineUpdate')
 				return 'VerizonVcastDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaVerizonVcastDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunVerizonVcastDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaVerizonVcastDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunVerizonVcastDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::VERIZON_VCAST)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::VERIZON_VCAST)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_VerizonVcastProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_VerizonVcastDistribution_Type_VerizonVcastDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_VerizonVcastDistribution_Type_VerizonVcastDistributionProfile';
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
-			return 'KalturaVerizonVcastDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
+			return 'VidiunVerizonVcastDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
-			return 'kVerizonVcastDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
+			return 'vVerizonVcastDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
-			return 'KalturaVerizonVcastDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
+			return 'VidiunVerizonVcastDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(VerizonVcastDistributionProviderType::VERIZON_VCAST))
 			return 'VerizonVcastDistributionProfile';
@@ -194,11 +194,11 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaVerizonVcastDistributionProvider();
+		$distributionProvider = new VidiunVerizonVcastDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -228,8 +228,8 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -237,6 +237,6 @@ class VerizonVcastDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

@@ -131,7 +131,7 @@ class myReportsMgr
 		}
 		
 		$end = microtime(true);
-		KalturaLog::log( "getGraph took [" . ( $end - $start ) . "]" );
+		VidiunLog::log( "getGraph took [" . ( $end - $start ) . "]" );
 		
 		return $res;
 	}
@@ -310,7 +310,7 @@ class myReportsMgr
 					$header = array();
 					$data = array();
 				}
-				$count_plays_limit = kConf::get('plays_limit');
+				$count_plays_limit = vConf::get('plays_limit');
 				if ($count_plays > $count_plays_limit) {
 					$unique_header[]= self::UNIQUE_USERS;
 					$unique_data[] = "-";
@@ -340,7 +340,7 @@ class myReportsMgr
 		}
 			
 		$end = microtime(true);
-		KalturaLog::log( "getTotal took [" . ( $end - $start ) . "]" );
+		VidiunLog::log( "getTotal took [" . ( $end - $start ) . "]" );
 		
 		return $res;
 	}
@@ -360,7 +360,7 @@ class myReportsMgr
 			if ( $total_count <= 0 )
 			{
 				$end = microtime(true);
-				KalturaLog::log( "getTable took [" . ( $end - $start ) . "]" );			
+				VidiunLog::log( "getTable took [" . ( $end - $start ) . "]" );			
 				return array ( array() , array() , 0 );
 			}
 		}
@@ -403,7 +403,7 @@ class myReportsMgr
 		}
 		
 		$end = microtime(true);
-		KalturaLog::log( "getTable took [" . ( $end - $start ) . "]" );
+		VidiunLog::log( "getTable took [" . ( $end - $start ) . "]" );
 
 		return $res;
 	}
@@ -427,7 +427,7 @@ class myReportsMgr
 		}
 		
 		$end = microtime(true);
-		KalturaLog::log( "getSubTotal took [" . ( $end - $start ) . "]" );
+		VidiunLog::log( "getSubTotal took [" . ( $end - $start ) . "]" );
 		
 		return $res;
 	}
@@ -512,7 +512,7 @@ class myReportsMgr
 	
 			// return URLwq
 			if ( ! file_exists (dirname ( $file_path ) ))
-					kFile::fullMkfileDir( dirname ( $file_path ) , 0777 );
+					vFile::fullMkfileDir( dirname ( $file_path ) , 0777 );
 				//adding BOM for fixing problem in open .csv file with special chars using excel.
 				$BOM = "\xEF\xBB\xBF";
 				file_put_contents ( $file_path, $BOM . $data );
@@ -528,7 +528,7 @@ class myReportsMgr
 			$table_amount =  self::getTotalTableCount($partner_id, $report_type, $input_filter, $page_size, $page_index, $order_by, $object_ids);
 			
 			if ($table_amount > self::REPORTS_CSV_MAX_QUERY_SIZE && $page_size > self::REPORTS_CSV_MAX_QUERY_SIZE)
-				throw new kCoreException("Exceeded max query size: " . self::REPORTS_CSV_MAX_QUERY_SIZE ,kCoreException::SEARCH_TOO_GENERAL);
+				throw new vCoreException("Exceeded max query size: " . self::REPORTS_CSV_MAX_QUERY_SIZE ,vCoreException::SEARCH_TOO_GENERAL);
 			
 			$start_offest = ($page_index - 1) * $page_size;
 			$end_offset = $start_offest + $page_size;
@@ -561,7 +561,7 @@ class myReportsMgr
 	
 					// return URL
 					if ( ! file_exists (dirname ( $file_path ) ))
-						kFile::fullMkfileDir( dirname ( $file_path ) , 0777 );
+						vFile::fullMkfileDir( dirname ( $file_path ) , 0777 );
 					
 					//adding BOM for fixing problem in open .csv file with special chars using excel.
 					$BOM = "\xEF\xBB\xBF";
@@ -590,23 +590,23 @@ class myReportsMgr
 
 	static function createUrl ($partner_id, $file_name)
 	{
-		$ksStr = "";
+		$vsStr = "";
 		$partner = PartnerPeer::retrieveByPK ( $partner_id );
 		$secret = $partner->getSecret ();
-		$privilege = ks::PRIVILEGE_DOWNLOAD . ":" . $file_name;
+		$privilege = vs::PRIVILEGE_DOWNLOAD . ":" . $file_name;
 		
 		$maxExpiry = 86400;
-		$expiry = $partner->getKsMaxExpiryInSeconds();
+		$expiry = $partner->getVsMaxExpiryInSeconds();
 		if(!$expiry || ($expiry > $maxExpiry))
 			$expiry = $maxExpiry;
 		
-		$result = kSessionUtils::startKSession ( $partner_id, $secret, null, $ksStr, $expiry, false, "", $privilege );
+		$result = vSessionUtils::startVSession ( $partner_id, $secret, null, $vsStr, $expiry, false, "", $privilege );
 		
 		if ($result < 0)
 			throw new Exception ( "Failed to generate session for asset [" . $this->getId () . "] of type " . $this->getType () );
 			
 		//url is built with DC url in order to be directed to the same DC of the saved file
-		$url = kDataCenterMgr::getCurrentDcUrl() . "/api_v3/index.php/service/report/action/serve/ks/$ksStr/id/$file_name/report.csv";
+		$url = vDataCenterMgr::getCurrentDcUrl() . "/api_v3/index.php/service/report/action/serve/vs/$vsStr/id/$file_name/report.csv";
 		return $url;
 	}
 	
@@ -619,7 +619,7 @@ class myReportsMgr
 		$folderPath = "/content/reports/$partner_id";
 		$fullPath = myContentStorage::getFSContentRootPath() .  $folderPath;
 		if(!file_exists($fullPath))
-			kFile::fullMkfileDir($fullPath, 0777, true);
+			vFile::fullMkfileDir($fullPath, 0777, true);
 			
 		$fileName = "{$file_name}_{$time_suffix}";
 		$file_path = "$fullPath/$fileName";
@@ -646,7 +646,7 @@ class myReportsMgr
 		$total_count = self::$count_cache->get( $cache_key );
 		if ( $total_count )
 		{
-			KalturaLog::log( "count from cache: [$total_count]" );
+			VidiunLog::log( "count from cache: [$total_count]" );
 			return $total_count;
 		}
 		
@@ -659,7 +659,7 @@ class myReportsMgr
 		{
 			$total_count = 0;
 		}
-	KalturaLog::log( "count: [$total_count]" );
+	VidiunLog::log( "count: [$total_count]" );
 	
 		self::$count_cache->put( $cache_key , $total_count ); // store in the cache for next time
 		return $total_count;				
@@ -723,7 +723,7 @@ class myReportsMgr
 			{
 				if ( strpos ($report_type,".") === 0 || strpos ($report_type,"/") === 0 || strpos ($report_type,"http") === 0 )
 				{
-					throw new kCoreException("Will not search for invalid report_type [$report_type", kCoreException::INVALID_QUERY);
+					throw new vCoreException("Will not search for invalid report_type [$report_type", vCoreException::INVALID_QUERY);
 				}
 				$file_path = dirname(__FILE__)."/". $report_type . ".sql";
 			}
@@ -731,7 +731,7 @@ class myReportsMgr
 			$sql_raw_content = file_get_contents( $file_path );
 			if ( ! $sql_raw_content )
 			{
-				$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaReportProvider');
+				$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunReportProvider');
 				foreach ($pluginInstances as $pluginInstance)
 				{
 
@@ -741,7 +741,7 @@ class myReportsMgr
 						return $res;
 					}
 				}
-				throw new kCoreException("Cannot find sql for [$report_type] [$report_flavor] at [$file_path]", kCoreException::QUERY_NOT_FOUND);
+				throw new vCoreException("Cannot find sql for [$report_type] [$report_flavor] at [$file_path]", vCoreException::QUERY_NOT_FOUND);
 			}
 			
 			$link = self::getConnection();
@@ -764,7 +764,7 @@ class myReportsMgr
 						if ($input_filter->ancestorPlaybackContext)
 							$categoryFilter->set("_matchor_likex_full_name", $input_filter->ancestorPlaybackContext);
 						
-						$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+						$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 						$categoryFilter->attachToCriteria($c);
 						$c->applyFilters();
 					
@@ -811,14 +811,14 @@ class myReportsMgr
 			
 			if ($shouldSelectFromSearchEngine)
 			{
-				$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+				$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 				$entryFilter->attachToCriteria($c);
 				$c->applyFilters();
 				
 				$entryIdsFromDB = $c->getFetchedIds();
 				
 				if ($c->getRecordsCount() > count($entryIdsFromDB))
-					throw new kCoreException('Search is to general', kCoreException::SEARCH_TOO_GENERAL );
+					throw new vCoreException('Search is to general', vCoreException::SEARCH_TOO_GENERAL );
 				
 				if (!count($entryIdsFromDB))
 					$entryIdsFromDB[] = entry::ENTRY_ID_THAT_DOES_NOT_EXIST;
@@ -873,20 +873,20 @@ class myReportsMgr
 
 			
 			if ($input_filter instanceof endUserReportsInputFilter && ($input_filter->userIds != null) && ($report_type == self::REPORT_TYPE_USER_USAGE || $report_type == self::REPORT_TYPE_SPECIFIC_USER_USAGE) ) {
-					$userFilter = new kuserFilter();
+					$userFilter = new vuserFilter();
 					$userFilter->set("_in_puser_id", $input_filter->userIds);
-					$c = KalturaCriteria::create(kuserPeer::OM_CLASS);
+					$c = VidiunCriteria::create(vuserPeer::OM_CLASS);
 					$userFilter->attachToCriteria($c);
 					$c->applyFilters();
 				
 					$userIdsFromDB = $c->getFetchedIds();
 				
 					if (count($userIdsFromDB))
-						$kuserIds = implode(",", $userIdsFromDB);
+						$vuserIds = implode(",", $userIdsFromDB);
 					else
-						$kuserIds = kuser::KUSER_ID_THAT_DOES_NOT_EXIST;
+						$vuserIds = vuser::VUSER_ID_THAT_DOES_NOT_EXIST;
 							
-					$obj_ids_clause = "u.kuser_id in ( $kuserIds )";
+					$obj_ids_clause = "u.vuser_id in ( $vuserIds )";
 			} 
 			
 			if ( is_numeric( $report_type ))
@@ -897,19 +897,19 @@ class myReportsMgr
 				$query_header = "/* -- " . self::$type_map[$report_type] . " " . self::$flavor_map[$report_flavor] . " -- */\n";
 			else 
 				$query_header = "/* -- " . $report_type . " -- */\n";
-			KalturaLog::log( "\n{$query_header}{$query}" );
+			VidiunLog::log( "\n{$query_header}{$query}" );
 			
 			$res = self::executeQuery ( $query, $link );
 			
 			$end = microtime(true);
-			KalturaLog::log( "Query took [" . ( $end - $start ) . "]" );
+			VidiunLog::log( "Query took [" . ( $end - $start ) . "]" );
 			return $res;
 		}
 		catch ( Exception $ex )
 		{
-			KalturaLog::log( $ex->getMessage() );
+			VidiunLog::log( $ex->getMessage() );
 			// TODO - write proeper error
-			if ($ex->getCode() == kCoreException::SEARCH_TOO_GENERAL);
+			if ($ex->getCode() == vCoreException::SEARCH_TOO_GENERAL);
 				throw $ex;
 			
 			throw new Exception ( "Error while processing report for [$partner_id , $report_type , $report_flavor]" );
@@ -1254,7 +1254,7 @@ class myReportsMgr
 		$time_shift = round($input_filter->timeZoneOffset / 60);
 		
 		// add time zone offset to the time shift
-		$dateTimeZoneServer = new DateTimeZone(kConf::get('date_default_timezone'));
+		$dateTimeZoneServer = new DateTimeZone(vConf::get('date_default_timezone'));
 		$dateTimeZoneUTC = new DateTimeZone("UTC");
 		$dateTimeUTC = new DateTime("now", $dateTimeZoneUTC);
 		$timeOffsetSeconds = $dateTimeZoneServer->getOffset($dateTimeUTC);
@@ -1337,14 +1337,14 @@ class myReportsMgr
 	
 	private static function executeQuery ( $query, $link )
 	{
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		$mysql_function = 'mysqli';
-		$db_config = kConf::get( "reports_db_config" );
+		$db_config = vConf::get( "reports_db_config" );
 		$db_selected =  mysqli_select_db ( $link , $db_config["db_name"] );
 		
 		$error_function = $mysql_function.'_error';
 		if (!$db_selected) {
-			throw new kCoreException('mysqli_select_db('. $db_config["db_name"].') failed, check settings in the reports_db_config section of configurations/local.ini', kCoreException::INVALID_QUERY);
+			throw new vCoreException('mysqli_select_db('. $db_config["db_name"].') failed, check settings in the reports_db_config section of configurations/local.ini', vCoreException::INVALID_QUERY);
 		}
 
 		if($mysql_function == 'mysql') $result = mysql_query($query);
@@ -1355,9 +1355,9 @@ class myReportsMgr
 		if (!$result) 
 		{
 		
-		    KalturaLog::err('Invalid query: ' . $error_function($link));
+		    VidiunLog::err('Invalid query: ' . $error_function($link));
 		    $message = 'Invalid query';
-		    throw new kCoreException($message, kCoreException::INVALID_QUERY);
+		    throw new vCoreException($message, vCoreException::INVALID_QUERY);
 		}
 			
 		$res = array();
@@ -1464,7 +1464,7 @@ class myReportsMgr
 	private static function getConnection() 
 	{
 		$mysql_function = 'mysqli';
-		$db_config = kConf::get( "reports_db_config" );
+		$db_config = vConf::get( "reports_db_config" );
 		if (!isset($db_config["port"])) {
 		    if(ini_get("mysqli.default_port")!==null){
 			$db_config["port"]=ini_get("mysqli.default_port");
@@ -1481,14 +1481,14 @@ class myReportsMgr
 		$connect_function = $mysql_function.'_connect';
 		$link  = $connect_function( $host , $db_config["user"] , $db_config["password"] , null, $db_config["port"] );
 		if (mysqli_connect_errno()) {
-		        throw new kCoreException('DB connection failed: '. mysqli_connect_error()."\ncheck settings in the reports_db_config section of configurations/local.ini", kCoreException::INVALID_QUERY);
+		        throw new vCoreException('DB connection failed: '. mysqli_connect_error()."\ncheck settings in the reports_db_config section of configurations/local.ini", vCoreException::INVALID_QUERY);
 		}
 		
 		$charset = isset($db_config["charset"]) ? $db_config["charset"] : null;
 		if($charset)
 			mysqli_set_charset($link, $charset);
 		
-		KalturaLog::log( "Reports query using database host: [$host] user [" . $db_config["user"] . "]" );
+		VidiunLog::log( "Reports query using database host: [$host] user [" . $db_config["user"] . "]" );
 		
 		return $link;
 	}	
@@ -1593,15 +1593,15 @@ class endUserReportsInputFilter extends reportsInputFilter
 			}
 			
 			$druid_filter[] = array(
-				kKavaReportsMgr::DRUID_DIMENSION => kKavaReportsMgr::DIMENSION_PLAYBACK_CONTEXT,
-				kKavaReportsMgr::DRUID_VALUES => $category_ids);
+				vKavaReportsMgr::DRUID_DIMENSION => vKavaReportsMgr::DIMENSION_PLAYBACK_CONTEXT,
+				vKavaReportsMgr::DRUID_VALUES => $category_ids);
 		}
 		
 		if ($this->application)
 		{
 			$druid_filter[] = array(
-				kKavaReportsMgr::DRUID_DIMENSION => kKavaReportsMgr::DIMENSION_APPLICATION,
-				kKavaReportsMgr::DRUID_VALUES => explode(',', $this->application)
+				vKavaReportsMgr::DRUID_DIMENSION => vKavaReportsMgr::DIMENSION_APPLICATION,
+				vKavaReportsMgr::DRUID_VALUES => explode(',', $this->application)
 			);
 		}
 	}
@@ -1627,7 +1627,7 @@ class endUserReportsInputFilter extends reportsInputFilter
 			$category_filter->set('_in_full_name', $playback_context);
 		}
 		
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$category_filter->attachToCriteria($c);
 		$category_filter->setPartnerSearchScope($partner_id);
 		$c->applyFilters();

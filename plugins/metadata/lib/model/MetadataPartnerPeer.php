@@ -20,7 +20,7 @@ class MetadataPartnerPeer extends PartnerPeer implements IMetadataPeer
     	$partner = self::retrieveByPK($objectId);
     	if(!$partner)
     	{
-    		KalturaLog::debug("Metadata object id with id [$objectId] not found");
+    		VidiunLog::debug("Metadata object id with id [$objectId] not found");
     		return false;
     	}
     

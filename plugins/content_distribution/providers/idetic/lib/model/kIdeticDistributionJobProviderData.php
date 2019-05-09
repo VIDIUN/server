@@ -3,7 +3,7 @@
  * @package plugins.ideticDistribution
  * @subpackage model.data
  */
-class kIdeticDistributionJobProviderData extends kDistributionJobProviderData
+class vIdeticDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string

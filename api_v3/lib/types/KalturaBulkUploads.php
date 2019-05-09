@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploads extends KalturaTypedArray
+class VidiunBulkUploads extends VidiunTypedArray
 {
 	public static function fromBatchJobArray ($arr)
 	{
-		$newArr = new KalturaBulkUploads();
+		$newArr = new VidiunBulkUploads();
 		if ($arr == null)
 			return $newArr;
 					
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaBulkUpload();
+			$nObj = new VidiunBulkUpload();
 			$nObj->fromObject($obj);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaBulkUploads extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaBulkUpload");	
+		parent::__construct("VidiunBulkUpload");	
 	}
 }

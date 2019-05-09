@@ -97,13 +97,13 @@ label:hover {
 }
 
 /* header */
-#kmcHeader {
+#vmcHeader {
 	height: 29px;
 	padding: 4px 7px 0;
 	background: url(../images/sprite.png) repeat-x 0 -152px;
 }
 
-#kmcHeader div#logo {
+#vmcHeader div#logo {
 	width: 115px;
 	height: 30px;
 	margin-top: -3px;
@@ -111,13 +111,13 @@ label:hover {
 	background: url(../images/sprite.png) repeat-x 0 -120px;
 }
 
-#kmcHeader ul {
+#vmcHeader ul {
 	height: 29px;
 	margin: -4px 0 0 68px;
 	float: left;
 }
 
-#kmcHeader li {
+#vmcHeader li {
 	height: 32px;
 	padding-left: 25px;
 	display: block;
@@ -125,16 +125,16 @@ label:hover {
 	list-style: none inside none;
 }
 
-#kmcHeader li.active {
+#vmcHeader li.active {
 	background: url(../images/sprite.png) no-repeat 0 -185px;
 }
 
-#kmcHeader li.active a {
+#vmcHeader li.active a {
 	background: url(../images/sprite.png) no-repeat right -185px;
 	color: #222;
 }
 
-#kmcHeader li a {
+#vmcHeader li a {
 	_width: 0;
 	height: 24px;
 	padding: 10px 24px 0 0;
@@ -144,15 +144,15 @@ label:hover {
 	text-decoration: none;
 }
 
-#kmcHeader li a:hover {
+#vmcHeader li a:hover {
 	color: #A6E7F6;
 }
 
-#kmcHeader li.active a:hover {
+#vmcHeader li.active a:hover {
 	color: #222;
 }
 
-#kmcHeader div#user_links {
+#vmcHeader div#user_links {
 	margin-top: -2px;
 	float: right;
 	text-align: right;
@@ -160,7 +160,7 @@ label:hover {
 	color: #ccc;
 }
 
-div.login #kmcHeader div {
+div.login #vmcHeader div {
 	margin-top: 13px;
 }
 
@@ -1688,16 +1688,16 @@ body#index-testme-doc #wrapper {
 	width: 533px
 }
 
-#list_kmc_users_panel button {
+#list_vmc_users_panel button {
 	position: static;
 }
 
-#list_kmc_users_panel table {
+#list_vmc_users_panel table {
 	width: 100%;
 	min-width: 0px;
 }
 
-/* kaltura_inernal_tools plugin */
+/* vidiun_inernal_tools plugin */
 dt#Algorithm-label {
 	margin-bottom: 10px;
 	font-size: 16px;
@@ -2159,18 +2159,18 @@ form#frmClonePartnerCatalogItems dd,form#frmClonePartnerCatalogItems dt {
 	margin-bottom: 13px;
 }
 
-#frmKmcUsersResetPassword dt {
+#frmVmcUsersResetPassword dt {
 	width: 120px;
 	float: left;
 }
 
-#frmKmcUsersResetPassword dd input {
+#frmVmcUsersResetPassword dd input {
 	width: 200px;
 	float: left;
 	height: 20px
 }
 
-#frmKmcUsersResetPassword button {
+#frmVmcUsersResetPassword button {
 	float: left;
 	margin-left: 10px;
 }
@@ -2313,7 +2313,7 @@ form#frmClonePartnerCatalogItems dd,form#frmClonePartnerCatalogItems dt {
 	margin-top: 3px;
 }
 
-#partner-configure-dialog #fieldset-configureKmcUsers .includeUsageFloatLeft
+#partner-configure-dialog #fieldset-configureVmcUsers .includeUsageFloatLeft
 	{
 	width: 377px;
 	float: left;
@@ -2352,7 +2352,7 @@ form#frmClonePartnerCatalogItems dd,form#frmClonePartnerCatalogItems dt {
 	width: 326px;
 }
 
-#partner-configure-dialog #fieldset-configureKmcUsers .includeUsageFloatLeft label
+#partner-configure-dialog #fieldset-configureVmcUsers .includeUsageFloatLeft label
 	{
 	margin-top: 3px;
 	margin-bottom: 5px;

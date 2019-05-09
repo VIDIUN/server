@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kLocalFilesResource extends kContentResource
+class vLocalFilesResource extends vContentResource
 {
 	/**
 	 * Full path to the local files 
