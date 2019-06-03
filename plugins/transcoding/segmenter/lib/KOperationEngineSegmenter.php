@@ -21,7 +21,7 @@ class VOperationEngineSegmenter  extends VSingleOutputOperationEngine
 
 	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
-//$this->outFilePath = "k:".$this->outFilePath;
+//$this->outFilePath = "v:".$this->outFilePath;
 		VidiunLog::debug("creating directory:".$this->outFilePath);
 		vFile::fullMkfileDir($this->outFilePath, 0777, true);
 		$res = parent::operate($operator, $inFilePath, $configFilePath);

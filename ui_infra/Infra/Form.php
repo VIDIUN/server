@@ -24,12 +24,12 @@ class Infra_Form extends Zend_Form
 		$this->addElementPrefixPath('Vidiun', APPLICATION_PATH . '/lib/Vidiun');
 
 		$validator = new Infra_SecurityKey(get_class($this));
-		$this->addElement('hidden', 'k', array(
+		$this->addElement('hidden', 'v', array(
 			'decorators' => array('ViewHelper'),
 			'required' => true,
 			'value' => $validator->getKey(),
 		));
-		$vElement = $this->getElement('k');
+		$vElement = $this->getElement('v');
 		$vElement->setAutoInsertNotEmptyValidator(false);
 		$vElement->addValidator($validator);
 	}

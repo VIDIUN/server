@@ -45,7 +45,7 @@ class Infra_SecurityKey extends Zend_Validate_Abstract
 	{
 		$session = self::getSession();
 		if(!isset($session->key))
-			$session->key = uniqid('k');
+			$session->key = uniqid('v');
 			
 		return $session->key;
 	}
