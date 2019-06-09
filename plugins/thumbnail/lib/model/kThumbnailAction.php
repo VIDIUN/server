@@ -4,7 +4,7 @@
  * @subpackage model
  */
 
-abstract class kThumbnailAction
+abstract class vThumbnailAction
 {
 	abstract protected function extractActionParameters();
 	abstract protected function validateInput();
@@ -103,7 +103,7 @@ abstract class kThumbnailAction
 		}
 		catch(Exception $e)
 		{
-			throw new KalturaAPIException(KalturaThumbnailErrors::BAD_QUERY, "Illegal value for color {$color}");
+			throw new VidiunAPIException(VidiunThumbnailErrors::BAD_QUERY, "Illegal value for color {$color}");
 		}
 	}
 }

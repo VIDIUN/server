@@ -1,26 +1,26 @@
 <?php
-class kSipEventsConsumer implements kObjectDeletedEventConsumer
+class vSipEventsConsumer implements vObjectDeletedEventConsumer
 {	
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null) 
 	{
 		try 
 		{
-			$pexipConfig = kPexipUtils::initAndValidateConfig();
-			kPexipHandler::deleteCallObjects($object, $pexipConfig);
+			$pexipConfig = vPexipUtils::initAndValidateConfig();
+			vPexipHandler::deleteCallObjects($object, $pexipConfig);
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process Sip objectDeleted for liveEntry ['.$object->getId().'] - '.$e->getMessage());
+			VidiunLog::err('Failed to process Sip objectDeleted for liveEntry ['.$object->getId().'] - '.$e->getMessage());
 		}
 		return true;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{

@@ -60,7 +60,7 @@ class vAssetTypeCondition extends vCondition
 			}
 			else
 			{
-				$intAssetTypes[] = kPluginableEnumsManager::apiToCore(asset::ASSET_TYPE, $type);
+				$intAssetTypes[] = vPluginableEnumsManager::apiToCore(asset::ASSET_TYPE, $type);
 			}
 		}
 		return $intAssetTypes;

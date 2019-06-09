@@ -5,7 +5,7 @@
  * @subpackage api.services
  */
 
-class ThumbnailService extends KalturaBaseUserService
+class ThumbnailService extends VidiunBaseUserService
 {
 	const PARTNER_INDEX = 0;
 	const IMAGE_TRANSFORMATION_STEPS_DELIMITER = "/";
@@ -19,20 +19,20 @@ class ThumbnailService extends KalturaBaseUserService
 	 */
 	public function transformAction()
 	{
-		kApiCache::disableCache();
+		vApiCache::disableCache();
 		$transformation = $this->parseUrl();
 		$transformation->validate();
 		$imagick = $transformation->execute();
 		$tempFilePath = self::saveTransformationResult($imagick);
-		$renderer = kFileUtils::getDumpFileRenderer($tempFilePath, null);
+		$renderer = vFileUtils::getDumpFileRenderer($tempFilePath, null);
 		$renderer->output();
 		return;
 	}
 
 	protected function saveTransformationResult($imagick)
 	{
-		$dc = kDataCenterMgr::getCurrentDc();
-		$id = $dc["id"].'_'.kString::generateStringId();
+		$dc = vDataCenterMgr::getCurrentDc();
+		$id = $dc["id"].'_'.vString::generateStringId();
 		$fileName = "{$id}.jpg";
 		$tempFilePath = sys_get_temp_dir().DIRECTORY_SEPARATOR . $fileName;
 		$imagick->setImageFormat('jpg');
@@ -63,7 +63,7 @@ class ThumbnailService extends KalturaBaseUserService
 		$transformParametersStart = strpos($uri,self::PARTNER_TOKEN);
 		if($transformParametersStart === false)
 		{
-			throw new KalturaAPIException(KalturaThumbnailErrors::MISSING_PARTNER_PARAMETER_IN_URL);
+			throw new VidiunAPIException(VidiunThumbnailErrors::MISSING_PARTNER_PARAMETER_IN_URL);
 		}
 
 		return substr($uri, $transformParametersStart + 3);

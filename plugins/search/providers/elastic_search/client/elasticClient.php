@@ -346,7 +346,7 @@ class elasticClient
 	 * return the index info for given index name
 	 * @param $indexName
 	 * @return mixed
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
 	public function getIndexInfo($indexName)
 	{
@@ -373,7 +373,7 @@ class elasticClient
 	 * delete the index
 	 * @param $indexName
 	 * @return mixed
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
 	public function deleteIndex($indexName)
 	{

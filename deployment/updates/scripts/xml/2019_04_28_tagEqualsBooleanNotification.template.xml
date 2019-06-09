@@ -14,7 +14,7 @@
     </session>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaBooleanNotificationTemplate">
+            <template objectType="VidiunBooleanNotificationTemplate">
                 <name>Entry Tags Equals</name>
                 <systemName>ENTRY_TAGS_EQUALS</systemName>
                 <description>Boolean notification template to be sent when an entry tags changed to specific values.</description>
@@ -24,25 +24,25 @@
                 <eventObjectType>1</eventObjectType>
                 <!-- EventNotificationEventObjectType::ENTRY -->
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Tag field modified</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getObject()->isColumnModified(entryPeer::TAGS)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Tags equals</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>array_intersect(array_map('trim',explode(',',strtolower($scope->getDynamicValueByKey("trigger_tags")))),array_diff($scope->getObject()->getTagsArr(),array_map('trim',explode(',',$scope->getEvent()->getObject()->getColumnsOldValues()['entry.TAGS']))))</code>
                         </field>
                     </item>
                 </eventConditions>
                 <format>1</format>
                 <userParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>trigger_tags</key>
                         <description>Entry tags that will trigger the event,(use comma to separate tags: tag1,tag2) </description>
-                        <value objectType="KalturaStringValue">
+                        <value objectType="VidiunStringValue">
                         </value>
                     </item>
                 </userParameters>

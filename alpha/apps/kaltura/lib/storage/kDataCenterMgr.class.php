@@ -153,11 +153,11 @@ class vDataCenterMgr
 	
 	public static function createCmdForRemoteDataCenter(FileSync $fileSync)
 	{
-		KalturaLog::log("File Sync [{$fileSync->getId()}]");
+		VidiunLog::log("File Sync [{$fileSync->getId()}]");
 		$remoteUrl = self::getInternalRemoteUrl($fileSync);
 		$locaFilePath = self::getLocalTempPathForFileSync($fileSync);
-		$timeOut = kConf::getArrayValue("remote_file_get_contents_timeout", "params", "dc_config", self::REMOTE_FILE_GET_CONTENTS_TIMEOUT);
-		$cmdLine = kConf::get( "bin_path_curl" ) . ' -m ' . $timeOut . ' -f -s -L -o"' . $locaFilePath . '" "' . $remoteUrl . '"';
+		$timeOut = vConf::getArrayValue("remote_file_get_contents_timeout", "params", "dc_config", self::REMOTE_FILE_GET_CONTENTS_TIMEOUT);
+		$cmdLine = vConf::get( "bin_path_curl" ) . ' -m ' . $timeOut . ' -f -s -L -o"' . $locaFilePath . '" "' . $remoteUrl . '"';
 		return $cmdLine;
 	}
 	

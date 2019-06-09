@@ -3,7 +3,7 @@
  * @package plugins.sip
  * @subpackage model.filters
  */
-class kSipAdvancedFilter extends AdvancedSearchFilterItem
+class vSipAdvancedFilter extends AdvancedSearchFilterItem
 {
 	/**
 	 * @var string
@@ -29,9 +29,9 @@ class kSipAdvancedFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
-		if ($query instanceof IKalturaIndexQuery)
+		if ($query instanceof IVidiunIndexQuery)
 		{
 			$searchData = SipPlugin::getSipTokenSearchData($this->sipToken);
 			$query->addMatch("(@plugins_data $searchData)");

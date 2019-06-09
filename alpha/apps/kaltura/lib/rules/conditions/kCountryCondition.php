@@ -49,9 +49,9 @@ class vCountryCondition extends vMatchCondition
 			$value = trim(strtolower($value), " \n\r\t");
 		});
 
-		kApiCache::addExtraField(array("type" => kApiCache::ECF_COUNTRY,
-			kApiCache::ECFD_GEO_CODER_TYPE => $this->getGeoCoderType()),
-			kApiCache::COND_COUNTRY_MATCH, $refValues);
+		vApiCache::addExtraField(array("type" => vApiCache::ECF_COUNTRY,
+			vApiCache::ECFD_GEO_CODER_TYPE => $this->getGeoCoderType()),
+			vApiCache::COND_COUNTRY_MATCH, $refValues);
 		
 		$ip = $scope->getIp();
 		$ipGeo = vGeoCoderManager::getGeoCoder($this->getGeoCoderType());

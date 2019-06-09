@@ -202,7 +202,7 @@ abstract class BulkUploadEngineFilter extends VBulkUploadEngine
 		if($requestResults && count($requestResults))
 			$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
 		
-		KalturaLog::info("job[{$this->job->id}] finished creating objects");
+		VidiunLog::info("job[{$this->job->id}] finished creating objects");
 	}
 	
     protected function updateObjectsResults(array $requestResults, array $bulkUploadResults)

@@ -59,17 +59,17 @@ class thumbnailEngine
 		$sourceParameters = explode(self::VALUE_DELIMITER, $sourceString);
 		if(count($sourceParameters) < 2)
 		{
-			throw new KalturaAPIException(KalturaThumbnailErrors::FAILED_TO_PARSE_SOURCE, $sourceString);
+			throw new VidiunAPIException(VidiunThumbnailErrors::FAILED_TO_PARSE_SOURCE, $sourceString);
 		}
 
 		$sourceType = $sourceParameters[self::SOURCE_TYPE_INDEX];
 		switch($sourceType)
 		{
-			case kSourceType::ID:
+			case vSourceType::ID:
 				$source = new entrySource($sourceParameters[self::SOURCE_VALUE_INDEX]);
 				break;
 			default:
-				throw new KalturaAPIException(KalturaThumbnailErrors::FAILED_TO_PARSE_SOURCE, $sourceType);
+				throw new VidiunAPIException(VidiunThumbnailErrors::FAILED_TO_PARSE_SOURCE, $sourceType);
 		}
 
 		return $source;
@@ -81,7 +81,7 @@ class thumbnailEngine
 		$parametersCount = count($parameters);
 		if(!array_key_exists($parameters[self::ACTION_NAME_INDEX], self::$actionsAlias))
 		{
-			throw new KalturaAPIException(KalturaThumbnailErrors::FAILED_TO_PARSE_ACTION, $parameters[self::ACTION_NAME_INDEX]);
+			throw new VidiunAPIException(VidiunThumbnailErrors::FAILED_TO_PARSE_ACTION, $parameters[self::ACTION_NAME_INDEX]);
 		}
 
 		$imageAction = self::createImageAction($parameters[self::ACTION_NAME_INDEX]);

@@ -1,6 +1,6 @@
 <?php
 
-class kKavaCustomReports extends kKavaReportsMgr
+class vKavaCustomReports extends vKavaReportsMgr
 {
 
 	protected static $custom_reports = null;
@@ -9,7 +9,7 @@ class kKavaCustomReports extends kKavaReportsMgr
 	{
 		if (is_null(self::$custom_reports))
 		{
-			self::$custom_reports = kConf::getMap('custom_reports');
+			self::$custom_reports = vConf::getMap('custom_reports');
 		}
 	}
 

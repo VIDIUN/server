@@ -67,7 +67,7 @@ class VidiunBeaconFilter extends VidiunBeaconBaseFilter
 		$terms[vBeacon::FIELD_PARTNER_ID] = vCurrentContext::getCurrentPartnerId();
 		
 		if(isset($this->indexTypeEqual))
-			$terms[kBeacon::FIELD_IS_LOG] = ($this->indexTypeEqual == KalturaBeaconIndexType::LOG) ? "true" : "false";
+			$terms[vBeacon::FIELD_IS_LOG] = ($this->indexTypeEqual == VidiunBeaconIndexType::LOG) ? "true" : "false";
 		
 		return $terms;
 	}

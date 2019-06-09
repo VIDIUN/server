@@ -60,12 +60,12 @@ class CaptionAssetItem extends BaseCaptionAssetItem implements IBaseObject
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 	
 	public function getSphinxIndexName()
 	{
-		return kSphinxSearchManager::getSphinxIndexName(CaptionAssetItemIndex::getObjectIndexName());
+		return vSphinxSearchManager::getSphinxIndexName(CaptionAssetItemIndex::getObjectIndexName());
 	}
 
 	/**

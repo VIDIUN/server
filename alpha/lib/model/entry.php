@@ -3217,7 +3217,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	
 	public function getSphinxIndexName()
 	{
-		return kSphinxSearchManager::getSphinxIndexName(entryIndex::getObjectIndexName(), entryIndex::getSphinxSplitIndexId($this->getPartnerId(), entryIndex::getObjectName()));
+		return vSphinxSearchManager::getSphinxIndexName(entryIndex::getObjectIndexName(), entryIndex::getSphinxSplitIndexId($this->getPartnerId(), entryIndex::getObjectName()));
 	}
 	
 	public function getCacheInvalidationKeys()
@@ -3232,7 +3232,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			return null;
 		/* entry $template */
 		$this->setTemplateEntryId($template->getId());
-		$this->setKuserId($template->getKuserId());
+		$this->setVuserId($template->getVuserId());
 		$this->setName($template->getName());
 		$this->setTags($template->getTags());
 		$this->setAnonymous($template->getAnonymous());

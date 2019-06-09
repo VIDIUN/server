@@ -347,7 +347,7 @@ class vSphinxSearchManager implements vObjectUpdatedEventConsumer, vObjectAddedE
 			$data[$key] = "'" . $valueStr . "'";
 		}
 		
-		$index = kSphinxSearchManager::getSphinxIndexName($objectIndexClass::getObjectIndexName());
+		$index = vSphinxSearchManager::getSphinxIndexName($objectIndexClass::getObjectIndexName());
 		$placeHolders = isset($options["placeHolders"]) ? $options["placeHolders"] : false;
 
 		if (is_array($placeHolders))
@@ -465,8 +465,8 @@ class vSphinxSearchManager implements vObjectUpdatedEventConsumer, vObjectAddedE
 			return true;
 					
 		$sphinxConnection = DbManager::getSphinxConnection(false, $splitIndexName);
-		if($sphinxConnection->getKalturaOption('sharded') && $splitIndexName)
-			$sql = str_replace(kSphinxSearchManager::getSphinxIndexName($objectIndexClass::getObjectIndexName()), $splitIndexName, $sql);
+		if($sphinxConnection->getVidiunOption('sharded') && $splitIndexName)
+			$sql = str_replace(vSphinxSearchManager::getSphinxIndexName($objectIndexClass::getObjectIndexName()), $splitIndexName, $sql);
 		
 		$ret = $sphinxConnection->exec($sql);
 		if($ret)
@@ -483,7 +483,7 @@ class vSphinxSearchManager implements vObjectUpdatedEventConsumer, vObjectAddedE
 		if(vConf::hasParam('exec_sphinx') && vConf::get('exec_sphinx'))
         {
         	$sphinxConnection = DbManager::getSphinxConnection(false, $indexName);
-			$sphinxServerCacheStore = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_SPHINX_EXECUTED_SERVER);
+			$sphinxServerCacheStore = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_SPHINX_EXECUTED_SERVER);
 			if ($sphinxServerCacheStore)
 			{
 				$sphinxConnectionId = $sphinxServerCacheStore->get(self::CACHE_PREFIX . $sphinxConnection->getHostName());
@@ -511,8 +511,8 @@ class vSphinxSearchManager implements vObjectUpdatedEventConsumer, vObjectAddedE
 	{
 		$objectIndexClass = $object->getIndexObjectName();
 		$objectIndexName = $object->getSphinxIndexName();
-		$index = kSphinxSearchManager::getSphinxIndexName($objectIndexClass);
-		$splitIndexName = kSphinxSearchManager::getSphinxIndexName($objectIndexClass, $objectIndexName);
+		$index = vSphinxSearchManager::getSphinxIndexName($objectIndexClass);
+		$splitIndexName = vSphinxSearchManager::getSphinxIndexName($objectIndexClass, $objectIndexName);
 		$id = $object->getIntId();
 		
 		VidiunLog::debug('Deleting sphinx document for object [' . get_class($object) . '] [' . $object->getId() . ']');

@@ -236,7 +236,7 @@ abstract class BaseIndexObject
 	
 	public static function getSplitIndexFactor($IndexObjectName)
 	{
-		$config = kConf::getDB();
+		$config = vConf::getDB();
 		if(!isset($config['sphinx_split_index']) || !$config['sphinx_split_index']['enabled'] || $config['sphinx_split_index']['enabled'] == false || !isset($config['sphinx_split_index'][$IndexObjectName]))
 		{
 			return null;

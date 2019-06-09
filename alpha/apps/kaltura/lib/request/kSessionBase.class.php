@@ -6,9 +6,9 @@
  * @subpackage request
  */
 require_once(dirname(__FILE__) . '/infraRequestUtils.class.php');
-require_once(dirname(__FILE__) . '/../cache/kCacheManager.php');
-require_once(dirname(__FILE__) . '/../../../../../infra/general/KCryptoWrapper.class.php');
-require_once(dirname(__FILE__) . '/../../../../config/kConfMapNames.php');
+require_once(dirname(__FILE__) . '/../cache/vCacheManager.php');
+require_once(dirname(__FILE__) . '/../../../../../infra/general/VCryptoWrapper.class.php');
+require_once(dirname(__FILE__) . '/../../../../config/vConfMapNames.php');
 
 /** 
  * @package server-infra
@@ -298,7 +298,7 @@ class vSessionBase
 	
 	static protected function getSecretsCacheKey($partnerId)
 	{
-		return self::SECRETS_CACHE_PREFIX . kConf::get('secrets_cache_version', kConfMapNames::CACHE_VERSIONS, '1') . '_' . $partnerId;
+		return self::SECRETS_CACHE_PREFIX . vConf::get('secrets_cache_version', vConfMapNames::CACHE_VERSIONS, '1') . '_' . $partnerId;
 	}
 	
 	static public function getSecretsFromCache($partnerId)

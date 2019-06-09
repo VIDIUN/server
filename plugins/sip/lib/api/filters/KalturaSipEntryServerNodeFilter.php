@@ -3,7 +3,7 @@
  * @package plugins.sip
  * @subpackage api.filters
  */
-class KalturaSipEntryServerNodeFilter extends KalturaSipEntryServerNodeBaseFilter
+class VidiunSipEntryServerNodeFilter extends VidiunSipEntryServerNodeBaseFilter
 {
 	public function __construct()
 	{

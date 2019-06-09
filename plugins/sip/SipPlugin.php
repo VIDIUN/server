@@ -2,10 +2,10 @@
 /**
  * @package plugins.sip
  */
-class SipPlugin extends KalturaPlugin implements   IKalturaObjectLoader, IKalturaEnumerator, IKalturaServices, IKalturaEventConsumers, IKalturaSearchDataContributor
+class SipPlugin extends VidiunPlugin implements   IVidiunObjectLoader, IVidiunEnumerator, IVidiunServices, IVidiunEventConsumers, IVidiunSearchDataContributor
 {
 	const PLUGIN_NAME = 'sip';
-	const SIP_EVENTS_CONSUMER = 'kSipEventsConsumer';
+	const SIP_EVENTS_CONSUMER = 'vSipEventsConsumer';
 	const SEARCH_DATA_SUFFIX = 'sipend';
 
 	public static function getPluginName()
@@ -14,7 +14,7 @@ class SipPlugin extends KalturaPlugin implements   IKalturaObjectLoader, IKaltur
 	}
 
 	/* (non-PHPdoc)
-		 * @see IKalturaPermissions::isAllowedPartner()
+		 * @see IVidiunPermissions::isAllowedPartner()
 		 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -24,33 +24,33 @@ class SipPlugin extends KalturaPlugin implements   IKalturaObjectLoader, IKaltur
 
 	public static function getCoreValue($type, $valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore($type, $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore($type, $value);
 	}
 
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 	/* (non-PHPdoc)
-    * @see IKalturaObjectLoader::loadObject()
+    * @see IVidiunObjectLoader::loadObject()
     */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if ($baseClass === 'KalturaServerNode' && $enumValue == self::getCoreValue('serverNodeType', SipServerNodeType::SIP_SERVER))
+		if ($baseClass === 'VidiunServerNode' && $enumValue == self::getCoreValue('serverNodeType', SipServerNodeType::SIP_SERVER))
 		{
-			return new KalturaSipServerNode();
+			return new VidiunSipServerNode();
 		}
-		if ($baseClass === 'KalturaEntryServerNode' && $enumValue == self::getCoreValue('EntryServerNodeType', SipEntryServerNodeType::SIP_ENTRY_SERVER))
+		if ($baseClass === 'VidiunEntryServerNode' && $enumValue == self::getCoreValue('EntryServerNodeType', SipEntryServerNodeType::SIP_ENTRY_SERVER))
 		{
-			return new KalturaSipEntryServerNode();
+			return new VidiunSipEntryServerNode();
 		}
 
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -65,7 +65,7 @@ class SipPlugin extends KalturaPlugin implements   IKalturaObjectLoader, IKaltur
 	}
 
 	/* (non-PHPdoc)
-    * @see IKalturaEnumerator::getEnums()
+    * @see IVidiunEnumerator::getEnums()
     */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -96,7 +96,7 @@ class SipPlugin extends KalturaPlugin implements   IKalturaObjectLoader, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -115,7 +115,7 @@ class SipPlugin extends KalturaPlugin implements   IKalturaObjectLoader, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaSearchDataContributor::getSearchData()
+	 * @see IVidiunSearchDataContributor::getSearchData()
 	 */
 	public static function getSearchData(BaseObject $object)
 	{

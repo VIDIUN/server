@@ -4,7 +4,7 @@
  * @subpackage model.pexip
  */
 
-class kPexipUtils
+class vPexipUtils
 {
 	const CONFIG_LICENSE_THRESHOLD = 'licenseThreshold';
 	const CONFIG_HOST_URL = 'hostUrl';
@@ -19,16 +19,16 @@ class kPexipUtils
 	/**
 	 * @return bool|null
 	 * @throws Exception
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public static function initAndValidateConfig()
 	{
-		if (kConf::hasMap('sip') && $pexipConfig = kConf::get('pexip', 'sip'))
+		if (vConf::hasMap('sip') && $pexipConfig = vConf::get('pexip', 'sip'))
 		{
 			return $pexipConfig;
 		}
 
-		throw new KalturaAPIException(KalturaErrors::PEXIP_MAP_NOT_CONFIGURED);
+		throw new VidiunAPIException(VidiunErrors::PEXIP_MAP_NOT_CONFIGURED);
 	}
 
 	/**
@@ -59,19 +59,19 @@ class kPexipUtils
 	/**
 	 * @param $entryId
 	 * @return entry
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public static function validateAndRetrieveEntry($entryId)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry)
 		{
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		}
 
 		if ($dbEntry->getType() != entryType::LIVE_STREAM)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_TYPE, $dbEntry->getName(), $dbEntry->getType(), entryType::LIVE_STREAM);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_TYPE, $dbEntry->getName(), $dbEntry->getType(), entryType::LIVE_STREAM);
 		}
 
 		return $dbEntry;
@@ -91,8 +91,8 @@ class kPexipUtils
 		}
 
 		myPartnerUtils::resetAllFilters();
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
-		$sipFilter = new kSipAdvancedFilter();
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
+		$sipFilter = new vSipAdvancedFilter();
 		$sipFilter->setSipToken($sipToken);
 		$entryFilter = new entryFilter();
 		$entryFilter->setAdvancedSearch($sipFilter);
@@ -103,42 +103,42 @@ class kPexipUtils
 		if (!$dbLiveEntry)
 		{
 			$msg = "Entry was not found for sip token $sipToken";
-			KalturaLog::err($msg);
+			VidiunLog::err($msg);
 			return false;
 		}
 
 		if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_SIP, $dbLiveEntry->getPartnerId()))
 		{
 			$msg = 'Sip Feature is not enabled for partner ' . $dbLiveEntry->getPartnerId();
-			KalturaLog::err($msg);
+			VidiunLog::err($msg);
 			return false;
 		}
 
 		if (!$dbLiveEntry instanceof LiveStreamEntry)
 		{
 			$msg = 'Entry ' . $dbLiveEntry->getId() . ' is not of type LiveStreamEntry.';
-			KalturaLog::err($msg);
+			VidiunLog::err($msg);
 			return false;
 		}
 
 		if (!$dbLiveEntry->getIsSipEnabled())
 		{
 			$msg = 'Sip flag is not enabled for entry ' . $dbLiveEntry->getId() . ' - generateSipUrl action should be called before connecting to entry';
-			KalturaLog::err($msg);
+			VidiunLog::err($msg);
 			return false;
 		}
 
 		if ($dbLiveEntry->isCurrentlyLive(false))
 		{
 			$msg = 'Entry Is currently Live. will not allow call.';
-			KalturaLog::err($msg);
+			VidiunLog::err($msg);
 			return false;
 		}
 
 		if (!$dbLiveEntry->getSipRoomId())
 		{
 			$msg = 'Missing Sip Room Id - Please generate sip url before connecting to entry';
-			KalturaLog::err($msg);
+			VidiunLog::err($msg);
 			return false;
 		}
 
@@ -157,7 +157,7 @@ class kPexipUtils
 	 */
 	protected static function extractPartnerIdAndSipTokenFromAddress($queryParams)
 	{
-		KalturaLog::debug('Extracting entry sip token from local_alias: ' . $queryParams[self::PARAM_LOCAL_ALIAS]);
+		VidiunLog::debug('Extracting entry sip token from local_alias: ' . $queryParams[self::PARAM_LOCAL_ALIAS]);
 		$intIdPattern = '/(?<=sip:)(.*)/';
 		preg_match($intIdPattern, $queryParams[self::PARAM_LOCAL_ALIAS], $matches);
 		if (!empty($matches))
@@ -166,11 +166,11 @@ class kPexipUtils
 			if (!empty($parts))
 			{
 				$partnerId = substr($parts[0], 0, -5);
-				KalturaLog::debug("Extracted partnerId and sipToken : [$partnerId ,$matches[0]]");
+				VidiunLog::debug("Extracted partnerId and sipToken : [$partnerId ,$matches[0]]");
 				return array($partnerId, $matches[0]);
 			}
 		}
-		KalturaLog::err('Could not extract PartnerId and SipToken from local_alias');
+		VidiunLog::err('Could not extract PartnerId and SipToken from local_alias');
 		return array();
 
 	}
@@ -187,19 +187,19 @@ class kPexipUtils
 		$connectedEntryServerNodes = EntryServerNodePeer::retrieveByEntryIdAndStatuses($entry->getId(), EntryServerNodePeer::$connectedServerNodeStatuses);
 		if (count($connectedEntryServerNodes))
 		{
-			KalturaLog::info('Entry [' . $entry->getId() . '] is Live and Active. can\'t create SipEntryServerNode.');
+			VidiunLog::info('Entry [' . $entry->getId() . '] is Live and Active. can\'t create SipEntryServerNode.');
 			return false;
 		}
 
 		$sipEntryServerNode = EntryServerNodePeer::retrieveByEntryIdAndServerType($entry->getId(), SipPlugin::getCoreValue('EntryServerNodeType', SipEntryServerNodeType::SIP_ENTRY_SERVER));
 		if ($sipEntryServerNode)
 		{
-			KalturaLog::debug('SipEntryServerNode already created for entry '. $entry->getId() );
+			VidiunLog::debug('SipEntryServerNode already created for entry '. $entry->getId() );
 			return $sipEntryServerNode;
 		}
 
 		$lockKey = 'allocate_sip_room_' . $entry->getId();
-		$sipEntryServerNode = kLock::runLocked($lockKey, array('kPexipUtils', 'createSipEntryServerNodeImpl'), array($entry, $roomId, $primaryAdpId, $secondaryAdpId));
+		$sipEntryServerNode = vLock::runLocked($lockKey, array('vPexipUtils', 'createSipEntryServerNodeImpl'), array($entry, $roomId, $primaryAdpId, $secondaryAdpId));
 		return $sipEntryServerNode;
 
 	}
@@ -218,7 +218,7 @@ class kPexipUtils
 		$sipEntryServerNode = EntryServerNodePeer::retrieveByEntryIdAndServerType($entry->getId(), SipPlugin::getCoreValue('EntryServerNodeType', SipEntryServerNodeType::SIP_ENTRY_SERVER));
 		if ($sipEntryServerNode)
 		{
-			KalturaLog::debug('SipEntryServerNode ' . $sipEntryServerNode->getId() . " already created for entry $entry->getId() ");
+			VidiunLog::debug('SipEntryServerNode ' . $sipEntryServerNode->getId() . " already created for entry $entry->getId() ");
 			return $sipEntryServerNode;
 		}
 
@@ -245,10 +245,10 @@ class kPexipUtils
 		$queryParams = array();
 		parse_str($_SERVER['QUERY_STRING'], $queryParams);
 
-		KalturaLog::debug('Retrieved qurey params :' . print_r($queryParams, true));
+		VidiunLog::debug('Retrieved qurey params :' . print_r($queryParams, true));
 		if (!isset($queryParams[self::PARAM_LOCAL_ALIAS]))
 		{
-			KalturaLog::debug('Missing ' . self::PARAM_LOCAL_ALIAS . ' param');
+			VidiunLog::debug('Missing ' . self::PARAM_LOCAL_ALIAS . ' param');
 			return false;
 		}
 		// TODO - validate origin call came from pexip server
@@ -261,15 +261,15 @@ class kPexipUtils
 	 */
 	public static function validateLicensesAvailable($pexipConfig)
 	{
-		$result = kPexipHandler::listRooms(0, 1, $pexipConfig, true);
+		$result = vPexipHandler::listRooms(0, 1, $pexipConfig, true);
 		if (empty($result))
 		{
-			KalturaLog::debug('Could Not retrieve active rooms - available licenes not validated!');
+			VidiunLog::debug('Could Not retrieve active rooms - available licenes not validated!');
 			return false;
 		}
 		if ( ( $result[self::PARAM_META][self::PARAM_TOTAL_COUNT] * self::LICENSES_PER_CALL ) >= $pexipConfig[self::CONFIG_LICENSE_THRESHOLD])
 		{
-			KalturaLog::debug('Max number of active rooms reached - active rooms count is ' . $result[self::PARAM_META][self::PARAM_TOTAL_COUNT] . '- available licenes not validated!');
+			VidiunLog::debug('Max number of active rooms reached - active rooms count is ' . $result[self::PARAM_META][self::PARAM_TOTAL_COUNT] . '- available licenes not validated!');
 			return false;
 		}
 
@@ -277,12 +277,12 @@ class kPexipUtils
 	}
 
 	/**
-	 * @param KCurlWrapper $curlWrapper
+	 * @param VCurlWrapper $curlWrapper
 	 * @param $url
 	 */
-	public static function logError(KCurlWrapper $curlWrapper, $url)
+	public static function logError(VCurlWrapper $curlWrapper, $url)
 	{
-		KalturaLog::info('Sending HTTP request failed ['. $curlWrapper->getErrorNumber() . '] httpCode ['.$curlWrapper->getHttpCode()."] url [$url]: ".$curlWrapper->getError());
+		VidiunLog::info('Sending HTTP request failed ['. $curlWrapper->getErrorNumber() . '] httpCode ['.$curlWrapper->getHttpCode()."] url [$url]: ".$curlWrapper->getError());
 	}
 
 	/**
@@ -294,7 +294,7 @@ class kPexipUtils
 		$resObj = json_decode($result, true);
 		if (!empty($resObj['objects']) && isset($resObj['objects'][0]))
 		{
-			KalturaLog::info('Retrieved Object ' . print_r($resObj['objects'][0],true));
+			VidiunLog::info('Retrieved Object ' . print_r($resObj['objects'][0],true));
 			return $resObj['objects'][0];
 		}
 		return null;
@@ -310,7 +310,7 @@ class kPexipUtils
 	{
 		$header = substr($result, 0, $headerSize);
 		$headerData = explode('\n', $header);
-		KalturaLog::info('Checking Headers ' . print_r($headerData, true));
+		VidiunLog::info('Checking Headers ' . print_r($headerData, true));
 		$locationPattern = "(?<=Location: $url)(.*)(?=/)";
 		$locationPattern = str_replace('/', '\/', $locationPattern);
 		foreach ($headerData as $part)
@@ -319,11 +319,11 @@ class kPexipUtils
 			if (!empty($matches))
 			{
 				$virtualRoomId = $matches[0];
-				KalturaLog::info("Pexip created ID: $virtualRoomId");
+				VidiunLog::info("Pexip created ID: $virtualRoomId");
 				return $virtualRoomId;
 			}
 		}
-		KalturaLog::info('Could not extract ID from headers');
+		VidiunLog::info('Could not extract ID from headers');
 		return null;
 	}
 }

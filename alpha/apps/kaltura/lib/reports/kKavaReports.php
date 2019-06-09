@@ -1,6 +1,6 @@
 <?php
 
-class kKavaReports extends kKavaReportsMgr
+class vKavaReports extends vKavaReportsMgr
 {
 
 	protected static $reports_def = array(
@@ -61,7 +61,7 @@ class kKavaReports extends kKavaReportsMgr
 				array(
 					self::REPORT_ENRICH_OUTPUT => 'country',
 					self::REPORT_ENRICH_FUNC => self::ENRICH_FOREACH_KEYS_FUNC,
-					self::REPORT_ENRICH_CONTEXT => 'kKavaCountryCodes::toShortName',
+					self::REPORT_ENRICH_CONTEXT => 'vKavaCountryCodes::toShortName',
 				),
 				array(
 					self::REPORT_ENRICH_OUTPUT => 'location_name',
@@ -86,7 +86,7 @@ class kKavaReports extends kKavaReportsMgr
 
 		ReportType::USER_ENGAGEMENT => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'name' => self::DIMENSION_KUSER_ID
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -112,7 +112,7 @@ class kKavaReports extends kKavaReportsMgr
 
 		ReportType::USER_TOP_CONTENT => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'name' => self::DIMENSION_KUSER_ID
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -125,7 +125,7 @@ class kKavaReports extends kKavaReportsMgr
 
 		ReportType::USER_CONTENT_DROPOFF => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'name' => self::DIMENSION_KUSER_ID
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -140,7 +140,7 @@ class kKavaReports extends kKavaReportsMgr
 
 		ReportType::USER_CONTENT_INTERACTIONS => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'name' => self::DIMENSION_KUSER_ID
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -481,8 +481,8 @@ class kKavaReports extends kKavaReportsMgr
 		ReportType::TOP_CONTRIBUTORS => array(
 			self::REPORT_DATA_SOURCE => self::DATASOURCE_ENTRY_LIFECYCLE,
 			self::REPORT_DIMENSION_MAP => array(
-				'object_id' => self::DIMENSION_KUSER_ID,
-				'name' => self::DIMENSION_KUSER_ID
+				'object_id' => self::DIMENSION_VUSER_ID,
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -520,9 +520,9 @@ class kKavaReports extends kKavaReportsMgr
 		ReportType::TOP_CREATORS => array(
 			self::REPORT_DATA_SOURCE => self::DATASOURCE_ENTRY_LIFECYCLE,
 			self::REPORT_DIMENSION_MAP => array(
-				'user_id' => self::DIMENSION_KUSER_ID,
-				'user_screen_name' => self::DIMENSION_KUSER_ID,
-				'user_full_name' => self::DIMENSION_KUSER_ID,
+				'user_id' => self::DIMENSION_VUSER_ID,
+				'user_screen_name' => self::DIMENSION_VUSER_ID,
+				'user_full_name' => self::DIMENSION_VUSER_ID,
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => array('user_id', 'user_screen_name', 'user_full_name'),
@@ -542,8 +542,8 @@ class kKavaReports extends kKavaReportsMgr
 
 		ReportType::USER_USAGE => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'kuser_id' => self::DIMENSION_KUSER_ID,
-				'name' => self::DIMENSION_KUSER_ID
+				'vuser_id' => self::DIMENSION_VUSER_ID,
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -1176,7 +1176,7 @@ class kKavaReports extends kKavaReportsMgr
 				array(
 					self::REPORT_ENRICH_OUTPUT => 'object_id',
 					self::REPORT_ENRICH_FUNC => self::ENRICH_FOREACH_KEYS_FUNC,
-					self::REPORT_ENRICH_CONTEXT => 'kKavaCountryCodes::toShortName',
+					self::REPORT_ENRICH_CONTEXT => 'vKavaCountryCodes::toShortName',
 				),
 				array(
 					self::REPORT_ENRICH_INPUT =>  array('country'),
@@ -1217,7 +1217,7 @@ class kKavaReports extends kKavaReportsMgr
 					self::REPORT_ENRICH_FUNC => 'self::genericQueryEnrich',
 					self::REPORT_ENRICH_CONTEXT => array(
 						'peer' => 'entryPeer',
-						'columns' => array('NAME', 'KUSER_ID', '@CREATED_AT', 'STATUS', 'MEDIA_TYPE', 'LENGTH_IN_MSECS'),
+						'columns' => array('NAME', 'VUSER_ID', '@CREATED_AT', 'STATUS', 'MEDIA_TYPE', 'LENGTH_IN_MSECS'),
 					)
 				),
 				array(
@@ -1225,7 +1225,7 @@ class kKavaReports extends kKavaReportsMgr
 					self::REPORT_ENRICH_FUNC => 'self::genericQueryEnrich',
 					self::REPORT_ENRICH_CONTEXT => array(
 						'columns' => array('IFNULL(TRIM(CONCAT(FIRST_NAME, " ", LAST_NAME)), PUSER_ID)'),
-						'peer' => 'kuserPeer',
+						'peer' => 'vuserPeer',
 					)
 				)
 			),
@@ -1237,16 +1237,16 @@ class kKavaReports extends kKavaReportsMgr
 
 		ReportType::TOP_CONTENT_CONTRIBUTORS => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'user_id' => self::DIMENSION_KUSER_ID,
-				'creator_name' => self::DIMENSION_KUSER_ID,
-				'created_at' => self::DIMENSION_KUSER_ID
+				'user_id' => self::DIMENSION_VUSER_ID,
+				'creator_name' => self::DIMENSION_VUSER_ID,
+				'created_at' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => array('user_id', 'creator_name', 'created_at'),
 				self::REPORT_ENRICH_FUNC => 'self::genericQueryEnrich',
 				self::REPORT_ENRICH_CONTEXT => array(
 					'columns' => array('PUSER_ID', 'IFNULL(TRIM(CONCAT(FIRST_NAME, " ", LAST_NAME)), PUSER_ID)', '@CREATED_AT'),
-					'peer' => 'kuserPeer',
+					'peer' => 'vuserPeer',
 				)
 			),
 			self::REPORT_JOIN_REPORTS => array(

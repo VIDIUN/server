@@ -18,37 +18,37 @@ class textAction extends imagickAction
 	protected $maxHeight;
 
 	protected $parameterAlias = array(
-		"f" => kThumbnailParameterName::FONT,
-		"fs" => kThumbnailParameterName::FONT_SIZE,
-		"fontsize" => kThumbnailParameterName::FONT_SIZE,
-		"t" => kThumbnailParameterName::TEXT,
-		"txt" => kThumbnailParameterName::TEXT,
-		"a" => kThumbnailParameterName::ANGLE,
-		"sc" => kThumbnailParameterName::STROKE_COLOR,
-		"strokecolor" => kThumbnailParameterName::STROKE_COLOR,
-		"fc" => kThumbnailParameterName::FILL_COLOR,
-		"fillcolor" => kThumbnailParameterName::FILL_COLOR,
-		"w" => kThumbnailParameterName::WIDTH,
-		"maxwidth" => kThumbnailParameterName::WIDTH,
-		"mw" => kThumbnailParameterName::WIDTH,
-		"h" => kThumbnailParameterName::HEIGHT,
-		"maxheight" => kThumbnailParameterName::HEIGHT,
-		"mh" => kThumbnailParameterName::HEIGHT,
+		"f" => vThumbnailParameterName::FONT,
+		"fs" => vThumbnailParameterName::FONT_SIZE,
+		"fontsize" => vThumbnailParameterName::FONT_SIZE,
+		"t" => vThumbnailParameterName::TEXT,
+		"txt" => vThumbnailParameterName::TEXT,
+		"a" => vThumbnailParameterName::ANGLE,
+		"sc" => vThumbnailParameterName::STROKE_COLOR,
+		"strokecolor" => vThumbnailParameterName::STROKE_COLOR,
+		"fc" => vThumbnailParameterName::FILL_COLOR,
+		"fillcolor" => vThumbnailParameterName::FILL_COLOR,
+		"w" => vThumbnailParameterName::WIDTH,
+		"maxwidth" => vThumbnailParameterName::WIDTH,
+		"mw" => vThumbnailParameterName::WIDTH,
+		"h" => vThumbnailParameterName::HEIGHT,
+		"maxheight" => vThumbnailParameterName::HEIGHT,
+		"mh" => vThumbnailParameterName::HEIGHT,
 	);
 
 	protected function extractActionParameters()
 	{
-		$this->x = $this->getIntActionParameter(kThumbnailParameterName::X, 0);
-		$this->y = $this->getIntActionParameter(kThumbnailParameterName::Y, 10);
-		$this->font_size = $this->getFloatActionParameter(kThumbnailParameterName::FONT_SIZE, 10);
-		$this->text = $this->getActionParameter(kThumbnailParameterName::TEXT);
+		$this->x = $this->getIntActionParameter(vThumbnailParameterName::X, 0);
+		$this->y = $this->getIntActionParameter(vThumbnailParameterName::Y, 10);
+		$this->font_size = $this->getFloatActionParameter(vThumbnailParameterName::FONT_SIZE, 10);
+		$this->text = $this->getActionParameter(vThumbnailParameterName::TEXT);
 		$this->text = trim(urldecode($this->text));
-		$this->font = $this->getActionParameter(kThumbnailParameterName::FONT, 'Courier');
-		$this->angle = $this->getFloatActionParameter(kThumbnailParameterName::ANGLE, 0);
-		$this->strokeColor = $this->getColorActionParameter(kThumbnailParameterName::STROKE_COLOR, "black");
-		$this->fillColor = $this->getColorActionParameter(kThumbnailParameterName::FILL_COLOR, "black");
-		$this->maxHeight = $this->getIntActionParameter(kThumbnailParameterName::HEIGHT);
-		$this->maxWidth = $this->getIntActionParameter(kThumbnailParameterName::WIDTH);
+		$this->font = $this->getActionParameter(vThumbnailParameterName::FONT, 'Courier');
+		$this->angle = $this->getFloatActionParameter(vThumbnailParameterName::ANGLE, 0);
+		$this->strokeColor = $this->getColorActionParameter(vThumbnailParameterName::STROKE_COLOR, "black");
+		$this->fillColor = $this->getColorActionParameter(vThumbnailParameterName::FILL_COLOR, "black");
+		$this->maxHeight = $this->getIntActionParameter(vThumbnailParameterName::HEIGHT);
+		$this->maxWidth = $this->getIntActionParameter(vThumbnailParameterName::WIDTH);
 	}
 
 	protected function validateInput()
@@ -57,7 +57,7 @@ class textAction extends imagickAction
 		$this->validateColorParameter($this->fillColor);
 		if(!$this->text)
 		{
-			throw new KalturaAPIException(KalturaThumbnailErrors::BAD_QUERY, "You must supply a text for this action");
+			throw new VidiunAPIException(VidiunThumbnailErrors::BAD_QUERY, "You must supply a text for this action");
 		}
 	}
 

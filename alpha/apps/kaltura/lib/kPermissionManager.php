@@ -73,7 +73,7 @@ class vPermissionManager implements vObjectCreatedEventConsumer, vObjectChangedE
 	
 	private static function getCacheKeyPrefix()
 	{
-		return self::GLOBAL_CACHE_KEY_PREFIX . kConf::get('permission_cache_version', kConfMapNames::CACHE_VERSIONS, '');
+		return self::GLOBAL_CACHE_KEY_PREFIX . vConf::get('permission_cache_version', vConfMapNames::CACHE_VERSIONS, '');
 	}
 	
 	/**
@@ -797,7 +797,7 @@ class vPermissionManager implements vObjectCreatedEventConsumer, vObjectChangedE
 			$actionBlocked = self::isActionBlockedForPartner($service, $action);
 			if($actionBlocked)
 			{
-				KalturaLog::err("The wanted service and action are not allowed for this partner");
+				VidiunLog::err("The wanted service and action are not allowed for this partner");
 				return false;
 			}
 		}
@@ -818,7 +818,7 @@ class vPermissionManager implements vObjectCreatedEventConsumer, vObjectChangedE
 
 	protected static function isActionBlockedForPartner($service, $action)
 	{
-		$blockedActionsMapContent = kConf::getMap("blocked_actions_per_account");
+		$blockedActionsMapContent = vConf::getMap("blocked_actions_per_account");
 		if(!empty($blockedActionsMapContent))
 		{
 			$partnerId = self::$operatingPartner->getId();

@@ -10,7 +10,7 @@ class embedPakhshkitJsAction extends sfAction
 	const PARTNER_ID_PARAM_NAME = "partner_id";
 	const VERSIONS_PARAM_NAME = "versions";
 	const ENTRY_ID_PARAM_NAME = "entry_id";
-	const KS_PARAM_NAME = "ks";
+	const VS_PARAM_NAME = "vs";
 	const CONFIG_PARAM_NAME = "config";	
 	const REGENERATE_PARAM_NAME = "regenerate";
 	const IFRAME_EMBED_PARAM_NAME = "iframeembed";
@@ -18,7 +18,7 @@ class embedPakhshkitJsAction extends sfAction
 	const LATEST = "{latest}";
 	const BETA = "{beta}";
 	const PLAYER_V3_VERSIONS_TAG = 'playerV3Versions';
-	const EMBED_PLAYKIT_UICONF_TAGS_KEY_NAME = 'uiConfTags';
+	const EMBED_PAKHSHKIT_UICONF_TAGS_KEY_NAME = 'uiConfTags';
 
 	private $bundleCache = null;
 	private $sourceMapsCache = null;
@@ -329,11 +329,11 @@ class embedPakhshkitJsAction extends sfAction
 		$config["provider"]->partnerId = $this->partnerId;
 		$config["provider"]->uiConfId = $this->uiconfId;
 
-		$ks = $this->getRequestParameter(self::KS_PARAM_NAME);	
+		$vs = $this->getRequestParameter(self::VS_PARAM_NAME);	
 
-		if ($ks) 
+		if ($vs) 
 		{
-			$config["provider"]->ks = $ks;
+			$config["provider"]->vs = $vs;
 		}
 
 		$config["targetId"] = $targetId;
@@ -502,10 +502,10 @@ class embedPakhshkitJsAction extends sfAction
 		$this->regenerate = $this->getRequestParameter(self::REGENERATE_PARAM_NAME);
 		
 		//Get the list of partner 0 uiconf tags for uiconfs that contain {latest} and {beta} lists
-		$embedPlaykitConf = kConf::getMap(kConfMapNames::EMBED_PLAYKIT);
-		if (isset($embedPlaykitConf[self::EMBED_PLAYKIT_UICONF_TAGS_KEY_NAME]))
+		$embedPakhshkitConf = vConf::getMap(vConfMapNames::EMBED_PAKHSHKIT);
+		if (isset($embedPakhshkitConf[self::EMBED_PAKHSHKIT_UICONF_TAGS_KEY_NAME]))
 		{
-			$this->uiConfTags = $embedPlaykitConf[self::EMBED_PLAYKIT_UICONF_TAGS_KEY_NAME];
+			$this->uiConfTags = $embedPakhshkitConf[self::EMBED_PAKHSHKIT_UICONF_TAGS_KEY_NAME];
 		}
 
 		//Get config params

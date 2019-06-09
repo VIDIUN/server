@@ -4,7 +4,7 @@
  * @subpackage model
  */
 
-abstract class imagickAction extends kThumbnailAction
+abstract class imagickAction extends vThumbnailAction
 {
 	/* @var Imagick $image */
 	protected $image;

@@ -3,7 +3,7 @@
  * @package plugins.crossVidiunDistribution
  * @subpackage model.data
  */
-class kCrossVidiunDistributionJobProviderData extends vDistributionJobProviderData
+class vCrossVidiunDistributionJobProviderData extends vDistributionJobProviderData
 {
 
     /**

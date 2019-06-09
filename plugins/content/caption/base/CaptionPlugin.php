@@ -68,7 +68,7 @@ class CaptionPlugin extends VidiunPlugin implements IVidiunServices, IVidiunPerm
 				'Georgian' =>	'kat',
 				'German' =>	'deu',
 				'Greek' =>	'ell',
-				'Greenlandic' =>	'kal',
+				'Greenlandic' =>	'vid',
 				'Guarani' =>	'grn',
 				'Gujarati' =>	'guj',
 				'Hausa' =>	'hau',

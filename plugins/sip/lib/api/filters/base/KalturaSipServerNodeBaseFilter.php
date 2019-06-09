@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaSipServerNodeBaseFilter extends KalturaServerNodeFilter
+abstract class VidiunSipServerNodeBaseFilter extends VidiunServerNodeFilter
 {
 	static private $map_between_objects = array
 	(

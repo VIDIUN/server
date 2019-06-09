@@ -245,7 +245,7 @@ abstract class VDropFolderEngine implements IVidiunLogger
 			{
 				$metadataPlugin = VidiunMetadataClientPlugin::get(VBatchBase::$vClient);
 				//Expect only one result
-				$res = $metadataPlugin->metadata->listAction($filter, new KalturaFilterPager());
+				$res = $metadataPlugin->metadata->listAction($filter, new VidiunFilterPager());
 				
 				if(!$res->objects || !count($res->objects))
 					return;

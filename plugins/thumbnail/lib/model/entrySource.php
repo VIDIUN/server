@@ -13,10 +13,10 @@ class entrySource extends thumbnailSource
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry)
 		{
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		}
 
-		$secureEntryHelper = new KSecureEntryHelper($dbEntry, kCurrentContext::$ks, null, ContextType::THUMBNAIL);
+		$secureEntryHelper = new VSecureEntryHelper($dbEntry, vCurrentContext::$vs, null, ContextType::THUMBNAIL);
 		$secureEntryHelper->validateAccessControl();
 		$this->dbEntry = $dbEntry;
 	}
@@ -41,12 +41,12 @@ class entrySource extends thumbnailSource
 		if($this->getEntryMediaType() == entry::ENTRY_MEDIA_TYPE_IMAGE)
 		{
 			$fileSyncKey = $this->dbEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-			$imageBlob = kFileSyncUtils::file_get_contents($fileSyncKey);
+			$imageBlob = vFileSyncUtils::file_get_contents($fileSyncKey);
 			$imagick = new Imagick();
 			$imagick->readImageBlob($imageBlob);
 			return $imagick;
 		}
 
-		throw new KalturaAPIException(KalturaThumbnailErrors::MISSING_SOURCE_ACTIONS_FOR_TYPE, $this->getEntryMediaType());
+		throw new VidiunAPIException(VidiunThumbnailErrors::MISSING_SOURCE_ACTIONS_FOR_TYPE, $this->getEntryMediaType());
 	}
 }

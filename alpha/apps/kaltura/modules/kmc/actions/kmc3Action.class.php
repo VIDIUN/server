@@ -203,8 +203,8 @@ class vmc3Action extends vidiunAction
 		}
 
 		/** jw uiconfs **/
-		$this->jw_uiconfs_array = kmcUtils::getJWPlayerUIConfs($this->partner_id);
-		$this->jw_uiconf_playlist = kmcUtils::getJWPlaylistUIConfs($this->partner_id);
+		$this->jw_uiconfs_array = vmcUtils::getJWPlayerUIConfs($this->partner_id);
+		$this->jw_uiconf_playlist = vmcUtils::getJWPlaylistUIConfs($this->partner_id);
 		
 		/** 508 uicinfs **/
 		if($partner->getVmcVersion() == self::CURRENT_VMC_VERSION && $partner->getEnable508Players())

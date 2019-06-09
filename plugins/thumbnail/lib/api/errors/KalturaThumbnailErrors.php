@@ -3,7 +3,7 @@
  * @package plugins.thumbnail
  * @subpackage api.errors
  */
-class KalturaThumbnailErrors extends KalturaErrors
+class VidiunThumbnailErrors extends VidiunErrors
 {
 	const MISSING_PARTNER_PARAMETER_IN_URL = "MISSING_PARTNER_PARAMETER_IN_URL;;Missing partner parameter in url";
 	const FAILED_TO_PARSE_ACTION = "FAILED_TO_PARSE_ACTION;actionString;Failed to parse action \"@actionString@\"";

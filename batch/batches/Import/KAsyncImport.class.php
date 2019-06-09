@@ -299,7 +299,7 @@ class VAsyncImport extends VJobHandlerWorker
 	/*
 	 * Will take a single VidiunBatchJob and fetch the URL to the job's destFile
 	 */
-	private function fetchFileSsh(KalturaBatchJob $job, KalturaImportJobData $data)
+	private function fetchFileSsh(VidiunBatchJob $job, VidiunImportJobData $data)
 	{
 		try
 		{
@@ -307,13 +307,13 @@ class VAsyncImport extends VJobHandlerWorker
 			
 			//Replace # sign to avoid cases where it's part of the user/password. The # sign is considered as fragment part of the URL.
 			//https://bugs.php.net/bug.php?id=73754
-			$sourceUrl = preg_replace("/#/", "_kHash_", $sourceUrl, -1, $replaceCount);
+			$sourceUrl = preg_replace("/#/", "_vHash_", $sourceUrl, -1, $replaceCount);
 			
 			// extract information from URL and job data
 			$parsedUrl = parse_url($sourceUrl);
 			if($replaceCount)
 			{
-				$parsedUrl = preg_replace("/_kHash_/", "#", $parsedUrl);
+				$parsedUrl = preg_replace("/_vHash_/", "#", $parsedUrl);
 			}
 
 			$host = isset($parsedUrl['host']) ? $parsedUrl['host'] : null;

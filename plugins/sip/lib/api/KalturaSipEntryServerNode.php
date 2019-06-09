@@ -3,7 +3,7 @@
  * @package plugins.sip
  * @subpackage api.objects
  */
-class KalturaSipEntryServerNode extends KalturaEntryServerNode
+class VidiunSipEntryServerNode extends VidiunEntryServerNode
 {
 	/**
 	 * @var string
@@ -31,7 +31,7 @@ class KalturaSipEntryServerNode extends KalturaEntryServerNode
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{

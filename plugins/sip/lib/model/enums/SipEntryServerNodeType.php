@@ -3,7 +3,7 @@
  * @package plugins.sip
  * @subpackage lib.enum
  */
-class SipEntryServerNodeType implements IKalturaPluginEnum, EntryServerNodeType
+class SipEntryServerNodeType implements IVidiunPluginEnum, EntryServerNodeType
 {
 	const SIP_ENTRY_SERVER = 'SIP_ENTRY_SERVER';
 	

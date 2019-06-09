@@ -1079,7 +1079,7 @@ return array(
 	'entry-investigate track entry paramStr2 th' => 'Param 2',
 	'entry-investigate track entry paramStr3 th' => 'Param 3',
 	'entry-investigate track entry sessionId th' => 'Session Id',
-	'entry-investigate track entry ks th' => 'KS',
+	'entry-investigate track entry vs th' => 'VS',
 	'entry-investigate track entry description th' => 'Description',
 	'entry-investigate track entry createdAt th' => 'Create Time',
 	'entry-investigate track entry updatedAt th' => 'Update Time',

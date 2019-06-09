@@ -91,7 +91,7 @@ class TvinciDistributionFeedEngine extends DistributionEngine implements
 	protected function postXml($url, $xml, $innerType)
 	{
 		$response = self::curlPost($url, $xml, $innerType);
-		KalturaLog::info("Post XML Full response: " . print_r($response,true));
+		VidiunLog::info("Post XML Full response: " . print_r($response,true));
 
 		if ( $response['http_code'] == VCurlHeaderResponse::HTTP_STATUS_OK )
 		{

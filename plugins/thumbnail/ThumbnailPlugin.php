@@ -2,7 +2,7 @@
 /**
  * @package plugins.thumbnail
  */
-class ThumbnailPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPermissions, IKalturaPending
+class ThumbnailPlugin extends VidiunPlugin implements IVidiunServices, IVidiunPermissions, IVidiunPending
 {
 	const PLUGIN_NAME = 'thumbnail';
 
@@ -12,7 +12,7 @@ class ThumbnailPlugin extends KalturaPlugin implements IKalturaServices, IKaltur
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -21,7 +21,7 @@ class ThumbnailPlugin extends KalturaPlugin implements IKalturaServices, IKaltur
 
 	public static function dependsOn()
 	{
-		$dependency = new KalturaDependency(FileSyncPlugin::getPluginName());
+		$dependency = new VidiunDependency(FileSyncPlugin::getPluginName());
 		return array($dependency);
 	}
 

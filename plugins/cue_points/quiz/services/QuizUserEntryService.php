@@ -50,7 +50,7 @@ class QuizUserEntryService extends VidiunBaseService{
 			$userEntry->score = null;
 		}
 
-		$c = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$c = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$c->add(CuePointPeer::ENTRY_ID, $dbUserEntry->getEntryId(), Criteria::EQUAL);
 		$c->add(CuePointPeer::TYPE, QuizPlugin::getCoreValue('CuePointType', QuizCuePointType::QUIZ_QUESTION));
 		$questions = CuePointPeer::doSelect($c);

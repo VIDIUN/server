@@ -136,7 +136,7 @@ class vmc1Action extends vidiunAction
 
 	function getJWPlayerUIConfs()
 	{
-		$c = kmcUtils::getDefaultTagAndObjectTypeCriteria('jwplayer', uiConf::UI_CONF_TYPE_WIDGET);
+		$c = vmcUtils::getDefaultTagAndObjectTypeCriteria('jwplayer', uiConf::UI_CONF_TYPE_WIDGET);
 		$jwPlayers = uiConfPeer::doSelect($c);
 		
 		$conf_players = array();
@@ -164,7 +164,7 @@ class vmc1Action extends vidiunAction
 
 	function getJWPlaylistUIConfs($partnerId = null)
 	{
-		$c = kmcUtils::getDefaultTagAndObjectTypeCriteria('jwplaylist', uiConf::UI_CONF_TYPE_WIDGET, $partnerId);
+		$c = vmcUtils::getDefaultTagAndObjectTypeCriteria('jwplaylist', uiConf::UI_CONF_TYPE_WIDGET, $partnerId);
 		$jwPlaylists = uiConfPeer::doSelect($c);
 		
 		$conf_playlist = array();

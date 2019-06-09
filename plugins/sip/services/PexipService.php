@@ -4,13 +4,13 @@
  * @package plugins.sip
  * @subpackage api.services
  */
-class PexipService extends KalturaBaseService
+class PexipService extends VidiunBaseService
 {
 	const CALL_DIRECTION_PARAM_NAME = 'call_direction';
 	const CALL_DIRECTION_DIAL_IN = 'dial_in';
 
 	/**
-	 * no partner will be provided by vendors as this called externally and not from kaltura
+	 * no partner will be provided by vendors as this called externally and not from vidiun
 	 * @param string $actionName
 	 * @return bool
 	 */
@@ -34,21 +34,21 @@ class PexipService extends KalturaBaseService
 	{
 		if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_SIP, $this->getPartnerId()))
 		{
-			throw new KalturaAPIException (APIErrors::FEATURE_FORBIDDEN, $this->serviceId . '->' . $this->actionName);
+			throw new VidiunAPIException (APIErrors::FEATURE_FORBIDDEN, $this->serviceId . '->' . $this->actionName);
 		}
 
-		$pexipConfig = kPexipUtils::initAndValidateConfig();
+		$pexipConfig = vPexipUtils::initAndValidateConfig();
 
 		/** @var LiveStreamEntry $dbLiveEntry */
-		$dbLiveEntry = kPexipUtils::validateAndRetrieveEntry($entryId);
+		$dbLiveEntry = vPexipUtils::validateAndRetrieveEntry($entryId);
 
 		if ($regenerate)
 		{
-			kPexipHandler::deleteCallObjects($dbLiveEntry, $pexipConfig);
+			vPexipHandler::deleteCallObjects($dbLiveEntry, $pexipConfig);
 		}
 
-		$sipToken = kPexipUtils::generateSipToken($dbLiveEntry, $pexipConfig, $regenerate);
-		list ($roomId, $primaryAdpId, $secondaryAdpId) = kPexipHandler::createCallObjects($dbLiveEntry, $pexipConfig, $sipToken);
+		$sipToken = vPexipUtils::generateSipToken($dbLiveEntry, $pexipConfig, $regenerate);
+		list ($roomId, $primaryAdpId, $secondaryAdpId) = vPexipHandler::createCallObjects($dbLiveEntry, $pexipConfig, $sipToken);
 
 		$dbLiveEntry->setSipToken($sipToken);
 		$dbLiveEntry->setSipRoomId($roomId);
@@ -66,20 +66,20 @@ class PexipService extends KalturaBaseService
 	 */
 	public function handleIncomingCallAction()
 	{
-		$response = new KalturaSipResponse();
+		$response = new VidiunSipResponse();
 		$response->action = 'reject';
 
 		try
 		{
-			$pexipConfig = kPexipUtils::initAndValidateConfig();
+			$pexipConfig = vPexipUtils::initAndValidateConfig();
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return $response;
 		}
 
-		$queryParams = kPexipUtils::validateAndGetQueryParams();
+		$queryParams = vPexipUtils::validateAndGetQueryParams();
 		if(!$queryParams)
 		{
 			return $response;
@@ -87,39 +87,39 @@ class PexipService extends KalturaBaseService
 
 		if ($queryParams[self::CALL_DIRECTION_PARAM_NAME] != self::CALL_DIRECTION_DIAL_IN)
 		{
-			KalturaLog::debug(self::CALL_DIRECTION_PARAM_NAME . ' ' . $queryParams[self::CALL_DIRECTION_PARAM_NAME] .' not validated!');
+			VidiunLog::debug(self::CALL_DIRECTION_PARAM_NAME . ' ' . $queryParams[self::CALL_DIRECTION_PARAM_NAME] .' not validated!');
 			$response->action = 'done';
 			return $response;
 		}
 
-		KalturaLog::debug(self::CALL_DIRECTION_PARAM_NAME . ' validated!');
+		VidiunLog::debug(self::CALL_DIRECTION_PARAM_NAME . ' validated!');
 		try
 		{
-			$dbLiveEntry = kPexipUtils::retrieveAndValidateEntryForSipCall($queryParams, $pexipConfig);
+			$dbLiveEntry = vPexipUtils::retrieveAndValidateEntryForSipCall($queryParams, $pexipConfig);
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Error validating and retrieving Entry for sip Call');
+			VidiunLog::err('Error validating and retrieving Entry for sip Call');
 			return $response;
 		}
 
 		/** @var LiveStreamEntry $dbLiveEntry */
 		if (!$dbLiveEntry)
 		{
-			KalturaLog::err('Live entry for call not Validated!');
+			VidiunLog::err('Live entry for call not Validated!');
 			return $response;
 		}
 
-		if(!kPexipUtils::validateLicensesAvailable($pexipConfig))
+		if(!vPexipUtils::validateLicensesAvailable($pexipConfig))
 		{
 			return $response;
 		}
 
-		$sipEntryServerNode = kPexipUtils::createSipEntryServerNode($dbLiveEntry, $dbLiveEntry->getSipRoomId(), $dbLiveEntry->getPrimaryAdpId(), $dbLiveEntry->getSecondaryAdpId());
+		$sipEntryServerNode = vPexipUtils::createSipEntryServerNode($dbLiveEntry, $dbLiveEntry->getSipRoomId(), $dbLiveEntry->getPrimaryAdpId(), $dbLiveEntry->getSecondaryAdpId());
 		/** @var  SipEntryServerNode $sipEntryServerNode */
 		if (!$sipEntryServerNode)
 		{
-			KalturaLog::debug("Could not create or retrieve SipEntryServerNode.");
+			VidiunLog::debug("Could not create or retrieve SipEntryServerNode.");
 			return $response;
 		}
 
@@ -132,18 +132,18 @@ class PexipService extends KalturaBaseService
 	 * @param int $offset
 	 * @param int $pageSize
 	 * @param bool $activeOnly
-	 * @return KalturaStringValueArray
-	 * @throws KalturaAPIException
+	 * @return VidiunStringValueArray
+	 * @throws VidiunAPIException
 	 */
 	public function listRoomsAction($offset = 0, $pageSize = 500, $activeOnly = false )
 	{
 		if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_SIP, $this->getPartnerId()))
 		{
-			throw new KalturaAPIException (APIErrors::FEATURE_FORBIDDEN, $this->serviceId . '->' . $this->actionName);
+			throw new VidiunAPIException (APIErrors::FEATURE_FORBIDDEN, $this->serviceId . '->' . $this->actionName);
 		}
-		$pexipConfig = kPexipUtils::initAndValidateConfig();
-		$res = kPexipHandler::listRooms($offset, $pageSize, $pexipConfig, $activeOnly);
-		return KalturaStringValueArray::fromDbArray(array(json_encode($res)));
+		$pexipConfig = vPexipUtils::initAndValidateConfig();
+		$res = vPexipHandler::listRooms($offset, $pageSize, $pexipConfig, $activeOnly);
+		return VidiunStringValueArray::fromDbArray(array(json_encode($res)));
 	}
 
 }

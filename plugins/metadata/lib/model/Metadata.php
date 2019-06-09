@@ -235,7 +235,7 @@ class Metadata extends BaseMetadata implements IIndexable, ISyncableFile, IRelat
 	
 	public function getSphinxIndexName()
 	{
-		return kSphinxSearchManager::getSphinxIndexName(MetadataIndex::getObjectIndexName());
+		return vSphinxSearchManager::getSphinxIndexName(MetadataIndex::getObjectIndexName());
 	}
 
 	/**

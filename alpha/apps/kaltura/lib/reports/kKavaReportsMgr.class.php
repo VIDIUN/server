@@ -94,8 +94,8 @@ class vKavaReportsMgr extends vKavaBase
 	const METRIC_AVG_VIEW_BITRATE = 'avg_view_bitrate';
 
 	//report classes
-	const CUSTOM_REPORTS_CLASS = 'kKavaCustomReports';
-	const KAVA_REPORTS_CLASS = 'kKavaReports';
+	const CUSTOM_REPORTS_CLASS = 'vKavaCustomReports';
+	const KAVA_REPORTS_CLASS = 'vKavaReports';
 
 	/// report settings
 	// report settings - common

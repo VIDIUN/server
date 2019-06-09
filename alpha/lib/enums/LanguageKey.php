@@ -47,7 +47,7 @@ interface LanguageKey extends BaseEnum
 	const KAT = 'Georgian';
 	const DEU = 'German';
 	const ELL = 'Greek';
-	const KAL = 'Greenlandic';
+	const VID = 'Greenlandic';
 	const GRN = 'Guarani';
 	const GUJ = 'Gujarati';
 	const HAU = 'Hausa';

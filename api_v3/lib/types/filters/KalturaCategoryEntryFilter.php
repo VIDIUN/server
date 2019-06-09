@@ -20,15 +20,15 @@ class VidiunCategoryEntryFilter extends VidiunCategoryEntryBaseFilter
 	 */
 	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$blockOnEmptyFilterPartners = kConf::getMap(kConfMapNames::REQUIRE_CATEGORY_ENTRY_FILTER_PARTNERS);
+		$blockOnEmptyFilterPartners = vConf::getMap(vConfMapNames::REQUIRE_CATEGORY_ENTRY_FILTER_PARTNERS);
 		if ($this->entryIdEqual == null &&
 			$this->entryIdIn == null &&
 			$this->categoryIdIn == null &&
 			$this->categoryIdEqual == null && 
-			(kEntitlementUtils::getEntitlementEnforcement() || !kCurrentContext::$is_admin_session || in_array(kCurrentContext::getCurrentPartnerId(), $blockOnEmptyFilterPartners))
+			(vEntitlementUtils::getEntitlementEnforcement() || !vCurrentContext::$is_admin_session || in_array(vCurrentContext::getCurrentPartnerId(), $blockOnEmptyFilterPartners))
 		)
 		{
-			throw new KalturaAPIException(KalturaErrors::MUST_FILTER_ON_ENTRY_OR_CATEGORY);
+			throw new VidiunAPIException(VidiunErrors::MUST_FILTER_ON_ENTRY_OR_CATEGORY);
 		}
 			
 		if(vEntitlementUtils::getEntitlementEnforcement())

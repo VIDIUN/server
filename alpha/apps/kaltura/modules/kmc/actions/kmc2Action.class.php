@@ -135,16 +135,16 @@ class vmc2Action extends vidiunAction
 		if ( !$this->email) $this->allow_reports = true;   
 		
 		/* applications versioning */
-		$this->kmc_content_version 	= 'v2.1.6.1';
-		$this->kmc_account_version 	= 'v2.1.2.3';
-		$this->kmc_appstudio_version 	= 'v2.0.4';
-		$this->kmc_rna_version 		= 'v1.1.3';
-		$this->kmc_dashboard_version 	= 'v1.0.10';
+		$this->vmc_content_version 	= 'v2.1.6.1';
+		$this->vmc_account_version 	= 'v2.1.2.3';
+		$this->vmc_appstudio_version 	= 'v2.0.4';
+		$this->vmc_rna_version 		= 'v1.1.3';
+		$this->vmc_dashboard_version 	= 'v1.0.10';
 		
-		$this->jw_uiconfs_array = kmcUtils::getJWPlayerUIConfs($this->partner_id);
-		$this->jw_uiconf_playlist = kmcUtils::getJWPlaylistUIConfs($this->partner_id);
-		$this->advanced_editor = kmcUtils::getUiConfByTagAndObjectType('andromeda_kae_for_kmc', uiConf::UI_CONF_TYPE_ADVANCED_EDITOR, $this->partner_id);
-		$this->simple_editor = kmcUtils::getUiConfByTagAndObjectType('andromeda_kse_for_kmc', uiConf::UI_CONF_TYPE_EDITOR, $this->partner_id);
+		$this->jw_uiconfs_array = vmcUtils::getJWPlayerUIConfs($this->partner_id);
+		$this->jw_uiconf_playlist = vmcUtils::getJWPlaylistUIConfs($this->partner_id);
+		$this->advanced_editor = vmcUtils::getUiConfByTagAndObjectType('andromeda_vae_for_vmc', uiConf::UI_CONF_TYPE_ADVANCED_EDITOR, $this->partner_id);
+		$this->simple_editor = vmcUtils::getUiConfByTagAndObjectType('andromeda_vse_for_vmc', uiConf::UI_CONF_TYPE_EDITOR, $this->partner_id);
 	}
 
 	private function getCritria ( )

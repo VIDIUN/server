@@ -780,7 +780,7 @@ class BulkUploadEngineXml extends VBulkUploadEngine
 				VBatchBase::$vClient->thumbAsset->delete($thumbAsset->id);
 		}
 		
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		$nonCriticalErrors = '';
 				
 		foreach((array)$requestResults as $requestResult)

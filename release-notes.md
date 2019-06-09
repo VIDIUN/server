@@ -45,15 +45,15 @@ None
 	moduls.Sip.permissionName = FEATURE_SIP
 	moduls.Sip.group = GROUP_ENABLE_DISABLE_FEATURES
 2. add Sip to plugins.ini	
-3. copy /opt/kaltura/app/configurations/sip.template.ini to sip.ini and replace all tokens accordingly.
+3. copy /opt/vidiun/app/configurations/sip.template.ini to sip.ini and replace all tokens accordingly.
 	
 #### Deployment Scripts ####	
 
-1. php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-2. php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2019_04_21_add_pexip_permissions.php
-3. add One serverNode for parter -5 with sipType (KalturaSipServerNode):
+1. php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+2. php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2019_04_21_add_pexip_permissions.php
+3. add One serverNode for parter -5 with sipType (VidiunSipServerNode):
 	servernode add 
-	serverNode:objectType=KalturaSipServerNode 
+	serverNode:objectType=VidiunSipServerNode 
 	serverNode:environment=$ENV$
 	serverNode:name=$NAME$
 	serverNode:description=$DESCRIPTION$ 
@@ -76,20 +76,20 @@ None
 		entry = X (where X is the sahrding factor).
 		
 		Add datasources settings for each of the shards
-		[sphinx_datasources_kaltura_entry_x]
+		[sphinx_datasources_vidiun_entry_x]
 		datasources.0 = sphinx
 		datasources.1 = sphinx2
 		
 		For each sharded datasource add the following:
-		sphinx.connection.options.kaltura.sharded = true
+		sphinx.connection.options.vidiun.sharded = true
 		
-	2. Modify your sphinx kaltura.conf file:
-		Duplicate Kaltura_entry sphinx definition per your sharding factor and add entry distribution index that points to the all.
-		index kaltura_entry
+	2. Modify your sphinx vidiun.conf file:
+		Duplicate Vidiun_entry sphinx definition per your sharding factor and add entry distribution index that points to the all.
+		index vidiun_entry
 		{
 		        type=distributed
-		        local=kaltura_entry_X
-		        local=kaltura_entry_X
+		        local=vidiun_entry_X
+		        local=vidiun_entry_X
 		}
 		
 	3. Reindex your data based on the new setup.
@@ -98,8 +98,8 @@ None
 #### Deployment Scripts ####	
 
 
-	Run the following alter command against the mysql server where kaltura_sphinx_log table is sotred: 
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura_sphinx_log < /opt/kaltura/app/deployment/updates/sql/2019_05_19_alter_table_sphinx_log.sql
+	Run the following alter command against the mysql server where vidiun_sphinx_log table is sotred: 
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun_sphinx_log < /opt/vidiun/app/deployment/updates/sql/2019_05_19_alter_table_sphinx_log.sql
 		
 
 ## Add getPublicInfo action to partner service ##
@@ -109,7 +109,7 @@ None
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2019_05_20_add_partner_get_public_info.php
+	  php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2019_05_20_add_partner_get_public_info.php
 
 # Naos 14.20.0 #
 
@@ -119,10 +119,10 @@ None
 
 ### Configuration ###
 	First replace all tokens from the XML files below and remove ".template" from the file name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2019_04_28_tagEqualsBooleanNotification.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2019_04_28_tagEqualsBooleanNotification.template.xml
 
 ### Deployment scripts ###
-	php /opt/kaltura/app/deployment/updates/scripts/2019_04_28_deploy_tag_equals_boolean_notification.php
+	php /opt/vidiun/app/deployment/updates/scripts/2019_04_28_deploy_tag_equals_boolean_notification.php
 
 ## Add permission in Admin Console for limiting the allowed action for partner ##
 

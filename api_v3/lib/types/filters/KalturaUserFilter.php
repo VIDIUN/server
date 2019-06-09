@@ -148,7 +148,7 @@ class VidiunUserFilter extends VidiunUserBaseFilter
 			$c->add(vuserPeer::ID, $vuserIds, VidiunCriteria::IN);
 		}
 
-		$c->addAnd(kuserPeer::PUSER_ID, NULL, KalturaCriteria::ISNOTNULL);
+		$c->addAnd(vuserPeer::PUSER_ID, NULL, VidiunCriteria::ISNOTNULL);
 		
 		$pager->attachToCriteria($c);
 		$list = vuserPeer::doSelect($c);

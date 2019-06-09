@@ -230,8 +230,8 @@ class DoubleClickFeed
 
 	public function setUniqueVersion2Elements($values, $item, $entry)
 	{
-		kXml::setNodeValue($this->xpath, 'dfpvideo:lastModifiedDate', date('r', $values[DoubleClickDistributionField::LAST_MEDIA_MODIFIED_DATE]), $item);
-		kXml::setNodeValue($this->xpath, 'dfpvideo:lastMediaModifiedDate', date('r', $values[DoubleClickDistributionField::LAST_MEDIA_MODIFIED_DATE]), $item);
+		vXml::setNodeValue($this->xpath, 'dfpvideo:lastModifiedDate', date('r', $values[DoubleClickDistributionField::LAST_MEDIA_MODIFIED_DATE]), $item);
+		vXml::setNodeValue($this->xpath, 'dfpvideo:lastMediaModifiedDate', date('r', $values[DoubleClickDistributionField::LAST_MEDIA_MODIFIED_DATE]), $item);
 		$status = $this->getStatusFieldValue($values[DoubleClickDistributionField::STATUS]);
 		vXml::setNodeValue($this->xpath, 'media:status/@state', $status, $item);
 		vXml::setNodeValue($this->xpath, 'dfpvideo:fw_caid', $values[DoubleClickDistributionField::FW_CAID], $item);
@@ -597,7 +597,7 @@ class DoubleClickFeed
 			{
 				$val = trim($val);
 				$node = $this->{$key}->cloneNode(true);
-				kXml::setNodeValue($this->xpath,'@value', $val, $node);
+				vXml::setNodeValue($this->xpath,'@value', $val, $node);
 				$item->appendChild($node);
 			}
 		}

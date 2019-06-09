@@ -3,7 +3,7 @@
 /**
  * @package plugins.reach
  */
-class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventConsumer, kObjectAddedEventConsumer, kGenericEventConsumer, kObjectReplacedEventConsumer
+class vReachManager implements vObjectChangedEventConsumer, vObjectCreatedEventConsumer, vObjectAddedEventConsumer, vGenericEventConsumer, vObjectReplacedEventConsumer
 {
 	/**
 	 * @var array<booleanNotificationTemplate>
@@ -125,8 +125,8 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 			return false;
 		}
 		
-		$eventType = kEventNotificationFlowManager::getEventType($event);
-		$eventObjectClassName = kEventNotificationFlowManager::getEventObjectType($event);
+		$eventType = vEventNotificationFlowManager::getEventType($event);
+		$eventObjectClassName = vEventNotificationFlowManager::getEventObjectType($event);
 		$objectType = self::getObjectType($eventObjectClassName);
 		if ($objectType)
 		{
@@ -219,11 +219,11 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
+	 * @see vObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
 	*/
 	public function shouldConsumeReplacedEvent(BaseObject $object)
 	{
-		if($object && $object instanceof entry && $object->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE)
+		if($object && $object instanceof entry && $object->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE)
 			return true;
 		
 		return false;
@@ -309,7 +309,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 	
 	/* (non-PHPdoc)
- 	* @see kObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
+ 	* @see vObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
 	*/
 	public function objectReplaced(BaseObject $object, BaseObject $replacingObject, BatchJob $raisedJob = null)
 	{
@@ -321,7 +321,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	{
 		$this->checkAutomaticRules($object, true);
 		
-		if($object->getSourceType() != EntrySourceType::KALTURA_RECORDED_LIVE)
+		if($object->getSourceType() != EntrySourceType::VIDIUN_RECORDED_LIVE)
 			return $this->checkPendingEntryTasks($object);
 		
 		return true;
@@ -473,7 +473,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	{
 		if($entry->getIsTemporary())
 		{
-			KalturaLog::debug("Entry [{$entry->getId()}] is temporary, entry vendor task object wont be created for it");
+			VidiunLog::debug("Entry [{$entry->getId()}] is temporary, entry vendor task object wont be created for it");
 			return null;
 		}
 		
@@ -494,11 +494,11 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 
 		//Set calculated values
 		$shouldModerateOutput = !$reachProfile->shouldModerateOutputCaptions($vendorCatalogItem->getServiceType());
-		$accessKeyExpiry = $vendorCatalogItem->getKsExpiry();
+		$accessKeyExpiry = $vendorCatalogItem->getVsExpiry();
 		$entryVendorTask->setIsOutputModerated($shouldModerateOutput);
 		$entryVendorTask->setAccessKeyExpiry($accessKeyExpiry);
-		$entryVendorTask->setAccessKey(kReachUtils::generateReachVendorKs($entryVendorTask->getEntryId(), $shouldModerateOutput, $accessKeyExpiry));
-		$entryVendorTask->setPrice(kReachUtils::calculateTaskPrice($entry, $vendorCatalogItem));
+		$entryVendorTask->setAccessKey(vReachUtils::generateReachVendorVs($entryVendorTask->getEntryId(), $shouldModerateOutput, $accessKeyExpiry));
+		$entryVendorTask->setPrice(vReachUtils::calculateTaskPrice($entry, $vendorCatalogItem));
 
 		if ($context)
 			$entryVendorTask->setContext($context);
@@ -518,8 +518,8 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 			$status = EntryVendorTaskStatus::PENDING_ENTRY_READY;
 		}
 		
-		//KalturaRecorded entries are ready on creation so make sure the vendors wont fetch the job until it receive its assets
-		if($entry->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE)
+		//VidiunRecorded entries are ready on creation so make sure the vendors wont fetch the job until it receive its assets
+		if($entry->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE)
 		{
 			$entryAssets = assetPeer::retrieveReadyByEntryId($entry->getId());
 			if(!count($entryAssets))

@@ -162,7 +162,7 @@ class vmcUtils
 		}
 
 		// implement query to get uiconfs from DB
-		$c = self::getDefaultTagAndObjectTypeCriteria($tag, uiConf::UI_CONF_TYPE_KDP3);
+		$c = self::getDefaultTagAndObjectTypeCriteria($tag, uiConf::UI_CONF_TYPE_VDP3);
 		$players = uiConfPeer::doSelect($c);
 
 		$conf_players = array();
@@ -279,7 +279,7 @@ class vmcUtils
 	public static function getDefaultTagAndObjectTypeCriteria($tag, $objectType, $partnerId = null)
 	{
 		$c = new Criteria();
-		$c->addAnd( uiConfPeer::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK , Criteria::GREATER_EQUAL );
+		$c->addAnd( uiConfPeer::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK , Criteria::GREATER_EQUAL );
 		$c->addAnd ( uiConfPeer::STATUS , uiConf::UI_CONF_STATUS_READY );
 		$c->addAnd ( uiConfPeer::OBJ_TYPE , $objectType );
 		$c->addAnd ( uiConfPeer::TAGS, $tag, Criteria::LIKE);

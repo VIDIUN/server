@@ -3,7 +3,7 @@
  * Enable question cue point objects and answer cue point objects management on entry objects
  * @package plugins.quiz
  */
-class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKalturaServices, IKalturaDynamicAttributesContributer, IKalturaEventConsumers, IKalturaReportProvider, IKalturaSearchDataContributor, IKalturaElasticSearchDataContributor, IKalturaCuePointXmlParser
+class QuizPlugin extends BaseCuePointPlugin implements IVidiunCuePoint, IVidiunServices, IVidiunDynamicAttributesContributer, IVidiunEventConsumers, IVidiunReportProvider, IVidiunSearchDataContributor, IVidiunElasticSearchDataContributor, IVidiunCuePointXmlParser
 {
 	const PLUGIN_NAME = 'quiz';
 
@@ -975,7 +975,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::parseXml()
+	 * @see IVidiunCuePointXmlParser::parseXml()
 	 */
 	public static function parseXml(SimpleXMLElement $scene, $partnerId, CuePoint $cuePoint = null)
 	{
@@ -998,7 +998,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	{
 		if(!$cuePoint)
 		{
-			$cuePoint = kCuePointManager::parseXml($scene, $partnerId, new QuestionCuePoint());
+			$cuePoint = vCuePointManager::parseXml($scene, $partnerId, new QuestionCuePoint());
 		}
 		
 		if(!($cuePoint instanceof QuestionCuePoint))
@@ -1022,7 +1022,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 		{
 			foreach ($scene->optionalAnswers->children() as $optionalAnswer)
 			{
-				$optionalAnswerObject = new kOptionalAnswer();
+				$optionalAnswerObject = new vOptionalAnswer();
 				
 				if(isset($optionalAnswer->key))
 				{
@@ -1053,7 +1053,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	{
 		if(!$cuePoint)
 		{
-			$cuePoint = kCuePointManager::parseXml($scene, $partnerId, new AnswerCuePoint());
+			$cuePoint = vCuePointManager::parseXml($scene, $partnerId, new AnswerCuePoint());
 		}
 		
 		if(!($cuePoint instanceof AnswerCuePoint))
@@ -1095,7 +1095,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	{
 		if(!$scene)
 		{
-			$scene = kCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-question-cue-point'));
+			$scene = vCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-question-cue-point'));
 		}
 		
 		return self::generateQuestionSimpleXmlElement($cuePoint, $scenes, $scene);
@@ -1105,14 +1105,14 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	{
 		if(!$scene)
 		{
-			$scene = kCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-answer-cue-point'));
+			$scene = vCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-answer-cue-point'));
 		}
 		
 		return self::generateAnswerSimpleXmlElement($cuePoint, $scenes, $scene);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::syndicate()
+	 * @see IVidiunCuePointXmlParser::syndicate()
 	 */
 	public static function syndicate(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{
@@ -1132,7 +1132,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	{
 		if(!$scene)
 		{
-			$scene = kCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-answer-cue-point'));
+			$scene = vCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-answer-cue-point'));
 		}
 		
 		return self::generateAnswerSimpleXmlElement($cuePoint, $scenes, $scene);
@@ -1142,7 +1142,7 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 	{
 		if(!$scene)
 		{
-			$scene = kCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-question-cue-point'));
+			$scene = vCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-question-cue-point'));
 		}
 		
 		return self::generateQuestionSimpleXmlElement($cuePoint, $scenes, $scene);
@@ -1153,17 +1153,17 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 		/* @var $cuePoint QuestionCuePoint */
 		if($cuePoint->getName())
 		{
-			$scene->addChild('question', kMrssManager::stringToSafeXml($cuePoint->getName()));
+			$scene->addChild('question', vMrssManager::stringToSafeXml($cuePoint->getName()));
 		}
 		
 		if($cuePoint->getHint())
 		{
-			$scene->addChild('hint', kMrssManager::stringToSafeXml($cuePoint->getHint()));
+			$scene->addChild('hint', vMrssManager::stringToSafeXml($cuePoint->getHint()));
 		}
 		
 		if($cuePoint->getExplanation())
 		{
-			$scene->addChild('explanation', kMrssManager::stringToSafeXml($cuePoint->getExplanation()));
+			$scene->addChild('explanation', vMrssManager::stringToSafeXml($cuePoint->getExplanation()));
 		}
 		
 		$optionalAnswers = $cuePoint->getOptionalAnswers();
@@ -1172,15 +1172,15 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 			$optionalAnswersScene = $scene->addChild('optionalAnswers');
 			foreach ($optionalAnswers as $optionalAnswer)
 			{
-				/* @var $optionalAnswer kOptionalAnswer */
+				/* @var $optionalAnswer vOptionalAnswer */
 				$optionalAnswersScene->addChild("optionalAnswer");
 				if($optionalAnswer->getKey())
 				{
-					$scene->addChild('key', kMrssManager::stringToSafeXml($cuePoint->getKey()));
+					$scene->addChild('key', vMrssManager::stringToSafeXml($cuePoint->getKey()));
 				}
 				if($optionalAnswer->getText())
 				{
-					$scene->addChild('text', kMrssManager::stringToSafeXml($cuePoint->getText()));
+					$scene->addChild('text', vMrssManager::stringToSafeXml($cuePoint->getText()));
 				}
 				if($optionalAnswer->getWeight())
 				{
@@ -1201,17 +1201,17 @@ class QuizPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKaltur
 		/* @var $cuePoint AnswerCuePoint */
 		if($cuePoint->getAnswerKey())
 		{
-			$scene->addChild('answerKey', kMrssManager::stringToSafeXml($cuePoint->getAnswerKey()));
+			$scene->addChild('answerKey', vMrssManager::stringToSafeXml($cuePoint->getAnswerKey()));
 		}
 		
 		if($cuePoint->getQuizUserEntryId())
 		{
-			$scene->addChild('quizUserEntryId', kMrssManager::stringToSafeXml($cuePoint->getQuizUserEntryId()));
+			$scene->addChild('quizUserEntryId', vMrssManager::stringToSafeXml($cuePoint->getQuizUserEntryId()));
 		}
 		
 		if($cuePoint->getParentId())
 		{
-			$scene->addChild('parentId', kMrssManager::stringToSafeXml($cuePoint->getParentId()));
+			$scene->addChild('parentId', vMrssManager::stringToSafeXml($cuePoint->getParentId()));
 		}
 		
 		return $scene;
