@@ -206,7 +206,7 @@ abstract class CuePointBulkUploadXmlHandler implements IVidiunBulkUploadXmlHandl
 		if(isset($scene['systemName']) && $scene['systemName'])
 			$cuePoint->systemName = $scene['systemName'] . '';
 			
-		$cuePoint->startTime = kXml::timeToInteger($scene->sceneStartTime);
+		$cuePoint->startTime = vXml::timeToInteger($scene->sceneStartTime);
 		
 		if(!isset($scene->tags))
 			return $cuePoint;

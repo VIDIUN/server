@@ -6,7 +6,7 @@ class CrossVidiunDistributionPlugin extends VidiunPlugin implements IVidiunPermi
 {
     
 	const PLUGIN_NAME = 'crossVidiunDistribution';
-	const CROSS_VIDIUN_EVENT_CONSUMER = 'kCrossVidiunDistributionEventsConsumer';
+	const CROSS_VIDIUN_EVENT_CONSUMER = 'vCrossVidiunDistributionEventsConsumer';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -113,7 +113,7 @@ class CrossVidiunDistributionPlugin extends VidiunPlugin implements IVidiunPermi
 			return 'VidiunCrossVidiunDistributionJobProviderData';
 	
 		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(CrossVidiunDistributionProviderType::CROSS_VIDIUN))
-			return 'kCrossVidiunDistributionJobProviderData';
+			return 'vCrossVidiunDistributionJobProviderData';
 	
 		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(CrossVidiunDistributionProviderType::CROSS_VIDIUN))
 			return 'VidiunCrossVidiunDistributionProfile';

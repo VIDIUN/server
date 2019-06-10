@@ -200,7 +200,7 @@ abstract class ScheduleEvent extends BaseScheduleEvent implements IRelatedObject
 	
 	public function getSphinxIndexName()
 	{
-		return kSphinxSearchManager::getSphinxIndexName(ScheduleEventIndex::getObjectIndexName());
+		return vSphinxSearchManager::getSphinxIndexName(ScheduleEventIndex::getObjectIndexName());
 	}
 	
 	public function getEntryIds()

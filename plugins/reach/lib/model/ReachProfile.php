@@ -452,7 +452,7 @@ class ReachProfile extends BaseReachProfile
 
 			foreach ($rule->getConditions() as $condition)
 			{
-				if ($condition->getType() == ConditionType::BOOLEAN && $condition->getbooleanEventNotificationIds() && $condition->getbooleanEventNotificationIds() !== kReachManager::EMPTY_STRING)
+				if ($condition->getType() == ConditionType::BOOLEAN && $condition->getbooleanEventNotificationIds() && $condition->getbooleanEventNotificationIds() !== vReachManager::EMPTY_STRING)
 				{
 					$gotBooleanCondition = true;
 					break;

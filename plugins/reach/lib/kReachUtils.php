@@ -11,7 +11,7 @@ class vReachUtils
 	 * @return string
 	 * @throws Exception
 	 */
-	public static function generateReachVendorKs($entryId, $shouldModerateOutput = false, $turnaroundTime = dateUtils::DAY, $disableDefaultEntryFilter = false)
+	public static function generateReachVendorVs($entryId, $shouldModerateOutput = false, $turnaroundTime = dateUtils::DAY, $disableDefaultEntryFilter = false)
 	{
 		$entry = $disableDefaultEntryFilter ? entryPeer::retrieveByPKNoFilter($entryId) : entryPeer::retrieveByPK($entryId);
 		if (!$entry)
@@ -33,7 +33,7 @@ class vReachUtils
 		$privileges .= ',' . vSessionBase::PRIVILEGE_DOWNLOAD . ':' . $entryId;
 
 		if($shouldModerateOutput)
-			$privileges .= ',' . kSessionBase::PRIVILEGE_ENABLE_CAPTION_MODERATION;
+			$privileges .= ',' . vSessionBase::PRIVILEGE_ENABLE_CAPTION_MODERATION;
 
 		$limitedVs = '';
 		$result = vSessionUtils::startVSession($partner->getId(), $partner->getSecret(), '', $limitedVs, $turnaroundTime, vSessionBase::SESSION_TYPE_USER, '', $privileges, null, null, false);

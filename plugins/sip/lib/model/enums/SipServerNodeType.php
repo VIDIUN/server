@@ -3,7 +3,7 @@
  * @package plugins.sip
  * @subpackage lib.enum
  */
-class SipServerNodeType implements IKalturaPluginEnum, serverNodeType
+class SipServerNodeType implements IVidiunPluginEnum, serverNodeType
 {
 	const SIP_SERVER = 'SIP_SERVER';
 	

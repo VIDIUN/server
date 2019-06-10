@@ -1098,7 +1098,7 @@
 						<th><?php echo $this->translate('entry-investigate track entry userIp th'); ?></th>
 						<th><?php echo $this->translate('entry-investigate track entry changedProperties th'); ?></th>
 						<th><?php echo $this->translate('entry-investigate track entry sessionId th'); ?></th>
-						<th><?php echo $this->translate('entry-investigate track entry ks th'); ?></th>
+						<th><?php echo $this->translate('entry-investigate track entry vs th'); ?></th>
 						<th><?php echo $this->translate('entry-investigate track entry description th'); ?></th>
 						<th><?php echo $this->translate('entry-investigate track entry createdAt th'); ?></th>
 						<th><?php echo $this->translate('entry-investigate track entry updatedAt th'); ?></th>
@@ -1144,7 +1144,7 @@
 							?><td><?php echo $track->sessionId; ?></td><?php
 						}
 						?>
-						<td><?php echo $track->ks; ?></td>
+						<td><?php echo $track->vs; ?></td>
 						<td><?php echo $track->description; ?></td>
 						<td><?php echo date($this->translate('time format'), $track->createdAt); ?></td>
 						<td><?php echo date($this->translate('time format'), $track->updatedAt); ?></td>

@@ -3,7 +3,7 @@
  * @package plugins.sip
  * @subpackage api.objects
  */
-class KalturaSipResponse extends KalturaObject{
+class VidiunSipResponse extends VidiunObject{
 
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class KalturaSipResponse extends KalturaObject{
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

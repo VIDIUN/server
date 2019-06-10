@@ -4,7 +4,7 @@
  * @subpackage model
  */
 
-abstract class sourceAction extends kThumbnailAction
+abstract class sourceAction extends vThumbnailAction
 {
 
 }

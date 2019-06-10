@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPartnerPublicInfo extends KalturaObject
+class VidiunPartnerPublicInfo extends VidiunObject
 {
 	/**
 	 * @var string

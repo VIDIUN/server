@@ -535,7 +535,7 @@ class CaptionAssetService extends VidiunAssetService
 			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
 		}
 		
-		$securyEntryHelper = new KSecureEntryHelper($entry, kCurrentContext::$ks, null, ContextType::DOWNLOAD, array(), $captionAsset);
+		$securyEntryHelper = new VSecureEntryHelper($entry, vCurrentContext::$vs, null, ContextType::DOWNLOAD, array(), $captionAsset);
 		$securyEntryHelper->validateForDownload();
 		
 		return $captionAsset;

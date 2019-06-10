@@ -4,7 +4,7 @@
  * @subpackage api.enum
  * @see SipRoomStatus
  */
-class KalturaSipEntryServerNodeStatus extends KalturaEnum implements SipEntryServerNodeStatus
+class VidiunSipEntryServerNodeStatus extends VidiunEnum implements SipEntryServerNodeStatus
 {
 
 }

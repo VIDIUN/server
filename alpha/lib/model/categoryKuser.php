@@ -245,7 +245,7 @@ class categoryVuser extends BasecategoryVuser implements IIndexable
 	
 	public function getSphinxIndexName()
 	{
-		return kSphinxSearchManager::getSphinxIndexName(categoryKuserIndex::getObjectIndexName());
+		return vSphinxSearchManager::getSphinxIndexName(categoryVuserIndex::getObjectIndexName());
 	}
 	
 	/**

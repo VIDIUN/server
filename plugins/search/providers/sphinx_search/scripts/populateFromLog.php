@@ -89,7 +89,7 @@ while(true)
 	{
 		$sphinxCon = DbManager::createSphinxConnection($sphinxServer,$sphinxPort);
 		$sphinxRtTables = getSphinxRtTables($sphinxCon);
-		KalturaLog::log("sphinxServer [$sphinxServer], running rt index names [" . implode(",", $sphinxRtTables) . "]");
+		VidiunLog::log("sphinxServer [$sphinxServer], running rt index names [" . implode(",", $sphinxRtTables) . "]");
 	}
 	catch(Exception $e)
 	{
@@ -109,7 +109,7 @@ while(true)
 		
 		if($isSharded && $sphinxLogIndexName && !in_array($sphinxLogIndexName, $sphinxRtTables))
 		{
-			KalturaLog::log("Sphinx log id [$sphinxLogId] index name [$sphinxLogIndexName] not in rt table list, continue to next one");
+			VidiunLog::log("Sphinx log id [$sphinxLogId] index name [$sphinxLogIndexName] not in rt table list, continue to next one");
 			continue;
 		}
 		
@@ -134,15 +134,15 @@ while(true)
 		{
 			if ($skipExecutedUpdates && $executedServerId == $serverLastLog->getId())
 			{
-				KalturaLog::log ("Sphinx server is initiated and the command already ran synchronously on this machine. Skipping");
+				VidiunLog::log ("Sphinx server is initiated and the command already ran synchronously on this machine. Skipping");
 			}
 			else
 			{
 				$sql = $sphinxLog->getSql();
 				if($isSharded && $sphinxLog->getObjectType() == "entry")
 				{
-					$shardedIndexName = $sphinxLog->getIndexName() ? $sphinxLog->getIndexName() : "kaltura_entry_" . ($sphinxLog->getPartnerId()/10)%10;
-					$sql = str_replace("kaltura_entry", $shardedIndexName, $sql);
+					$shardedIndexName = $sphinxLog->getIndexName() ? $sphinxLog->getIndexName() : "vidiun_entry_" . ($sphinxLog->getPartnerId()/10)%10;
+					$sql = str_replace("vidiun_entry", $shardedIndexName, $sql);
 				}
 				
 				// sql update commands are created only via an external script for updating entries plays count
@@ -185,7 +185,7 @@ while(true)
 	SphinxLogPeer::clearInstancePool();
 }
 
-KalturaLog::log('Done');
+VidiunLog::log('Done');
 
 function getSphinxRtTables($sphinxCon)
 {

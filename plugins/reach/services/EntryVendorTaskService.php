@@ -67,10 +67,10 @@ class EntryVendorTaskService extends VidiunBaseService
 		if (!vReachUtils::isEnoughCreditLeft($dbEntry, $dbVendorCatalogItem, $dbReachProfile))
 			throw new VidiunAPIException(VidiunReachErrors::EXCEEDED_MAX_CREDIT_ALLOWED, $entryVendorTask->entryId, $entryVendorTask->catalogItemId);
 		
-		$dbEntryVendorTask = kReachManager::addEntryVendorTask($dbEntry, $dbReachProfile, $dbVendorCatalogItem, !kCurrentContext::$is_admin_session, $taskVersion);
+		$dbEntryVendorTask = vReachManager::addEntryVendorTask($dbEntry, $dbReachProfile, $dbVendorCatalogItem, !vCurrentContext::$is_admin_session, $taskVersion);
 		if(!$dbEntryVendorTask)
 		{
-			throw new KalturaAPIException(KalturaReachErrors::TASK_NOT_CREATED, $entryVendorTask->entryId, $entryVendorTask->catalogItemId);
+			throw new VidiunAPIException(VidiunReachErrors::TASK_NOT_CREATED, $entryVendorTask->entryId, $entryVendorTask->catalogItemId);
 		}
 		$entryVendorTask->toInsertableObject($dbEntryVendorTask);
 		$dbEntryVendorTask->save();
@@ -389,7 +389,7 @@ class EntryVendorTaskService extends VidiunBaseService
 		
 		try
 		{
-			$dbEntryVendorTask->setAccessKey(kReachUtils::generateReachVendorKs($dbEntryVendorTask->getEntryId(), $shouldModerateOutput, $accessKeyExpiry, true));
+			$dbEntryVendorTask->setAccessKey(vReachUtils::generateReachVendorVs($dbEntryVendorTask->getEntryId(), $shouldModerateOutput, $accessKeyExpiry, true));
 			$dbEntryVendorTask->save();
 		}
 		catch (Exception $e)

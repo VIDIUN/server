@@ -206,7 +206,7 @@ class GroupService extends VidiunBaseUserService
 	 * @param string $originalGroupId The unique identifier in the partner's system
 	 * @param string $newGroupId The unique identifier in the partner's system
 	 * @param string $newGroupName The name of the new cloned group
-	 * @return KalturaGroup The cloned group
+	 * @return VidiunGroup The cloned group
 	 *
 	 * @throws VidiunErrors::INVALID_FIELD_VALUE
 	 * @throws VidiunGroupErrors::INVALID_GROUP_ID
@@ -220,13 +220,13 @@ class GroupService extends VidiunBaseUserService
 			throw new VidiunAPIException(VidiunGroupErrors::INVALID_GROUP_ID, $originalGroupId);
 		}
 
-		$dbNewGroup = kuserPeer::getKuserByPartnerAndUid($this->getPartnerId(), $newGroupId);
+		$dbNewGroup = vuserPeer::getVuserByPartnerAndUid($this->getPartnerId(), $newGroupId);
 		if ($dbNewGroup)
 		{
-			throw new KalturaAPIException(KalturaGroupErrors::DUPLICATE_GROUP_BY_ID, $newGroupId);
+			throw new VidiunAPIException(VidiunGroupErrors::DUPLICATE_GROUP_BY_ID, $newGroupId);
 		}
 
-		$group = new KalturaGroup();
+		$group = new VidiunGroup();
 		if ($newGroupName == null)
 		{
 			$newGroupName = $newGroupId;

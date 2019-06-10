@@ -3,9 +3,9 @@
  * @package plugins.sip
  * @subpackage api.filters
  */
-class KalturaSipServerNodeFilter extends KalturaSipServerNodeBaseFilter
+class VidiunSipServerNodeFilter extends VidiunSipServerNodeBaseFilter
 {
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		if(!$type)
 		{

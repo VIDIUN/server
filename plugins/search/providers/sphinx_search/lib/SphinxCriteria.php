@@ -143,7 +143,7 @@ abstract class SphinxCriteria extends VidiunCriteria implements IVidiunIndexQuer
 	{
 		$pdo = DbManager::getSphinxConnection(true, $splitIndexName);
 		$objectClass = $this->getIndexObjectName();
-		if($pdo->getKalturaOption('sharded'))
+		if($pdo->getVidiunOption('sharded'))
 			$index = $splitIndexName;
 		
 		if (!$this->selectColumn)
@@ -572,7 +572,7 @@ abstract class SphinxCriteria extends VidiunCriteria implements IVidiunIndexQuer
 			$this->ranker = self::RANKER_BM25;
 		}
 		
-		$index = kSphinxSearchManager::getSphinxIndexName($objectClass::getObjectIndexName());
+		$index = vSphinxSearchManager::getSphinxIndexName($objectClass::getObjectIndexName());
 		$splitIndexName = $this->getSphinxIndexName();
 		$maxMatches = self::getMaxRecords();
 		$limit = $maxMatches;
@@ -613,14 +613,14 @@ abstract class SphinxCriteria extends VidiunCriteria implements IVidiunIndexQuer
 			$criteria = $this->getCriterion($splitIndexAttr);
 			if(!$criteria)
 			{
-				KalturaLog::debug("Split index attribute not found on Criteria, will query distributed index");
+				VidiunLog::debug("Split index attribute not found on Criteria, will query distributed index");
 			}
 			else
 			{
-				$splitIndexValue = kQueryCache::getCriterionValues($criteria, $splitIndexAttr);
+				$splitIndexValue = vQueryCache::getCriterionValues($criteria, $splitIndexAttr);
 				if($splitIndexValue && count($splitIndexValue) > 1 )
 				{
-					KalturaLog::debug("Found multiple values for Split index attribute, will query distributed index");
+					VidiunLog::debug("Found multiple values for Split index attribute, will query distributed index");
 					$splitIndexValue = null;
 				}
 				else
@@ -631,7 +631,7 @@ abstract class SphinxCriteria extends VidiunCriteria implements IVidiunIndexQuer
 			}
 		}
 		
-		return kSphinxSearchManager::getSphinxIndexName($objectClass::getObjectIndexName(), $objectClass::getSphinxSplitIndexId($splitIndexValue, $objectClass::getObjectName()));
+		return vSphinxSearchManager::getSphinxIndexName($objectClass::getObjectIndexName(), $objectClass::getSphinxSplitIndexId($splitIndexValue, $objectClass::getObjectName()));
 	}
 	
 	

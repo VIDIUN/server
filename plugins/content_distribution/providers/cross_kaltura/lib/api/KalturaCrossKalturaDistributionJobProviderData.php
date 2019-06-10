@@ -96,7 +96,7 @@ class VidiunCrossVidiunDistributionJobProviderData extends VidiunConfigurableDis
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kCrossVidiunDistributionJobProviderData();
+			$dbObject = new vCrossVidiunDistributionJobProviderData();
 			
 		return parent::toObject($dbObject, $skip);
 	}

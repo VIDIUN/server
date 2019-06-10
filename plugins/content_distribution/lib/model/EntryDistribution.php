@@ -334,7 +334,7 @@ class EntryDistribution extends BaseEntryDistribution implements IIndexable, ISy
 	
 	public function getSphinxIndexName()
 	{
-		return kSphinxSearchManager::getSphinxIndexName(EntryDistributionIndex::getObjectIndexName());
+		return vSphinxSearchManager::getSphinxIndexName(EntryDistributionIndex::getObjectIndexName());
 	}
 	
 	/* (non-PHPdoc)

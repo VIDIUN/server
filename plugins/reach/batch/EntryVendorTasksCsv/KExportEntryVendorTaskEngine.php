@@ -162,12 +162,12 @@ class VExportEntryVendorTaskEngine extends VObjectExportEngine
 		
 		try
 		{
-			$vendorCatalogItem = KBatchBase::$kClient->vendorCatalogItem->get($id);
+			$vendorCatalogItem = VBatchBase::$vClient->vendorCatalogItem->get($id);
 		}
 		catch (Exception $e)
 		{
 			$vendorCatalogItem = null;
-			KalturaLog::info("Failed to get catalog item data info for catalog item id [$id], with err message: " . $e->getMessage());
+			VidiunLog::info("Failed to get catalog item data info for catalog item id [$id], with err message: " . $e->getMessage());
 		}
 		
 		$catalogItemInfo = array(

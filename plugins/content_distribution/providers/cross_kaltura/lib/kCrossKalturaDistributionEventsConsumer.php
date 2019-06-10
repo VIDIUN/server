@@ -3,7 +3,7 @@
  * @package plugins.crossVidiunDistribution
  * @subpackage lib
  */
-class kCrossVidiunDistributionEventsConsumer implements vBatchJobStatusEventConsumer
+class vCrossVidiunDistributionEventsConsumer implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
 	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
@@ -67,7 +67,7 @@ class kCrossVidiunDistributionEventsConsumer implements vBatchJobStatusEventCons
 		}
 		
 		$providerData = $data->getProviderData();
-		if(!($providerData instanceof kCrossVidiunDistributionJobProviderData))
+		if(!($providerData instanceof vCrossVidiunDistributionJobProviderData))
 		{
 		    VidiunLog::err('Wrong provider data class ['.get_class($providerData).']');
 			return $dbBatchJob;

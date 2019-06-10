@@ -3,12 +3,12 @@
  * @package plugins.sip
  * @subpackage api.objects
  */
-class KalturaSipServerNode extends KalturaServerNode
+class VidiunSipServerNode extends VidiunServerNode
 {
 	private static $map_between_objects = array();
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -16,7 +16,7 @@ class KalturaSipServerNode extends KalturaServerNode
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -29,7 +29,7 @@ class KalturaSipServerNode extends KalturaServerNode
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{

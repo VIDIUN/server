@@ -3,7 +3,7 @@
  * @package plugins.thumbnail
  * @subpackage model.enum
  */
-interface kSourceType extends BaseEnum
+interface vSourceType extends BaseEnum
 {
 	const ID = "id";
 }

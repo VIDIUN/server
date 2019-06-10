@@ -210,14 +210,14 @@ class ElasticIndexRotationWorker
 	{
 		if(!$indicesToDelete)
 		{
-			KalturaLog::debug("No indices to delete");
+			VidiunLog::debug("No indices to delete");
 			return;
 		}
 
 		$indicesToDeleteString = implode(",", $indicesToDelete);
 		if($this->dryRun)
 		{
-			KalturaLog::debug("Dry run - deleting indices {$indicesToDeleteString}");
+			VidiunLog::debug("Dry run - deleting indices {$indicesToDeleteString}");
 		}
 		else
 		{

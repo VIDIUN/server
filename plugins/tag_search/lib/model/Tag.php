@@ -92,7 +92,7 @@ class Tag extends BaseTag implements IIndexable
 	
 	public function getSphinxIndexName()
 	{
-		return kSphinxSearchManager::getSphinxIndexName(TagIndex::getObjectIndexName());
+		return vSphinxSearchManager::getSphinxIndexName(TagIndex::getObjectIndexName());
 	}
     
 	public function getIndexPrivacyContext ()

@@ -26,13 +26,13 @@ class vApiCacheBase
 	//	in the cache key instead of taking the whole country (2 possible cache key values for
 	//	the entry, instead of 200)
 	const COND_NONE = '';
-	const COND_MATCH = 'match';					// used by kAnonymousIPCondition
+	const COND_MATCH = 'match';					// used by vAnonymousIPCondition
 	const COND_MATCH_ALL = 'matchAll';
-	const COND_REGEX = 'regex';					// used by kUserAgentCondition
-	const COND_SITE_MATCH = 'siteMatch';		// used by kSiteCondition
-	const COND_IP_RANGE = 'ipRange';			// used by kIpAddressCondition
-	const COND_GEO_DISTANCE = 'geoDistance';	// used by kGeoDistanceCondition
-	const COND_COUNTRY_MATCH = 'countryMatch';	// used by kCountryCondition
+	const COND_REGEX = 'regex';					// used by vUserAgentCondition
+	const COND_SITE_MATCH = 'siteMatch';		// used by vSiteCondition
+	const COND_IP_RANGE = 'ipRange';			// used by vIpAddressCondition
+	const COND_GEO_DISTANCE = 'geoDistance';	// used by vGeoDistanceCondition
+	const COND_COUNTRY_MATCH = 'countryMatch';	// used by vCountryCondition
 	
 	// cache statuses
 	const CACHE_STATUS_ACTIVE = 0;				// cache was not explicitly disabled

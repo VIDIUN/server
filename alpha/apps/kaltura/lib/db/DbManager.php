@@ -173,7 +173,7 @@ class DbManager
 		}
 
 		$stickySessionExpiry = isset(self::$config['sphinx_datasources']['sticky_session_timeout']) ? self::$config['sphinx_datasources']['sticky_session_timeout'] : 600;
-		KalturaLog::debug("Setting sphinx sticky session for key [" . self::$stickySessionKey . "] to sphinx index [" . print_r(self::$connIndexes, true) . "]");
+		VidiunLog::debug("Setting sphinx sticky session for key [" . self::$stickySessionKey . "] to sphinx index [" . print_r(self::$connIndexes, true) . "]");
 		self::$sphinxCache->set(self::$stickySessionKey, self::$connIndexes , $stickySessionExpiry);
 		self::$cachedConnIndexes[$indexName] = self::$connIndexes[$indexName];
 	}
@@ -188,7 +188,7 @@ class DbManager
 		
 		self::$stickySessionKey = self::getStickySessionKey();
 		$preferredIndex = self::$sphinxCache->get(self::$stickySessionKey);
-		KalturaLog::debug("Got sphinx sticky session for key [" . self::$stickySessionKey . "] to sphinx index [" . print_r($preferredIndex, true) . "]");
+		VidiunLog::debug("Got sphinx sticky session for key [" . self::$stickySessionKey . "] to sphinx index [" . print_r($preferredIndex, true) . "]");
 		
 		if ($preferredIndex === false || !isset($preferredIndex[$indexName]))
 		{
@@ -246,7 +246,7 @@ class DbManager
 	 */
 	public static function getSphinxConnection($read = true, $indexName = null)
 	{
-		KalturaLog::debug("Using index with name [$indexName]");
+		VidiunLog::debug("Using index with name [$indexName]");
 		if(!isset(self::$sphinxConnection[$indexName]))
 		{
 			if($indexName && isset(self::$config['sphinx_datasources_'.$indexName]['datasources']))
@@ -275,7 +275,7 @@ class DbManager
 			{
 				throw new Exception('Failed to connect to any Sphinx config');
 			}
-			KalturaLog::debug("Actual sphinx index [". self::$connIndexes[$indexName]. "] sphinx index by best lag [" . $preferredIndex. "]");
+			VidiunLog::debug("Actual sphinx index [". self::$connIndexes[$indexName]. "] sphinx index by best lag [" . $preferredIndex. "]");
 		}
 	
 		if (!$read)
@@ -354,7 +354,7 @@ class DbManager
 
 		$dataSource = self::$config['datasources'][$key]['connection']['dsn'];
 		self::$sphinxConnection[$indexName] =
-			new KalturaPDO($dataSource, null, null, array(PDO::ATTR_TIMEOUT => $connectTimeout, KalturaPDO::KALTURA_ATTR_NAME => $key), $key);
+			new VidiunPDO($dataSource, null, null, array(PDO::ATTR_TIMEOUT => $connectTimeout, VidiunPDO::VIDIUN_ATTR_NAME => $key), $key);
 		self::$sphinxConnection[$indexName]->setCommentsEnabled(false);
 		
 		return self::$sphinxConnection[$indexName];

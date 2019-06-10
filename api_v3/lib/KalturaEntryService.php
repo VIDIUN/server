@@ -166,7 +166,7 @@ class VidiunEntryService extends VidiunBaseService
 
 	public function isApproveReplaceRequired($dbEntry)
 	{
-		if ($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
+		if ($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
 		{
 			return false;
 		}

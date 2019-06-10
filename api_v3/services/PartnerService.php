@@ -503,7 +503,7 @@ class PartnerService extends VidiunBaseService
 	 *
 	 * @action getPublicInfo
 	 * @param int $id
-	 * @return KalturaPartnerPublicInfo
+	 * @return VidiunPartnerPublicInfo
 	 *
 	 * @throws APIErrors::INVALID_PARTNER_ID
 	 */
@@ -511,16 +511,16 @@ class PartnerService extends VidiunBaseService
 	{
 		if (!$id)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_PARTNER_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_PARTNER_ID, $id);
 		}
 
 		$dbPartner = PartnerPeer::retrieveByPK($id);
 		if (is_null($dbPartner))
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_PARTNER_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_PARTNER_ID, $id);
 		}
 
-		$response = new KalturaPartnerPublicInfo();
+		$response = new VidiunPartnerPublicInfo();
 		$response->fromObject($dbPartner, $this->getResponseProfile());
 
 		return $response;

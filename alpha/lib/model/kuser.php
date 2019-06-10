@@ -1172,7 +1172,7 @@ class vuser extends Basevuser implements IIndexable, IRelatedObject, IElasticInd
 	
 	public function getSphinxIndexName()
 	{
-		return kSphinxSearchManager::getSphinxIndexName(kuserIndex::getObjectIndexName());
+		return vSphinxSearchManager::getSphinxIndexName(vuserIndex::getObjectIndexName());
 	}
     
 	/* (non-PHPdoc)

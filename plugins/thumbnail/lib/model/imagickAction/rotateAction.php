@@ -13,11 +13,11 @@ class rotateAction extends imagickAction
 	const MIN_DEGREES = 1;
 
 	protected $parameterAlias = array(
-		"d" => kThumbnailParameterName::DEGREES,
-		"deg" => kThumbnailParameterName::DEGREES,
-		"b" => kThumbnailParameterName::BACKGROUND_COLOR,
-		"bg" => kThumbnailParameterName::BACKGROUND_COLOR,
-		"backgroundColor" => kThumbnailParameterName::BACKGROUND_COLOR,
+		"d" => vThumbnailParameterName::DEGREES,
+		"deg" => vThumbnailParameterName::DEGREES,
+		"b" => vThumbnailParameterName::BACKGROUND_COLOR,
+		"bg" => vThumbnailParameterName::BACKGROUND_COLOR,
+		"backgroundColor" => vThumbnailParameterName::BACKGROUND_COLOR,
 	);
 
 	/**
@@ -31,15 +31,15 @@ class rotateAction extends imagickAction
 
 	protected function extractActionParameters()
 	{
-		$this->degrees = self::getIntActionParameter(kThumbnailParameterName::DEGREES, self::MIN_DEGREES);
-		$this->backgroundColor = self::getColorActionParameter(kThumbnailParameterName::BACKGROUND_COLOR, 'black');
+		$this->degrees = self::getIntActionParameter(vThumbnailParameterName::DEGREES, self::MIN_DEGREES);
+		$this->backgroundColor = self::getColorActionParameter(vThumbnailParameterName::BACKGROUND_COLOR, 'black');
 	}
 
 	protected function validateInput()
 	{
 		if($this->degrees < self::MIN_DEGREES || $this->degrees > self::MAX_DEGREES)
 		{
-			throw new KalturaAPIException(KalturaThumbnailErrors::BAD_QUERY, "Degrees must be between 0 and 360, exclusive");
+			throw new VidiunAPIException(VidiunThumbnailErrors::BAD_QUERY, "Degrees must be between 0 and 360, exclusive");
 		}
 
 		$this->validateColorParameter($this->backgroundColor);

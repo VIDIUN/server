@@ -2052,7 +2052,7 @@ class Partner extends BasePartner
 
 	public function getAnalyticsHost()
 	{
-		return $this->getFromCustomData(self::ANALYTICS_HOST, null , kConf::get(self::ANALYTICS_HOST, 'local',  null));
+		return $this->getFromCustomData(self::ANALYTICS_HOST, null , vConf::get(self::ANALYTICS_HOST, 'local',  null));
 	}
 
 	public function setAnalyticsHost($v)

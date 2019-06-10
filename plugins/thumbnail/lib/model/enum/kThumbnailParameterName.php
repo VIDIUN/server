@@ -3,7 +3,7 @@
  * @package plugins.thumbnail
  * @subpackage model.enum
  */
-interface kThumbnailParameterName extends BaseEnum
+interface vThumbnailParameterName extends BaseEnum
 {
 	const WIDTH = "width";
 	const HEIGHT = "height";
